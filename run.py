@@ -16,6 +16,9 @@ app.secret_key = "q_T_a1C18aizPnA2yf-1Q8(2&,pd5n"
 def index():
     return render_template('index.html')
 
+@app.route("/contacts")
+def contacts():
+    return render_template("content/ansprechpartner.html")
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost")

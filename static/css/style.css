@@ -73,6 +73,32 @@ a:hover {
     width: 100%;
 }
 
+.content-section {
+    margin: 0 0 40px 0;
+}
+
+.content-section h2 {
+    padding: 0;
+    margin: 0 0 12px 0;
+}
+
+.contacts {
+    border-collapse: collapse;
+    min-width: 35%;
+}
+.contacts th {
+    padding: 3px;
+    text-align: left;
+}
+.contacts td {
+    padding: 5px 3px;
+    vertical-align: top;
+}
+
+.contacts tr:nth-child(even) {
+    background: #e8ecf8;
+}
+
 .clear {
     clear: both;
 }
