@@ -1,0 +1,78 @@
+body {
+    font-family: Verdana, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    font-size: 9pt;
+    margin: 0;
+    padding: 0;
+}
+
+a, a:visited, a:active {
+    color: #9d92e3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#header {
+    background: #4e65f3 url("/static/img/logo.png") 10px 5px no-repeat;
+    border-bottom: 4px solid #000000;
+    color: #ffffff;
+    font-size: larger;
+    height: 100px;
+}
+
+#header h1 {
+    color: #ffffff;
+    margin: 0;
+    padding: 30px 130px;
+}
+
+#navigation {
+    color: #ffffff;
+    float: left;
+    width: 12%;
+}
+
+#navigation a {
+    color: #dcd8ff;
+}
+
+.navigation-block {
+    background: #4e65f3;
+    border-right: 4px solid #000000;
+    margin: 10px;
+    padding: 10px;
+}
+
+.navigation-block ul {
+    list-style: circle;
+    padding: 0 0 0 20px;
+}
+
+.navigation-block li {
+    margin: 3px 0;
+}
+
+.navigation-block-header {
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+#content {
+    float: right;
+    padding: 20px 0 0 0;
+    width: 87%;
+}
+
+#footer {
+    font-size: 8pt;
+    text-align: center;
+    width: 100%;
+}
+
+.clear {
+    clear: both;
+}
