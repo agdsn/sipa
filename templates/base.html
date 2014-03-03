@@ -12,6 +12,13 @@
 
 <div id="navigation">
     <div class="navigation-block">
+        <div class="navigation-block-header">Benutzermenü</div>
+        <ul>
+            <li><a href="{{ url_for("login") }}">Login</a></li>
+        </ul>
+    </div>
+
+    <div class="navigation-block">
         <div class="navigation-block-header">Informationen</div>
         <ul>
             <li><a href="{{ url_for("index") }}">News</a></li>
@@ -35,7 +42,7 @@
     </div>
 
     <div class="navigation-block">
-        <div class="navigation-block-header">Netz</div>
+        <div class="navigation-block-header">AG-Netz</div>
         <ul>
             <li><a href="{{ url_for("index") }}">Anmeldung</a></li>
             <li><a href="{{ url_for("index") }}">Externer Anschluss</a></li>

@@ -73,6 +73,15 @@ a:hover {
     width: 100%;
 }
 
+#login-form {
+    padding: 50px;
+    text-align: center;
+}
+#login-form input {
+    margin-bottom: 10px;
+    width: 200px;
+}
+
 .content-section {
     margin: 0 0 40px 0;
 }
