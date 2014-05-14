@@ -3,71 +3,83 @@
 <head>
     <meta charset="utf-8" />
     <title>AGDSN Sektion Wundtstraße{% if page_title %} - {{ page_title }}{% endif %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
 </head>
 <body>
-<div id="header">
-    <a href="{{ url_for("index") }}"><h1>AGDSN Sektion Wundtstraße</h1></a>
-</div>
-
-<div id="navigation">
-    <div class="navigation-block">
-        <div class="navigation-block-header">Informationen</div>
-        <ul>
-            <li><a href="{{ url_for("index") }}">News</a></li>
-            <li><a href="{{ url_for("contacts") }}">Ansprechpartner</a></li>
-            <li><a href="http://www.studentenwerk-dresden.de/wohnen/ansprechpartner.html">Hausmeister</a></li>
-            <li><a href="http://www.studentenwerk-dresden.de/wohnen/wohnheimkatalog/">Wohnheime</a></li>
-            <li><a href="http://www.studentenwerk-dresden.de/mensen/mensen_cafeterien.html">Mensen</a></li>
-        </ul>
-    </div>
-
-    <div class="navigation-block">
-        <div class="navigation-block-header">Dienste</div>
-        <ul>
-            <li><a href="{{ url_for("index") }}">Abfahrtszeiten</a></li>
-
-            <li><a href="{{ url_for("index") }}">Software</a></li>
-            <li><a href="https://www.wh2.tu-dresden.de/webmail">Webmail</a></li>
-            <li><a href="{{ url_for("index") }}">Wegweiser</a></li>
-            <li><a href="http://www.wh2.tu-dresden.de/wetter">Wetter in der Wu</a></li>
-        </ul>
-    </div>
-
-    <div class="navigation-block">
-        <div class="navigation-block-header">Netz</div>
-        <ul>
-            <li><a href="{{ url_for("index") }}">Anmeldung</a></li>
-            <li><a href="{{ url_for("index") }}">Externer Anschluss</a></li>
-            <li><a href="{{ url_for("index") }}">Häufig gestellte Fragen</a></li>
-            <li><a href="{{ url_for("index") }}">Anleitungen</a></li>
-            <li><a href="{{ url_for("index") }}">Semesterbeitrag</a></li>
-            <li><a href="{{ url_for("index") }}">Status unserer Dienste</a></li>
-            <li><a href="{{ url_for("index") }}">Wohnortwechsel</a></li>
-        </ul>
-    </div>
-
-    <div class="navigation-block">
-        <div class="navigation-block-header">Rechtliches</div>
-        <ul>
-            <li><a href="{{ url_for("index") }}">Trafficregelungen</a></li>
-            <li><a href="{{ url_for("index") }}">Finanzordnung</a></li>
-            <li><a href="http://agdsn.de/rechtliches">Höhere Ordnungen</a></li>
-            <li><a href="{{ url_for("index") }}">Netzordnung</a></li>
-            <li><a href="{{ url_for("index") }}">Satzung der AGDSN</a></li>
-            <li><a href="{{ url_for("index") }}">Satzung der Sektion</a></li>
-            <li><a href="{{ url_for("index") }}">Impressum</a></li>
-        </ul>
+<div class="container-fluid">
+<div class="row">
+    <div id="header" class="col-md-12">
+        <a href="{{ url_for("index") }}"><h1>AGDSN Sektion Wundtstraße</h1></a>
     </div>
 </div>
 
-<div id="content">
-    {% block content %}
-    {% endblock %}
+<div class="row">
+    <div id="navigation" class="col-md-2">
+        <div class="navigation-block">
+            <div class="navigation-block-header">Informationen</div>
+            <ul>
+                <li><a href="{{ url_for("index") }}">News</a></li>
+                <li><a href="{{ url_for("contacts") }}">Ansprechpartner</a></li>
+                <li><a href="http://www.studentenwerk-dresden.de/wohnen/ansprechpartner.html">Hausmeister</a></li>
+                <li><a href="http://www.studentenwerk-dresden.de/wohnen/wohnheimkatalog/">Wohnheime</a></li>
+                <li><a href="http://www.studentenwerk-dresden.de/mensen/mensen_cafeterien.html">Mensen</a></li>
+            </ul>
+        </div>
+
+        <div class="navigation-block">
+            <div class="navigation-block-header">Dienste</div>
+            <ul>
+                <li><a href="{{ url_for("index") }}">Abfahrtszeiten</a></li>
+                <li><a href="{{ url_for("index") }}">Software</a></li>
+                <li><a href="https://www.wh2.tu-dresden.de/webmail">Webmail</a></li>
+                <li><a href="{{ url_for("index") }}">Wegweiser</a></li>
+                <li><a href="http://www.wh2.tu-dresden.de/wetter">Wetter in der Wu</a></li>
+            </ul>
+        </div>
+
+        <div class="navigation-block">
+            <div class="navigation-block-header">Netz</div>
+            <ul>
+                <li><a href="{{ url_for("index") }}">Anmeldung</a></li>
+                <li><a href="{{ url_for("index") }}">Externer Anschluss</a></li>
+                <li><a href="{{ url_for("index") }}">Häufig gestellte Fragen</a></li>
+                <li><a href="{{ url_for("index") }}">Anleitungen</a></li>
+                <li><a href="{{ url_for("index") }}">Semesterbeitrag</a></li>
+                <li><a href="{{ url_for("index") }}">Status unserer Dienste</a></li>
+                <li><a href="{{ url_for("index") }}">Wohnortwechsel</a></li>
+            </ul>
+        </div>
+
+        <div class="navigation-block">
+            <div class="navigation-block-header">Rechtliches</div>
+            <ul>
+                <li><a href="{{ url_for("index") }}">Trafficregelungen</a></li>
+                <li><a href="{{ url_for("index") }}">Finanzordnung</a></li>
+                <li><a href="http://agdsn.de/rechtliches">Höhere Ordnungen</a></li>
+                <li><a href="{{ url_for("index") }}">Netzordnung</a></li>
+                <li><a href="{{ url_for("index") }}">Satzung der AGDSN</a></li>
+                <li><a href="{{ url_for("index") }}">Satzung der Sektion</a></li>
+                <li><a href="{{ url_for("index") }}">Impressum</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        {% if page_title %}
+            <h2>{{ page_title }}</h2>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
 </div>
-<div class="clear"></div>
-<div id="footer">
-    Sektion Wundtstraße, 2014
+
+<div class="row">
+    <div id="footer" class="col-md-12">
+        Sektion Wundtstraße, 2014
+    </div>
+</div>
+
 </div>
 </body>
 </html>
