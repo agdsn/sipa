@@ -32,14 +32,14 @@ a:hover {
 }
 
 #navigation, #navigation a {
-    color: #ffffff;
+    color: #000000;
 }
 
 .navigation-block {
-    background: #4e65f3;
-    border-right: 2px solid #000000;
-    margin-top: 12px;
-    padding: 10px;
+    background: #ffffff;
+    border-left: 2px solid #4e65f3;
+    margin-top: 30px;
+    padding: 0px;
 }
 
 .navigation-block ul {
