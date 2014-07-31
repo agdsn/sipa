@@ -109,3 +109,6 @@ def authenticate(username, password):
         return User.get(username)
     except ldap.INVALID_CREDENTIALS:
         return -2
+    except ldap.UNWILLING_TO_PERFORM:
+        # Empty password
+        return -2

@@ -77,6 +77,15 @@
         {% if page_title %}
             <h2>{{ page_title }}</h2>
         {% endif %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div id="flash-messages" class="warning alert-warning">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         {% block content %}
         {% endblock %}
     </div>

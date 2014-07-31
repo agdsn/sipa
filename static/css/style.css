@@ -21,10 +21,7 @@ a:hover {
 
 #header {
     background: #4e65f3 url("/static/img/logo.png") 20px 3px no-repeat;
-    border-top: 20px solid #ffffff;
     color: #ffffff;
-    font-size: larger;
-    height: 100px;
 }
 
 #header h1 {
@@ -55,7 +52,6 @@ a:hover {
 
 .navigation-block-header {
     font-size: 14pt;
-    border-bottom: 2px solid #4e65f3;
     text-align: left;
     padding: 0 0 5px 10px;
 }
@@ -99,6 +95,10 @@ a:hover {
 
 .contacts tr:nth-child(even) {
     background: #e8ecf8;
+}
+
+#flash-messages {
+    padding: 10px;
 }
 
 .clear {

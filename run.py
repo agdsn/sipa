@@ -39,7 +39,10 @@ def login():
         password = request.form['password']
         user = authenticate(username, password)
 
-        #TODO: error codes and flashes
+        if user == -1:
+            flash(u"Nutzer nicht gefunden!")
+        elif user == -2:
+            flash(u"Passwort war inkorrekt!")
         
         if isinstance(user, User):
             login_user(user)
