@@ -3,13 +3,12 @@
 
 {% block content %}
     <div id="login-form">
-        <form action="{{ url_for("login") }}" method="post">
+        <form action="{{ url_for("login") }}" method="POST">
             Benutzername<br>
-            <input type="text" name="username"><br>
+            <input type="text" id="username" name="username"><br>
             Passwort<br>
-            <input type="password" name="password"><br>
+            <input type="password" id="password" name="password"><br>
             <button type="submit">Einloggen</button>
         </form>
     </div>
-
 {% endblock %}
