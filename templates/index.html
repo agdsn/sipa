@@ -2,5 +2,5 @@
 {% set page_title = "Home" %}
 
 {% block content %}
-Hallo
+Hallo{% if current_user.name %} {{ current_user.name }}{% else %} Besucher{% endif %}!
 {% endblock %}

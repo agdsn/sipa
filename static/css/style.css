@@ -23,6 +23,8 @@ a:hover {
     background: #4e65f3 url("/static/img/logo.png") 20px 3px no-repeat;
     border-top: 20px solid #ffffff;
     color: #ffffff;
+    font-size: larger;
+    height: 100px;
 }
 
 #header h1 {
@@ -61,6 +63,42 @@ a:hover {
 #footer {
     font-size: 8pt;
     text-align: center;
+    width: 100%;
+}
+
+#login-form {
+    padding: 50px;
+    text-align: center;
+}
+#login-form input {
+    margin-bottom: 10px;
+    width: 200px;
+}
+
+.content-section {
+    margin: 0 0 40px 0;
+}
+
+.content-section h2 {
+    padding: 0;
+    margin: 0 0 12px 0;
+}
+
+.contacts {
+    border-collapse: collapse;
+    min-width: 35%;
+}
+.contacts th {
+    padding: 3px;
+    text-align: left;
+}
+.contacts td {
+    padding: 5px 3px;
+    vertical-align: top;
+}
+
+.contacts tr:nth-child(even) {
+    background: #e8ecf8;
 }
 
 .clear {
