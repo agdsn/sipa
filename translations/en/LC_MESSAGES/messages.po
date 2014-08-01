@@ -1,0 +1,366 @@
+# English translations for PROJECT.
+# Copyright (C) 2014 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-08-01 22:08+0200\n"
+"PO-Revision-Date: 2014-08-01 19:21+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#: config.py:36
+msgid "Bezahlt, verbunden"
+msgstr "Payed, connected"
+
+#: config.py:37
+msgid "Nicht bezahlt, Netzanschluss gesperrt"
+msgstr "Not payed, connection blocked"
+
+#: config.py:38
+msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
+msgstr "Net usage violation, connection blocked"
+
+#: config.py:39
+msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
+msgstr "Traffic limit reached, account blocked"
+
+#: forms.py:12
+msgid "E-Mail ist nicht in gültigem Format!"
+msgstr "E-Mail is invalid!"
+
+#: forms.py:13
+msgid "Betreff muss angegeben werden!"
+msgstr "Subject is missing!"
+
+#: forms.py:15
+msgid "Allgemeine Frage an die Admins"
+msgstr "General question"
+
+#: forms.py:16
+msgid "Störungen im Wu-ZW-Netz"
+msgstr "Network connectivity problems"
+
+#: forms.py:17
+msgid "Finanzen (Beiträge, Gebühren)"
+msgstr "Question about fees and charges"
+
+#: forms.py:18
+msgid "Probleme mit eigener Technik"
+msgstr "Problems with your own devices"
+
+#: forms.py:20
+msgid "Nachricht fehlt!"
+msgstr "Message is missing!"
+
+#: forms.py:24
+msgid "Altes Passwort muss angegeben werden!"
+msgstr "Old password must be submitted!"
+
+#: forms.py:25
+msgid "Neues Passwort fehlt!"
+msgstr "New password is missing!"
+
+#: forms.py:26
+msgid "Bestätigung des neuen Passworts fehlt!"
+msgstr "Verification of your new password is missing!"
+
+#: run.py:28
+msgid "Seite nicht gefunden!"
+msgstr "Page not found!"
+
+#: run.py:30
+msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
+msgstr "You do not have sufficient rights to view this page!"
+
+#: run.py:32
+msgid "Es ist ein Fehler aufgetreten!"
+msgstr "An error occured!"
+
+#: run.py:66
+msgid "Nutzer nicht gefunden!"
+msgstr "User not found!"
+
+#: run.py:68
+msgid "Passwort war inkorrekt!"
+msgstr "Wrong password submitted!"
+
+#: run.py:90
+msgid "Es gab einen Fehler bei der Datenbankanfrage!"
+msgstr "Database query could not be processed!"
+
+#: run.py:116
+msgid "Nachricht wurde versandt."
+msgstr "Message was sent."
+
+#: run.py:118
+msgid ""
+"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
+"direkt eine E-Mail an support@wh2.tu-dresden.de"
+msgstr ""
+"There was an error sending your message. Please contact us at support@wh2"
+".tu-dresden.de"
+
+#: run.py:147
+msgid "Neue Passwörter stimmen nicht überein!"
+msgstr "Password verification was unsuccessful!"
+
+#: run.py:151
+msgid "Altes Passwort war inkorrekt!"
+msgstr "Old password was incorrect!"
+
+#: run.py:153
+msgid "Passwort wurde geändert"
+msgstr "Password was changed"
+
+#: templates/base.html:20
+msgid "Benutzermenü"
+msgstr "User menu"
+
+#: templates/base.html:26
+msgid "Nachricht an die Admins"
+msgstr "Message to the admins"
+
+#: templates/base.html:27
+msgid "Passwort ändern"
+msgstr "Change password"
+
+#: templates/base.html:34
+msgid "Informationen"
+msgstr "Information"
+
+#: templates/base.html:37 templates/content/ansprechpartner.html:2
+#: templates/content/ansprechpartner.html:66
+msgid "Ansprechpartner"
+msgstr "Contacts"
+
+#: templates/base.html:38
+msgid "Hausmeister"
+msgstr "Facility managers"
+
+#: templates/base.html:39
+msgid "Wohnheime"
+msgstr "Dormitories"
+
+#: templates/base.html:40
+msgid "Mensen"
+msgstr "Cafeterias"
+
+#: templates/base.html:45
+msgid "Dienste"
+msgstr "Services"
+
+#: templates/base.html:47
+msgid "Abfahrtszeiten"
+msgstr "Bus & train departure times"
+
+#: templates/base.html:50
+msgid "Wegweiser"
+msgstr "Guidepost"
+
+#: templates/base.html:51
+msgid "Wetter in der Wu"
+msgstr "Weather @ Wundtstraße"
+
+#: templates/base.html:56
+msgid "AG-Netz"
+msgstr "Our network"
+
+#: templates/base.html:58
+msgid "Anmeldung"
+msgstr "Registration"
+
+#: templates/base.html:59
+msgid "Externer Anschluss"
+msgstr "External provider connection"
+
+#: templates/base.html:60
+msgid "Häufig gestellte Fragen"
+msgstr "Frequently asked questions"
+
+#: templates/base.html:61
+msgid "Anleitungen"
+msgstr "Tutorials"
+
+#: templates/base.html:62
+msgid "Semesterbeitrag"
+msgstr "Semester fee"
+
+#: templates/base.html:63
+msgid "Status unserer Dienste"
+msgstr "Status of our services"
+
+#: templates/base.html:64
+msgid "Wohnortwechsel"
+msgstr "Moving"
+
+#: templates/base.html:69
+msgid "Rechtliches"
+msgstr "Legal"
+
+#: templates/base.html:71
+msgid "Trafficregelungen"
+msgstr "Traffic regulations"
+
+#: templates/base.html:72
+msgid "Finanzordnung"
+msgstr "Finance regulations"
+
+#: templates/base.html:73
+msgid "Höhere Ordnungen"
+msgstr "Higher regulations"
+
+#: templates/base.html:74
+msgid "Netzordnung"
+msgstr "Network regulations"
+
+#: templates/base.html:75
+msgid "Satzung der AG DSN"
+msgstr "Statute of AG DSN"
+
+#: templates/base.html:76
+msgid "Satzung der Sektion"
+msgstr "Statute of division Wundstraße"
+
+#: templates/base.html:77
+msgid "Impressum"
+msgstr "Imprint"
+
+#: templates/content/ansprechpartner.html:5
+msgid "Allgemeine Ansprechpartner"
+msgstr "General contacts"
+
+#: templates/content/ansprechpartner.html:9
+msgid "Bereich"
+msgstr "Division"
+
+#: templates/content/ansprechpartner.html:10
+msgid "Verantwortliche"
+msgstr "Responsible"
+
+#: templates/content/ansprechpartner.html:15
+msgid "Vorstand"
+msgstr "Managing"
+
+#: templates/content/ansprechpartner.html:20
+msgid "Finanzen"
+msgstr "Finance"
+
+#: templates/content/ansprechpartner.html:30
+msgid "Öffentlichkeitsarbeit"
+msgstr "Public relations"
+
+#: templates/content/ansprechpartner.html:40
+msgid "Nutzerverwaltung"
+msgstr "User management"
+
+#: templates/content/ansprechpartner.html:50
+msgid "Server & Dienste"
+msgstr "Servers & services"
+
+#: templates/content/ansprechpartner.html:61
+msgid "Hausadmins"
+msgstr "Dormitory admins"
+
+#: templates/content/ansprechpartner.html:65
+msgid "Haus"
+msgstr "Dormitory"
+
+#: templates/usersuite/change_password.html:2
+msgid "Password ändern"
+msgstr "Change password"
+
+#: templates/usersuite/change_password.html:10
+msgid "Dein altes Passwort"
+msgstr "Your old password"
+
+#: templates/usersuite/change_password.html:16
+msgid "Dein neues Passwort"
+msgstr "Your new password"
+
+#: templates/usersuite/change_password.html:22
+msgid "Bestätigung des neuen Passworts"
+msgstr "Verification of your new password"
+
+#: templates/usersuite/change_password.html:26
+#: templates/usersuite/contact.html:35
+msgid "Abschicken"
+msgstr "Send"
+
+#: templates/usersuite/change_password.html:27
+#: templates/usersuite/contact.html:36
+msgid "Zurücksetzen"
+msgstr "Reset"
+
+#: templates/usersuite/contact.html:2
+msgid "Nachricht an die Sektionsadmins"
+msgstr "Message to the admins"
+
+#: templates/usersuite/contact.html:10
+msgid "Deine E-Mail-Adresse"
+msgstr "Your e-mail address"
+
+#: templates/usersuite/contact.html:14
+msgid "Kategorie"
+msgstr "Category"
+
+#: templates/usersuite/contact.html:20
+msgid "Betreff deiner Nachricht"
+msgstr "Subject of your message"
+
+#: templates/usersuite/contact.html:26
+msgid "Deine Nachricht an uns"
+msgstr "Your message"
+
+#: templates/usersuite/contact.html:32
+msgid ""
+"Hinweis: Zusätzlich zu deiner Nachricht wird deine User-ID, dein Wohnheim"
+" sowie dein Echtname an die Nachricht angehängt."
+msgstr ""
+"Note: additionally to your message your user-id, your dormitory and your "
+"real name will be submitted with this mail."
+
+#: templates/usersuite/index.html:2
+msgid "Usersuite von "
+msgstr "Usersuite of "
+
+#: templates/usersuite/index.html:9
+msgid "Nutzer-ID"
+msgstr "User-ID"
+
+#: templates/usersuite/index.html:13
+msgid "Accountname"
+msgstr "Account name"
+
+#: templates/usersuite/index.html:17
+msgid "Accountstatus"
+msgstr "Account status"
+
+#: templates/usersuite/index.html:21
+msgid "Aktuelles Zimmer"
+msgstr "Current room"
+
+#: templates/usersuite/index.html:25
+msgid "Aktuelle IP-Adresse"
+msgstr "Current IP address"
+
+#: templates/usersuite/index.html:29
+msgid "Aktuelle MAC-Adresse"
+msgstr "Current MAC address"
+
+#: templates/usersuite/index.html:33
+msgid "E-Mail-Weiterleitung"
+msgstr "E-Mail forwarding address"
+
+#: templates/usersuite/index.html:42
+msgid "Dein Traffic"
+msgstr "Your traffic"
+

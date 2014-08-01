@@ -8,8 +8,10 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
+from flask.ext.babel import Babel, gettext
 
 from authentication import User, authenticate, change_password
+from config import languages
 from database import query_userinfo
 from forms import flash_formerrors, ContactForm, ChangePasswordForm
 from mail import send_mail
@@ -19,14 +21,15 @@ app.secret_key = "q_T_a1C18aizPnA2yf-1Q8(2&,pd5n"
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+babel = Babel(app)
 
 def errorpage(e):
     if e.code in (404,):
-        flash(u"Seite nicht gefunden!", "warning")
+        flash(gettext(u"Seite nicht gefunden!"), "warning")
     elif e.code in (401, 403):
-        flash(u"Sie haben nicht die notwendigen Rechte um die Seite zu sehen!", "warning")
+        flash(gettext(u"Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"), "warning")
     else:
-        flash(u"Es ist ein Fehler aufgetreten!", "error")
+        flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")
     return redirect(url_for("index"))
 app.register_error_handler(401, errorpage)
 app.register_error_handler(403, errorpage)
@@ -37,6 +40,10 @@ app.register_error_handler(404, errorpage)
 def load_user(username):
     return User.get(username)
 
+
+@babel.localeselector
+def babel_selector():
+    return request.accept_languages.best_match(languages.keys())
 
 @app.route('/')
 def index():
@@ -56,9 +63,9 @@ def login():
         user = authenticate(username, password)
 
         if user == -1:
-            flash(u"Nutzer nicht gefunden!", "error")
+            flash(gettext(u"Nutzer nicht gefunden!"), "error")
         elif user == -2:
-            flash(u"Passwort war inkorrekt!", "error")
+            flash(gettext(u"Passwort war inkorrekt!"), "error")
         
         if isinstance(user, User):
             login_user(user)
@@ -80,7 +87,7 @@ def logout():
 def usersuite():
     userinfo = query_userinfo(current_user.uid)
     if userinfo == -1:
-        flash(u"Es gab einen Fehler bei der Datenbankanfrage!", "error")
+        flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for("index"))
     return render_template("usersuite/index.html", userinfo=userinfo)
 
@@ -106,9 +113,9 @@ def usersuite_contact():
         subject = u"[Usersuite] {0}: {1}".format(cat, form.subject.data)
 
         if send_mail(form.email.data, "support@wh2.tu-dresden.de", subject, form.message.data):
-            flash(u"Nachricht wurde versandt.")
+            flash(gettext(u"Nachricht wurde versandt."), "success")
         else:
-            flash(u"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an org@wh2.tu-dresden.de", "error")
+            flash(gettext(u"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"), "error")
         return redirect(url_for("usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)
@@ -137,13 +144,13 @@ def usersuite_change_password():
         new = form.new.data
 
         if new != form.new2.data:
-            flash(u"Neue Passwörter stimmen nicht überein!", "error")
+            flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
             code = change_password(current_user.uid, old, new)
             if code == -1:
-                flash(u"Altes Passwort war inkorrekt!", "error")
+                flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
             elif code:
-                flash(u"Passwort wurde geändert", "success")
+                flash(gettext(u"Passwort wurde geändert"), "success")
                 return redirect(url_for("usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)

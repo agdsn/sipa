@@ -3,3 +3,5 @@ venv
 *.pyo
 *~
 .idea
+
+messages.pot

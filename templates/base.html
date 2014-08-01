@@ -10,71 +10,71 @@
 <div class="container-fluid">
 <div class="row">
     <div id="header" class="col-md-12">
-        <a href="{{ url_for("index") }}"><h1>AGDSN Sektion Wundtstraße</h1></a>
+        <a href="{{ url_for("index") }}"><h1>AG DSN Sektion Wundtstraße</h1></a>
     </div>
 </div>
 
 <div class="row">
     <div id="navigation" class="col-md-2">
 		<div class="navigation-block">
-		    <div class="navigation-block-header">Benutzermenü</div>
+		    <div class="navigation-block-header">{{ _('Benutzermenü') }}</div>
 		    <ul>
 		        {% if current_user.is_anonymous() %}
                     <li><a href="{{ url_for("login") }}">Login</a></li>
                 {% else %}
                     <li><a href="{{ url_for("usersuite") }}">Usersuite</a></li>
-                    <li><a href="{{ url_for("usersuite_contact") }}">Nachricht an die Admins</a></li>
-                    <li><a href="{{ url_for("usersuite_change_password") }}">Passwort ändern</a></li>
+                    <li><a href="{{ url_for("usersuite_contact") }}">{{ _('Nachricht an die Admins') }}</a></li>
+                    <li><a href="{{ url_for("usersuite_change_password") }}">{{ _('Passwort ändern') }}</a></li>
                     <li><a href="{{ url_for("logout") }}">Logout</a></li>
                 {% endif %}
 		    </ul>
 		</div>
 
         <div class="navigation-block">
-            <div class="navigation-block-header">Informationen</div>
+            <div class="navigation-block-header">{{ _('Informationen') }}</div>
             <ul>
                 <li><a href="{{ url_for("index") }}">News</a></li>
-                <li><a href="{{ url_for("contacts") }}">Ansprechpartner</a></li>
-                <li><a href="http://www.studentenwerk-dresden.de/wohnen/ansprechpartner.html">Hausmeister</a></li>
-                <li><a href="http://www.studentenwerk-dresden.de/wohnen/wohnheimkatalog/">Wohnheime</a></li>
-                <li><a href="http://www.studentenwerk-dresden.de/mensen/mensen_cafeterien.html">Mensen</a></li>
+                <li><a href="{{ url_for("contacts") }}">{{ _('Ansprechpartner') }}</a></li>
+                <li><a href="http://www.studentenwerk-dresden.de/wohnen/ansprechpartner.html">{{ _('Hausmeister') }}</a></li>
+                <li><a href="http://www.studentenwerk-dresden.de/wohnen/wohnheimkatalog/">{{ _('Wohnheime') }}</a></li>
+                <li><a href="http://www.studentenwerk-dresden.de/mensen/mensen_cafeterien.html">{{ _('Mensen') }}</a></li>
             </ul>
         </div>
 
         <div class="navigation-block">
-            <div class="navigation-block-header">Dienste</div>
+            <div class="navigation-block-header">{{ _('Dienste') }}</div>
             <ul>
-                <li><a href="{{ url_for("index") }}">Abfahrtszeiten</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Abfahrtszeiten') }}</a></li>
                 <li><a href="{{ url_for("index") }}">Software</a></li>
                 <li><a href="https://www.wh2.tu-dresden.de/webmail">Webmail</a></li>
-                <li><a href="{{ url_for("index") }}">Wegweiser</a></li>
-                <li><a href="http://www.wh2.tu-dresden.de/wetter">Wetter in der Wu</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Wegweiser') }}</a></li>
+                <li><a href="http://www.wh2.tu-dresden.de/wetter">{{ _('Wetter in der Wu') }}</a></li>
             </ul>
         </div>
 
         <div class="navigation-block">
-            <div class="navigation-block-header">AG-Netz</div>
+            <div class="navigation-block-header">{{ _('AG-Netz') }}</div>
             <ul>
-                <li><a href="{{ url_for("index") }}">Anmeldung</a></li>
-                <li><a href="{{ url_for("index") }}">Externer Anschluss</a></li>
-                <li><a href="{{ url_for("index") }}">Häufig gestellte Fragen</a></li>
-                <li><a href="{{ url_for("index") }}">Anleitungen</a></li>
-                <li><a href="{{ url_for("index") }}">Semesterbeitrag</a></li>
-                <li><a href="{{ url_for("index") }}">Status unserer Dienste</a></li>
-                <li><a href="{{ url_for("index") }}">Wohnortwechsel</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Anmeldung') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Externer Anschluss') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Häufig gestellte Fragen') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Anleitungen') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Semesterbeitrag') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Status unserer Dienste') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Wohnortwechsel') }}</a></li>
             </ul>
         </div>
 
         <div class="navigation-block">
-            <div class="navigation-block-header">Rechtliches</div>
+            <div class="navigation-block-header">{{ _('Rechtliches') }}</div>
             <ul>
-                <li><a href="{{ url_for("index") }}">Trafficregelungen</a></li>
-                <li><a href="{{ url_for("index") }}">Finanzordnung</a></li>
-                <li><a href="http://agdsn.de/rechtliches">Höhere Ordnungen</a></li>
-                <li><a href="{{ url_for("index") }}">Netzordnung</a></li>
-                <li><a href="{{ url_for("index") }}">Satzung der AGDSN</a></li>
-                <li><a href="{{ url_for("index") }}">Satzung der Sektion</a></li>
-                <li><a href="{{ url_for("index") }}">Impressum</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Trafficregelungen') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Finanzordnung') }}</a></li>
+                <li><a href="http://agdsn.de/rechtliches">{{ _('Höhere Ordnungen') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Netzordnung') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Satzung der AG DSN') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Satzung der Sektion') }}</a></li>
+                <li><a href="{{ url_for("index") }}">{{ _('Impressum') }}</a></li>
             </ul>
         </div>
     </div>
@@ -88,7 +88,7 @@
                 {% for cat, msg in messages %}
                     {% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
                     <div class="alert{% if cat and cat != 'message' %} alert-{{ cat }}{% else %} alert-info{% endif %}">
-                        {{ msg }}
+                        {{ _(msg) }}
                     </div>
                 {% endfor %}
             {% endif %}

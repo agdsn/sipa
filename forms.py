@@ -2,27 +2,28 @@
 # -*- coding: utf-8 -*-
 
 from flask import flash
+from flask.ext.babel import gettext, lazy_gettext
 from flask.ext.wtf import Form
 from wtforms import TextField, TextAreaField, SelectField, PasswordField
 from wtforms.validators import Required, Email
 
 
 class ContactForm(Form):
-    email = TextField(u"E-Mail", validators=[Email(u"E-Mail ist nicht in gültigem Format!")])
-    subject = TextField(u"Betreff", validators=[Required(u"Betreff muss angegeben werden!")])
+    email = TextField(u"E-Mail", validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
+    subject = TextField(u"Betreff", validators=[Required(gettext(u"Betreff muss angegeben werden!"))])
     type = SelectField(u"Kategorie", choices=[
-        (u"frage", u"Allgemeine Frage an die Admins"),
-        (u"stoerung", u"Störungen im Wu-ZW-Netz"),
-        (u"finanzen", u"Finanzen (Beiträge, Gebühren)"),
-        (u"eigene-technik", u"Probleme mit eigener Technik")
+        (u"frage", lazy_gettext(u"Allgemeine Frage an die Admins")),
+        (u"stoerung", lazy_gettext(u"Störungen im Wu-ZW-Netz")),
+        (u"finanzen", lazy_gettext(u"Finanzen (Beiträge, Gebühren)")),
+        (u"eigene-technik", lazy_gettext(u"Probleme mit eigener Technik"))
     ])
-    message = TextAreaField(u"Nachricht", validators=[Required(u"Nachricht fehlt!")])
+    message = TextAreaField(u"Nachricht", validators=[Required(gettext(u"Nachricht fehlt!"))])
 
 
 class ChangePasswordForm(Form):
-    old = PasswordField(validators=[Required(u"Altes Passwort muss angegeben werden!")])
-    new = PasswordField(validators=[Required(u"Neues Passwort fehlt!")])
-    new2 = PasswordField(validators=[Required(u"Bestätigung des neuen Passworts fehlt!")])
+    old = PasswordField(validators=[Required(gettext(u"Altes Passwort muss angegeben werden!"))])
+    new = PasswordField(validators=[Required(gettext(u"Neues Passwort fehlt!"))])
+    new2 = PasswordField(validators=[Required(gettext(u"Bestätigung des neuen Passworts fehlt!"))])
 
 
 def flash_formerrors(form):
@@ -31,4 +32,4 @@ def flash_formerrors(form):
     """
     for field, errors in form.errors.items():
             for e in errors:
-                flash(e, "error")
+                flash(gettext(e), "error")

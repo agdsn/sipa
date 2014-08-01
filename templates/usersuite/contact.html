@@ -1,5 +1,5 @@
 {% extends "base.html" %}#
-{% set page_title = "Nachricht an die Sektionsadmins" %}
+{% set page_title = _("Nachricht an die Sektionsadmins") %}
 
 {% block content %}
     <div id="contact-form">
@@ -7,33 +7,33 @@
             {{ form.csrf_token }}
             <div class="row">
                 <div class="col-md-3 form-group">
-                    <label>Deine E-Mail-Adresse</label>
+                    <label>{{ _('Deine E-Mail-Adresse') }}</label>
                     {{ form.email(class="form-control", value=current_user.uid+"@wh2.tu-dresden.de") }}
                 </div>
                 <div class="col-md-3 form-group">
-                    <label>Kategorie</label>
-                    {{ form.type(class="form-control") }}
+                    <label>{{ _('Kategorie') }}</label>
+                    {{ _(form.type(class="form-control")) }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>Betreff deiner Nachricht</label>
+                    <label>{{ _('Betreff deiner Nachricht') }}</label>
                     {{ form.subject(class="form-control") }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>Deine Nachricht an uns</label>
+                    <label>{{ _('Deine Nachricht an uns') }}</label>
                     {{ form.message(class="form-control", rows=5) }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    Hinweis: Zusätzlich zu deiner Nachricht wird deine User-ID, dein Wohnheim sowie dein Echtname an die Nachricht angehängt.
+                    {{ _('Hinweis: Zusätzlich zu deiner Nachricht wird deine User-ID, dein Wohnheim sowie dein Echtname an die Nachricht angehängt.') }}
                 </div>
             </div>
-            <button type="submit" class="btn btn-default">Abschicken</button>
-            <button type="reset" class="btn btn-default">Zurücksetzen</button>
+            <button type="submit" class="btn btn-default">{{ _('Abschicken') }}</button>
+            <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
         </form>
     </div>
 {% endblock %}
