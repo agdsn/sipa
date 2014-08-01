@@ -9,8 +9,8 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 
-from authentication import User, authenticate
-from forms import ContactForm
+from authentication import User, authenticate, change_password
+from forms import flash_formerrors, ContactForm, ChangePasswordForm
 from mail import send_mail
 
 app = Flask(__name__)
@@ -67,7 +67,6 @@ def usersuite_contact():
     form = ContactForm()
 
     if form.validate_on_submit():
-        # Form was submitted _and_ successfully validated.
         types = {
             'stoerung': u"Störung",
             'finanzen': u"Finanzen",
@@ -88,12 +87,44 @@ def usersuite_contact():
             flash(u"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an org@wh2.tu-dresden.de", "error")
         return redirect(url_for("usersuite"))
     elif form.is_submitted():
-        # If the form was submitted, but could not be validated.
-        for field, errors in form.errors.items():
-            for e in errors:
-                flash(e, "error")
+        flash_formerrors(form)
 
     return render_template("usersuite/contact.html", form=form)
+
+
+@app.route("/usersuite/change-password", methods=['GET', 'POST'])
+def usersuite_change_password():
+    """Lets the user change his password.
+    Requests the old password once (in case someone forgot to logout for
+    example) and the new password two times.
+
+    If the new password was entered correctly twice, LDAP performs a bind
+    with the old credentials at the users DN and submits the passwords to
+    ldap.passwd_s(). This way every user can edit only his own data.
+
+    Error code "-1" is an incorrect old or empty password.
+
+    TODO: set a minimum character limit for new passwords.
+    """
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        old = form.old.data
+        new = form.new.data
+
+        if new != form.new2.data:
+            flash(u"Neue Passwörter stimmen nicht überein!", "error")
+        else:
+            code = change_password(current_user.uid, old, new)
+            if code == -1:
+                flash(u"Altes Passwort war inkorrekt!", "error")
+            elif code:
+                flash(u"Passwort wurde geändert", "success")
+                return redirect(url_for("usersuite"))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template("usersuite/change_password.html", form=form)
 
 
 @app.route("/logout")

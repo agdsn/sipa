@@ -105,6 +105,7 @@ def authenticate(username, password):
 
     try:
         l = ldap.initialize("ldap://%s:%s" % (LDAP_HOST, LDAP_PORT))
+        l.protocol_version = ldap.VERSION3
         l.simple_bind_s(user['dn'], password.encode('iso8859-1'))
         l.unbind_s()
         return User.get(username)
@@ -113,3 +114,21 @@ def authenticate(username, password):
     except ldap.UNWILLING_TO_PERFORM:
         # Empty password
         return -2
+
+
+def change_password(username, old, new):
+    try:
+        user = fetch_user(username)
+        if not user:
+            return -1
+        l = ldap.initialize("ldap://%s:%s" % (LDAP_HOST, LDAP_PORT))
+        l.protocol_version = ldap.VERSION3
+        l.simple_bind_s(user['dn'], old.encode('iso8859-1'))
+        l.passwd_s(user['dn'], old.encode('iso8859-1'), new.encode('iso8859-1'))
+        l.unbind_s()
+        return 1
+    except ldap.INVALID_CREDENTIALS:
+        return -1
+    except ldap.UNWILLING_TO_PERFORM:
+        # Empty password
+        return -1
