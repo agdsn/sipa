@@ -1,0 +1,31 @@
+{% extends "base.html" %}#
+{% set page_title = "Usersuite von " + current_user.name %}
+
+{% block content %}
+    <table class="table table-striped">
+        <tr>
+            <td>Nutzer-ID</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Accountstatus</td>
+            <td>ok/nicht bezahlt/gesperrt Traffic/gesperrt Verstoß</td>
+        </tr>
+        <tr>
+            <td>Aktuelles Zimmer</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Aktuelle MAC-Adresse</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>E-Mail-Weiterleitung</td>
+            <td>Nein/..Adresse..</td>
+        </tr>
+    </table>
+
+    <div id="usersuite-trafficgraph">
+        TRAFFICGRAPH
+    </div>
+{% endblock %}

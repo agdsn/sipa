@@ -19,8 +19,12 @@
 		<div class="navigation-block">
 		    <div class="navigation-block-header">Benutzermenü</div>
 		    <ul>
-		        <li>{% if current_user.is_anonymous() %}<a href="{{ url_for("login") }}">Login</a>
-		            {% else %}<a href="{{ url_for("logout") }}">Logout</a>{% endif %}</li>
+		        {% if current_user.is_anonymous() %}
+                    <li><a href="{{ url_for("login") }}">Login</a></li>
+                {% else %}
+                    <li><a href="{{ url_for("usersuite") }}">Usersuite</a></li>
+                    <li><a href="{{ url_for("logout") }}">Logout</a></li>
+                {% endif %}
 		    </ul>
 		</div>
 

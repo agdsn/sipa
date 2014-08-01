@@ -73,8 +73,9 @@ def fetch_user(username):
     user = l.search_s(LDAP_SEARCH_BASE,
                       ldap.SCOPE_SUBTREE,
                       "(uid=%s)" % username,
-                      ['uid', 'gecos', 'host', 'test'])
+                      ['uid', 'gecos', 'host'])
     l.unbind_s()
+
     if user:
         user = user.pop()
         userdict = {

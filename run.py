@@ -7,7 +7,7 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask.ext.login import LoginManager, current_user, login_user, logout_user
+from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 
 from authentication import User, authenticate
 
@@ -51,6 +51,12 @@ def login():
         return redirect(url_for('index'))
 
     return render_template('login.html')
+
+
+@app.route("/usersuite")
+@login_required
+def usersuite():
+    return render_template("usersuite/index.html")
 
 
 @app.route("/logout")
