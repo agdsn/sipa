@@ -20,6 +20,19 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+def errorpage(e):
+    if e.code in (404,):
+        flash(u"Seite nicht gefunden!", "warning")
+    elif e.code in (401, 403):
+        flash(u"Sie haben nicht die notwendigen Rechte um die Seite zu sehen!", "warning")
+    else:
+        flash(u"Es ist ein Fehler aufgetreten!", "error")
+    return redirect(url_for("index"))
+app.register_error_handler(401, errorpage)
+app.register_error_handler(403, errorpage)
+app.register_error_handler(404, errorpage)
+
+
 @login_manager.user_loader
 def load_user(username):
     return User.get(username)
