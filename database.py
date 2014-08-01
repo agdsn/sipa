@@ -3,27 +3,8 @@
 
 from sqlalchemy import create_engine
 
+from config import dormitories, status, DB_USER, DB_PASSWORD
 
-dormitories = [
-    u'Wundstraße 5',
-    u'Wundstraße 7',
-    u'Wundstraße 9',
-    u'Wundstraße 11',
-    u'Wundstraße 1',
-    u'Wundstraße 3',
-    u'Zellescher Weg 41',
-    u'Zellescher Weg 41A',
-    u'Zellescher Weg 41B',
-    u'Zellescher Weg 41C',
-    u'Zellescher Weg 41D'
-]
-
-status = {
-    1: u'Bezahlt, verbunden',
-    2: u'Nicht bezahlt, Netzanschluss gesperrt',
-    7: u'Verstoß gegen Netzordnung, Netzanschluss gesperrt',
-    12: u'Trafficlimit überschritten, Netzanschluss gesperrt'
-}
 
 
 def sql_query(query, args=None):
@@ -81,4 +62,4 @@ def query_userinfo(username):
     return user
 
 
-db = create_engine('mysql+mysqldb://buzz:word@127.0.0.1:3306/netusers', echo=False)
+db = create_engine('mysql+mysqldb://{0}:{1}@127.0.0.1:3306/netusers'.format(DB_USER, DB_PASSWORD), echo=False)

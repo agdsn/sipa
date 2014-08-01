@@ -51,9 +51,15 @@ def login():
             login_user(user)
 
     if current_user.is_authenticated():
-        return redirect(url_for('index'))
+        return redirect(url_for('usersuite'))
 
     return render_template('login.html')
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
 
 
 @app.route("/usersuite")
@@ -130,12 +136,6 @@ def usersuite_change_password():
         flash_formerrors(form)
 
     return render_template("usersuite/change_password.html", form=form)
-
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":

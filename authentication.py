@@ -6,10 +6,7 @@ Everything used for authentication in Sektionsweb (Usersuite..).
 """
 import ldap
 
-
-LDAP_HOST = "localhost"
-LDAP_PORT = 1389
-LDAP_SEARCH_BASE = "ou=buzz,o=AG DSN,c=de"
+from config import LDAP_HOST, LDAP_PORT, LDAP_SEARCH_BASE
 
 
 class User(object):
