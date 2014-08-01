@@ -8,7 +8,11 @@
             <div class="row">
                 <div class="col-md-3 form-group">
                     <label>{{ _('Deine E-Mail-Adresse') }}</label>
-                    {{ form.email(class="form-control", value=current_user.uid+"@wh2.tu-dresden.de") }}
+                    {% if current_user.mail %}
+                        {{ form.email(class="form-control", value=current_user.mail) }}
+                    {% else %}
+                        {{ form.email(class="form-control", value=current_user.uid+"@wh2.tu-dresden.de") }}
+                    {% endif %}
                 </div>
                 <div class="col-md-3 form-group">
                     <label>{{ _('Kategorie') }}</label>

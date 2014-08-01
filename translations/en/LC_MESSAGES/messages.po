@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-01 22:46+0200\n"
+"POT-Creation-Date: 2014-08-01 23:52+0200\n"
 "PO-Revision-Date: 2014-08-01 19:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr "Net usage violation, connection blocked"
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr "Traffic limit reached, account blocked"
 
-#: forms.py:12
+#: forms.py:12 forms.py:31
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr "E-Mail is invalid!"
 
@@ -58,10 +58,14 @@ msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
 #: forms.py:30
+msgid "Passwort nicht angegeben!"
+msgstr "No password submitted!"
+
+#: forms.py:35
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: forms.py:31
+#: forms.py:36
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
@@ -81,7 +85,7 @@ msgstr "An error occured!"
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:70
+#: run.py:70 run.py:182
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
@@ -113,6 +117,14 @@ msgstr "Old password was incorrect!"
 msgid "Passwort wurde geändert"
 msgstr "Password was changed"
 
+#: run.py:184
+msgid "Nicht genügend LDAP-Rechte!"
+msgstr "Insufficient rights!"
+
+#: run.py:186
+msgid "E-Mail-Adresse wurde geändert"
+msgstr "Email address was changed"
+
 #: templates/base.html:20
 msgid "Benutzermenü"
 msgstr "User menu"
@@ -125,104 +137,108 @@ msgstr "Message to the admins"
 msgid "Passwort ändern"
 msgstr "Change password"
 
-#: templates/base.html:34
+#: templates/base.html:28
+msgid "E-Mail-Adresse ändern"
+msgstr "Change email address"
+
+#: templates/base.html:35
 msgid "Informationen"
 msgstr "Information"
 
-#: templates/base.html:37 templates/content/ansprechpartner.html:2
+#: templates/base.html:38 templates/content/ansprechpartner.html:2
 #: templates/content/ansprechpartner.html:66
 msgid "Ansprechpartner"
 msgstr "Contacts"
 
-#: templates/base.html:38
+#: templates/base.html:39
 msgid "Hausmeister"
 msgstr "Facility managers"
 
-#: templates/base.html:39
+#: templates/base.html:40
 msgid "Wohnheime"
 msgstr "Dormitories"
 
-#: templates/base.html:40
+#: templates/base.html:41
 msgid "Mensen"
 msgstr "Cafeterias"
 
-#: templates/base.html:45
+#: templates/base.html:46
 msgid "Dienste"
 msgstr "Services"
 
-#: templates/base.html:47
+#: templates/base.html:48
 msgid "Abfahrtszeiten"
 msgstr "Bus & train departure times"
 
-#: templates/base.html:50
+#: templates/base.html:51
 msgid "Wegweiser"
 msgstr "Guidepost"
 
-#: templates/base.html:51
+#: templates/base.html:52
 msgid "Wetter in der Wu"
 msgstr "Weather @ Wundtstraße"
 
-#: templates/base.html:56
+#: templates/base.html:57
 msgid "AG-Netz"
 msgstr "Our network"
 
-#: templates/base.html:58
+#: templates/base.html:59
 msgid "Anmeldung"
 msgstr "Registration"
 
-#: templates/base.html:59
+#: templates/base.html:60
 msgid "Externer Anschluss"
 msgstr "External provider connection"
 
-#: templates/base.html:60
+#: templates/base.html:61
 msgid "Häufig gestellte Fragen"
 msgstr "Frequently asked questions"
 
-#: templates/base.html:61
+#: templates/base.html:62
 msgid "Anleitungen"
 msgstr "Tutorials"
 
-#: templates/base.html:62
+#: templates/base.html:63
 msgid "Semesterbeitrag"
 msgstr "Semester fee"
 
-#: templates/base.html:63
+#: templates/base.html:64
 msgid "Status unserer Dienste"
 msgstr "Status of our services"
 
-#: templates/base.html:64
+#: templates/base.html:65
 msgid "Wohnortwechsel"
 msgstr "Moving"
 
-#: templates/base.html:69
+#: templates/base.html:70
 msgid "Rechtliches"
 msgstr "Legal"
 
-#: templates/base.html:71
+#: templates/base.html:72
 msgid "Trafficregelungen"
 msgstr "Traffic regulations"
 
-#: templates/base.html:72
+#: templates/base.html:73
 msgid "Finanzordnung"
 msgstr "Finance regulations"
 
-#: templates/base.html:73
+#: templates/base.html:74
 msgid "Höhere Ordnungen"
 msgstr "Higher regulations"
 
-#: templates/base.html:74
+#: templates/base.html:75
 msgid "Netzordnung"
 msgstr "Network regulations"
 
-#: templates/base.html:75
+#: templates/base.html:76
 msgid "Satzung der AG DSN"
 msgstr "Statute of AG DSN"
 
-#: templates/base.html:76
+#: templates/base.html:77
 msgid "Satzung der Sektion"
 msgstr "Statute of division Wundstraße"
 
-#: templates/base.html:77
+#: templates/base.html:78
 msgid "Impressum"
 msgstr "Imprint"
 
@@ -278,6 +294,24 @@ msgstr "Dormitory admins"
 msgid "Haus"
 msgstr "Dormitory"
 
+#: templates/usersuite/change_mail.html:2
+msgid "E-Mail ändern"
+msgstr "Change email address"
+
+#: templates/usersuite/change_mail.html:10
+msgid "Dein aktuelles Passwort"
+msgstr "Your current password"
+
+#: templates/usersuite/change_mail.html:16
+msgid "Die neue E-Mail-Adresse"
+msgstr "Your new e-mail address"
+
+#: templates/usersuite/change_mail.html:20
+#: templates/usersuite/change_password.html:26
+#: templates/usersuite/contact.html:39
+msgid "Abschicken"
+msgstr "Send"
+
 #: templates/usersuite/change_password.html:2
 msgid "Password ändern"
 msgstr "Change password"
@@ -294,13 +328,8 @@ msgstr "Your new password"
 msgid "Bestätigung des neuen Passworts"
 msgstr "Verification of your new password"
 
-#: templates/usersuite/change_password.html:26
-#: templates/usersuite/contact.html:35
-msgid "Abschicken"
-msgstr "Send"
-
 #: templates/usersuite/change_password.html:27
-#: templates/usersuite/contact.html:36
+#: templates/usersuite/contact.html:40
 msgid "Zurücksetzen"
 msgstr "Reset"
 
@@ -312,19 +341,19 @@ msgstr "Message to the admins"
 msgid "Deine E-Mail-Adresse"
 msgstr "Your e-mail address"
 
-#: templates/usersuite/contact.html:14
+#: templates/usersuite/contact.html:18
 msgid "Kategorie"
 msgstr "Category"
 
-#: templates/usersuite/contact.html:20
+#: templates/usersuite/contact.html:24
 msgid "Betreff deiner Nachricht"
 msgstr "Subject of your message"
 
-#: templates/usersuite/contact.html:26
+#: templates/usersuite/contact.html:30
 msgid "Deine Nachricht an uns"
 msgstr "Your message"
 
-#: templates/usersuite/contact.html:32
+#: templates/usersuite/contact.html:36
 msgid ""
 "Hinweis: Zusätzlich zu deiner Nachricht wird deine User-ID, dein Wohnheim"
 " sowie dein Echtname an die Nachricht angehängt."
@@ -364,19 +393,23 @@ msgstr "Current MAC address"
 msgid "E-Mail-Weiterleitung"
 msgstr "E-Mail forwarding address"
 
+#: templates/usersuite/index.html:34
+msgid "Nicht eingerichtet"
+msgstr "Not set up"
+
 #: templates/usersuite/index.html:42
 msgid "Dein Traffic"
 msgstr "Your traffic"
 
-#~ msgid "Allgemeine Frage an die Admins"
-#~ msgstr "General question"
+msgid "Allgemeine Frage an die Admins"
+msgstr "General question"
 
-#~ msgid "Störungen im Wu-ZW-Netz"
-#~ msgstr "Network connectivity problems"
+msgid "Störungen im Wu-ZW-Netz"
+msgstr "Network connectivity problems"
 
-#~ msgid "Finanzen (Beiträge, Gebühren)"
-#~ msgstr "Question about fees and charges"
+msgid "Finanzen (Beiträge, Gebühren)"
+msgstr "Question about fees and charges"
 
-#~ msgid "Probleme mit eigener Technik"
-#~ msgstr "Problems with your own devices"
+msgid "Probleme mit eigener Technik"
+msgstr "Problems with your own devices"
 

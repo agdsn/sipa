@@ -26,6 +26,11 @@ class ChangePasswordForm(Form):
     new2 = PasswordField(validators=[Required(gettext(u"Bestätigung des neuen Passworts fehlt!"))])
 
 
+class ChangeMailForm(Form):
+    password = PasswordField(validators=[Required(gettext(u"Passwort nicht angegeben!"))])
+    email = TextField(validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
+
+
 class LoginForm(Form):
     username = TextField(u"Username", validators=[Required(gettext(u"Nutzername muss angegeben werden!"))])
     password = PasswordField(u"Password", validators=[Required(gettext(u"Kein Passwort eingegeben!"))])

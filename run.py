@@ -10,10 +10,10 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 from flask.ext.babel import Babel, gettext
 
-from authentication import User, authenticate, change_password
+from authentication import User, authenticate, change_password, change_email
 from config import languages
 from database import query_userinfo
-from forms import flash_formerrors, ContactForm, ChangePasswordForm, LoginForm
+from forms import flash_formerrors, ContactForm, ChangePasswordForm, ChangeMailForm, LoginForm
 from mail import send_mail
 
 app = Flask(__name__)
@@ -160,6 +160,35 @@ def usersuite_change_password():
         flash_formerrors(form)
 
     return render_template("usersuite/change_password.html", form=form)
+
+
+@app.route("/usersuite/change-mail", methods=['GET', 'POST'])
+def usersuite_change_mail():
+    """Changes the users forwarding mail attribute
+    in his LDAP entry.
+
+    TODO: LDAP schema forbids add/replace 'mail' attribute
+    """
+    form = ChangeMailForm()
+
+    if form.validate_on_submit():
+        password = form.password.data
+        email = form.email.data
+
+        code = change_email(current_user.uid, password, email)
+        if code == -1:
+            pass
+        elif code == -2:
+            flash(gettext(u"Passwort war inkorrekt!"), "error")
+        elif code == -3:
+            flash(gettext(u"Nicht genügend LDAP-Rechte!"), "error")
+        else:
+            flash(gettext(u"E-Mail-Adresse wurde geändert"), "success")
+            return redirect(url_for('usersuite'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template('usersuite/change_mail.html', form=form)
 
 
 if __name__ == "__main__":

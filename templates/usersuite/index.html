@@ -31,7 +31,7 @@
                 </tr>
                 <tr>
                     <td>{{ _('E-Mail-Weiterleitung') }}</td>
-                    <td>&nbsp;</td>
+                    <td>{% if current_user.mail %}{{ current_user.mail }}{% else %}{{ _('Nicht eingerichtet') }}{% endif %}</td>
                 </tr>
             </table>
         </div>
