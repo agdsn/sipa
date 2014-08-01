@@ -10,6 +10,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 
 from authentication import User, authenticate, change_password
+from database import query_userinfo
 from forms import flash_formerrors, ContactForm, ChangePasswordForm
 from mail import send_mail
 
@@ -58,7 +59,11 @@ def login():
 @app.route("/usersuite")
 @login_required
 def usersuite():
-    return render_template("usersuite/index.html")
+    userinfo = query_userinfo(current_user.uid)
+    if userinfo == -1:
+        flash(u"Es gab einen Fehler bei der Datenbankanfrage!", "error")
+        return redirect(url_for("index"))
+    return render_template("usersuite/index.html", userinfo=userinfo)
 
 
 @app.route("/usersuite/contact", methods=['GET', 'POST'])
