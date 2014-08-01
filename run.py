@@ -13,7 +13,7 @@ from flask.ext.babel import Babel, gettext
 from authentication import User, authenticate, change_password
 from config import languages
 from database import query_userinfo
-from forms import flash_formerrors, ContactForm, ChangePasswordForm
+from forms import flash_formerrors, ContactForm, ChangePasswordForm, LoginForm
 from mail import send_mail
 
 app = Flask(__name__)
@@ -57,23 +57,27 @@ def contacts():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
         user = authenticate(username, password)
 
         if user == -1:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         elif user == -2:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
-        
+
         if isinstance(user, User):
             login_user(user)
+    elif form.is_submitted():
+        flash_formerrors(form)
 
     if current_user.is_authenticated():
         return redirect(url_for('usersuite'))
 
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 
 @app.route("/logout")

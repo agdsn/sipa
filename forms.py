@@ -26,6 +26,11 @@ class ChangePasswordForm(Form):
     new2 = PasswordField(validators=[Required(gettext(u"Bestätigung des neuen Passworts fehlt!"))])
 
 
+class LoginForm(Form):
+    username = TextField(u"Username", validators=[Required(gettext(u"Nutzername muss angegeben werden!"))])
+    password = PasswordField(u"Password", validators=[Required(gettext(u"Kein Passwort eingegeben!"))])
+
+
 def flash_formerrors(form):
     """If a form is submitted, but could not be validated the routing passes the form
     and this method returns all form errors (form.errors) as flash messages.

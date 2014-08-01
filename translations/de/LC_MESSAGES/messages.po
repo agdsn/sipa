@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-01 22:08+0200\n"
+"POT-Creation-Date: 2014-08-01 22:46+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -41,22 +41,6 @@ msgstr ""
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: forms.py:15
-msgid "Allgemeine Frage an die Admins"
-msgstr ""
-
-#: forms.py:16
-msgid "Störungen im Wu-ZW-Netz"
-msgstr ""
-
-#: forms.py:17
-msgid "Finanzen (Beiträge, Gebühren)"
-msgstr ""
-
-#: forms.py:18
-msgid "Probleme mit eigener Technik"
-msgstr ""
-
 #: forms.py:20
 msgid "Nachricht fehlt!"
 msgstr ""
@@ -73,6 +57,14 @@ msgstr ""
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
+#: forms.py:30
+msgid "Nutzername muss angegeben werden!"
+msgstr ""
+
+#: forms.py:31
+msgid "Kein Passwort eingegeben!"
+msgstr ""
+
 #: run.py:28
 msgid "Seite nicht gefunden!"
 msgstr ""
@@ -85,37 +77,37 @@ msgstr ""
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: run.py:66
+#: run.py:68
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: run.py:68
+#: run.py:70
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:90
+#: run.py:94
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: run.py:116
+#: run.py:120
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: run.py:118
+#: run.py:122
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: run.py:147
+#: run.py:151
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: run.py:151
+#: run.py:155
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:153
+#: run.py:157
 msgid "Passwort wurde geändert"
 msgstr ""
 
@@ -230,6 +222,18 @@ msgstr ""
 
 #: templates/base.html:77
 msgid "Impressum"
+msgstr ""
+
+#: templates/login.html:10
+msgid "Benutzername"
+msgstr ""
+
+#: templates/login.html:16
+msgid "Passwort"
+msgstr ""
+
+#: templates/login.html:20
+msgid "Einloggen"
 msgstr ""
 
 #: templates/content/ansprechpartner.html:5
@@ -364,8 +368,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "Es gab einen Fehler beim Versenden "
-#~ "der Nachricht. Bitte schicke uns direkt"
-#~ " eine E-Mail an org@wh2.tu-dresden.de"
+#~ msgstr ""
+
+#~ msgid "Allgemeine Frage an die Admins"
+#~ msgstr ""
+
+#~ msgid "Störungen im Wu-ZW-Netz"
+#~ msgstr ""
+
+#~ msgid "Finanzen (Beiträge, Gebühren)"
+#~ msgstr ""
+
+#~ msgid "Probleme mit eigener Technik"
 #~ msgstr ""
 

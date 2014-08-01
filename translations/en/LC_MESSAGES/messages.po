@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-01 22:08+0200\n"
+"POT-Creation-Date: 2014-08-01 22:46+0200\n"
 "PO-Revision-Date: 2014-08-01 19:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -41,22 +41,6 @@ msgstr "E-Mail is invalid!"
 msgid "Betreff muss angegeben werden!"
 msgstr "Subject is missing!"
 
-#: forms.py:15
-msgid "Allgemeine Frage an die Admins"
-msgstr "General question"
-
-#: forms.py:16
-msgid "Störungen im Wu-ZW-Netz"
-msgstr "Network connectivity problems"
-
-#: forms.py:17
-msgid "Finanzen (Beiträge, Gebühren)"
-msgstr "Question about fees and charges"
-
-#: forms.py:18
-msgid "Probleme mit eigener Technik"
-msgstr "Problems with your own devices"
-
 #: forms.py:20
 msgid "Nachricht fehlt!"
 msgstr "Message is missing!"
@@ -73,6 +57,14 @@ msgstr "New password is missing!"
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
+#: forms.py:30
+msgid "Nutzername muss angegeben werden!"
+msgstr "No username submitted!"
+
+#: forms.py:31
+msgid "Kein Passwort eingegeben!"
+msgstr "No password submitted!"
+
 #: run.py:28
 msgid "Seite nicht gefunden!"
 msgstr "Page not found!"
@@ -85,23 +77,23 @@ msgstr "You do not have sufficient rights to view this page!"
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: run.py:66
+#: run.py:68
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:68
+#: run.py:70
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: run.py:90
+#: run.py:94
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: run.py:116
+#: run.py:120
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: run.py:118
+#: run.py:122
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
@@ -109,15 +101,15 @@ msgstr ""
 "There was an error sending your message. Please contact us at support@wh2"
 ".tu-dresden.de"
 
-#: run.py:147
+#: run.py:151
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: run.py:151
+#: run.py:155
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: run.py:153
+#: run.py:157
 msgid "Passwort wurde geändert"
 msgstr "Password was changed"
 
@@ -233,6 +225,18 @@ msgstr "Statute of division Wundstraße"
 #: templates/base.html:77
 msgid "Impressum"
 msgstr "Imprint"
+
+#: templates/login.html:10
+msgid "Benutzername"
+msgstr "Username"
+
+#: templates/login.html:16
+msgid "Passwort"
+msgstr "Password"
+
+#: templates/login.html:20
+msgid "Einloggen"
+msgstr "Log in"
 
 #: templates/content/ansprechpartner.html:5
 msgid "Allgemeine Ansprechpartner"
@@ -363,4 +367,16 @@ msgstr "E-Mail forwarding address"
 #: templates/usersuite/index.html:42
 msgid "Dein Traffic"
 msgstr "Your traffic"
+
+#~ msgid "Allgemeine Frage an die Admins"
+#~ msgstr "General question"
+
+#~ msgid "Störungen im Wu-ZW-Netz"
+#~ msgstr "Network connectivity problems"
+
+#~ msgid "Finanzen (Beiträge, Gebühren)"
+#~ msgstr "Question about fees and charges"
+
+#~ msgid "Probleme mit eigener Technik"
+#~ msgstr "Problems with your own devices"
 

@@ -75,19 +75,6 @@ Layout elements
 
 
 /*
-Login form
-*/
-#login-form {
-    padding: 50px;
-    text-align: center;
-}
-#login-form input {
-    margin-bottom: 10px;
-    width: 200px;
-}
-
-
-/*
 Content box and specific use cases in content context
 */
 .content-section {
