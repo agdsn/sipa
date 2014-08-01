@@ -1,3 +1,6 @@
+/*
+General styling; font, links
+*/
 @font-face {
     font-family: Oxygen;
     src: url("/static/fonts/Oxygen.otf");
@@ -19,6 +22,10 @@ a:hover {
     text-decoration: underline;
 }
 
+
+/*
+Layout elements
+*/
 #header {
     background: #4e65f3 url("/static/img/logo.png") 20px 3px no-repeat;
     color: #ffffff;
@@ -62,6 +69,14 @@ a:hover {
     width: 100%;
 }
 
+#flash-messages {
+    padding: 10px;
+}
+
+
+/*
+Login form
+*/
 #login-form {
     padding: 50px;
     text-align: center;
@@ -71,6 +86,10 @@ a:hover {
     width: 200px;
 }
 
+
+/*
+Content box and specific use cases in content context
+*/
 .content-section {
     margin: 0 0 40px 0;
 }
@@ -97,10 +116,7 @@ a:hover {
     background: #e8ecf8;
 }
 
-#flash-messages {
-    padding: 10px;
-}
-
+/* Hackz */
 .clear {
     clear: both;
 }

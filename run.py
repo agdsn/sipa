@@ -10,6 +10,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 
 from authentication import User, authenticate
+from forms import ContactForm
 
 app = Flask(__name__)
 app.secret_key = "q_T_a1C18aizPnA2yf-1Q8(2&,pd5n"
@@ -57,6 +58,17 @@ def login():
 @login_required
 def usersuite():
     return render_template("usersuite/index.html")
+
+
+@app.route("/usersuite/contact", methods=['GET', 'POST'])
+@login_required
+def usersuite_contact():
+    form = ContactForm()
+
+    if form.validate_on_submit():
+        pass
+
+    return render_template("usersuite/contact.html", form=form)
 
 
 @app.route("/logout")

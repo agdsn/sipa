@@ -8,7 +8,7 @@ import ldap
 
 
 LDAP_HOST = "localhost"
-LDAP_PORT = 389
+LDAP_PORT = 1389
 LDAP_SEARCH_BASE = "ou=buzz,o=AG DSN,c=de"
 
 
