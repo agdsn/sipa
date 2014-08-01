@@ -1,17 +1,24 @@
 {% extends "base.html" %}#
-{% set page_title = "Usersuite - Kontakt" %}
+{% set page_title = "Nachricht an die Sektionsadmins" %}
 
 {% block content %}
     <div id="contact-form">
         <form action="" method="post" id="usersuite-contact-form" class="form">
+            {{ form.csrf_token }}
             <div class="row">
                 <div class="col-md-3 form-group">
                     <label>Deine E-Mail-Adresse</label>
-                    {{ form.email(class="form-control", type="email", value=current_user.uid+"@wh2.tu-dresden.de") }}
+                    {{ form.email(class="form-control", value=current_user.uid+"@wh2.tu-dresden.de") }}
                 </div>
                 <div class="col-md-3 form-group">
-                    <label>Betreff deiner Nachricht</label>
+                    <label>Kategorie</label>
                     {{ form.type(class="form-control") }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label>Betreff deiner Nachricht</label>
+                    {{ form.subject(class="form-control") }}
                 </div>
             </div>
             <div class="row">

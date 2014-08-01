@@ -82,13 +82,14 @@
         {% if page_title %}
             <h2>{{ page_title }}</h2>
         {% endif %}
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
-                <div id="flash-messages" class="warning alert-warning">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                </div>
+                {% for cat, msg in messages %}
+                    {% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
+                    <div class="alert{% if cat and cat != 'message' %} alert-{{ cat }}{% else %} alert-info{% endif %}">
+                        {{ msg }}
+                    </div>
+                {% endfor %}
             {% endif %}
         {% endwith %}
         {% block content %}
