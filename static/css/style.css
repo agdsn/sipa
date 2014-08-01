@@ -117,6 +117,9 @@ Content box and specific use cases in content context
 }
 
 /* Hackz */
+select {
+    padding: 0 7px !important;
+}
 .clear {
     clear: both;
 }
