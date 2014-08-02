@@ -10,11 +10,11 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 from flask.ext.babel import Babel, gettext
 
-from authentication import User, authenticate, change_password, change_email
+from utils.ldap_utils import User, authenticate, change_password, change_email
 from config import languages
-from database import query_userinfo
+from utils.database_utils import query_userinfo
 from forms import flash_formerrors, ContactForm, ChangePasswordForm, ChangeMailForm, LoginForm
-from mail import send_mail
+from utils.mail_utils import send_mail
 
 app = Flask(__name__)
 app.secret_key = "q_T_a1C18aizPnA2yf-1Q8(2&,pd5n"
