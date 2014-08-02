@@ -6,14 +6,17 @@ Drupalport auf Python im Zuge der Entwicklung von Pycroft.
 Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 from flask.ext.babel import Babel, gettext
+import io
+import pygal
+from pygal.style import Style
 
-from utils.ldap_utils import User, authenticate, change_password, change_email
 from config import languages
-from utils.database_utils import query_userinfo
 from forms import flash_formerrors, ContactForm, ChangePasswordForm, ChangeMailForm, LoginForm
+from utils.database_utils import query_userinfo, query_trafficdata
+from utils.ldap_utils import User, authenticate, change_password, change_email
 from utils.mail_utils import send_mail
 
 app = Flask(__name__)
@@ -22,6 +25,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 babel = Babel(app)
+
 
 def errorpage(e):
     if e.code in (404,):
@@ -93,7 +97,12 @@ def usersuite():
     if userinfo == -1:
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for("index"))
-    return render_template("usersuite/index.html", userinfo=userinfo)
+
+    usertraffic = query_trafficdata(userinfo['ip'])
+
+    return render_template("usersuite/index.html",
+                           userinfo=userinfo,
+                           usertraffic=usertraffic)
 
 
 @app.route("/usersuite/contact", methods=['GET', 'POST'])
@@ -128,6 +137,7 @@ def usersuite_contact():
 
 
 @app.route("/usersuite/change-password", methods=['GET', 'POST'])
+@login_required
 def usersuite_change_password():
     """Lets the user change his password.
     Requests the old password once (in case someone forgot to logout for
@@ -163,6 +173,7 @@ def usersuite_change_password():
 
 
 @app.route("/usersuite/change-mail", methods=['GET', 'POST'])
+@login_required
 def usersuite_change_mail():
     """Changes the users forwarding mail attribute
     in his LDAP entry.
@@ -189,6 +200,63 @@ def usersuite_change_mail():
         flash_formerrors(form)
 
     return render_template('usersuite/change_mail.html', form=form)
+
+
+@app.route("/usertraffic")
+def usertraffic():
+    """For anonymous users with a valid IP
+    """
+    pass
+
+
+@app.route("/traffic.png")
+def usersuite_trafficpng():
+    """Create a traffic chart as png binary file and return the binary
+    object to the client.
+
+    If the user is not logged in, try to create a graph for the remote IP.
+    Fails, if the IP was not recognized.
+    """
+    if current_user.is_anonymous():
+        ip = request.remote_addr
+    else:
+        userinfo = query_userinfo(current_user.uid)
+        ip = userinfo['ip']
+
+    usertraffic = query_trafficdata(ip)
+    if usertraffic == -1:
+        flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
+        return redirect(url_for('index'))
+
+    traffic_chart_style = Style(
+        background='transparent',
+        plot_background='transparent',
+        foreground='black',
+        foreground_light='black',
+        foreground_dark='black',
+        opacity='1',
+        transition='400ms ease-in',
+        colors=('red', 'blue')
+    )
+    traffic_chart = pygal.Bar(
+        height=350,
+        show_legend=False,
+        show_x_labels=False,
+        show_y_guides=True,
+        human_readable=False,
+        major_label_font_size=12,
+        label_font_size=12,
+        print_values=False,
+        style=traffic_chart_style,
+        y_labels_major_every=2,
+        show_minor_y_labels=False
+        #y_title=u'Traffic in MBytes'
+    )
+    traffic_chart.x_labels = usertraffic[0]
+    traffic_chart.add('Input', usertraffic[1])
+    traffic_chart.add('Output', usertraffic[2])
+
+    return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
 
 
 if __name__ == "__main__":

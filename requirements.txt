@@ -1,4 +1,5 @@
 Babel==1.3
+CairoSVG==1.0.8
 Flask==0.10.1
 Flask-Babel==0.9
 Flask-LDAP==0.1.5
@@ -9,7 +10,14 @@ MarkupSafe==0.19
 SQLAlchemy==0.9.7
 WTForms==1.0.5
 Werkzeug==0.9.4
+cairocffi==0.5.4
+cffi==0.8.6
+cssselect==0.9.1
 distribute==0.6.24
 itsdangerous==0.23
+lxml==3.3.5
+pycparser==2.10
+pygal==1.4.6
 python-ldap==2.4.14
 speaklater==1.3
+tinycss==0.3
