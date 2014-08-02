@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 from sqlalchemy import create_engine
 
-from config import dormitories, status, DB_USER, DB_PASSWORD
-
+from config import dormitories, status, weekdays, DB_USER, DB_PASSWORD
+from utils import timestamp_from_timetag
 
 
 def sql_query(query, args=None):
@@ -60,6 +61,34 @@ def query_userinfo(username):
     }
 
     return user
+
+
+def query_trafficdata(ip):
+    """Query traffic input/output for IP
+    """
+    trafficdata = sql_query(
+        "SELECT timetag, input, output "
+        "FROM traffic.tuext "
+        "WHERE ip = %s "
+        "ORDER BY timetag DESC "
+        "LIMIT 0, 7",
+        (ip,)
+    ).fetchall()
+
+    if not trafficdata:
+        return -1
+
+    traffic = [[], [], []]
+    for i in reversed(trafficdata):
+        day = datetime.date.fromtimestamp(
+            timestamp_from_timetag(i['timetag'])
+        ).strftime('%w')
+
+        traffic[0].append(weekdays[day])
+        traffic[1].append(round(i['input'] / 1024.0, 2))
+        traffic[2].append(round(i['output'] / 1024.0, 2))
+
+    return traffic
 
 
 db = create_engine('mysql+mysqldb://{0}:{1}@127.0.0.1:3306/netusers'.format(DB_USER, DB_PASSWORD), echo=False)
