@@ -94,15 +94,16 @@ def logout():
 @login_required
 def usersuite():
     userinfo = query_userinfo(current_user.uid)
+
     if userinfo == -1:
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for("index"))
 
-    usertraffic = query_trafficdata(userinfo['ip'])
+    trafficdata = query_trafficdata(userinfo['ip'])
 
     return render_template("usersuite/index.html",
                            userinfo=userinfo,
-                           usertraffic=usertraffic)
+                           usertraffic=trafficdata)
 
 
 @app.route("/usersuite/contact", methods=['GET', 'POST'])
@@ -206,7 +207,13 @@ def usersuite_change_mail():
 def usertraffic():
     """For anonymous users with a valid IP
     """
-    pass
+    trafficdata = query_trafficdata(request.remote_addr)
+
+    if trafficdata == -1:
+        flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
+        return redirect(url_for('index'))
+
+    return render_template("usertraffic.html", usertraffic=trafficdata)
 
 
 @app.route("/traffic.png")
@@ -223,8 +230,8 @@ def usersuite_trafficpng():
         userinfo = query_userinfo(current_user.uid)
         ip = userinfo['ip']
 
-    usertraffic = query_trafficdata(ip)
-    if usertraffic == -1:
+    trafficdata = query_trafficdata(ip)
+    if trafficdata == -1:
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for('index'))
 
@@ -250,9 +257,9 @@ def usersuite_trafficpng():
         y_labels_major_every=2,
         show_minor_y_labels=False
     )
-    traffic_chart.x_labels = usertraffic['history'][0]
-    traffic_chart.add('Input', usertraffic['history'][1])
-    traffic_chart.add('Output', usertraffic['history'][2])
+    traffic_chart.x_labels = trafficdata['history'][0]
+    traffic_chart.add('Input', trafficdata['history'][1])
+    traffic_chart.add('Output', trafficdata['history'][2])
 
     return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
 

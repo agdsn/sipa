@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-02 15:38+0200\n"
+"POT-Creation-Date: 2014-08-02 16:12+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -109,46 +109,50 @@ msgstr ""
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: run.py:72 run.py:191
+#: run.py:72 run.py:192
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: run.py:74 run.py:193
+#: run.py:74 run.py:194
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:98 run.py:228
+#: run.py:99 run.py:235
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: run.py:129
+#: run.py:130
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: run.py:131
+#: run.py:132
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: run.py:161
+#: run.py:162
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: run.py:165
+#: run.py:166
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:167
+#: run.py:168
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: run.py:195
+#: run.py:196
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: run.py:197
+#: run.py:198
 msgid "E-Mail-Adresse wurde geändert"
+msgstr ""
+
+#: run.py:213
+msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
 #: templates/base.html:20
@@ -320,6 +324,22 @@ msgstr ""
 msgid "Haus"
 msgstr ""
 
+#: templates/drafts/usertraffic_table_graph.html:3
+msgid "Dein Traffic"
+msgstr ""
+
+#: templates/drafts/usertraffic_table_graph.html:6
+msgid "Wochentag"
+msgstr ""
+
+#: templates/drafts/usertraffic_table_graph.html:20
+msgid "Verbrauch"
+msgstr ""
+
+#: templates/drafts/usertraffic_table_graph.html:20
+msgid "von 14 GB"
+msgstr ""
+
 #: templates/usersuite/change_mail.html:2
 msgid "E-Mail ändern"
 msgstr ""
@@ -421,22 +441,6 @@ msgstr ""
 msgid "Nicht eingerichtet"
 msgstr ""
 
-#: templates/usersuite/index.html:42
-msgid "Dein Traffic"
-msgstr ""
-
-#: templates/usersuite/index.html:45
-msgid "Wochentag"
-msgstr ""
-
-#: templates/usersuite/index.html:59
-msgid "Verbrauch"
-msgstr ""
-
-#: templates/usersuite/index.html:59
-msgid "von 14 GB"
-msgstr ""
-
 #~ msgid "Bezahlt, verbunden"
 #~ msgstr ""
 
@@ -453,5 +457,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Probleme mit eigener Technik"
+#~ msgstr ""
+
+#~ msgid "Dein Traffic"
+#~ msgstr ""
+
+#~ msgid "Wochentag"
+#~ msgstr ""
+
+#~ msgid "Verbrauch"
+#~ msgstr ""
+
+#~ msgid "von 14 GB"
 #~ msgstr ""
 

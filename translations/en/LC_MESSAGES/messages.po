@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-02 15:38+0200\n"
+"POT-Creation-Date: 2014-08-02 16:12+0200\n"
 "PO-Revision-Date: 2014-08-01 19:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -109,23 +109,23 @@ msgstr "You do not have sufficient rights to view this page!"
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: run.py:72 run.py:191
+#: run.py:72 run.py:192
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:74 run.py:193
+#: run.py:74 run.py:194
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: run.py:98 run.py:228
+#: run.py:99 run.py:235
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: run.py:129
+#: run.py:130
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: run.py:131
+#: run.py:132
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
@@ -133,25 +133,29 @@ msgstr ""
 "There was an error sending your message. Please contact us at support@wh2"
 ".tu-dresden.de"
 
-#: run.py:161
+#: run.py:162
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: run.py:165
+#: run.py:166
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: run.py:167
+#: run.py:168
 msgid "Passwort wurde geändert"
 msgstr "Password was changed"
 
-#: run.py:195
+#: run.py:196
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: run.py:197
+#: run.py:198
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address was changed"
+
+#: run.py:213
+msgid "Deine IP gehört nicht zum Wohnheim!"
+msgstr "Your IP does not belong to this network!"
 
 #: templates/base.html:20
 msgid "Benutzermenü"
@@ -322,6 +326,22 @@ msgstr "Dormitory admins"
 msgid "Haus"
 msgstr "Dormitory"
 
+#: templates/drafts/usertraffic_table_graph.html:3
+msgid "Dein Traffic"
+msgstr "Your traffic"
+
+#: templates/drafts/usertraffic_table_graph.html:6
+msgid "Wochentag"
+msgstr "Weekday"
+
+#: templates/drafts/usertraffic_table_graph.html:20
+msgid "Verbrauch"
+msgstr "Usage"
+
+#: templates/drafts/usertraffic_table_graph.html:20
+msgid "von 14 GB"
+msgstr "of 14 GB"
+
 #: templates/usersuite/change_mail.html:2
 msgid "E-Mail ändern"
 msgstr "Change email address"
@@ -425,21 +445,6 @@ msgstr "E-Mail forwarding address"
 msgid "Nicht eingerichtet"
 msgstr "Not set up"
 
-#: templates/usersuite/index.html:42
-msgid "Dein Traffic"
-msgstr "Your traffic"
-
-#: templates/usersuite/index.html:45
-msgid "Wochentag"
-msgstr "Weekday"
-
-#: templates/usersuite/index.html:59
-msgid "Verbrauch"
-msgstr "Usage"
-
-#: templates/usersuite/index.html:59
-msgid "von 14 GB"
-msgstr "of 14 GB"
 
 msgid "Allgemeine Frage an die Admins"
 msgstr "General question"
@@ -452,3 +457,4 @@ msgstr "Question about fees and charges"
 
 msgid "Probleme mit eigener Technik"
 msgstr "Problems with your own devices"
+

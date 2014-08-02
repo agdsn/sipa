@@ -20,6 +20,7 @@
 		    <div class="navigation-block-header">{{ _('Benutzermenü') }}</div>
 		    <ul>
 		        {% if current_user.is_anonymous() %}
+                    <li><a href="{{ url_for("usertraffic") }}">Usertraffic</a></li>
                     <li><a href="{{ url_for("login") }}">Login</a></li>
                 {% else %}
                     <li><a href="{{ url_for("usersuite") }}">Usersuite</a></li>
