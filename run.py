@@ -151,7 +151,7 @@ def usersuite_change_password():
             flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
             code = change_password(current_user.uid, old, new)
-            if code == -1:
+            if code == -2:
                 flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
             elif code:
                 flash(gettext(u"Passwort wurde geändert"), "success")
@@ -177,7 +177,7 @@ def usersuite_change_mail():
 
         code = change_email(current_user.uid, password, email)
         if code == -1:
-            pass
+            flash(gettext(u"Nutzer nicht gefunden!"), "error")
         elif code == -2:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         elif code == -3:
