@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-02 14:50+0200\n"
+"POT-Creation-Date: 2014-08-02 15:38+0200\n"
 "PO-Revision-Date: 2014-08-01 19:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -433,6 +433,14 @@ msgstr "Your traffic"
 msgid "Wochentag"
 msgstr "Weekday"
 
+#: templates/usersuite/index.html:59
+msgid "Verbrauch"
+msgstr "Usage"
+
+#: templates/usersuite/index.html:59
+msgid "von 14 GB"
+msgstr "of 14 GB"
+
 msgid "Allgemeine Frage an die Admins"
 msgstr "General question"
 
@@ -444,4 +452,3 @@ msgstr "Question about fees and charges"
 
 msgid "Probleme mit eigener Technik"
 msgstr "Problems with your own devices"
-

@@ -103,6 +103,13 @@ Content box and specific use cases in content context
     background: #e8ecf8;
 }
 
+#usersuite-traffic-sum {
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+}
+
+
 /* Hackz */
 select {
     padding: 0 7px !important;

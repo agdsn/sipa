@@ -234,9 +234,8 @@ def usersuite_trafficpng():
         foreground='black',
         foreground_light='black',
         foreground_dark='black',
-        opacity='1',
-        transition='400ms ease-in',
-        colors=('red', 'blue')
+        opacity='.9',
+        colors=('#00C800', '#9696FF')
     )
     traffic_chart = pygal.Bar(
         height=350,
@@ -250,11 +249,10 @@ def usersuite_trafficpng():
         style=traffic_chart_style,
         y_labels_major_every=2,
         show_minor_y_labels=False
-        #y_title=u'Traffic in MBytes'
     )
-    traffic_chart.x_labels = usertraffic[0]
-    traffic_chart.add('Input', usertraffic[1])
-    traffic_chart.add('Output', usertraffic[2])
+    traffic_chart.x_labels = usertraffic['history'][0]
+    traffic_chart.add('Input', usertraffic['history'][1])
+    traffic_chart.add('Output', usertraffic['history'][2])
 
     return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
 

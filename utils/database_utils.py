@@ -78,15 +78,31 @@ def query_trafficdata(ip):
     if not trafficdata:
         return -1
 
-    traffic = [[], [], []]
+    traffic = {
+        'history': [
+            [],
+            [],
+            []
+        ],
+        'total': 0,
+        'percent': 0.0
+    }
+
     for i in reversed(trafficdata):
         day = datetime.date.fromtimestamp(
             timestamp_from_timetag(i['timetag'])
         ).strftime('%w')
 
-        traffic[0].append(weekdays[day])
-        traffic[1].append(round(i['input'] / 1024.0, 2))
-        traffic[2].append(round(i['output'] / 1024.0, 2))
+        input = round(i['input'] / 1024.0, 2)
+        output = round(i['output'] / 1024.0, 2)
+
+        traffic['history'][0].append(weekdays[day])
+        traffic['history'][1].append(input)
+        traffic['history'][2].append(output)
+
+        traffic['total'] += input + output
+
+    traffic['percent'] = round(traffic['total'] / (14 * 1024) * 100, 2)
 
     return traffic
 
