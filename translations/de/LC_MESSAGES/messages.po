@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-01 23:52+0200\n"
+"POT-Creation-Date: 2014-08-02 14:50+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -31,6 +31,34 @@ msgstr ""
 
 #: config.py:39
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
+msgstr ""
+
+#: config.py:43
+msgid "Sonntag"
+msgstr ""
+
+#: config.py:44
+msgid "Montag"
+msgstr ""
+
+#: config.py:45
+msgid "Dienstag"
+msgstr ""
+
+#: config.py:46
+msgid "Mittwoch"
+msgstr ""
+
+#: config.py:47
+msgid "Donnerstag"
+msgstr ""
+
+#: config.py:48
+msgid "Freitag"
+msgstr ""
+
+#: config.py:49
+msgid "Samstag"
 msgstr ""
 
 #: forms.py:12 forms.py:31
@@ -69,57 +97,57 @@ msgstr ""
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: run.py:28
+#: run.py:32
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: run.py:30
+#: run.py:34
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: run.py:32
+#: run.py:36
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: run.py:68
+#: run.py:72 run.py:191
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: run.py:70 run.py:182
+#: run.py:74 run.py:193
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:94
+#: run.py:98 run.py:228
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: run.py:120
+#: run.py:129
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: run.py:122
+#: run.py:131
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: run.py:151
+#: run.py:161
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: run.py:155
+#: run.py:165
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:157
+#: run.py:167
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: run.py:184
+#: run.py:195
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: run.py:186
+#: run.py:197
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
@@ -395,6 +423,10 @@ msgstr ""
 
 #: templates/usersuite/index.html:42
 msgid "Dein Traffic"
+msgstr ""
+
+#: templates/usersuite/index.html:45
+msgid "Wochentag"
 msgstr ""
 
 #~ msgid "Bezahlt, verbunden"

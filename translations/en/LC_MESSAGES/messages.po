@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-01 23:52+0200\n"
+"POT-Creation-Date: 2014-08-02 14:50+0200\n"
 "PO-Revision-Date: 2014-08-01 19:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -32,6 +32,34 @@ msgstr "Net usage violation, connection blocked"
 #: config.py:39
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr "Traffic limit reached, account blocked"
+
+#: config.py:43
+msgid "Sonntag"
+msgstr "Sunday"
+
+#: config.py:44
+msgid "Montag"
+msgstr "Monday"
+
+#: config.py:45
+msgid "Dienstag"
+msgstr "Tuesday"
+
+#: config.py:46
+msgid "Mittwoch"
+msgstr "Wednesday"
+
+#: config.py:47
+msgid "Donnerstag"
+msgstr "Thursday"
+
+#: config.py:48
+msgid "Freitag"
+msgstr "Friday"
+
+#: config.py:49
+msgid "Samstag"
+msgstr "Saturday"
 
 #: forms.py:12 forms.py:31
 msgid "E-Mail ist nicht in gültigem Format!"
@@ -69,35 +97,35 @@ msgstr "No username submitted!"
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: run.py:28
+#: run.py:32
 msgid "Seite nicht gefunden!"
 msgstr "Page not found!"
 
-#: run.py:30
+#: run.py:34
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr "You do not have sufficient rights to view this page!"
 
-#: run.py:32
+#: run.py:36
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: run.py:68
+#: run.py:72 run.py:191
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:70 run.py:182
+#: run.py:74 run.py:193
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: run.py:94
+#: run.py:98 run.py:228
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: run.py:120
+#: run.py:129
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: run.py:122
+#: run.py:131
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
@@ -105,23 +133,23 @@ msgstr ""
 "There was an error sending your message. Please contact us at support@wh2"
 ".tu-dresden.de"
 
-#: run.py:151
+#: run.py:161
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: run.py:155
+#: run.py:165
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: run.py:157
+#: run.py:167
 msgid "Passwort wurde geändert"
 msgstr "Password was changed"
 
-#: run.py:184
+#: run.py:195
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: run.py:186
+#: run.py:197
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address was changed"
 
@@ -400,6 +428,10 @@ msgstr "Not set up"
 #: templates/usersuite/index.html:42
 msgid "Dein Traffic"
 msgstr "Your traffic"
+
+#: templates/usersuite/index.html:45
+msgid "Wochentag"
+msgstr "Weekday"
 
 msgid "Allgemeine Frage an die Admins"
 msgstr "General question"
