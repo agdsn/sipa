@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-02 16:12+0200\n"
+"POT-Creation-Date: 2014-08-04 15:21+0200\n"
 "PO-Revision-Date: 2014-08-01 19:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -97,35 +97,35 @@ msgstr "No username submitted!"
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: run.py:32
+#: run.py:33
 msgid "Seite nicht gefunden!"
 msgstr "Page not found!"
 
-#: run.py:34
+#: run.py:35
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr "You do not have sufficient rights to view this page!"
 
-#: run.py:36
+#: run.py:37
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: run.py:72 run.py:192
+#: run.py:73 run.py:193
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:74 run.py:194
+#: run.py:75 run.py:195
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: run.py:99 run.py:235
+#: run.py:100 run.py:236
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: run.py:130
+#: run.py:131
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: run.py:132
+#: run.py:133
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
@@ -133,27 +133,27 @@ msgstr ""
 "There was an error sending your message. Please contact us at support@wh2"
 ".tu-dresden.de"
 
-#: run.py:162
+#: run.py:163
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: run.py:166
+#: run.py:167
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: run.py:168
+#: run.py:169
 msgid "Passwort wurde geändert"
 msgstr "Password was changed"
 
-#: run.py:196
+#: run.py:197
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: run.py:198
+#: run.py:199
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address was changed"
 
-#: run.py:213
+#: run.py:214
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
@@ -161,118 +161,138 @@ msgstr "Your IP does not belong to this network!"
 msgid "Benutzermenü"
 msgstr "User menu"
 
-#: templates/base.html:26
+#: templates/base.html:27
 msgid "Nachricht an die Admins"
 msgstr "Message to the admins"
 
-#: templates/base.html:27
+#: templates/base.html:28
 msgid "Passwort ändern"
 msgstr "Change password"
 
-#: templates/base.html:28
+#: templates/base.html:29
 msgid "E-Mail-Adresse ändern"
 msgstr "Change email address"
 
-#: templates/base.html:35
+#: templates/base.html:36
 msgid "Informationen"
 msgstr "Information"
 
-#: templates/base.html:38 templates/content/ansprechpartner.html:2
+#: templates/base.html:39 templates/content/ansprechpartner.html:2
 #: templates/content/ansprechpartner.html:66
 msgid "Ansprechpartner"
 msgstr "Contacts"
 
-#: templates/base.html:39
+#: templates/base.html:40
 msgid "Hausmeister"
 msgstr "Facility managers"
 
-#: templates/base.html:40
+#: templates/base.html:41
 msgid "Wohnheime"
 msgstr "Dormitories"
 
-#: templates/base.html:41
+#: templates/base.html:42
 msgid "Mensen"
 msgstr "Cafeterias"
 
-#: templates/base.html:46
+#: templates/base.html:47
 msgid "Dienste"
 msgstr "Services"
 
-#: templates/base.html:48
+#: templates/base.html:49 templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr "Bus & train departure times"
 
-#: templates/base.html:51
+#: templates/base.html:52
 msgid "Wegweiser"
 msgstr "Guidepost"
 
-#: templates/base.html:52
+#: templates/base.html:53
 msgid "Wetter in der Wu"
 msgstr "Weather @ Wundtstraße"
 
-#: templates/base.html:57
+#: templates/base.html:58
 msgid "AG-Netz"
 msgstr "Our network"
 
-#: templates/base.html:59
+#: templates/base.html:60
 msgid "Anmeldung"
 msgstr "Registration"
 
-#: templates/base.html:60
+#: templates/base.html:61
 msgid "Externer Anschluss"
 msgstr "External provider connection"
 
-#: templates/base.html:61
+#: templates/base.html:62
 msgid "Häufig gestellte Fragen"
 msgstr "Frequently asked questions"
 
-#: templates/base.html:62
+#: templates/base.html:63
 msgid "Anleitungen"
 msgstr "Tutorials"
 
-#: templates/base.html:63
+#: templates/base.html:64
 msgid "Semesterbeitrag"
 msgstr "Semester fee"
 
-#: templates/base.html:64
+#: templates/base.html:65
 msgid "Status unserer Dienste"
 msgstr "Status of our services"
 
-#: templates/base.html:65
+#: templates/base.html:66
 msgid "Wohnortwechsel"
 msgstr "Moving"
 
-#: templates/base.html:70
+#: templates/base.html:71
 msgid "Rechtliches"
 msgstr "Legal"
 
-#: templates/base.html:72
+#: templates/base.html:73
 msgid "Trafficregelungen"
 msgstr "Traffic regulations"
 
-#: templates/base.html:73
+#: templates/base.html:74
 msgid "Finanzordnung"
 msgstr "Finance regulations"
 
-#: templates/base.html:74
+#: templates/base.html:75
 msgid "Höhere Ordnungen"
 msgstr "Higher regulations"
 
-#: templates/base.html:75
+#: templates/base.html:76
 msgid "Netzordnung"
 msgstr "Network regulations"
 
-#: templates/base.html:76
+#: templates/base.html:77
 msgid "Satzung der AG DSN"
 msgstr "Statute of AG DSN"
 
-#: templates/base.html:77
+#: templates/base.html:78
 msgid "Satzung der Sektion"
 msgstr "Statute of division Wundstraße"
 
-#: templates/base.html:78
+#: templates/base.html:79
 msgid "Impressum"
 msgstr "Imprint"
+
+#: templates/bustimes.html:8
+msgid "Haltestelle"
+msgstr "Stop"
+
+#: templates/bustimes.html:10 templates/bustimes.html:31
+msgid "Fehler bei der Abfrage!"
+msgstr "Query could not be processed!"
+
+#: templates/bustimes.html:14
+msgid "Linie"
+msgstr "Route"
+
+#: templates/bustimes.html:15
+msgid "Richtung"
+msgstr "Direction"
+
+#: templates/bustimes.html:28
+msgid "Quelle"
+msgstr "Source"
 
 #: templates/login.html:10
 msgid "Benutzername"
@@ -444,7 +464,6 @@ msgstr "E-Mail forwarding address"
 #: templates/usersuite/index.html:34
 msgid "Nicht eingerichtet"
 msgstr "Not set up"
-
 
 msgid "Allgemeine Frage an die Admins"
 msgstr "General question"

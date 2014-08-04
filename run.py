@@ -13,8 +13,9 @@ import io
 import pygal
 from pygal.style import Style
 
-from config import languages
+from config import languages, busstops
 from forms import flash_formerrors, ContactForm, ChangePasswordForm, ChangeMailForm, LoginForm
+from utils import get_bustimes
 from utils.database_utils import query_userinfo, query_trafficdata
 from utils.ldap_utils import User, authenticate, change_password, change_email
 from utils.mail_utils import send_mail
@@ -262,6 +263,26 @@ def usersuite_trafficpng():
     traffic_chart.add('Output', trafficdata['history'][2])
 
     return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
+
+
+@app.route("/bustimes")
+@app.route("/bustimes/<string:stopname>")
+def bustimes(stopname=None):
+    """Queries the VVO-Online widget for the given stop.
+    If no specific stop is given in the URL, it will query all
+    stops set up in the config.
+    """
+    data = {}
+
+    if stopname:
+        # Only one stop requested
+        data[stopname] = get_bustimes(stopname)
+    else:
+        # General output page
+        for stop in busstops:
+            data[stop] = get_bustimes(stop, 4)
+
+    return render_template('bustimes.html', times=data, stopname=stopname)
 
 
 if __name__ == "__main__":
