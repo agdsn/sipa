@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-04 15:21+0200\n"
+"POT-Creation-Date: 2014-08-04 18:39+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -97,198 +97,198 @@ msgstr ""
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: run.py:33
+#: run.py:35
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: run.py:35
+#: run.py:37
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: run.py:37
+#: run.py:39
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: run.py:73 run.py:193
+#: run.py:80 run.py:211
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: run.py:75 run.py:195
+#: run.py:82 run.py:213
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:100 run.py:236
+#: run.py:113 run.py:254
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: run.py:131
+#: run.py:148
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: run.py:133
+#: run.py:150
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: run.py:163
+#: run.py:180
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: run.py:167
+#: run.py:184
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:169
+#: run.py:186
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: run.py:197
+#: run.py:215
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: run.py:199
+#: run.py:217
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: run.py:214
+#: run.py:232
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: templates/base.html:20
+#: templates/base.html:30
 msgid "Benutzermenü"
 msgstr ""
 
-#: templates/base.html:27
+#: templates/base.html:37
 msgid "Nachricht an die Admins"
 msgstr ""
 
-#: templates/base.html:28
+#: templates/base.html:38
 msgid "Passwort ändern"
 msgstr ""
 
-#: templates/base.html:29
+#: templates/base.html:39
 msgid "E-Mail-Adresse ändern"
 msgstr ""
 
-#: templates/base.html:36
+#: templates/base.html:46
 msgid "Informationen"
 msgstr ""
 
-#: templates/base.html:39 templates/content/ansprechpartner.html:2
+#: templates/base.html:49 templates/content/ansprechpartner.html:2
 #: templates/content/ansprechpartner.html:66
 msgid "Ansprechpartner"
 msgstr ""
 
-#: templates/base.html:40
+#: templates/base.html:50
 msgid "Hausmeister"
 msgstr ""
 
-#: templates/base.html:41
+#: templates/base.html:51
 msgid "Wohnheime"
 msgstr ""
 
-#: templates/base.html:42
+#: templates/base.html:52
 msgid "Mensen"
 msgstr ""
 
-#: templates/base.html:47
+#: templates/base.html:57
 msgid "Dienste"
 msgstr ""
 
-#: templates/base.html:49 templates/bustimes.html:2
+#: templates/base.html:59 templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr ""
 
-#: templates/base.html:52
+#: templates/base.html:62
 msgid "Wegweiser"
 msgstr ""
 
-#: templates/base.html:53
+#: templates/base.html:63
 msgid "Wetter in der Wu"
 msgstr ""
 
-#: templates/base.html:58
+#: templates/base.html:68
 msgid "AG-Netz"
 msgstr ""
 
-#: templates/base.html:60
+#: templates/base.html:70
 msgid "Anmeldung"
 msgstr ""
 
-#: templates/base.html:61
+#: templates/base.html:71
 msgid "Externer Anschluss"
 msgstr ""
 
-#: templates/base.html:62
+#: templates/base.html:72
 msgid "Häufig gestellte Fragen"
 msgstr ""
 
-#: templates/base.html:63
+#: templates/base.html:73
 msgid "Anleitungen"
 msgstr ""
 
-#: templates/base.html:64
+#: templates/base.html:74
 msgid "Semesterbeitrag"
 msgstr ""
 
-#: templates/base.html:65
+#: templates/base.html:75
 msgid "Status unserer Dienste"
 msgstr ""
 
-#: templates/base.html:66
+#: templates/base.html:76
 msgid "Wohnortwechsel"
 msgstr ""
 
-#: templates/base.html:71
+#: templates/base.html:81
 msgid "Rechtliches"
 msgstr ""
 
-#: templates/base.html:73
+#: templates/base.html:83
 msgid "Trafficregelungen"
 msgstr ""
 
-#: templates/base.html:74
+#: templates/base.html:84
 msgid "Finanzordnung"
 msgstr ""
 
-#: templates/base.html:75
+#: templates/base.html:85
 msgid "Höhere Ordnungen"
 msgstr ""
 
-#: templates/base.html:76
+#: templates/base.html:86
 msgid "Netzordnung"
 msgstr ""
 
-#: templates/base.html:77
+#: templates/base.html:87
 msgid "Satzung der AG DSN"
 msgstr ""
 
-#: templates/base.html:78
+#: templates/base.html:88
 msgid "Satzung der Sektion"
 msgstr ""
 
-#: templates/base.html:79
+#: templates/base.html:89
 msgid "Impressum"
 msgstr ""
 
-#: templates/bustimes.html:8
+#: templates/bustimes.html:9
 msgid "Haltestelle"
 msgstr ""
 
-#: templates/bustimes.html:10 templates/bustimes.html:31
+#: templates/bustimes.html:11 templates/bustimes.html:33
 msgid "Fehler bei der Abfrage!"
 msgstr ""
 
-#: templates/bustimes.html:14
+#: templates/bustimes.html:15
 msgid "Linie"
 msgstr ""
 
-#: templates/bustimes.html:15
+#: templates/bustimes.html:16
 msgid "Richtung"
 msgstr ""
 
-#: templates/bustimes.html:28
+#: templates/bustimes.html:29
 msgid "Quelle"
 msgstr ""
 
@@ -420,9 +420,7 @@ msgid "Deine Nachricht an uns"
 msgstr ""
 
 #: templates/usersuite/contact.html:36
-msgid ""
-"Hinweis: Zusätzlich zu deiner Nachricht wird deine User-ID, dein Wohnheim"
-" sowie dein Echtname an die Nachricht angehängt."
+msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
 msgstr ""
 
 #: templates/usersuite/index.html:2
@@ -489,5 +487,12 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "von 14 GB"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Hinweis: Zusätzlich zu deiner Nachricht "
+#~ "wird deine User-ID, dein Wohnheim "
+#~ "sowie dein Echtname an die Nachricht "
+#~ "angehängt."
 #~ msgstr ""
 

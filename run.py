@@ -141,7 +141,10 @@ def usersuite_contact():
 
         subject = u"[Usersuite] {0}: {1}".format(cat, form.subject.data)
 
-        if send_mail(form.email.data, "support@wh2.tu-dresden.de", subject, form.message.data):
+        message_text = u"Nutzerlogin: {0}\n\n".format(current_user.uid) \
+                       + form.message.data
+
+        if send_mail(form.email.data, "support@wh2.tu-dresden.de", subject, message_text):
             flash(gettext(u"Nachricht wurde versandt."), "success")
         else:
             flash(gettext(u"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"), "error")
