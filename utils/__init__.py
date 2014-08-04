@@ -8,7 +8,15 @@ General utilities
 import httplib
 import socket
 import time
-from urllib import urlencode
+
+
+def calculate_userid_checksum(id):
+    """Calculate checksum for a userid.
+    """
+    cross = 0
+    for i in str(id):
+        cross += int(i)
+    return cross%10
 
 
 def timetag_from_timestamp(timestamp=time.time()):

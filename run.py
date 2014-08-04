@@ -15,7 +15,7 @@ from pygal.style import Style
 
 from config import languages, busstops
 from forms import flash_formerrors, ContactForm, ChangePasswordForm, ChangeMailForm, LoginForm
-from utils import get_bustimes
+from utils import calculate_userid_checksum, get_bustimes
 from utils.database_utils import query_userinfo, query_trafficdata
 from utils.ldap_utils import User, authenticate, change_password, change_email
 from utils.mail_utils import send_mail
@@ -100,6 +100,7 @@ def usersuite():
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for("index"))
 
+    userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
     trafficdata = query_trafficdata(userinfo['ip'])
 
     return render_template("usersuite/index.html",
