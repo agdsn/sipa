@@ -6,13 +6,16 @@ Drupalport auf Python im Zuge der Entwicklung von Pycroft.
 Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file
-from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
+from flask import Flask, render_template, request, redirect, \
+    url_for, flash, send_file, session
+from flask.ext.login import LoginManager, current_user, login_user, \
+    logout_user, login_required
 from flask.ext.babel import Babel, gettext
 import io
 
 from config import languages, busstops
-from forms import flash_formerrors, ContactForm, ChangePasswordForm, ChangeMailForm, LoginForm
+from forms import flash_formerrors, ContactForm, ChangePasswordForm, \
+    ChangeMailForm, LoginForm
 from utils import calculate_userid_checksum, get_bustimes
 from utils.database_utils import query_userinfo, query_trafficdata
 from utils.graph_utils import make_trafficgraph
@@ -47,7 +50,12 @@ def load_user(username):
 
 @babel.localeselector
 def babel_selector():
-    return request.accept_languages.best_match(languages.keys())
+    lang = session.get('lang')
+    if not lang:
+        session['lang'] = request.accept_languages.best_match(languages.keys())
+
+    return session.get('lang')
+
 
 @app.route('/')
 def index():
@@ -88,6 +96,12 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+
+@app.route("/language/<string:lang>")
+def set_language(lang='de'):
+    session['lang'] = lang
+    return redirect(request.referrer)
 
 
 @app.route("/usersuite")

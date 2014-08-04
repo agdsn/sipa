@@ -29,12 +29,23 @@ Layout elements
 #header {
     background: #4e65f3 url("/static/img/logo.png") 20px 3px no-repeat;
     color: #ffffff;
+    position: relative;
 }
 
 #header h1 {
     color: #ffffff;
     margin: 0;
     padding: 30px 130px;
+}
+
+#languageselection {
+    bottom: 4px;
+    position: absolute;
+    right: 10px;
+}
+#languageselection a {
+    color: #ffffff;
+    font-weight: bold;
 }
 
 #navigation, #navigation a {

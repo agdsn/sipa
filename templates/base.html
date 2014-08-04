@@ -10,6 +10,16 @@
 <div class="container-fluid">
 <div class="row">
     <div id="header" class="col-md-12">
+        <div id="languageselection">
+            {% if session.get('lang') == 'en' %}
+                <a href="{{ url_for('set_language', lang='de') }}">Deutsch</a>
+            {% elif session.get('lang') == 'de' %}
+                <a href="{{ url_for('set_language', lang='en') }}">English</a>
+            {% else %}
+                <a href="{{ url_for('set_language', lang='de') }}">de</a> -
+                <a href="{{ url_for('set_language', lang='en') }}">en</a>
+            {% endif %}
+        </div>
         <a href="{{ url_for("index") }}"><h1>AG DSN Sektion Wundtstraße</h1></a>
     </div>
 </div>
