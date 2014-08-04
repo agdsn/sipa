@@ -12,6 +12,8 @@ from flask.ext.login import LoginManager, current_user, login_user, \
     logout_user, login_required
 from flask.ext.babel import Babel, gettext
 import io
+from sqlalchemy.exc import OperationalError
+from ldap import SERVER_DOWN
 
 from config import languages, busstops
 from forms import flash_formerrors, ContactForm, ChangePasswordForm, \
@@ -41,6 +43,29 @@ def errorpage(e):
 app.register_error_handler(401, errorpage)
 app.register_error_handler(403, errorpage)
 app.register_error_handler(404, errorpage)
+
+
+@app.errorhandler(OperationalError)
+def exceptionhandler_sql(ex):
+    """Handles global MySQL errors (server down).
+    """
+    flash(u"Connection to SQL server could not be established!", "error")
+    return redirect(url_for('index'))
+
+
+@app.errorhandler(SERVER_DOWN)
+def exceptionhandler_ldap(ex):
+    """Handles global LDAP SERVER_DOWN exceptions.
+    The session must be reset, because if the user is logged in and the server
+    fails during his session, it would cause a redirect loop.
+    This also resets the language choice, btw.
+
+    The alternative would be a try-except catch block in load_user, but login
+    also needs a handler.
+    """
+    session.clear()
+    flash(u"Connection to LDAP server could not be established!", "error")
+    return redirect(url_for('index'))
 
 
 @login_manager.user_loader
