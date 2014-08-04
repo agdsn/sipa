@@ -10,13 +10,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash, sen
 from flask.ext.login import LoginManager, current_user, login_user, logout_user, login_required
 from flask.ext.babel import Babel, gettext
 import io
-import pygal
-from pygal.style import Style
 
 from config import languages, busstops
 from forms import flash_formerrors, ContactForm, ChangePasswordForm, ChangeMailForm, LoginForm
 from utils import calculate_userid_checksum, get_bustimes
 from utils.database_utils import query_userinfo, query_trafficdata
+from utils.graph_utils import make_trafficgraph
 from utils.ldap_utils import User, authenticate, change_password, change_email
 from utils.mail_utils import send_mail
 
@@ -189,6 +188,7 @@ def usersuite_change_mail():
         password = form.password.data
         email = form.email.data
 
+
         code = change_email(current_user.uid, password, email)
         if code == -1:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
@@ -237,31 +237,7 @@ def usersuite_trafficpng():
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for('index'))
 
-    traffic_chart_style = Style(
-        background='transparent',
-        plot_background='transparent',
-        foreground='black',
-        foreground_light='black',
-        foreground_dark='black',
-        opacity='.9',
-        colors=('#00C800', '#9696FF')
-    )
-    traffic_chart = pygal.Bar(
-        height=350,
-        show_legend=False,
-        show_x_labels=False,
-        show_y_guides=True,
-        human_readable=False,
-        major_label_font_size=12,
-        label_font_size=12,
-        print_values=False,
-        style=traffic_chart_style,
-        y_labels_major_every=2,
-        show_minor_y_labels=False
-    )
-    traffic_chart.x_labels = trafficdata['history'][0]
-    traffic_chart.add('Input', trafficdata['history'][1])
-    traffic_chart.add('Output', trafficdata['history'][2])
+    traffic_chart = make_trafficgraph(trafficdata)
 
     return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
 
