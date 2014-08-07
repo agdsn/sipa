@@ -70,11 +70,17 @@ def exceptionhandler_ldap(ex):
 
 @login_manager.user_loader
 def load_user(username):
+    """Loads a User object from/into the session at every request
+    """
     return User.get(username)
 
 
 @babel.localeselector
 def babel_selector():
+    """Tries to get the language setting from the current session cookie.
+    If this fails (if it is not set) the best matching language out of the
+    header accept-language is chosen and set.
+    """
     lang = session.get('lang')
     if not lang:
         session['lang'] = request.accept_languages.best_match(languages.keys())
@@ -94,6 +100,8 @@ def contacts():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    """Login page for users
+    """
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -125,6 +133,8 @@ def logout():
 
 @app.route("/language/<string:lang>")
 def set_language(lang='de'):
+    """Set the session language via URL
+    """
     session['lang'] = lang
     return redirect(request.referrer)
 
@@ -132,6 +142,9 @@ def set_language(lang='de'):
 @app.route("/usersuite")
 @login_required
 def usersuite():
+    """Usersuite landing page with user account information
+    and traffic overview.
+    """
     userinfo = query_userinfo(current_user.uid)
 
     if userinfo == -1:
@@ -149,6 +162,10 @@ def usersuite():
 @app.route("/usersuite/contact", methods=['GET', 'POST'])
 @login_required
 def usersuite_contact():
+    """Contact form for logged in users.
+    Currently sends an e-mail to the support mailing list as
+    '[Usersuite] Category: Subject' with userid and message.
+    """
     form = ContactForm()
 
     if form.validate_on_submit():

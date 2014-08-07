@@ -12,6 +12,7 @@ import time
 
 def calculate_userid_checksum(id):
     """Calculate checksum for a userid.
+    (Modulo 10 on the sum of all digits)
     """
     cross = 0
     for i in str(id):
