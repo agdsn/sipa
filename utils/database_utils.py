@@ -107,4 +107,20 @@ def query_trafficdata(ip):
     return traffic
 
 
+def update_macaddress(ip, oldmac, newmac):
+    """Update a MAC address in computer table.
+
+    TODO: check, if 'LIMIT 1' causes problems (sqlalchemy says
+    "Warning: Unsafe statement")
+    """
+    sql_query(
+        "UPDATE computer "
+        "SET c_etheraddr = %s "
+        "WHERE c_ip = %s "
+        "AND c_etheraddr = %s "
+        "LIMIT 1",
+        (newmac.lower(), ip, oldmac)
+    )
+
+
 db = create_engine('mysql+mysqldb://{0}:{1}@127.0.0.1:3306/netusers'.format(DB_USER, DB_PASSWORD), echo=False)

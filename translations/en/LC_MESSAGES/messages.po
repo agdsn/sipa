@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-04 18:39+0200\n"
+"POT-Creation-Date: 2014-08-07 17:43+0200\n"
 "PO-Revision-Date: 2014-08-01 19:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -85,47 +85,47 @@ msgstr "New password is missing!"
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: forms.py:30
+#: forms.py:30 forms.py:35
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
 
-#: forms.py:35
+#: forms.py:40
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: forms.py:36
+#: forms.py:41
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: run.py:35
+#: run.py:37
 msgid "Seite nicht gefunden!"
 msgstr "Page not found!"
 
-#: run.py:37
+#: run.py:39
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr "You do not have sufficient rights to view this page!"
 
-#: run.py:39
+#: run.py:41
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: run.py:80 run.py:211
+#: run.py:113 run.py:253
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:82 run.py:213
+#: run.py:115 run.py:255 run.py:295
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: run.py:113 run.py:254
+#: run.py:151 run.py:333
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: run.py:148
+#: run.py:190
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: run.py:150
+#: run.py:192
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
@@ -133,27 +133,31 @@ msgstr ""
 "There was an error sending your message. Please contact us at support@wh2"
 ".tu-dresden.de"
 
-#: run.py:180
+#: run.py:222
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: run.py:184
+#: run.py:226
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: run.py:186
+#: run.py:228
 msgid "Passwort wurde geändert"
 msgstr "Password was changed"
 
-#: run.py:215
+#: run.py:257
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: run.py:217
+#: run.py:259
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address was changed"
 
-#: run.py:232
+#: run.py:292
+msgid "MAC-Adresse wurde geändert!"
+msgstr "MAC address was changed"
+
+#: run.py:311
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
@@ -173,104 +177,108 @@ msgstr "Change password"
 msgid "E-Mail-Adresse ändern"
 msgstr "Change email address"
 
-#: templates/base.html:46
+#: templates/base.html:40 templates/usersuite/change_mac.html:2
+msgid "MAC-Adresse ändern"
+msgstr "Change MAC address"
+
+#: templates/base.html:47
 msgid "Informationen"
 msgstr "Information"
 
-#: templates/base.html:49 templates/content/ansprechpartner.html:2
+#: templates/base.html:50 templates/content/ansprechpartner.html:2
 #: templates/content/ansprechpartner.html:66
 msgid "Ansprechpartner"
 msgstr "Contacts"
 
-#: templates/base.html:50
+#: templates/base.html:51
 msgid "Hausmeister"
 msgstr "Facility managers"
 
-#: templates/base.html:51
+#: templates/base.html:52
 msgid "Wohnheime"
 msgstr "Dormitories"
 
-#: templates/base.html:52
+#: templates/base.html:53
 msgid "Mensen"
 msgstr "Cafeterias"
 
-#: templates/base.html:57
+#: templates/base.html:58
 msgid "Dienste"
 msgstr "Services"
 
-#: templates/base.html:59 templates/bustimes.html:2
+#: templates/base.html:60 templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr "Bus & train departure times"
 
-#: templates/base.html:62
+#: templates/base.html:63
 msgid "Wegweiser"
 msgstr "Guidepost"
 
-#: templates/base.html:63
+#: templates/base.html:64
 msgid "Wetter in der Wu"
 msgstr "Weather @ Wundtstraße"
 
-#: templates/base.html:68
+#: templates/base.html:69
 msgid "AG-Netz"
 msgstr "Our network"
 
-#: templates/base.html:70
+#: templates/base.html:71
 msgid "Anmeldung"
 msgstr "Registration"
 
-#: templates/base.html:71
+#: templates/base.html:72
 msgid "Externer Anschluss"
 msgstr "External provider connection"
 
-#: templates/base.html:72
+#: templates/base.html:73
 msgid "Häufig gestellte Fragen"
 msgstr "Frequently asked questions"
 
-#: templates/base.html:73
+#: templates/base.html:74
 msgid "Anleitungen"
 msgstr "Tutorials"
 
-#: templates/base.html:74
+#: templates/base.html:75
 msgid "Semesterbeitrag"
 msgstr "Semester fee"
 
-#: templates/base.html:75
+#: templates/base.html:76
 msgid "Status unserer Dienste"
 msgstr "Status of our services"
 
-#: templates/base.html:76
+#: templates/base.html:77
 msgid "Wohnortwechsel"
 msgstr "Moving"
 
-#: templates/base.html:81
+#: templates/base.html:82
 msgid "Rechtliches"
 msgstr "Legal"
 
-#: templates/base.html:83
+#: templates/base.html:84
 msgid "Trafficregelungen"
 msgstr "Traffic regulations"
 
-#: templates/base.html:84
+#: templates/base.html:85
 msgid "Finanzordnung"
 msgstr "Finance regulations"
 
-#: templates/base.html:85
+#: templates/base.html:86
 msgid "Höhere Ordnungen"
 msgstr "Higher regulations"
 
-#: templates/base.html:86
+#: templates/base.html:87
 msgid "Netzordnung"
 msgstr "Network regulations"
 
-#: templates/base.html:87
+#: templates/base.html:88
 msgid "Satzung der AG DSN"
 msgstr "Statute of AG DSN"
 
-#: templates/base.html:88
+#: templates/base.html:89
 msgid "Satzung der Sektion"
 msgstr "Statute of division Wundstraße"
 
-#: templates/base.html:89
+#: templates/base.html:90
 msgid "Impressum"
 msgstr "Imprint"
 
@@ -362,23 +370,52 @@ msgstr "Usage"
 msgid "von 14 GB"
 msgstr "of 14 GB"
 
-#: templates/usersuite/change_mail.html:2
-msgid "E-Mail ändern"
-msgstr "Change email address"
-
+#: templates/usersuite/change_mac.html:10
 #: templates/usersuite/change_mail.html:10
 msgid "Dein aktuelles Passwort"
 msgstr "Your current password"
 
-#: templates/usersuite/change_mail.html:16
-msgid "Die neue E-Mail-Adresse"
-msgstr "Your new e-mail address"
+#: templates/usersuite/change_mac.html:16
+msgid "Die neue MAC-Adresse"
+msgstr "Your new MAC address"
 
+#: templates/usersuite/change_mac.html:22
+msgid ""
+"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
+"Benachrichtigungsmail an uns gesandt."
+msgstr "Note: we will be notified about any change of your MAC address."
+
+#: templates/usersuite/change_mac.html:23
+msgid ""
+"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es"
+" ist nicht zulässig, den eigenen Account weiterzugeben."
+msgstr ""
+"Please be aware that every user needs his own account. It is not permitted to"
+" share an account!"
+
+#: templates/usersuite/change_mac.html:24
+msgid ""
+"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
+"MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
+"alle Aktivitäten des Accounts!"
+msgstr ""
+"If you share your account with someone else (share login, enter someone else's"
+" MAC address) you are still liable for all activities of this account!"
+
+#: templates/usersuite/change_mac.html:27
 #: templates/usersuite/change_mail.html:20
 #: templates/usersuite/change_password.html:26
 #: templates/usersuite/contact.html:39
 msgid "Abschicken"
 msgstr "Send"
+
+#: templates/usersuite/change_mail.html:2
+msgid "E-Mail ändern"
+msgstr "Change email address"
+
+#: templates/usersuite/change_mail.html:16
+msgid "Die neue E-Mail-Adresse"
+msgstr "Your new e-mail address"
 
 #: templates/usersuite/change_password.html:2
 msgid "Password ändern"
@@ -461,19 +498,15 @@ msgstr "E-Mail forwarding address"
 msgid "Nicht eingerichtet"
 msgstr "Not set up"
 
-#: forms.py:15
 msgid "Allgemeine Frage an die Admins"
 msgstr "General question"
 
-#: forms.py:16
 msgid "Störungen im Wu-ZW-Netz"
 msgstr "Network connectivity problems"
 
-#: forms.py:17
 msgid "Finanzen (Beiträge, Gebühren)"
 msgstr "Question about fees and charges"
 
-#: forms.py:18
 msgid "Probleme mit eigener Technik"
 msgstr "Problems with your own devices"
 

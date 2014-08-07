@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-04 18:39+0200\n"
+"POT-Creation-Date: 2014-08-07 17:43+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -85,73 +85,77 @@ msgstr ""
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: forms.py:30
+#: forms.py:30 forms.py:35
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: forms.py:35
+#: forms.py:40
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: forms.py:36
+#: forms.py:41
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: run.py:35
+#: run.py:37
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: run.py:37
+#: run.py:39
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: run.py:39
+#: run.py:41
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: run.py:80 run.py:211
+#: run.py:113 run.py:253
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: run.py:82 run.py:213
+#: run.py:115 run.py:255 run.py:295
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:113 run.py:254
+#: run.py:151 run.py:333
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: run.py:148
+#: run.py:190
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: run.py:150
+#: run.py:192
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: run.py:180
+#: run.py:222
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: run.py:184
+#: run.py:226
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:186
+#: run.py:228
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: run.py:215
+#: run.py:257
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: run.py:217
+#: run.py:259
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: run.py:232
+#: run.py:292
+msgid "MAC-Adresse wurde geändert!"
+msgstr ""
+
+#: run.py:311
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
@@ -171,104 +175,108 @@ msgstr ""
 msgid "E-Mail-Adresse ändern"
 msgstr ""
 
-#: templates/base.html:46
+#: templates/base.html:40 templates/usersuite/change_mac.html:2
+msgid "MAC-Adresse ändern"
+msgstr ""
+
+#: templates/base.html:47
 msgid "Informationen"
 msgstr ""
 
-#: templates/base.html:49 templates/content/ansprechpartner.html:2
+#: templates/base.html:50 templates/content/ansprechpartner.html:2
 #: templates/content/ansprechpartner.html:66
 msgid "Ansprechpartner"
 msgstr ""
 
-#: templates/base.html:50
+#: templates/base.html:51
 msgid "Hausmeister"
 msgstr ""
 
-#: templates/base.html:51
+#: templates/base.html:52
 msgid "Wohnheime"
 msgstr ""
 
-#: templates/base.html:52
+#: templates/base.html:53
 msgid "Mensen"
 msgstr ""
 
-#: templates/base.html:57
+#: templates/base.html:58
 msgid "Dienste"
 msgstr ""
 
-#: templates/base.html:59 templates/bustimes.html:2
+#: templates/base.html:60 templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr ""
 
-#: templates/base.html:62
+#: templates/base.html:63
 msgid "Wegweiser"
 msgstr ""
 
-#: templates/base.html:63
+#: templates/base.html:64
 msgid "Wetter in der Wu"
 msgstr ""
 
-#: templates/base.html:68
+#: templates/base.html:69
 msgid "AG-Netz"
 msgstr ""
 
-#: templates/base.html:70
+#: templates/base.html:71
 msgid "Anmeldung"
 msgstr ""
 
-#: templates/base.html:71
+#: templates/base.html:72
 msgid "Externer Anschluss"
 msgstr ""
 
-#: templates/base.html:72
+#: templates/base.html:73
 msgid "Häufig gestellte Fragen"
 msgstr ""
 
-#: templates/base.html:73
+#: templates/base.html:74
 msgid "Anleitungen"
 msgstr ""
 
-#: templates/base.html:74
+#: templates/base.html:75
 msgid "Semesterbeitrag"
 msgstr ""
 
-#: templates/base.html:75
+#: templates/base.html:76
 msgid "Status unserer Dienste"
 msgstr ""
 
-#: templates/base.html:76
+#: templates/base.html:77
 msgid "Wohnortwechsel"
 msgstr ""
 
-#: templates/base.html:81
+#: templates/base.html:82
 msgid "Rechtliches"
 msgstr ""
 
-#: templates/base.html:83
+#: templates/base.html:84
 msgid "Trafficregelungen"
 msgstr ""
 
-#: templates/base.html:84
+#: templates/base.html:85
 msgid "Finanzordnung"
 msgstr ""
 
-#: templates/base.html:85
+#: templates/base.html:86
 msgid "Höhere Ordnungen"
 msgstr ""
 
-#: templates/base.html:86
+#: templates/base.html:87
 msgid "Netzordnung"
 msgstr ""
 
-#: templates/base.html:87
+#: templates/base.html:88
 msgid "Satzung der AG DSN"
 msgstr ""
 
-#: templates/base.html:88
+#: templates/base.html:89
 msgid "Satzung der Sektion"
 msgstr ""
 
-#: templates/base.html:89
+#: templates/base.html:90
 msgid "Impressum"
 msgstr ""
 
@@ -360,22 +368,47 @@ msgstr ""
 msgid "von 14 GB"
 msgstr ""
 
-#: templates/usersuite/change_mail.html:2
-msgid "E-Mail ändern"
-msgstr ""
-
+#: templates/usersuite/change_mac.html:10
 #: templates/usersuite/change_mail.html:10
 msgid "Dein aktuelles Passwort"
 msgstr ""
 
-#: templates/usersuite/change_mail.html:16
-msgid "Die neue E-Mail-Adresse"
+#: templates/usersuite/change_mac.html:16
+msgid "Die neue MAC-Adresse"
 msgstr ""
 
+#: templates/usersuite/change_mac.html:22
+msgid ""
+"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
+"Benachrichtigungsmail an uns gesandt."
+msgstr ""
+
+#: templates/usersuite/change_mac.html:23
+msgid ""
+"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es"
+" ist nicht zulässig, den eigenen Account weiterzugeben."
+msgstr ""
+
+#: templates/usersuite/change_mac.html:24
+msgid ""
+"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
+"MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
+"alle Aktivitäten des Accounts!"
+msgstr ""
+
+#: templates/usersuite/change_mac.html:27
 #: templates/usersuite/change_mail.html:20
 #: templates/usersuite/change_password.html:26
 #: templates/usersuite/contact.html:39
 msgid "Abschicken"
+msgstr ""
+
+#: templates/usersuite/change_mail.html:2
+msgid "E-Mail ändern"
+msgstr ""
+
+#: templates/usersuite/change_mail.html:16
+msgid "Die neue E-Mail-Adresse"
 msgstr ""
 
 #: templates/usersuite/change_password.html:2
@@ -487,12 +520,5 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "von 14 GB"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Hinweis: Zusätzlich zu deiner Nachricht "
-#~ "wird deine User-ID, dein Wohnheim "
-#~ "sowie dein Echtname an die Nachricht "
-#~ "angehängt."
 #~ msgstr ""
 

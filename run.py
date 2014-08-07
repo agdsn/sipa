@@ -17,9 +17,9 @@ from ldap import SERVER_DOWN
 
 from config import languages, busstops
 from forms import flash_formerrors, ContactForm, ChangePasswordForm, \
-    ChangeMailForm, LoginForm
+    ChangeMailForm, LoginForm, ChangeMACForm
 from utils import calculate_userid_checksum, get_bustimes
-from utils.database_utils import query_userinfo, query_trafficdata
+from utils.database_utils import query_userinfo, query_trafficdata, update_macaddress
 from utils.graph_utils import make_trafficgraph
 from utils.ldap_utils import User, authenticate, change_password, change_email
 from utils.mail_utils import send_mail
@@ -262,6 +262,43 @@ def usersuite_change_mail():
         flash_formerrors(form)
 
     return render_template('usersuite/change_mail.html', form=form)
+
+
+@app.route("/usersuite/change-mac", methods=['GET', 'POST'])
+@login_required
+def usersuite_change_mac():
+    """As user, change the MAC address of your device.
+    """
+    form = ChangeMACForm()
+    userinfo = query_userinfo(current_user.uid)
+
+    if form.validate_on_submit():
+        password = form.password.data
+        mac = form.mac.data
+
+        auth = authenticate(current_user.uid, password)
+        if not isinstance(auth, int):
+            update_macaddress(userinfo['ip'], userinfo['mac'], mac)
+
+            subject = u"[Usersuite] %s hat seine/ihre MAC-Adresse " \
+                      u"geändert" % current_user.uid
+            message = u"Nutzer %(name)s (%(uid)s) hat seine/ihre MAC-Adresse " \
+                      u"geändert.\nAlte MAC: %(old_mac)s\nNeue MAC: %(new_mac)s" % \
+                      { 'name': current_user.name, 'uid': current_user.uid,
+                        'old_mac': userinfo['mac'], 'new_mac': mac }
+            send_mail(current_user.uid + u"@wh2.tu-dresden.de",
+                      "support@wh2.tu-dresden.de", subject, message)
+
+            flash(gettext(u"MAC-Adresse wurde geändert!"), "success")
+            return redirect(url_for('usersuite'))
+        else:
+            flash(gettext(u"Passwort war inkorrekt!"), "error")
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    old_mac = userinfo['mac']
+    return render_template('usersuite/change_mac.html',
+                           form=form, old_mac=old_mac)
 
 
 @app.route("/usertraffic")

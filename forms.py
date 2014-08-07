@@ -5,7 +5,7 @@ from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
 from flask.ext.wtf import Form
 from wtforms import TextField, TextAreaField, SelectField, PasswordField
-from wtforms.validators import Required, Email
+from wtforms.validators import Required, Email, MacAddress
 
 
 class ContactForm(Form):
@@ -29,6 +29,11 @@ class ChangePasswordForm(Form):
 class ChangeMailForm(Form):
     password = PasswordField(validators=[Required(gettext(u"Passwort nicht angegeben!"))])
     email = TextField(validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
+
+
+class ChangeMACForm(Form):
+    password = PasswordField(validators=[Required(gettext(u"Passwort nicht angegeben!"))])
+    mac = TextField(validators=[Required(u"MAC-Adresse nicht angegeben!"), MacAddress(u"MAC ist nicht in gültigem Format!")])
 
 
 class LoginForm(Form):
