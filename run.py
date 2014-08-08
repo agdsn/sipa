@@ -83,11 +83,15 @@ def load_user(username):
 @babel.localeselector
 def babel_selector():
     """Tries to get the language setting from the current session cookie.
-    If this fails (if it is not set) the best matching language out of the
-    header accept-language is chosen and set.
+    If this fails (if it is not set) it first checks if a language was
+    submitted as an argument ('/page?lang=de') and if not, the best matching
+    language out of the header accept-language is chosen and set.
     """
     lang = session.get('lang')
-    if not lang:
+
+    if 'lang' in request.args and request.args['lang'] in ('de', 'en'):
+        session['lang'] = request.args['lang']
+    elif not lang:
         session['lang'] = request.accept_languages.best_match(languages.keys())
 
     return session.get('lang')
