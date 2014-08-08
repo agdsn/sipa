@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-07 17:43+0200\n"
+"POT-Creation-Date: 2014-08-09 00:15+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -17,47 +17,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: config.py:36
+#: config.py:41
 msgid "Bezahlt, verbunden"
 msgstr ""
 
-#: config.py:37
+#: config.py:42
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: config.py:38
+#: config.py:43
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: config.py:39
+#: config.py:44
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: config.py:43
+#: config.py:48
 msgid "Sonntag"
 msgstr ""
 
-#: config.py:44
+#: config.py:49
 msgid "Montag"
 msgstr ""
 
-#: config.py:45
+#: config.py:50
 msgid "Dienstag"
 msgstr ""
 
-#: config.py:46
+#: config.py:51
 msgid "Mittwoch"
 msgstr ""
 
-#: config.py:47
+#: config.py:52
 msgid "Donnerstag"
 msgstr ""
 
-#: config.py:48
+#: config.py:53
 msgid "Freitag"
 msgstr ""
 
-#: config.py:49
+#: config.py:54
 msgid "Samstag"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: forms.py:26
+#: forms.py:26 forms.py:46
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
@@ -93,70 +93,78 @@ msgstr ""
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: forms.py:41
+#: forms.py:41 forms.py:45
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: run.py:37
+#: run.py:46
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: run.py:39
+#: run.py:48
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: run.py:41
+#: run.py:50
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: run.py:113 run.py:253
+#: run.py:160 blueprints/usersuite.py:141
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: run.py:115 run.py:255 run.py:295
+#: run.py:162 blueprints/usersuite.py:143 blueprints/usersuite.py:170
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:151 run.py:333
+#: run.py:196
+msgid "Deine IP gehört nicht zum Wohnheim!"
+msgstr ""
+
+#: run.py:219 blueprints/usersuite.py:36
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: run.py:190
+#: blueprints/usersuite.py:74
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: run.py:192
+#: blueprints/usersuite.py:76 blueprints/usersuite.py:186
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: run.py:222
+#: blueprints/usersuite.py:109 blueprints/usersuite.py:213
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: run.py:226
+#: blueprints/usersuite.py:114
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:228
+#: blueprints/usersuite.py:116
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: run.py:257
+#: blueprints/usersuite.py:145
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: run.py:259
+#: blueprints/usersuite.py:147
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: run.py:292
+#: blueprints/usersuite.py:183
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: run.py:311
-msgid "Deine IP gehört nicht zum Wohnheim!"
+#: blueprints/usersuite.py:206
+msgid "Deine Datenbank wurde gelöscht."
+msgstr ""
+
+#: blueprints/usersuite.py:217
+msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
 #: templates/base.html:30
@@ -179,104 +187,109 @@ msgstr ""
 msgid "MAC-Adresse ändern"
 msgstr ""
 
-#: templates/base.html:47
+#: templates/base.html:41
+msgid "Webhosting konfigurieren"
+msgstr ""
+
+#: templates/base.html:48
 msgid "Informationen"
 msgstr ""
 
-#: templates/base.html:50 templates/content/ansprechpartner.html:2
+#: templates/base.html:51 templates/content/ansprechpartner.html:2
 #: templates/content/ansprechpartner.html:66
 msgid "Ansprechpartner"
 msgstr ""
 
-#: templates/base.html:51
+#: templates/base.html:52
 msgid "Hausmeister"
 msgstr ""
 
-#: templates/base.html:52
+#: templates/base.html:53
 msgid "Wohnheime"
 msgstr ""
 
-#: templates/base.html:53
+#: templates/base.html:54
 msgid "Mensen"
 msgstr ""
 
-#: templates/base.html:58
+#: templates/base.html:59
 msgid "Dienste"
 msgstr ""
 
-#: templates/base.html:60 templates/bustimes.html:2
+#: templates/base.html:61 templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr ""
 
-#: templates/base.html:63
+#: templates/base.html:64
 msgid "Wegweiser"
 msgstr ""
 
-#: templates/base.html:64
+#: templates/base.html:65
 msgid "Wetter in der Wu"
 msgstr ""
 
-#: templates/base.html:69
+#: templates/base.html:70
 msgid "AG-Netz"
 msgstr ""
 
-#: templates/base.html:71
+#: templates/base.html:72
 msgid "Anmeldung"
 msgstr ""
 
-#: templates/base.html:72
+#: templates/base.html:73
 msgid "Externer Anschluss"
 msgstr ""
 
-#: templates/base.html:73
+#: templates/base.html:74
 msgid "Häufig gestellte Fragen"
 msgstr ""
 
-#: templates/base.html:74
+#: templates/base.html:75
 msgid "Anleitungen"
 msgstr ""
 
-#: templates/base.html:75
+#: templates/base.html:76
 msgid "Semesterbeitrag"
 msgstr ""
 
-#: templates/base.html:76
+#: templates/base.html:77
 msgid "Status unserer Dienste"
 msgstr ""
 
-#: templates/base.html:77
+#: templates/base.html:78
 msgid "Wohnortwechsel"
 msgstr ""
 
-#: templates/base.html:82
+#: templates/base.html:83
 msgid "Rechtliches"
 msgstr ""
 
-#: templates/base.html:84
+#: templates/base.html:85 templates/content/traffic.html:2
+#: templates/content/en/traffic.html:2
 msgid "Trafficregelungen"
 msgstr ""
 
-#: templates/base.html:85
+#: templates/base.html:86
 msgid "Finanzordnung"
 msgstr ""
 
-#: templates/base.html:86
+#: templates/base.html:87
 msgid "Höhere Ordnungen"
 msgstr ""
 
-#: templates/base.html:87
+#: templates/base.html:88
 msgid "Netzordnung"
 msgstr ""
 
-#: templates/base.html:88
+#: templates/base.html:89
 msgid "Satzung der AG DSN"
 msgstr ""
 
-#: templates/base.html:89
+#: templates/base.html:90
 msgid "Satzung der Sektion"
 msgstr ""
 
-#: templates/base.html:90
+#: templates/base.html:91
 msgid "Impressum"
 msgstr ""
 
@@ -399,7 +412,7 @@ msgstr ""
 #: templates/usersuite/change_mac.html:27
 #: templates/usersuite/change_mail.html:20
 #: templates/usersuite/change_password.html:26
-#: templates/usersuite/contact.html:39
+#: templates/usersuite/contact.html:39 templates/usersuite/hosting.html:37
 msgid "Abschicken"
 msgstr ""
 
@@ -428,7 +441,7 @@ msgid "Bestätigung des neuen Passworts"
 msgstr ""
 
 #: templates/usersuite/change_password.html:27
-#: templates/usersuite/contact.html:40
+#: templates/usersuite/contact.html:40 templates/usersuite/hosting.html:38
 msgid "Zurücksetzen"
 msgstr ""
 
@@ -454,6 +467,52 @@ msgstr ""
 
 #: templates/usersuite/contact.html:36
 msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
+msgstr ""
+
+#: templates/usersuite/hosting.html:2
+msgid "MySQL Datenbank"
+msgstr ""
+
+#: templates/usersuite/hosting.html:7
+msgid "Willst du deine Datenbank wirklich löschen?"
+msgstr ""
+
+#: templates/usersuite/hosting.html:7
+msgid "Jawohl!"
+msgstr ""
+
+#: templates/usersuite/hosting.html:12
+msgid ""
+"Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos "
+"zum Webhosting findest du hier."
+msgstr ""
+
+#: templates/usersuite/hosting.html:18
+msgid "Du hast noch keine Datenbank erstellt!"
+msgstr ""
+
+#: templates/usersuite/hosting.html:19
+msgid "Im folgenden kannst du dir eine Datenbank anlegen."
+msgstr ""
+
+#: templates/usersuite/hosting.html:21
+msgid "Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:"
+msgstr ""
+
+#: templates/usersuite/hosting.html:21
+msgid "Datenbank löschen"
+msgstr ""
+
+#: templates/usersuite/hosting.html:22
+msgid "Im folgenden kannst du dein aktuelles MySQL-Passwort ändern."
+msgstr ""
+
+#: templates/usersuite/hosting.html:27
+msgid "Dein neues MySQL-Passwort"
+msgstr ""
+
+#: templates/usersuite/hosting.html:33
+msgid "Bestätige dein neues Passwort"
 msgstr ""
 
 #: templates/usersuite/index.html:2
