@@ -9,6 +9,7 @@ import ldap
 from ldap.ldapobject import SimpleLDAPObject
 
 from config import LDAP_HOST, LDAP_PORT, LDAP_SEARCH_BASE
+from exceptions import UserNotFound, PasswordInvalid, LDAPConnectionError
 
 
 class User(object):
@@ -69,11 +70,6 @@ class LdapConnector(object):
     * If you pass it a username only, it will use an anonymous bind.
     * If you pass it a username and password, it will try to bind to LDAP with
         the users credentials.
-
-    Return codes are
-    * -1: User not found
-    * -2: Wrong password
-    * -3: Insufficient rights to perform LDAP operation
     """
     def __init__(self, username, password=None):
         self.username = username
@@ -84,7 +80,7 @@ class LdapConnector(object):
         try:
             user = self.fetch_user(self.username)
             if not user:
-                return -1
+                raise UserNotFound
             self.l = ldap.initialize("ldap://%s:%s" % (LDAP_HOST, LDAP_PORT))
             self.l.protocol_version = ldap.VERSION3
 
@@ -93,12 +89,12 @@ class LdapConnector(object):
 
             return self.l
         except ldap.INVALID_CREDENTIALS:
-            return -2
+            raise PasswordInvalid
         except ldap.UNWILLING_TO_PERFORM:
             # Empty password
-            return -2
+            raise PasswordInvalid
         except ldap.INSUFFICIENT_ACCESS:
-            return -3
+            raise LDAPConnectionError
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if isinstance(self.l, SimpleLDAPObject):
@@ -141,7 +137,7 @@ class LdapConnector(object):
 
 def get_dn(l):
     """l.whoami_s returns a string 'dn:<full dn>',
-    but we mostly need the <full dn> part only.
+    but we need the <full dn> part only.
     """
     return l.whoami_s()[3:]
 
@@ -149,13 +145,9 @@ def get_dn(l):
 def authenticate(username, password):
     """This method checks the user and password combination against LDAP
 
-    Returns the User object if successful, else
-    returns -1 if the user was not found and
-    -2 if the password was incorrect.
+    Returns the User object if successful.
     """
     with LdapConnector(username, password) as l:
-        if isinstance(l, int):
-            return l
         return User.get(username)
 
 
@@ -163,8 +155,6 @@ def change_password(username, old, new):
     """Change a user's password from old to new
     """
     with LdapConnector(username, old) as l:
-        if isinstance(l, int):
-            return l
         l.passwd_s(get_dn(l), old.encode('iso8859-1'), new.encode('iso8859-1'))
         return 1
 
@@ -177,9 +167,6 @@ def change_email(username, password, email):
     attributes of the given kind and puts the new one in place)
     """
     with LdapConnector(username, password) as l:
-        if isinstance(l, int):
-            return l
-
         # The attribute to modify. 'email' is casted to a string, because
         # passing a unicode object will raise a TypeError
         attr = [(ldap.MOD_REPLACE, 'mail', str(email))]

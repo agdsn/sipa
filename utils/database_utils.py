@@ -5,6 +5,7 @@ import datetime
 from sqlalchemy import create_engine
 
 from config import dormitories, status, weekdays, DB_USER, DB_PASSWORD
+from exceptions import DBQueryEmpty
 from utils import timestamp_from_timetag
 
 
@@ -34,7 +35,7 @@ def query_userinfo(username):
     ).fetchone()
 
     if not user:
-        return -1
+        raise DBQueryEmpty
 
     computer = sql_query(
         "SELECT c_etheraddr, c_ip, c_hname, c_alias "
@@ -44,7 +45,7 @@ def query_userinfo(username):
     ).fetchone()
 
     if not computer:
-        return -1
+        raise DBQueryEmpty
 
     user = {
         'id': user['nutzer_id'],
@@ -76,7 +77,7 @@ def query_trafficdata(ip):
     ).fetchall()
 
     if not trafficdata:
-        return -1
+        raise DBQueryEmpty
 
     traffic = {
         'history': [

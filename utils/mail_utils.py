@@ -45,6 +45,6 @@ def send_mail(sender, receipient, subject, message):
         smtp.sendmail(sender, receipient, mail.as_string(0))
         smtp.close()
         return True
-    except Exception:
-        # Raises "err", but no official Exception.
+    except IOError:
+        # smtp.connect failed to connect
         return False

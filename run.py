@@ -20,6 +20,7 @@ from forms import flash_formerrors, ContactForm, ChangePasswordForm, \
     ChangeMailForm, LoginForm, ChangeMACForm
 from utils import calculate_userid_checksum, get_bustimes
 from utils.database_utils import query_userinfo, query_trafficdata, update_macaddress
+from utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty, LDAPConnectionError
 from utils.graph_utils import make_trafficgraph
 from utils.ldap_utils import User, authenticate, change_password, change_email
 from utils.mail_utils import send_mail
@@ -107,15 +108,16 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        user = authenticate(username, password)
 
-        if user == -1:
+        try:
+            user = authenticate(username, password)
+        except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
-        elif user == -2:
+        except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
-
-        if isinstance(user, User):
-            login_user(user)
+        else:
+            if isinstance(user, User):
+                login_user(user)
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -145,14 +147,13 @@ def usersuite():
     """Usersuite landing page with user account information
     and traffic overview.
     """
-    userinfo = query_userinfo(current_user.uid)
-
-    if userinfo == -1:
+    try:
+        userinfo = query_userinfo(current_user.uid)
+        userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
+        trafficdata = query_trafficdata(userinfo['ip'])
+    except DBQueryEmpty:
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for("index"))
-
-    userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
-    trafficdata = query_trafficdata(userinfo['ip'])
 
     return render_template("usersuite/index.html",
                            userinfo=userinfo,
@@ -221,10 +222,11 @@ def usersuite_change_password():
         if new != form.new2.data:
             flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
-            code = change_password(current_user.uid, old, new)
-            if code == -2:
+            try:
+                change_password(current_user.uid, old, new)
+            except PasswordInvalid:
                 flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
-            elif code:
+            else:
                 flash(gettext(u"Passwort wurde geändert"), "success")
                 return redirect(url_for("usersuite"))
     elif form.is_submitted():
@@ -247,13 +249,13 @@ def usersuite_change_mail():
         password = form.password.data
         email = form.email.data
 
-
-        code = change_email(current_user.uid, password, email)
-        if code == -1:
+        try:
+            change_email(current_user.uid, password, email)
+        except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
-        elif code == -2:
+        except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
-        elif code == -3:
+        except LDAPConnectionError:
             flash(gettext(u"Nicht genügend LDAP-Rechte!"), "error")
         else:
             flash(gettext(u"E-Mail-Adresse wurde geändert"), "success")
@@ -276,8 +278,11 @@ def usersuite_change_mac():
         password = form.password.data
         mac = form.mac.data
 
-        auth = authenticate(current_user.uid, password)
-        if not isinstance(auth, int):
+        try:
+            authenticate(current_user.uid, password)
+        except PasswordInvalid:
+            flash(gettext(u"Passwort war inkorrekt!"), "error")
+        else:
             update_macaddress(userinfo['ip'], userinfo['mac'], mac)
 
             subject = u"[Usersuite] %s hat seine/ihre MAC-Adresse " \
@@ -286,13 +291,16 @@ def usersuite_change_mac():
                       u"geändert.\nAlte MAC: %(old_mac)s\nNeue MAC: %(new_mac)s" % \
                       { 'name': current_user.name, 'uid': current_user.uid,
                         'old_mac': userinfo['mac'], 'new_mac': mac }
-            send_mail(current_user.uid + u"@wh2.tu-dresden.de",
-                      "support@wh2.tu-dresden.de", subject, message)
 
-            flash(gettext(u"MAC-Adresse wurde geändert!"), "success")
-            return redirect(url_for('usersuite'))
-        else:
-            flash(gettext(u"Passwort war inkorrekt!"), "error")
+            if send_mail(current_user.uid + u"@wh2.tu-dresden.de",
+                      "support@wh2.tu-dresden.de", subject, message):
+                flash(gettext(u"MAC-Adresse wurde geändert!"), "success")
+                return redirect(url_for('usersuite'))
+            else:
+                flash(gettext(u"Es gab einen Fehler beim Versenden der "
+                              u"Nachricht. Bitte schicke uns direkt eine E-Mail "
+                              u"an support@wh2.tu-dresden.de"), "error")
+                return redirect(url_for('usersuite'))
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -305,9 +313,9 @@ def usersuite_change_mac():
 def usertraffic():
     """For anonymous users with a valid IP
     """
-    trafficdata = query_trafficdata(request.remote_addr)
-
-    if trafficdata == -1:
+    try:
+        trafficdata = query_trafficdata(request.remote_addr)
+    except DBQueryEmpty:
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
         return redirect(url_for('index'))
 
@@ -328,8 +336,9 @@ def usersuite_trafficpng():
         userinfo = query_userinfo(current_user.uid)
         ip = userinfo['ip']
 
-    trafficdata = query_trafficdata(ip)
-    if trafficdata == -1:
+    try:
+        trafficdata = query_trafficdata(ip)
+    except DBQueryEmpty:
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
         return redirect(url_for('index'))
 
