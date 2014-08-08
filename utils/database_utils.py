@@ -4,16 +4,16 @@
 import datetime
 from sqlalchemy import create_engine
 
-from config import dormitories, status, weekdays, DB_USER, DB_PASSWORD
 from exceptions import DBQueryEmpty
+from config import *
 from utils import timestamp_from_timetag
 
 
-def sql_query(query, args=None):
+def sql_query(query, database, args=None):
     """Prepare and execute a raw sql query.
     'args' is a tuple needed for string replacement.
     """
-    conn = db.connect()
+    conn = database.connect()
     result = conn.execute(query, args)
     conn.close()
     return result
@@ -31,6 +31,7 @@ def query_userinfo(username):
         "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
         "FROM nutzer "
         "WHERE unix_account = %s",
+        db,
         (username,)
     ).fetchone()
 
@@ -41,6 +42,7 @@ def query_userinfo(username):
         "SELECT c_etheraddr, c_ip, c_hname, c_alias "
         "FROM computer "
         "WHERE nutzer_id = %s",
+        db,
         (user['nutzer_id'])
     ).fetchone()
 
@@ -73,6 +75,7 @@ def query_trafficdata(ip):
         "WHERE ip = %s "
         "ORDER BY timetag DESC "
         "LIMIT 0, 7",
+        db,
         (ip,)
     ).fetchall()
 
@@ -120,8 +123,60 @@ def update_macaddress(ip, oldmac, newmac):
         "WHERE c_ip = %s "
         "AND c_etheraddr = %s "
         "LIMIT 1",
+        db,
         (newmac.lower(), ip, oldmac)
     )
 
 
+def user_has_mysql_db(username):
+    """Returns true if a database with the given name exists on helios-userdatabase,
+    otherwise false.
+    """
+    userdb = sql_query(
+        "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{0}'".format(username),
+        db_helios,
+        ()
+    ).fetchone()
+
+    print(userdb)
+
+    if userdb is not None:
+        return True
+    else:
+        return False
+
+
+def create_mysql_userdatabase(username, password):
+    """A user specific database on helios is going to be created.
+    """
+    sql_query(
+        "CREATE DATABASE IF NOT EXISTS {0}".format(username),
+        db_helios,
+        ()
+    )
+    change_mysql_userdatabase_password(username, password)
+
+
+def change_mysql_userdatabase_password(username, password):
+    """This changes a user password for the helios MySQL-database.
+    """
+    str = "GRANT USAGE ON {0}.* TO {0}@'10.1.7.%%' IDENTIFIED BY '{1}' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0".format(username, password)
+    erg = sql_query(
+        str,
+        db_helios,
+        ()
+    )
+
+
+def drop_mysql_userdatabase(username):
+    """This removes a userdatabase on helios.
+    """
+    sql_query(
+        "DROP DATABASE IF EXISTS {0}".format(username),
+        db_helios,
+        ()
+    )
+
 db = create_engine('mysql+mysqldb://{0}:{1}@127.0.0.1:3306/netusers'.format(DB_USER, DB_PASSWORD), echo=False)
+db_helios = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/'.format(
+    DB_HELIOS_USER, DB_HELIOS_PASSWORD, DB_HELIOS_HOST), echo=False)

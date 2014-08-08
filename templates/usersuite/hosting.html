@@ -1,0 +1,34 @@
+{% extends "base.html" %}#
+{% set page_title = _("MySQL Datenbank") %}
+
+{% block content %}
+    <div id="change-mysql-form">
+        <p>{{ _('Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du _hier_.') }}</p>
+        <form action="{{ url_for("usersuite.usersuite_hosting") }}" method="post" class="form">
+            {% if not user_has_db %}
+                {{ form.action(value="createdb") }}
+                <p>{{ _('Du hast noch keine Datenbank erstellt!') }}</p>
+                <p>{{ _('Im folgenden kannst du dir eine Datenbank anlegen.') }}</p>
+            {% else %}
+                {{ form.action(value="changepassword") }}
+                <p>{{ _('Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:') }} <a href="{{ url_for('usersuite.usersuite_hosting', action='deletedb') }}">{{ _('Datenbank löschen') }}</a></p>
+                <p>{{ _('Im folgenden kannst du dein aktuelles MySQL-Passwort ändern.') }}</p>
+            {% endif %}
+        {{ form.csrf_token }}
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label>{{ _('Dein neues MySQL-Passwort') }}</label>
+                    {{ form.password1(class="form-control") }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label>{{ _('Bestätige dein neues Passwort') }}</label>
+                    {{ form.password2(class="form-control") }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default">{{ _('Abschicken') }}</button>
+            <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
+        </form>
+    </div>
+{% endblock %}

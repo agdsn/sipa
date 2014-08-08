@@ -4,7 +4,7 @@
 from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
 from flask.ext.wtf import Form
-from wtforms import TextField, TextAreaField, SelectField, PasswordField
+from wtforms import TextField, TextAreaField, SelectField, PasswordField, HiddenField
 from wtforms.validators import Required, Email, MacAddress
 
 
@@ -39,6 +39,12 @@ class ChangeMACForm(Form):
 class LoginForm(Form):
     username = TextField(u"Username", validators=[Required(gettext(u"Nutzername muss angegeben werden!"))])
     password = PasswordField(u"Password", validators=[Required(gettext(u"Kein Passwort eingegeben!"))])
+
+
+class HostingForm(Form):
+    password1 = PasswordField(u"Password", validators=[Required(gettext(u"Kein Passwort eingegeben!"))])
+    password2 = PasswordField(validators=[Required(gettext(u"Bestätigung des neuen Passworts fehlt!"))])
+    action = HiddenField()
 
 
 def flash_formerrors(form):

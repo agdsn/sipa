@@ -4,15 +4,15 @@
 """Blueprint for Usersuite components
 """
 
-from flask import Blueprint, render_template, url_for, redirect, flash
+from flask import Blueprint, render_template, url_for, redirect, flash, request
 from flask.ext.babel import gettext
 from flask.ext.login import login_required, current_user
 
 from forms import ContactForm, ChangeMACForm, ChangeMailForm, \
-    ChangePasswordForm, flash_formerrors
+    ChangePasswordForm, flash_formerrors, HostingForm
 from utils import calculate_userid_checksum
 from utils.database_utils import query_trafficdata, query_userinfo, \
-    update_macaddress
+    update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, change_mysql_userdatabase_password, user_has_mysql_db
 from utils.ldap_utils import change_password, change_email, authenticate
 from utils.mail_utils import send_mail
 from utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
@@ -193,3 +193,38 @@ def usersuite_change_mac():
     old_mac = userinfo['mac']
     return render_template('usersuite/change_mac.html',
                            form=form, old_mac=old_mac)
+
+
+@bp_usersuite.route("/hosting", methods=['GET', 'POST'])
+@login_required
+def usersuite_hosting():
+    """Change various settings for Helios.
+    """
+    if request.args.get('action') == "deletedb":
+        flash(gettext(u"Willst du wirklich deine Datenbank löschen?")
+            + u" <a href='?action=confirm_deletedb'>"
+            + gettext(u"Löschen")
+            + u"</a>", "warning")
+    elif request.args.get('action') == "confirm_deletedb":
+        drop_mysql_userdatabase(current_user.uid)
+        flash(gettext(u"Deine Datenbank wurde gelöscht."), "message")
+
+    form = HostingForm()
+
+    if form.validate_on_submit():
+
+        if form.password1.data != form.password2.data:
+            flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
+        else:
+            if form.action.data == "createdb":
+                create_mysql_userdatabase(current_user.uid, form.password1.data)
+                flash(gettext(u"Deine Datenbank wurde erstellt."), "message")
+            change_mysql_userdatabase_password(current_user.uid, form.password1.data)
+
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    user_has_db = user_has_mysql_db(current_user.uid)
+
+    return render_template('usersuite/hosting.html',
+                           form=form, user_has_db=user_has_db)
