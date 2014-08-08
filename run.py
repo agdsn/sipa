@@ -16,7 +16,7 @@ from flask.ext.babel import Babel, gettext
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from blueprints.usersuite import bp_usersuite
+from blueprints import bp_usersuite, bp_pages
 from config import languages, busstops
 from forms import flash_formerrors, LoginForm
 from utils import get_bustimes
@@ -34,6 +34,7 @@ babel = Babel(app)
 
 # Blueprints
 app.register_blueprint(bp_usersuite)
+app.register_blueprint(bp_pages)
 
 
 def errorpage(e):
@@ -95,11 +96,6 @@ def babel_selector():
 @app.route('/')
 def index():
     return render_template("index.html")
-
-
-@app.route("/contacts")
-def contacts():
-    return render_template("content/ansprechpartner.html")
 
 
 @app.route("/login", methods=['GET', 'POST'])

@@ -19,7 +19,7 @@ from utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
 
-bp_usersuite = Blueprint('usersuite', 'usersuite', url_prefix='/usersuite')
+bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
 
 @bp_usersuite.route("/")
