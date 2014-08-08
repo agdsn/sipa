@@ -1,6 +1,18 @@
 {% extends "base.html" %}#
-{% set page_title = "Home" %}
+{% set page_title = "News" %}
 
 {% block content %}
-Hallo{% if current_user.name %} {{ current_user.name }}{% else %} Besucher{% endif %}!
+    {% for n in news %}
+        <div class="row">
+            <div class="col-md-9 news-article">
+                <div class="news-article-header{% if n.type == 'alert' %} news-article-header-alert{% endif %}">
+                    <h3>{{ n.title }} </h3>
+                    {{ n.author }} @ {{ n.date }}
+                </div>
+                <div class="news-article-content{% if n.type == 'alert' %} news-article-content-alert{% endif %}">
+                    {{ n.message|markdown }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

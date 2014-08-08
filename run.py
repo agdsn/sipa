@@ -6,13 +6,16 @@ Drupalport auf Python im Zuge der Entwicklung von Pycroft.
 Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
+import codecs
 import io
+import os
 
 from flask import Flask, render_template, request, redirect, \
     url_for, flash, send_file, session
 from flask.ext.login import LoginManager, current_user, login_user, \
     logout_user
 from flask.ext.babel import Babel, gettext
+from flask.ext.markdown import Markdown
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
@@ -31,6 +34,7 @@ app.secret_key = "q_T_a1C18aizPnA2yf-1Q8(2&,pd5n"
 login_manager = LoginManager()
 login_manager.init_app(app)
 babel = Babel(app)
+markdown_ = Markdown(app, extensions=['nl2br', 'sane_lists'])
 
 # Blueprints
 app.register_blueprint(bp_usersuite)
@@ -99,7 +103,45 @@ def babel_selector():
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    """Get all markdown files from 'news/', parse them and put
+    them in a list for the template.
+
+    The format is like this (Pelican compatible):
+
+        Title: ABC
+        Author: userX
+        Date: 1970-01-01
+        [Type: alert]
+
+        Message
+
+    The type field does not need to be used. If you use it, check what types
+    are available. For now, it's only 'alert' which colors the news entry red.
+    """
+    news = []
+    for i in os.listdir('news'):
+        with codecs.open(os.path.join('news', i), 'r', 'utf8') as fh:
+            entry = {
+                'message': '',
+                'type': 'default'
+            }
+
+            for line in fh.read().split('\n'):
+                if line.startswith('Title'):
+                    entry['title'] = line[7:]
+                elif line.startswith('Author'):
+                    entry['author'] = line[8:]
+                elif line.startswith('Date'):
+                    entry['date'] = line[6:]
+                elif line.startswith('Type'):
+                    entry['type'] = line[6:]
+                else:
+                    entry['message'] += line + '\n'
+
+            news.append(entry)
+
+    news_sorted = sorted(news, key=lambda k: k['date'], reverse=True)
+    return render_template("index.html", news=news_sorted)
 
 
 @app.route("/login", methods=['GET', 'POST'])

@@ -4,8 +4,10 @@ Flask==0.10.1
 Flask-Babel==0.9
 Flask-LDAP==0.1.5
 Flask-Login==0.2.11
+Flask-Markdown==0.3
 Flask-WTF==0.9.4
 Jinja2==2.7.2
+Markdown==2.4.1
 MarkupSafe==0.19
 SQLAlchemy==0.9.7
 WTForms==1.0.5

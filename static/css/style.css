@@ -97,6 +97,28 @@ Content box and specific use cases in content context
     margin: 0 0 12px 0;
 }
 
+.news-article {
+    margin-bottom: 16px;
+}
+.news-article-header {
+    background-color: #4e65f3;
+    color: #ffffff;
+    padding: 5px 10px;
+}
+.news-article-header-alert {
+    background-color: darkred !important;
+}
+.news-article-header > h3 {
+    margin: 0;
+}
+.news-article-content {
+    border: 1px solid #4e65f3;
+    padding: 10px 10px 0 10px;
+}
+.news-article-content-alert {
+    border: 1px solid darkred !important;
+}
+
 .contacts {
     border-collapse: collapse;
     min-width: 35%;
