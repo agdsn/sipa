@@ -196,35 +196,32 @@ def usersuite_change_mac():
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
+@bp_usersuite.route("/hosting/<string:action>", methods=['GET', 'POST'])
 @login_required
-def usersuite_hosting():
+def usersuite_hosting(action=None):
     """Change various settings for Helios.
     """
-    if request.args.get('action') == "deletedb":
-        flash(gettext(u"Willst du wirklich deine Datenbank löschen?")
-            + u" <a href='?action=confirm_deletedb'>"
-            + gettext(u"Löschen")
-            + u"</a>", "warning")
-    elif request.args.get('action') == "confirm_deletedb":
+    if action == "confirm":
         drop_mysql_userdatabase(current_user.uid)
         flash(gettext(u"Deine Datenbank wurde gelöscht."), "message")
+        return redirect(url_for('.usersuite_hosting'))
 
     form = HostingForm()
 
     if form.validate_on_submit():
-
         if form.password1.data != form.password2.data:
             flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
-            if form.action.data == "createdb":
+            if form.action.data == "create":
                 create_mysql_userdatabase(current_user.uid, form.password1.data)
                 flash(gettext(u"Deine Datenbank wurde erstellt."), "message")
-            change_mysql_userdatabase_password(current_user.uid, form.password1.data)
-
+            else:
+                change_mysql_userdatabase_password(current_user.uid,
+                                                   form.password1.data)
     elif form.is_submitted():
         flash_formerrors(form)
 
     user_has_db = user_has_mysql_db(current_user.uid)
 
     return render_template('usersuite/hosting.html',
-                           form=form, user_has_db=user_has_db)
+                           form=form, user_has_db=user_has_db, action=action)

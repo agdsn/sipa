@@ -2,19 +2,26 @@
 {% set page_title = _("MySQL Datenbank") %}
 
 {% block content %}
+    {% if action == 'delete' %}
+        <div class="alert alert-warning">
+            {{ _('Willst du deine Datenbank wirklich löschen?') }} <a href="{{ url_for('.usersuite_hosting', action='confirm') }}">{{ _('Jawohl!') }}</a>
+        </div>
+    {% endif %}
+
     <div id="change-mysql-form">
-        <p>{{ _('Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du _hier_.') }}</p>
+        <p>{{ _('Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du hier.') }}</p>
         <form action="{{ url_for("usersuite.usersuite_hosting") }}" method="post" class="form">
+            {{ form.csrf_token }}
+
             {% if not user_has_db %}
-                {{ form.action(value="createdb") }}
+                {{ form.action(value="create") }}
                 <p>{{ _('Du hast noch keine Datenbank erstellt!') }}</p>
                 <p>{{ _('Im folgenden kannst du dir eine Datenbank anlegen.') }}</p>
             {% else %}
-                {{ form.action(value="changepassword") }}
-                <p>{{ _('Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:') }} <a href="{{ url_for('usersuite.usersuite_hosting', action='deletedb') }}">{{ _('Datenbank löschen') }}</a></p>
+                <p>{{ _('Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:') }} <a href="{{ url_for('usersuite.usersuite_hosting', action='delete') }}">{{ _('Datenbank löschen') }}</a></p>
                 <p>{{ _('Im folgenden kannst du dein aktuelles MySQL-Passwort ändern.') }}</p>
             {% endif %}
-        {{ form.csrf_token }}
+
             <div class="row">
                 <div class="col-md-4 form-group">
                     <label>{{ _('Dein neues MySQL-Passwort') }}</label>
