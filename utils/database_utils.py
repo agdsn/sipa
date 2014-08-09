@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 from exceptions import DBQueryEmpty
 from config import *
-from utils import timestamp_from_timetag
+from utils import timestamp_from_timetag, timetag_from_timestamp
 
 
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@127.0.0.1:3306/netusers'.format(
@@ -88,14 +88,31 @@ def query_trafficdata(ip):
     if not trafficdata:
         raise DBQueryEmpty
 
+    if TRAFFICSYSTEM_VERSION == 2:
+        userid = sql_query(
+            "SELECT nutzer_id "
+            "FROM computer "
+            "WHERE c_ip = %s",
+            (ip,)
+        ).fetchone()
+
+        credit = sql_query(
+            "SELECT amount, timetag "
+            "FROM credit "
+            "WHERE user_id = %s "
+            "ORDER BY timetag DESC "
+            "LIMIT 0, 3",
+            (userid['nutzer_id'])
+        ).fetchall()
+
     traffic = {
+        'version': TRAFFICSYSTEM_VERSION,
         'history': [
             [],
             [],
             []
         ],
-        'total': 0,
-        'percent': 0.0
+        'total': 0
     }
 
     for i in reversed(trafficdata):
@@ -112,7 +129,12 @@ def query_trafficdata(ip):
 
         traffic['total'] += input + output
 
-    traffic['percent'] = round(traffic['total'] / (14 * 1024) * 100, 2)
+    if TRAFFICSYSTEM_VERSION == 1:
+        traffic['percent'] = round(traffic['total'] / (14 * 1024) * 100, 2)
+    elif TRAFFICSYSTEM_VERSION == 2:
+        if credit[0]['timetag'] == timetag_from_timestamp():
+            # Make sure to have the latest (todays) entry
+            traffic['credit'] = round(credit[0]['amount'] / (1024.0**1), 2)
 
     return traffic
 
