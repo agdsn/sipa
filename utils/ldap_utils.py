@@ -16,10 +16,10 @@ class User(object):
     """User object will be created from LDAP credentials,
     only stored in session.
     """
-    def __init__(self, uid, name, hostflag, mail):
+    def __init__(self, uid, name, mail):
         self.uid = uid
         self.name = name
-        self.group = self.define_group(hostflag)
+        self.group = self.define_group(uid)
         self.mail = mail
 
     def __repr__(self):
@@ -45,15 +45,15 @@ class User(object):
         """
         return self.uid
 
-    def define_group(self, hostflag):
-        """Define a simple user group from the host flag
+    def define_group(self, username):
+        """Define a user group from the LDAP group
         """
-        if hostflag == 'atlantis':
+        if search_in_group(username, 'Aktiv'):
             return 'active'
-        elif hostflag == 'exorg':
+        elif search_in_group(username, 'Exaktiv'):
             return 'exactive'
-        else:
-            return 'passive'
+        return 'passive'
+
 
     @staticmethod
     def get(username):
@@ -61,7 +61,7 @@ class User(object):
         used before _every_ request.
         """
         user = LdapConnector.fetch_user(username)
-        return User(user['uid'], user['name'], user['host'], user['mail'])
+        return User(user['uid'], user['name'], user['mail'])
 
 
 class LdapConnector(object):
@@ -105,14 +105,14 @@ class LdapConnector(object):
         """Fetch a user by his username from LDAP.
         This method does not check the authenticity of the requested user!
 
-        Returns a formatted dict with the LDAP dn, username, real name and host.
+        Returns a formatted dict with the LDAP dn, username and real name.
         If the username was not found, returns None.
         """
         l = ldap.initialize("ldap://%s:%s" % (LDAP_HOST, LDAP_PORT))
         user = l.search_s(LDAP_SEARCH_BASE,
                           ldap.SCOPE_SUBTREE,
                           "(uid=%s)" % username,
-                          ['uid', 'gecos', 'host', 'mail'])
+                          ['uid', 'gecos', 'mail'])
         l.unbind_s()
 
         if user:
@@ -121,13 +121,10 @@ class LdapConnector(object):
                 'dn': user[0],
                 'uid': user[1]['uid'].pop(),
                 'name': user[1]['gecos'].pop(),
-                'host': None,
                 'mail': None
             }
 
-            # If the user has a hostflag or mail set, put it in the dict
-            if 'host' in user[1]:
-                userdict['host'] = user[1]['host'].pop()
+            # If the user has mail set, put it in the dict
             if 'mail' in user[1]:
                 userdict['mail'] = user[1]['mail'].pop()
 
@@ -149,6 +146,20 @@ def authenticate(username, password):
     """
     with LdapConnector(username, password) as l:
         return User.get(username)
+
+
+def search_in_group(username, group):
+    """Searches for the given user in the given LDAP group memberuid list.
+    This replaces the previous usage of hostflags.
+    """
+    with LdapConnector(username) as l:
+        group_object = l.search_s(
+            'cn=' + group + ',ou=Gruppen,ou=Sektion Wundtstrasse,o=AG DSN,c=de',
+            ldap.SCOPE_SUBTREE, '(memberuid=%s)' % username)
+
+        if group_object:
+            return True
+        return False
 
 
 def change_password(username, old, new):
