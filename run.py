@@ -140,7 +140,14 @@ def index():
 
             news.append(entry)
 
-    news_sorted = sorted(news, key=lambda k: k['date'], reverse=True)
+    news_sorted = news
+    try:
+        news_sorted = sorted(news, key=lambda k: k['date'], reverse=True)
+    except KeyError:
+        flash(u"Error sorting news items! 'Date' must be valid meta data.",
+              "error")
+
+
     return render_template("index.html", news=news_sorted)
 
 

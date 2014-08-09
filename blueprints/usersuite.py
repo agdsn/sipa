@@ -4,7 +4,7 @@
 """Blueprint for Usersuite components
 """
 
-from flask import Blueprint, render_template, url_for, redirect, flash, request
+from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import login_required, current_user
 

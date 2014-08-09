@@ -191,8 +191,8 @@ def change_mysql_userdatabase_password(username, password):
     sql_query(
         "GRANT SELECT, INSERT, UPDATE, DELETE, ALTER, CREATE, DROP, INDEX, LOCK TABLES "
         "ON `%s`.* "
-        "TO %%s@'10.1.7.%%%%'" % (username),
-        (username),
+        "TO %%s@'10.1.7.%%%%'" % username,
+        (username,),
         database=db_helios
     )
 
@@ -208,6 +208,6 @@ def drop_mysql_userdatabase(username):
 
     sql_query(
         "DROP USER %s@'10.1.7.%%'",
-        (username),
+        (username,),
         database=db_helios
     )
