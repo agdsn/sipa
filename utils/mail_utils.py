@@ -10,6 +10,8 @@ from email.mime.text import MIMEText
 import smtplib
 import textwrap
 
+from config import MAILSERVER_HOST
+
 
 def wrap_message(message, chars_in_line=80):
     """Wraps an unformatted block of text to 80 characters
@@ -41,7 +43,7 @@ def send_mail(sender, receipient, subject, message):
 
     try:
         smtp = smtplib.SMTP()
-        smtp.connect(host='localhost', port=25)
+        smtp.connect(host=MAILSERVER_HOST, port=25)
         smtp.sendmail(sender, receipient, mail.as_string(0))
         smtp.close()
         return True

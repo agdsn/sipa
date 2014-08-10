@@ -9,8 +9,8 @@ from config import *
 from utils import timestamp_from_timetag, timetag_from_timestamp
 
 
-db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@127.0.0.1:3306/netusers'.format(
-    DB_USER, DB_PASSWORD), echo=False)
+db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
+    DB_ATLANTIS_USER, DB_ATLANTIS_PASSWORD, DB_ATLANTIS_HOST), echo=False)
 
 db_helios = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/'.format(
     DB_HELIOS_USER, DB_HELIOS_PASSWORD, DB_HELIOS_HOST), echo=False)

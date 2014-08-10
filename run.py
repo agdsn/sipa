@@ -101,6 +101,7 @@ def babel_selector():
     return session.get('lang')
 
 
+@app.route('/index.php')
 @app.route('/')
 def index():
     """Get all markdown files from 'news/', parse them and put
@@ -146,7 +147,6 @@ def index():
     except KeyError:
         flash(u"Error sorting news items! 'Date' must be valid meta data.",
               "error")
-
 
     return render_template("index.html", news=news_sorted)
 
