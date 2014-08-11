@@ -6,18 +6,17 @@ Drupalport auf Python im Zuge der Entwicklung von Pycroft.
 Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
-import codecs
 import io
-import os
 
 from flask import Flask, render_template, request, redirect, \
     url_for, flash, send_file, session
 from flask.ext.login import LoginManager, current_user, login_user, \
     logout_user
 from flask.ext.babel import Babel, gettext
-from flask.ext.markdown import Markdown
+from flask.ext.flatpages import FlatPages
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
+from markdown import Markdown
 
 from blueprints import bp_usersuite, bp_pages
 from config import languages, busstops
@@ -30,11 +29,11 @@ from utils.ldap_utils import User, authenticate
 
 
 app = Flask(__name__)
-app.secret_key = "q_T_a1C18aizPnA2yf-1Q8(2&,pd5n"
+app.config.from_pyfile('settings.py')
 login_manager = LoginManager()
 login_manager.init_app(app)
 babel = Babel(app)
-markdown_ = Markdown(app, extensions=['nl2br', 'sane_lists'])
+pages = FlatPages(app)
 
 # Blueprints
 app.register_blueprint(bp_usersuite)
@@ -52,6 +51,11 @@ def errorpage(e):
 app.register_error_handler(401, errorpage)
 app.register_error_handler(403, errorpage)
 app.register_error_handler(404, errorpage)
+
+
+def safe_markdown(text):
+    md = Markdown(safe_mode='escape')
+    return md.convert(text)
 
 
 @app.errorhandler(OperationalError)
@@ -120,37 +124,11 @@ def index():
     """
     lang = session.get('lang', 'de')
 
-    news = []
-    for i in os.listdir(os.path.join('news', lang)):
-        with codecs.open(os.path.join('news', lang, i), 'r', 'utf8') as fh:
-            entry = {
-                'message': '',
-                'type': 'default'
-            }
+    pages.reload()
+    articles = (p for p in pages if p.path.startswith(lang + u'/news/'))
+    latest = sorted(articles, key=lambda a: a.meta['date'], reverse=True)
 
-            for line in fh.read().split('\n'):
-                if line.startswith('Title'):
-                    entry['title'] = line[7:]
-                elif line.startswith('Author'):
-                    entry['author'] = line[8:]
-                elif line.startswith('Date'):
-                    entry['date'] = line[6:]
-                elif line.startswith('Type'):
-                    entry['type'] = line[6:]
-                else:
-                    entry['message'] += line + '\n'
-
-            news.append(entry)
-
-    news_sorted = news
-    try:
-        news_sorted = sorted(news, key=lambda k: k['date'], reverse=True)
-    except KeyError:
-        flash(u"Error sorting news items! 'Date' must be valid meta data.",
-              "error")
-
-
-    return render_template("index.html", news=news_sorted)
+    return render_template("index.html", articles=latest)
 
 
 @app.route("/login", methods=['GET', 'POST'])

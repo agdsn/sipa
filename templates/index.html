@@ -2,15 +2,15 @@
 {% set page_title = "News" %}
 
 {% block content %}
-    {% for n in news %}
+    {% for art in articles %}
         <div class="row">
             <div class="col-md-9 news-article">
-                <div class="news-article-header{% if n.type == 'alert' %} news-article-header-alert{% endif %}">
-                    <h3>{{ n.title }} </h3>
-                    {{ n.author }} @ {{ n.date }}
+                <div class="news-article-header{% if art.meta.type == 'alert' %} news-article-header-alert{% endif %}">
+                    <h3>{{ art.meta.title }} </h3>
+                    {{ art.meta.author }} @ {{ art.meta.date }}
                 </div>
-                <div class="news-article-content{% if n.type == 'alert' %} news-article-content-alert{% endif %}">
-                    {{ n.message|markdown }}
+                <div class="news-article-content{% if art.meta.type == 'alert' %} news-article-content-alert{% endif %}">
+                    {{ art.html|safe }}
                 </div>
             </div>
         </div>
