@@ -15,7 +15,7 @@ Werkzeug==0.9.4
 cairocffi==0.5.4
 cffi==0.8.6
 cssselect==0.9.1
-distribute==0.6.24
+#distribute==0.6.24
 itsdangerous==0.23
 lxml==3.3.5
 pycparser==2.10

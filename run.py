@@ -118,9 +118,11 @@ def index():
     The type field does not need to be used. If you use it, check what types
     are available. For now, it's only 'alert' which colors the news entry red.
     """
+    lang = session.get('lang', 'de')
+
     news = []
-    for i in os.listdir('news'):
-        with codecs.open(os.path.join('news', i), 'r', 'utf8') as fh:
+    for i in os.listdir(os.path.join('news', lang)):
+        with codecs.open(os.path.join('news', lang, i), 'r', 'utf8') as fh:
             entry = {
                 'message': '',
                 'type': 'default'
