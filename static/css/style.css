@@ -27,7 +27,6 @@ a:hover {
 Layout elements
 */
 #header {
-    background: #4e65f3 url("/static/img/logo.png") 20px 3px no-repeat;
     color: #ffffff;
     position: relative;
 }

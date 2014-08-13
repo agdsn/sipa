@@ -105,6 +105,7 @@ def babel_selector():
     return session.get('lang')
 
 
+@app.route('/index.php')
 @app.route('/')
 def index():
     """Get all markdown files from 'news/', parse them and put
