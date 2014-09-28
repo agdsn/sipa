@@ -42,12 +42,13 @@
             <ul class="nav navbar-nav navbar-right">
 				<li>
 					{% if session.get('lang') == 'en' %}
-						<a href="{{ url_for('set_language', lang='de') }}">Deutsch</a>
+						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> Deutsch</a>
 					{% elif session.get('lang') == 'de' %}
-						<a href="{{ url_for('set_language', lang='en') }}">English</a>
+						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> English</a>
 					{% else %}
-						<a href="{{ url_for('set_language', lang='de') }}">de</a> -
-						<a href="{{ url_for('set_language', lang='en') }}">en</a>
+						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> de</a> -
+						
+						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> en</a>
 					{% endif %}
 				</li>
                 <li>
