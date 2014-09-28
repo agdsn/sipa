@@ -1,151 +1,28 @@
-/*
-General styling; font, links
-*/
-@font-face {
-    font-family: Oxygen;
-    src: url("/static/fonts/Oxygen.otf");
+.pg-header {
+	padding-top: 60px;
+	padding-bottom: 60px;
+	text-align: left;
+	font-size: 24px;
+	position: relative;
+	padding: 60px 50px;
+	color: white;
+	background-color: black;
+	background-image: url(../img/background.jpg);
+	margin-bottom: 40px;
+}
+
+#trafficgauge {
+	height: 200px;
+}
+
+.pg-header h1 {
+	color: white;
 }
 
 body {
-    font-family: Oxygen, Verdana, Helvetica, Geneva, sans-serif;
-    font-size: 10pt;
-    margin: 0;
-    padding: 0;
+	margin-top: 40px;
 }
 
-a, a:visited, a:active {
-    color: #9d92e3;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-
-/*
-Layout elements
-*/
-#header {
-    color: #ffffff;
-    position: relative;
-}
-
-#header h1 {
-    color: #ffffff;
-    margin: 0;
-    padding: 30px 130px;
-}
-
-#languageselection {
-    bottom: 4px;
-    position: absolute;
-    right: 10px;
-}
-#languageselection a {
-    color: #ffffff;
-    font-weight: bold;
-}
-
-#navigation, #navigation a {
-    color: #000000;
-}
-
-.navigation-block {
-    background: #ffffff;
-    border-left: 2px solid #4e65f3;
-    margin-top: 30px;
-    padding: 0;
-}
-
-.navigation-block ul {
-    list-style: none;
-    padding: 0 0 0 10px;
-}
-
-.navigation-block li {
-    margin: 2px 0;
-}
-
-.navigation-block-header {
-    font-size: 14pt;
-    text-align: left;
-    padding: 0 0 5px 10px;
-}
-
-#footer {
-    font-size: 8pt;
-    text-align: center;
-    width: 100%;
-}
-
-#flash-messages {
-    padding: 10px;
-}
-
-
-/*
-Content box and specific use cases in content context
-*/
-.content-section {
-    margin: 0 0 40px 0;
-}
-
-.content-section h2 {
-    padding: 0;
-    margin: 0 0 12px 0;
-}
-
-.news-article {
-    margin-bottom: 16px;
-}
-.news-article-header {
-    background-color: #4e65f3;
-    color: #ffffff;
-    padding: 5px 10px;
-}
-.news-article-header-alert {
-    background-color: darkred !important;
-}
-.news-article-header > h3 {
-    margin: 0;
-}
-.news-article-content {
-    border: 1px solid #4e65f3;
-    padding: 10px 10px 0 10px;
-}
-.news-article-content-alert {
-    border: 1px solid darkred !important;
-}
-
-.contacts {
-    border-collapse: collapse;
-    min-width: 35%;
-}
-.contacts th {
-    padding: 3px;
-    text-align: left;
-}
-.contacts td {
-    padding: 5px 3px;
-    vertical-align: top;
-}
-
-.contacts tr:nth-child(even) {
-    background: #e8ecf8;
-}
-
-#usersuite-traffic-sum {
-    font-size: larger;
-    font-weight: bold;
-    text-align: center;
-}
-
-
-/* Hackz */
-select {
-    padding: 0 7px !important;
-}
-.clear {
-    clear: both;
-}
+.pg-header .container {
+	position: relative;
+} 
