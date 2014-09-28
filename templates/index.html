@@ -3,7 +3,13 @@
 
 {% block content %}
     {% for art in articles %}
-        <div class="row">
+		<h2>{{ art.meta.title }}</h2>
+		<small>{{ _("written by") }} {{ art.meta.author }}, {{ art.meta.date }}</small>
+		<hr />
+		<p>{{ art.html|safe }}</p>
+		<br />
+        
+        <!-- <div class="row">
             <div class="col-md-9 news-article">
                 <div class="news-article-header{% if art.meta.type == 'alert' %} news-article-header-alert{% endif %}">
                     <h3>{{ art.meta.title }} </h3>
@@ -13,6 +19,6 @@
                     {{ art.html|safe }}
                 </div>
             </div>
-        </div>
+        </div> -->
     {% endfor %}
 {% endblock %}
