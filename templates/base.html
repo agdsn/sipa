@@ -40,6 +40,16 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+				<li>
+					{% if session.get('lang') == 'en' %}
+						<a href="{{ url_for('set_language', lang='de') }}">Deutsch</a>
+					{% elif session.get('lang') == 'de' %}
+						<a href="{{ url_for('set_language', lang='en') }}">English</a>
+					{% else %}
+						<a href="{{ url_for('set_language', lang='de') }}">de</a> -
+						<a href="{{ url_for('set_language', lang='en') }}">en</a>
+					{% endif %}
+				</li>
                 <li>
                     <a href="/">Anmelden</a>
                 </li>
