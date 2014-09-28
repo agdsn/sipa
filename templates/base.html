@@ -52,7 +52,11 @@
 					{% endif %}
 				</li>
                 <li>
-                    <a href="/">Anmelden</a>
+					{% if current_user.is_anonymous() %}
+						<a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("login") }}</a>
+					{% else %}
+						<a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("logout") }}</a>
+					{% endif %}
                 </li>
             </ul>
         </div>
