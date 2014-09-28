@@ -15,7 +15,86 @@
 </head>
 
 <body>
-<div class="container-fluid">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">{{ _('Toggle') }}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='img/logo.png') }}"/ style="max-width: 32px; margin-top: -5px;"></a>
+        </div>
+        
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/anschluss" title="Anschlusskonfiguration">Anschluss</a>
+                </li>
+                <li>
+                    <a href="/wohnheim" title="Wohnheimsübersicht">Wohnheim</a>
+                </li>
+                <li>
+                    <a href="https://www.wh2.tu-dresden.de/" title="AGDSN">AGDSN</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Anmelden</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>    
+	
+<header class="pg-header">
+	<div class="container">
+		<h1>AGDSN Wundtstraße</h1>
+		<p>{{ _("Description") }} </p>
+	</div>
+</header>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-9 col-md-9">
+			{% with messages = get_flashed_messages(with_categories=True) %}
+				{% if messages %}
+					{% for cat, msg in messages %}
+						{% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
+						<div class="alert{% if cat and cat != 'message' %} alert-{{ cat }}{% else %} alert-info{% endif %}">
+							{{ _(msg) }}
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+			{% block content %}
+			{% endblock %}
+		</div>
+		
+		<div class="col-lg-3 col-md-3">
+			<h2>Traffic</h2>
+			<p>Folgendes Traffickontingent wurde von dir benutzt:</p>
+			<div id="trafficgauge"></div>
+			<p>Bei Überschreitung des maximalen Limits wird dein Anschluss automatisch gesperrt!</p>
+		</div>
+	</div>
+</div>
+
+<footer>
+	<div class="container text-center">
+        <hr>
+        <div class="row">
+            <div class="col-lg-12 footer-below">
+                <p>AGDSN Sektion Wundtstraße, 2014</a>.
+                <br>Powered by <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+	
+<!-- <div class="container-fluid">
 <div class="row">
     <div id="header" class="col-md-12">
         <div id="languageselection">
@@ -100,36 +179,18 @@
             </ul>
         </div>
     </div>
-
-    <div class="col-md-9">
-        {% if page_title %}
-            <h2>{{ page_title }}</h2>
-        {% endif %}
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for cat, msg in messages %}
-                    {% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
-                    <div class="alert{% if cat and cat != 'message' %} alert-{{ cat }}{% else %} alert-info{% endif %}">
-                        {{ _(msg) }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% block content %}
-        {% endblock %}
-    </div>
 </div>
 
 <div class="row">
     <div id="footer" class="col-md-12">
         Sektion Wundtstraße, 2014
     </div>
-</div>
+</div> -->
 
-<script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
-<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
-<script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
-<script type="text/javascript" src="{{ url_for("static", filename="js/justgage-1.0.1.min.js") }}"></script>
-<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
+	<script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
+	<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
+	<script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
+	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.min.js") }}"></script>
+	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
 </body>
 </html>
