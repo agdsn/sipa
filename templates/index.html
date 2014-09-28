@@ -3,7 +3,15 @@
 
 {% block content %}
     {% for art in articles %}
-		<h2>{{ art.meta.title }}</h2>
+		{% if art.meta.type == 'alert' %}
+			<div class="panel panel-danger"><div class="panel-body">
+		{% endif %}
+		<h2>
+			{{ art.meta.title }}
+			{% if art.meta.type == 'alert' %}
+				<span class="label label-danger"><span class="glyphicon glyphicon-exclamation-sign"></span></span>
+			{% endif %}
+		</h2>
 		<small>{{ _("written by") }} {{ art.meta.author }}, {{ art.meta.date }}</small>
 		<hr />
 		<p>{{ art.html|safe }}</p>
@@ -20,5 +28,9 @@
                 </div>
             </div>
         </div> -->
+        
+		{% if art.meta.type == 'alert' %}
+			</div></div>
+		{% endif %}
     {% endfor %}
 {% endblock %}
