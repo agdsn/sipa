@@ -24,7 +24,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='img/logo.png') }}"/ style="max-width: 32px; margin-top: -5px;"></a>
+            <a class="navbar-brand" href="{{ url_for("index") }}"><img src="{{ url_for('static', filename='img/logo.png') }}"/ style="max-width: 32px; margin-top: -5px;"></a>
         </div>
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -105,23 +105,7 @@
     </div>
 </footer>
 	
-<!-- <div class="container-fluid">
-<div class="row">
-    <div id="header" class="col-md-12">
-        <div id="languageselection">
-            {% if session.get('lang') == 'en' %}
-                <a href="{{ url_for('set_language', lang='de') }}">Deutsch</a>
-            {% elif session.get('lang') == 'de' %}
-                <a href="{{ url_for('set_language', lang='en') }}">English</a>
-            {% else %}
-                <a href="{{ url_for('set_language', lang='de') }}">de</a> -
-                <a href="{{ url_for('set_language', lang='en') }}">en</a>
-            {% endif %}
-        </div>
-        <a href="{{ url_for("index") }}"><h1>AG DSN Sektion Wundtstraße</h1></a>
-    </div>
-</div>
-
+<!-- 
 <div class="row">
     <div id="navigation" class="col-md-2">
 		<div class="navigation-block">
