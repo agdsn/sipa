@@ -29,14 +29,66 @@
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li>
-                    <a href="/anschluss" title="Anschlusskonfiguration">Anschluss</a>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" title="Anschlusskonfiguration">Anschluss <span class="caret"></span></a>
+                    
+                    <ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-log-in"></span> &nbsp; Registrieren</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; Externer Anschluss</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; Abmelden</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; Zahlung</a>
+						</li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="/wohnheim" title="Wohnheimsübersicht">Wohnheim</a>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Wohnheim <span class="caret"></span></a>
+                    
+                    <ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; Hausmeister</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-tint"></span> &nbsp; Club Wu5</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-leaf"></span> &nbsp; Studentenwerk</a>
+						</li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="https://www.wh2.tu-dresden.de/" title="AGDSN">AGDSN</a>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">AGDSN <span class="caret"></span></a>
+                    
+                    <ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-envelope"></span> &nbsp; E-Mail</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-save"></span> &nbsp; Software</a>
+						</li>
+						
+						<li class="divider"></li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-list"></span> &nbsp; Satzung</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; Finanzordnung</a>
+						</li>
+                    </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -73,7 +125,51 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-lg-9 col-md-9">
+		<div class="col-sm-3 col-sm-push-9">
+			<div class="row">
+				<div class="col-xs-6 col-sm-12">
+					<h2>Traffic</h2>
+					<div id="trafficgauge"></div>
+
+						<div class="row">
+							<div class="col-xs-1">
+								<span class="glyphicon glyphicon-list-alt"></span>
+							</div>
+							<div class="col-xs-10">
+								<a href="traffic.html">Trafficstatistik</a>
+							</div>
+						</div>
+				</div>
+				
+				<div class="col-xs-6 col-sm-12">
+					<h2>Kontakt</h2>
+					
+					<p>
+						<div class="row">
+							<div class="col-xs-1">
+								<span class="glyphicon glyphicon-comment"></span>
+							</div>
+							<div class="col-xs-10">
+								<a href="mailto:support@wh2.tu-dresden.de">support@wh2.tu-dresden.de</a>
+							</div>
+						</div>
+						
+						<br />
+						
+						<div class="row">
+							<div class="col-xs-1">
+								<span class="glyphicon glyphicon-home"></span>
+							</div>
+							<div class="col-xs-10">
+								Wundtstraße 5<br />Klingel 0100<br />01217 Dresden
+							</div>
+						</div>
+					</p>
+				</div>
+			</div>			
+		</div>
+		
+		<div class="col-sm-9 col-sm-pull-3">
 			{% with messages = get_flashed_messages(with_categories=True) %}
 				{% if messages %}
 					{% for cat, msg in messages %}
@@ -86,13 +182,6 @@
 			{% endwith %}
 			{% block content %}
 			{% endblock %}
-		</div>
-		
-		<div class="col-lg-3 col-md-3">
-			<h2>Traffic</h2>
-			<p>Folgendes Traffickontingent wurde von dir benutzt:</p>
-			<div id="trafficgauge"></div>
-			<p>Bei Überschreitung des maximalen Limits wird dein Anschluss automatisch gesperrt!</p>
 		</div>
 	</div>
 </div>

@@ -36,7 +36,6 @@ def timestamp_from_timetag(timetag):
     """
     return timetag * 86400
 
-
 def get_bustimes(stopname, count=10):
     """Parses the VVO-Online API return string.
     API returns in format [["line", "to", "minutes"],[__],[__]], where "__" are
