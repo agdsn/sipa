@@ -1,28 +1,57 @@
 .pg-header {
-	padding-top: 60px;
-	padding-bottom: 60px;
-	text-align: left;
-	font-size: 24px;
-	position: relative;
-	padding: 60px 50px;
-	color: white;
-	background-color: black;
-	background-image: url(../img/background.jpg);
-	margin-bottom: 40px;
-}
-
-#trafficgauge {
-	height: 200px;
-}
-
-.pg-header h1 {
-	color: white;
+	display: none;
 }
 
 body {
 	margin-top: 40px;
 }
 
-.pg-header .container {
-	position: relative;
-} 
+@media (min-width: 768px) {
+	.pg-header {
+		display: block;
+		padding-top: 60px;
+		padding-bottom: 60px;
+		text-align: left;
+		font-size: 24px;
+		position: relative;
+		padding: 60px 50px;
+		color: white;
+		background-color: black;
+		background-size: cover;
+		background-image: url(../img/background.jpg);
+		margin-bottom: 40px;
+	}
+	
+	.pg-header h1 {
+		color: white;
+	}
+
+	.pg-header .container {
+		position: relative;
+	} 
+}
+
+#logo {
+	margin-top: -5px;
+	background-image: url(../img/logo.png);
+	background-size: 32px;
+	width: 32px;
+	height: 32px;
+}
+
+#logo:hover {
+	background-image: url(../img/logo_hover.png);
+}
+
+#trafficgauge {
+	height: 200px;
+}
+
+td {
+	vertical-align: top;
+	padding-bottom: 20px;
+}
+
+#trafstat {
+	width: 100%;
+}
