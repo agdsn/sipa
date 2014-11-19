@@ -30,23 +30,23 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" title="Anschlusskonfiguration">Anschluss <span class="caret"></span></a>
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" title="Anschlusskonfiguration">{{ _('Link-Up') }} <span class="caret"></span></a>
                     
                     <ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-log-in"></span> &nbsp; Registrieren</a>
+							<a href="#"><span class="glyphicon glyphicon-log-in"></span> &nbsp; {{ _('Register') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; Externer Anschluss</a>
+							<a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; {{ _('External provider') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; Abmelden</a>
+							<a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; {{ _('Give notice of departure') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; Zahlung</a>
+							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Payment') }}</a>
 						</li>
                     </ul>
                 </li>
@@ -55,15 +55,15 @@
                     
                     <ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; Hausmeister</a>
+							<a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; {{ _('Caretaker') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-tint"></span> &nbsp; Club Wu5</a>
+							<a href="#"><span class="glyphicon glyphicon-tint"></span> &nbsp; {{ _('Club Wu5') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-leaf"></span> &nbsp; Studentenwerk</a>
+							<a href="#"><span class="glyphicon glyphicon-leaf"></span> &nbsp; {{ _('Studentenwerk') }}</a>
 						</li>
                     </ul>
                 </li>
@@ -72,21 +72,21 @@
                     
                     <ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-envelope"></span> &nbsp; E-Mail</a>
+							<a href="#"><span class="glyphicon glyphicon-envelope"></span> &nbsp; {{ _('E-Mail') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-save"></span> &nbsp; Software</a>
+							<a href="#"><span class="glyphicon glyphicon-save"></span> &nbsp; {{ _('Software') }}</a>
 						</li>
 						
 						<li class="divider"></li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-list"></span> &nbsp; Satzung</a>
+							<a href="#"><span class="glyphicon glyphicon-list"></span> &nbsp; {{ _('Rules') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; Finanzordnung</a>
+							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Finance rules') }}</a>
 						</li>
                     </ul>
                 </li>
@@ -94,9 +94,9 @@
             <ul class="nav navbar-nav navbar-right">
 				<li>
 					{% if session.get('lang') == 'en' %}
-						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> Deutsch</a>
+						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> {{ _('Deutsch') }}</a>
 					{% elif session.get('lang') == 'de' %}
-						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> English</a>
+						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> {{ _('English') }}</a>
 					{% else %}
 						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> de</a> -
 						
@@ -105,9 +105,9 @@
 				</li>
                 <li>
 					{% if current_user.is_anonymous() %}
-						<a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("login") }}</a>
+						<a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
 					{% else %}
-						<a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("logout") }}</a>
+						<a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Logout") }}</a>
 					{% endif %}
                 </li>
             </ul>
@@ -118,7 +118,7 @@
 <header class="pg-header">
 	<div class="container">
 		<h1>AGDSN Wundtstraße</h1>
-		<p>{{ _("Description") }} </p>
+		<p>{{ _("Description") }}</p>
 	</div>
 </header>
 
@@ -136,7 +136,7 @@
 								<span class="glyphicon glyphicon-list-alt"></span>
 							</div>
 							<div class="col-xs-10">
-								<a href="traffic.html">Trafficstatistik</a>
+								<a href="traffic.html">{{ _("Traffic statistics") }}</a>
 							</div>
 						</div>
 				</div>
@@ -161,7 +161,7 @@
 								<span class="glyphicon glyphicon-home"></span>
 							</div>
 							<div class="col-xs-10">
-								Wundtstraße 5<br />Klingel 0100<br />01217 Dresden
+								Wundtstraße 5<br />{{ _("Doorbell") }} 0100<br />01217 Dresden
 							</div>
 						</div>
 					</p>
