@@ -16,12 +16,10 @@ db_helios = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/'.format(
     DB_HELIOS_USER, DB_HELIOS_PASSWORD, DB_HELIOS_HOST), echo=False)
 
 
-def sql_query(query, args=None, database=db_atlantis):
+def sql_query(query, args=(), database=db_atlantis):
     """Prepare and execute a raw sql query.
     'args' is a tuple needed for string replacement.
     """
-    if not args:
-        args = ()
     conn = database.connect()
     result = conn.execute(query, args)
     conn.close()
