@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="{{ _('Description') }}">
-	<meta name="author" content="{{ _('Author') }}">
+	<meta name="description" content="Arbeitsgemeinschaft Dresdner Studentennetz, Sektion Wundtstraße">
+	<meta name="author" content="AG DSN Administrators">
     
     <title>AG DSN Sektion Wundtstraße{% if page_title %} - {{ page_title }}{% endif %}</title>
 
@@ -19,7 +19,7 @@
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse">
-                <span class="sr-only">{{ _('Toggle') }}</span>
+                <span class="sr-only">toggle</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -34,28 +34,28 @@
                     
                     <ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-log-in"></span> &nbsp; {{ _('Register') }}</a>
+							<a href="#"><span class="glyphicon glyphicon-log-in"></span> &nbsp; {{ _('Anmeldung') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; {{ _('External provider') }}</a>
+							<a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; {{ _('Externer Anbieter') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; {{ _('Give notice of departure') }}</a>
+							<a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; {{ _('Auszugsmeldung') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Payment') }}</a>
+							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Bezahlung') }}</a>
 						</li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">Wohnheim <span class="caret"></span></a>
-                    
+
                     <ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; {{ _('Caretaker') }}</a>
+							<a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; {{ _('Hausmeister') }}</a>
 						</li>
 						
 						<li>
@@ -82,11 +82,11 @@
 						<li class="divider"></li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-list"></span> &nbsp; {{ _('Rules') }}</a>
+							<a href="#"><span class="glyphicon glyphicon-list"></span> &nbsp; {{ _('Rechtliches') }}</a>
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Finance rules') }}</a>
+							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Finanzordnung') }}</a>
 						</li>
                     </ul>
                 </li>
@@ -118,7 +118,7 @@
 <header class="pg-header">
 	<div class="container">
 		<h1>AGDSN Wundtstraße</h1>
-		<p>{{ _("Description") }}</p>
+		<p>Arbeitsgemeinschaft Dresdner Studentennetz, Sektion Wundtstraße</p>
 	</div>
 </header>
 
@@ -136,7 +136,7 @@
 								<span class="glyphicon glyphicon-list-alt"></span>
 							</div>
 							<div class="col-xs-10">
-								<a href="traffic.html">{{ _("Traffic statistics") }}</a>
+								<a href="{{ url_for('usertraffic') }}">{{ _("Traffic") }}</a>
 							</div>
 						</div>
 				</div>
@@ -161,7 +161,7 @@
 								<span class="glyphicon glyphicon-home"></span>
 							</div>
 							<div class="col-xs-10">
-								Wundtstraße 5<br />{{ _("Doorbell") }} 0100<br />01217 Dresden
+								Wundtstraße 5<br />{{ _("Klingel") }} 0100<br />01217 Dresden
 							</div>
 						</div>
 					</p>
@@ -197,83 +197,6 @@
         </div>
     </div>
 </footer>
-	
-<!-- 
-<div class="row">
-    <div id="navigation" class="col-md-2">
-		<div class="navigation-block">
-		    <div class="navigation-block-header">{{ _('Benutzermenü') }}</div>
-		    <ul>
-		        {% if current_user.is_anonymous() %}
-                    <li><a href="{{ url_for("usertraffic") }}">Usertraffic</a></li>
-                    <li><a href="{{ url_for("login") }}">Login</a></li>
-                {% else %}
-                    <li><a href="{{ url_for("usersuite.usersuite") }}">Usersuite</a></li>
-                    <li><a href="{{ url_for("usersuite.usersuite_contact") }}">{{ _('Nachricht an die Admins') }}</a></li>
-                    <li><a href="{{ url_for("usersuite.usersuite_change_password") }}">{{ _('Passwort ändern') }}</a></li>
-                    <li><a href="{{ url_for("usersuite.usersuite_change_mail") }}">{{ _('E-Mail-Adresse ändern') }}</a></li>
-                    <li><a href="{{ url_for("usersuite.usersuite_change_mac") }}">{{ _('MAC-Adresse ändern') }}</a></li>
-                    <li><a href="{{ url_for("usersuite.usersuite_hosting") }}">{{ _('Webhosting konfigurieren') }}</a></li>
-                    <li><a href="{{ url_for("logout") }}">Logout</a></li>
-                {% endif %}
-		    </ul>
-		</div>
-
-        <div class="navigation-block">
-            <div class="navigation-block-header">{{ _('Informationen') }}</div>
-            <ul>
-                <li><a href="{{ url_for("index") }}">News</a></li>
-                <li><a href="{{ url_for("pages.contacts") }}">{{ _('Ansprechpartner') }}</a></li>
-                <li><a href="http://www.studentenwerk-dresden.de/wohnen/ansprechpartner.html">{{ _('Hausmeister') }}</a></li>
-                <li><a href="http://www.studentenwerk-dresden.de/wohnen/wohnheimkatalog/">{{ _('Wohnheime') }}</a></li>
-                <li><a href="http://www.studentenwerk-dresden.de/mensen/mensen_cafeterien.html">{{ _('Mensen') }}</a></li>
-            </ul>
-        </div>
-
-        <div class="navigation-block">
-            <div class="navigation-block-header">{{ _('Dienste') }}</div>
-            <ul>
-                <li><a href="{{ url_for("bustimes") }}">{{ _('Abfahrtszeiten') }}</a></li>
-                <li><a href="{{ url_for("index") }}">Software</a></li>
-                <li><a href="https://www.wh2.tu-dresden.de/webmail">Webmail</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Wegweiser') }}</a></li>
-                <li><a href="http://www.wh2.tu-dresden.de/wetter">{{ _('Wetter in der Wu') }}</a></li>
-            </ul>
-        </div>
-
-        <div class="navigation-block">
-            <div class="navigation-block-header">{{ _('AG-Netz') }}</div>
-            <ul>
-                <li><a href="{{ url_for("index") }}">{{ _('Anmeldung') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Externer Anschluss') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Häufig gestellte Fragen') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Anleitungen') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Semesterbeitrag') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Status unserer Dienste') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Wohnortwechsel') }}</a></li>
-            </ul>
-        </div>
-
-        <div class="navigation-block">
-            <div class="navigation-block-header">{{ _('Rechtliches') }}</div>
-            <ul>
-                <li><a href="{{ url_for("pages.traffic") }}">{{ _('Trafficregelungen') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Finanzordnung') }}</a></li>
-                <li><a href="http://agdsn.de/rechtliches">{{ _('Höhere Ordnungen') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Netzordnung') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Satzung der AG DSN') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Satzung der Sektion') }}</a></li>
-                <li><a href="{{ url_for("index") }}">{{ _('Impressum') }}</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div id="footer" class="col-md-12">
-        Sektion Wundtstraße, 2014
-    </div>
-</div> -->
 
 	<script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>

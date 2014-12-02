@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-28 16:33+0200\n"
-"PO-Revision-Date: 2014-08-01 19:21+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2014-12-02 15:19+0100\n"
+"PO-Revision-Date: 2014-12-02 15:21+0100\n"
+"Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
@@ -17,51 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: config.py:48
+#: config.py:51
 msgid "Bezahlt, verbunden"
 msgstr "Payed, connected"
 
-#: config.py:49
+#: config.py:52
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr "Not payed, connection blocked"
 
-#: config.py:50
+#: config.py:53
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr "Net usage violation, connection blocked"
 
-#: config.py:51
+#: config.py:54
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr "Traffic limit reached, account blocked"
 
-#: config.py:55
+#: config.py:58
 msgid "Sonntag"
 msgstr "Sunday"
 
-#: config.py:56
+#: config.py:59
 msgid "Montag"
 msgstr "Monday"
 
-#: config.py:57
+#: config.py:60
 msgid "Dienstag"
 msgstr "Tuesday"
 
-#: config.py:58
+#: config.py:61
 msgid "Mittwoch"
 msgstr "Wednesday"
 
-#: config.py:59
+#: config.py:62
 msgid "Donnerstag"
 msgstr "Thursday"
 
-#: config.py:60
+#: config.py:63
 msgid "Freitag"
 msgstr "Friday"
 
-#: config.py:61
+#: config.py:64
 msgid "Samstag"
 msgstr "Saturday"
 
-#: forms.py:12 forms.py:31
+#: forms.py:12
+#: forms.py:31
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr "E-Mail is invalid!"
 
@@ -81,11 +82,13 @@ msgstr "Old password must be submitted!"
 msgid "Neues Passwort fehlt!"
 msgstr "New password is missing!"
 
-#: forms.py:26 forms.py:46
+#: forms.py:26
+#: forms.py:46
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: forms.py:30 forms.py:35
+#: forms.py:30
+#: forms.py:35
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
 
@@ -93,7 +96,8 @@ msgstr "No password submitted!"
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: forms.py:41 forms.py:45
+#: forms.py:41
+#: forms.py:45
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
@@ -109,19 +113,23 @@ msgstr "You do not have sufficient rights to view this page!"
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: run.py:148 blueprints/usersuite.py:141
+#: run.py:149
+#: blueprints/usersuite.py:141
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:150 blueprints/usersuite.py:143 blueprints/usersuite.py:170
+#: run.py:151
+#: blueprints/usersuite.py:143
+#: blueprints/usersuite.py:170
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: run.py:184
+#: run.py:186
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
-#: run.py:207 blueprints/usersuite.py:36
+#: run.py:209
+#: blueprints/usersuite.py:36
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
@@ -129,15 +137,13 @@ msgstr "Database query could not be processed!"
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: blueprints/usersuite.py:76 blueprints/usersuite.py:186
-msgid ""
-"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
-"direkt eine E-Mail an support@wh2.tu-dresden.de"
-msgstr ""
-"There was an error sending your message. Please contact us at support@wh2"
-".tu-dresden.de"
+#: blueprints/usersuite.py:76
+#: blueprints/usersuite.py:186
+msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"
+msgstr "There was an error sending your message. Please contact us at support@wh2.tu-dresden.de"
 
-#: blueprints/usersuite.py:109 blueprints/usersuite.py:213
+#: blueprints/usersuite.py:109
+#: blueprints/usersuite.py:213
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
@@ -169,157 +175,88 @@ msgstr "Your database was deleted."
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database was created."
 
-#: templates/base.html:7 templates/base.html:69
-msgid "Description"
-msgstr ""
+#: templates/base.html:33
+msgid "Link-Up"
+msgstr "Link-Up"
 
-#: templates/base.html:8
-msgid "Author"
-msgstr ""
-
-#: templates/base.html:22
-msgid "Toggle"
-msgstr ""
-
-#: templates/base.html:56
-msgid "login"
-msgstr ""
-
-#: templates/base.html:58
-msgid "logout"
-msgstr ""
-
-#: templates/base.html:116
-msgid "Benutzermenü"
-msgstr "User menu"
-
-#: templates/base.html:123
-msgid "Nachricht an die Admins"
-msgstr "Message to the admins"
-
-#: templates/base.html:124
-msgid "Passwort ändern"
-msgstr "Change password"
-
-#: templates/base.html:125
-msgid "E-Mail-Adresse ändern"
-msgstr "Change email address"
-
-#: templates/base.html:126 templates/usersuite/change_mac.html:2
-msgid "MAC-Adresse ändern"
-msgstr "Change MAC address"
-
-#: templates/base.html:127
-msgid "Webhosting konfigurieren"
-msgstr "Configure hosting"
-
-#: templates/base.html:134
-msgid "Informationen"
-msgstr "Information"
-
-#: templates/base.html:137 templates/content/ansprechpartner.html:2
-#: templates/content/ansprechpartner.html:66
-msgid "Ansprechpartner"
-msgstr "Contacts"
-
-#: templates/base.html:138
-msgid "Hausmeister"
-msgstr "Facility managers"
-
-#: templates/base.html:139
-msgid "Wohnheime"
-msgstr "Dormitories"
-
-#: templates/base.html:140
-msgid "Mensen"
-msgstr "Cafeterias"
-
-#: templates/base.html:145
-msgid "Dienste"
-msgstr "Services"
-
-#: templates/base.html:147 templates/bustimes.html:2
-msgid "Abfahrtszeiten"
-msgstr "Bus & train departure times"
-
-#: templates/base.html:150
-msgid "Wegweiser"
-msgstr "Guidepost"
-
-#: templates/base.html:151
-msgid "Wetter in der Wu"
-msgstr "Weather @ Wundtstraße"
-
-#: templates/base.html:156
-msgid "AG-Netz"
-msgstr "Our network"
-
-#: templates/base.html:158
+#: templates/base.html:37
 msgid "Anmeldung"
 msgstr "Registration"
 
-#: templates/base.html:159
-msgid "Externer Anschluss"
-msgstr "External provider connection"
+#: templates/base.html:41
+msgid "Externer Anbieter"
+msgstr "External provider"
 
-#: templates/base.html:160
-msgid "Häufig gestellte Fragen"
-msgstr "Frequently asked questions"
+#: templates/base.html:45
+msgid "Auszugsmeldung"
+msgstr "Moving out"
 
-#: templates/base.html:161
-msgid "Anleitungen"
-msgstr "Tutorials"
+#: templates/base.html:49
+msgid "Bezahlung"
+msgstr "Payment"
 
-#: templates/base.html:162
-msgid "Semesterbeitrag"
-msgstr "Semester fee"
+#: templates/base.html:58
+msgid "Hausmeister"
+msgstr "Janitor"
 
-#: templates/base.html:163
-msgid "Status unserer Dienste"
-msgstr "Status of our services"
+#: templates/base.html:62
+msgid "Club Wu5"
+msgstr ""
 
-#: templates/base.html:164
-msgid "Wohnortwechsel"
-msgstr "Moving"
+#: templates/base.html:66
+msgid "Studentenwerk"
+msgstr ""
 
-#: templates/base.html:169
+#: templates/base.html:75
+msgid "E-Mail"
+msgstr ""
+
+#: templates/base.html:79
+msgid "Software"
+msgstr ""
+
+#: templates/base.html:85
 msgid "Rechtliches"
 msgstr "Legal"
 
-#: templates/base.html:171 templates/content/traffic.html:2
-#: templates/content/en/traffic.html:2
-msgid "Trafficregelungen"
-msgstr "Traffic regulations"
-
-#: templates/base.html:172
+#: templates/base.html:89
 msgid "Finanzordnung"
 msgstr "Finance regulations"
 
-#: templates/base.html:173
-msgid "Höhere Ordnungen"
-msgstr "Higher regulations"
+#: templates/base.html:97
+msgid "Deutsch"
+msgstr "German"
 
-#: templates/base.html:174
-msgid "Netzordnung"
-msgstr "Network regulations"
+#: templates/base.html:99
+msgid "English"
+msgstr "English"
 
-#: templates/base.html:175
-msgid "Satzung der AG DSN"
-msgstr "Statute of AG DSN"
+#: templates/base.html:108
+msgid "Login"
+msgstr "Login"
 
-#: templates/base.html:176
-msgid "Satzung der Sektion"
-msgstr "Statute of division Wundstraße"
+#: templates/base.html:110
+msgid "Logout"
+msgstr "Logout"
 
-#: templates/base.html:177
-msgid "Impressum"
-msgstr "Imprint"
+#: templates/base.html:139
+msgid "Traffic"
+msgstr "traffic"
+
+#: templates/base.html:164
+msgid "Klingel"
+msgstr "Doorbell"
+
+#: templates/bustimes.html:2
+msgid "Abfahrtszeiten"
+msgstr "Bus & train departure times"
 
 #: templates/bustimes.html:9
 msgid "Haltestelle"
 msgstr "Stop"
 
-#: templates/bustimes.html:11 templates/bustimes.html:33
+#: templates/bustimes.html:11
+#: templates/bustimes.html:33
 msgid "Fehler bei der Abfrage!"
 msgstr "Query could not be processed!"
 
@@ -336,8 +273,8 @@ msgid "Quelle"
 msgstr "Source"
 
 #: templates/index.html:15
-msgid "written by"
-msgstr ""
+msgid "geschrieben von"
+msgstr "written by"
 
 #: templates/login.html:10
 msgid "Benutzername"
@@ -350,6 +287,11 @@ msgstr "Password"
 #: templates/login.html:20
 msgid "Einloggen"
 msgstr "Log in"
+
+#: templates/content/ansprechpartner.html:2
+#: templates/content/ansprechpartner.html:66
+msgid "Ansprechpartner"
+msgstr "Contacts"
 
 #: templates/content/ansprechpartner.html:5
 msgid "Allgemeine Ansprechpartner"
@@ -391,6 +333,11 @@ msgstr "Dormitory admins"
 msgid "Haus"
 msgstr "Dormitory"
 
+#: templates/content/traffic.html:2
+#: templates/content/en/traffic.html:2
+msgid "Trafficregelungen"
+msgstr "Traffic regulations"
+
 #: templates/drafts/usertraffic_table_graph.html:3
 msgid "Dein Traffic"
 msgstr "Your traffic"
@@ -408,6 +355,10 @@ msgstr "Usage"
 msgid "von 14 GB"
 msgstr "of 14 GB"
 
+#: templates/usersuite/change_mac.html:2
+msgid "MAC-Adresse ändern"
+msgstr "Change MAC address"
+
 #: templates/usersuite/change_mac.html:10
 #: templates/usersuite/change_mail.html:10
 msgid "Dein aktuelles Passwort"
@@ -418,33 +369,22 @@ msgid "Die neue MAC-Adresse"
 msgstr "Your new MAC address"
 
 #: templates/usersuite/change_mac.html:22
-msgid ""
-"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
-"Benachrichtigungsmail an uns gesandt."
+msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
 msgstr "Note: we will be notified about any change of your MAC address."
 
 #: templates/usersuite/change_mac.html:23
-msgid ""
-"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es"
-" ist nicht zulässig, den eigenen Account weiterzugeben."
-msgstr ""
-"Please be aware that every user needs his own account. It is not "
-"permitted to share an account!"
+msgid "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben."
+msgstr "Please be aware that every user needs his own account. It is not permitted to share an account!"
 
 #: templates/usersuite/change_mac.html:24
-msgid ""
-"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
-"MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
-"alle Aktivitäten des Accounts!"
-msgstr ""
-"If you share your account with someone else (share login, enter someone "
-"else's MAC address) you are still liable for all activities of this "
-"account!"
+msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
+msgstr "If you share your account with someone else (share login, enter someone else's MAC address) you are still liable for all activities of this account!"
 
 #: templates/usersuite/change_mac.html:27
 #: templates/usersuite/change_mail.html:20
 #: templates/usersuite/change_password.html:26
-#: templates/usersuite/contact.html:39 templates/usersuite/hosting.html:37
+#: templates/usersuite/contact.html:39
+#: templates/usersuite/hosting.html:37
 msgid "Abschicken"
 msgstr "Send"
 
@@ -473,7 +413,8 @@ msgid "Bestätigung des neuen Passworts"
 msgstr "Verification of your new password"
 
 #: templates/usersuite/change_password.html:27
-#: templates/usersuite/contact.html:40 templates/usersuite/hosting.html:38
+#: templates/usersuite/contact.html:40
+#: templates/usersuite/hosting.html:38
 msgid "Zurücksetzen"
 msgstr "Reset"
 
@@ -514,9 +455,7 @@ msgid "Jawohl!"
 msgstr "Yes sir!"
 
 #: templates/usersuite/hosting.html:12
-msgid ""
-"Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos "
-"zum Webhosting findest du hier."
+msgid "Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du hier."
 msgstr "You can create a MySQL database on our servers. More information here."
 
 #: templates/usersuite/hosting.html:18
@@ -595,3 +534,122 @@ msgstr "Not set up"
 #~ msgid "Probleme mit eigener Technik"
 #~ msgstr "Problems with your own devices"
 
+#~ msgid "login"
+#~ msgstr ""
+
+#~ msgid "logout"
+#~ msgstr ""
+
+#~ msgid "Benutzermenü"
+#~ msgstr "User menu"
+
+#~ msgid "Nachricht an die Admins"
+#~ msgstr "Message to the admins"
+
+#~ msgid "Passwort ändern"
+#~ msgstr "Change password"
+
+#~ msgid "E-Mail-Adresse ändern"
+#~ msgstr "Change email address"
+
+#~ msgid "Webhosting konfigurieren"
+#~ msgstr "Configure hosting"
+
+#~ msgid "Informationen"
+#~ msgstr "Information"
+
+#~ msgid "Hausmeister"
+#~ msgstr "Facility managers"
+
+#~ msgid "Wohnheime"
+#~ msgstr "Dormitories"
+
+#~ msgid "Mensen"
+#~ msgstr "Cafeterias"
+
+#~ msgid "Dienste"
+#~ msgstr "Services"
+
+#~ msgid "Wetter in der Wu"
+#~ msgstr "Weather @ Wundtstraße"
+
+#~ msgid "AG-Netz"
+#~ msgstr "Our network"
+
+#~ msgid "Anmeldung"
+#~ msgstr "Registration"
+
+#~ msgid "Externer Anschluss"
+#~ msgstr "External provider connection"
+
+#~ msgid "Häufig gestellte Fragen"
+#~ msgstr "Frequently asked questions"
+
+#~ msgid "Anleitungen"
+#~ msgstr "Tutorials"
+
+#~ msgid "Semesterbeitrag"
+#~ msgstr "Semester fee"
+
+#~ msgid "Status unserer Dienste"
+#~ msgstr "Status of our services"
+
+#~ msgid "Wohnortwechsel"
+#~ msgstr "Moving"
+
+#~ msgid "Rechtliches"
+#~ msgstr "Legal"
+
+#~ msgid "Finanzordnung"
+#~ msgstr "Finance regulations"
+
+#~ msgid "Höhere Ordnungen"
+#~ msgstr "Higher regulations"
+
+#~ msgid "Netzordnung"
+#~ msgstr "Network regulations"
+
+#~ msgid "Satzung der AG DSN"
+#~ msgstr "Statute of AG DSN"
+
+#~ msgid "Satzung der Sektion"
+#~ msgstr "Statute of division Wundstraße"
+
+#~ msgid "Impressum"
+#~ msgstr "Imprint"
+
+#~ msgid "External provider"
+#~ msgstr ""
+
+#~ msgid "Give notice of departure"
+#~ msgstr ""
+
+#~ msgid "Payment"
+#~ msgstr ""
+
+#~ msgid "Caretaker"
+#~ msgstr ""
+
+#~ msgid "Rules"
+#~ msgstr ""
+
+#~ msgid "Finance rules"
+#~ msgstr ""
+
+#~ msgid "Traffic statistics"
+#~ msgstr ""
+
+#~ msgid "Doorbell"
+#~ msgstr ""
+
+#~ msgid "Toggle"
+#~ msgstr ""
+
+#~ msgid "written by"
+#~ msgstr ""
+
+#~ msgid "Description"
+#~ msgstr ""
+
+#~ msgid "Author"
+#~ msgstr ""
