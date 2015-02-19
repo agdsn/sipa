@@ -20,13 +20,13 @@ def calculate_userid_checksum(id):
     return cross%10
 
 
-def timetag_from_timestamp(timestamp=time.time()):
+def timetag_from_timestamp(timestamp=None):
     """Convert a UNIX timestamp to a timetag.
 
     If timestamp is None, use the current time.
     COPIED FROM LEGACY
     """
-    return int(timestamp // 86400)
+    return int((time.time() if timestamp is None else timestamp) // 86400)
 
 
 def timestamp_from_timetag(timetag):
