@@ -7,24 +7,17 @@
                 <th>Download</th>
                 <th>Upload</th>
                 <th>Gesamt</th>
+                <th>Credit</th>
             </thead>
-            {% for e in usertraffic['history'][0] %}
+            {% for day in usertraffic['history'] %}
                 <tr>
-                    <td>{{ _(e) }}</td>
-                    <td>{{ usertraffic['history'][1][loop.index0] }} MB</td>
-                    <td>{{ usertraffic['history'][2][loop.index0] }} MB</td>
-                    <td>{{ usertraffic['history'][1][loop.index0] + usertraffic['history'][2][loop.index0] }} MB</td>
+                    <td>{{ _(day[0]) }}</td>
+                    <td>{{ day[1] }}{# Input #} MB</td>
+                    <td>{{ day[2] }}{# Output #} MB</td>
+                    <td>{{ day[1]+day[2] }}{# Throughput #} MB</td>
+                    <td>{{ day[3] }}{# Credit #} MB</td>
                 </tr>
             {% endfor %}
-            {% if usertraffic.version == 1 %}
-                <tr>
-                    <td id="usersuite-traffic-sum" colspan="4">{{ _('Verbrauch') }}: {{ usertraffic.total }} MB, {{ usertraffic.percent }}% {{ _('von 14 GB') }}</td>
-                </tr>
-            {% elif usertraffic.version == 2 %}
-                <tr>
-                    <td id="usersuite-traffic-sum" colspan="4">{{ _('Verbrauch') }}: {{ usertraffic.total }} MB, Credit: {{ usertraffic.credit }} MB</td>
-                </tr>
-            {% endif %}
         </table>
 
         <img src="{{ url_for('trafficpng') }}" />

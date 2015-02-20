@@ -74,65 +74,42 @@ def query_userinfo(username):
 def query_trafficdata(ip):
     """Query traffic input/output for IP
     """
-    trafficdata = sql_query(
-        "SELECT timetag, input, output "
-        "FROM traffic.tuext "
-        "WHERE ip = %s "
-        "ORDER BY timetag DESC "
-        "LIMIT 0, 7",
+    userid = sql_query(
+        "SELECT nutzer_id "
+        "FROM computer "
+        "WHERE c_ip = %s",
         (ip,)
+    ).fetchone()
+
+    trafficdata = sql_query(
+        "SELECT t.timetag - %(today)s AS day, input, output, amount "
+        "FROM traffic.tuext AS t "
+        "LEFT OUTER JOIN credit AS c ON t.timetag = c.timetag "
+        "WHERE ip = %(ip)s AND c.user_id = %(uid)s "
+        "AND t.timetag BETWEEN %(weekago)s AND %(today)s "
+        "ORDER BY 'day' DESC ",
+        {'today': timetag_from_timestamp(),
+         'weekago': timetag_from_timestamp() - 6,
+         'ip': ip,
+         'uid': userid['nutzer_id']}
     ).fetchall()
 
     if not trafficdata:
         raise DBQueryEmpty
 
-    if TRAFFICSYSTEM_VERSION == 2:
-        userid = sql_query(
-            "SELECT nutzer_id "
-            "FROM computer "
-            "WHERE c_ip = %s",
-            (ip,)
-        ).fetchone()
+    traffic = {'history': [], 'total': 0}
 
-        credit = sql_query(
-            "SELECT amount, timetag "
-            "FROM credit "
-            "WHERE user_id = %s "
-            "ORDER BY timetag DESC "
-            "LIMIT 0, 3",
-            (userid['nutzer_id'])
-        ).fetchall()
-
-    traffic = {
-        'version': TRAFFICSYSTEM_VERSION,
-        'history': [
-            [],
-            [],
-            []
-        ],
-        'total': 0
-    }
-
-    for i in reversed(trafficdata):
+    for i in trafficdata:
         day = datetime.date.fromtimestamp(
-            timestamp_from_timetag(i['timetag'])
+            timestamp_from_timetag(timetag_from_timestamp() + i['day'])
         ).strftime('%w')
 
-        input = round(i['input'] / 1024.0, 2)
-        output = round(i['output'] / 1024.0, 2)
+        (input, output, credit) = (round(i[param] / 1024.0, 2)
+                                   for param in ['input', 'output', 'amount'])
 
-        traffic['history'][0].append(weekdays[day])
-        traffic['history'][1].append(input)
-        traffic['history'][2].append(output)
+        traffic['history'].append((weekdays[day], input, output, credit))
 
         traffic['total'] += input + output
-
-    if TRAFFICSYSTEM_VERSION == 1:
-        traffic['percent'] = round(traffic['total'] / (14 * 1024) * 100, 2)
-    elif TRAFFICSYSTEM_VERSION == 2:
-        if credit[0]['timetag'] == timetag_from_timestamp():
-            # Make sure to have the latest (todays) entry
-            traffic['credit'] = round(credit[0]['amount'] / (1024.0**1), 2)
 
     return traffic
 
