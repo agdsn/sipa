@@ -12,8 +12,10 @@ from utils import timestamp_from_timetag, timetag_from_timestamp
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
     DB_ATLANTIS_USER, DB_ATLANTIS_PASSWORD, DB_ATLANTIS_HOST), echo=False)
 
-db_helios = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/'.format(
-    DB_HELIOS_USER, DB_HELIOS_PASSWORD, DB_HELIOS_HOST), echo=False)
+db_helios = create_engine(
+    'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
+        DB_HELIOS_USER, DB_HELIOS_PASSWORD, DB_HELIOS_HOST, DB_HELIOS_PORT),
+    echo=False)
 
 
 def sql_query(query, args=(), database=db_atlantis):
@@ -62,10 +64,12 @@ def query_userinfo(username):
             user['zimmernr']
         ),
         'status': status[user['status']],
+        'status_is_good': user['status'] == 1,
         'ip': computer['c_ip'],
         'mac': computer['c_etheraddr'].upper(),
         'hostname': computer['c_hname'],
-        'hostalias': computer['c_alias']
+        'hostalias': computer['c_alias'],
+        'heliosdb': user_has_mysql_db(username)
     }
 
     return user

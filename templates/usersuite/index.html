@@ -14,13 +14,17 @@
                     <td>{{ current_user.uid }} —
                         <a href="{{ url_for(".usersuite_change_password") }}">
                             {{ _("Passwort ändern") }}
-                            <span class="glyphicon glyphicon-pencil"/>
+                            <span class="glyphicon glyphicon-pencil"></span>
                         </a>
                     </td>
                 </tr>
                 <tr>
                     <td>{{ _('Accountstatus') }}</td>
-                    <td>{{ _(userinfo.status) }}</td>
+                    <td>{% if userinfo.status_is_good %}<span class="text-success">
+                        {% else %}<span class="text-danger">{% endif %}
+                        {{ _(userinfo.status) }}
+                        </span>
+                    </td>
                 </tr>
                 <tr>
                     <td>{{ _('Aktuelles Zimmer') }}</td>
@@ -33,18 +37,26 @@
                 <tr>
                     <td>{{ _('Aktuelle MAC-Adresse') }}</td>
                     <td>{{ userinfo.mac }}
-                        <a href="{{ url_for(".usersuite_change_mac") }}"><span class="glyphicon glyphicon-pencil"/> </a>
+                        <a href="{{ url_for(".usersuite_change_mac") }}"><span class="glyphicon glyphicon-pencil"></span></a>
                     </td>
                 </tr>
                 <tr>
                     <td>{{ _('E-Mail-Weiterleitung') }}</td>
                     <td>{% if current_user.mail %}
                         {{ current_user.mail }}
-                        <a href="{{ url_for(".usersuite_delete_mail") }}"><span class="glyphicon glyphicon-remove"/> </a>
+                        <a href="{{ url_for(".usersuite_delete_mail") }}"><span class="glyphicon glyphicon-remove"></span></a>
                     {% else %}
-                        {{ _('Nicht eingerichtet') }}
+                        <span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
                     {% endif %}
-                        <a href="{{ url_for(".usersuite_change_mail") }}"><span class="glyphicon glyphicon-pencil"/> </a>
+                        <a href="{{ url_for(".usersuite_change_mail") }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ _('MySQL Datenbank') }}</td>
+                    <td>{% if userinfo.heliosdb %}<span class="text-success">{{ _('Eingerichtet') }}</span>
+                        {% else %}<span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
+                        {% endif %}
+                        <a href="{{ url_for(".usersuite_hosting") }}"><span class="glyphicon glyphicon-pencil"></span></a>
                     </td>
                 </tr>
             </table>

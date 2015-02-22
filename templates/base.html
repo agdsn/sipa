@@ -108,9 +108,9 @@
                 {% if current_user.is_anonymous() %}<li>
                     <a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
                 </li>{% else %}<li>
-                    <a href="{{ url_for('usersuite.usersuite') }}"><span class="glyphicon glyphicon-user"></span>  {{ current_user.name }}</a>
+                    <a href="{{ url_for('usersuite.usersuite') }}"><span class="text-success"><span class="glyphicon glyphicon-user"></span> {{ current_user.name }}</span></a>
                 </li><li>
-                    <a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-off"></span> {{ _("Logout") }}</a>
+                    <a href="{{ url_for('logout') }}"><span class="text-danger"><span class="glyphicon glyphicon-off"></span> {{ _("Logout") }}<span></span></a>
                 </li>{% endif %}
             </ul>
         </div>
