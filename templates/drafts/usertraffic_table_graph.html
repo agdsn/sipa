@@ -2,13 +2,13 @@
     <div class="col-md-7">
         <h3>{{ _('Dein Traffic') }}</h3>
         <table class="table table-striped table-bordered col-md-8">
-            <thead>
+            <thead><tr>
                 <th>{{ _('Wochentag') }}</th>
                 <th>Download</th>
                 <th>Upload</th>
                 <th>Gesamt</th>
                 <th>Credit</th>
-            </thead>
+            </tr></thead>
             {% for day in usertraffic['history'] %}
                 <tr>
                     <td>{{ _(day[0]) }}</td>
