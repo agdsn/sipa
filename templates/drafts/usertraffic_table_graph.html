@@ -18,6 +18,10 @@
                     <td>{{ day[3] }}{# Credit #} MB</td>
                 </tr>
             {% endfor %}
+                <tr>
+                    <td id="usersuite-traffic-sum" colspan="4">{{ _("Verbleibender Credit") }}</td>
+                    <td>{{ usertraffic.credit }} MB</td>
+                </tr>
         </table>
 
         <img src="{{ url_for('trafficpng') }}" />

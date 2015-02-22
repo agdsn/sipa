@@ -100,7 +100,7 @@ def query_trafficdata(ip):
     if not trafficdata:
         raise DBQueryEmpty
 
-    traffic = {'history': [], 'total': 0}
+    traffic = {'history': [], 'credit': 0}
 
     for i in trafficdata:
         day = datetime.date.fromtimestamp(
@@ -112,7 +112,7 @@ def query_trafficdata(ip):
 
         traffic['history'].append((weekdays[day], input, output, credit))
 
-        traffic['total'] += input + output
+    traffic['credit'] = (lambda d: d[3]-d[1]-d[2])(traffic['history'][-1])
 
     return traffic
 
