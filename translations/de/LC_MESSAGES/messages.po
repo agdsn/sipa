@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-02 15:19+0100\n"
+"POT-Creation-Date: 2015-02-22 14:31+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -17,226 +17,235 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: config.py:51
+#: config.py:56
 msgid "Bezahlt, verbunden"
 msgstr ""
 
-#: config.py:52
+#: config.py:57
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: config.py:53
+#: config.py:58
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: config.py:54
+#: config.py:59
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: config.py:58
+#: config.py:63
 msgid "Sonntag"
 msgstr ""
 
-#: config.py:59
+#: config.py:64
 msgid "Montag"
 msgstr ""
 
-#: config.py:60
+#: config.py:65
 msgid "Dienstag"
 msgstr ""
 
-#: config.py:61
+#: config.py:66
 msgid "Mittwoch"
 msgstr ""
 
-#: config.py:62
+#: config.py:67
 msgid "Donnerstag"
 msgstr ""
 
-#: config.py:63
+#: config.py:68
 msgid "Freitag"
 msgstr ""
 
-#: config.py:64
+#: config.py:69
 msgid "Samstag"
 msgstr ""
 
-#: forms.py:12 forms.py:31
+#: forms.py:15 forms.py:41
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
-#: forms.py:13
+#: forms.py:17
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: forms.py:20
+#: forms.py:25
 msgid "Nachricht fehlt!"
 msgstr ""
 
-#: forms.py:24
+#: forms.py:30
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: forms.py:25
+#: forms.py:32
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: forms.py:26 forms.py:46
+#: forms.py:34 forms.py:68
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: forms.py:30 forms.py:35
+#: forms.py:39 forms.py:46 forms.py:51
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: forms.py:40
+#: forms.py:59
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: forms.py:41 forms.py:45
+#: forms.py:61 forms.py:66
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: run.py:45
+#: run.py:53
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: run.py:47
+#: run.py:55
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: run.py:49
+#: run.py:59
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: run.py:149 blueprints/usersuite.py:141
+#: run.py:160 blueprints/usersuite.py:142 blueprints/usersuite.py:170
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: run.py:151 blueprints/usersuite.py:143 blueprints/usersuite.py:170
+#: run.py:162 blueprints/usersuite.py:144 blueprints/usersuite.py:172
+#: blueprints/usersuite.py:199
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: run.py:186
+#: run.py:196
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: run.py:209 blueprints/usersuite.py:36
+#: run.py:219 blueprints/usersuite.py:37
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: blueprints/usersuite.py:74
+#: blueprints/usersuite.py:75
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: blueprints/usersuite.py:76 blueprints/usersuite.py:186
+#: blueprints/usersuite.py:77 blueprints/usersuite.py:215
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: blueprints/usersuite.py:109 blueprints/usersuite.py:213
+#: blueprints/usersuite.py:110 blueprints/usersuite.py:242
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: blueprints/usersuite.py:114
+#: blueprints/usersuite.py:115
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: blueprints/usersuite.py:116
+#: blueprints/usersuite.py:117
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: blueprints/usersuite.py:145
+#: blueprints/usersuite.py:146 blueprints/usersuite.py:174
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: blueprints/usersuite.py:147
+#: blueprints/usersuite.py:148
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: blueprints/usersuite.py:183
+#: blueprints/usersuite.py:176
+msgid "E-Mail-Adresse wurde zurückgesetzt"
+msgstr ""
+
+#: blueprints/usersuite.py:212
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: blueprints/usersuite.py:206
+#: blueprints/usersuite.py:235
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: blueprints/usersuite.py:217
+#: blueprints/usersuite.py:246
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: templates/base.html:33
+#: templates/base.html:35
 msgid "Link-Up"
 msgstr ""
 
-#: templates/base.html:37
+#: templates/base.html:39
 msgid "Anmeldung"
 msgstr ""
 
-#: templates/base.html:41
+#: templates/base.html:43
 msgid "Externer Anbieter"
 msgstr ""
 
-#: templates/base.html:45
+#: templates/base.html:47
 msgid "Auszugsmeldung"
 msgstr ""
 
-#: templates/base.html:49
+#: templates/base.html:51
 msgid "Bezahlung"
 msgstr ""
 
-#: templates/base.html:58
+#: templates/base.html:60
 msgid "Hausmeister"
 msgstr ""
 
-#: templates/base.html:62
+#: templates/base.html:64
 msgid "Club Wu5"
 msgstr ""
 
-#: templates/base.html:66
+#: templates/base.html:68
 msgid "Studentenwerk"
 msgstr ""
 
-#: templates/base.html:75
+#: templates/base.html:77
 msgid "E-Mail"
 msgstr ""
 
-#: templates/base.html:79
+#: templates/base.html:81
 msgid "Software"
 msgstr ""
 
-#: templates/base.html:85
+#: templates/base.html:87
 msgid "Rechtliches"
 msgstr ""
 
-#: templates/base.html:89
+#: templates/base.html:91
 msgid "Finanzordnung"
 msgstr ""
 
-#: templates/base.html:97
+#: templates/base.html:99
 msgid "Deutsch"
 msgstr ""
 
-#: templates/base.html:99
+#: templates/base.html:101
 msgid "English"
 msgstr ""
 
-#: templates/base.html:108
+#: templates/base.html:109
 msgid "Login"
 msgstr ""
 
-#: templates/base.html:110
+#: templates/base.html:113
 msgid "Logout"
 msgstr ""
 
-#: templates/base.html:139
+#: templates/base.html:144
 msgid "Traffic"
 msgstr ""
 
-#: templates/base.html:164
+#: templates/base.html:172
 msgid "Klingel"
+msgstr ""
+
+#: templates/base.html:223
+msgid "Verbrauchter Traffic"
 msgstr ""
 
 #: templates/bustimes.html:2
@@ -336,13 +345,8 @@ msgstr ""
 msgid "Wochentag"
 msgstr ""
 
-#: templates/drafts/usertraffic_table_graph.html:21
-#: templates/drafts/usertraffic_table_graph.html:25
-msgid "Verbrauch"
-msgstr ""
-
-#: templates/drafts/usertraffic_table_graph.html:21
-msgid "von 14 GB"
+#: templates/drafts/usertraffic_table_graph.html:22
+msgid "Verbleibender Credit"
 msgstr ""
 
 #: templates/usersuite/change_mac.html:2
@@ -351,6 +355,7 @@ msgstr ""
 
 #: templates/usersuite/change_mac.html:10
 #: templates/usersuite/change_mail.html:10
+#: templates/usersuite/delete_mail.html:10
 msgid "Dein aktuelles Passwort"
 msgstr ""
 
@@ -380,11 +385,13 @@ msgstr ""
 #: templates/usersuite/change_mac.html:27
 #: templates/usersuite/change_mail.html:20
 #: templates/usersuite/change_password.html:26
-#: templates/usersuite/contact.html:39 templates/usersuite/hosting.html:37
+#: templates/usersuite/contact.html:39 templates/usersuite/delete_mail.html:14
+#: templates/usersuite/hosting.html:37
 msgid "Abschicken"
 msgstr ""
 
 #: templates/usersuite/change_mail.html:2
+#: templates/usersuite/delete_mail.html:2
 msgid "E-Mail ändern"
 msgstr ""
 
@@ -437,7 +444,7 @@ msgstr ""
 msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
 msgstr ""
 
-#: templates/usersuite/hosting.html:2
+#: templates/usersuite/hosting.html:2 templates/usersuite/index.html:55
 msgid "MySQL Datenbank"
 msgstr ""
 
@@ -495,28 +502,36 @@ msgstr ""
 msgid "Accountname"
 msgstr ""
 
-#: templates/usersuite/index.html:17
+#: templates/usersuite/index.html:16
+msgid "Passwort ändern"
+msgstr ""
+
+#: templates/usersuite/index.html:22
 msgid "Accountstatus"
 msgstr ""
 
-#: templates/usersuite/index.html:21
+#: templates/usersuite/index.html:30
 msgid "Aktuelles Zimmer"
 msgstr ""
 
-#: templates/usersuite/index.html:25
+#: templates/usersuite/index.html:34
 msgid "Aktuelle IP-Adresse"
 msgstr ""
 
-#: templates/usersuite/index.html:29
+#: templates/usersuite/index.html:38
 msgid "Aktuelle MAC-Adresse"
 msgstr ""
 
-#: templates/usersuite/index.html:33
+#: templates/usersuite/index.html:44
 msgid "E-Mail-Weiterleitung"
 msgstr ""
 
-#: templates/usersuite/index.html:34
+#: templates/usersuite/index.html:49 templates/usersuite/index.html:57
 msgid "Nicht eingerichtet"
+msgstr ""
+
+#: templates/usersuite/index.html:56
+msgid "Eingerichtet"
 msgstr ""
 
 #~ msgid "Bezahlt, verbunden"
