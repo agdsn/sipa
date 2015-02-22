@@ -11,11 +11,11 @@
                         <div style="color: red;">{{ _('Fehler bei der Abfrage!') }}</div>
                     {% else %}
                         <table id="timetable" class="table table-bordered table-striped">
-                            <thead>
+                            <thead><tr>
                                 <th class="col-md-1">{{ _('Linie') }}</th>
                                 <th class="col-md-2">{{ _('Richtung') }}</th>
                                 <th class="col-md-1">in</th>
-                            </thead>
+                            </tr></thead>
                             {% for i in times[stop] %}
                                 <tr>
                                     <td>{{ i[0] }}</td>

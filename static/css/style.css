@@ -9,16 +9,13 @@ body {
 @media (min-width: 768px) {
 	.pg-header {
 		display: block;
-		padding-top: 60px;
-		padding-bottom: 60px;
 		text-align: left;
 		font-size: 24px;
 		position: relative;
 		padding: 60px 50px;
 		color: white;
-		background-color: black;
+        background: black url(../img/background.jpg);
 		background-size: cover;
-		background-image: url(../img/background.jpg);
 		margin-bottom: 40px;
 	}
 	
