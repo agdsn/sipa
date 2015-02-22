@@ -17,7 +17,7 @@ def calculate_userid_checksum(id):
     cross = 0
     for i in str(id):
         cross += int(i)
-    return cross%10
+    return cross % 10
 
 
 def timetag_from_timestamp(timestamp=None):
@@ -36,6 +36,7 @@ def timestamp_from_timetag(timetag):
     """
     return timetag * 86400
 
+
 def get_bustimes(stopname, count=10):
     """Parses the VVO-Online API return string.
     API returns in format [["line", "to", "minutes"],[__],[__]], where "__" are
@@ -48,7 +49,9 @@ def get_bustimes(stopname, count=10):
 
     stopname = stopname.replace(' ', '%20')
     try:
-        conn.request('GET', '/abfahrtsmonitor/Abfahrten.do?ort=Dresden&hst={0}'.format(stopname))
+        conn.request('GET',
+                     '/abfahrtsmonitor/Abfahrten.do?ort=Dresden&hst={0}'.format(
+                         stopname))
         r = conn.getresponse()
     except socket.error:
         return None
@@ -66,10 +69,11 @@ def get_bustimes(stopname, count=10):
         tmpdata = i[1:-1].split('","')
         try:
             try:
-                data.append([tmpdata[0], tmpdata[1].decode('utf8'), int(tmpdata[2])])
+                data.append(
+                    [tmpdata[0], tmpdata[1].decode('utf8'), int(tmpdata[2])])
             except ValueError:
                 data.append([tmpdata[0], tmpdata[1].decode('utf8'), 0])
         except IndexError:
-                return None
+            return None
 
     return data

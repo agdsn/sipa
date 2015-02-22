@@ -57,7 +57,7 @@ def query_userinfo(username):
     user = {
         'id': user['nutzer_id'],
         'address': u"{0} / {1} {2}".format(
-            dormitories[user['wheim_id']-1],
+            dormitories[user['wheim_id'] - 1],
             user['etage'],
             user['zimmernr']
         ),
@@ -112,7 +112,7 @@ def query_trafficdata(ip):
 
         traffic['history'].append((weekdays[day], input, output, credit))
 
-    traffic['credit'] = (lambda d: d[3]-d[1]-d[2])(traffic['history'][-1])
+    traffic['credit'] = (lambda d: d[3] - d[1] - d[2])(traffic['history'][-1])
 
     return traffic
 

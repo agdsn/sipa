@@ -43,7 +43,7 @@ app.register_blueprint(bp_pages)
 app.jinja_env.globals.update(
     traffic=(lambda l: {
         "credit": l[3],
-        "exhausted": l[1]+l[2]
+        "exhausted": l[1] + l[2]
     })(query_trafficdata("141.30.223.106")['history'][-1])
 )
 
@@ -52,10 +52,14 @@ def errorpage(e):
     if e.code in (404,):
         flash(gettext(u"Seite nicht gefunden!"), "warning")
     elif e.code in (401, 403):
-        flash(gettext(u"Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"), "warning")
+        flash(gettext(
+            u"Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"),
+              "warning")
     else:
         flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")
     return redirect(url_for("index"))
+
+
 app.register_error_handler(401, errorpage)
 app.register_error_handler(403, errorpage)
 app.register_error_handler(404, errorpage)
@@ -212,7 +216,8 @@ def trafficpng():
     try:
         trafficdata = query_trafficdata(ip)
     except DBQueryEmpty:
-        flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"), "error")
+        flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
+              "error")
         return redirect(url_for('index'))
 
     traffic_chart = make_trafficgraph(trafficdata)

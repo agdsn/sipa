@@ -12,7 +12,8 @@ from forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm
 from utils import calculate_userid_checksum
 from utils.database_utils import query_trafficdata, query_userinfo, \
-    update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, change_mysql_userdatabase_password, user_has_mysql_db
+    update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
+    change_mysql_userdatabase_password, user_has_mysql_db
 from utils.ldap_utils import change_password, change_email, authenticate
 from utils.mail_utils import send_mail
 from utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
@@ -76,7 +77,7 @@ def usersuite_contact():
             flash(gettext(
                 u"Es gab einen Fehler beim Versenden der Nachricht. Bitte "
                 u"schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"),
-                "error")
+                  "error")
         return redirect(url_for(".usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)

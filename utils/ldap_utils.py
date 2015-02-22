@@ -16,6 +16,7 @@ class User(object):
     """User object will be created from LDAP credentials,
     only stored in session.
     """
+
     def __init__(self, uid, name, mail):
         self.uid = uid
         self.name = name
@@ -71,6 +72,7 @@ class LdapConnector(object):
     * If you pass it a username and password, it will try to bind to LDAP with
         the users credentials.
     """
+
     def __init__(self, username, password=None):
         self.username = username
         self.password = password
@@ -85,7 +87,8 @@ class LdapConnector(object):
             self.l.protocol_version = ldap.VERSION3
 
             if self.password:
-                self.l.simple_bind_s(user['dn'], self.password.encode('iso8859-1'))
+                self.l.simple_bind_s(user['dn'],
+                                     self.password.encode('iso8859-1'))
 
             return self.l
         except ldap.INVALID_CREDENTIALS:
