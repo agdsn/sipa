@@ -11,7 +11,12 @@
                 </tr>
                 <tr>
                     <td>{{ _('Accountname') }}</td>
-                    <td>{{ current_user.uid }}</td>
+                    <td>{{ current_user.uid }} —
+                        <a href="{{ url_for(".usersuite_change_password") }}">
+                            {{ _("Passwort ändern") }}
+                            <span class="glyphicon glyphicon-pencil"/>
+                        </a>
+                    </td>
                 </tr>
                 <tr>
                     <td>{{ _('Accountstatus') }}</td>
@@ -27,11 +32,20 @@
                 </tr>
                 <tr>
                     <td>{{ _('Aktuelle MAC-Adresse') }}</td>
-                    <td>{{ userinfo.mac }}</td>
+                    <td>{{ userinfo.mac }}
+                        <a href="{{ url_for(".usersuite_change_mac") }}"><span class="glyphicon glyphicon-pencil"/> </a>
+                    </td>
                 </tr>
                 <tr>
                     <td>{{ _('E-Mail-Weiterleitung') }}</td>
-                    <td>{% if current_user.mail %}{{ current_user.mail }}{% else %}{{ _('Nicht eingerichtet') }}{% endif %}</td>
+                    <td>{% if current_user.mail %}
+                        {{ current_user.mail }}
+                        <a href="{# todo implement mail deletion #}"><span class="glyphicon glyphicon-remove"/> </a>
+                    {% else %}
+                        {{ _('Nicht eingerichtet') }}
+                    {% endif %}
+                        <a href="{{ url_for(".usersuite_change_mail") }}"><span class="glyphicon glyphicon-pencil"/> </a>
+                    </td>
                 </tr>
             </table>
         </div>
