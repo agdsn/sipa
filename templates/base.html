@@ -129,8 +129,11 @@
 	<div class="row">
 		<div class="col-sm-3 col-sm-push-9">
 			<div class="row">
+                {# todo hide if foreign ip (but leave during development) #}
 				<div class="col-xs-6 col-sm-12">
-					<h2>Traffic</h2>
+					<h2>Lukas' Traffic</h2>
+                    <p>I sacrificed my privacy for the sake of the Sektionsweb. Better one sees my actual traffic than a dummy value ;)</p>
+                    <p>In the far future, this has to be based on the actual IP, of course.</p>
 					<div id="trafficgauge"></div>
 
 						<div class="row">
@@ -205,5 +208,17 @@
 	<script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
+    <script type="text/javascript">
+        $(function(){
+            new JustGage({
+                id: "trafficgauge",
+                value: {{ (traffic.exhausted/1024)|round(2) }},
+                min: 0,
+                max: {{ (traffic.credit/1024)|round(2) }},
+                title: "{{ _("Verbrauchter Traffic") }}",
+                label: "GiB"
+            });
+        });
+    </script>
 </body>
 </html>

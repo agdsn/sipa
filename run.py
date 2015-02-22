@@ -39,6 +39,14 @@ pages = FlatPages(app)
 app.register_blueprint(bp_usersuite)
 app.register_blueprint(bp_pages)
 
+# global jinja variable containing data for the gauge
+app.jinja_env.globals.update(
+    traffic=(lambda l: {
+        "credit": l[3],
+        "exhausted": l[1]+l[2]
+    })(query_trafficdata("141.30.223.106")['history'][-1])
+)
+
 
 def errorpage(e):
     if e.code in (404,):
