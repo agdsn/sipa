@@ -105,13 +105,13 @@
 						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> en</a>
 					{% endif %}
 				</li>
-                <li>
-					{% if current_user.is_anonymous() %}
-						<a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
-					{% else %}
-						<a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Logout") }}</a>
-					{% endif %}
-                </li>
+                {% if current_user.is_anonymous() %}<li>
+                    <a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
+                </li>{% else %}<li>
+                    <a href="{{ url_for('usersuite.usersuite') }}"><span class="glyphicon glyphicon-user"></span>  {{ current_user.name }}</a>
+                </li><li>
+                    <a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-off"></span> {{ _("Logout") }}</a>
+                </li>{% endif %}
             </ul>
         </div>
     </div>
