@@ -40,7 +40,7 @@
                     <td>{{ _('E-Mail-Weiterleitung') }}</td>
                     <td>{% if current_user.mail %}
                         {{ current_user.mail }}
-                        <a href="{# todo implement mail deletion #}"><span class="glyphicon glyphicon-remove"/> </a>
+                        <a href="{{ url_for(".usersuite_delete_mail") }}"><span class="glyphicon glyphicon-remove"/> </a>
                     {% else %}
                         {{ _('Nicht eingerichtet') }}
                     {% endif %}

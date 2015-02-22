@@ -9,7 +9,7 @@ from flask.ext.babel import gettext
 from flask.ext.login import login_required, current_user
 
 from forms import ContactForm, ChangeMACForm, ChangeMailForm, \
-    ChangePasswordForm, flash_formerrors, HostingForm
+    ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from utils import calculate_userid_checksum
 from utils.database_utils import query_trafficdata, query_userinfo, \
     update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
@@ -151,6 +151,34 @@ def usersuite_change_mail():
         flash_formerrors(form)
 
     return render_template('usersuite/change_mail.html', form=form)
+
+
+@bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
+@login_required
+def usersuite_delete_mail():
+    """Resets the users forwarding mail attribute
+    in his LDAP entry.
+    """
+    form = DeleteMailForm()
+
+    if form.validate_on_submit():
+        password = form.password.data
+
+        try:
+            change_email(current_user.uid, password, "")
+        except UserNotFound:
+            flash(gettext(u"Nutzer nicht gefunden!"), "error")
+        except PasswordInvalid:
+            flash(gettext(u"Passwort war inkorrekt!"), "error")
+        except LDAPConnectionError:
+            flash(gettext(u"Nicht genügend LDAP-Rechte!"), "error")
+        else:
+            flash(gettext(u"E-Mail-Adresse wurde zurückgesetzt"), "success")
+            return redirect(url_for('.usersuite'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template('usersuite/delete_mail.html', form=form)
 
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
