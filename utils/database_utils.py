@@ -81,6 +81,9 @@ def query_trafficdata(ip):
         (ip,)
     ).fetchone()
 
+    if not userid:
+        raise DBQueryEmpty
+
     trafficdata = sql_query(
         "SELECT t.timetag - %(today)s AS day, input, output, amount "
         "FROM traffic.tuext AS t "
