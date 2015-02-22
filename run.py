@@ -209,6 +209,12 @@ def trafficpng():
 
     traffic_chart = make_trafficgraph(trafficdata)
 
+    # todo fix png export, use svg or include svg directly in html
+    # pygals render_to_png IS BROKEN
+    # proof of concept: Just add some stuff to a bar_chart = pygal.Bar()
+    # then compare the outputs of render_to_file and render_to_png
+    # the first (svg) will work just fine, but not the second (png)
+    # alternative: directly import into the html, there is no need for a file
     return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
 
 

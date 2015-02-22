@@ -32,8 +32,10 @@ def make_trafficgraph(trafficdata):
         y_labels_major_every=2,
         show_minor_y_labels=False
     )
-    traffic_chart.x_labels = trafficdata['history'][0]
-    traffic_chart.add('Input', trafficdata['history'][1])
-    traffic_chart.add('Output', trafficdata['history'][2])
+    # todo test if the data is given correctly
+    # testing is impossible due to brickedness of render
+    traffic_chart.x_labels = [day[0] for day in trafficdata['history']]
+    traffic_chart.add('Input', [day[1] for day in trafficdata['history']])
+    traffic_chart.add('Output', [day[2] for day in trafficdata['history']])
 
     return traffic_chart
