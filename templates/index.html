@@ -1,24 +1,25 @@
 {% extends "base.html" %}#
 {% set page_title = "News" %}
+{% macro panelclass(type) %}
+    {% if type == 'alert' %}
+        panel-danger
+    {% elif type == 'warning' %}
+        panel-warning
+    {% elif type == 'info' %}
+        panel-info
+    {% elif type == 'good' %}
+        panel-success
+    {% else %}
+        panel-default
+    {% endif %}
+{% endmacro %}
 
 {% block content %}
     {% for art in articles %}
-		{% if art.meta.type == 'alert' %}
-			<div class="panel panel-danger"><div class="panel-body">
-		{% endif %}
-		<h2>
-			{{ art.meta.title }}
-			{% if art.meta.type == 'alert' %}
-				<span class="label label-danger"><span class="glyphicon glyphicon-exclamation-sign"></span></span>
-			{% endif %}
-		</h2>
-		<small>{{ _("geschrieben von") }} {{ art.meta.author }}, {{ art.meta.date }}</small>
-		<hr />
-		<p>{{ art.html|safe }}</p>
-		<br />
-        
-		{% if art.meta.type == 'alert' %}
-			</div></div>
-		{% endif %}
+        <div class="panel {{ panelclass(art.meta.type) }}">
+            <div class="panel-heading"><h2 class="panel-title">{{ art.meta.title }}</h2></div>
+            <div class="panel-body">{{ art.html|safe }}</div>
+            <div class="panel-footer">{{ _("geschrieben von") }} {{ art.meta.author }}, {{ art.meta.date }}</div>
+        </div>
     {% endfor %}
 {% endblock %}
