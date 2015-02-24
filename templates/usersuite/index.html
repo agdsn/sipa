@@ -2,67 +2,8 @@
 {% set page_title = _('Usersuite von ') + current_user.name %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-7">
-            <table class="table table-striped table-bordered">
-                <tr>
-                    <td class="col-md-2">{{ _('Nutzer-ID') }}</td>
-                    <td class="col-md-5">{{ userinfo.id }}-{{ userinfo.checksum }}</td>
-                </tr>
-                <tr>
-                    <td>{{ _('Accountname') }}</td>
-                    <td>{{ current_user.uid }} —
-                        <a href="{{ url_for(".usersuite_change_password") }}">
-                            {{ _("Passwort ändern") }}
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ _('Accountstatus') }}</td>
-                    <td>{% if userinfo.status_is_good %}<span class="text-success">
-                        {% else %}<span class="text-danger">{% endif %}
-                        {{ _(userinfo.status) }}
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ _('Aktuelles Zimmer') }}</td>
-                    <td>{{ userinfo.address }}</td>
-                </tr>
-                <tr>
-                    <td>{{ _('Aktuelle IP-Adresse') }}</td>
-                    <td>{{ userinfo.ip }}</td>
-                </tr>
-                <tr>
-                    <td>{{ _('Aktuelle MAC-Adresse') }}</td>
-                    <td>{{ userinfo.mac }}
-                        <a href="{{ url_for(".usersuite_change_mac") }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ _('E-Mail-Weiterleitung') }}</td>
-                    <td>{% if current_user.mail %}
-                        {{ current_user.mail }}
-                        <a href="{{ url_for(".usersuite_delete_mail") }}"><span class="glyphicon glyphicon-remove"></span></a>
-                    {% else %}
-                        <span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
-                    {% endif %}
-                        <a href="{{ url_for(".usersuite_change_mail") }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ _('MySQL Datenbank') }}</td>
-                    <td>{% if userinfo.heliosdb %}<span class="text-success">{{ _('Eingerichtet') }}</span>
-                        {% else %}<span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
-                        {% endif %}
-                        <a href="{{ url_for(".usersuite_hosting") }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div class="col-md-7">
+        {% include 'usersuite/_index_status.html' %}
+        {% include 'drafts/_traffic_overview.html' %}
     </div>
-
-    {% include 'drafts/usertraffic_table_graph.html' %}
-
 {% endblock %}

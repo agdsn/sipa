@@ -196,6 +196,7 @@ def usertraffic():
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
         return redirect(url_for('index'))
 
+    # todo test if the template works if called from this position
     return render_template("usertraffic.html", usertraffic=trafficdata)
 
 
