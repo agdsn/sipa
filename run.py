@@ -22,7 +22,8 @@ from blueprints import bp_usersuite, bp_pages
 from config import languages, busstops
 from forms import flash_formerrors, LoginForm
 from utils import get_bustimes
-from utils.database_utils import query_userinfo, query_trafficdata
+from utils.database_utils import query_userinfo, query_trafficdata, \
+    query_gauge_data
 from utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
 from utils.graph_utils import make_trafficgraph
 from utils.ldap_utils import User, authenticate
@@ -41,10 +42,7 @@ app.register_blueprint(bp_pages)
 
 # global jinja variable containing data for the gauge
 app.jinja_env.globals.update(
-    traffic=(lambda l: {
-        "credit": l[3],
-        "exhausted": l[1] + l[2]
-    })(query_trafficdata("141.30.223.106")['history'][-1])
+    traffic=query_gauge_data
 )
 
 

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+from flask.globals import request
 from sqlalchemy import create_engine
 
 from exceptions import DBQueryEmpty
@@ -119,6 +120,20 @@ def query_trafficdata(ip):
     traffic['credit'] = (lambda d: d[3] - d[1] - d[2])(traffic['history'][-1])
 
     return traffic
+
+
+def query_gauge_data(ip=None):
+    if request.remote_addr:
+        try:
+            return (lambda l: {
+                "credit": l[3],
+                "exhausted": l[1] + l[2]
+            })(query_trafficdata(request.remote_addr)['history'][-1])
+        # todo distinguish if IP is foreign
+        except DBQueryEmpty:
+            return {'error': True}
+    else:
+        return {'error': True}
 
 
 def update_macaddress(ip, oldmac, newmac):
