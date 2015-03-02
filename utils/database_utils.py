@@ -121,18 +121,26 @@ def query_trafficdata(ip=None, userid=None):
         raise DBQueryEmpty
 
     traffic = {'history': [], 'credit': 0}
+    returned_days = [int(i['day']) for i in trafficdata]
 
-    for i in trafficdata:
+    # loop through expected days ([-6..0])
+    for d in range(-6, 1):
         day = datetime.date.fromtimestamp(
-            timestamp_from_timetag(timetag_from_timestamp() + i['day'])
+            timestamp_from_timetag(timetag_from_timestamp() + d)
         ).strftime('%w')
+        if d in returned_days:
+            # pick the to `d` corresponding item of the mysql-result
+            i = next((x for x in trafficdata if x['day'] == d), None)
 
-        (input, output, credit) = (round(i[param] / 1024.0, 2)
-                                   for param in ['input', 'output', 'amount'])
+            (input, output, credit) = (
+                round(i[param] / 1024.0, 2)
+                for param in ['input', 'output', 'amount']
+            )
+            traffic['history'].append((weekdays[day], input, output, credit))
+        else:
+            traffic['history'].append((weekdays[day], 0.0, 0.0, 0.0))
 
-        traffic['history'].append((weekdays[day], input, output, credit))
-
-    traffic['credit'] = (lambda d: d[3] - d[1] - d[2])(traffic['history'][-1])
+    traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
     return traffic
 
