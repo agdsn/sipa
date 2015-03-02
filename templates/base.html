@@ -143,7 +143,7 @@
                             </div>
                         {% elif traffic().error == "foreign_ip" %}
                             <div class="text-danger text-center">
-                                {{ _("Diese IP gehört nicht zum Netzwerk der Wundtstraße") }}!
+                                {{ _("Diese IP gehört nicht zum Netzwerk der Sektion") }}!
                             </div>
                         {% else %}
                             <div class="text-danger text-center">
@@ -225,9 +225,9 @@
         {% set gauge_max = (traffic.credit/1024)|round(2) %}
         {% set gauge_label = "GiB" %}
     {% else %}
-        {% set gauge_val = "-" %}
+        {% set gauge_val = "–" %}
         {% set gauge_max = 0 %}
-        {% set gauge_label = _("Fremde IP") %}
+        {% set gauge_label = "" %}
     {% endif %}
     <script type="text/javascript">
         $(function(){

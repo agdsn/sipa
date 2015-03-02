@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from exceptions import DBQueryEmpty
 from config import *
 from utils import timestamp_from_timetag, timetag_from_timestamp
+from utils.exceptions import ForeignIPAccessError
 
 
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
@@ -87,7 +88,7 @@ def query_trafficdata(ip):
     ).fetchone()
 
     if not userid:
-        raise DBQueryEmpty
+        raise ForeignIPAccessError
 
     trafficdata = sql_query(
         "SELECT t.timetag - %(today)s AS day, input, output, amount "
@@ -122,14 +123,16 @@ def query_trafficdata(ip):
     return traffic
 
 
-def query_gauge_data(ip=None):
+def query_gauge_data():
     if request.remote_addr:
         try:
             return (lambda l: {
                 "credit": l[3],
                 "exhausted": l[1] + l[2]
             })(query_trafficdata(request.remote_addr)['history'][-1])
-        # todo distinguish if IP is foreign
+        except ForeignIPAccessError:
+            # todo better method to tell that “error”?
+            return {'error': 'foreign_ip'}
         except DBQueryEmpty:
             return {'error': True}
     else:
