@@ -35,39 +35,53 @@
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle" title="Anschlusskonfiguration">{{ _('Link-Up') }} <span class="caret"></span></a>
                     
                     <ul class="dropdown-menu" role="menu">
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-log-in"></span> &nbsp; {{ _('Anmeldung') }}</a>
-						</li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; {{ _('Externer Anbieter') }}</a>
-						</li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; {{ _('Auszugsmeldung') }}</a>
-						</li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Bezahlung') }}</a>
-						</li>
+                        <li>
+                                <a href="{{ url_for('pages.membership')}}"><span class="glyphicon glyphicon-log-in"></span> &nbsp; {{ _('Mitgliedschaft') }}</a>
+                        </li>
+
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; {{ _('Externer Anbieter') }}</a>
+                        </li>
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Bezahlung') }}</a>
+                        </li>
+ 
+                  </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" title="Anschlusskonfiguration">{{ _('Support') }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-group"></span> &nbsp; {{ _('Kontakt') }}</a>
+                        </li>
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; {{ _('Auszug') }}</a>
+                        </li>
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-transfer"></span> &nbsp; {{ _('Umzug') }}</a>
+                        </li>
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-flag"></span> &nbsp; {{ _('FAQ') }}</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">Wohnheim <span class="caret"></span></a>
 
                     <ul class="dropdown-menu" role="menu">
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; {{ _('Hausmeister') }}</a>
-						</li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-tint"></span> &nbsp; {{ _('Club Wu5') }}</a>
-						</li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-leaf"></span> &nbsp; {{ _('Studentenwerk') }}</a>
-						</li>
-                    </ul>
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; {{ _('Hausmeister') }}</a>
+                        </li>
+
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-tint"></span> &nbsp; {{ _('Club Wu5') }}</a>
+                        </li>
+
+                        <li>
+                                <a href="#"><span class="glyphicon glyphicon-leaf"></span> &nbsp; {{ _('Studentenwerk') }}</a>
+                        </li>
+                   </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">AGDSN <span class="caret"></span></a>

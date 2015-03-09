@@ -17,136 +17,335 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: config.py:56
+#: config.py:63 local/config.py:63
 msgid "Bezahlt, verbunden"
 msgstr "Payed, connected"
 
-#: config.py:57
+#: config.py:64 local/config.py:64
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr "Not payed, connection blocked"
 
-#: config.py:58
+#: config.py:65 local/config.py:65
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr "Net usage violation, connection blocked"
 
-#: config.py:59
+#: config.py:66 local/config.py:66
+msgid "Exaktiv"
+msgstr ""
+
+#: config.py:67 local/config.py:67
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr "Traffic limit reached, account blocked"
 
-#: config.py:63
+#: config.py:71 local/config.py:71
 msgid "Sonntag"
 msgstr "Sunday"
 
-#: config.py:64
+#: config.py:72 local/config.py:72
 msgid "Montag"
 msgstr "Monday"
 
-#: config.py:65
+#: config.py:73 local/config.py:73
 msgid "Dienstag"
 msgstr "Tuesday"
 
-#: config.py:66
+#: config.py:74 local/config.py:74
 msgid "Mittwoch"
 msgstr "Wednesday"
 
-#: config.py:67
+#: config.py:75 local/config.py:75
 msgid "Donnerstag"
 msgstr "Thursday"
 
-#: config.py:68
+#: config.py:76 local/config.py:76
 msgid "Freitag"
 msgstr "Friday"
 
-#: config.py:69
+#: config.py:77 local/config.py:77
 msgid "Samstag"
 msgstr "Saturday"
 
-#: forms.py:15
-#: forms.py:41
+#: forms.py:15 forms.py:41 local/forms.py:15 local/forms.py:41
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr "E-Mail is invalid!"
 
-#: forms.py:17
+#: forms.py:17 local/forms.py:17
 msgid "Betreff muss angegeben werden!"
 msgstr "Subject is missing!"
 
-#: forms.py:25
+#: forms.py:25 local/forms.py:25
 msgid "Nachricht fehlt!"
 msgstr "Message is missing!"
 
-#: forms.py:30
+#: forms.py:30 local/forms.py:30
 msgid "Altes Passwort muss angegeben werden!"
 msgstr "Old password must be submitted!"
 
-#: forms.py:32
+#: forms.py:32 local/forms.py:32
 msgid "Neues Passwort fehlt!"
 msgstr "New password is missing!"
 
-#: forms.py:34
-#: forms.py:68
+#: forms.py:34 forms.py:68 local/forms.py:34 local/forms.py:68
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: forms.py:39
-#: forms.py:46
-#: forms.py:51
+#: forms.py:39 forms.py:46 forms.py:51 local/forms.py:39 local/forms.py:46
+#: local/forms.py:51
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
 
-#: forms.py:59
+#: forms.py:59 local/forms.py:59
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: forms.py:61
-#: forms.py:66
+#: forms.py:61 forms.py:66 local/forms.py:61 local/forms.py:66
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: run.py:53
+#: run.py:51 local/run.py:51
 msgid "Seite nicht gefunden!"
 msgstr "Page not found!"
 
-#: run.py:55
+#: run.py:53 local/run.py:53
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr "You do not have sufficient rights to view this page!"
 
-#: run.py:59
+#: run.py:57 local/run.py:57
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: run.py:160
-#: blueprints/usersuite.py:142
-#: blueprints/usersuite.py:170
+#: run.py:158 blueprints/usersuite.py:142 blueprints/usersuite.py:170
+#: local/run.py:158
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: run.py:162
-#: blueprints/usersuite.py:144
-#: blueprints/usersuite.py:172
-#: blueprints/usersuite.py:199
+#: run.py:160 blueprints/usersuite.py:144 blueprints/usersuite.py:172
+#: blueprints/usersuite.py:199 local/run.py:160
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: run.py:196
+#: run.py:194 local/run.py:194
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
-#: run.py:219
-#: blueprints/usersuite.py:37
+#: run.py:218 blueprints/usersuite.py:37 local/run.py:218
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/form.py:109
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/csrf/session.py:57
+msgid "CSRF token missing"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:73
+msgid "Get a visual challenge"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:74
+msgid "Get an audio challenge"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:75
+msgid "Get a new challenge"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:76
+msgid "Type the two words:"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:77
+msgid "Type what you hear:"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:78
+msgid "Help"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:79
+msgid "Play sound again"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:80
+msgid "Download sound as MP3"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/flask_wtf/recaptcha/widgets.py:81
+msgid "Incorrect. Try again."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:55
+#, python-format
+msgid "Invalid field name '%s'."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:63
+#, python-format
+msgid "Field must be equal to %(other_name)s."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:96
+#, python-format
+msgid "Field must be at least %(min)d character long."
+msgid_plural "Field must be at least %(min)d characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:99
+#, python-format
+msgid "Field cannot be longer than %(max)d character."
+msgid_plural "Field cannot be longer than %(max)d characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:102
+#, python-format
+msgid "Field must be between %(min)d and %(max)d characters long."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:138
+#, python-format
+msgid "Number must be at least %(min)s."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:140
+#, python-format
+msgid "Number must be at most %(max)s."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:142
+#, python-format
+msgid "Number must be between %(min)s and %(max)s."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:198
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:233
+msgid "This field is required."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:264
+msgid "Invalid input."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:286
+msgid "Invalid email address."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:318
+msgid "Invalid IP address."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:367
+msgid "Invalid Mac address."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:393
+msgid "Invalid URL."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:412
+msgid "Invalid UUID."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:440
+#, python-format
+msgid "Invalid value, must be one of: %(values)s."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/validators.py:472
+#, python-format
+msgid "Invalid value, can't be any of: %(values)s."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/appengine/fields.py:91
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/appengine/fields.py:168
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/appengine/fields.py:170
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/django/fields.py:89
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/sqlalchemy/fields.py:126
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/sqlalchemy/fields.py:128
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/sqlalchemy/fields.py:178
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/sqlalchemy/fields.py:183
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:435
+msgid "Not a valid choice"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/appengine/fields.py:189
+msgid "Not a valid list"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/appengine/fields.py:208
+msgid "Not a valid integer list"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/csrf/form.py:47
+msgid "Invalid CSRF Token"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/csrf/session.py:65
+msgid "CSRF failed"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/csrf/session.py:70
+msgid "CSRF token expired"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/dateutil/fields.py:50
+msgid "Please input a date/time value"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/dateutil/fields.py:62
+msgid "Invalid date/time input"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/ext/sqlalchemy/validators.py:34
+msgid "Already exists."
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:428
+msgid "Invalid Choice: could not coerce"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:461
+msgid "Invalid choice(s): one or more data inputs could not be coerced"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:468
+#, python-format
+msgid "'%(value)s' is not a valid choice for this field"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:523
+msgid "Not a valid integer value"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:573
+msgid "Not a valid decimal value"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:600
+msgid "Not a valid float value"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:659
+msgid "Not a valid datetime value"
+msgstr ""
+
+#: Sektionsweb/lib/python2.7/site-packages/wtforms/fields/core.py:676
+msgid "Not a valid date value"
+msgstr ""
 
 #: blueprints/usersuite.py:75
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: blueprints/usersuite.py:77
-#: blueprints/usersuite.py:215
-msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"
-msgstr "There was an error sending your message. Please contact us at support@wh2.tu-dresden.de"
+#: blueprints/usersuite.py:77 blueprints/usersuite.py:215
+msgid ""
+"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
+"direkt eine E-Mail an support@wh2.tu-dresden.de"
+msgstr ""
+"There was an error sending your message. Please contact us at support@wh2"
+".tu-dresden.de"
 
-#: blueprints/usersuite.py:110
-#: blueprints/usersuite.py:242
+#: blueprints/usersuite.py:110 blueprints/usersuite.py:242
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
@@ -158,8 +357,7 @@ msgstr "Old password was incorrect!"
 msgid "Passwort wurde geändert"
 msgstr "Password was changed"
 
-#: blueprints/usersuite.py:146
-#: blueprints/usersuite.py:174
+#: blueprints/usersuite.py:146 blueprints/usersuite.py:174
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
@@ -188,76 +386,107 @@ msgid "Link-Up"
 msgstr "Link-Up"
 
 #: templates/base.html:39
-msgid "Anmeldung"
-msgstr "Registration"
+msgid "Mitgliedschaft"
+msgstr ""
 
 #: templates/base.html:43
 msgid "Externer Anbieter"
 msgstr "External provider"
 
-#: templates/base.html:47
-msgid "Auszugsmeldung"
-msgstr "Moving out"
-
-#: templates/base.html:51
+#: templates/base.html:46
 msgid "Bezahlung"
 msgstr "Payment"
 
-#: templates/base.html:60
+#: templates/base.html:52
+msgid "Support"
+msgstr ""
+
+#: templates/base.html:56
+#, fuzzy
+msgid "Kontakt"
+msgstr "Monday"
+
+#: templates/base.html:59
+#, fuzzy
+msgid "Auszug"
+msgstr "Dormitory"
+
+#: templates/base.html:62
+msgid "Umzug"
+msgstr ""
+
+#: templates/base.html:65
+msgid "FAQ"
+msgstr ""
+
+#: templates/base.html:74
 msgid "Hausmeister"
 msgstr "Janitor"
 
-#: templates/base.html:64
+#: templates/base.html:78
 msgid "Club Wu5"
 msgstr "Club Wu5"
 
-#: templates/base.html:68
+#: templates/base.html:82
 msgid "Studentenwerk"
 msgstr "Studentenwerk"
 
-#: templates/base.html:77
+#: templates/base.html:91
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: templates/base.html:81
+#: templates/base.html:95
 msgid "Software"
 msgstr "Software"
 
-#: templates/base.html:87
+#: templates/base.html:101
 msgid "Rechtliches"
 msgstr "Legal"
 
-#: templates/base.html:91
+#: templates/base.html:105
 msgid "Finanzordnung"
 msgstr "Finance regulations"
 
-#: templates/base.html:99
+#: templates/base.html:113
 msgid "Deutsch"
 msgstr "German"
 
-#: templates/base.html:101
+#: templates/base.html:115
 msgid "English"
 msgstr "English"
 
-#: templates/base.html:109
+#: templates/base.html:123
 msgid "Login"
 msgstr "Login"
 
-#: templates/base.html:113
+#: templates/base.html:127
 msgid "Logout"
 msgstr "Logout"
 
-#: templates/base.html:144
+#: templates/base.html:156
 msgid "Traffic"
 msgstr "traffic"
 
-#: templates/base.html:172
+#: templates/base.html:160
+msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
+msgstr "This IP does not belong to the Network of the AGDSN"
+
+#: templates/base.html:164
+#, fuzzy
+msgid "Es gab einen Fehler bei der Trafficabfrage"
+msgstr "Database query could not be processed!"
+
+#: templates/base.html:193
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: templates/base.html:223
+#: templates/base.html:253
 msgid "Verbrauchter Traffic"
 msgstr "Exhausted traffic"
+
+#: templates/become_member.html:2
+msgid "Mitglied werden"
+msgstr "Becomming a Member"
 
 #: templates/bustimes.html:2
 msgid "Abfahrtszeiten"
@@ -267,8 +496,7 @@ msgstr "Bus & train departure times"
 msgid "Haltestelle"
 msgstr "Stop"
 
-#: templates/bustimes.html:11
-#: templates/bustimes.html:33
+#: templates/bustimes.html:11 templates/bustimes.html:33
 msgid "Fehler bei der Abfrage!"
 msgstr "Query could not be processed!"
 
@@ -284,7 +512,40 @@ msgstr "Direction"
 msgid "Quelle"
 msgstr "Source"
 
-#: templates/index.html:15
+#: templates/external.html:5
+msgid "Anmeldung eines Externen Anschlusses"
+msgstr ""
+
+#: templates/external.html:7
+msgid "Gilt nur für alle Bewohner der Häuser <b> Wu1, Wu5, Wu7 und ZW 41c</b>:"
+msgstr ""
+
+#: templates/external.html:10
+msgid ""
+"Solltest du dir von einem externen Internetanbieter einen Anschluss im "
+"Wohnheim legen lassen wollen, so müssen wir als AGDSN dein Zimmer dafür "
+"freischalten."
+msgstr ""
+
+#: templates/external.html:13
+msgid ""
+"Weitere Informationen und das entsprechende Formular dafür findest du "
+"hier:"
+msgstr ""
+
+#: templates/external.html:14
+#, fuzzy
+msgid "Antrag"
+msgstr "Monday"
+
+#: templates/external.html:17
+msgid ""
+"Solltest du in keinem der aufgeführten Häuser wohnen brauchst du nur den "
+"Techniker deines Anbieters, diese Häuser sind bereits mit Anschlüssen "
+"versorgt."
+msgstr ""
+
+#: templates/index.html:22
 msgid "geschrieben von"
 msgstr "written by"
 
@@ -299,6 +560,87 @@ msgstr "Password"
 #: templates/login.html:20
 msgid "Einloggen"
 msgstr "Log in"
+
+#: templates/membership.html:6
+msgid "Mitglied werden und Anschluss beantragen"
+msgstr "Become a member and link-up"
+
+#: templates/membership.html:8
+msgid ""
+"Die AG DSN ist eine Arbeitsgemeinschaft von Studenten wie dir, die sich "
+"unter anderem um die Bereitstellung des Netzwerkes in den von der Ihr "
+"betreuten Wohnheimen kümmern."
+msgstr ""
+
+#: templates/membership.html:10
+#, fuzzy
+msgid "Passives Mitglied werden"
+msgstr "Becomming a Member"
+
+#: templates/membership.html:12
+msgid ""
+"Um passives Mitglied in der AG DSN zu werden und damit unter anderem "
+"Zugang zum Studentennetz zu erhalten , musst Du folgendes tun."
+msgstr ""
+
+#: templates/membership.html:16
+msgid "Lies dir die Hinweise auf der Rückseite des Formulars gründlich durch."
+msgstr ""
+
+#: templates/membership.html:19
+msgid ""
+"Fülle zwei Exemplare dieses Formulars leserlich aus und unterzeichne sie "
+"je zweimal."
+msgstr ""
+
+#: templates/membership.html:22
+msgid ""
+"Wirf beide Exemplare in unseren Briefkasten in der Wundtstraße 5 (rechts "
+"unten) oder gib sie zu den Sprechzeiten im Büro (Wundtstraße 5, "
+"Erdgeschoss) ab. Dort werden die Anträge üblicherweise sofort bearbeitet."
+msgstr ""
+
+#: templates/membership.html:25
+msgid ""
+"Etwa eine Woche nach der Abgabe erhältst Du ein Exemplar verbunden mit "
+"einem Zugangsdatenblatt zurück. Spätestens jetzt sollte Dein Zugang "
+"funktionieren.\n"
+"        Bitte beschrifte Deinen Briefkasten, da ansonsten gegebenenfalls "
+"keine Zustellung erfolgen kann und wir Deinen Zugang sperren müssen."
+msgstr ""
+
+#: templates/membership.html:29
+msgid "Überweise den Semesterbeitrag innerhalb von 31 Tagen auf unser Konto."
+msgstr ""
+
+#: templates/membership.html:36
+msgid "Mitgliedschaftsantrag"
+msgstr ""
+
+#: templates/membership.html:40
+msgid "Nun bist Du passives Mitglied."
+msgstr ""
+
+#: templates/membership.html:42
+#, fuzzy
+msgid "Aktives Mitglied werden"
+msgstr "Becomming a Member"
+
+#: templates/membership.html:43
+msgid ""
+"Das Studentennetz wurde von Studenten wie Dir selbst geschaffen und wird "
+"von eben diesen ehrenamtlich verwaltet und erweitert. Wenn Du Interesse "
+"an unserer Arbeit hast, so schau doch einfach mal vorbei. Du musst "
+"keineswegs Informatik oder Ähnliches studieren, um mitmachen zu können. "
+"Es warten viele spannende Aufgaben in den Bereichen Administration von "
+"Netzwerk- und Rechentechnik, Softwareentwicklung und -wartung, "
+"3>Finanzen, Verwaltung, Recht und Öffentlichkeitsarbeit. Neben guten "
+"Referenzen für Deinen Lebenslauf erhältst Du so auch einen Einblick in "
+"spannende Technik, die man sonst eher nicht zu Gesicht bekommt. Wir "
+"würden uns freuen, auch bald Dich in unseren Reihen begrüßen zu können. "
+"Komm doch einfach zur Sprechstunde oder unserer wöchentlichen Sitzung, "
+"Mittwochs um 20:30 Uhr, in unserem Büro vorbei."
+msgstr ""
 
 #: templates/content/ansprechpartner.html:2
 #: templates/content/ansprechpartner.html:66
@@ -345,22 +687,74 @@ msgstr "Dormitory admins"
 msgid "Haus"
 msgstr "Dormitory"
 
-#: templates/content/traffic.html:2
-#: templates/content/en/traffic.html:2
+#: templates/content/traffic.html:2 templates/content/en/traffic.html:2
 msgid "Trafficregelungen"
 msgstr "Traffic regulations"
 
-#: templates/drafts/usertraffic_table_graph.html:3
+#: templates/drafts/_traffic_overview.html:1
 msgid "Dein Traffic"
 msgstr "Your traffic"
 
-#: templates/drafts/usertraffic_table_graph.html:6
+#: templates/drafts/_traffic_overview.html:4
 msgid "Wochentag"
 msgstr "Weekday"
 
-#: templates/drafts/usertraffic_table_graph.html:22
+#: templates/drafts/_traffic_overview.html:20
 msgid "Verbleibender Credit"
 msgstr "Remaining Credit"
+
+#: templates/usersuite/_index_status.html:1
+msgid "Statusinformationen"
+msgstr ""
+
+#: templates/usersuite/_index_status.html:5
+msgid "Passwort ändern"
+msgstr "Change password"
+
+#: templates/usersuite/_index_status.html:9
+msgid "Kontaktformular"
+msgstr ""
+
+#: templates/usersuite/_index_status.html:15
+msgid "Nutzer-ID"
+msgstr "User-ID"
+
+#: templates/usersuite/_index_status.html:19
+msgid "Accountname"
+msgstr "Account name"
+
+#: templates/usersuite/_index_status.html:23
+msgid "Accountstatus"
+msgstr "Account status"
+
+#: templates/usersuite/_index_status.html:31
+msgid "Aktuelles Zimmer"
+msgstr "Current room"
+
+#: templates/usersuite/_index_status.html:35
+msgid "Aktuelle IP-Adresse"
+msgstr "Current IP address"
+
+#: templates/usersuite/_index_status.html:39
+msgid "Aktuelle MAC-Adresse"
+msgstr "Current MAC address"
+
+#: templates/usersuite/_index_status.html:45
+msgid "E-Mail-Weiterleitung"
+msgstr "E-Mail forwarding address"
+
+#: templates/usersuite/_index_status.html:50
+#: templates/usersuite/_index_status.html:58
+msgid "Nicht eingerichtet"
+msgstr "Not set up"
+
+#: templates/usersuite/_index_status.html:56 templates/usersuite/hosting.html:2
+msgid "MySQL Datenbank"
+msgstr "MySQL database"
+
+#: templates/usersuite/_index_status.html:57
+msgid "Eingerichtet"
+msgstr "Set up"
 
 #: templates/usersuite/change_mac.html:2
 msgid "MAC-Adresse ändern"
@@ -377,22 +771,33 @@ msgid "Die neue MAC-Adresse"
 msgstr "Your new MAC address"
 
 #: templates/usersuite/change_mac.html:22
-msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
+msgid ""
+"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
+"Benachrichtigungsmail an uns gesandt."
 msgstr "Note: we will be notified about any change of your MAC address."
 
 #: templates/usersuite/change_mac.html:23
-msgid "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben."
-msgstr "Please be aware that every user needs his own account. It is not permitted to share an account!"
+msgid ""
+"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es"
+" ist nicht zulässig, den eigenen Account weiterzugeben."
+msgstr ""
+"Please be aware that every user needs his own account. It is not "
+"permitted to share an account!"
 
 #: templates/usersuite/change_mac.html:24
-msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
-msgstr "If you share your account with someone else (share login, enter someone else's MAC address) you are still liable for all activities of this account!"
+msgid ""
+"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
+"MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
+"alle Aktivitäten des Accounts!"
+msgstr ""
+"If you share your account with someone else (share login, enter someone "
+"else's MAC address) you are still liable for all activities of this "
+"account!"
 
 #: templates/usersuite/change_mac.html:27
 #: templates/usersuite/change_mail.html:20
 #: templates/usersuite/change_password.html:26
-#: templates/usersuite/contact.html:39
-#: templates/usersuite/delete_mail.html:14
+#: templates/usersuite/contact.html:39 templates/usersuite/delete_mail.html:14
 #: templates/usersuite/hosting.html:37
 msgid "Abschicken"
 msgstr "Send"
@@ -423,8 +828,7 @@ msgid "Bestätigung des neuen Passworts"
 msgstr "Verification of your new password"
 
 #: templates/usersuite/change_password.html:27
-#: templates/usersuite/contact.html:40
-#: templates/usersuite/hosting.html:38
+#: templates/usersuite/contact.html:40 templates/usersuite/hosting.html:38
 msgid "Zurücksetzen"
 msgstr "Reset"
 
@@ -452,11 +856,6 @@ msgstr "Your message"
 msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
 msgstr "Note: Your username will be appended to your message."
 
-#: templates/usersuite/hosting.html:2
-#: templates/usersuite/index.html:55
-msgid "MySQL Datenbank"
-msgstr "MySQL database"
-
 #: templates/usersuite/hosting.html:7
 msgid "Willst du deine Datenbank wirklich löschen?"
 msgstr "Do you really want to delete your database?"
@@ -466,7 +865,9 @@ msgid "Jawohl!"
 msgstr "Yes sir!"
 
 #: templates/usersuite/hosting.html:12
-msgid "Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du hier."
+msgid ""
+"Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos "
+"zum Webhosting findest du hier."
 msgstr "You can create a MySQL database on our servers. More information here."
 
 #: templates/usersuite/hosting.html:18
@@ -501,44 +902,48 @@ msgstr "Verification of your new password"
 msgid "Usersuite von "
 msgstr "Usersuite of "
 
-#: templates/usersuite/index.html:9
-msgid "Nutzer-ID"
-msgstr "User-ID"
+#: utils/database_utils.py:104
+msgid "Nutzer hat keine IP"
+msgstr ""
 
-#: templates/usersuite/index.html:13
-msgid "Accountname"
-msgstr "Account name"
+#~ msgid "Anmeldung"
+#~ msgstr "Registration"
 
-#: templates/usersuite/index.html:16
-msgid "Passwort ändern"
-msgstr "Change password"
+#~ msgid "Auszugsmeldung"
+#~ msgstr "Moving out"
 
-#: templates/usersuite/index.html:22
-msgid "Accountstatus"
-msgstr "Account status"
+#~ msgid ""
+#~ "Um die Mitgliedschaft in der AG "
+#~ "DSN zu beantragen, benötigst Du ein "
+#~ "Antragsformular in doppelter Ausführung. Diese"
+#~ " füllst Du wie auf der Rückseite "
+#~ "beschrieben aus. Bitte nimm Dir die "
+#~ "Zeit, die Rückseite komplett zu lesen,"
+#~ " so ersparst Du Dir und uns "
+#~ "Arbeit."
+#~ msgstr ""
+#~ "For getting membership in the AG "
+#~ "DSN, you need a counterpart application"
+#~ " form for membership. Please fill "
+#~ "them out as it is mentioned on "
+#~ "the backside. Please take some time "
+#~ "for reading the back side, so you"
+#~ " will save a lot of work for"
+#~ " you and us."
 
-#: templates/usersuite/index.html:30
-msgid "Aktuelles Zimmer"
-msgstr "Current room"
-
-#: templates/usersuite/index.html:34
-msgid "Aktuelle IP-Adresse"
-msgstr "Current IP address"
-
-#: templates/usersuite/index.html:38
-msgid "Aktuelle MAC-Adresse"
-msgstr "Current MAC address"
-
-#: templates/usersuite/index.html:44
-msgid "E-Mail-Weiterleitung"
-msgstr "E-Mail forwarding address"
-
-#: templates/usersuite/index.html:49
-#: templates/usersuite/index.html:57
-msgid "Nicht eingerichtet"
-msgstr "Not set up"
-
-#: templates/usersuite/index.html:56
-msgid "Eingerichtet"
-msgstr "Set up"
+#~ msgid ""
+#~ "Als nächstes muss der Mitgliedsbeitrag "
+#~ "bezahlt werden, nähere Informationen dazu "
+#~ "erhällst Du auf der Seite zum "
+#~ "Semesterbeitrag.\n"
+#~ "Für das Bezahlen gibt es allerdings "
+#~ "eine Frist von einem Monat, das "
+#~ "Netz funktioniert also auch schon vor"
+#~ " dem Bezahlen."
+#~ msgstr ""
+#~ "Next part is to transfer the "
+#~ "membership fee. More information is "
+#~ "given on the site about the "
+#~ "semester fee.The network works without "
+#~ "the payment for 62 days."
 

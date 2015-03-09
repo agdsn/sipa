@@ -1,0 +1,10 @@
+{% extends "base.html" %}#
+{% set page_title = "{{page.meta.title}}" %}
+
+{% block content %}
+        <div class="panel">
+            <div class="panel-heading"><h2 class="panel-title">{{ page.meta.title }}</h2></div>
+            <div class="panel-body">{{ page.html|safe }}</div>
+            <div class="panel-footer">{{ _("geschrieben von") }} {{ page.meta.author }}, {{  page.meta.date }}</div>
+        </div>
+{% endblock %}

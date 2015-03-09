@@ -12,11 +12,15 @@ from flask import Flask, render_template, request, redirect, \
     url_for, flash, send_file, session
 from flask.ext.login import LoginManager, current_user, login_user, \
     logout_user
+#to translate every thing
 from flask.ext.babel import Babel, gettext
-from flask.ext.flatpages import FlatPages
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from markdown import Markdown
+
+#workaround found here http://stackoverflow.com/questions/11020170/using-flask-extensions-in-flask-blueprints
+# because we want to use flatpages within blueprints
+from flatpages import pages
 
 from blueprints import bp_usersuite, bp_pages
 from config import languages, busstops
@@ -34,7 +38,8 @@ app.config.from_pyfile('settings.py')
 login_manager = LoginManager()
 login_manager.init_app(app)
 babel = Babel(app)
-pages = FlatPages(app)
+
+pages.init_app(app)
 
 # Blueprints
 app.register_blueprint(bp_usersuite)
@@ -228,27 +233,6 @@ def trafficpng():
     # the first (svg) will work just fine, but not the second (png)
     # alternative: directly import into the html, there is no need for a file
     return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
-
-
-@app.route("/bustimes")
-@app.route("/bustimes/<string:stopname>")
-def bustimes(stopname=None):
-    """Queries the VVO-Online widget for the given stop.
-    If no specific stop is given in the URL, it will query all
-    stops set up in the config.
-    """
-    data = {}
-
-    if stopname:
-        # Only one stop requested
-        data[stopname] = get_bustimes(stopname)
-    else:
-        # General output page
-        for stop in busstops:
-            data[stop] = get_bustimes(stop, 4)
-
-    return render_template('bustimes.html', times=data, stopname=stopname)
-
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost")
