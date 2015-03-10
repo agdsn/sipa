@@ -19,7 +19,7 @@ from markdown import Markdown
 
 from flatpages import pages
 
-from blueprints import bp_usersuite, bp_pages
+from blueprints import bp_usersuite, bp_pages, bp_documents
 from config import languages, busstops
 from forms import flash_formerrors, LoginForm
 from utils import get_bustimes
@@ -41,6 +41,7 @@ pages.init_app(app)
 # Blueprints
 app.register_blueprint(bp_usersuite)
 app.register_blueprint(bp_pages)
+app.register_blueprint(bp_documents)
 
 # global jinja variable containing data for the gauge
 app.jinja_env.globals.update(
