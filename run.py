@@ -79,15 +79,20 @@ def get_direct_pages():
     pages.reload()
     value = []
     for p in pages:
-        if p.meta['direct'] and p.path.startswith(lang):
-            # I feel to make brakes around
+        try:
+            if p.meta['direct'] and p.path.startswith(lang):
+                # I feel to make brakes around
 
-            if p.meta['category'] not in (cat for value.categoryname in value):
-                value.append({'categoryname': p.meta['category'], 'pages': [p]})
-            else:
-                for v in value:
-                    if v.categoryname is p.meta['category']:
-                        v.pages.append(p)
+                if p.meta['category'] not in (cat for value.categoryname in value):
+                    value.append({'categoryname': p.meta['category'], 'pages': [p]})
+                else:
+                    for v in value:
+                        if v.categoryname is p.meta['category']:
+                            v.pages.append(p)
+        except KeyError:
+            # todo log the name of the page
+            # like log('Corrupt metadata in {}'.format(p.path))
+            flash(gettext(u'Eine News enthält inkorrekte Metadaten', 'warning'))
     return value
 
 # global jinja variable containing the pages
