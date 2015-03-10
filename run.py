@@ -12,14 +12,11 @@ from flask import Flask, render_template, request, redirect, \
     url_for, flash, send_file, session
 from flask.ext.login import LoginManager, current_user, login_user, \
     logout_user
-#to translate every thing
 from flask.ext.babel import Babel, gettext
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from markdown import Markdown
 
-#workaround found here http://stackoverflow.com/questions/11020170/using-flask-extensions-in-flask-blueprints
-# because we want to use flatpages within blueprints
 from flatpages import pages
 
 from blueprints import bp_usersuite, bp_pages

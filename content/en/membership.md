@@ -15,7 +15,7 @@ Um passives Mitglied in der AG DSN zu werden und damit unter anderem Zugang zum 
 1. Lies dir die Hinweise auf der Rückseite des Formulars gründlich durch.
 2. Fülle zwei Exemplare dieses Formulars leserlich aus und unterzeichne sie je zweimal.
 3. Wirf beide Exemplare in unseren Briefkasten in der Wundtstraße 5 (rechts unten) oder gib sie zu den Sprechzeiten im Büro (Wundtstraße 5, Erdgeschoss) ab. Dort werden die Anträge üblicherweise sofort bearbeitet.
-4. Etwa eine Woche nach der Abgabe erhältst Du ein Exemplar verbunden mit einem Zugangsdatenblatt zurück. Spätestens jetzt sollte Dein Zugang funktionieren. Bitte beschrifte Deinen Briefkasten, da ansonsten gegebenenfalls keine Zustellung erfolgen kann und wir Deinen Zugang sperren müssen.')}}
+4. Etwa eine Woche nach der Abgabe erhältst Du ein Exemplar verbunden mit einem Zugangsdatenblatt zurück. Spätestens jetzt sollte Dein Zugang funktionieren. Bitte beschrifte Deinen Briefkasten, da ansonsten gegebenenfalls keine Zustellung erfolgen kann und wir Deinen Zugang sperren müssen.
 5. Überweise den Semesterbeitrag innerhalb von 31 Tagen auf unser Konto.
 
 [Mitgliedschaftsantrag](pages/membership)
