@@ -31,82 +31,28 @@
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                {% with categories  = get_direct_pages() %}
+                {% for c in categories %}
                 <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" title="Anschlusskonfiguration">{{ _('Link-Up') }} <span class="caret"></span></a>
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" >{{c.categoryname}} <span class="caret"></span></a>
                     
                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                                <a href="{{ url_for('pages.membership')}}"><span class="glyphicon glyphicon-log-in"></span> &nbsp; {{ _('Mitgliedschaft') }}</a>
-                        </li>
-
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-new-window"></span> &nbsp; {{ _('Externer Anbieter') }}</a>
-                        </li>
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Bezahlung') }}</a>
-                        </li>
- 
-                  </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" title="Anschlusskonfiguration">{{ _('Support') }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-group"></span> &nbsp; {{ _('Kontakt') }}</a>
-                        </li>
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp; {{ _('Auszug') }}</a>
-                        </li>
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-transfer"></span> &nbsp; {{ _('Umzug') }}</a>
-                        </li>
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-flag"></span> &nbsp; {{ _('FAQ') }}</a>
-                        </li>
+                       
+                          {% for p in c.pages %}
+                          <li>
+                              <a href="{% if p.meta.type != 'link' %}pages/{% endif %}{{p.meta.link}}">
+                                  <span class="glyphicon {{p.meta.glyphicon}}"></span>
+                                  &nbsp; {{p.meta.title}}
+                              </a>
+                          </li>
+                          {% endfor %}
                     </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Wohnheim <span class="caret"></span></a>
-
-                    <ul class="dropdown-menu" role="menu">
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-user"></span> &nbsp; {{ _('Hausmeister') }}</a>
-                        </li>
-
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-tint"></span> &nbsp; {{ _('Club Wu5') }}</a>
-                        </li>
-
-                        <li>
-                                <a href="#"><span class="glyphicon glyphicon-leaf"></span> &nbsp; {{ _('Studentenwerk') }}</a>
-                        </li>
-                   </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">AGDSN <span class="caret"></span></a>
-                    
-                    <ul class="dropdown-menu" role="menu">
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-envelope"></span> &nbsp; {{ _('E-Mail') }}</a>
-						</li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-save"></span> &nbsp; {{ _('Software') }}</a>
-						</li>
-						
-						<li class="divider"></li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-list"></span> &nbsp; {{ _('Rechtliches') }}</a>
-						</li>
-						
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-euro"></span> &nbsp; {{ _('Finanzordnung') }}</a>
-						</li>
-                    </ul>
-                </li>
+                <li>
+                {% endfor %}
+                {% endwith %}
+                
             </ul>
+
             <ul class="nav navbar-nav navbar-right">
 				<li>
 					{% if session.get('lang') == 'en' %}

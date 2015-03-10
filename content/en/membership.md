@@ -1,6 +1,11 @@
-title: Mitgliedschaft
-author: cookie
+title: Membership
+category: Linkup
+link: membership
+author: peetcreative
 date: 2014-08-08
+direct: true
+glyphicon: glyphicon-log-in
+
 
 ###Mitglied werden und Anschluss beantragen
 Die AG DSN ist eine Arbeitsgemeinschaft von Studenten wie dir, die sich unter anderem um die Bereitstellung des Netzwerkes in den von der Ihr betreuten Wohnheimen kümmern.
@@ -13,7 +18,7 @@ Um passives Mitglied in der AG DSN zu werden und damit unter anderem Zugang zum 
 4. Etwa eine Woche nach der Abgabe erhältst Du ein Exemplar verbunden mit einem Zugangsdatenblatt zurück. Spätestens jetzt sollte Dein Zugang funktionieren. Bitte beschrifte Deinen Briefkasten, da ansonsten gegebenenfalls keine Zustellung erfolgen kann und wir Deinen Zugang sperren müssen.')}}
 5. Überweise den Semesterbeitrag innerhalb von 31 Tagen auf unser Konto.
 
-[Mitgliedschaftsantrag]({{ url_for('pages.membership')}})
+[Mitgliedschaftsantrag](pages/membership)
 
 Nun bist Du passives Mitglied.
 

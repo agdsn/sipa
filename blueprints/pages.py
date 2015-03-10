@@ -38,7 +38,7 @@ bp_pages = Blueprint('pages', __name__, url_prefix='/pages')
     #return content_localization("traffic.html")
 
 
-@bp_pages.route('/', defaults={'page': 'index'})
+#@bp_pages.route('/', defaults={'page': 'index'})
 @bp_pages.route('/<page>')
 def show(page):
     lang = session.get('lang', 'de')

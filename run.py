@@ -51,6 +51,7 @@ app.jinja_env.globals.update(
 )
 
 
+
 def errorpage(e):
     if e.code in (404,):
         flash(gettext(u"Seite nicht gefunden!"), "warning")
@@ -71,7 +72,33 @@ app.register_error_handler(404, errorpage)
 def safe_markdown(text):
     md = Markdown(safe_mode='escape')
     return md.convert(text)
+#gives a List of dicts [{categoryname:TEXT,pages:[pages]}]
+#I know that's no a good description but look the code'
+def get_direct_pages():
+    lang = session.get('lang', 'de')
+    pages.reload()
+    value = []
+    for p in pages:
+        if p.meta['direct'] and  p.path.startswith(lang):
+            #I feel to make brakes around
+            
+            if p.meta['category'] not in (cat for value.categoryname in  value):
+                value.append({'categoryname': p.meta['category'], 'pages': [p] })
+            else:
+                for v in value:
+                    if v.categoryname is p.meta['category']:
+                        v.pages.append(p)
+    return value
 
+# global jinja variable containing the pages
+app.jinja_env.globals.update(
+    get_direct_pages=get_direct_pages
+)
+
+def get_categories():
+    lang = session.get('lang', 'de')
+    pages.reload()
+    
 
 @app.errorhandler(OperationalError)
 def exceptionhandler_sql(ex):
@@ -118,6 +145,7 @@ def babel_selector():
         session['lang'] = request.accept_languages.best_match(languages.keys())
 
     return session.get('lang')
+
 
 
 @app.route('/index.php')
