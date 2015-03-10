@@ -17,8 +17,8 @@ from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from markdown import Markdown
 
-from flatpages import pages
 
+from flatpages import pages
 from blueprints import bp_usersuite, bp_pages, bp_documents
 from config import languages, busstops
 from forms import flash_formerrors, LoginForm
@@ -28,7 +28,7 @@ from utils.database_utils import query_userinfo, query_trafficdata, \
 from utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
 from utils.graph_utils import make_trafficgraph
 from utils.ldap_utils import User, authenticate
-
+#from utils.git_utils import
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')
