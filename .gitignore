@@ -1,4 +1,5 @@
 venv
+content
 *.pyc
 *.pyo
 *~
