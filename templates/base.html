@@ -31,21 +31,28 @@
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                {% with categories  = get_direct_pages() %}
+                {% with categories  = pages.categories %}
                 {% for c in categories %}
                 <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" >{{c.categoryname}} <span class="caret"></span></a>
-                    
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" >
+                      {% if session.get('lang') == 'en' %}
+                          {{c.category.meta['name[en]']}}
+                      {% else %}
+                          {{c.category.meta['name[de]']}}
+                      {% endif %}
+                      <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu" role="menu">
-                       
-                          {% for p in c.pages %}
-                          <li>
-                              <a href="{% if p.meta.type != 'link' %}pages/{% endif %}{{p.meta.link}}">
-                                  <span class="glyphicon {{p.meta.glyphicon}}"></span>
-                                  &nbsp; {{p.meta.title}}
-                              </a>
-                          </li>
-                          {% endfor %}
+                        {% for p in pages  %}
+                        {% if p.meta.category_link == c.link and p.path.endswith(session.get('lang'))%}
+                        <li>
+                            <a href="pages/{{p.meta.link}}">
+                                <span class="glyphicon {{p.meta.glyphicon}}"></span>
+                                &nbsp; {{p.meta.title}}
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
                     </ul>
                 <li>
                 {% endfor %}

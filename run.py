@@ -7,27 +7,30 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
 import io
+import os.path
+import sys
+current_file = os.path.abspath(__file__)
+sys.path.insert(0, os.path.dirname(os.path.dirname(current_file)))
 
 from flask import Flask, render_template, request, redirect, \
     url_for, flash, send_file, session
-from flask.ext.login import LoginManager, current_user, login_user, \
+from flask_login import LoginManager, current_user, login_user, \
     logout_user
-from flask.ext.babel import Babel, gettext
+from flask_babel import Babel, gettext
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from markdown import Markdown
 
-
-from flatpages import pages
-from blueprints import bp_usersuite, bp_pages, bp_documents
-from config import languages, busstops
-from forms import flash_formerrors, LoginForm
-from utils import get_bustimes
-from utils.database_utils import query_userinfo, query_trafficdata, \
+from Sektionsweb.flatpages import pages, CustomFlatPages
+from Sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents
+from Sektionsweb.config import languages, busstops
+from Sektionsweb.forms import flash_formerrors, LoginForm
+from Sektionsweb.utils import get_bustimes
+from Sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
     query_gauge_data
-from utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
-from utils.graph_utils import make_trafficgraph
-from utils.ldap_utils import User, authenticate
+from Sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
+from Sektionsweb.utils.graph_utils import make_trafficgraph
+from Sektionsweb.utils.ldap_utils import User, authenticate
 #from utils.git_utils import
 
 app = Flask(__name__)
@@ -36,7 +39,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 babel = Babel(app)
 
-pages.init_app(app)
 
 # Blueprints
 app.register_blueprint(bp_usersuite)
@@ -69,42 +71,50 @@ app.register_error_handler(404, errorpage)
 def safe_markdown(text):
     md = Markdown(safe_mode='escape')
     return md.convert(text)
+    
+pages.init_app(app)
 
-
-def get_direct_pages():
-    """gives a List of dicts [{categoryname:TEXT,pages:[pages]}]
-    I know that's no a good description but look the code'
-    :return:
-    """
-    lang = session.get('lang', 'de')
-    pages.reload()
-    value = []
-    for p in pages:
-        try:
-            if p.meta['direct'] and p.path.startswith(lang):
-                # I feel to make brakes around
-
-                if p.meta['category'] not in (cat for value.categoryname in value):
-                    value.append({'categoryname': p.meta['category'], 'pages': [p]})
-                else:
-                    for v in value:
-                        if v.categoryname is p.meta['category']:
-                            v.pages.append(p)
-        except KeyError:
-            # todo log the name of the page
-            # like log('Corrupt metadata in {}'.format(p.path))
-            flash(gettext(u'Eine News enthält inkorrekte Metadaten', 'warning'))
-    return value
+print 'pages'
+for p in pages:
+    print p
+#print  pages.categories
 
 # global jinja variable containing the pages
 app.jinja_env.globals.update(
-    get_direct_pages=get_direct_pages
+    pages=pages
 )
 
 
-def get_categories():
-    lang = session.get('lang', 'de')
-    pages.reload()
+#def get_direct_pages():
+    #"""gives a List of dicts [{categoryname:TEXT,pages:[pages]}]
+    #I know that's no a good description but look the code'
+    #:return:
+    #"""
+    ##category_page = flat_pages.get_or_404(u'pages/{}/__init__'.format(category))
+    ##try:
+      ##cat_name = category_page.meta[u'name[{}]'.format(lang))]
+    ##except KeyError:
+      ##flash("Syntax error in category meta data")
+      ##abort(500)
+    #lang = session.get('lang', 'de')
+    #value = []
+    #for p in pages:
+        #try:
+            #if 'direct' in p.meta.keys() and  p.category:
+                ## I feel to make brakes around
+
+                #if p.meta['category'] not in (cat for value.categoryname in value):
+                    #value.append({'categoryname': p.meta['category'], 'pages': [p]})
+                #else:
+                    #for v in value:
+                        #if v.categoryname is p.meta['category']:
+                            #v.pages.append(p)
+        #except KeyError:
+            ## todo log the name of the page
+            ## like log('Corrupt metadata in {}'.format(p.path))
+            #flash(gettext(u'Eine News enthält inkorrekte Metadaten', 'warning'))
+    #return value
+
 
 
 @app.errorhandler(OperationalError)
@@ -174,7 +184,6 @@ def index():
     """
     lang = session.get('lang', 'de')
 
-    pages.reload()
     articles = (p for p in pages if p.path.startswith(lang + u'/news/'))
     latest = sorted(articles, key=lambda a: a.meta['date'], reverse=True)
 

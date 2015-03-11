@@ -5,10 +5,9 @@ import datetime
 from flask.globals import request
 from sqlalchemy import create_engine
 
-from exceptions import DBQueryEmpty
-from config import *
-from utils import timestamp_from_timetag, timetag_from_timestamp
-from utils.exceptions import ForeignIPAccessError
+from Sektionsweb.config import *
+from Sektionsweb.utils import timestamp_from_timetag, timetag_from_timestamp
+from .exceptions import DBQueryEmpty, ForeignIPAccessError
 
 
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
