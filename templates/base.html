@@ -33,6 +33,7 @@
             <ul class="nav navbar-nav">
                 {% with categories  = pages.categories %}
                 {% for c in categories %}
+                {% if not c.link == 'news' %}
                 <li class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle" >
                       {% if session.get('lang') == 'en' %}
@@ -44,7 +45,8 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         {% for p in pages  %}
-                        {% if p.meta.category_link == c.link and p.path.endswith(session.get('lang'))%}
+                        {% if p.meta.category_link == c.link and
+                        p.path.endswith(session.get('lang')) %}
                         <li>
                             <a href="pages/{{p.meta.link}}">
                                 <span class="glyphicon {{p.meta.glyphicon}}"></span>
@@ -55,6 +57,7 @@
                         {% endfor %}
                     </ul>
                 <li>
+                {% endif %}
                 {% endfor %}
                 {% endwith %}
                 

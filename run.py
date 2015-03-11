@@ -50,6 +50,16 @@ app.jinja_env.globals.update(
     traffic=query_gauge_data
 )
 
+def safe_markdown(text):
+    md = Markdown(safe_mode='escape')
+    return md.convert(text)
+
+pages.init_app(app)
+
+# global jinja variable containing the pages
+app.jinja_env.globals.update(
+    pages=pages
+)
 
 def errorpage(e):
     if e.code in (404,):
@@ -68,21 +78,6 @@ app.register_error_handler(403, errorpage)
 app.register_error_handler(404, errorpage)
 
 
-def safe_markdown(text):
-    md = Markdown(safe_mode='escape')
-    return md.convert(text)
-    
-pages.init_app(app)
-
-print 'pages'
-for p in pages:
-    print p
-#print  pages.categories
-
-# global jinja variable containing the pages
-app.jinja_env.globals.update(
-    pages=pages
-)
 
 
 #def get_direct_pages():
@@ -184,7 +179,7 @@ def index():
     """
     lang = session.get('lang', 'de')
 
-    articles = (p for p in pages if p.path.startswith(lang + u'/news/'))
+    articles = (p for p in pages if p.meta['category_link'] == 'news' and not p.path.endswith('__init__') and p.meta['lang'] == session.get('lang'))
     latest = sorted(articles, key=lambda a: a.meta['date'], reverse=True)
 
     return render_template("index.html", articles=latest)

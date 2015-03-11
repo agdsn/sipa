@@ -15,8 +15,8 @@ class CustomFlatPages(FlatPages):
         # that all bad karma
         # but do you know that it is only eecuted at init
         # ohh cool
+        # WHATEVER this have to be written definitly again
         for p in self:
-            print p
             found = False
             if (p.path.endswith('__init__')):
                 for c in self.categories:
@@ -26,6 +26,15 @@ class CustomFlatPages(FlatPages):
                     self.categories.append({'link': p.path.split('/')[0],'category': p})
         for p in self:
             p.meta['category_link'] = p.path.split('/')[0]
+            link = p.path
+            link = link.replace('.de' , '')
+            link = link.replace('.en' , '')
+            p.meta['link'] = link
+            if p.path.endswith('.de'):
+                p.meta['lang'] = 'de'
+            elif p.path.endswith('.en'):
+                p.meta['lang'] = 'en'
+
         
 
 pages = CustomFlatPages()
