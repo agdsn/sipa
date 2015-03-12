@@ -185,6 +185,9 @@ def index():
                     articles.append(p)
     latest = sorted(articles, key=lambda a: a.meta['date'], reverse=True)
 
+    if len(latest) == 0:
+        flash(gettext('Keine News anzuzeigen!'), 'info')
+
     return render_template("index.html", articles=latest)
 
 
