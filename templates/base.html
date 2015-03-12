@@ -30,14 +30,13 @@
         </div>
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            {% if session.get('lang') %}
             <ul class="nav navbar-nav">
                 {% with categories  = pages.categories %}
                 {% for c in categories %}
                 {% if not c.link == 'news' %}
                 <li class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle" >
-                      {% if session.get('lang') == 'en' %}
+                      {% if lang() == 'en' %}
                           {{c.category.meta['name[en]']}}
                       {% else %}
                           {{c.category.meta['name[de]']}}
@@ -47,7 +46,7 @@
                     <ul class="dropdown-menu" role="menu">
                         {% for p in pages  %}
                         {% if p.meta.category_link == c.link and
-                        p.path.endswith(session.get('lang')) %}
+                        p.path.endswith(lang()) %}
                         <li>
                             <a href="pages/{{p.meta.link}}">
                                 <span class="glyphicon {{p.meta.glyphicon}}"></span>
@@ -62,13 +61,12 @@
                 {% endfor %}
                 {% endwith %}
             </ul>
-            {% endif %}
 
             <ul class="nav navbar-nav navbar-right">
 				<li>
-					{% if session.get('lang') == 'en' %}
+					{% if lang() == 'en' %}
 						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> {{ _('Deutsch') }}</a>
-					{% elif session.get('lang') == 'de' %}
+					{% elif lang() == 'de' %}
 						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> {{ _('English') }}</a>
 					{% else %}
 					{# todo splash screen or default language instead #}

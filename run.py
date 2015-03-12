@@ -9,6 +9,8 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 import io
 import os.path
 import sys
+from flask.ext.babel import get_locale
+from utils.babel_utils import lang
 
 current_file = os.path.abspath(__file__)
 sys.path.insert(0, os.path.dirname(os.path.dirname(current_file)))
@@ -44,11 +46,6 @@ app.register_blueprint(bp_usersuite)
 app.register_blueprint(bp_pages)
 app.register_blueprint(bp_documents)
 
-# global jinja variable containing data for the gauge
-app.jinja_env.globals.update(
-    traffic=query_gauge_data
-)
-
 
 def safe_markdown(text):
     md = Markdown(safe_mode='escape')
@@ -57,9 +54,11 @@ def safe_markdown(text):
 
 pages.init_app(app)
 
-# global jinja variable containing the pages
+# global jinja variables
 app.jinja_env.globals.update(
-    pages=pages
+    pages=pages,
+    traffic=query_gauge_data,
+    lang=lang
 )
 
 
@@ -179,7 +178,7 @@ def index():
     """
     articles = (p for p in pages if p.meta['category_link'] == 'news'
                 and not p.path.endswith('__init__')
-                and p.meta['lang'] == session.get('lang'))
+                and p.meta['lang'] == lang())
     latest = sorted(articles, key=lambda a: a.meta['date'], reverse=True)
 
     return render_template("index.html", articles=latest)
