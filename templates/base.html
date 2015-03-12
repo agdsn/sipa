@@ -31,6 +31,10 @@
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('index') }}">
+                    <span class="glyphicon glyphicon-book"></span> {{ _("News") }}
+                </a></li>
+
                 {% with categories  = pages.categories %}
                 {% for c in categories %}
                 {% if not c.link == 'news' %}
