@@ -30,6 +30,7 @@
         </div>
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            {% if session.get('lang') %}
             <ul class="nav navbar-nav">
                 {% with categories  = pages.categories %}
                 {% for c in categories %}
@@ -60,8 +61,8 @@
                 {% endif %}
                 {% endfor %}
                 {% endwith %}
-                
             </ul>
+            {% endif %}
 
             <ul class="nav navbar-nav navbar-right">
 				<li>
@@ -70,6 +71,7 @@
 					{% elif session.get('lang') == 'de' %}
 						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> {{ _('English') }}</a>
 					{% else %}
+					{# todo splash screen or default language instead #}
 						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> de</a> -
 						
 						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> en</a>
