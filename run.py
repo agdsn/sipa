@@ -9,6 +9,7 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 import io
 import os.path
 import sys
+
 current_file = os.path.abspath(__file__)
 sys.path.insert(0, os.path.dirname(os.path.dirname(current_file)))
 
@@ -48,9 +49,11 @@ app.jinja_env.globals.update(
     traffic=query_gauge_data
 )
 
+
 def safe_markdown(text):
     md = Markdown(safe_mode='escape')
     return md.convert(text)
+
 
 pages.init_app(app)
 
@@ -58,6 +61,7 @@ pages.init_app(app)
 app.jinja_env.globals.update(
     pages=pages
 )
+
 
 def errorpage(e):
     if e.code in (404,):
@@ -76,37 +80,35 @@ app.register_error_handler(403, errorpage)
 app.register_error_handler(404, errorpage)
 
 
-
-
-#def get_direct_pages():
-    #"""gives a List of dicts [{categoryname:TEXT,pages:[pages]}]
-    #I know that's no a good description but look the code'
-    #:return:
-    #"""
-    ##category_page = flat_pages.get_or_404(u'pages/{}/__init__'.format(category))
-    ##try:
-      ##cat_name = category_page.meta[u'name[{}]'.format(lang))]
-    ##except KeyError:
-      ##flash("Syntax error in category meta data")
-      ##abort(500)
-    #lang = session.get('lang', 'de')
-    #value = []
-    #for p in pages:
-        #try:
-            #if 'direct' in p.meta.keys() and  p.category:
-                ## I feel to make brakes around
-
-                #if p.meta['category'] not in (cat for value.categoryname in value):
-                    #value.append({'categoryname': p.meta['category'], 'pages': [p]})
-                #else:
-                    #for v in value:
-                        #if v.categoryname is p.meta['category']:
-                            #v.pages.append(p)
-        #except KeyError:
-            ## todo log the name of the page
-            ## like log('Corrupt metadata in {}'.format(p.path))
-            #flash(gettext(u'Eine News enthält inkorrekte Metadaten', 'warning'))
-    #return value
+# def get_direct_pages():
+#     """gives a List of dicts [{categoryname:TEXT,pages:[pages]}]
+#     I know that's no a good description but look the code'
+#     :return:
+#     """
+#     category_page = flat_pages.get_or_404(u'pages/{}/__init__'.format(category))
+#     try:
+#         cat_name = category_page.meta[u'name[{}]'.format(lang))]
+#     except KeyError:
+#         flash("Syntax error in category meta data")
+#         abort(500)
+#     lang = session.get('lang', 'de')
+#     value = []
+#     for p in pages:
+#         try:
+#             if 'direct' in p.meta.keys() and  p.category:
+#                 # I feel to make brakes around
+#
+#                 if p.meta['category'] not in (cat for value.categoryname in value):
+#                     value.append({'categoryname': p.meta['category'], 'pages': [p]})
+#                 else:
+#                     for v in value:
+#                         if v.categoryname is p.meta['category']:
+#                             v.pages.append(p)
+#         except KeyError:
+#             # todo log the name of the page
+#             # like log('Corrupt metadata in {}'.format(p.path))
+#             flash(gettext(u'Eine News enthält inkorrekte Metadaten', 'warning'))
+#     return value
 
 
 
@@ -175,9 +177,9 @@ def index():
     The type field does not need to be used. If you use it, check what types
     are available. For now, it's only 'alert' which colors the news entry red.
     """
-    lang = session.get('lang', 'de')
-
-    articles = (p for p in pages if p.meta['category_link'] == 'news' and not p.path.endswith('__init__') and p.meta['lang'] == session.get('lang'))
+    articles = (p for p in pages if p.meta['category_link'] == 'news'
+                and not p.path.endswith('__init__')
+                and p.meta['lang'] == session.get('lang'))
     latest = sorted(articles, key=lambda a: a.meta['date'], reverse=True)
 
     return render_template("index.html", articles=latest)
