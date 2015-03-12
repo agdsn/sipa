@@ -6,7 +6,6 @@ from flask.ext.babel import gettext, lazy_gettext
 from flask.ext.wtf import Form
 from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
     HiddenField
-from wtforms.fields.core import BooleanField
 from wtforms.validators import Required, Email, MacAddress
 
 

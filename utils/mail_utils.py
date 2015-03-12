@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 import smtplib
 import textwrap
 
-from Sektionsweb.config import MAILSERVER_HOST, MAILSERVER_PORT
+from config import MAILSERVER_HOST, MAILSERVER_PORT
 
 
 def wrap_message(message, chars_in_line=80):

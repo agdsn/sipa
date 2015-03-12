@@ -21,17 +21,15 @@ from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from markdown import Markdown
 
-from Sektionsweb.flatpages import pages, CustomFlatPages
-from Sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents
-from Sektionsweb.config import languages, busstops
-from Sektionsweb.forms import flash_formerrors, LoginForm
-from Sektionsweb.utils import get_bustimes
-from Sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
+from flatpages import pages
+from blueprints import bp_usersuite, bp_pages, bp_documents
+from config import languages
+from forms import flash_formerrors, LoginForm
+from utils.database_utils import query_userinfo, query_trafficdata, \
     query_gauge_data
-from Sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
-from Sektionsweb.utils.graph_utils import make_trafficgraph
-from Sektionsweb.utils.ldap_utils import User, authenticate
-#from utils.git_utils import
+from utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
+from utils.graph_utils import make_trafficgraph
+from utils.ldap_utils import User, authenticate
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')
