@@ -176,9 +176,13 @@ def index():
     The type field does not need to be used. If you use it, check what types
     are available. For now, it's only 'alert' which colors the news entry red.
     """
-    articles = (p for p in pages if p.meta['category_link'] == 'news'
-                and not p.path.endswith('__init__')
-                and p.meta['lang'] == lang())
+
+    articles = []
+    for p in pages:
+        if p.meta['category_link'] == 'news':
+            if not p.path.endswith('__init__'):
+                if p.meta['lang'] == lang():
+                    articles.append(p)
     latest = sorted(articles, key=lambda a: a.meta['date'], reverse=True)
 
     return render_template("index.html", articles=latest)

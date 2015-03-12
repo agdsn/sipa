@@ -26,15 +26,14 @@ class CustomFlatPages(FlatPages):
                     self.categories.append({'link': p.path.split('/')[0],'category': p})
         for p in self:
             p.meta['category_link'] = p.path.split('/')[0]
-            link = p.path
-            link = link.replace('.de' , '')
-            link = link.replace('.en' , '')
-            p.meta['link'] = link
+            if 'link' not in p.meta.keys():
+                link = p.path
+                link = link.replace('.de' , '')
+                link = link.replace('.en' , '')
+                p.meta['link'] = link
             if p.path.endswith('.de'):
                 p.meta['lang'] = 'de'
             elif p.path.endswith('.en'):
                 p.meta['lang'] = 'en'
-
-        
 
 pages = CustomFlatPages()

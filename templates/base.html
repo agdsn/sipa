@@ -45,8 +45,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         {% for p in pages  %}
-                        {% if p.meta.category_link == c.link and
-                        p.path.endswith(lang()) %}
+                        {% if p.meta.category_link == c.link and p.meta.lang == lang() %}
                         <li>
                             <a href="pages/{{p.meta.link}}">
                                 <span class="glyphicon {{p.meta.glyphicon}}"></span>
