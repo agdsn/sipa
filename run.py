@@ -46,12 +46,6 @@ app.register_blueprint(bp_usersuite)
 app.register_blueprint(bp_pages)
 app.register_blueprint(bp_documents)
 
-
-def safe_markdown(text):
-    md = Markdown(safe_mode='escape')
-    return md.convert(text)
-
-
 pages.init_app(app)
 
 # global jinja variables
