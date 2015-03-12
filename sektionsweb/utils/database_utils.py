@@ -5,8 +5,8 @@ import datetime
 from flask.globals import request
 from sqlalchemy import create_engine
 
-from config import *
-from utils import timestamp_from_timetag, timetag_from_timestamp
+from sektionsweb.config import *
+from sektionsweb.utils import timestamp_from_timetag, timetag_from_timestamp
 from .exceptions import DBQueryEmpty, ForeignIPAccessError
 
 

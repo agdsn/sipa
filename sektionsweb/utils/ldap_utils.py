@@ -8,7 +8,7 @@ Everything used for authentication in Sektionsweb (Usersuite..).
 import ldap
 from ldap.ldapobject import SimpleLDAPObject
 
-from config import LDAP_HOST, LDAP_PORT, LDAP_SEARCH_BASE
+from sektionsweb.config import LDAP_HOST, LDAP_PORT, LDAP_SEARCH_BASE
 from .exceptions import UserNotFound, PasswordInvalid, LDAPConnectionError
 
 

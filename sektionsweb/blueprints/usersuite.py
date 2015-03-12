@@ -8,15 +8,15 @@ from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import login_required, current_user
 
-from forms import ContactForm, ChangeMACForm, ChangeMailForm, \
+from sektionsweb.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from utils import calculate_userid_checksum
-from utils.database_utils import query_trafficdata, query_userinfo, \
+from sektionsweb.utils import calculate_userid_checksum
+from sektionsweb.utils.database_utils import query_trafficdata, query_userinfo, \
     update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db
-from utils.ldap_utils import change_password, change_email, authenticate
-from utils.mail_utils import send_mail
-from utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
+from sektionsweb.utils.ldap_utils import change_password, change_email, authenticate
+from sektionsweb.utils.mail_utils import send_mail
+from sektionsweb.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
 
