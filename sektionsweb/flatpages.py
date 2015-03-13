@@ -1,39 +1,122 @@
+from __future__ import absolute_import
+from flask import abort
+from flask_babel import Locale, get_locale
 from flask_flatpages import FlatPages
+from babel.core import UnknownLocaleError
+
+from .babel import babel, locale_preferences
 #workaround found here http://stackoverflow.com/questions/11020170/using-flask-extensions-in-flask-blueprints
 # because we want to use flatpages within blueprints
 
-class CustomFlatPages(FlatPages):
+class Node(object):
+    def __init__(self, parent, id):
+        self.parent = parent
+        self.id = id
 
+class Article(Node):
+    def __init__(self, parent, id):
+        super(Article, self).__init__(parent, id)
+        self.localized_pages = {}
+        self.default_page = None
+
+    def __getattr__(self, attr):
+        try:
+            return self.localized_page.meta[attr]
+        except KeyError:
+            raise AttributeError()
+
+    @property
+    def localized_page(self):
+        available_locales = self.localized_pages.keys()
+        for locale in locale_preferences():
+            # Locale is unfortunately not hashable
+            # so locale in self.localized_pages does not work
+            for available_locale in available_locales:
+                if available_locale == locale:
+                    localized_page = self.localized_pages.get(available_locale)
+                    return localized_page
+        return self.default_page
+    
+
+class Category(Node):
+    def __init__(self, parent, id):
+        super(Category, self).__init__(parent, id)
+        self.categories = {}
+        self.articles = {}
+
+    def __getattr__(self, attr):
+        try:
+            return getattr(self.articles['index'], attr)
+        except KeyError:
+            raise AttributeError()
+     
+    def add_category(self, id):
+        category = self.categories.get(id)
+        if category is not None:
+            return category
+        category = Category(self, id)
+        self.categories[id] = category
+        return category
+    
+    def add_article(self, page_name, page):
+        components = page_name.split('.')
+        if len(components) == 1:
+            article_id = page_name
+            locale = babel.default_locale
+        else:
+            try:
+                article_id = '.'.join(components[:-1])
+                locale = Locale(components[-1])
+            except UnknownLocaleError:
+                article_id = page_name
+                locale = babel.default_locale
+        article = self.articles.get(article_id)
+        if article is None:
+            article = Article(self, article_id)
+            article.default_page = page
+            self.articles[article_id] = article
+        article.localized_pages[locale] = page
+        if locale == babel.default_locale:
+            article.default_page = page
+
+ 
+class CategorizedFlatPages(object):
 
     def __init__(self):
-        FlatPages.__init__(self)
-        self.categories = []
+        self.flat_pages = FlatPages()
+        self.root_category = Category(None, '<root>')
     
     def init_app(self, app):
-        super(CustomFlatPages, self).init_app(app)
-        #(TODO) PLEASE NOT SO MANY fors and if
-        # that all bad karma
-        # but do you know that it is only eecuted at init
-        # ohh cool
-        # WHATEVER this have to be written definitly again
-        for p in self:
-            found = False
-            if (p.path.endswith('__init__')):
-                for c in self.categories:
-                    if c['link'] == p.path.split('/')[0]:
-                        found = True
-                if not found:
-                    self.categories.append({'link': p.path.split('/')[0],'category': p})
-        for p in self:
-            p.meta['category_link'] = p.path.split('/')[0]
-            if 'link' not in p.meta.keys():
-                link = p.path
-                link = link.replace('.de' , '')
-                link = link.replace('.en' , '')
-                p.meta['link'] = link
-            if p.path.endswith('.de'):
-                p.meta['lang'] = 'de'
-            elif p.path.endswith('.en'):
-                p.meta['lang'] = 'en'
+        self.flat_pages.init_app(app)
+        self._set_categories()
 
-pages = CustomFlatPages()
+    def __iter__(self):
+        return self.root_category.categories.itervalues()
+
+    def get(self, category_id, article_id):
+        category = self.root_category.categories.get(category_id)
+        if category is None:
+            return None
+        return category.articles.get(article_id)
+
+    def get_or_404(self, category_id, article_id):
+        page = self.get(category_id, article_id)
+        if page is None:
+            abort(404)
+        return page
+        
+    def _set_categories(self):
+        for page in self.flat_pages:
+            components = page.path.split('/')
+            parent = self.root_category
+            for category_id in components[:-1]:
+                parent = parent.add_category(category_id)
+            page_name = components[-1]
+            parent.add_article(page_name, page)
+
+    def reload(self):
+        self.flat_pages.reload()
+        self._set_categories()
+
+
+pages = CategorizedFlatPages()

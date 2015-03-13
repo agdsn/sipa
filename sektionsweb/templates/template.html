@@ -1,5 +1,6 @@
 {% extends "base.html" %}#
-{% set page_title = page.meta.title %}
+{% set page_title = article.title %}
+{% set page = article.localized_page %}
 
 {% block content %}
         <div class="panel">

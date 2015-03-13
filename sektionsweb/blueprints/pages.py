@@ -19,10 +19,7 @@ bp_pages = Blueprint('pages', __name__, url_prefix='/pages')
 
 # todo create sitemap at /pages/
 # @bp_pages.route('/', defaults={'page': 'index'})
-@bp_pages.route('/<category>/<name>')
-def show(category, name):
-    page = pages.get_or_404(u'{}/{}.{}'.format(category, name, lang()))
-    if page is None:
-        abort(404)
-    else:
-        return render_template('template.html', page=page)
+@bp_pages.route('/<category_id>/<article_id>')
+def show(category_id, article_id):
+    article = pages.get_or_404(category_id, article_id)
+    return render_template('template.html', article=article)

@@ -34,35 +34,23 @@
                 <li><a href="{{ url_for('index') }}">
                     <span class="glyphicon glyphicon-book"></span> {{ _("News") }}
                 </a></li>
-
-                {% with categories  = pages.categories %}
-                {% for c in categories %}
-                {% if not c.link == 'news' %}
+                {% for c in pages %}
+                {% if c.index %}
                 <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" >
-                      {% if lang() == 'en' %}
-                          {{c.category.meta['name[en]']}}
-                      {% else %}
-                          {{c.category.meta['name[de]']}}
-                      {% endif %}
-                      <span class="caret"></span>
-                    </a>
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" >{{ c.name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        {% for p in pages  %}
-                        {% if p.meta.category_link == c.link and p.meta.lang == lang() %}
+                        {% for article_id, article in c.articles.iteritems()  %}
                         <li>
-                            <a href="pages/{{p.meta.link}}">
-                                <span class="glyphicon {{p.meta.glyphicon}}"></span>
-                                &nbsp; {{p.meta.title}}
+                            <a href="{{ url_for('pages.show', category_id=c.id, article_id=article_id) }}">
+                                <span class="glyphicon {{article.glyphicon}}"></span>
+                                &nbsp; {{ article.title }}
                             </a>
                         </li>
-                        {% endif %}
                         {% endfor %}
                     </ul>
                 <li>
                 {% endif %}
                 {% endfor %}
-                {% endwith %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
