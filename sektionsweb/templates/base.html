@@ -40,12 +40,14 @@
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle" >{{ c.name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         {% for article_id, article in c.articles.iteritems()  %}
+                        {% if not article_id == 'index' %}
                         <li>
                             <a href="{{ url_for('pages.show', category_id=c.id, article_id=article_id) }}">
                                 <span class="glyphicon {{article.glyphicon}}"></span>
                                 &nbsp; {{ article.title }}
                             </a>
                         </li>
+                        {% endif %}
                         {% endfor %}
                     </ul>
                 <li>
