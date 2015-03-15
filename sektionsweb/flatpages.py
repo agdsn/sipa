@@ -21,7 +21,10 @@ class Article(Node):
 
     def __getattr__(self, attr):
         try:
-            return self.localized_page.meta[attr]
+            if attr is 'html':
+                return self.localized_page.html
+            else:
+                return self.localized_page.meta[attr]
         except KeyError:
             raise AttributeError()
 
@@ -98,6 +101,9 @@ class CategorizedFlatPages(object):
         if category is None:
             return None
         return category.articles.get(article_id)
+
+    def get_articles_of_category(self, category_id):
+        return self.root_category.categories.get(category_id).articles
 
     def get_or_404(self, category_id, article_id):
         page = self.get(category_id, article_id)

@@ -15,11 +15,13 @@
 {% endmacro %}
 
 {% block content %}
-    {% for art in articles %}
-        <div class="panel {{ panelclass(art.meta.type) }}">
-            <div class="panel-heading"><h2 class="panel-title">{{ art.meta.title }}</h2></div>
+    {% for (key,art) in articles.iteritems() %}
+    {% if key != 'index'%}
+        <div class="panel {{ panelclass(art.type) }}">
+            <div class="panel-heading"><h2 class="panel-title">{{ art.title }}</h2></div>
             <div class="panel-body">{{ art.html|safe }}</div>
-            <div class="panel-footer">{{ _("geschrieben von") }} {{ art.meta.author }}, {{ art.meta.date }}</div>
+            <div class="panel-footer">{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</div>
         </div>
+    {% endif %}
     {% endfor %}
 {% endblock %}

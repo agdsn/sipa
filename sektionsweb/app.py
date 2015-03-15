@@ -136,8 +136,7 @@ def index():
     are available. For now, it's only 'alert' which colors the news entry red.
     """
 
-    articles = []
-
+    articles = pages.get_articles_of_category('news')
     return render_template("index.html", articles=articles)
 
 
