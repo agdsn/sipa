@@ -11,12 +11,13 @@ from .exceptions import DBQueryEmpty, ForeignIPAccessError
 
 
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
-    DB_ATLANTIS_USER, DB_ATLANTIS_PASSWORD, DB_ATLANTIS_HOST), echo=False)
+    DB_ATLANTIS_USER, DB_ATLANTIS_PASSWORD, DB_ATLANTIS_HOST),
+    echo=False, connect_args={'connect_timeout': SQL_TIMEOUT})
 
 db_helios = create_engine(
     'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
         DB_HELIOS_USER, DB_HELIOS_PASSWORD, DB_HELIOS_HOST, DB_HELIOS_PORT),
-    echo=False)
+    echo=False, connect_args={'connect_timeout': SQL_TIMEOUT})
 
 
 def sql_query(query, args=(), database=db_atlantis):
