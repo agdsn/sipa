@@ -15,7 +15,6 @@ from flask_login import LoginManager, current_user, login_user, \
     logout_user
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
-from markdown import Markdown
 from babel import Locale
 
 from .babel import babel, possible_locales
@@ -27,7 +26,8 @@ from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, 
     query_gauge_data
 from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, \
     DBQueryEmpty
-from sektionsweb.utils.graph_utils import make_trafficgraph
+from sektionsweb.utils.graph_utils import render_traffic_chart, \
+    generate_traffic_chart
 from sektionsweb.utils.ldap_utils import User, authenticate
 
 app = Flask('sektionsweb')
@@ -45,13 +45,13 @@ def init_app():
     app.register_blueprint(bp_pages)
     app.register_blueprint(bp_documents)
 
-
     # global jinja variables
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
         traffic=query_gauge_data,
         get_locale=get_locale,
-        possible_locales=possible_locales
+        possible_locales=possible_locales,
+        chart=render_traffic_chart,
     )
 
 
@@ -223,7 +223,7 @@ def trafficpng():
               "error")
         return redirect(url_for('index'))
 
-    traffic_chart = make_trafficgraph(trafficdata)
+    traffic_chart = generate_traffic_chart(trafficdata)
 
     # todo fix png export, use svg or include svg directly in html
     # pygals render_to_png IS BROKEN
