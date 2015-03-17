@@ -42,7 +42,12 @@
                         {% for article_id, article in c.articles.iteritems()  %}
                         {% if not article_id == 'index' %}
                         <li>
-                            <a href="{{ url_for('pages.show', category_id=c.id, article_id=article_id) }}">
+                            <a href="
+                                {% if not article.link %}
+                                    {{url_for('pages.show', category_id=c.id, article_id=article_id) }}
+                                {% else %}
+                                    {{ article.link }}
+                                {% endif %}">
                                 <span class="glyphicon {{article.glyphicon}}"></span>
                                 &nbsp; {{ article.title }}
                             </a>
