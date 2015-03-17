@@ -20,7 +20,8 @@ from babel import Locale
 
 from .babel import babel, possible_locales
 from sektionsweb.flatpages import cf_pages
-from sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents
+from sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents, \
+    bp_features
 from sektionsweb.forms import flash_formerrors, LoginForm
 from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
     query_gauge_data
@@ -39,6 +40,7 @@ def init_app():
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
     # Blueprints
+    app.register_blueprint(bp_features)
     app.register_blueprint(bp_usersuite)
     app.register_blueprint(bp_pages)
     app.register_blueprint(bp_documents)
