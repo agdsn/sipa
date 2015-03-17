@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 from flask import abort
-from flask_babel import Locale, get_locale
+from flask_babel import Locale
 from flask_flatpages import FlatPages
 from babel.core import UnknownLocaleError
 
 from .babel import babel, locale_preferences
+
 
 def compare(x, y):
     if x.rank is None:
@@ -16,10 +17,12 @@ def compare(x, y):
     else:
         return 1
 
+
 class Node(object):
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
+
 
 class Article(Node):
     def __init__(self, parent, id):
@@ -33,7 +36,7 @@ class Article(Node):
             return self.localized_page.meta['rank']
         except KeyError:
             return 100
-            
+
     def __getattr__(self, attr):
         try:
             if attr is 'html':
@@ -54,7 +57,7 @@ class Article(Node):
                     localized_page = self.localized_pages.get(available_locale)
                     return localized_page
         return self.default_page
-    
+
 
 class Category(Node):
     def __init__(self, parent, id):
@@ -63,15 +66,15 @@ class Category(Node):
         self.articles = {}
 
     def articles_itterator(self):
-        return iter(sorted(self.articles.values(), cmp= compare))
-        
+        return iter(sorted(self.articles.values(), cmp=compare))
+
 
     def __getattr__(self, attr):
         try:
             return getattr(self.articles['index'], attr, False)
         except KeyError:
             raise AttributeError()
-     
+
     def add_category(self, id):
         category = self.categories.get(id)
         if category is not None:
@@ -79,7 +82,7 @@ class Category(Node):
         category = Category(self, id)
         self.categories[id] = category
         return category
-    
+
     def add_article(self, page_name, page):
         components = page_name.split('.')
         if len(components) == 1:
@@ -101,21 +104,20 @@ class Category(Node):
         if locale == babel.default_locale:
             article.default_page = page
 
- 
-class CategorizedFlatPages(object):
 
+class CategorizedFlatPages(object):
     def __init__(self):
         self.flat_pages = FlatPages()
         self.root_category = Category(None, '<root>')
-    
+
     def init_app(self, app):
         self.flat_pages.init_app(app)
         self._set_categories()
 
     def __iter__(self):
         return iter(sorted(self.root_category.categories.values(),
-            cmp= compare))
-        
+            cmp=compare))
+
 
     def get(self, category_id, article_id):
         category = self.root_category.categories.get(category_id)
@@ -131,7 +133,7 @@ class CategorizedFlatPages(object):
         if page is None:
             abort(404)
         return page
-        
+
     def _set_categories(self):
         for page in self.flat_pages:
             components = page.path.split('/')
@@ -146,5 +148,4 @@ class CategorizedFlatPages(object):
         self._set_categories()
 
 
-        
 cf_pages = CategorizedFlatPages()

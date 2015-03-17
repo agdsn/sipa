@@ -14,7 +14,8 @@ from sektionsweb.utils import calculate_userid_checksum
 from sektionsweb.utils.database_utils import query_trafficdata, query_userinfo, \
     update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db
-from sektionsweb.utils.ldap_utils import change_password, change_email, authenticate
+from sektionsweb.utils.ldap_utils import change_password, change_email, \
+    authenticate
 from sektionsweb.utils.mail_utils import send_mail
 from sektionsweb.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
@@ -77,7 +78,7 @@ def usersuite_contact():
             flash(gettext(
                 u"Es gab einen Fehler beim Versenden der Nachricht. Bitte "
                 u"schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"),
-                  "error")
+                "error")
         return redirect(url_for(".usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)

@@ -69,8 +69,9 @@ class HostingForm(Form):
 
 
 def flash_formerrors(form):
-    """If a form is submitted, but could not be validated the routing passes the form
-    and this method returns all form errors (form.errors) as flash messages.
+    """If a form is submitted but could not be validated, the routing passes
+    the form and this method returns all form errors (form.errors)
+    as flash messages.
     """
     for field, errors in form.errors.items():
         for e in errors:

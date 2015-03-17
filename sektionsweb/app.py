@@ -8,7 +8,6 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 
 import io
 
-
 from flask import Flask, render_template, request, redirect, \
     url_for, flash, send_file, session
 from flask_babel import gettext, get_locale
@@ -23,10 +22,10 @@ from .babel import babel, possible_locales
 from sektionsweb.flatpages import cf_pages
 from sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents
 from sektionsweb.forms import flash_formerrors, LoginForm
-from sektionsweb.utils import get_bustimes
 from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
     query_gauge_data
-from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
+from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, \
+    DBQueryEmpty
 from sektionsweb.utils.graph_utils import make_trafficgraph
 from sektionsweb.utils.ldap_utils import User, authenticate
 
@@ -44,13 +43,13 @@ def init_app():
     app.register_blueprint(bp_pages)
     app.register_blueprint(bp_documents)
 
-   
+
     # global jinja variables
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
         traffic=query_gauge_data,
-        get_locale = get_locale,
-        possible_locales = possible_locales
+        get_locale=get_locale,
+        possible_locales=possible_locales
     )
 
 
@@ -100,6 +99,7 @@ def load_user(username):
     """
     return User.get(username)
 
+
 def babel_selector():
     """Tries to get the language setting from the current session cookie.
     If this fails (if it is not set) it first checks if a language was
@@ -107,15 +107,17 @@ def babel_selector():
     language out of the header accept-language is chosen and set.
     """
 
-    if 'locale' in request.args and Locale(request.args['locale']) in possible_locales():
+    if 'locale' in request.args and Locale(
+            request.args['locale']) in possible_locales():
         session['locale'] = request.args['locale']
     elif not session.get('locale'):
         langs = []
-        for lang in  possible_locales():
+        for lang in possible_locales():
             langs.append(lang.language)
         session['locale'] = request.accept_languages.best_match(langs)
 
     return session.get('locale')
+
 
 @app.route("/language/<string:lang>")
 def set_language(lang='de'):
@@ -123,7 +125,8 @@ def set_language(lang='de'):
     """
     session['locale'] = lang
     return redirect(request.referrer)
-    
+
+
 @app.route('/index.php')
 @app.route('/')
 def index():
@@ -179,9 +182,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("index"))
-
-
-
 
 
 @app.route("/usertraffic")

@@ -55,7 +55,6 @@ class User(object):
             return 'exactive'
         return 'passive'
 
-
     @staticmethod
     def get(username):
         """Static method for flask-login user_loader,

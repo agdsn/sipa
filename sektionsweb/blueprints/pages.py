@@ -5,9 +5,9 @@
 Blueprint for the flatpages
 """
 
-from flask import Blueprint, render_template, session, abort
+from flask import Blueprint, render_template
+
 from sektionsweb.flatpages import cf_pages
-from sektionsweb.utils.babel_utils import lang
 
 
 bp_pages = Blueprint('pages', __name__, url_prefix='/pages')
