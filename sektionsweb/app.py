@@ -7,11 +7,11 @@ Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
 import io
-from flask.ext.babel import get_locale
+
 
 from flask import Flask, render_template, request, redirect, \
     url_for, flash, send_file, session
-from flask_babel import gettext
+from flask_babel import gettext, get_locale
 from flask_login import LoginManager, current_user, login_user, \
     logout_user
 from sqlalchemy.exc import OperationalError
@@ -30,7 +30,6 @@ from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, 
 from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
 from sektionsweb.utils.graph_utils import make_trafficgraph
 from sektionsweb.utils.ldap_utils import User, authenticate
-#from utils.git_utils import
 
 app = Flask('sektionsweb')
 login_manager = LoginManager()

@@ -5,8 +5,8 @@
 """
 
 from flask import Blueprint, render_template, url_for, redirect, flash
-from flask.ext.babel import gettext
-from flask.ext.login import login_required, current_user
+from flask_babel import gettext
+from flask_login import login_required, current_user
 
 from sektionsweb.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
