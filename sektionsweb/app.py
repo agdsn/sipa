@@ -146,8 +146,10 @@ def index():
     are available. For now, it's only 'alert' which colors the news entry red.
     """
     cf_pages.reload()
-    articles = cf_pages.get_articles_of_category('news')
-    return render_template("index.html", articles=articles)
+    latest = cf_pages.get_articles_of_category('news')
+    latest = sorted(latest, key=lambda a: a.date, reverse=True)
+    latest = latest[0:10]
+    return render_template("index.html", articles=latest)
 
 
 @app.route("/login", methods=['GET', 'POST'])

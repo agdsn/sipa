@@ -126,7 +126,11 @@ class CategorizedFlatPages(object):
         return category.articles.get(article_id)
 
     def get_articles_of_category(self, category_id):
-        return self.root_category.categories.get(category_id).articles
+        barticles = []
+        for a in self.root_category.categories.get(category_id).articles.values():
+            if a.id != 'index':
+                barticles.append(a)
+        return barticles
 
     def get_or_404(self, category_id, article_id):
         page = self.get(category_id, article_id)
