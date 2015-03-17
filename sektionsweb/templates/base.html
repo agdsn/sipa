@@ -61,17 +61,22 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-				<li>
-					{% if lang() == 'en' %}
-						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> {{ _('Deutsch') }}</a>
-					{% elif lang() == 'de' %}
-						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> {{ _('English') }}</a>
-					{% else %}
-					{# todo splash screen or default language instead #}
-						<a href="{{ url_for('set_language', lang='de') }}"><img src="{{ url_for('static', filename='img/de.png') }}" /> de</a> -
-						
-						<a href="{{ url_for('set_language', lang='en') }}"><img src="{{ url_for('static', filename='img/en.png') }}" /> en</a>
-					{% endif %}
+				<li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                        <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
+                        {{ get_locale().display_name}}
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        {% for locale in possible_locales() %}
+                        <li >
+                            <a href="{{ url_for('set_language', lang=locale.language) }}">
+                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
+                                {{locale.display_name}}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
 				</li>
                 {% if current_user.is_anonymous() %}<li>
                     <a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
