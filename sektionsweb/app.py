@@ -142,7 +142,7 @@ def index():
     The type field does not need to be used. If you use it, check what types
     are available. For now, it's only 'alert' which colors the news entry red.
     """
-
+    cf_pages.reload()
     articles = cf_pages.get_articles_of_category('news')
     return render_template("index.html", articles=articles)
 
