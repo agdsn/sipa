@@ -17,14 +17,13 @@ from flask_login import LoginManager, current_user, login_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from markdown import Markdown
+from babel import Locale
 
-from .babel import babel
-from sektionsweb.flatpages import pages
+from .babel import babel, possible_locales
+from sektionsweb.flatpages import cf_pages
 from sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents
-from sektionsweb.config import languages, busstops
 from sektionsweb.forms import flash_formerrors, LoginForm
 from sektionsweb.utils import get_bustimes
-from sektionsweb.utils.babel_utils import lang
 from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
     query_gauge_data
 from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, DBQueryEmpty
@@ -39,17 +38,19 @@ def init_app():
     login_manager.init_app(app)
     babel.init_app(app)
     babel.localeselector(babel_selector)
-    pages.init_app(app)
+    cf_pages.init_app(app)
     # Blueprints
     app.register_blueprint(bp_usersuite)
     app.register_blueprint(bp_pages)
     app.register_blueprint(bp_documents)
 
+   
     # global jinja variables
     app.jinja_env.globals.update(
-        pages=pages,
+        cf_pages=cf_pages,
         traffic=query_gauge_data,
-        lang=lang
+        get_locale = get_locale,
+        possible_locales = possible_locales
     )
 
 
@@ -99,23 +100,30 @@ def load_user(username):
     """
     return User.get(username)
 
-
 def babel_selector():
     """Tries to get the language setting from the current session cookie.
     If this fails (if it is not set) it first checks if a language was
     submitted as an argument ('/page?lang=de') and if not, the best matching
     language out of the header accept-language is chosen and set.
     """
-    lang = session.get('lang')
 
-    if 'lang' in request.args and request.args['lang'] in ('de', 'en'):
-        session['lang'] = request.args['lang']
-    elif not lang:
-        session['lang'] = request.accept_languages.best_match(languages.keys())
+    if 'locale' in request.args and Locale(request.args['locale']) in possible_locales():
+        session['locale'] = request.args['locale']
+    elif not session.get('locale'):
+        langs = []
+        for lang in  possible_locales():
+            langs.append(lang.language)
+        session['locale'] = request.accept_languages.best_match(langs)
 
-    return session.get('lang')
+    return session.get('locale')
 
-
+@app.route("/language/<string:lang>")
+def set_language(lang='de'):
+    """Set the session language via URL
+    """
+    session['locale'] = lang
+    return redirect(request.referrer)
+    
 @app.route('/index.php')
 @app.route('/')
 def index():
@@ -135,7 +143,7 @@ def index():
     are available. For now, it's only 'alert' which colors the news entry red.
     """
 
-    articles = pages.get_articles_of_category('news')
+    articles = cf_pages.get_articles_of_category('news')
     return render_template("index.html", articles=articles)
 
 
@@ -173,12 +181,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/language/<string:lang>")
-def set_language(lang='de'):
-    """Set the session language via URL
-    """
-    session['lang'] = lang
-    return redirect(request.referrer)
+
 
 
 @app.route("/usertraffic")

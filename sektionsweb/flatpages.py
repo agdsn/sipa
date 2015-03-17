@@ -125,4 +125,4 @@ class CategorizedFlatPages(object):
         self._set_categories()
 
 
-pages = CategorizedFlatPages()
+cf_pages = CategorizedFlatPages()

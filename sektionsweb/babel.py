@@ -20,3 +20,9 @@ def locale_preferences():
 
     locales.extend(imap(to_locale, request.accept_languages.itervalues()))
     return locales
+
+def possible_locales():
+    """
+    (TODO) write a GOOD function which gives us all possible Languages
+    """
+    return [Locale('de'),Locale('en')]
