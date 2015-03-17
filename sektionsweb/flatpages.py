@@ -5,8 +5,16 @@ from flask_flatpages import FlatPages
 from babel.core import UnknownLocaleError
 
 from .babel import babel, locale_preferences
-#workaround found here http://stackoverflow.com/questions/11020170/using-flask-extensions-in-flask-blueprints
-# because we want to use flatpages within blueprints
+
+def compare(x, y):
+    if x.rank is None:
+        return -1
+    if y.rank is None:
+        return 1
+    if x.rank < y.rank:
+        return -1
+    else:
+        return 1
 
 class Node(object):
     def __init__(self, parent, id):
@@ -19,6 +27,13 @@ class Article(Node):
         self.localized_pages = {}
         self.default_page = None
 
+    @property
+    def rank(self):
+        try:
+            return self.localized_page.meta['rank']
+        except KeyError:
+            return 100
+            
     def __getattr__(self, attr):
         try:
             if attr is 'html':
@@ -47,9 +62,13 @@ class Category(Node):
         self.categories = {}
         self.articles = {}
 
+    def articles_itterator(self):
+        return iter(sorted(self.articles.values(), cmp= compare))
+        
+
     def __getattr__(self, attr):
         try:
-            return getattr(self.articles['index'], attr)
+            return getattr(self.articles['index'], attr, False)
         except KeyError:
             raise AttributeError()
      
@@ -94,7 +113,9 @@ class CategorizedFlatPages(object):
         self._set_categories()
 
     def __iter__(self):
-        return self.root_category.categories.itervalues()
+        return iter(sorted(self.root_category.categories.values(),
+            cmp= compare))
+        
 
     def get(self, category_id, article_id):
         category = self.root_category.categories.get(category_id)
@@ -125,4 +146,5 @@ class CategorizedFlatPages(object):
         self._set_categories()
 
 
+        
 cf_pages = CategorizedFlatPages()
