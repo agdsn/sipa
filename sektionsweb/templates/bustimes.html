@@ -4,7 +4,7 @@
 {% block content %}
     {% if times %}
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 {% for stop in times %}
                     <h3>{{ _('Haltestelle') }} {{ stop }}</h3>
                     {% if not times[stop] %}
@@ -13,7 +13,7 @@
                         <table id="timetable" class="table table-bordered table-striped">
                             <thead><tr>
                                 <th class="col-md-1">{{ _('Linie') }}</th>
-                                <th class="col-md-2">{{ _('Richtung') }}</th>
+                                <th class="col-md-3">{{ _('Richtung') }}</th>
                                 <th class="col-md-1">in</th>
                             </tr></thead>
                             {% for i in times[stop] %}
