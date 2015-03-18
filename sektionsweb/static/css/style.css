@@ -52,3 +52,5 @@ td {
 #trafstat {
 	width: 100%;
 }
+
+img[alt=software_logo] { width: 100px; }
