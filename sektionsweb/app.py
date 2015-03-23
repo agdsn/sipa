@@ -25,7 +25,7 @@ from sektionsweb.forms import flash_formerrors, LoginForm
 from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
     query_gauge_data
 from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, \
-    DBQueryEmpty
+    DBQueryEmpty, ForeignIPAccessError
 from sektionsweb.utils.graph_utils import render_traffic_chart, \
     generate_traffic_chart
 from sektionsweb.utils.ldap_utils import User, authenticate
@@ -194,41 +194,9 @@ def usertraffic():
     """
     try:
         trafficdata = query_trafficdata(request.remote_addr)
-    except DBQueryEmpty:
+    except ForeignIPAccessError:
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
         return redirect(url_for('index'))
 
     # todo test if the template works if called from this position
     return render_template("usertraffic.html", usertraffic=trafficdata)
-
-
-@app.route("/traffic.png")
-def trafficpng():
-    """Create a traffic chart as png binary file and return the binary
-    object to the client.
-
-    If the user is not logged in, try to create a graph for the remote IP.
-    Fails, if the IP was not recognized.
-    """
-    if current_user.is_anonymous():
-        ip = request.remote_addr
-    else:
-        userinfo = query_userinfo(current_user.uid)
-        ip = userinfo['ip']
-
-    try:
-        trafficdata = query_trafficdata(ip)
-    except DBQueryEmpty:
-        flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
-              "error")
-        return redirect(url_for('index'))
-
-    traffic_chart = generate_traffic_chart(trafficdata)
-
-    # todo fix png export, use svg or include svg directly in html
-    # pygals render_to_png IS BROKEN
-    # proof of concept: Just add some stuff to a bar_chart = pygal.Bar()
-    # then compare the outputs of render_to_file and render_to_png
-    # the first (svg) will work just fine, but not the second (png)
-    # alternative: directly import into the html, there is no need for a file
-    return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")
