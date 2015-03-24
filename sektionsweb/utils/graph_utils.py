@@ -25,6 +25,7 @@ def generate_traffic_chart(traffic_data, inline=True):
         label_font_size=12,
         style=BlueStyle,
         disable_xml_declaration=inline,   # for direct html import
+        js=[],  # prevent automatically fetching scripts from github
     )
 
     days, in_values, out_values, credit = zip(*traffic_data['history'])
