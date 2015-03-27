@@ -34,7 +34,7 @@ def usersuite():
     try:
         userinfo = query_userinfo(current_user.uid)
         userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
-        trafficdata = query_trafficdata(userid=userinfo['id'])
+        trafficdata = query_trafficdata(user_id=userinfo['id'])
     except DBQueryEmpty:
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
               "error")

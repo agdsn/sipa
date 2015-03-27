@@ -23,7 +23,7 @@ from sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents, \
     bp_features
 from sektionsweb.forms import flash_formerrors, LoginForm
 from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
-    query_gauge_data
+    query_gauge_data, user_id_from_ip
 from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, \
     DBQueryEmpty, ForeignIPAccessError
 from sektionsweb.utils.graph_utils import render_traffic_chart, \
@@ -193,10 +193,26 @@ def usertraffic():
     """For anonymous users with a valid IP
     """
     try:
-        trafficdata = query_trafficdata(request.remote_addr)
+        ip = request.remote_addr
+        trafficdata = query_trafficdata(ip)
+
+        if current_user.is_authenticated():
+            if current_user.userid is user_id_from_ip(ip):
+                flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"
+                              u" Eingetragene ist angemeldet!"), "warning")
+                flash(gettext("Hier werden die Trafficdaten "
+                              "dieses Anschlusses angezeigt"), "info")
     except ForeignIPAccessError:
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
-        return redirect(url_for('index'))
+
+        if current_user.is_authenticated():
+            flash(gettext(u"Da du angemeldet bist, kannst du deinen Traffic "
+                          u"hier in der Usersuite einsehen."), "info")
+            return redirect(url_for('usersuite.usersuite'))
+        else:
+            flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu können,"
+                          u" musst du dich anmelden."), "info")
+            return redirect(url_for('login'))
 
     # todo test if the template works if called from this position
     return render_template("usertraffic.html", usertraffic=trafficdata)
