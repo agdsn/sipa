@@ -2,8 +2,16 @@
 {% set page_title = _('Usersuite von ') + current_user.name %}
 
 {% block content %}
-    <div class="col-md-7">
+    <div class="row"><div class="col-md-7">
         {% include 'usersuite/_index_status.html' %}
         {% include 'drafts/_traffic_overview.html' %}
+    </div></div>
+    <div class="row">
+        {% include 'drafts/_traffic_chart.html' %}
     </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script type="text/javascript" src="{{ url_for("static", filename="js/svg.jquery.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename="js/pygal-tooltips.js") }}"></script>
 {% endblock %}

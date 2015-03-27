@@ -77,28 +77,28 @@ def query_userinfo(username):
     return user
 
 
-def query_trafficdata(ip=None, userid=None):
+def user_id_from_ip(ip=None):
+    if ip is None:
+        raise ValueError
+
+    result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
+                       (ip,)).fetchone()
+    if result is None:
+        raise ForeignIPAccessError()
+
+    return result['nutzer_id']
+
+
+def query_trafficdata(ip=None, user_id=None):
     """Query traffic input/output for IP
     """
-    if userid is None:
-        if ip is None:
-            raise ValueError
-        else:
-            # get userid from IP
-            result = (sql_query(
-                "SELECT nutzer_id "
-                "FROM computer "
-                "WHERE c_ip = %s",
-                (ip,)
-            ).fetchone())
-            if not result:
-                raise ForeignIPAccessError()
-            userid = result['nutzer_id']
+    if user_id is None:
+        user_id = user_id_from_ip(ip)
     else:
         # ip gotten from db is preferred to the ip possibly given as parameter
         result = (sql_query(
             "SELECT c_ip FROM computer WHERE nutzer_id = %s",
-            (userid,)
+            (user_id,)
         ).fetchone())
         if not result:
             raise DBQueryEmpty(gettext('Nutzer hat keine IP'))
@@ -114,7 +114,7 @@ def query_trafficdata(ip=None, userid=None):
         {'today': timetag_from_timestamp(),
          'weekago': timetag_from_timestamp() - 6,
          'ip': ip,
-         'uid': userid}
+         'uid': user_id}
     ).fetchall()
 
     if not trafficdata:

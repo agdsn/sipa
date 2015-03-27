@@ -15,7 +15,6 @@ from flask_login import LoginManager, current_user, login_user, \
     logout_user
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
-from markdown import Markdown
 from babel import Locale
 
 from .babel import babel, possible_locales
@@ -24,10 +23,11 @@ from sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents, \
     bp_features
 from sektionsweb.forms import flash_formerrors, LoginForm
 from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
-    query_gauge_data
+    query_gauge_data, user_id_from_ip
 from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, \
-    DBQueryEmpty
-from sektionsweb.utils.graph_utils import make_trafficgraph
+    DBQueryEmpty, ForeignIPAccessError
+from sektionsweb.utils.graph_utils import render_traffic_chart, \
+    generate_traffic_chart
 from sektionsweb.utils.ldap_utils import User, authenticate
 
 app = Flask('sektionsweb')
@@ -45,13 +45,13 @@ def init_app():
     app.register_blueprint(bp_pages)
     app.register_blueprint(bp_documents)
 
-
     # global jinja variables
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
         traffic=query_gauge_data,
         get_locale=get_locale,
-        possible_locales=possible_locales
+        possible_locales=possible_locales,
+        chart=render_traffic_chart,
     )
 
 
@@ -193,42 +193,26 @@ def usertraffic():
     """For anonymous users with a valid IP
     """
     try:
-        trafficdata = query_trafficdata(request.remote_addr)
-    except DBQueryEmpty:
+        ip = request.remote_addr
+        trafficdata = query_trafficdata(ip)
+
+        if current_user.is_authenticated():
+            if current_user.userid is user_id_from_ip(ip):
+                flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"
+                              u" Eingetragene ist angemeldet!"), "warning")
+                flash(gettext("Hier werden die Trafficdaten "
+                              "dieses Anschlusses angezeigt"), "info")
+    except ForeignIPAccessError:
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
-        return redirect(url_for('index'))
+
+        if current_user.is_authenticated():
+            flash(gettext(u"Da du angemeldet bist, kannst du deinen Traffic "
+                          u"hier in der Usersuite einsehen."), "info")
+            return redirect(url_for('usersuite.usersuite'))
+        else:
+            flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu können,"
+                          u" musst du dich anmelden."), "info")
+            return redirect(url_for('login'))
 
     # todo test if the template works if called from this position
     return render_template("usertraffic.html", usertraffic=trafficdata)
-
-
-@app.route("/traffic.png")
-def trafficpng():
-    """Create a traffic chart as png binary file and return the binary
-    object to the client.
-
-    If the user is not logged in, try to create a graph for the remote IP.
-    Fails, if the IP was not recognized.
-    """
-    if current_user.is_anonymous():
-        ip = request.remote_addr
-    else:
-        userinfo = query_userinfo(current_user.uid)
-        ip = userinfo['ip']
-
-    try:
-        trafficdata = query_trafficdata(ip)
-    except DBQueryEmpty:
-        flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
-              "error")
-        return redirect(url_for('index'))
-
-    traffic_chart = make_trafficgraph(trafficdata)
-
-    # todo fix png export, use svg or include svg directly in html
-    # pygals render_to_png IS BROKEN
-    # proof of concept: Just add some stuff to a bar_chart = pygal.Bar()
-    # then compare the outputs of render_to_file and render_to_png
-    # the first (svg) will work just fine, but not the second (png)
-    # alternative: directly import into the html, there is no need for a file
-    return send_file(io.BytesIO(traffic_chart.render_to_png()), "image/png")

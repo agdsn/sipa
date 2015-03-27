@@ -14,6 +14,7 @@ from sektionsweb.utils import calculate_userid_checksum
 from sektionsweb.utils.database_utils import query_trafficdata, query_userinfo, \
     update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db
+from sektionsweb.utils.graph_utils import generate_traffic_chart
 from sektionsweb.utils.ldap_utils import change_password, change_email, \
     authenticate
 from sektionsweb.utils.mail_utils import send_mail
@@ -33,7 +34,7 @@ def usersuite():
     try:
         userinfo = query_userinfo(current_user.uid)
         userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
-        trafficdata = query_trafficdata(userid=userinfo['id'])
+        trafficdata = query_trafficdata(user_id=userinfo['id'])
     except DBQueryEmpty:
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
               "error")
