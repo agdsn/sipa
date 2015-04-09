@@ -7,3 +7,5 @@ documents
 .idea
 
 messages.pot
+
+sektionsweb/config_local.py
