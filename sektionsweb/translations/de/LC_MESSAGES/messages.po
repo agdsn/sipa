@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-16 22:45+0100\n"
+"POT-Creation-Date: 2015-04-09 19:34+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -17,82 +17,100 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: sektionsweb/app.py:59
+#: sektionsweb/app.py:60
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: sektionsweb/app.py:61
+#: sektionsweb/app.py:62
 msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: sektionsweb/app.py:65
+#: sektionsweb/app.py:66
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sektionsweb/app.py:157 sektionsweb/blueprints/usersuite.py:142
-#: sektionsweb/blueprints/usersuite.py:170
+#: sektionsweb/app.py:170 sektionsweb/blueprints/usersuite.py:144
+#: sektionsweb/blueprints/usersuite.py:172
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sektionsweb/app.py:159 sektionsweb/blueprints/usersuite.py:144
-#: sektionsweb/blueprints/usersuite.py:172
-#: sektionsweb/blueprints/usersuite.py:199
+#: sektionsweb/app.py:172 sektionsweb/blueprints/usersuite.py:146
+#: sektionsweb/blueprints/usersuite.py:174
+#: sektionsweb/blueprints/usersuite.py:201
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sektionsweb/app.py:193
+#: sektionsweb/app.py:201
+msgid ""
+"Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
+"angemeldet!"
+msgstr ""
+
+#: sektionsweb/app.py:203
+msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
+msgstr ""
+
+#: sektionsweb/app.py:206
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: sektionsweb/app.py:217 sektionsweb/blueprints/usersuite.py:37
-msgid "Es gab einen Fehler bei der Datenbankanfrage!"
+#: sektionsweb/app.py:209
+msgid ""
+"Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
+"einsehen."
 msgstr ""
 
-#: sektionsweb/config.py:65
+#: sektionsweb/app.py:213
+msgid ""
+"Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
+"anmelden."
+msgstr ""
+
+#: sektionsweb/config.py:54
 msgid "Bezahlt, verbunden"
 msgstr ""
 
-#: sektionsweb/config.py:66
+#: sektionsweb/config.py:55
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: sektionsweb/config.py:67
+#: sektionsweb/config.py:56
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: sektionsweb/config.py:68
+#: sektionsweb/config.py:57
 msgid "Exaktiv"
 msgstr ""
 
-#: sektionsweb/config.py:69
+#: sektionsweb/config.py:58
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sektionsweb/config.py:73
+#: sektionsweb/config.py:62
 msgid "Sonntag"
 msgstr ""
 
-#: sektionsweb/config.py:74
+#: sektionsweb/config.py:63
 msgid "Montag"
 msgstr ""
 
-#: sektionsweb/config.py:75
+#: sektionsweb/config.py:64
 msgid "Dienstag"
 msgstr ""
 
-#: sektionsweb/config.py:76
+#: sektionsweb/config.py:65
 msgid "Mittwoch"
 msgstr ""
 
-#: sektionsweb/config.py:77
+#: sektionsweb/config.py:66
 msgid "Donnerstag"
 msgstr ""
 
-#: sektionsweb/config.py:78
+#: sektionsweb/config.py:67
 msgid "Freitag"
 msgstr ""
 
-#: sektionsweb/config.py:79
+#: sektionsweb/config.py:68
 msgid "Samstag"
 msgstr ""
 
@@ -132,118 +150,93 @@ msgstr ""
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:75
-msgid "Nachricht wurde versandt."
+#: sektionsweb/blueprints/usersuite.py:39
+msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
 #: sektionsweb/blueprints/usersuite.py:77
-#: sektionsweb/blueprints/usersuite.py:215
+msgid "Nachricht wurde versandt."
+msgstr ""
+
+#: sektionsweb/blueprints/usersuite.py:79
+#: sektionsweb/blueprints/usersuite.py:217
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:110
-#: sektionsweb/blueprints/usersuite.py:242
+#: sektionsweb/blueprints/usersuite.py:112
+#: sektionsweb/blueprints/usersuite.py:244
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:115
+#: sektionsweb/blueprints/usersuite.py:117
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:117
+#: sektionsweb/blueprints/usersuite.py:119
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:146
-#: sektionsweb/blueprints/usersuite.py:174
+#: sektionsweb/blueprints/usersuite.py:148
+#: sektionsweb/blueprints/usersuite.py:176
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:148
+#: sektionsweb/blueprints/usersuite.py:150
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:176
+#: sektionsweb/blueprints/usersuite.py:178
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:212
+#: sektionsweb/blueprints/usersuite.py:214
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:235
+#: sektionsweb/blueprints/usersuite.py:237
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:246
+#: sektionsweb/blueprints/usersuite.py:248
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sektionsweb/templates/base.html:35
+#: sektionsweb/templates/base.html:33
 msgid "News"
 msgstr ""
 
-#: sektionsweb/templates/base.html:59
-msgid "Deutsch"
-msgstr ""
-
-#: sektionsweb/templates/base.html:61
-msgid "English"
-msgstr ""
-
-#: sektionsweb/templates/base.html:70
+#: sektionsweb/templates/base.html:80
 msgid "Login"
 msgstr ""
 
-#: sektionsweb/templates/base.html:74
+#: sektionsweb/templates/base.html:84
 msgid "Logout"
 msgstr ""
 
-#: sektionsweb/templates/base.html:103
+#: sektionsweb/templates/base.html:113
 msgid "Traffic"
 msgstr ""
 
-#: sektionsweb/templates/base.html:107
+#: sektionsweb/templates/base.html:117
 msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
 msgstr ""
 
-#: sektionsweb/templates/base.html:111
+#: sektionsweb/templates/base.html:121
 msgid "Es gab einen Fehler bei der Trafficabfrage"
 msgstr ""
 
-#: sektionsweb/templates/base.html:140
+#: sektionsweb/templates/base.html:128
+msgid "Kontakt"
+msgstr ""
+
+#: sektionsweb/templates/base.html:150
 msgid "Klingel"
 msgstr ""
 
-#: sektionsweb/templates/base.html:200
+#: sektionsweb/templates/base.html:210
 msgid "Verbrauchter Traffic"
-msgstr ""
-
-#: sektionsweb/templates/bustimes.html:2
-msgid "Abfahrtszeiten"
-msgstr ""
-
-#: sektionsweb/templates/bustimes.html:9
-msgid "Haltestelle"
-msgstr ""
-
-#: sektionsweb/templates/bustimes.html:11
-#: sektionsweb/templates/bustimes.html:33
-msgid "Fehler bei der Abfrage!"
-msgstr ""
-
-#: sektionsweb/templates/bustimes.html:15
-msgid "Linie"
-msgstr ""
-
-#: sektionsweb/templates/bustimes.html:16
-msgid "Richtung"
-msgstr ""
-
-#: sektionsweb/templates/bustimes.html:29
-msgid "Quelle"
 msgstr ""
 
 #: sektionsweb/templates/index.html:22 sektionsweb/templates/template.html:9
@@ -262,54 +255,8 @@ msgstr ""
 msgid "Einloggen"
 msgstr ""
 
-#: sektionsweb/templates/content/ansprechpartner.html:2
-#: sektionsweb/templates/content/ansprechpartner.html:66
-msgid "Ansprechpartner"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:5
-msgid "Allgemeine Ansprechpartner"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:9
-msgid "Bereich"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:10
-msgid "Verantwortliche"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:15
-msgid "Vorstand"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:20
-msgid "Finanzen"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:30
-msgid "Öffentlichkeitsarbeit"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:40
-msgid "Nutzerverwaltung"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:50
-msgid "Server & Dienste"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:61
-msgid "Hausadmins"
-msgstr ""
-
-#: sektionsweb/templates/content/ansprechpartner.html:65
-msgid "Haus"
-msgstr ""
-
-#: sektionsweb/templates/content/traffic.html:2
-#: sektionsweb/templates/content/en/traffic.html:2
-msgid "Trafficregelungen"
+#: sektionsweb/templates/drafts/_traffic_chart.html:2
+msgid "Trafficdiagramm"
 msgstr ""
 
 #: sektionsweb/templates/drafts/_traffic_overview.html:1
@@ -525,6 +472,22 @@ msgstr ""
 msgid "Nutzer hat keine IP"
 msgstr ""
 
+#: sektionsweb/utils/graph_utils.py:20
+msgid "Traffic (MB)"
+msgstr ""
+
+#: sektionsweb/utils/graph_utils.py:33
+msgid "Input"
+msgstr ""
+
+#: sektionsweb/utils/graph_utils.py:34
+msgid "Output"
+msgstr ""
+
+#: sektionsweb/utils/graph_utils.py:35
+msgid "Gesamt"
+msgstr ""
+
 #~ msgid "Bezahlt, verbunden"
 #~ msgstr ""
 
@@ -726,9 +689,10 @@ msgstr ""
 #~ msgstr[1] ""
 
 #~ msgid "Field cannot be longer than %(max)d character."
-#~ msgid_plural "Field cannot be longer than %(max)d characters."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
+#~ msgstr ""
+
+#~ msgid "Field cannot be longer than %(max)d characters."
+#~ msgstr ""
 
 #~ msgid "Field must be between %(min)d and %(max)d characters long."
 #~ msgstr ""
@@ -868,78 +832,16 @@ msgstr ""
 #~ msgid "Gilt nur für alle Bewohner der Häuser <b> Wu1, Wu5, Wu7 und ZW 41c</b>:"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Solltest du dir von einem externen "
-#~ "Internetanbieter einen Anschluss im Wohnheim"
-#~ " legen lassen wollen, so müssen wir"
-#~ " als AGDSN dein Zimmer dafür "
-#~ "freischalten."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Weitere Informationen und das entsprechende"
-#~ " Formular dafür findest du hier:"
-#~ msgstr ""
-
 #~ msgid "Antrag"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Solltest du in keinem der aufgeführten"
-#~ " Häuser wohnen brauchst du nur den"
-#~ " Techniker deines Anbieters, diese Häuser"
-#~ " sind bereits mit Anschlüssen versorgt."
 #~ msgstr ""
 
 #~ msgid "Mitglied werden und Anschluss beantragen"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Die AG DSN ist eine Arbeitsgemeinschaft"
-#~ " von Studenten wie dir, die sich "
-#~ "unter anderem um die Bereitstellung des"
-#~ " Netzwerkes in den von der Ihr "
-#~ "betreuten Wohnheimen kümmern."
-#~ msgstr ""
-
 #~ msgid "Passives Mitglied werden"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Um passives Mitglied in der AG DSN"
-#~ " zu werden und damit unter anderem"
-#~ " Zugang zum Studentennetz zu erhalten "
-#~ ", musst Du folgendes tun."
-#~ msgstr ""
-
 #~ msgid "Lies dir die Hinweise auf der Rückseite des Formulars gründlich durch."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Fülle zwei Exemplare dieses Formulars "
-#~ "leserlich aus und unterzeichne sie je"
-#~ " zweimal."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Wirf beide Exemplare in unseren "
-#~ "Briefkasten in der Wundtstraße 5 (rechts"
-#~ " unten) oder gib sie zu den "
-#~ "Sprechzeiten im Büro (Wundtstraße 5, "
-#~ "Erdgeschoss) ab. Dort werden die Anträge"
-#~ " üblicherweise sofort bearbeitet."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Etwa eine Woche nach der Abgabe "
-#~ "erhältst Du ein Exemplar verbunden mit"
-#~ " einem Zugangsdatenblatt zurück. Spätestens "
-#~ "jetzt sollte Dein Zugang funktionieren.\n"
-#~ ""
-#~ "        Bitte beschrifte Deinen Briefkasten,"
-#~ " da ansonsten gegebenenfalls keine "
-#~ "Zustellung erfolgen kann und wir Deinen"
-#~ " Zugang sperren müssen."
 #~ msgstr ""
 
 #~ msgid "Überweise den Semesterbeitrag innerhalb von 31 Tagen auf unser Konto."
@@ -954,28 +856,63 @@ msgstr ""
 #~ msgid "Aktives Mitglied werden"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Das Studentennetz wurde von Studenten "
-#~ "wie Dir selbst geschaffen und wird "
-#~ "von eben diesen ehrenamtlich verwaltet "
-#~ "und erweitert. Wenn Du Interesse an "
-#~ "unserer Arbeit hast, so schau doch "
-#~ "einfach mal vorbei. Du musst keineswegs"
-#~ " Informatik oder Ähnliches studieren, um"
-#~ " mitmachen zu können. Es warten viele"
-#~ " spannende Aufgaben in den Bereichen "
-#~ "Administration von Netzwerk- und "
-#~ "Rechentechnik, Softwareentwicklung und -wartung, "
-#~ "3>Finanzen, Verwaltung, Recht und "
-#~ "Öffentlichkeitsarbeit. Neben guten Referenzen "
-#~ "für Deinen Lebenslauf erhältst Du so "
-#~ "auch einen Einblick in spannende "
-#~ "Technik, die man sonst eher nicht "
-#~ "zu Gesicht bekommt. Wir würden uns "
-#~ "freuen, auch bald Dich in unseren "
-#~ "Reihen begrüßen zu können. Komm doch "
-#~ "einfach zur Sprechstunde oder unserer "
-#~ "wöchentlichen Sitzung, Mittwochs um 20:30 "
-#~ "Uhr, in unserem Büro vorbei."
+#~ msgid "Deutsch"
+#~ msgstr ""
+
+#~ msgid "English"
+#~ msgstr ""
+
+#~ msgid "Abfahrtszeiten"
+#~ msgstr ""
+
+#~ msgid "Haltestelle"
+#~ msgstr ""
+
+#~ msgid "Fehler bei der Abfrage!"
+#~ msgstr ""
+
+#~ msgid "Linie"
+#~ msgstr ""
+
+#~ msgid "Richtung"
+#~ msgstr ""
+
+#~ msgid "Quelle"
+#~ msgstr ""
+
+#~ msgid "Ansprechpartner"
+#~ msgstr ""
+
+#~ msgid "Allgemeine Ansprechpartner"
+#~ msgstr ""
+
+#~ msgid "Bereich"
+#~ msgstr ""
+
+#~ msgid "Verantwortliche"
+#~ msgstr ""
+
+#~ msgid "Vorstand"
+#~ msgstr ""
+
+#~ msgid "Finanzen"
+#~ msgstr ""
+
+#~ msgid "Öffentlichkeitsarbeit"
+#~ msgstr ""
+
+#~ msgid "Nutzerverwaltung"
+#~ msgstr ""
+
+#~ msgid "Server & Dienste"
+#~ msgstr ""
+
+#~ msgid "Hausadmins"
+#~ msgstr ""
+
+#~ msgid "Haus"
+#~ msgstr ""
+
+#~ msgid "Trafficregelungen"
 #~ msgstr ""
 
