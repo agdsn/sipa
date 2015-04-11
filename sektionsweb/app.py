@@ -77,6 +77,12 @@ def exceptionhandler_sql(ex):
     """Handles global MySQL errors (server down).
     """
     flash(u"Connection to SQL server could not be established!", "error")
+    # todo check if infinite redirection might still occur
+    # Proviously, requesting `/` w/o having a connection to the mysql database
+    # would result in an infinite loop of redirects to `/` since
+    # OperationalError is being handled globally.
+    # In the latter case, the cause was the request of the traffic chart data.
+    # A quick fix was catching it and returning an error status.
     return redirect(url_for('index'))
 
 

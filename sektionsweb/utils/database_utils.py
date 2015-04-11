@@ -4,6 +4,7 @@
 import datetime
 from flask.globals import request
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 
 from sektionsweb.config import *
 from sektionsweb.utils import timestamp_from_timetag, timetag_from_timestamp
@@ -156,6 +157,8 @@ def query_gauge_data():
             # todo better method to tell that “error”?
             return {'error': 'foreign_ip'}
         except DBQueryEmpty:
+            return {'error': True}
+        except OperationalError:
             return {'error': True}
     else:
         return {'error': True}
