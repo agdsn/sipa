@@ -1,5 +1,11 @@
-AGDSN Sektionsweb
+SIPA - Supreme Information Providing Application
 ==================================
+
+
+Name
+----------------------------------
+Just as SIPA stands for a ball over the net game[1], the lesser known **s**upreme **i**nformation **p**roviding **a**pplication
+does just the same -- sending packets over the internet.
 
 This project is a flask-based webserver developed by members of the student network Dresden.
 
@@ -77,3 +83,5 @@ Another possibility is to include hyperlinks, which only have a metadata section
     glyphicon: glyphicon-tower
     link: http://http://www.awesome-page.com/
     rank: 1
+
+[1] https://en.wikipedia.org/wiki/Sipa
