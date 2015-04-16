@@ -6,7 +6,7 @@ from flask_babel import gettext, lazy_gettext
 from flask_wtf import Form
 from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
     HiddenField
-from wtforms.validators import Required, Email, MacAddress
+from wtforms.validators import Required, Email, MacAddress, ValidationError
 
 
 class ContactForm(Form):
@@ -45,12 +45,23 @@ class DeleteMailForm(Form):
         validators=[Required(gettext(u"Passwort nicht angegeben!"))])
 
 
+def require_unicast_mac(form, field):
+    """
+    Validator for unicast mac adress.
+    A MAC-adress is defined to be “broadcast” if the least significant bit
+    of the first octet is 1. Therefore, it has to be 0 to be valid.
+    """
+    if int(field.data[1], 16) % 2:
+        raise ValidationError(gettext(u"MAC muss unicast-Adresse sein!"))
+
+
 class ChangeMACForm(Form):
     password = PasswordField(
         validators=[Required(gettext(u"Passwort nicht angegeben!"))])
     mac = TextField(validators=[Required(u"MAC-Adresse nicht angegeben!"),
                                 MacAddress(
-                                    u"MAC ist nicht in gültigem Format!")])
+                                    u"MAC ist nicht in gültigem Format!"),
+                                require_unicast_mac])
 
 
 class LoginForm(Form):
