@@ -17,7 +17,7 @@ As the project is
 * has been designed for our purposes (e.g. view each user's specific data)
 it is not suitable for any custom use.
 
-Note that **this will change soon**, because we plan to use the Sektionsweb elsewhere.
+Note that **this will change soon**, because we plan to use sipa elsewhere.
 
 
 Libraries required to run dev server

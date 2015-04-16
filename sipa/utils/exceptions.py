@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Custom exceptions for Sektionsweb
+Custom exceptions for sipa
 
 OperationalError for MySQL and SERVER_DOWN for LDAP are global app handlers!
 """

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Everything used for authentication in Sektionsweb (Usersuite..).
+Everything used for authentication in sipa (Usersuite..).
 """
 
 import ldap
