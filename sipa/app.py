@@ -18,19 +18,19 @@ from ldap import SERVER_DOWN
 from babel import Locale
 
 from .babel import babel, possible_locales
-from sektionsweb.flatpages import cf_pages
-from sektionsweb.blueprints import bp_usersuite, bp_pages, bp_documents, \
+from sipa.flatpages import cf_pages
+from sipa.blueprints import bp_usersuite, bp_pages, bp_documents, \
     bp_features
-from sektionsweb.forms import flash_formerrors, LoginForm
-from sektionsweb.utils.database_utils import query_userinfo, query_trafficdata, \
+from sipa.forms import flash_formerrors, LoginForm
+from sipa.utils.database_utils import query_userinfo, query_trafficdata, \
     query_gauge_data, user_id_from_ip
-from sektionsweb.utils.exceptions import UserNotFound, PasswordInvalid, \
+from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     DBQueryEmpty, ForeignIPAccessError
-from sektionsweb.utils.graph_utils import render_traffic_chart, \
+from sipa.utils.graph_utils import render_traffic_chart, \
     generate_traffic_chart
-from sektionsweb.utils.ldap_utils import User, authenticate
+from sipa.utils.ldap_utils import User, authenticate
 
-app = Flask('sektionsweb')
+app = Flask('sipa')
 login_manager = LoginManager()
 
 

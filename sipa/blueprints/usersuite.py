@@ -8,17 +8,17 @@ from flask import Blueprint, render_template, url_for, redirect, flash
 from flask_babel import gettext
 from flask_login import login_required, current_user
 
-from sektionsweb.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
+from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from sektionsweb.utils import calculate_userid_checksum
-from sektionsweb.utils.database_utils import query_trafficdata, query_userinfo, \
+from sipa.utils import calculate_userid_checksum
+from sipa.utils.database_utils import query_trafficdata, query_userinfo, \
     update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db
-from sektionsweb.utils.graph_utils import generate_traffic_chart
-from sektionsweb.utils.ldap_utils import change_password, change_email, \
+from sipa.utils.graph_utils import generate_traffic_chart
+from sipa.utils.ldap_utils import change_password, change_email, \
     authenticate
-from sektionsweb.utils.mail_utils import send_mail
-from sektionsweb.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
+from sipa.utils.mail_utils import send_mail
+from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
 

@@ -6,8 +6,8 @@ from flask.globals import request
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
-from sektionsweb.config import *
-from sektionsweb.utils import timestamp_from_timetag, timetag_from_timestamp
+from sipa.config import *
+from sipa.utils import timestamp_from_timetag, timetag_from_timestamp
 from .exceptions import DBQueryEmpty, ForeignIPAccessError
 
 

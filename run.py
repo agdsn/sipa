@@ -1,5 +1,5 @@
 import os.path
-from sektionsweb.app import app, init_app
+from sipa.app import app, init_app
 
 if __name__ == "__main__":
     app.config.from_pyfile('settings.py')
