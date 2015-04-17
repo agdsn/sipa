@@ -44,6 +44,18 @@ body {
 	height: 200px;
 }
 
+a#traffic_gauge_link {
+    text-decoration: none;
+    transition: text-shadow 1s ease, color 1s ease;
+    -moz-transition: text-shadow 1s ease, color 1s ease;
+    -webkit-transition: text-shadow 1s ease, color 1s ease;
+    -o-transition: text-shadow 1s ease, color 1s ease;
+}
+
+a#traffic_gauge_link:hover {
+    text-shadow: 3px 3px 8px hsl(0, 0%, 82%);
+}
+
 td {
 	vertical-align: top;
 	padding-bottom: 20px;

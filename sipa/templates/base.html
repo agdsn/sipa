@@ -101,27 +101,21 @@
 		<div class="col-sm-3 col-sm-push-9">
 			<div class="row">
 				<div class="col-xs-6 col-sm-12">
-					<h2>Traffic</h2>
-					<div id="trafficgauge"></div>
+					<a id="traffic_gauge_link" href="{{ url_for('usertraffic') }}"><div id="trafficgauge"></div>
+                        <div class="text-center"><small>({{ _("Für Details klicken") }})</small></div>
+					</a><br>
 
-						<div class="row">
-                        {% if not traffic().error %}
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-list-alt"></span>
-                            </div>
-                            <div class="col-xs-10">
-                                <a href="{{ url_for('usertraffic') }}">{{ _("Traffic") }}</a>
-                            </div>
-                        {% elif traffic().error == "foreign_ip" %}
-                            <div class="text-danger text-center">
-                                {{ _("Diese IP gehört nicht zum Netzwerk der Sektion") }}!
-                            </div>
-                        {% else %}
-                            <div class="text-danger text-center">
-                                {{ _("Es gab einen Fehler bei der Trafficabfrage") }}!
-                            </div>
-                        {% endif %}
-						</div>
+                    <div class="row">
+                    {% if traffic().error == "foreign_ip" %}
+                        <div class="text-danger text-center">
+                            {{ _("Diese IP gehört nicht zum Netzwerk der Sektion") }}!
+                        </div>
+                    {% else %}
+                        <div class="text-danger text-center">
+                            {{ _("Es gab einen Fehler bei der Trafficabfrage") }}!
+                        </div>
+                    {% endif %}
+                    </div>
 				</div>
 				
 				<div class="col-xs-6 col-sm-12">
