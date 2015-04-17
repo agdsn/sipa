@@ -6,29 +6,27 @@ Drupalport auf Python im Zuge der Entwicklung von Pycroft.
 Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
-import io
-
 from flask import Flask, render_template, request, redirect, \
-    url_for, flash, send_file, session
+    url_for, flash, session
 from flask_babel import gettext, get_locale
 from flask_login import LoginManager, current_user, login_user, \
     logout_user
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
-from babel import Locale
 
+from babel import Locale
 from .babel import babel, possible_locales
 from sipa.flatpages import cf_pages
 from sipa.blueprints import bp_usersuite, bp_pages, bp_documents, \
     bp_features
 from sipa.forms import flash_formerrors, LoginForm
-from sipa.utils.database_utils import query_userinfo, query_trafficdata, \
+from sipa.utils.database_utils import query_trafficdata, \
     query_gauge_data, user_id_from_ip
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
-    DBQueryEmpty, ForeignIPAccessError
-from sipa.utils.graph_utils import render_traffic_chart, \
-    generate_traffic_chart
+    ForeignIPAccessError
+from sipa.utils.graph_utils import render_traffic_chart
 from sipa.utils.ldap_utils import User, authenticate
+
 
 app = Flask('sipa')
 login_manager = LoginManager()
