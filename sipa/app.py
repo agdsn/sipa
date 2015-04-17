@@ -60,7 +60,7 @@ def errorpage(e):
         flash(gettext(u"Seite nicht gefunden!"), "warning")
     elif e.code in (401, 403):
         flash(gettext(
-            u"Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"),
+            u"Du hast nicht die notwendigen Rechte um die Seite zu sehen!"),
             "warning")
     else:
         flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")

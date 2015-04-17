@@ -17,474 +17,474 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: sektionsweb/app.py:60
+#: sipa/app.py:60
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: sektionsweb/app.py:62
-msgid "Sie haben nicht die notwendigen Rechte um die Seite zu sehen!"
+#: sipa/app.py:62
+msgid "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: sektionsweb/app.py:66
+#: sipa/app.py:66
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sektionsweb/app.py:170 sektionsweb/blueprints/usersuite.py:144
-#: sektionsweb/blueprints/usersuite.py:172
+#: sipa/app.py:170 sipa/blueprints/usersuite.py:144
+#: sipa/blueprints/usersuite.py:172
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sektionsweb/app.py:172 sektionsweb/blueprints/usersuite.py:146
-#: sektionsweb/blueprints/usersuite.py:174
-#: sektionsweb/blueprints/usersuite.py:201
+#: sipa/app.py:172 sipa/blueprints/usersuite.py:146
+#: sipa/blueprints/usersuite.py:174
+#: sipa/blueprints/usersuite.py:201
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sektionsweb/app.py:201
+#: sipa/app.py:201
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sektionsweb/app.py:203
+#: sipa/app.py:203
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr ""
 
-#: sektionsweb/app.py:206
+#: sipa/app.py:206
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: sektionsweb/app.py:209
+#: sipa/app.py:209
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
 "einsehen."
 msgstr ""
 
-#: sektionsweb/app.py:213
+#: sipa/app.py:213
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
 "anmelden."
 msgstr ""
 
-#: sektionsweb/config.py:54
+#: sipa/config.py:54
 msgid "Bezahlt, verbunden"
 msgstr ""
 
-#: sektionsweb/config.py:55
+#: sipa/config.py:55
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: sektionsweb/config.py:56
+#: sipa/config.py:56
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: sektionsweb/config.py:57
+#: sipa/config.py:57
 msgid "Exaktiv"
 msgstr ""
 
-#: sektionsweb/config.py:58
+#: sipa/config.py:58
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sektionsweb/config.py:62
+#: sipa/config.py:62
 msgid "Sonntag"
 msgstr ""
 
-#: sektionsweb/config.py:63
+#: sipa/config.py:63
 msgid "Montag"
 msgstr ""
 
-#: sektionsweb/config.py:64
+#: sipa/config.py:64
 msgid "Dienstag"
 msgstr ""
 
-#: sektionsweb/config.py:65
+#: sipa/config.py:65
 msgid "Mittwoch"
 msgstr ""
 
-#: sektionsweb/config.py:66
+#: sipa/config.py:66
 msgid "Donnerstag"
 msgstr ""
 
-#: sektionsweb/config.py:67
+#: sipa/config.py:67
 msgid "Freitag"
 msgstr ""
 
-#: sektionsweb/config.py:68
+#: sipa/config.py:68
 msgid "Samstag"
 msgstr ""
 
-#: sektionsweb/forms.py:14 sektionsweb/forms.py:40
+#: sipa/forms.py:14 sipa/forms.py:40
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
-#: sektionsweb/forms.py:16
+#: sipa/forms.py:16
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: sektionsweb/forms.py:24
+#: sipa/forms.py:24
 msgid "Nachricht fehlt!"
 msgstr ""
 
-#: sektionsweb/forms.py:29
+#: sipa/forms.py:29
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: sektionsweb/forms.py:31
+#: sipa/forms.py:31
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sektionsweb/forms.py:33 sektionsweb/forms.py:67
+#: sipa/forms.py:33 sipa/forms.py:67
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sektionsweb/forms.py:38 sektionsweb/forms.py:45 sektionsweb/forms.py:50
+#: sipa/forms.py:38 sipa/forms.py:45 sipa/forms.py:50
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sektionsweb/forms.py:58
+#: sipa/forms.py:58
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sektionsweb/forms.py:60 sektionsweb/forms.py:65
+#: sipa/forms.py:60 sipa/forms.py:65
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:39
+#: sipa/blueprints/usersuite.py:39
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:77
+#: sipa/blueprints/usersuite.py:77
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:79
-#: sektionsweb/blueprints/usersuite.py:217
+#: sipa/blueprints/usersuite.py:79
+#: sipa/blueprints/usersuite.py:217
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:112
-#: sektionsweb/blueprints/usersuite.py:244
+#: sipa/blueprints/usersuite.py:112
+#: sipa/blueprints/usersuite.py:244
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:117
+#: sipa/blueprints/usersuite.py:117
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:119
+#: sipa/blueprints/usersuite.py:119
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:148
-#: sektionsweb/blueprints/usersuite.py:176
+#: sipa/blueprints/usersuite.py:148
+#: sipa/blueprints/usersuite.py:176
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:150
+#: sipa/blueprints/usersuite.py:150
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:178
+#: sipa/blueprints/usersuite.py:178
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:214
+#: sipa/blueprints/usersuite.py:214
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:237
+#: sipa/blueprints/usersuite.py:237
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sektionsweb/blueprints/usersuite.py:248
+#: sipa/blueprints/usersuite.py:248
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sektionsweb/templates/base.html:33
+#: sipa/templates/base.html:33
 msgid "News"
 msgstr ""
 
-#: sektionsweb/templates/base.html:80
+#: sipa/templates/base.html:80
 msgid "Login"
 msgstr ""
 
-#: sektionsweb/templates/base.html:84
+#: sipa/templates/base.html:84
 msgid "Logout"
 msgstr ""
 
-#: sektionsweb/templates/base.html:113
+#: sipa/templates/base.html:113
 msgid "Traffic"
 msgstr ""
 
-#: sektionsweb/templates/base.html:117
+#: sipa/templates/base.html:117
 msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
 msgstr ""
 
-#: sektionsweb/templates/base.html:121
+#: sipa/templates/base.html:121
 msgid "Es gab einen Fehler bei der Trafficabfrage"
 msgstr ""
 
-#: sektionsweb/templates/base.html:128
+#: sipa/templates/base.html:128
 msgid "Kontakt"
 msgstr ""
 
-#: sektionsweb/templates/base.html:150
+#: sipa/templates/base.html:150
 msgid "Klingel"
 msgstr ""
 
-#: sektionsweb/templates/base.html:210
+#: sipa/templates/base.html:210
 msgid "Verbrauchter Traffic"
 msgstr ""
 
-#: sektionsweb/templates/index.html:22 sektionsweb/templates/template.html:9
+#: sipa/templates/index.html:22 sipa/templates/template.html:9
 msgid "geschrieben von"
 msgstr ""
 
-#: sektionsweb/templates/login.html:10
+#: sipa/templates/login.html:10
 msgid "Benutzername"
 msgstr ""
 
-#: sektionsweb/templates/login.html:16
+#: sipa/templates/login.html:16
 msgid "Passwort"
 msgstr ""
 
-#: sektionsweb/templates/login.html:20
+#: sipa/templates/login.html:20
 msgid "Einloggen"
 msgstr ""
 
-#: sektionsweb/templates/drafts/_traffic_chart.html:2
+#: sipa/templates/drafts/_traffic_chart.html:2
 msgid "Trafficdiagramm"
 msgstr ""
 
-#: sektionsweb/templates/drafts/_traffic_overview.html:1
+#: sipa/templates/drafts/_traffic_overview.html:1
 msgid "Dein Traffic"
 msgstr ""
 
-#: sektionsweb/templates/drafts/_traffic_overview.html:4
+#: sipa/templates/drafts/_traffic_overview.html:4
 msgid "Wochentag"
 msgstr ""
 
-#: sektionsweb/templates/drafts/_traffic_overview.html:20
+#: sipa/templates/drafts/_traffic_overview.html:20
 msgid "Verbleibender Credit"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:1
+#: sipa/templates/usersuite/_index_status.html:1
 msgid "Statusinformationen"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:5
+#: sipa/templates/usersuite/_index_status.html:5
 msgid "Passwort ändern"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:9
+#: sipa/templates/usersuite/_index_status.html:9
 msgid "Kontaktformular"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:15
+#: sipa/templates/usersuite/_index_status.html:15
 msgid "Nutzer-ID"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:19
+#: sipa/templates/usersuite/_index_status.html:19
 msgid "Accountname"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:23
+#: sipa/templates/usersuite/_index_status.html:23
 msgid "Accountstatus"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:31
+#: sipa/templates/usersuite/_index_status.html:31
 msgid "Aktuelles Zimmer"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:35
+#: sipa/templates/usersuite/_index_status.html:35
 msgid "Aktuelle IP-Adresse"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:39
+#: sipa/templates/usersuite/_index_status.html:39
 msgid "Aktuelle MAC-Adresse"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:45
+#: sipa/templates/usersuite/_index_status.html:45
 msgid "E-Mail-Weiterleitung"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:50
-#: sektionsweb/templates/usersuite/_index_status.html:58
+#: sipa/templates/usersuite/_index_status.html:50
+#: sipa/templates/usersuite/_index_status.html:58
 msgid "Nicht eingerichtet"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:56
-#: sektionsweb/templates/usersuite/hosting.html:2
+#: sipa/templates/usersuite/_index_status.html:56
+#: sipa/templates/usersuite/hosting.html:2
 msgid "MySQL Datenbank"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/_index_status.html:57
+#: sipa/templates/usersuite/_index_status.html:57
 msgid "Eingerichtet"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mac.html:2
+#: sipa/templates/usersuite/change_mac.html:2
 msgid "MAC-Adresse ändern"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mac.html:10
-#: sektionsweb/templates/usersuite/change_mail.html:10
-#: sektionsweb/templates/usersuite/delete_mail.html:10
+#: sipa/templates/usersuite/change_mac.html:10
+#: sipa/templates/usersuite/change_mail.html:10
+#: sipa/templates/usersuite/delete_mail.html:10
 msgid "Dein aktuelles Passwort"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mac.html:16
+#: sipa/templates/usersuite/change_mac.html:16
 msgid "Die neue MAC-Adresse"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mac.html:22
+#: sipa/templates/usersuite/change_mac.html:22
 msgid ""
 "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
 "Benachrichtigungsmail an uns gesandt."
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mac.html:23
+#: sipa/templates/usersuite/change_mac.html:23
 msgid ""
 "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es"
 " ist nicht zulässig, den eigenen Account weiterzugeben."
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mac.html:24
+#: sipa/templates/usersuite/change_mac.html:24
 msgid ""
 "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
 "MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
 "alle Aktivitäten des Accounts!"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mac.html:27
-#: sektionsweb/templates/usersuite/change_mail.html:20
-#: sektionsweb/templates/usersuite/change_password.html:26
-#: sektionsweb/templates/usersuite/contact.html:39
-#: sektionsweb/templates/usersuite/delete_mail.html:14
-#: sektionsweb/templates/usersuite/hosting.html:37
+#: sipa/templates/usersuite/change_mac.html:27
+#: sipa/templates/usersuite/change_mail.html:20
+#: sipa/templates/usersuite/change_password.html:26
+#: sipa/templates/usersuite/contact.html:39
+#: sipa/templates/usersuite/delete_mail.html:14
+#: sipa/templates/usersuite/hosting.html:37
 msgid "Abschicken"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mail.html:2
-#: sektionsweb/templates/usersuite/delete_mail.html:2
+#: sipa/templates/usersuite/change_mail.html:2
+#: sipa/templates/usersuite/delete_mail.html:2
 msgid "E-Mail ändern"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_mail.html:16
+#: sipa/templates/usersuite/change_mail.html:16
 msgid "Die neue E-Mail-Adresse"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_password.html:2
+#: sipa/templates/usersuite/change_password.html:2
 msgid "Password ändern"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_password.html:10
+#: sipa/templates/usersuite/change_password.html:10
 msgid "Dein altes Passwort"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_password.html:16
+#: sipa/templates/usersuite/change_password.html:16
 msgid "Dein neues Passwort"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_password.html:22
+#: sipa/templates/usersuite/change_password.html:22
 msgid "Bestätigung des neuen Passworts"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/change_password.html:27
-#: sektionsweb/templates/usersuite/contact.html:40
-#: sektionsweb/templates/usersuite/hosting.html:38
+#: sipa/templates/usersuite/change_password.html:27
+#: sipa/templates/usersuite/contact.html:40
+#: sipa/templates/usersuite/hosting.html:38
 msgid "Zurücksetzen"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/contact.html:2
+#: sipa/templates/usersuite/contact.html:2
 msgid "Nachricht an die Sektionsadmins"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/contact.html:10
+#: sipa/templates/usersuite/contact.html:10
 msgid "Deine E-Mail-Adresse"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/contact.html:18
+#: sipa/templates/usersuite/contact.html:18
 msgid "Kategorie"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/contact.html:24
+#: sipa/templates/usersuite/contact.html:24
 msgid "Betreff deiner Nachricht"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/contact.html:30
+#: sipa/templates/usersuite/contact.html:30
 msgid "Deine Nachricht an uns"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/contact.html:36
+#: sipa/templates/usersuite/contact.html:36
 msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:7
+#: sipa/templates/usersuite/hosting.html:7
 msgid "Willst du deine Datenbank wirklich löschen?"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:7
+#: sipa/templates/usersuite/hosting.html:7
 msgid "Jawohl!"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:12
+#: sipa/templates/usersuite/hosting.html:12
 msgid ""
 "Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos "
 "zum Webhosting findest du hier."
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:18
+#: sipa/templates/usersuite/hosting.html:18
 msgid "Du hast noch keine Datenbank erstellt!"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:19
+#: sipa/templates/usersuite/hosting.html:19
 msgid "Im folgenden kannst du dir eine Datenbank anlegen."
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:21
+#: sipa/templates/usersuite/hosting.html:21
 msgid "Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:21
+#: sipa/templates/usersuite/hosting.html:21
 msgid "Datenbank löschen"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:22
+#: sipa/templates/usersuite/hosting.html:22
 msgid "Im folgenden kannst du dein aktuelles MySQL-Passwort ändern."
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:27
+#: sipa/templates/usersuite/hosting.html:27
 msgid "Dein neues MySQL-Passwort"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/hosting.html:33
+#: sipa/templates/usersuite/hosting.html:33
 msgid "Bestätige dein neues Passwort"
 msgstr ""
 
-#: sektionsweb/templates/usersuite/index.html:2
+#: sipa/templates/usersuite/index.html:2
 msgid "Usersuite von "
 msgstr ""
 
-#: sektionsweb/utils/database_utils.py:104
+#: sipa/utils/database_utils.py:104
 msgid "Nutzer hat keine IP"
 msgstr ""
 
-#: sektionsweb/utils/graph_utils.py:20
+#: sipa/utils/graph_utils.py:20
 msgid "Traffic (MB)"
 msgstr ""
 
-#: sektionsweb/utils/graph_utils.py:33
+#: sipa/utils/graph_utils.py:33
 msgid "Input"
 msgstr ""
 
-#: sektionsweb/utils/graph_utils.py:34
+#: sipa/utils/graph_utils.py:34
 msgid "Output"
 msgstr ""
 
-#: sektionsweb/utils/graph_utils.py:35
+#: sipa/utils/graph_utils.py:35
 msgid "Gesamt"
 msgstr ""
 
