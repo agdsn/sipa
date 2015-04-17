@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" xmlns="http://www.w3.org/1999/html">
 	
 <head>
     <meta charset="utf-8" />
@@ -29,9 +29,19 @@
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('index') }}">
-                    <span class="glyphicon glyphicon-book"></span> {{ _("News") }}
-                </a></li>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                        <span class="glyphicon glyphicon-comment"></span> {{ _("News") }}<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{{ url_for('news.newest') }}">
+                            <span class="glyphicon glyphicon-fast-backward"></span>&nbsp; {{ _("Neueste") }}</a></li>
+                        <li><a href="{{ url_for('news.oldest') }}">
+                            <span class="glyphicon glyphicon-fast-forward"></span>&nbsp; {{ _("Älteste") }}</a></li>
+                        <li><a href="{{ url_for('news.display_all') }}">
+                            <span class="glyphicon glyphicon-book"></span>&nbsp; {{ _("Alle") }}</a></li>
+                    </ul>
+                </li>
                 {% for c in cf_pages %}
                 {% if c.index %}
                 <li class="dropdown">
