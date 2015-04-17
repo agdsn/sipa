@@ -215,8 +215,8 @@ def usersuite_change_mac():
                 return redirect(url_for('.usersuite'))
             else:
                 flash(gettext(u"Es gab einen Fehler beim Versenden der "
-                              u"Nachricht. Bitte schicke uns direkt eine E-Mail "
-                              u"an support@wh2.tu-dresden.de"), "error")
+                              u"Nachricht. Bitte schicke uns direkt eine E-Mail"
+                              u" an support@wh2.tu-dresden.de"), "error")
                 return redirect(url_for('.usersuite'))
     elif form.is_submitted():
         flash_formerrors(form)

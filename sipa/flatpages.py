@@ -68,7 +68,6 @@ class Category(Node):
     def articles_itterator(self):
         return iter(sorted(self.articles.values(), cmp=compare))
 
-
     def __getattr__(self, attr):
         try:
             return getattr(self.articles['index'], attr, False)
@@ -116,8 +115,7 @@ class CategorizedFlatPages(object):
 
     def __iter__(self):
         return iter(sorted(self.root_category.categories.values(),
-            cmp=compare))
-
+                    cmp=compare))
 
     def get(self, category_id, article_id):
         category = self.root_category.categories.get(category_id)
@@ -127,7 +125,8 @@ class CategorizedFlatPages(object):
 
     def get_articles_of_category(self, category_id):
         barticles = []
-        for a in self.root_category.categories.get(category_id).articles.values():
+        for a in self.root_category.categories.get(
+                category_id).articles.values():
             if a.id != 'index':
                 barticles.append(a)
         return barticles

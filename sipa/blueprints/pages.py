@@ -17,6 +17,7 @@ bp_pages = Blueprint('pages', __name__, url_prefix='/pages')
 # def show_category(category):
 # pass
 
+
 # todo create sitemap at /pages/
 # @bp_pages.route('/', defaults={'page': 'index'})
 @bp_pages.route('/<category_id>/<article_id>')
