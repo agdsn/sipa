@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-09 19:34+0200\n"
+"POT-Creation-Date: 2015-04-17 17:31+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -29,88 +29,87 @@ msgstr ""
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/app.py:170 sipa/blueprints/usersuite.py:144
+#: sipa/app.py:176 sipa/blueprints/usersuite.py:144
 #: sipa/blueprints/usersuite.py:172
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/app.py:172 sipa/blueprints/usersuite.py:146
-#: sipa/blueprints/usersuite.py:174
-#: sipa/blueprints/usersuite.py:201
+#: sipa/app.py:178 sipa/blueprints/usersuite.py:146
+#: sipa/blueprints/usersuite.py:174 sipa/blueprints/usersuite.py:201
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/app.py:201
+#: sipa/app.py:207
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/app.py:203
+#: sipa/app.py:209
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr ""
 
-#: sipa/app.py:206
+#: sipa/app.py:212
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: sipa/app.py:209
+#: sipa/app.py:215
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
 "einsehen."
 msgstr ""
 
-#: sipa/app.py:213
+#: sipa/app.py:219
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
 "anmelden."
 msgstr ""
 
-#: sipa/config.py:54
+#: sipa/config.py:56
 msgid "Bezahlt, verbunden"
 msgstr ""
 
-#: sipa/config.py:55
+#: sipa/config.py:57
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/config.py:56
+#: sipa/config.py:58
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/config.py:57
+#: sipa/config.py:59
 msgid "Exaktiv"
 msgstr ""
 
-#: sipa/config.py:58
+#: sipa/config.py:60
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/config.py:62
+#: sipa/config.py:64
 msgid "Sonntag"
 msgstr ""
 
-#: sipa/config.py:63
+#: sipa/config.py:65
 msgid "Montag"
 msgstr ""
 
-#: sipa/config.py:64
+#: sipa/config.py:66
 msgid "Dienstag"
 msgstr ""
 
-#: sipa/config.py:65
+#: sipa/config.py:67
 msgid "Mittwoch"
 msgstr ""
 
-#: sipa/config.py:66
+#: sipa/config.py:68
 msgid "Donnerstag"
 msgstr ""
 
-#: sipa/config.py:67
+#: sipa/config.py:69
 msgid "Freitag"
 msgstr ""
 
-#: sipa/config.py:68
+#: sipa/config.py:70
 msgid "Samstag"
 msgstr ""
 
@@ -134,19 +133,23 @@ msgstr ""
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:33 sipa/forms.py:67
+#: sipa/forms.py:33 sipa/forms.py:78
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:38 sipa/forms.py:45 sipa/forms.py:50
+#: sipa/forms.py:38 sipa/forms.py:45 sipa/forms.py:60
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sipa/forms.py:58
+#: sipa/forms.py:55
+msgid "MAC muss unicast-Adresse sein!"
+msgstr ""
+
+#: sipa/forms.py:69
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:60 sipa/forms.py:65
+#: sipa/forms.py:71 sipa/forms.py:76
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
@@ -158,15 +161,13 @@ msgstr ""
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:79
-#: sipa/blueprints/usersuite.py:217
+#: sipa/blueprints/usersuite.py:79 sipa/blueprints/usersuite.py:217
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:112
-#: sipa/blueprints/usersuite.py:244
+#: sipa/blueprints/usersuite.py:112 sipa/blueprints/usersuite.py:244
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
@@ -178,8 +179,7 @@ msgstr ""
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:148
-#: sipa/blueprints/usersuite.py:176
+#: sipa/blueprints/usersuite.py:148 sipa/blueprints/usersuite.py:176
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
@@ -215,31 +215,31 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: sipa/templates/base.html:113
-msgid "Traffic"
+#: sipa/templates/base.html:105
+msgid "Für Details klicken"
 msgstr ""
 
-#: sipa/templates/base.html:117
+#: sipa/templates/base.html:111
 msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
 msgstr ""
 
-#: sipa/templates/base.html:121
+#: sipa/templates/base.html:115
 msgid "Es gab einen Fehler bei der Trafficabfrage"
 msgstr ""
 
-#: sipa/templates/base.html:128
+#: sipa/templates/base.html:122
 msgid "Kontakt"
 msgstr ""
 
-#: sipa/templates/base.html:150
+#: sipa/templates/base.html:144
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:210
+#: sipa/templates/base.html:204
 msgid "Verbrauchter Traffic"
 msgstr ""
 
-#: sipa/templates/index.html:22 sipa/templates/template.html:9
+#: sipa/templates/index.html:22
 msgid "geschrieben von"
 msgstr ""
 
@@ -253,6 +253,14 @@ msgstr ""
 
 #: sipa/templates/login.html:20
 msgid "Einloggen"
+msgstr ""
+
+#: sipa/templates/template.html:9
+msgid "Geschrieben von"
+msgstr ""
+
+#: sipa/templates/template.html:10
+msgid "Menütitel"
 msgstr ""
 
 #: sipa/templates/drafts/_traffic_chart.html:2
@@ -468,7 +476,7 @@ msgstr ""
 msgid "Usersuite von "
 msgstr ""
 
-#: sipa/utils/database_utils.py:104
+#: sipa/utils/database_utils.py:105
 msgid "Nutzer hat keine IP"
 msgstr ""
 
@@ -914,5 +922,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Trafficregelungen"
+#~ msgstr ""
+
+#~ msgid "Traffic"
 #~ msgstr ""
 
