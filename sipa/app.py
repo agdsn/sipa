@@ -16,6 +16,7 @@ from ldap import SERVER_DOWN
 
 from babel import Locale
 from .babel import babel, possible_locales
+from sipa.blueprints.news import bp_news
 from sipa.flatpages import cf_pages
 from sipa.blueprints import bp_usersuite, bp_pages, bp_documents, \
     bp_features
@@ -42,6 +43,7 @@ def init_app():
     app.register_blueprint(bp_usersuite)
     app.register_blueprint(bp_pages)
     app.register_blueprint(bp_documents)
+    app.register_blueprint(bp_news)
 
     # global jinja variables
     app.jinja_env.globals.update(
@@ -136,26 +138,7 @@ def set_language(lang='de'):
 @app.route('/index.php')
 @app.route('/')
 def index():
-    """Get all markdown files from 'news/', parse them and put
-    them in a list for the template.
-
-    The format is like this (Pelican compatible):
-
-        Title: ABC
-        Author: userX
-        Date: 1970-01-01
-        [Type: alert]
-
-        Message
-
-    The type field does not need to be used. If you use it, check what types
-    are available. For now, it's only 'alert' which colors the news entry red.
-    """
-    cf_pages.reload()
-    latest = cf_pages.get_articles_of_category('news')
-    latest = sorted(latest, key=lambda a: a.date, reverse=True)
-    latest = latest[0:10]
-    return render_template("index.html", articles=latest)
+    return redirect(url_for("news.display"))
 
 
 @app.route("/login", methods=['GET', 'POST'])
