@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-17 17:31+0200\n"
+"POT-Creation-Date: 2015-04-18 01:23+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -17,49 +17,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: sipa/app.py:60
+#: sipa/app.py:72
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: sipa/app.py:62
+#: sipa/app.py:74
 msgid "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: sipa/app.py:66
+#: sipa/app.py:78
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/app.py:176 sipa/blueprints/usersuite.py:144
+#: sipa/app.py:169 sipa/blueprints/usersuite.py:144
 #: sipa/blueprints/usersuite.py:172
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/app.py:178 sipa/blueprints/usersuite.py:146
+#: sipa/app.py:171 sipa/blueprints/usersuite.py:146
 #: sipa/blueprints/usersuite.py:174 sipa/blueprints/usersuite.py:201
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/app.py:207
+#: sipa/app.py:200
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/app.py:209
+#: sipa/app.py:202
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr ""
 
-#: sipa/app.py:212
+#: sipa/app.py:205
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: sipa/app.py:215
+#: sipa/app.py:208
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
 "einsehen."
 msgstr ""
 
-#: sipa/app.py:219
+#: sipa/app.py:212
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
 "anmelden."
@@ -203,44 +203,72 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sipa/templates/base.html:33
+#: sipa/templates/base.html:34
 msgid "News"
 msgstr ""
 
-#: sipa/templates/base.html:80
+#: sipa/templates/base.html:38
+msgid "Neueste"
+msgstr ""
+
+#: sipa/templates/base.html:40
+msgid "Älteste"
+msgstr ""
+
+#: sipa/templates/base.html:42
+msgid "Alle"
+msgstr ""
+
+#: sipa/templates/base.html:90
 msgid "Login"
 msgstr ""
 
-#: sipa/templates/base.html:84
+#: sipa/templates/base.html:94
 msgid "Logout"
 msgstr ""
 
-#: sipa/templates/base.html:105
+#: sipa/templates/base.html:115
 msgid "Für Details klicken"
 msgstr ""
 
-#: sipa/templates/base.html:111
+#: sipa/templates/base.html:121
 msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
 msgstr ""
 
-#: sipa/templates/base.html:115
+#: sipa/templates/base.html:125
 msgid "Es gab einen Fehler bei der Trafficabfrage"
 msgstr ""
 
-#: sipa/templates/base.html:122
+#: sipa/templates/base.html:132
 msgid "Kontakt"
 msgstr ""
 
-#: sipa/templates/base.html:144
+#: sipa/templates/base.html:154
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:204
+#: sipa/templates/base.html:214
 msgid "Verbrauchter Traffic"
 msgstr ""
 
 #: sipa/templates/index.html:22
 msgid "geschrieben von"
+msgstr ""
+
+#: sipa/templates/index.html:30
+msgid "Neuer"
+msgstr ""
+
+#: sipa/templates/index.html:34
+msgid "Keine neueren Beiträge"
+msgstr ""
+
+#: sipa/templates/index.html:41
+msgid "Älter"
+msgstr ""
+
+#: sipa/templates/index.html:45
+msgid "Keine älteren Beiträge"
 msgstr ""
 
 #: sipa/templates/login.html:10

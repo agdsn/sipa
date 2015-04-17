@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-17 17:31+0200\n"
-"PO-Revision-Date: 2015-04-17 17:32+0100\n"
+"POT-Creation-Date: 2015-04-18 01:23+0200\n"
+"PO-Revision-Date: 2015-04-18 01:26+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -17,48 +17,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: sipa/app.py:60
+#: sipa/app.py:72
 msgid "Seite nicht gefunden!"
 msgstr "Page not found!"
 
-#: sipa/app.py:62
+#: sipa/app.py:74
 msgid "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr "You are not permitted to view this page!"
 
-#: sipa/app.py:66
+#: sipa/app.py:78
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: sipa/app.py:176
+#: sipa/app.py:169
 #: sipa/blueprints/usersuite.py:144
 #: sipa/blueprints/usersuite.py:172
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/app.py:178
+#: sipa/app.py:171
 #: sipa/blueprints/usersuite.py:146
 #: sipa/blueprints/usersuite.py:174
 #: sipa/blueprints/usersuite.py:201
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/app.py:207
+#: sipa/app.py:200
 msgid "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/app.py:209
+#: sipa/app.py:202
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr "You will find here the traffic data for this connection"
 
-#: sipa/app.py:212
+#: sipa/app.py:205
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
-#: sipa/app.py:215
+#: sipa/app.py:208
 msgid "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite einsehen."
 msgstr "Because you are logged in, you can view your traffic here in the usersuite."
 
-#: sipa/app.py:219
+#: sipa/app.py:212
 msgid "Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
 msgstr "To view your traffic from outside the network, you have to log in."
 
@@ -206,45 +206,73 @@ msgstr "Your database has been deleted."
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
-#: sipa/templates/base.html:33
+#: sipa/templates/base.html:34
 msgid "News"
 msgstr "News"
 
-#: sipa/templates/base.html:80
+#: sipa/templates/base.html:38
+msgid "Neueste"
+msgstr "Newest"
+
+#: sipa/templates/base.html:40
+msgid "Älteste"
+msgstr "Oldest"
+
+#: sipa/templates/base.html:42
+msgid "Alle"
+msgstr "Everything"
+
+#: sipa/templates/base.html:90
 msgid "Login"
 msgstr "Login"
 
-#: sipa/templates/base.html:84
+#: sipa/templates/base.html:94
 msgid "Logout"
 msgstr "Logout"
 
-#: sipa/templates/base.html:105
+#: sipa/templates/base.html:115
 msgid "Für Details klicken"
 msgstr "Click for details"
 
-#: sipa/templates/base.html:111
+#: sipa/templates/base.html:121
 msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
 msgstr "This IP does not belong to the network of the AGDSN"
 
-#: sipa/templates/base.html:115
+#: sipa/templates/base.html:125
 msgid "Es gab einen Fehler bei der Trafficabfrage"
 msgstr "Database query could not be processed"
 
-#: sipa/templates/base.html:122
+#: sipa/templates/base.html:132
 msgid "Kontakt"
 msgstr "Contact"
 
-#: sipa/templates/base.html:144
+#: sipa/templates/base.html:154
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:204
+#: sipa/templates/base.html:214
 msgid "Verbrauchter Traffic"
 msgstr "Spent traffic"
 
 #: sipa/templates/index.html:22
 msgid "geschrieben von"
 msgstr "written by"
+
+#: sipa/templates/index.html:30
+msgid "Neuer"
+msgstr "Newer"
+
+#: sipa/templates/index.html:34
+msgid "Keine neueren Beiträge"
+msgstr "No newer entries"
+
+#: sipa/templates/index.html:41
+msgid "Älter"
+msgstr "Older"
+
+#: sipa/templates/index.html:45
+msgid "Keine älteren Beiträge"
+msgstr "No older entries"
 
 #: sipa/templates/login.html:10
 msgid "Benutzername"
@@ -650,58 +678,58 @@ msgstr "Total"
 #~ msgstr ""
 
 #~ msgid "Support"
-#~ msgstr "Link-Up"
+#~ msgstr ""
 
 #~ msgid "Kontakt"
-#~ msgstr ""
+#~ msgstr "Link-Up"
 
 #~ msgid "Auszug"
-#~ msgstr "External provider"
+#~ msgstr ""
 
 #~ msgid "Umzug"
-#~ msgstr "Payment"
+#~ msgstr "External provider"
 
 #~ msgid "FAQ"
-#~ msgstr ""
+#~ msgstr "Payment"
 
 #~ msgid "Hausmeister"
-#~ msgstr "Monday"
+#~ msgstr ""
 
 #~ msgid "Club Wu5"
-#~ msgstr "Dormitory"
+#~ msgstr "Monday"
 
 #~ msgid "Studentenwerk"
-#~ msgstr ""
+#~ msgstr "Dormitory"
 
 #~ msgid "E-Mail"
 #~ msgstr ""
 
 #~ msgid "Software"
-#~ msgstr "Janitor"
+#~ msgstr ""
 
 #~ msgid "Rechtliches"
-#~ msgstr "Club Wu5"
+#~ msgstr "Janitor"
 
 #~ msgid "Finanzordnung"
-#~ msgstr "Studentenwerk"
+#~ msgstr "Club Wu5"
 
 #~ msgid "Mitglied werden"
-#~ msgstr "E-Mail"
+#~ msgstr "Studentenwerk"
 
 #~ msgid "Anmeldung eines Externen Anschlusses"
-#~ msgstr "Software"
+#~ msgstr "E-Mail"
 
 #~ msgid "Gilt nur für alle Bewohner der Häuser <b> Wu1, Wu5, Wu7 und ZW 41c</b>:"
-#~ msgstr "Legal"
+#~ msgstr "Software"
 
 #~ msgid "Antrag"
-#~ msgstr "Finance regulations"
+#~ msgstr "Legal"
 
 #~ msgid "Mitglied werden und Anschluss beantragen"
-#~ msgstr "Becomming a Member"
+#~ msgstr "Finance regulations"
 
 #~ msgid "Passives Mitglied werden"
-#~ msgstr ""
+#~ msgstr "Becomming a Member"
 
 #~ msgid "Lies dir die Hinweise auf der Rückseite des Formulars gründlich durch."
 #~ msgstr ""
@@ -728,55 +756,55 @@ msgstr "Total"
 #~ msgstr ""
 
 #~ msgid "Haltestelle"
-#~ msgstr "German"
+#~ msgstr ""
 
 #~ msgid "Fehler bei der Abfrage!"
-#~ msgstr "English"
+#~ msgstr "German"
 
 #~ msgid "Linie"
-#~ msgstr "Bus & train departure times"
+#~ msgstr "English"
 
 #~ msgid "Richtung"
-#~ msgstr "Stop"
+#~ msgstr "Bus & train departure times"
 
 #~ msgid "Quelle"
-#~ msgstr "Query could not be processed!"
+#~ msgstr "Stop"
 
 #~ msgid "Ansprechpartner"
-#~ msgstr "Route"
+#~ msgstr "Query could not be processed!"
 
 #~ msgid "Allgemeine Ansprechpartner"
-#~ msgstr "Direction"
+#~ msgstr "Route"
 
 #~ msgid "Bereich"
-#~ msgstr "Source"
+#~ msgstr "Direction"
 
 #~ msgid "Verantwortliche"
-#~ msgstr "Contacts"
+#~ msgstr "Source"
 
 #~ msgid "Vorstand"
-#~ msgstr "General contacts"
+#~ msgstr "Contacts"
 
 #~ msgid "Finanzen"
-#~ msgstr "Division"
+#~ msgstr "General contacts"
 
 #~ msgid "Öffentlichkeitsarbeit"
-#~ msgstr "Responsible"
+#~ msgstr "Division"
 
 #~ msgid "Nutzerverwaltung"
-#~ msgstr "Managing"
+#~ msgstr "Responsible"
 
 #~ msgid "Server & Dienste"
-#~ msgstr "Finance"
+#~ msgstr "Managing"
 
 #~ msgid "Hausadmins"
-#~ msgstr "Public relations"
+#~ msgstr "Finance"
 
 #~ msgid "Haus"
-#~ msgstr "User management"
+#~ msgstr "Public relations"
 
 #~ msgid "Trafficregelungen"
-#~ msgstr "Servers & services"
+#~ msgstr "User management"
 
 #~ msgid "Traffic"
-#~ msgstr "Dormitory admins"
+#~ msgstr "Servers & services"
