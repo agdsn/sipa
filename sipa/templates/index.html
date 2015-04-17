@@ -22,4 +22,29 @@
             <div class="panel-footer">{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</div>
         </div>
     {% endfor %}
+    <nav>
+        <ul class="pager">
+        {% if previous_range %}
+            <li class="previous">
+                <a href="{{ url_for(".display", start=previous_range.start, end=previous_range.end) }}">
+                <span aria-hidden="true">&larr;</span> {{ _("Neuer") }}</a>
+            </li>
+        {% else %}
+            <li class="previous disabled">
+                <a href="#">{{ _("Keine neueren Beiträge") }}</a>
+            </li>
+        {% endif %}
+
+        {% if next_range %}
+            <li class="next">
+                <a href="{{ url_for(".display", start=next_range.start, end=next_range.end) }}">
+                {{ _("Älter") }} <span aria-hidden="true">&rarr;</span></a>
+            </li>
+        {% else %}
+            <li class="next disabled">
+                <a href="#">{{ _("Keine älteren Beiträge") }}</a>
+            </li>
+        {% endif %}
+        </ul>
+    </nav>
 {% endblock %}
