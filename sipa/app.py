@@ -88,7 +88,8 @@ app.register_error_handler(404, errorpage)
 def exceptionhandler_sql(ex):
     """Handles global MySQL errors (server down).
     """
-    flash(u"Connection to SQL server could not be established!", "error")
+    flash(gettext("Verbindung zum SQL-Server konnte nicht hergestellt werden!"),
+          "error")
     # todo check if infinite redirection might still occur
     # Proviously, requesting `/` w/o having a connection to the mysql database
     # would result in an infinite loop of redirects to `/` since
@@ -109,7 +110,10 @@ def exceptionhandler_ldap(ex):
     also needs a handler.
     """
     session.clear()
-    flash(u"Connection to LDAP server could not be established!", "error")
+    flash(gettext(
+        "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"),
+        "error"
+    )
     return redirect(url_for('index'))
 
 

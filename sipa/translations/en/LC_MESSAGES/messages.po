@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-18 01:23+0200\n"
-"PO-Revision-Date: 2015-04-18 01:26+0100\n"
+"POT-Creation-Date: 2015-04-18 16:39+0200\n"
+"PO-Revision-Date: 2015-04-18 16:40+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -29,36 +29,44 @@ msgstr "You are not permitted to view this page!"
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: sipa/app.py:169
+#: sipa/app.py:92
+msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
+msgstr "Connection to SQL server could not be established!"
+
+#: sipa/app.py:115
+msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
+msgstr "Connection to LDAP server could not be established!"
+
+#: sipa/app.py:175
 #: sipa/blueprints/usersuite.py:144
 #: sipa/blueprints/usersuite.py:172
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/app.py:171
+#: sipa/app.py:177
 #: sipa/blueprints/usersuite.py:146
 #: sipa/blueprints/usersuite.py:174
 #: sipa/blueprints/usersuite.py:201
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/app.py:200
+#: sipa/app.py:206
 msgid "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/app.py:202
+#: sipa/app.py:208
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr "You will find here the traffic data for this connection"
 
-#: sipa/app.py:205
+#: sipa/app.py:211
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
-#: sipa/app.py:208
+#: sipa/app.py:214
 msgid "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite einsehen."
 msgstr "Because you are logged in, you can view your traffic here in the usersuite."
 
-#: sipa/app.py:212
+#: sipa/app.py:218
 msgid "Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
 msgstr "To view your traffic from outside the network, you have to log in."
 
@@ -498,7 +506,7 @@ msgstr "Verification of your new password"
 msgid "Usersuite von "
 msgstr "Usersuite of "
 
-#: sipa/utils/database_utils.py:105
+#: sipa/utils/database_utils.py:106
 msgid "Nutzer hat keine IP"
 msgstr "User does not have an IP"
 
@@ -681,58 +689,58 @@ msgstr "Total"
 #~ msgstr ""
 
 #~ msgid "Kontakt"
-#~ msgstr "Link-Up"
+#~ msgstr ""
 
 #~ msgid "Auszug"
-#~ msgstr ""
+#~ msgstr "Link-Up"
 
 #~ msgid "Umzug"
-#~ msgstr "External provider"
+#~ msgstr ""
 
 #~ msgid "FAQ"
-#~ msgstr "Payment"
+#~ msgstr "External provider"
 
 #~ msgid "Hausmeister"
-#~ msgstr ""
+#~ msgstr "Payment"
 
 #~ msgid "Club Wu5"
-#~ msgstr "Monday"
+#~ msgstr ""
 
 #~ msgid "Studentenwerk"
-#~ msgstr "Dormitory"
+#~ msgstr "Monday"
 
 #~ msgid "E-Mail"
-#~ msgstr ""
+#~ msgstr "Dormitory"
 
 #~ msgid "Software"
 #~ msgstr ""
 
 #~ msgid "Rechtliches"
-#~ msgstr "Janitor"
+#~ msgstr ""
 
 #~ msgid "Finanzordnung"
-#~ msgstr "Club Wu5"
+#~ msgstr "Janitor"
 
 #~ msgid "Mitglied werden"
-#~ msgstr "Studentenwerk"
+#~ msgstr "Club Wu5"
 
 #~ msgid "Anmeldung eines Externen Anschlusses"
-#~ msgstr "E-Mail"
+#~ msgstr "Studentenwerk"
 
 #~ msgid "Gilt nur für alle Bewohner der Häuser <b> Wu1, Wu5, Wu7 und ZW 41c</b>:"
-#~ msgstr "Software"
+#~ msgstr "E-Mail"
 
 #~ msgid "Antrag"
-#~ msgstr "Legal"
+#~ msgstr "Software"
 
 #~ msgid "Mitglied werden und Anschluss beantragen"
-#~ msgstr "Finance regulations"
+#~ msgstr "Legal"
 
 #~ msgid "Passives Mitglied werden"
-#~ msgstr "Becomming a Member"
+#~ msgstr "Finance regulations"
 
 #~ msgid "Lies dir die Hinweise auf der Rückseite des Formulars gründlich durch."
-#~ msgstr ""
+#~ msgstr "Becomming a Member"
 
 #~ msgid "Überweise den Semesterbeitrag innerhalb von 31 Tagen auf unser Konto."
 #~ msgstr ""
@@ -759,52 +767,52 @@ msgstr "Total"
 #~ msgstr ""
 
 #~ msgid "Fehler bei der Abfrage!"
-#~ msgstr "German"
+#~ msgstr ""
 
 #~ msgid "Linie"
-#~ msgstr "English"
+#~ msgstr "German"
 
 #~ msgid "Richtung"
-#~ msgstr "Bus & train departure times"
+#~ msgstr "English"
 
 #~ msgid "Quelle"
-#~ msgstr "Stop"
+#~ msgstr "Bus & train departure times"
 
 #~ msgid "Ansprechpartner"
-#~ msgstr "Query could not be processed!"
+#~ msgstr "Stop"
 
 #~ msgid "Allgemeine Ansprechpartner"
-#~ msgstr "Route"
+#~ msgstr "Query could not be processed!"
 
 #~ msgid "Bereich"
-#~ msgstr "Direction"
+#~ msgstr "Route"
 
 #~ msgid "Verantwortliche"
-#~ msgstr "Source"
+#~ msgstr "Direction"
 
 #~ msgid "Vorstand"
-#~ msgstr "Contacts"
+#~ msgstr "Source"
 
 #~ msgid "Finanzen"
-#~ msgstr "General contacts"
+#~ msgstr "Contacts"
 
 #~ msgid "Öffentlichkeitsarbeit"
-#~ msgstr "Division"
+#~ msgstr "General contacts"
 
 #~ msgid "Nutzerverwaltung"
-#~ msgstr "Responsible"
+#~ msgstr "Division"
 
 #~ msgid "Server & Dienste"
-#~ msgstr "Managing"
+#~ msgstr "Responsible"
 
 #~ msgid "Hausadmins"
-#~ msgstr "Finance"
+#~ msgstr "Managing"
 
 #~ msgid "Haus"
-#~ msgstr "Public relations"
+#~ msgstr "Finance"
 
 #~ msgid "Trafficregelungen"
-#~ msgstr "User management"
+#~ msgstr "Public relations"
 
 #~ msgid "Traffic"
-#~ msgstr "Servers & services"
+#~ msgstr "User management"

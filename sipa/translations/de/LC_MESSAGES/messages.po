@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-18 01:23+0200\n"
+"POT-Creation-Date: 2015-04-18 16:39+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -29,37 +29,45 @@ msgstr ""
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/app.py:169 sipa/blueprints/usersuite.py:144
+#: sipa/app.py:92
+msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
+msgstr ""
+
+#: sipa/app.py:115
+msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
+msgstr ""
+
+#: sipa/app.py:175 sipa/blueprints/usersuite.py:144
 #: sipa/blueprints/usersuite.py:172
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/app.py:171 sipa/blueprints/usersuite.py:146
+#: sipa/app.py:177 sipa/blueprints/usersuite.py:146
 #: sipa/blueprints/usersuite.py:174 sipa/blueprints/usersuite.py:201
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/app.py:200
+#: sipa/app.py:206
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/app.py:202
+#: sipa/app.py:208
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr ""
 
-#: sipa/app.py:205
+#: sipa/app.py:211
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: sipa/app.py:208
+#: sipa/app.py:214
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
 "einsehen."
 msgstr ""
 
-#: sipa/app.py:212
+#: sipa/app.py:218
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
 "anmelden."
@@ -504,7 +512,7 @@ msgstr ""
 msgid "Usersuite von "
 msgstr ""
 
-#: sipa/utils/database_utils.py:105
+#: sipa/utils/database_utils.py:106
 msgid "Nutzer hat keine IP"
 msgstr ""
 
