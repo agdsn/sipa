@@ -57,6 +57,19 @@ def init_app():
     app.register_blueprint(bp_documents)
     app.register_blueprint(bp_news)
 
+    if not app.debug:
+        app.config.setdefault('LOG_MAX_BYTES', 1024**2)
+        app.config.setdefault('LOG_BACKUP_COUNT', 10)
+        import logging
+        from logging.handlers import RotatingFileHandler
+        file_handler = RotatingFileHandler(
+            app.config['LOG_FILE'],
+            maxBytes=app.config['LOG_MAX_BYTES'],
+            backupCount=app.config['LOG_BACKUP_COUNT'])
+        file_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(file_handler)
+
+
     # global jinja variables
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
