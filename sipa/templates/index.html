@@ -15,13 +15,17 @@
 {% endmacro %}
 
 {% block content %}
-    {% for art in articles %}
+    {% if articles%}{% for art in articles %}
         <div class="panel {{ panelclass(art.type) }}">
             <div class="panel-heading"><h2 class="panel-title">{{ art.title }}</h2></div>
             <div class="panel-body">{{ art.html|safe }}</div>
             <div class="panel-footer">{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</div>
         </div>
-    {% endfor %}
+    {% endfor %}{% else %}
+        <div class="alert alert-info">
+            {{ _("Keine News Vorhanden!") }}
+        </div>
+    {% endif %}
     <nav>
         <ul class="pager">
         {% if previous_range %}

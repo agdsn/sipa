@@ -23,6 +23,9 @@ def display(start=None, end=None):
     """
     cf_pages.reload()
     news = cf_pages.get_articles_of_category('news')
+    if len(news) is 0:
+        return render_template("index.html", articles=None,
+                               previous_range=0, next_range=0)
     news = sorted(news, key=lambda a: a.date, reverse=True)
 
     default_step = 10
