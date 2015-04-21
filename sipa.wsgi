@@ -3,11 +3,11 @@ from os import environ
 from sipa import app
 from sipa.base import init_app
 
+#default configuration
 app.config.from_pyfile('default_config.py')
 
 # if local config file exists, load everything into local space.
 config_dir = os.getenv('SIPA_CONFIG_DIR', '..')
-
 try:
     app.config.from_pyfile( '{}/config.py'.format(config_dir))
 except IOError:
