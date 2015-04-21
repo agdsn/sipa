@@ -6,19 +6,24 @@ from flask.globals import request
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
-from sipa.config import *
+from sipa import app
 from sipa.utils import timestamp_from_timetag, timetag_from_timestamp
 from .exceptions import DBQueryEmpty, ForeignIPAccessError
 
 
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
-    DB_ATLANTIS_USER, DB_ATLANTIS_PASSWORD, DB_ATLANTIS_HOST),
-    echo=False, connect_args={'connect_timeout': SQL_TIMEOUT})
+    app.config['DB_ATLANTIS_USER'],
+    app.config['DB_ATLANTIS_PASSWORD'],
+    app.config['DB_ATLANTIS_HOST'] ),
+    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
 
 db_helios = create_engine(
     'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
-        DB_HELIOS_USER, DB_HELIOS_PASSWORD, DB_HELIOS_HOST, DB_HELIOS_PORT),
-    echo=False, connect_args={'connect_timeout': SQL_TIMEOUT})
+        app.config['DB_HELIOS_USER'],
+        app.config['DB_HELIOS_PASSWORD'],
+        app.config['DB_HELIOS_HOST'],
+        app.config['DB_HELIOS_PORT']),
+    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT'] })
 
 
 def sql_query(query, args=(), database=db_atlantis):
@@ -69,11 +74,11 @@ def query_userinfo(username):
     user = {
         'id': user['nutzer_id'],
         'address': u"{0} / {1} {2}".format(
-            dormitories[user['wheim_id'] - 1],
+            app.config['dormitories'][user['wheim_id'] - 1],
             user['etage'],
             user['zimmernr']
         ),
-        'status': status[user['status']],
+        'status': app.config['status'][user['status']],
         'status_is_good': user['status'] == 1,
         'ip': computer['c_ip'],
         'mac': computer['c_etheraddr'].upper(),
@@ -109,7 +114,7 @@ def query_trafficdata(ip=None, user_id=None):
             (user_id,)
         ).fetchone())
         if not result:
-            raise DBQueryEmpty(gettext('Nutzer hat keine IP'))
+            raise DBQueryEmpty('Nutzer hat keine IP')
         ip = result['c_ip']
 
     trafficdata = sql_query(
@@ -144,9 +149,9 @@ def query_trafficdata(ip=None, user_id=None):
                 round(i[param] / 1024.0, 2)
                 for param in ['input', 'output', 'amount']
             )
-            traffic['history'].append((weekdays[day], input, output, credit))
+            traffic['history'].append((app.config['weekdays'][day], input, output, credit))
         else:
-            traffic['history'].append((weekdays[day], 0.0, 0.0, 0.0))
+            traffic['history'].append(( app.config['weekdays'][day], 0.0, 0.0, 0.0))
 
     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
