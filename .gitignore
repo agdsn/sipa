@@ -4,6 +4,7 @@ documents
 *.pyc
 *.pyo
 *~
+*.log
 .idea
 
 messages.pot
