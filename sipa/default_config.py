@@ -48,7 +48,7 @@ SQL_TIMEOUT = 15
 
 # todo further modularization. id mappings are rather specific than generous.
 # MySQL id mappings
-dormitories = [
+DORMITORIES = [
     u'Wundstraße 5',
     u'Wundstraße 7',
     u'Wundstraße 9',
@@ -62,7 +62,7 @@ dormitories = [
     u'Zellescher Weg 41D'
 ]
 
-status = {
+STATUS = {
     # todo vervollständigen oder mindestens fehlerresistent machen!
     # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
     1: gettext(u'Bezahlt, verbunden'),
@@ -72,7 +72,7 @@ status = {
     12: gettext(u'Trafficlimit überschritten, Netzanschluss gesperrt')
 }
 
-weekdays = {
+WEEKDAYS = {
     '0': gettext('Sonntag'),
     '1': gettext('Montag'),
     '2': gettext('Dienstag'),
@@ -83,13 +83,13 @@ weekdays = {
 }
 
 # Languages
-languages = {
+LANGUAGES = {
     'de': 'Deutsch',
     'en': 'English'
 }
 
 # Bus & tram stops
-busstops = [
+BUSSTOPS = [
     "Zellescher Weg",
     "Strehlener Platz",
     "Weberplatz"
