@@ -26,8 +26,8 @@ def init_app():
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
 
-    from sipa.blueprints import bp_features, bp_usersuite, bp_pages, bp_documents
-    from sipa.blueprints.news import bp_news
+    from sipa.blueprints import bp_features, bp_usersuite, \
+        bp_pages, bp_documents, bp_news
 
     # Blueprints
     app.register_blueprint(bp_features)
