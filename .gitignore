@@ -8,4 +8,4 @@ documents
 
 messages.pot
 
-sipa/config_local.py
+sipa/config.py
