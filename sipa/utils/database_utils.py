@@ -59,6 +59,13 @@ def query_userinfo(username):
     if not computer:
         raise DBQueryEmpty
 
+    try:
+        has_mysql_db = user_has_mysql_db(username)
+    except OperationalError:
+        # todo display error (helios unreachable)
+        # was a workaround to not abort due to this error
+        has_mysql_db = False
+
     user = {
         'id': user['nutzer_id'],
         'address': u"{0} / {1} {2}".format(
@@ -72,7 +79,7 @@ def query_userinfo(username):
         'mac': computer['c_etheraddr'].upper(),
         'hostname': computer['c_hname'],
         'hostalias': computer['c_alias'],
-        'heliosdb': user_has_mysql_db(username)
+        'heliosdb': has_mysql_db
     }
 
     return user
