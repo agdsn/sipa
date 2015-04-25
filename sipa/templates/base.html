@@ -193,7 +193,7 @@
 	<script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
-	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.min.js") }}"></script>
+	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
     {% if not traffic().error %}
         {% set gauge_val = (traffic.exhausted/1024)|round(2) %}
