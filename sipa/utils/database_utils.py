@@ -14,7 +14,7 @@ from .exceptions import DBQueryEmpty, ForeignIPAccessError
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
     app.config['DB_ATLANTIS_USER'],
     app.config['DB_ATLANTIS_PASSWORD'],
-    app.config['DB_ATLANTIS_HOST'] ),
+    app.config['DB_ATLANTIS_HOST']),
     echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
 
 db_helios = create_engine(
@@ -23,7 +23,7 @@ db_helios = create_engine(
         app.config['DB_HELIOS_PASSWORD'],
         app.config['DB_HELIOS_HOST'],
         app.config['DB_HELIOS_PORT']),
-    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT'] })
+    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
 
 
 def sql_query(query, args=(), database=db_atlantis):
@@ -149,9 +149,11 @@ def query_trafficdata(ip=None, user_id=None):
                 round(i[param] / 1024.0, 2)
                 for param in ['input', 'output', 'amount']
             )
-            traffic['history'].append((app.config['WEEKDAYS'][day], input, output, credit))
+            traffic['history'].append(
+                (app.config['WEEKDAYS'][day], input, output, credit))
         else:
-            traffic['history'].append(( app.config['WEEKDAYS'][day], 0.0, 0.0, 0.0))
+            traffic['history'].append(
+                (app.config['WEEKDAYS'][day], 0.0, 0.0, 0.0))
 
     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
@@ -248,7 +250,8 @@ def change_mysql_userdatabase_password(username, password):
         )
 
     sql_query(
-        "GRANT SELECT, INSERT, UPDATE, DELETE, ALTER, CREATE, DROP, INDEX, LOCK TABLES "
+        "GRANT SELECT, INSERT, UPDATE, DELETE, "
+        "ALTER, CREATE, DROP, INDEX, LOCK TABLES "
         "ON `%s`.* "
         "TO %%s@'10.1.7.%%%%'" % username,
         (username,),

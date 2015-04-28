@@ -17,9 +17,6 @@ from sipa.utils.ldap_utils import User
 login_manager = LoginManager()
 
 
-
-
-
 def init_app():
     login_manager.init_app(app)
     babel.init_app(app)

@@ -16,9 +16,7 @@ from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
-from babel import Locale
 from sipa import app
-from sipa.babel import possible_locales
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils.database_utils import query_trafficdata, \
     user_id_from_ip
@@ -36,10 +34,6 @@ class IntegerConverter(BaseIntegerConverter):
 
 
 app.url_map.converters['int'] = IntegerConverter
-
-
-
-
 
 
 def errorpage(e):

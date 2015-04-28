@@ -43,7 +43,8 @@ def send_mail(sender, receipient, subject, message):
 
     try:
         smtp = smtplib.SMTP()
-        smtp.connect(host=app.config['MAILSERVER_HOST'], port=app.config['MAILSERVER_PORT'])
+        smtp.connect(host=app.config['MAILSERVER_HOST'],
+                     port=app.config['MAILSERVER_PORT'])
         smtp.sendmail(sender, receipient, mail.as_string(0))
         smtp.close()
         return True
