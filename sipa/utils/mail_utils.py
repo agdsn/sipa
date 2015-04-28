@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 import smtplib
 import textwrap
 
-from sipa.config import MAILSERVER_HOST, MAILSERVER_PORT
+from sipa import app
 
 
 def wrap_message(message, chars_in_line=80):
@@ -43,7 +43,7 @@ def send_mail(sender, receipient, subject, message):
 
     try:
         smtp = smtplib.SMTP()
-        smtp.connect(host=MAILSERVER_HOST, port=MAILSERVER_PORT)
+        smtp.connect(host=app.config['MAILSERVER_HOST'], port=app.config['MAILSERVER_PORT'])
         smtp.sendmail(sender, receipient, mail.as_string(0))
         smtp.close()
         return True

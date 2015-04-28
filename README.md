@@ -84,4 +84,9 @@ Another possibility is to include hyperlinks, which only have a metadata section
     link: http://http://www.awesome-page.com/
     rank: 1
 
+Dockercontainer
+---------------
+
+Build the Dockercontainer with `docker build -t sipa-base .` within the top folder. 
+
 [1] https://en.wikipedia.org/wiki/Sipa

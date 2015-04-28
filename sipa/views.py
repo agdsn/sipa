@@ -6,29 +6,25 @@ Drupalport auf Python im Zuge der Entwicklung von Pycroft.
 Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
 """
 
-from flask import Flask, render_template, request, redirect, \
+from __future__ import absolute_import
+
+from flask import render_template, request, redirect, \
     url_for, flash, session
-from flask_babel import gettext, get_locale
-from flask_login import LoginManager, current_user, login_user, \
-    logout_user
+from flask_babel import gettext
+from flask_login import current_user, login_user, logout_user
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
+from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from babel import Locale
-from .babel import babel, possible_locales
-from sipa.blueprints.news import bp_news
-from sipa.flatpages import cf_pages
-from sipa.blueprints import bp_usersuite, bp_pages, bp_documents, \
-    bp_features
+from sipa import app
+from sipa.babel import possible_locales
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils.database_utils import query_trafficdata, \
-    query_gauge_data, user_id_from_ip
+    user_id_from_ip
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     ForeignIPAccessError
-from sipa.utils.graph_utils import render_traffic_chart
 from sipa.utils.ldap_utils import User, authenticate
-
-from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 
 class IntegerConverter(BaseIntegerConverter):
@@ -39,45 +35,11 @@ class IntegerConverter(BaseIntegerConverter):
     regex = r'-?\d+'
 
 
-app = Flask('sipa')
-
 app.url_map.converters['int'] = IntegerConverter
-login_manager = LoginManager()
 
 
-def init_app():
-    login_manager.init_app(app)
-    babel.init_app(app)
-    babel.localeselector(babel_selector)
-    cf_pages.init_app(app)
-    # Blueprints
-    app.register_blueprint(bp_features)
-    app.register_blueprint(bp_usersuite)
-    app.register_blueprint(bp_pages)
-    app.register_blueprint(bp_documents)
-    app.register_blueprint(bp_news)
-
-    if not app.debug:
-        app.config.setdefault('LOG_MAX_BYTES', 1024**2)
-        app.config.setdefault('LOG_BACKUP_COUNT', 10)
-        import logging
-        from logging.handlers import RotatingFileHandler
-        file_handler = RotatingFileHandler(
-            app.config['LOG_FILE'],
-            maxBytes=app.config['LOG_MAX_BYTES'],
-            backupCount=app.config['LOG_BACKUP_COUNT'])
-        file_handler.setLevel(logging.WARNING)
-        app.logger.addHandler(file_handler)
 
 
-    # global jinja variables
-    app.jinja_env.globals.update(
-        cf_pages=cf_pages,
-        traffic=query_gauge_data,
-        get_locale=get_locale,
-        possible_locales=possible_locales,
-        chart=render_traffic_chart,
-    )
 
 
 def errorpage(e):
@@ -128,32 +90,6 @@ def exceptionhandler_ldap(ex):
         "error"
     )
     return redirect(url_for('index'))
-
-
-@login_manager.user_loader
-def load_user(username):
-    """Loads a User object from/into the session at every request
-    """
-    return User.get(username)
-
-
-def babel_selector():
-    """Tries to get the language setting from the current session cookie.
-    If this fails (if it is not set) it first checks if a language was
-    submitted as an argument ('/page?lang=de') and if not, the best matching
-    language out of the header accept-language is chosen and set.
-    """
-
-    if 'locale' in request.args and Locale(
-            request.args['locale']) in possible_locales():
-        session['locale'] = request.args['locale']
-    elif not session.get('locale'):
-        langs = []
-        for lang in possible_locales():
-            langs.append(lang.language)
-        session['locale'] = request.accept_languages.best_match(langs)
-
-    return session.get('locale')
 
 
 @app.route("/language/<string:lang>")
