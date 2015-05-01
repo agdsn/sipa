@@ -27,9 +27,9 @@ RUN mkdir /var/log/sipa && \
 ADD . /home/sipa/sipa
 
 WORKDIR /home/sipa/sipa
-RUN pip install -r requirements.txt
-#RUN python /home/sipa/sipa/setup.py install
+RUN chown -R sipa:sipa /home/sipa/sipa
 
+RUN pip install -r requirements.txt
 
 
 EXPOSE 5000
