@@ -195,14 +195,13 @@
 	<script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
+    {% set gauge_max = 63 %}
     {% if not traffic().error %}
-        {% set gauge_val = (traffic.exhausted/1024)|round(2) %}
-        {% set gauge_max = (traffic.credit/1024)|round(2) %}
+        {% set gauge_val = (traffic().exhausted/1024)|round(2) %}
         {% set gauge_label = "GiB" %}
     {% else %}
-        {% set gauge_val = "–" %}
-        {% set gauge_max = 0 %}
-        {% set gauge_label = "" %}
+        {% set gauge_val = 0 %}
+        {% set gauge_label = "–" %}
     {% endif %}
     <script type="text/javascript">
         $(function(){
