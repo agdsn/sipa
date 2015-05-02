@@ -15,10 +15,11 @@ class ContactForm(Form):
     subject = TextField(u"Betreff", validators=[
         Required(gettext(u"Betreff muss angegeben werden!"))])
     type = SelectField(u"Kategorie", choices=[
-        (u"frage", lazy_gettext(u"Allgemeine Frage an die Admins")),
-        (u"stoerung", lazy_gettext(u"Störungen im Wu-ZW-Netz")),
-        (u"finanzen", lazy_gettext(u"Finanzen (Beiträge, Gebühren)")),
-        (u"eigene-technik", lazy_gettext(u"Probleme mit eigener Technik"))
+        (u"frage", lazy_gettext(u"Allgemeine Frage an die Administratoren")),
+        (u"stoerung",
+         lazy_gettext(u"Störungen im Netzwerk Wundtstraße/Zellescher Weg")),
+        (u"finanzen", lazy_gettext(u"Finanzfragen (Beiträge, Gebühren)")),
+        (u"eigene-technik", lazy_gettext(u"Probleme mit privater Technik"))
     ])
     message = TextAreaField(u"Nachricht",
                             validators=[Required(gettext(u"Nachricht fehlt!"))])
