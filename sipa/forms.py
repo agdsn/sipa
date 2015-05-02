@@ -3,10 +3,10 @@
 
 from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
+from flask_wtf import Form
 from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
-    HiddenField, Form
+    HiddenField
 from wtforms.validators import Required, Email, MacAddress, ValidationError
-
 
 class ContactForm(Form):
     email = TextField(u"E-Mail", validators=[
