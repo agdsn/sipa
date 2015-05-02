@@ -84,9 +84,33 @@ Another possibility is to include hyperlinks, which only have a metadata section
     link: http://http://www.awesome-page.com/
     rank: 1
 
-Dockercontainer
----------------
+Running on Docker
+-----------------
+To create a running instance of Sipa with Docker, you have to create the *image*
+first. This is determined by the Dockerfile, which is located in the top folder
+of the repository, in this case `.`.
+Therefore, you have to run `docker build -t sipa-base .` in order to create a
+valid docker image; “sipa-base” is an arbitrary name we chose to make
+identification easier. Else, `docker images` would just print
+the ID of the image.
+To use Sipa, you have to run a container based on that image. Additionally, you
+will want to:
 
-Build the Dockercontainer with `docker build -t sipa-base .` within the top folder. 
+* mount the top directory to apply changes in that directory (crucial for
+  development)
+* make the according tcp port accessible for you (i.e. `:5001`)
+* give the container a name (i.e. `sipa`)
+* run the server (via `python`)
+
+This leads to the following command:
+
+```shell
+docker run --rm \
+    --name=sipa \
+    -p=5001:5000 \
+    -v=/home/lukas/code/sipa:/home/sipa/sipa \
+    sipa-base \
+    python sipa.wsgi
+```
 
 [1] https://en.wikipedia.org/wiki/Sipa
