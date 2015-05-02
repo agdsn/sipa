@@ -197,7 +197,7 @@
 	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
     {% set gauge_max = 63 %}
     {% if not traffic().error %}
-        {% set gauge_val = (traffic().exhausted/1024)|round(2) %}
+        {% set gauge_val = (traffic().credit/1024)|round(2) %}
         {% set gauge_label = "GiB" %}
     {% else %}
         {% set gauge_val = 0 %}
@@ -211,8 +211,9 @@
                 min: 0,
 				relativeGaugeSize: true,
                 max: {{ gauge_max }},
-                title: "{{ _("Verbrauchter Traffic") }}",
-                label: "{{ gauge_label }}"
+                title: "{{ _("Verbleibender Traffic") }}",
+                label: "{{ gauge_label }}",
+                levelColors: ["#ff0000", "#ffff00", "00ff00"]
             });
         });
     </script>

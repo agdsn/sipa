@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-02 08:56+0200\n"
-"PO-Revision-Date: 2015-05-02 08:59+0100\n"
+"POT-Creation-Date: 2015-05-02 10:22+0200\n"
+"PO-Revision-Date: 2015-05-02 10:23+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -154,7 +154,8 @@ msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
 #: sipa/views.py:147
-msgid "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
+msgid ""
+"Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
 #: sipa/views.py:149
@@ -166,11 +167,15 @@ msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
 #: sipa/views.py:155
-msgid "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite einsehen."
-msgstr "Because you are logged in, you can view your traffic here in the usersuite."
+msgid ""
+"Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
+"einsehen."
+msgstr ""
+"Because you are logged in, you can view your traffic here in the usersuite."
 
 #: sipa/views.py:159
-msgid "Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
+msgid ""
+"Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
 msgstr "To view your traffic from outside the network, you have to log in."
 
 #: sipa/blueprints/usersuite.py:39
@@ -182,8 +187,12 @@ msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
 #: sipa/blueprints/usersuite.py:79 sipa/blueprints/usersuite.py:217
-msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"
-msgstr "There was an error sending your message. Please contact us at support@wh2.tu-dresden.de"
+msgid ""
+"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
+"eine E-Mail an support@wh2.tu-dresden.de"
+msgstr ""
+"There was an error sending your message. Please contact us at support@wh2.tu-"
+"dresden.de"
 
 #: sipa/blueprints/usersuite.py:112 sipa/blueprints/usersuite.py:244
 msgid "Neue Passwörter stimmen nicht überein!"
@@ -265,9 +274,9 @@ msgstr "Contact"
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:215
-msgid "Verbrauchter Traffic"
-msgstr "Spent traffic"
+#: sipa/templates/base.html:213
+msgid "Verbleibender Traffic"
+msgstr "Remaining Credit"
 
 #: sipa/templates/index.html:22
 msgid "geschrieben von"
@@ -398,16 +407,27 @@ msgid "Die neue MAC-Adresse"
 msgstr "Your new MAC address"
 
 #: sipa/templates/usersuite/change_mac.html:22
-msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
+msgid ""
+"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
+"Benachrichtigungsmail an uns gesandt."
 msgstr "Note: we will be notified about any change of your MAC address."
 
 #: sipa/templates/usersuite/change_mac.html:23
-msgid "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben."
-msgstr "Please be aware that every user needs his own account. It is not permitted to share an account!"
+msgid ""
+"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es "
+"ist nicht zulässig, den eigenen Account weiterzugeben."
+msgstr ""
+"Please be aware that every user needs his own account. It is not permitted "
+"to share an account!"
 
 #: sipa/templates/usersuite/change_mac.html:24
-msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
-msgstr "If you share your account with someone else (share login, enter someone else's MAC address) you are still liable for all activities of this account!"
+msgid ""
+"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-"
+"Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle "
+"Aktivitäten des Accounts!"
+msgstr ""
+"If you share your account with someone else (share login, enter someone "
+"else's MAC address) you are still liable for all activities of this account!"
 
 #: sipa/templates/usersuite/change_mac.html:27
 #: sipa/templates/usersuite/change_mail.html:20
@@ -482,7 +502,9 @@ msgid "Jawohl!"
 msgstr "Yes sir!"
 
 #: sipa/templates/usersuite/hosting.html:12
-msgid "Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du hier."
+msgid ""
+"Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum "
+"Webhosting findest du hier."
 msgstr "You can create a MySQL database on our servers. More information here."
 
 #: sipa/templates/usersuite/hosting.html:18
@@ -532,300 +554,3 @@ msgstr "Output"
 #: sipa/utils/graph_utils.py:35
 msgid "Gesamt"
 msgstr "Total"
-
-#~ msgid "Anmeldung"
-#~ msgstr "Registration"
-
-#~ msgid "Auszugsmeldung"
-#~ msgstr "Moving out"
-
-#~ msgid ""
-#~ msgstr "Becomming a Member"
-
-#~ msgid "CSRF token missing"
-#~ msgstr ""
-
-#~ msgid "Get a visual challenge"
-#~ msgstr ""
-
-#~ msgid "Get an audio challenge"
-#~ msgstr ""
-
-#~ msgid "Get a new challenge"
-#~ msgstr ""
-
-#~ msgid "Type the two words:"
-#~ msgstr ""
-
-#~ msgid "Type what you hear:"
-#~ msgstr ""
-
-#~ msgid "Help"
-#~ msgstr ""
-
-#~ msgid "Play sound again"
-#~ msgstr ""
-
-#~ msgid "Download sound as MP3"
-#~ msgstr ""
-
-#~ msgid "Incorrect. Try again."
-#~ msgstr ""
-
-#~ msgid "Invalid field name '%s'."
-#~ msgstr ""
-
-#~ msgid "Field must be equal to %(other_name)s."
-#~ msgstr ""
-
-#~ msgid "Field must be at least %(min)d character long."
-
-#~ msgid_plural "Field must be at least %(min)d characters long."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-#~ msgid "Field cannot be longer than %(max)d character."
-#~ msgstr ""
-
-#~ msgid "Field cannot be longer than %(max)d characters."
-#~ msgstr ""
-
-#~ msgid "Field must be between %(min)d and %(max)d characters long."
-#~ msgstr ""
-
-#~ msgid "Number must be at least %(min)s."
-#~ msgstr ""
-
-#~ msgid "Number must be at most %(max)s."
-#~ msgstr ""
-
-#~ msgid "Number must be between %(min)s and %(max)s."
-#~ msgstr ""
-
-#~ msgid "This field is required."
-#~ msgstr ""
-
-#~ msgid "Invalid input."
-#~ msgstr ""
-
-#~ msgid "Invalid email address."
-#~ msgstr ""
-
-#~ msgid "Invalid IP address."
-#~ msgstr ""
-
-#~ msgid "Invalid Mac address."
-#~ msgstr ""
-
-#~ msgid "Invalid URL."
-#~ msgstr ""
-
-#~ msgid "Invalid UUID."
-#~ msgstr ""
-
-#~ msgid "Invalid value, must be one of: %(values)s."
-#~ msgstr ""
-
-#~ msgid "Invalid value, can't be any of: %(values)s."
-#~ msgstr ""
-
-#~ msgid "Not a valid choice"
-#~ msgstr ""
-
-#~ msgid "Not a valid list"
-#~ msgstr ""
-
-#~ msgid "Not a valid integer list"
-#~ msgstr ""
-
-#~ msgid "Invalid CSRF Token"
-#~ msgstr ""
-
-#~ msgid "CSRF failed"
-#~ msgstr ""
-
-#~ msgid "CSRF token expired"
-#~ msgstr ""
-
-#~ msgid "Please input a date/time value"
-#~ msgstr ""
-
-#~ msgid "Invalid date/time input"
-#~ msgstr ""
-
-#~ msgid "Already exists."
-#~ msgstr ""
-
-#~ msgid "Invalid Choice: could not coerce"
-#~ msgstr ""
-
-#~ msgid "Invalid choice(s): one or more data inputs could not be coerced"
-#~ msgstr ""
-
-#~ msgid "'%(value)s' is not a valid choice for this field"
-#~ msgstr ""
-
-#~ msgid "Not a valid integer value"
-#~ msgstr ""
-
-#~ msgid "Not a valid decimal value"
-#~ msgstr ""
-
-#~ msgid "Not a valid float value"
-#~ msgstr ""
-
-#~ msgid "Not a valid datetime value"
-#~ msgstr ""
-
-#~ msgid "Not a valid date value"
-#~ msgstr ""
-
-#~ msgid "Link-Up"
-#~ msgstr ""
-
-#~ msgid "Mitgliedschaft"
-#~ msgstr ""
-
-#~ msgid "Externer Anbieter"
-#~ msgstr ""
-
-#~ msgid "Bezahlung"
-#~ msgstr ""
-
-#~ msgid "Support"
-#~ msgstr ""
-
-#~ msgid "Kontakt"
-#~ msgstr ""
-
-#~ msgid "Auszug"
-#~ msgstr ""
-
-#~ msgid "Umzug"
-#~ msgstr ""
-
-#~ msgid "FAQ"
-#~ msgstr "Link-Up"
-
-#~ msgid "Hausmeister"
-#~ msgstr ""
-
-#~ msgid "Club Wu5"
-#~ msgstr "External provider"
-
-#~ msgid "Studentenwerk"
-#~ msgstr "Payment"
-
-#~ msgid "E-Mail"
-#~ msgstr ""
-
-#~ msgid "Software"
-#~ msgstr "Monday"
-
-#~ msgid "Rechtliches"
-#~ msgstr "Dormitory"
-
-#~ msgid "Finanzordnung"
-#~ msgstr ""
-
-#~ msgid "Mitglied werden"
-#~ msgstr ""
-
-#~ msgid "Anmeldung eines Externen Anschlusses"
-#~ msgstr "Janitor"
-
-#~ msgid "Gilt nur für alle Bewohner der Häuser <b> Wu1, Wu5, Wu7 und ZW 41c</b>:"
-#~ msgstr "Club Wu5"
-
-#~ msgid "Antrag"
-#~ msgstr "Studentenwerk"
-
-#~ msgid "Mitglied werden und Anschluss beantragen"
-#~ msgstr "E-Mail"
-
-#~ msgid "Passives Mitglied werden"
-#~ msgstr "Software"
-
-#~ msgid "Lies dir die Hinweise auf der Rückseite des Formulars gründlich durch."
-#~ msgstr "Legal"
-
-#~ msgid "Überweise den Semesterbeitrag innerhalb von 31 Tagen auf unser Konto."
-#~ msgstr "Finance regulations"
-
-#~ msgid "Mitgliedschaftsantrag"
-#~ msgstr "Becomming a Member"
-
-#~ msgid "Nun bist Du passives Mitglied."
-#~ msgstr ""
-
-#~ msgid "Aktives Mitglied werden"
-#~ msgstr ""
-
-#~ msgid "Deutsch"
-#~ msgstr ""
-
-#~ msgid "English"
-#~ msgstr ""
-
-#~ msgid "Abfahrtszeiten"
-#~ msgstr ""
-
-#~ msgid "Haltestelle"
-#~ msgstr ""
-
-#~ msgid "Fehler bei der Abfrage!"
-#~ msgstr ""
-
-#~ msgid "Linie"
-#~ msgstr ""
-
-#~ msgid "Richtung"
-#~ msgstr ""
-
-#~ msgid "Quelle"
-#~ msgstr "German"
-
-#~ msgid "Ansprechpartner"
-#~ msgstr "English"
-
-#~ msgid "Allgemeine Ansprechpartner"
-#~ msgstr "Bus & train departure times"
-
-#~ msgid "Bereich"
-#~ msgstr "Stop"
-
-#~ msgid "Verantwortliche"
-#~ msgstr "Query could not be processed!"
-
-#~ msgid "Vorstand"
-#~ msgstr "Route"
-
-#~ msgid "Finanzen"
-#~ msgstr "Direction"
-
-#~ msgid "Öffentlichkeitsarbeit"
-#~ msgstr "Source"
-
-#~ msgid "Nutzerverwaltung"
-#~ msgstr "Contacts"
-
-#~ msgid "Server & Dienste"
-#~ msgstr "General contacts"
-
-#~ msgid "Hausadmins"
-#~ msgstr "Division"
-
-#~ msgid "Haus"
-#~ msgstr "Responsible"
-
-#~ msgid "Trafficregelungen"
-#~ msgstr "Managing"
-
-#~ msgid "Traffic"
-#~ msgstr "Finance"
-
-#~ msgid "Nutzer hat keine IP"
-#~ msgstr "User does not have an IP"
-
-#~ msgid "Fremde IP-Adresse!"
-#~ msgstr ""

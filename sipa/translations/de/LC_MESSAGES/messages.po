@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-02 08:56+0200\n"
+"POT-Creation-Date: 2015-05-02 10:22+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -271,8 +271,8 @@ msgstr ""
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:215
-msgid "Verbrauchter Traffic"
+#: sipa/templates/base.html:213
+msgid "Verbleibender Traffic"
 msgstr ""
 
 #: sipa/templates/index.html:22
@@ -983,5 +983,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Fremde IP-Adresse!"
+#~ msgstr ""
+
+#~ msgid "Verbrauchter Traffic"
 #~ msgstr ""
 
