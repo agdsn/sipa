@@ -6,7 +6,7 @@
         <form action="" method="post" id="usersuite-contact-form" class="form">
             {{ form.csrf_token }}
             <div class="row">
-                <div class="col-md-3 form-group">
+                <div class="col-md-7 form-group">
                     <label>{{ _('Deine E-Mail-Adresse') }}</label>
                     {% if current_user.mail %}
                         {{ form.email(class="form-control", value=current_user.mail) }}
@@ -14,25 +14,27 @@
                         {{ form.email(class="form-control", value=current_user.uid+"@wh2.tu-dresden.de") }}
                     {% endif %}
                 </div>
-                <div class="col-md-3 form-group">
+            </div>
+            <div class="row">
+                <div class="col-md-7 form-group">
                     <label>{{ _('Kategorie') }}</label>
                     {{ _(form.type(class="form-control")) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 form-group">
+                <div class="col-md-7 form-group">
                     <label>{{ _('Betreff deiner Nachricht') }}</label>
                     {{ form.subject(class="form-control") }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 form-group">
+                <div class="col-md-7 form-group">
                     <label>{{ _('Deine Nachricht an uns') }}</label>
                     {{ form.message(class="form-control", rows=5) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-7">
                     {{ _('Hinweis: Dein Username wird an die Nachricht angehängt.') }}
                 </div>
             </div>
