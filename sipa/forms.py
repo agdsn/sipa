@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from flask import flash
-from flask_babel import gettext, lazy_gettext
-from flask_wtf import Form
+from flask.ext.babel import gettext, lazy_gettext
 from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
-    HiddenField
+    HiddenField, Form
 from wtforms.validators import Required, Email, MacAddress, ValidationError
 
 

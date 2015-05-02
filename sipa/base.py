@@ -5,12 +5,12 @@ from babel import Locale
 
 from flask import Flask, request, session
 from flask.ext.babel import get_locale
+from flask.ext.login import LoginManager
 
 from sipa import app
 from sipa.babel import babel, possible_locales
 from sipa.flatpages import cf_pages
 from sipa.utils.graph_utils import render_traffic_chart
-from flask_login import LoginManager
 from sipa.utils.ldap_utils import User
 
 

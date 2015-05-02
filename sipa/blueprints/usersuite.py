@@ -5,8 +5,8 @@
 """
 
 from flask import Blueprint, render_template, url_for, redirect, flash
-from flask_babel import gettext
-from flask_login import login_required, current_user
+from flask.ext.babel import gettext
+from flask.ext.login import current_user, login_required
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
@@ -14,7 +14,6 @@ from sipa.utils import calculate_userid_checksum
 from sipa.utils.database_utils import query_trafficdata, query_userinfo, \
     update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db
-from sipa.utils.graph_utils import generate_traffic_chart
 from sipa.utils.ldap_utils import change_password, change_email, \
     authenticate
 from sipa.utils.mail_utils import send_mail

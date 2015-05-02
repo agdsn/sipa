@@ -1,9 +1,9 @@
 from __future__ import absolute_import
 
 from itertools import imap
-from babel.core import UnknownLocaleError
+from babel.core import UnknownLocaleError, Locale
 from flask import request
-from flask_babel import Babel, Locale, get_locale
+from flask.ext.babel import Babel, get_locale
 
 babel = Babel()
 

@@ -1,8 +1,7 @@
 from __future__ import absolute_import
 from flask import abort
-from flask_babel import Locale
-from flask_flatpages import FlatPages
-from babel.core import UnknownLocaleError
+from babel.core import UnknownLocaleError, Locale
+from flask.ext.flatpages import FlatPages
 
 from .babel import babel, locale_preferences
 

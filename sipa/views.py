@@ -10,8 +10,8 @@ from __future__ import absolute_import
 
 from flask import render_template, request, redirect, \
     url_for, flash, session
-from flask_babel import gettext
-from flask_login import current_user, login_user, logout_user
+from flask.ext.babel import gettext
+from flask.ext.login import current_user, login_user, logout_user
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
