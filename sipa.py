@@ -12,9 +12,10 @@ try:
     app.config.from_pyfile('{}/config.py'.format(config_dir))
 except IOError:
     print("No Config found")
-
-app.config['FLATPAGES_ROOT'] = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'content')
+if app.config['FLATPAGES_ROOT'] == "":
+    app.config['FLATPAGES_ROOT'] = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        'content')
 init_app()
 
 location_log_config = app.config['LOGGING_CONFIG_LOCATION']

@@ -14,6 +14,7 @@ SECRET_KEY = ""
 
 LOG_FILE = 'error.log'
 
+FLATPAGES_ROOT = ""
 FLATPAGES_EXTENSION = '.md'
 FLATPAGES_MARKDOWN_EXTENSIONS = [
     'sane_lists',
