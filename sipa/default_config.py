@@ -23,6 +23,7 @@ FLATPAGES_MARKDOWN_EXTENSIONS = [
     'attr_list'
 ]
 
+LOGGING_CONFIG_LOCATION = "sipa/default_log_config"
 
 # Mail configuration
 MAILSERVER_HOST = "127.0.0.1"
