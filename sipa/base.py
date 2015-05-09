@@ -13,8 +13,21 @@ from sipa.flatpages import cf_pages
 from sipa.utils.graph_utils import render_traffic_chart
 from sipa.utils.ldap_utils import User
 
+from werkzeug.routing import IntegerConverter as BaseIntegerConverter
+
 
 login_manager = LoginManager()
+
+
+class IntegerConverter(BaseIntegerConverter):
+    """Modification of the standard IntegerConverter which does not support
+    negative values. See
+    http://werkzeug.pocoo.org/docs/0.10/routing/#werkzeug.routing.IntegerConverter
+    """
+    regex = r'-?\d+'
+
+
+app.url_map.converters['int'] = IntegerConverter
 
 
 def init_app():

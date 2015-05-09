@@ -14,7 +14,6 @@ from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
-from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from sipa import app
 from sipa.forms import flash_formerrors, LoginForm
@@ -23,17 +22,6 @@ from sipa.utils.database_utils import query_trafficdata, \
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     ForeignIPAccessError
 from sipa.utils.ldap_utils import User, authenticate
-
-
-class IntegerConverter(BaseIntegerConverter):
-    """Modification of the standard IntegerConverter which does not support
-    negative values. See
-    http://werkzeug.pocoo.org/docs/0.10/routing/#werkzeug.routing.IntegerConverter
-    """
-    regex = r'-?\d+'
-
-
-app.url_map.converters['int'] = IntegerConverter
 
 
 def errorpage(e):
