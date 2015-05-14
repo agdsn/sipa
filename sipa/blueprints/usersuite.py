@@ -141,9 +141,13 @@ def usersuite_change_mail():
 
         try:
             change_email(current_user.uid, password, email)
-        except UserNotFound:
+        except UserNotFound as e:
+            logger.error('UserNotFound raised in change_email() '
+                         'with current_user. Args: {}'.format(e.args))
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
+            logger.info('Wrong password provided when attempting '
+                        'change of mail address')
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         except LDAPConnectionError:
             logger.error('Not sufficient rights to change the mail address')
@@ -171,9 +175,22 @@ def usersuite_delete_mail():
 
         try:
             change_email(current_user.uid, password, "")
-        except UserNotFound:
+        except UserNotFound as e:
+            logger.error('UserNotFound raised in change_email() '
+                         'with current_user. Args: {}'.format(e.args))
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
+            # todo catch these in the backend functions && reraise
+            # log messages should not be handled by the
+            # function responsible for evaluating a HTTP request. This should
+            # happen in the backend. example:
+            # except PasswordInvalid:
+            #     logger.info('stuff')
+            #     raise
+            # especially in *this case*, *one* function is wrapped *twice* with
+            # basically the same exception handling
+            logger.info('Wrong password provided when attempting '
+                        'reset of mail address')
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         except LDAPConnectionError:
             logger.error('Not sufficient rights to change the mail address')
@@ -203,8 +220,11 @@ def usersuite_change_mac():
         try:
             authenticate(current_user.uid, password)
         except PasswordInvalid:
+            logger.info('Wrong password provided when attempting '
+                        'change of MAC address')
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         else:
+            logger.info('Successfully changed MAC address to {}'.format(mac))
             update_macaddress(userinfo['ip'], userinfo['mac'], mac)
 
             subject = u"[Usersuite] %s hat seine/ihre MAC-Adresse " \
