@@ -60,11 +60,7 @@ def usersuite_contact():
             'eigene-technik': u"Eigene Technik"
         }
 
-        cat = form.type.data
-        if cat in types.keys():
-            cat = types[cat]
-        else:
-            cat = u"Allgemein"
+        cat = types.get(form.type.data, u"Allgemein")
 
         subject = u"[Usersuite] {0}: {1}".format(cat, form.subject.data)
 
