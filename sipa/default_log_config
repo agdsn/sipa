@@ -1,5 +1,5 @@
 [loggers]
-keys=root
+keys=root,sipa
 
 [handlers]
 keys=hand01
@@ -12,6 +12,11 @@ keys=form01
 level=DEBUG
 handlers=hand01
 
+[logger_sipa]
+qualname=sipa
+handlers=
+propagate=1
+
 [handler_hand01]
 class=StreamHandler
 level=NOTSET
@@ -19,6 +24,6 @@ formatter=form01
 args=(sys.stdout,)
 
 [formatter_form01]
-format=F1 %(asctime)s %(levelname)s %(message)s
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
 datefmt=
 class=logging.Formatter

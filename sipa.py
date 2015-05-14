@@ -1,6 +1,6 @@
 import os.path
 import logging.config
-from sipa import app
+from sipa import app, logger
 from sipa.base import init_app
 
 # default configuration
@@ -22,7 +22,12 @@ location_log_config = app.config['LOGGING_CONFIG_LOCATION']
 
 if os.path.isfile(location_log_config):
     logging.config.fileConfig(location_log_config,
-                              disable_existing_loggers=True )
+                              disable_existing_loggers=True)
+    logger.info('Loaded logging configuration file "{}".'
+                .format(location_log_config))
+else:
+    logging.warn('Given LOGGING_CONFIG_LOCATION "{}" is not accessible.'
+                 .format(location_log_config))
 
 
 if __name__ == "__main__":
