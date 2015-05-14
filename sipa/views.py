@@ -115,7 +115,7 @@ def login():
         else:
             if isinstance(user, User):
                 login_user(user)
-                logger.info('{} successfully authenticated'.format(user))
+                logger.info('Authentication successful')
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -128,7 +128,7 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-    logger.info('{} successfully logged out'.format(current_user))
+    logger.info('Logging out')
     logout_user()
     return redirect(url_for("index"))
 

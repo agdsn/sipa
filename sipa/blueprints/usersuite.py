@@ -112,12 +112,11 @@ def usersuite_change_password():
             try:
                 change_password(current_user.uid, old, new)
             except PasswordInvalid:
-                logger.info('{} provided a wrong password when trying '
-                            'to change his password'.format(current_user))
+                logger.info('Wrong password provided when attempting '
+                            'change of password')
                 flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
             else:
-                logger.info('Password of {} successfully changed'
-                            .format(current_user))
+                logger.info('Password successfully changed')
                 flash(gettext(u"Passwort wurde geändert"), "success")
                 return redirect(url_for(".usersuite"))
     elif form.is_submitted():
@@ -147,8 +146,10 @@ def usersuite_change_mail():
         except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         except LDAPConnectionError:
+            logger.error('Not sufficient rights to change the mail address')
             flash(gettext(u"Nicht genügend LDAP-Rechte!"), "error")
         else:
+            logger.info('Mail address successfully changed to {}'.format(email))
             flash(gettext(u"E-Mail-Adresse wurde geändert"), "success")
             return redirect(url_for('.usersuite'))
     elif form.is_submitted():
@@ -175,8 +176,10 @@ def usersuite_delete_mail():
         except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         except LDAPConnectionError:
+            logger.error('Not sufficient rights to change the mail address')
             flash(gettext(u"Nicht genügend LDAP-Rechte!"), "error")
         else:
+            logger.info('Mail address successfully reset')
             flash(gettext(u"E-Mail-Adresse wurde zurückgesetzt"), "success")
             return redirect(url_for('.usersuite'))
     elif form.is_submitted():
