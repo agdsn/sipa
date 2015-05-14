@@ -6,7 +6,7 @@ from __future__ import absolute_import
 
 from babel import Locale
 
-from flask import Flask, request, session
+from flask import request, session
 from flask.ext.babel import get_locale
 from flask.ext.login import LoginManager
 
