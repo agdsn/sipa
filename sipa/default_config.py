@@ -12,7 +12,7 @@ from flask.ext.babel import gettext
 
 SECRET_KEY = ""
 
-LOG_FILE = 'error.log'
+LOG_FILE = '/tmp/error.log'
 
 FLATPAGES_ROOT = ""
 FLATPAGES_EXTENSION = '.md'

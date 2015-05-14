@@ -9,7 +9,7 @@ import ldap
 from ldap.ldapobject import SimpleLDAPObject
 
 
-from sipa import app
+from sipa import app, logger
 from .exceptions import UserNotFound, PasswordInvalid, LDAPConnectionError
 
 
@@ -169,8 +169,12 @@ def authenticate(username, password):
 
     Returns the User object if successful.
     """
-    with LdapConnector(username, password) as l:
-        return User.get(username)
+    try:
+        with LdapConnector(username, password) as l:
+            return User.get(username)
+    except PasswordInvalid:
+        logger.info('Wrong password provided when attempting authentication')
+        raise
 
 
 def search_in_group(username, group):
@@ -190,9 +194,15 @@ def search_in_group(username, group):
 def change_password(username, old, new):
     """Change a user's password from old to new
     """
-    with LdapConnector(username, old) as l:
-        l.passwd_s(get_dn(l), old.encode('iso8859-1'), new.encode('iso8859-1'))
-        return 1
+    try:
+        with LdapConnector(username, old) as l:
+            l.passwd_s(get_dn(l), old.encode('iso8859-1'), new.encode('iso8859-1'))
+    except PasswordInvalid:
+        logger.info('Wrong password provided when attempting '
+                    'change of password')
+        raise
+    else:
+        logger.info('Password successfully changed')
 
 
 def change_email(username, password, email):
@@ -202,9 +212,22 @@ def change_email(username, password, email):
     attribute, if it is not yet set up (replace removes all
     attributes of the given kind and puts the new one in place)
     """
-    with LdapConnector(username, password) as l:
-        # The attribute to modify. 'email' is casted to a string, because
-        # passing a unicode object will raise a TypeError
-        attr = [(ldap.MOD_REPLACE, 'mail', str(email))]
-        l.modify_s(get_dn(l), attr)
-        return 1
+    try:
+        with LdapConnector(username, password) as l:
+            # The attribute to modify. 'email' is casted to a string, because
+            # passing a unicode object will raise a TypeError
+            attr = [(ldap.MOD_REPLACE, 'mail', str(email))]
+            l.modify_s(get_dn(l), attr)
+    except UserNotFound as e:
+        logger.error('UserNotFound raised in change_email() '
+                     'with current_user. Args: {}'.format(e.args))
+        raise
+    except PasswordInvalid:
+        logger.info('Wrong password provided when attempting '
+                    'change of mail address')
+        raise
+    except LDAPConnectionError:
+        logger.error('Not sufficient rights to change the mail address')
+        raise
+    else:
+        logger.info('Mail address successfully changed to "{}"'.format(email))
