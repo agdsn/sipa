@@ -16,7 +16,7 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from sipa import app
+from sipa import app, logger
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils.database_utils import query_trafficdata, \
     user_id_from_ip
@@ -48,6 +48,8 @@ def exceptionhandler_sql(ex):
     """
     flash(gettext("Verbindung zum SQL-Server konnte nicht hergestellt werden!"),
           "error")
+    # todo include valuable information
+    logger.critical('Unable to connect to MySQL server: "{}"'.format(ex.args))
     # todo check if infinite redirection might still occur
     # Proviously, requesting `/` w/o having a connection to the mysql database
     # would result in an infinite loop of redirects to `/` since
@@ -72,6 +74,11 @@ def exceptionhandler_ldap(ex):
         "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"),
         "error"
     )
+    logger.critical('Unable to connect to LDAP server {}:{} with BaseDN "{}": '
+                    '"{}"'.format(app.config['LDAP_HOST'],
+                                  app.config['LDAP_PORT'],
+                                  app.config['LDAP_SEARCH_BASE'],
+                                  ex.args,))
     return redirect(url_for('index'))
 
 
@@ -108,6 +115,7 @@ def login():
         else:
             if isinstance(user, User):
                 login_user(user)
+                logger.info('{} successfully authenticated'.format(user))
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -120,6 +128,7 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
+    logger.info('{} successfully logged out'.format(current_user))
     logout_user()
     return redirect(url_for("index"))
 

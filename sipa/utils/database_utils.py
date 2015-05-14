@@ -131,7 +131,8 @@ def query_trafficdata(ip=None, user_id=None):
     ).fetchall()
 
     if not trafficdata:
-        raise DBQueryEmpty
+        raise DBQueryEmpty('No trafficdata retrieved for user {}@{}'
+                           .format(user_id, ip))
 
     traffic = {'history': [], 'credit': 0}
     returned_days = [int(i['day']) for i in trafficdata]

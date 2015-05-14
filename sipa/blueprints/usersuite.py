@@ -7,6 +7,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
+from sipa import logger
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
@@ -34,7 +35,9 @@ def usersuite():
         userinfo = query_userinfo(current_user.uid)
         userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
         trafficdata = query_trafficdata(user_id=userinfo['id'])
-    except DBQueryEmpty:
+    except DBQueryEmpty as e:
+        logger.error('Userinfo DB query could not be finished: '
+                     '{}'.format(e.args))
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
               "error")
         return redirect(url_for("index"))
@@ -109,8 +112,12 @@ def usersuite_change_password():
             try:
                 change_password(current_user.uid, old, new)
             except PasswordInvalid:
+                logger.info('{} provided a wrong password when trying '
+                            'to change his password'.format(current_user))
                 flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
             else:
+                logger.info('Password of {} successfully changed'
+                            .format(current_user))
                 flash(gettext(u"Passwort wurde geändert"), "success")
                 return redirect(url_for(".usersuite"))
     elif form.is_submitted():

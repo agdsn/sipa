@@ -3,4 +3,4 @@ from flask import Flask
 
 app = Flask('sipa')
 
-logger = getLogger(name='sipa')
+logger = getLogger(name=__name__)

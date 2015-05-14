@@ -31,4 +31,6 @@ else:
 
 
 if __name__ == "__main__":
+    logger.info('Starting sipa...')
+    logger.warning('Running in Debug mode')
     app.run(debug=True, host="0.0.0.0")
