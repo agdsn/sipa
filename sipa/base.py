@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from __future__ import absolute_import
 
 
@@ -36,6 +39,12 @@ def init_app():
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
 
+    # todo rethink imports here. These are kind of awkward.
+    # I am quite sceptical looking at imports in the middle of the code -
+    # not to mention that part “hanging” at the end of this function.
+    # importing something just to execute some initializing code like in
+    # `import sipa.views` is bad practice. If things need to be done
+    # initially, one should make a method for this.
     from sipa.blueprints import bp_features, bp_usersuite, \
         bp_pages, bp_documents, bp_news
 
