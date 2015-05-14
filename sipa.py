@@ -26,8 +26,8 @@ if os.path.isfile(location_log_config):
     logger.info('Loaded logging configuration file "{}".'
                 .format(location_log_config))
 else:
-    logging.warn('Given LOGGING_CONFIG_LOCATION "{}" is not accessible.'
-                 .format(location_log_config))
+    logger.warn('Given LOGGING_CONFIG_LOCATION "{}" is not accessible.'
+                .format(location_log_config))
 
 
 if __name__ == "__main__":
