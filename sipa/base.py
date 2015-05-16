@@ -10,7 +10,7 @@ from flask import request, session
 from flask.ext.babel import get_locale
 from flask.ext.login import LoginManager
 
-from sipa import app
+from sipa import app, logger
 from sipa.babel import babel, possible_locales
 from sipa.flatpages import cf_pages
 from sipa.utils.graph_utils import render_traffic_chart
@@ -34,6 +34,7 @@ app.url_map.converters['int'] = IntegerConverter
 
 
 def init_app():
+    logger.debug('Initializing app')
     login_manager.init_app(app)
     babel.init_app(app)
     babel.localeselector(babel_selector)
@@ -48,7 +49,7 @@ def init_app():
     from sipa.blueprints import bp_features, bp_usersuite, \
         bp_pages, bp_documents, bp_news
 
-    # Blueprints
+    logger.debug('Registering blueprints')
     app.register_blueprint(bp_features)
     app.register_blueprint(bp_usersuite)
     app.register_blueprint(bp_pages)
@@ -68,7 +69,7 @@ def init_app():
         app.logger.addHandler(file_handler)
 
     from sipa.utils.database_utils import query_gauge_data
-    # global jinja variables
+    logger.debug('Registering Jinja globals')
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
         traffic=query_gauge_data,
