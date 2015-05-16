@@ -1,4 +1,5 @@
-from logging import getLogger, LoggerAdapter, Logger
+from logging import getLogger, LoggerAdapter
+
 from flask import Flask
 from flask.ext.login import current_user
 from flask.globals import request
