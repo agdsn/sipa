@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+    sipa.py
+    ~~~~~~~~~~~~~~
+
+    This file shall be used to start the Flask app. Specific things are handled
+    in the `sipa` package.
+
+"""
+
 import os.path
 import logging.config
 

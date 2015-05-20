@@ -34,6 +34,14 @@ app.url_map.converters['int'] = IntegerConverter
 
 
 def init_app():
+    """Initialize the Flask app located in the module sipa.
+    This initializes the Flask app by:
+    * calling the internal init_app() procedures of each module
+    * registering the Blueprints
+    * configuring the rotatingFileHandler for loggin
+    * registering the Jinja global variables
+    :return: None
+    """
     logger.debug('Initializing app')
     login_manager.init_app(app)
     babel.init_app(app)
@@ -57,6 +65,12 @@ def init_app():
     app.register_blueprint(bp_news)
 
     if not app.debug:
+        # todo what's being done here with logging?
+        # I thought logging should be handled *centrally* in the
+        # default_log_config?
+        # and why should we use a rotatingFileHandler? Sipa is going to run
+        # in an isolated docker container. the only things making sense to me
+        # would be stdout and streamhandlers.
         app.config.setdefault('LOG_MAX_BYTES', 1024**2)
         app.config.setdefault('LOG_BACKUP_COUNT', 10)
         import logging

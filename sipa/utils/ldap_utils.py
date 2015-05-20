@@ -69,6 +69,7 @@ class User(object):
     def define_group(self, username):
         """Define a user group from the LDAP group
         """
+        # todo check: does this work? has it _ever_ worked?
         if search_in_group(username, 'Aktiv'):
             return 'active'
         elif search_in_group(username, 'Exaktiv'):
