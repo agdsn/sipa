@@ -15,7 +15,9 @@ SECRET_KEY = os.getenv("SIPA_SECRET_KEY", "insecuresecretKey")
 
 LOG_FILE = '/tmp/error.log'
 
-FLATPAGES_ROOT = os.getenv("SIPA_FLATPAGES_ROOT", "../content")
+CONTENT_URL = os.getenv("SIPA_CONTENT_URL")
+
+FLATPAGES_ROOT = os.getenv("SIPA_FLATPAGES_ROOT", "")
 FLATPAGES_EXTENSION =  os.getenv("SIPA_FLATPAGES_EXTENSION", '.md')
 sipa_flatpages_markdown_extensions = os.getenv("SIPA_FLATPAGES_MARKDOWN_EXTENSIONS")
 if sipa_flatpages_markdown_extensions is not None:
