@@ -1,8 +1,8 @@
 from logging import getLogger, LoggerAdapter
 
 from flask import Flask
-from flask.ext.login import current_user
 from flask.globals import request
+from sipa.utils import current_user_name
 
 app = Flask('sipa')
 
@@ -16,9 +16,7 @@ class CustomAdapter(LoggerAdapter):
         extra = kwargs.pop('extra', {})
         tags = extra.pop('tags', {})
         if request:
-            login = 'anonymous'
-            if current_user.is_authenticated():
-                login = current_user.uid
+            login = current_user_name()
             tags['user'] = login
             tags['ip'] = request.remote_addr
             extra['tags'] = tags

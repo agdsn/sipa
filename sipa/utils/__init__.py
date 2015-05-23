@@ -8,6 +8,7 @@ General utilities
 import httplib
 import socket
 import time
+from flask.ext.login import current_user
 
 
 def calculate_userid_checksum(id):
@@ -77,3 +78,12 @@ def get_bustimes(stopname, count=10):
             return None
 
     return data
+
+
+def current_user_name():
+    if current_user.is_authenticated():
+        return current_user.uid
+    elif current_user.is_anonymous():
+        return 'anonymous'
+    else:
+        return ''
