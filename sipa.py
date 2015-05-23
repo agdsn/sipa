@@ -91,16 +91,17 @@ if os.path.isfile(location_log_config):
 else:
     logger.warn('Error loading configuration file "%s"', location_log_config)
 
-sentry = Sentry()
-sentry.init_app(app)
+if app.config['SENTRY_DSN']:
+    sentry = Sentry()
+    sentry.init_app(app)
 
-handler = SentryHandler(app.config['SENTRY_DSN'])
-handler.level = logging.NOTSET
+    handler = SentryHandler(app.config['SENTRY_DSN'])
+    handler.level = logging.NOTSET
 
-setup_logging(handler)
+    setup_logging(handler)
 
-# suppress INFO logging messages occurring every request
-logging.getLogger('werkzeug').setLevel(logging.WARN)
+    # suppress INFO logging messages occurring every request
+    logging.getLogger('werkzeug').setLevel(logging.WARN)
 
 if __name__ == "__main__":
     logger.info('Starting sipa...')

@@ -13,6 +13,8 @@ from flask.ext.babel import gettext
 
 SECRET_KEY = os.getenv("SIPA_SECRET_KEY", "insecuresecretKey")
 
+SENTRY_DSN = os.getenv('SIPA_SENTRY_DSN', '')
+
 LOG_FILE = '/tmp/error.log'
 
 CONTENT_URL = os.getenv("SIPA_CONTENT_URL")
