@@ -99,6 +99,8 @@ handler.level = logging.NOTSET
 
 setup_logging(handler)
 
+# suppress INFO logging messages occurring every request
+logging.getLogger('werkzeug').setLevel(logging.WARN)
 
 if __name__ == "__main__":
     logger.info('Starting sipa...')

@@ -16,13 +16,21 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from sipa import app, logger
+from sipa import app, logger, http_logger
 from sipa.forms import flash_formerrors, LoginForm
+from sipa.utils import current_user_name
 from sipa.utils.database_utils import query_trafficdata, \
     user_id_from_ip
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     ForeignIPAccessError
 from sipa.utils.ldap_utils import User, authenticate
+
+
+@app.before_request
+def log_request():
+    http_logger.debug('Incoming request: %s %s', request.method, request.path,
+                      extra={'tags': {'user': current_user_name(),
+                                      'ip': request.remote_addr}})
 
 
 def errorpage(e):

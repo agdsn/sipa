@@ -33,3 +33,4 @@ class CustomAdapter(LoggerAdapter):
 
 
 logger = CustomAdapter(logger=getLogger(name=__name__), extra={})
+http_logger = getLogger(name='{}.http'.format(__name__))    # 'sipa.http'
