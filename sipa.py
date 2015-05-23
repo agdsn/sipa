@@ -87,11 +87,9 @@ location_log_config = app.config['LOGGING_CONFIG_LOCATION']
 if os.path.isfile(location_log_config):
     logging.config.fileConfig(location_log_config,
                               disable_existing_loggers=True)
-    logger.info('Loaded logging configuration file "{}".'
-                .format(location_log_config))
+    logger.info('Loaded logging configuration file "%s"', location_log_config)
 else:
-    logger.warn('Given LOGGING_CONFIG_LOCATION "{}" is not accessible.'
-                .format(location_log_config))
+    logger.warn('Error loading configuration file "%s"', location_log_config)
 
 sentry = Sentry()
 sentry.init_app(app)

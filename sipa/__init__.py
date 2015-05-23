@@ -13,14 +13,23 @@ class CustomAdapter(LoggerAdapter):
     if possible
     """
     def process(self, msg, kwargs):
+        extra = kwargs.pop('extra', {})
+        tags = extra.pop('tags', {})
         if request:
             login = 'anonymous'
             if current_user.is_authenticated():
                 login = current_user.uid
-            return '{} - {} - {}'.format(
-                request.remote_addr,
-                login,
-                msg), kwargs
+            tags['user'] = login
+            tags['ip'] = request.remote_addr
+            extra['tags'] = tags
+            kwargs['extra'] = extra
+            if app.config['GENERIC_LOGGING']:
+                return msg, kwargs
+            else:
+                return '{} - {} - {}'.format(
+                    request.remote_addr,
+                    login,
+                    msg), kwargs
         else:
             return msg, kwargs
 
