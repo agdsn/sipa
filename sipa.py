@@ -65,7 +65,8 @@ if app.config['FLATPAGES_ROOT'] == "":
         os.path.dirname(os.path.abspath(__file__)),
         'content')
 
-init_repo(app.config["FLATPAGES_ROOT"], app.config['CONTENT_URL'])
+if app.config['CONTENT_URL']:
+    init_repo(app.config["FLATPAGES_ROOT"], app.config['CONTENT_URL'])
 
 if os.getenv("SIPA_UWSGI" ,"False") == 'True':
     import uwsgi
