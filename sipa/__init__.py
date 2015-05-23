@@ -1,8 +1,8 @@
 from logging import getLogger, LoggerAdapter
 
 from flask import Flask
-from flask.ext.login import current_user
 from flask.globals import request
+from sipa.utils import current_user_name
 
 app = Flask('sipa')
 
@@ -13,16 +13,24 @@ class CustomAdapter(LoggerAdapter):
     if possible
     """
     def process(self, msg, kwargs):
+        extra = kwargs.pop('extra', {})
+        tags = extra.pop('tags', {})
         if request:
-            login = 'anonymous'
-            if current_user.is_authenticated():
-                login = current_user.uid
-            return '{} - {} - {}'.format(
-                request.remote_addr,
-                login,
-                msg), kwargs
+            login = current_user_name()
+            tags['user'] = login
+            tags['ip'] = request.remote_addr
+            extra['tags'] = tags
+            kwargs['extra'] = extra
+            if app.config['GENERIC_LOGGING']:
+                return msg, kwargs
+            else:
+                return '{} - {} - {}'.format(
+                    request.remote_addr,
+                    login,
+                    msg), kwargs
         else:
             return msg, kwargs
 
 
 logger = CustomAdapter(logger=getLogger(name=__name__), extra={})
+http_logger = getLogger(name='{}.http'.format(__name__))    # 'sipa.http'

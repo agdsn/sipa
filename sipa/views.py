@@ -16,13 +16,21 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from sipa import app, logger
+from sipa import app, logger, http_logger
 from sipa.forms import flash_formerrors, LoginForm
+from sipa.utils import current_user_name
 from sipa.utils.database_utils import query_trafficdata, \
     user_id_from_ip
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     ForeignIPAccessError
 from sipa.utils.ldap_utils import User, authenticate
+
+
+@app.before_request
+def log_request():
+    http_logger.debug('Incoming request: %s %s', request.method, request.path,
+                      extra={'tags': {'user': current_user_name(),
+                                      'ip': request.remote_addr}})
 
 
 def errorpage(e):
@@ -48,8 +56,9 @@ def exceptionhandler_sql(ex):
     """
     flash(gettext("Verbindung zum SQL-Server konnte nicht hergestellt werden!"),
           "error")
-    # todo include valuable information
-    logger.critical('Unable to connect to MySQL server: "{}"'.format(ex.args))
+    # todo include more valuable information
+    logger.critical('Unable to connect to MySQL server',
+                    extra={'data': {'exception_args': ex.args}})
     # todo check if infinite redirection might still occur
     # Proviously, requesting `/` w/o having a connection to the mysql database
     # would result in an infinite loop of redirects to `/` since
@@ -74,11 +83,12 @@ def exceptionhandler_ldap(ex):
         "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"),
         "error"
     )
-    logger.critical('Unable to connect to LDAP server {}:{} with BaseDN "{}": '
-                    '"{}"'.format(app.config['LDAP_HOST'],
-                                  app.config['LDAP_PORT'],
-                                  app.config['LDAP_SEARCH_BASE'],
-                                  ex.args,))
+    logger.critical(
+        'Unable to connect to LDAP server %s:%s',
+        app.config['LDAP_HOST'], app.config['LDAP_PORT'],
+        extra={'data': {'ldap_base_dn': app.config['LDAP_SEARCH_BASE'],
+                        'exception_args': ex.args}}
+    )
     return redirect(url_for('index'))
 
 

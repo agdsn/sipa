@@ -13,6 +13,8 @@ from flask.ext.babel import gettext
 
 SECRET_KEY = os.getenv("SIPA_SECRET_KEY", "insecuresecretKey")
 
+SENTRY_DSN = os.getenv('SIPA_SENTRY_DSN', '')
+
 LOG_FILE = '/tmp/error.log'
 
 CONTENT_URL = os.getenv("SIPA_CONTENT_URL")
@@ -33,6 +35,7 @@ else:
 FLATPAGES_MARKDOWN_EXTENSIONS = sipa_flatpages_markdown_extensions
 
 LOGGING_CONFIG_LOCATION = os.getenv("SIPA_LOGGING_CONFIG_LOCATION", "sipa/default_log_config")
+GENERIC_LOGGING = True
 
 # Mail configuration
 MAILSERVER_HOST = os.getenv("SIPA_MAILSERVER_HOST", "127.0.0.1")

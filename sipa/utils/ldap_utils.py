@@ -220,8 +220,10 @@ def change_email(username, password, email):
             attr = [(ldap.MOD_REPLACE, 'mail', str(email))]
             l.modify_s(get_dn(l), attr)
     except UserNotFound as e:
-        logger.error('UserNotFound raised in change_email() '
-                     'with current_user. Args: {}'.format(e.args))
+        logger.error('LDAP-User not found  when attempting '
+                     'change of mail address',
+                     extra={'data': {'exception_args': e.args},
+                            'stack': True})
         raise
     except PasswordInvalid:
         logger.info('Wrong password provided when attempting '
@@ -231,4 +233,4 @@ def change_email(username, password, email):
         logger.error('Not sufficient rights to change the mail address')
         raise
     else:
-        logger.info('Mail address successfully changed to "{}"'.format(email))
+        logger.info('Mail address successfully changed to "%s"', email)

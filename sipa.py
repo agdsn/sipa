@@ -12,6 +12,9 @@ import os.path
 import logging.config
 
 from sipa.utils.git_utils import update_repo, init_repo
+from raven import setup_logging
+from raven.contrib.flask import Sentry
+from raven.handlers.logging import SentryHandler
 from sipa import app, logger
 from sipa.base import init_app
 
@@ -84,12 +87,21 @@ location_log_config = app.config['LOGGING_CONFIG_LOCATION']
 if os.path.isfile(location_log_config):
     logging.config.fileConfig(location_log_config,
                               disable_existing_loggers=True)
-    logger.info('Loaded logging configuration file "{}".'
-                .format(location_log_config))
+    logger.info('Loaded logging configuration file "%s"', location_log_config)
 else:
-    logger.warn('Given LOGGING_CONFIG_LOCATION "{}" is not accessible.'
-                .format(location_log_config))
+    logger.warn('Error loading configuration file "%s"', location_log_config)
 
+if app.config['SENTRY_DSN']:
+    sentry = Sentry()
+    sentry.init_app(app)
+
+    handler = SentryHandler(app.config['SENTRY_DSN'])
+    handler.level = logging.NOTSET
+
+    setup_logging(handler)
+
+    # suppress INFO logging messages occurring every request
+    logging.getLogger('werkzeug').setLevel(logging.WARN)
 
 if __name__ == "__main__":
     logger.info('Starting sipa...')

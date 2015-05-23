@@ -51,14 +51,18 @@ def send_mail(sender, receipient, subject, message):
         smtp.close()
     except IOError as e:
         # smtp.connect failed to connect
-        logger.critical('Unable to connect to SMTP server {}:{}: {}'.format(
-            mailserver_host,
-            mailserver_port,
-            e.args,
-        ))
+        logger.critical('Unable to connect to SMTP server', extra={
+            'trace': True,
+            'tags': {'mailserver': '{}:{}'.format(mailserver_host,
+                                                  mailserver_port)},
+            'data': {'exception_arguments': e.args}
+        })
         return False
     else:
-        logger.info('Successfully sent mail FROM {} TO {} VIA {}:{}. '
-                    'Subject: {}'.format(sender, receipient, mailserver_host,
-                                         mailserver_port, subject))
+        logger.info('Successfully sent mail from usersuite', extra={
+            'tags': {'from': sender, 'to': receipient,
+                     'mailserver': '{}:{}'.format(mailserver_host,
+                                                  mailserver_port)},
+            'data': {'subject': subject, 'message': message}
+        })
         return True

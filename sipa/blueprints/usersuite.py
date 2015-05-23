@@ -36,8 +36,8 @@ def usersuite():
         userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
         trafficdata = query_trafficdata(user_id=userinfo['id'])
     except DBQueryEmpty as e:
-        logger.error('Userinfo DB query could not be finished: '
-                     '{}'.format(e.args))
+        logger.error('Userinfo DB query could not be finished',
+                     extra={'data': {'exception_args': e.args}, 'stack': True})
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
               "error")
         return redirect(url_for("index"))
@@ -199,7 +199,7 @@ def usersuite_change_mac():
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         else:
             update_macaddress(userinfo['ip'], userinfo['mac'], mac)
-            logger.info('Successfully changed MAC address to {}'.format(mac))
+            logger.info('Successfully changed MAC address to %s', mac)
 
             subject = u"[Usersuite] %s hat seine/ihre MAC-Adresse " \
                       u"geändert" % current_user.uid
