@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from flask.ext.babel import gettext
 from flask.ext.login import current_user
 
 from flask.globals import request
@@ -7,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
 import datetime
-from sipa import app
+from sipa import app, logger
 from sipa.utils import timestamp_from_timetag, timetag_from_timestamp
 from .exceptions import DBQueryEmpty
 from sipa.utils.ldap_utils import get_current_uid
@@ -133,7 +134,7 @@ def query_current_credit(uid=None, ip=None):
     """Returns the current credit in MiB
     :param uid: The id of the user
     :param ip: The ip of the user
-    :return: The current amount of credit
+    :return: The current amount of credit or False if foreign IP
     """
     if uid is None:
         if ip is None:
@@ -145,16 +146,22 @@ def query_current_credit(uid=None, ip=None):
         user_id = user_id_from_uid(uid)
         ip = ip_from_user_id(user_id)
 
-    return round(sql_query(
-        "SELECT amount - input - output as current "
-        "FROM traffic.tuext AS t "
-        "LEFT OUTER JOIN credit AS c ON t.timetag = c.timetag "
-        "WHERE ip = %(ip)s AND c.user_id = %(user_id)s "
-        "AND t.timetag = %(today)s",
-        {'today': timetag_from_timestamp(),
-         'ip': ip,
-         'user_id': user_id}
-    ).fetchone()['current'] / 1024, 2)
+    try:
+        result = sql_query(
+            "SELECT amount - input - output as current "
+            "FROM traffic.tuext AS t "
+            "LEFT OUTER JOIN credit AS c ON t.timetag = c.timetag "
+            "WHERE ip = %(ip)s AND c.user_id = %(user_id)s "
+            "AND t.timetag = %(today)s",
+            {'today': timetag_from_timestamp(), 'ip': ip, 'user_id': user_id}
+        ).fetchone()
+    except OperationalError:
+        # todo include more valuable information
+        logger.critical('Unable to connect to MySQL server',
+                        extra={'data': {'exception_args': ex.args}})
+        raise
+    else:
+        return round(result['current'] / 1024, 2)
 
 
 
@@ -214,9 +221,19 @@ def query_trafficdata(ip=None, user_id=None):
 
 
 def query_gauge_data():
-    if current_user.is_authenticated():
-        return query_current_credit(uid=current_user.uid)
-    return query_current_credit(ip=request.remote_addr)
+    credit = {}
+    try:
+        if current_user.is_authenticated():
+            credit['data'] = query_current_credit(uid=current_user.uid)
+        else:
+            credit['data'] = query_current_credit(ip=request.remote_addr)
+    except OperationalError:
+        credit['error'] = gettext(u'Fehler bei der Abfrage der Daten')
+    else:
+        if not credit['data']:
+            credit['error'] = gettext(u'Diese IP gehört nicht '
+                                      u'zu unserem Netzwerk')
+    return credit
 
 
 def update_macaddress(ip, oldmac, newmac):

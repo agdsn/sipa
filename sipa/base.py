@@ -86,7 +86,7 @@ def init_app():
     logger.debug('Registering Jinja globals')
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
-        traffic=query_gauge_data,
+        gauge_data=query_gauge_data,
         get_locale=get_locale,
         possible_locales=possible_locales,
         chart=render_traffic_chart,

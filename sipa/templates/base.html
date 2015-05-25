@@ -1,4 +1,4 @@
-{% set credit = traffic() %}
+{% set credit = gauge_data() %}
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 	
@@ -117,9 +117,9 @@
 					</a><br>
 
                     <div class="row">
-                    {% if not credit %}
+                    {% if credit.error %}
                         <div class="text-danger text-center">
-                            {{ _("Diese IP gehört nicht zum Netzwerk der Sektion") }}!
+                            {{ credit.error }}!
                         </div>
                     {% endif %}
                     </div>
@@ -193,8 +193,8 @@
 	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
     {% set gauge_max = 63 %}
-    {% if credit %}
-        {% set gauge_val = (credit/1024)|round(2) %}
+    {% if credit.data %}
+        {% set gauge_val = (credit.data/1024)|round(2) %}
         {% set gauge_label = "GiB" %}
     {% else %}
         {% set gauge_val = 0 %}
