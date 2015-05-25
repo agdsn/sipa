@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-25 03:53+0200\n"
-"PO-Revision-Date: 2015-05-25 03:56+0100\n"
+"POT-Creation-Date: 2015-05-25 06:49+0200\n"
+"PO-Revision-Date: 2015-05-25 06:50+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -237,51 +237,47 @@ msgstr "Your database has been deleted."
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
-#: sipa/templates/base.html:34
+#: sipa/templates/base.html:35
 msgid "News"
 msgstr "News"
 
-#: sipa/templates/base.html:38
+#: sipa/templates/base.html:39
 msgid "Neueste"
 msgstr "Newest"
 
-#: sipa/templates/base.html:40
+#: sipa/templates/base.html:41
 msgid "Älteste"
 msgstr "Oldest"
 
-#: sipa/templates/base.html:42
+#: sipa/templates/base.html:43
 msgid "Alle"
 msgstr "Everything"
 
-#: sipa/templates/base.html:90
+#: sipa/templates/base.html:91
 msgid "Login"
 msgstr "Login"
 
-#: sipa/templates/base.html:94
+#: sipa/templates/base.html:95
 msgid "Logout"
 msgstr "Logout"
 
-#: sipa/templates/base.html:115
+#: sipa/templates/base.html:116
 msgid "Für Details klicken"
 msgstr "Click for details"
 
-#: sipa/templates/base.html:121
+#: sipa/templates/base.html:122
 msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
 msgstr "This IP does not belong to the network of the AGDSN"
 
-#: sipa/templates/base.html:125
-msgid "Es gab einen Fehler bei der Trafficabfrage"
-msgstr "Database query could not be processed"
-
-#: sipa/templates/base.html:132
+#: sipa/templates/base.html:129
 msgid "Kontakt"
 msgstr "Contact"
 
-#: sipa/templates/base.html:154
+#: sipa/templates/base.html:151
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:214
+#: sipa/templates/base.html:211
 msgid "Verbleibender Traffic"
 msgstr "Remaining Credit"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-25 03:53+0200\n"
+"POT-Creation-Date: 2015-05-25 06:49+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -234,51 +234,47 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sipa/templates/base.html:34
+#: sipa/templates/base.html:35
 msgid "News"
 msgstr ""
 
-#: sipa/templates/base.html:38
+#: sipa/templates/base.html:39
 msgid "Neueste"
 msgstr ""
 
-#: sipa/templates/base.html:40
+#: sipa/templates/base.html:41
 msgid "Älteste"
 msgstr ""
 
-#: sipa/templates/base.html:42
+#: sipa/templates/base.html:43
 msgid "Alle"
 msgstr ""
 
-#: sipa/templates/base.html:90
+#: sipa/templates/base.html:91
 msgid "Login"
 msgstr ""
 
-#: sipa/templates/base.html:94
+#: sipa/templates/base.html:95
 msgid "Logout"
 msgstr ""
 
-#: sipa/templates/base.html:115
+#: sipa/templates/base.html:116
 msgid "Für Details klicken"
 msgstr ""
 
-#: sipa/templates/base.html:121
+#: sipa/templates/base.html:122
 msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
 msgstr ""
 
-#: sipa/templates/base.html:125
-msgid "Es gab einen Fehler bei der Trafficabfrage"
-msgstr ""
-
-#: sipa/templates/base.html:132
+#: sipa/templates/base.html:129
 msgid "Kontakt"
 msgstr ""
 
-#: sipa/templates/base.html:154
+#: sipa/templates/base.html:151
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:214
+#: sipa/templates/base.html:211
 msgid "Verbleibender Traffic"
 msgstr ""
 
@@ -1017,5 +1013,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Verbrauchter Traffic"
+#~ msgstr ""
+
+#~ msgid "Es gab einen Fehler bei der Trafficabfrage"
 #~ msgstr ""
 

@@ -1,3 +1,4 @@
+{% set credit = traffic() %}
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 	
@@ -116,13 +117,9 @@
 					</a><br>
 
                     <div class="row">
-                    {% if traffic().error == "foreign_ip" %}
+                    {% if not credit %}
                         <div class="text-danger text-center">
                             {{ _("Diese IP gehört nicht zum Netzwerk der Sektion") }}!
-                        </div>
-                    {% else %}
-                        <div class="text-danger text-center">
-                            {{ _("Es gab einen Fehler bei der Trafficabfrage") }}!
                         </div>
                     {% endif %}
                     </div>
@@ -196,8 +193,8 @@
 	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
     {% set gauge_max = 63 %}
-    {% if not traffic().error %}
-        {% set gauge_val = (traffic().credit/1024)|round(2) %}
+    {% if credit %}
+        {% set gauge_val = (credit/1024)|round(2) %}
         {% set gauge_label = "GiB" %}
     {% else %}
         {% set gauge_val = 0 %}

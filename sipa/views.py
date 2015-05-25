@@ -21,8 +21,7 @@ from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils import current_user_name
 from sipa.utils.database_utils import query_trafficdata, \
     user_id_from_ip
-from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
-    ForeignIPAccessError
+from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 from sipa.utils.ldap_utils import User, authenticate
 
 
@@ -146,17 +145,20 @@ def logout():
 def usertraffic():
     """For anonymous users with a valid IP
     """
-    try:
-        ip = request.remote_addr
-        trafficdata = query_trafficdata(ip)
+    ip = request.remote_addr
 
+    if user_id_from_ip(ip):
         if current_user.is_authenticated():
             if current_user.userid is user_id_from_ip(ip):
                 flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"
                               u" Eingetragene ist angemeldet!"), "warning")
                 flash(gettext("Hier werden die Trafficdaten "
                               "dieses Anschlusses angezeigt"), "info")
-    except ForeignIPAccessError:
+
+        # todo test if the template works if called from this position
+        return render_template("usertraffic.html", usertraffic=(
+            query_trafficdata(ip)))
+    else:
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
 
         if current_user.is_authenticated():
@@ -167,6 +169,3 @@ def usertraffic():
             flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu können,"
                           u" musst du dich anmelden."), "info")
             return redirect(url_for('login'))
-
-    # todo test if the template works if called from this position
-    return render_template("usertraffic.html", usertraffic=trafficdata)

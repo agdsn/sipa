@@ -4,10 +4,9 @@
 """
 Everything used for authentication in sipa (Usersuite..).
 """
-
+from flask.ext.login import current_user
 import ldap
 from ldap.ldapobject import SimpleLDAPObject
-
 
 from sipa import app, logger
 from .exceptions import UserNotFound, PasswordInvalid, LDAPConnectionError
@@ -239,3 +238,9 @@ def change_email(username, password, email):
         raise
     else:
         logger.info('Mail address successfully changed to "%s"', email)
+
+
+def get_current_uid():
+    if not current_user.is_authenticated:
+        raise AttributeError("current user not authenticated")
+    return current_user.uid

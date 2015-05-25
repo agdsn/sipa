@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from flask.ext.login import current_user
 
-import datetime
 from flask.globals import request
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
+import datetime
 from sipa import app
 from sipa.utils import timestamp_from_timetag, timetag_from_timestamp
-from .exceptions import DBQueryEmpty, ForeignIPAccessError
-
+from .exceptions import DBQueryEmpty
+from sipa.utils.ldap_utils import get_current_uid
 
 db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
     app.config['DB_ATLANTIS_USER'],
@@ -90,32 +91,82 @@ def query_userinfo(username):
     return user
 
 
-def user_id_from_ip(ip=None):
-    if ip is None:
-        raise ValueError
+def user_id_from_uid(uid=None):
+    """Fetch user.id (MySQL) from user.uid (LDAP)
+
+    :param uid: The uid of the LDAP user object
+    :return: The user id of the MySQL user
+    """
+    if uid is None:
+        uid = get_current_uid()
+
+    return sql_query("SELECT nutzer_id FROM nutzer WHERE unix_account = %s",
+                     (uid,)).fetchone()['nutzer_id']
+
+
+
+def ip_from_user_id(user_id):
+    result = (sql_query(
+        "SELECT c_ip FROM computer WHERE nutzer_id = %s",
+        (user_id,)
+    ).fetchone())
+    if not result:
+        raise DBQueryEmpty('Nutzer hat keine IP')
+    return result['c_ip']
+
+
+def user_id_from_ip(ip):
+    """Returns the MySQL user.id corresponding to the ip or 0 if foreign to the db
+    :param ip: A valid IP address
+    :return: A user id
+    """
 
     result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
                        (ip,)).fetchone()
     if result is None:
-        raise ForeignIPAccessError()
+        return 0
 
     return result['nutzer_id']
+
+
+def query_current_credit(uid=None, ip=None):
+    """Returns the current credit in MiB
+    :param uid: The user's id
+    :return:
+    """
+    if uid is None:
+        if ip is None:
+            raise AttributeError('Either ip or user_id must be specified!')
+        user_id = user_id_from_ip(ip)
+        if user_id is 0:
+            return False    # IP doesn't correspond to any user
+    else:
+        user_id = user_id_from_uid(uid)
+        ip = ip_from_user_id(user_id)
+
+    return round(sql_query(
+        "SELECT amount - input - output as current "
+        "FROM traffic.tuext AS t "
+        "LEFT OUTER JOIN credit AS c ON t.timetag = c.timetag "
+        "WHERE ip = %(ip)s AND c.user_id = %(user_id)s "
+        "AND t.timetag = %(today)s",
+        {'today': timetag_from_timestamp(),
+         'ip': ip,
+         'user_id': user_id}
+    ).fetchone()['current'] / 1024, 2)
+
 
 
 def query_trafficdata(ip=None, user_id=None):
     """Query traffic input/output for IP
     """
     if user_id is None:
+        if ip is None:
+            raise AttributeError('Either ip or user_id must be specified!')
         user_id = user_id_from_ip(ip)
     else:
         # ip gotten from db is preferred to the ip possibly given as parameter
-        result = (sql_query(
-            "SELECT c_ip FROM computer WHERE nutzer_id = %s",
-            (user_id,)
-        ).fetchone())
-        if not result:
-            raise DBQueryEmpty('Nutzer hat keine IP')
-        ip = result['c_ip']
+        ip = ip_from_user_id(user_id)
 
     trafficdata = sql_query(
         "SELECT t.timetag - %(today)s AS day, input, output, amount "
@@ -162,21 +213,9 @@ def query_trafficdata(ip=None, user_id=None):
 
 
 def query_gauge_data():
-    if request.remote_addr:
-        try:
-            return (lambda l: {
-                "credit": l[3],
-                "exhausted": l[1] + l[2]
-            })(query_trafficdata(request.remote_addr)['history'][-1])
-        except ForeignIPAccessError:
-            # todo better method to tell that “error”?
-            return {'error': 'foreign_ip'}
-        except DBQueryEmpty:
-            return {'error': True}
-        except OperationalError:
-            return {'error': True}
-    else:
-        return {'error': True}
+    if current_user.is_authenticated():
+        return query_current_credit(uid=current_user.uid)
+    return query_current_credit(ip=request.remote_addr)
 
 
 def update_macaddress(ip, oldmac, newmac):
