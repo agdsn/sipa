@@ -171,10 +171,15 @@ def authenticate(username, password):
     Returns the User object if successful.
     """
     try:
-        with LdapConnector(username, password) as l:
+        with LdapConnector(username, password):
             return User.get(username)
     except PasswordInvalid:
-        logger.info('Wrong password provided when attempting authentication')
+        logger.info('Failed login attempt (Wrong %s)', 'password',
+                    extra={'data': {'username': username}})
+        raise
+    except UserNotFound:
+        logger.info('Failed login attempt (Wrong %s)', 'username',
+                    extra={'data': {'username': username}})
         raise
 
 

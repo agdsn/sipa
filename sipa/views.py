@@ -118,14 +118,13 @@ def login():
 
         try:
             user = authenticate(username, password)
-        except UserNotFound:
-            flash(gettext(u"Nutzer nicht gefunden!"), "error")
-        except PasswordInvalid:
-            flash(gettext(u"Passwort war inkorrekt!"), "error")
+        except (UserNotFound, PasswordInvalid):
+            flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
                 login_user(user)
                 logger.info('Authentication successful')
+                flash(gettext(u"Anmeldung erfolgreich!"), "success")
     elif form.is_submitted():
         flash_formerrors(form)
 
