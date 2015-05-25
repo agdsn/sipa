@@ -32,7 +32,14 @@ def log_request():
                                       'ip': request.remote_addr}})
 
 
-def errorpage(e):
+@app.errorhandler(401)
+@app.errorhandler(403)
+@app.errorhandler(404)
+def error_handler_redirection(e):
+    """Handles errors by flashing an according message and redirecting to /
+    :param e: The error
+    :return: A flask response, in this case `redirect(url_for('index'))`
+    """
     if e.code in (404,):
         flash(gettext(u"Seite nicht gefunden!"), "warning")
     elif e.code in (401, 403):
@@ -42,11 +49,6 @@ def errorpage(e):
     else:
         flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")
     return redirect(url_for("index"))
-
-
-app.register_error_handler(401, errorpage)
-app.register_error_handler(403, errorpage)
-app.register_error_handler(404, errorpage)
 
 
 @app.errorhandler(OperationalError)
