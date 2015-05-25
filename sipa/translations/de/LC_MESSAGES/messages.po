@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-25 02:54+0200\n"
+"POT-Creation-Date: 2015-05-25 03:53+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -17,51 +17,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: sipa/default_config.py:83
+#: sipa/default_config.py:81
 msgid "Bezahlt, verbunden"
 msgstr ""
 
-#: sipa/default_config.py:84
+#: sipa/default_config.py:82
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/default_config.py:85
+#: sipa/default_config.py:83
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/default_config.py:86
+#: sipa/default_config.py:84
 msgid "Exaktiv"
 msgstr ""
 
-#: sipa/default_config.py:87
+#: sipa/default_config.py:85
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/default_config.py:91
+#: sipa/default_config.py:89
 msgid "Sonntag"
 msgstr ""
 
-#: sipa/default_config.py:92
+#: sipa/default_config.py:90
 msgid "Montag"
 msgstr ""
 
-#: sipa/default_config.py:93
+#: sipa/default_config.py:91
 msgid "Dienstag"
 msgstr ""
 
-#: sipa/default_config.py:94
+#: sipa/default_config.py:92
 msgid "Mittwoch"
 msgstr ""
 
-#: sipa/default_config.py:95
+#: sipa/default_config.py:93
 msgid "Donnerstag"
 msgstr ""
 
-#: sipa/default_config.py:96
+#: sipa/default_config.py:94
 msgid "Freitag"
 msgstr ""
 
-#: sipa/default_config.py:97
+#: sipa/default_config.py:95
 msgid "Samstag"
 msgstr ""
 
@@ -175,62 +175,62 @@ msgid ""
 "anmelden."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:40
+#: sipa/blueprints/usersuite.py:41
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:73
+#: sipa/blueprints/usersuite.py:75
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:79 sipa/blueprints/usersuite.py:219
+#: sipa/blueprints/usersuite.py:77 sipa/blueprints/usersuite.py:216
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:112 sipa/blueprints/usersuite.py:246
+#: sipa/blueprints/usersuite.py:110 sipa/blueprints/usersuite.py:243
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:117
+#: sipa/blueprints/usersuite.py:115
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:119
+#: sipa/blueprints/usersuite.py:117
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:144 sipa/blueprints/usersuite.py:172
+#: sipa/blueprints/usersuite.py:142 sipa/blueprints/usersuite.py:170
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:146 sipa/blueprints/usersuite.py:174
-#: sipa/blueprints/usersuite.py:201
+#: sipa/blueprints/usersuite.py:144 sipa/blueprints/usersuite.py:172
+#: sipa/blueprints/usersuite.py:199
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:148 sipa/blueprints/usersuite.py:176
+#: sipa/blueprints/usersuite.py:146 sipa/blueprints/usersuite.py:174
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:150
+#: sipa/blueprints/usersuite.py:148
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:178
+#: sipa/blueprints/usersuite.py:176
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:205
+#: sipa/blueprints/usersuite.py:213
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:239
+#: sipa/blueprints/usersuite.py:236
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:250
+#: sipa/blueprints/usersuite.py:247
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
@@ -280,6 +280,30 @@ msgstr ""
 
 #: sipa/templates/base.html:214
 msgid "Verbleibender Traffic"
+msgstr ""
+
+#: sipa/templates/bustimes.html:2
+msgid "Abfahrtszeiten"
+msgstr ""
+
+#: sipa/templates/bustimes.html:9
+msgid "Haltestelle"
+msgstr ""
+
+#: sipa/templates/bustimes.html:11 sipa/templates/bustimes.html:33
+msgid "Fehler bei der Abfrage!"
+msgstr ""
+
+#: sipa/templates/bustimes.html:15
+msgid "Linie"
+msgstr ""
+
+#: sipa/templates/bustimes.html:16
+msgid "Richtung"
+msgstr ""
+
+#: sipa/templates/bustimes.html:29
+msgid "Quelle"
 msgstr ""
 
 #: sipa/templates/index.html:22
