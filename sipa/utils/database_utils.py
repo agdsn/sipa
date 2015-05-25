@@ -131,8 +131,9 @@ def user_id_from_ip(ip):
 
 def query_current_credit(uid=None, ip=None):
     """Returns the current credit in MiB
-    :param uid: The user's id
-    :return:
+    :param uid: The id of the user
+    :param ip: The ip of the user
+    :return: The current amount of credit
     """
     if uid is None:
         if ip is None:
