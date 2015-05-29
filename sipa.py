@@ -71,12 +71,14 @@ if app.config['FLATPAGES_ROOT'] == "":
 if app.config['CONTENT_URL']:
     init_repo(app.config["FLATPAGES_ROOT"], app.config['CONTENT_URL'])
 
-if os.getenv("SIPA_UWSGI" ,"False") == 'True':
+if os.getenv("SIPA_UWSGI", "False") == 'True':
     import uwsgi
+
     def update_uwsgi(signum):
         hasToReload = update_repo(app.config["FLATPAGES_ROOT"])
         if hasToReload:
             uwsgi.reload
+
     uwsgi.register_signal(20, "", update_uwsgi)
     uwsgi.add_cron(20, -5, -1, -1, -1, -1)
 
