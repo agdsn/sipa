@@ -14,11 +14,10 @@ from flask.ext.login import current_user
 def calculate_userid_checksum(id):
     """Calculate checksum for a userid.
     (Modulo 10 on the sum of all digits)
+
+    :param user_id: The id of the mysql user tuple
     """
-    cross = 0
-    for i in str(id):
-        cross += int(i)
-    return cross % 10
+    return sum(map(int, user_id)) % 10
 
 
 def timetag_from_timestamp(timestamp=None):
