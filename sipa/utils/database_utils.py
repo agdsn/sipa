@@ -167,6 +167,11 @@ def query_current_credit(uid=None, ip=None):
 
 def query_trafficdata(ip=None, user_id=None):
     """Query traffic input/output for IP
+
+    :param ip: a valid ip
+    :param user_id: an id of a mysql user tuple
+    :return: a dict containing the traffic data in the form of
+    {'history': [('weekday', in, out, credit), …], 'credit': credit}
     """
     if user_id is None:
         if ip is None:

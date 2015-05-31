@@ -43,6 +43,7 @@ class User(object):
         self.mail = mail
 
     def __repr__(self):
+        # todo use here or in `__str__` real-world strings as "Alice Brown"
         return "User<%s,%s,%s>" % (self.uid, self.name, self.group)
 
     def is_active(self):
