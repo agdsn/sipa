@@ -15,7 +15,7 @@
 {% endmacro %}
 
 {% block content %}
-    {% if articles%}{% for art in articles %}
+    {% if articles %}{% for art in articles %}
         <h2>{{ art.title }}</h2>
         <small>{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</small>
         <hr />
