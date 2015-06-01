@@ -3,11 +3,9 @@
 {% set page = article.localized_page %}
 
 {% block content %}
-        <div class="panel panel-default">
-            <div class="panel-body">{{ page.html|safe }}</div>
-            <div class="panel-footer">
-                {{ _("Geschrieben von") }} {{ page.meta.author }}, {{ page.meta.date }}.
-                {{ _("Menütitel") }}: {{ page.meta.title }}
-                </div>
-        </div>
+    <h2>{{ page.meta.title }}</h2>
+    <small>{{ _("Geschrieben von") }} {{ page.meta.author }}, {{ page.meta.date }}.</small>
+    <hr />
+    <div>{{ page.html|safe }}</div>
+    <hr />
 {% endblock %}

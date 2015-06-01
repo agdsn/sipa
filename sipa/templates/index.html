@@ -16,11 +16,12 @@
 
 {% block content %}
     {% if articles%}{% for art in articles %}
-        <div class="panel {{ panelclass(art.type) }}">
-            <div class="panel-heading"><h2 class="panel-title">{{ art.title }}</h2></div>
-            <div class="panel-body">{{ art.html|safe }}</div>
-            <div class="panel-footer">{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</div>
-        </div>
+        <h2>{{ art.title }}</h2>
+        <small>{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</small>
+        <hr />
+        <div>{{ art.html|safe }}</div>
+
+        <br />
     {% endfor %}{% else %}
         <div class="alert alert-info">
             {{ _("Keine News Vorhanden!") }}
