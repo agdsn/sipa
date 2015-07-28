@@ -56,7 +56,7 @@ if os.path.isfile(location_log_config):
                               disable_existing_loggers=True)
     logger.info('Loaded logging configuration file "%s"', location_log_config)
 else:
-    logger.warn('Error loading configuration file "%s"', location_log_config)
+    logger.warning('Error loading configuration file "%s"', location_log_config)
 
 if app.config['SENTRY_DSN']:
     sentry = Sentry()
@@ -68,7 +68,7 @@ if app.config['SENTRY_DSN']:
     setup_logging(handler)
 
     # suppress INFO logging messages occurring every request
-    logging.getLogger('werkzeug').setLevel(logging.WARN)
+    logging.getLogger('werkzeug').setLevel(logging.WARNING)
     logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
 else:
     logger.debug("No sentry DSN specified")
