@@ -183,7 +183,9 @@ def change_password(username, old, new):
     """
     try:
         with LdapConnector(username, old) as l:
-            l.passwd_s(get_dn(l), old.encode('iso8859-1'), new.encode('iso8859-1'))
+            l.passwd_s(get_dn(l),
+                       old.encode('iso8859-1'),
+                       new.encode('iso8859-1'))
     except PasswordInvalid:
         logger.info('Wrong password provided when attempting '
                     'change of password')

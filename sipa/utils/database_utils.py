@@ -109,7 +109,6 @@ def user_id_from_uid(uid=None):
                      (uid,)).fetchone()['nutzer_id']
 
 
-
 def ip_from_user_id(user_id):
     result = (sql_query(
         "SELECT c_ip FROM computer WHERE nutzer_id = %s",
@@ -159,14 +158,13 @@ def query_current_credit(uid=None, ip=None):
             "AND t.timetag = %(today)s",
             {'today': timetag_from_timestamp(), 'ip': ip, 'user_id': user_id}
         ).fetchone()
-    except OperationalError:
+    except OperationalError as e:
         # todo include more valuable information
         logger.critical('Unable to connect to MySQL server',
-                        extra={'data': {'exception_args': ex.args}})
+                        extra={'data': {'exception_args': e.args}})
         raise
     else:
         return round(result['current'] / 1024, 2)
-
 
 
 def query_trafficdata(ip=None, user_id=None):

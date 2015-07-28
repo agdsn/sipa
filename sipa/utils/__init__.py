@@ -11,7 +11,7 @@ import time
 from flask.ext.login import current_user
 
 
-def calculate_userid_checksum(id):
+def calculate_userid_checksum(user_id):
     """Calculate checksum for a userid.
     (Modulo 10 on the sum of all digits)
 
