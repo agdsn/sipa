@@ -104,6 +104,9 @@ if app.config['SENTRY_DSN']:
 
     # suppress INFO logging messages occurring every request
     logging.getLogger('werkzeug').setLevel(logging.WARN)
+    logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
+else:
+    logger.debug("No sentry DSN specified")
 
 if __name__ == "__main__":
     logger.info('Starting sipa...')
