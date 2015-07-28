@@ -48,12 +48,6 @@ def init_app():
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
 
-    # todo rethink imports here. These are kind of awkward.
-    # I am quite sceptical looking at imports in the middle of the code -
-    # not to mention that part “hanging” at the end of this function.
-    # importing something just to execute some initializing code like in
-    # `import sipa.views` is bad practice. If things need to be done
-    # initially, one should make a method for this.
     from sipa.blueprints import bp_features, bp_usersuite, \
         bp_pages, bp_documents, bp_news
 
@@ -65,12 +59,6 @@ def init_app():
     app.register_blueprint(bp_news)
 
     if not app.debug:
-        # todo what's being done here with logging?
-        # I thought logging should be handled *centrally* in the
-        # default_log_config?
-        # and why should we use a rotatingFileHandler? Sipa is going to run
-        # in an isolated docker container. the only things making sense to me
-        # would be stdout and streamhandlers.
         app.config.setdefault('LOG_MAX_BYTES', 1024**2)
         app.config.setdefault('LOG_BACKUP_COUNT', 10)
         import logging

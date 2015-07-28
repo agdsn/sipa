@@ -80,7 +80,7 @@ def query_userinfo(username):
             user['etage'],
             user['zimmernr']
         ),
-        'status': app.config['STATUS'][user['status']],
+        'status': status_string_from_id(user['status']),
         'status_is_good': user['status'] == 1,
         'ip': computer['c_ip'],
         'mac': computer['c_etheraddr'].upper(),
@@ -90,6 +90,10 @@ def query_userinfo(username):
     }
 
     return user
+
+
+def status_string_from_id(status_id):
+    return app.config['STATUS'].get(status_id, gettext(u"Unbekannt"))
 
 
 def user_id_from_uid(uid=None):

@@ -23,9 +23,3 @@ class DBQueryEmpty(Exception):
 class LDAPConnectionError(Exception):
     pass
 
-
-# todo custom exception “TrafficDataError” beyond this one?
-class ForeignIPAccessError(Exception):
-    pass
-
-# todo think about “ReportError” or similar to group errors by severity

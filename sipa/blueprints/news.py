@@ -6,6 +6,7 @@ Blueprint providing features regarding the news entries.
 """
 
 from flask import Blueprint, render_template, url_for, redirect
+
 from sipa.flatpages import cf_pages
 
 bp_news = Blueprint('news', __name__, url_prefix='/news')
@@ -14,7 +15,6 @@ bp_news = Blueprint('news', __name__, url_prefix='/news')
 @bp_news.route("/")
 @bp_news.route("/start/<int:start>")
 @bp_news.route("/end/<int:end>")
-# todo implement (gui) feature to select range
 @bp_news.route("/range/<int:start>:<int:end>")
 def display(start=None, end=None):
     """Get all markdown files from 'content/news/', parse them and put

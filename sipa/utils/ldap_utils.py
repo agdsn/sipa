@@ -12,25 +12,6 @@ from sipa import app, logger
 from .exceptions import UserNotFound, PasswordInvalid, LDAPConnectionError
 
 
-# TODO assign currently used classes to variables
-# Just as when assigning the intconverter in the base.py:
-#   app.url_map.converters['int'] = IntegerConverter
-# we can use this to rename the classes being too specific to Base{}, e.g.
-# BaseUser.
-# This can look like this:
-# ```
-# class BaseUser(object):
-#     def __init__(self, uid, name, mail):
-#     # […]
-# User = BaseUser
-# ```
-# This makes customization a *dimension* easier, because one just has to *add*
-# code and just modify one line (per object-exchange), which cuts down
-# interference with the original code a lot.
-# Seemingly, PyCharm understands objects being assigned to a variable and
-# supports according parameter completion.
-
-
 class User(object):
     """User object will be created from LDAP credentials,
     only stored in session.
