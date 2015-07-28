@@ -40,7 +40,7 @@ def usersuite():
                      extra={'data': {'exception_args': e.args}, 'stack': True})
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
               "error")
-        return redirect(url_for("index"))
+        return redirect(url_for('generic.index'))
 
     return render_template("usersuite/index.html",
                            userinfo=userinfo,

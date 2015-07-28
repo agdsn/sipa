@@ -49,9 +49,10 @@ def init_app():
     cf_pages.init_app(app)
 
     from sipa.blueprints import bp_features, bp_usersuite, \
-        bp_pages, bp_documents, bp_news
+        bp_pages, bp_documents, bp_news, bp_generic
 
     logger.debug('Registering blueprints')
+    app.register_blueprint(bp_generic)
     app.register_blueprint(bp_features)
     app.register_blueprint(bp_usersuite)
     app.register_blueprint(bp_pages)
@@ -79,7 +80,6 @@ def init_app():
         possible_locales=possible_locales,
         chart=render_traffic_chart,
     )
-    import sipa.views
 
 
 @login_manager.user_loader

@@ -1,22 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Drupalport auf Python im Zuge der Entwicklung von Pycroft.
-Erstellt am 02.03.2014 von Dominik Pataky pataky@wh2.tu-dresden.de
-"""
-
 from __future__ import absolute_import
 
 from flask import render_template, request, redirect, \
     url_for, flash, session
+from flask.blueprints import Blueprint
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from sipa import app, logger, http_logger
+from sipa import logger, http_logger, app
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils import current_user_name
 from sipa.utils.database_utils import query_trafficdata, \
@@ -24,21 +20,23 @@ from sipa.utils.database_utils import query_trafficdata, \
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 from sipa.utils.ldap_utils import User, authenticate
 
+bp_generic = Blueprint('generic', __name__)
 
-@app.before_request
+
+@bp_generic.before_app_request
 def log_request():
     http_logger.debug('Incoming request: %s %s', request.method, request.path,
                       extra={'tags': {'user': current_user_name(),
                                       'ip': request.remote_addr}})
 
 
-@app.errorhandler(401)
-@app.errorhandler(403)
-@app.errorhandler(404)
+@bp_generic.app_errorhandler(401)
+@bp_generic.app_errorhandler(403)
+@bp_generic.app_errorhandler(404)
 def error_handler_redirection(e):
     """Handles errors by flashing an according message and redirecting to /
     :param e: The error
-    :return: A flask response, in this case `redirect(url_for('index'))`
+    :return: A flask response, in this case `redirect(url_for('.index'))`
     """
     if e.code in (404,):
         flash(gettext(u"Seite nicht gefunden!"), "warning")
@@ -48,10 +46,10 @@ def error_handler_redirection(e):
             "warning")
     else:
         flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")
-    return redirect(url_for("index"))
+    return redirect(url_for('generic.index'))
 
 
-@app.errorhandler(OperationalError)
+@bp_generic.app_errorhandler(OperationalError)
 def exceptionhandler_sql(ex):
     """Handles global MySQL errors (server down).
     """
@@ -66,10 +64,10 @@ def exceptionhandler_sql(ex):
     # OperationalError is being handled globally.
     # In the latter case, the cause was the request of the traffic chart data.
     # A quick fix was catching it and returning an error status.
-    return redirect(url_for('index'))
+    return redirect(url_for('generic.index'))
 
 
-@app.errorhandler(SERVER_DOWN)
+@bp_generic.app_errorhandler(SERVER_DOWN)
 def exceptionhandler_ldap(ex):
     """Handles global LDAP SERVER_DOWN exceptions.
     The session must be reset, because if the user is logged in and the server
@@ -90,10 +88,10 @@ def exceptionhandler_ldap(ex):
         extra={'data': {'ldap_base_dn': app.config['LDAP_SEARCH_BASE'],
                         'exception_args': ex.args}}
     )
-    return redirect(url_for('index'))
+    return redirect(url_for('generic.index'))
 
 
-@app.route("/language/<string:lang>")
+@bp_generic.route("/language/<string:lang>")
 def set_language(lang='de'):
     """Set the session language via URL
     """
@@ -101,13 +99,13 @@ def set_language(lang='de'):
     return redirect(request.referrer)
 
 
-@app.route('/index.php')
-@app.route('/')
+@bp_generic.route('/index.php')
+@bp_generic.route('/')
 def index():
-    return redirect(url_for("news.display"))
+    return redirect(url_for('news.display'))
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@bp_generic.route("/login", methods=['GET', 'POST'])
 def login():
     """Login page for users
     """
@@ -135,15 +133,15 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route("/logout")
+@bp_generic.route("/logout")
 @login_required
 def logout():
     logger.info('Logging out')
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for('.index'))
 
 
-@app.route("/usertraffic")
+@bp_generic.route("/usertraffic")
 def usertraffic():
     """For anonymous users with a valid IP
     """
@@ -170,4 +168,4 @@ def usertraffic():
         else:
             flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu können,"
                           u" musst du dich anmelden."), "info")
-            return redirect(url_for('login'))
+            return redirect(url_for('.login'))

@@ -25,7 +25,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url_for("index") }}"><div id="logo"></div></a>
+            <a class="navbar-brand" href="{{ url_for('generic.index') }}"><div id="logo"></div></a>
         </div>
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -78,7 +78,7 @@
                     <ul class="dropdown-menu" role="menu">
                         {% for locale in possible_locales() %}
                         <li >
-                            <a href="{{ url_for('set_language', lang=locale.language) }}">
+                            <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
                                 <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
                                 {{locale.display_name}}
                             </a>
@@ -88,11 +88,11 @@
 
 				</li>
                 {% if current_user.is_anonymous() %}<li>
-                    <a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
+                    <a href="{{ url_for('generic.login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
                 </li>{% else %}<li>
                     <a href="{{ url_for('usersuite.usersuite') }}"><span class="text-success"><span class="glyphicon glyphicon-user"></span> {{ current_user.name }}</span></a>
                 </li><li>
-                    <a href="{{ url_for('logout') }}"><span class="text-danger"><span class="glyphicon glyphicon-off"></span> {{ _("Logout") }}</span></a>
+                    <a href="{{ url_for('generic.logout') }}"><span class="text-danger"><span class="glyphicon glyphicon-off"></span> {{ _("Logout") }}</span></a>
                 </li>{% endif %}
             </ul>
         </div>
@@ -112,7 +112,7 @@
 		<div class="col-sm-3 col-sm-push-9">
 			<div class="row">
 				<div class="col-xs-6 col-sm-12">
-					<a id="traffic_gauge_link" href="{{ url_for('usertraffic') }}"><div id="trafficgauge"></div>
+					<a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}"><div id="trafficgauge"></div>
                         <div class="text-center"><small>({{ _("Für Details klicken") }})</small></div>
 					</a><br>
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """Blueprint for feature components such as bustimes etc.
-Basically, this is everything that is to specific to appear in the views.py
+Basically, this is everything that is to specific to appear in the generic.py
 and does not fit into any other blueprint such as “documents”.
 """
 
