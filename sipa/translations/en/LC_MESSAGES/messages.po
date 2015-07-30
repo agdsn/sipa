@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-25 06:49+0200\n"
-"PO-Revision-Date: 2015-05-25 06:50+0100\n"
+"POT-Creation-Date: 2015-07-30 16:30+0200\n"
+"PO-Revision-Date: 2015-07-30 16:32+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-"Language: en\n"
-"X-Generator: Poedit 1.6.10\n"
+"Language: de\n"
+"X-Generator: Poedit 1.8.2\n"
 
 #: sipa/default_config.py:81
 msgid "Bezahlt, verbunden"
@@ -123,55 +123,55 @@ msgstr "No username submitted!"
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: sipa/views.py:38
+#: sipa/blueprints/generic.py:42
 msgid "Seite nicht gefunden!"
 msgstr "Page not found!"
 
-#: sipa/views.py:40
+#: sipa/blueprints/generic.py:44
 msgid "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr "You are not permitted to view this page!"
 
-#: sipa/views.py:44
+#: sipa/blueprints/generic.py:48
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: sipa/views.py:57
+#: sipa/blueprints/generic.py:56
 msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
 msgstr "Connection to SQL server could not be established!"
 
-#: sipa/views.py:82
+#: sipa/blueprints/generic.py:81
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr "Connection to LDAP server could not be established!"
 
-#: sipa/views.py:122
+#: sipa/blueprints/generic.py:121
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
-#: sipa/views.py:127
+#: sipa/blueprints/generic.py:126
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/views.py:155
+#: sipa/blueprints/generic.py:153
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/views.py:157
+#: sipa/blueprints/generic.py:155
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr "You will find here the traffic data for this connection"
 
-#: sipa/views.py:160
+#: sipa/blueprints/generic.py:162
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
-#: sipa/views.py:163
+#: sipa/blueprints/generic.py:165
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
 "einsehen."
 msgstr ""
 "Because you are logged in, you can view your traffic here in the usersuite."
 
-#: sipa/views.py:167
+#: sipa/blueprints/generic.py:169
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
 msgstr "To view your traffic from outside the network, you have to log in."
@@ -265,10 +265,6 @@ msgstr "Logout"
 msgid "Für Details klicken"
 msgstr "Click for details"
 
-#: sipa/templates/base.html:122
-msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
-msgstr "This IP does not belong to the network of the AGDSN"
-
 #: sipa/templates/base.html:129
 msgid "Kontakt"
 msgstr "Contact"
@@ -305,27 +301,27 @@ msgstr "Direction"
 msgid "Quelle"
 msgstr "Source"
 
-#: sipa/templates/index.html:22
+#: sipa/templates/index.html:20
 msgid "geschrieben von"
 msgstr "written by"
 
-#: sipa/templates/index.html:26
+#: sipa/templates/index.html:27
 msgid "Keine News Vorhanden!"
 msgstr "No News available!"
 
-#: sipa/templates/index.html:34
+#: sipa/templates/index.html:35
 msgid "Neuer"
 msgstr "Newer"
 
-#: sipa/templates/index.html:38
+#: sipa/templates/index.html:39
 msgid "Keine neueren Beiträge"
 msgstr "No newer entries"
 
-#: sipa/templates/index.html:45
+#: sipa/templates/index.html:46
 msgid "Älter"
 msgstr "Older"
 
-#: sipa/templates/index.html:49
+#: sipa/templates/index.html:50
 msgid "Keine älteren Beiträge"
 msgstr "No older entries"
 
@@ -341,13 +337,9 @@ msgstr "Password"
 msgid "Einloggen"
 msgstr "Log in"
 
-#: sipa/templates/template.html:9
+#: sipa/templates/template.html:7
 msgid "Geschrieben von"
 msgstr "Written by"
-
-#: sipa/templates/template.html:10
-msgid "Menütitel"
-msgstr "Menu title"
 
 #: sipa/templates/drafts/_traffic_chart.html:2
 msgid "Trafficdiagramm"
@@ -566,6 +558,20 @@ msgstr "Verification of your new password"
 msgid "Usersuite von "
 msgstr "Usersuite of "
 
+#: sipa/utils/database_utils.py:96
+msgid "Unbekannt"
+msgstr "Unknown"
+
+#: sipa/utils/database_utils.py:238
+#, fuzzy
+msgid "Fehler bei der Abfrage der Daten"
+msgstr "An error occurred!"
+
+#: sipa/utils/database_utils.py:241
+#, fuzzy
+msgid "Diese IP gehört nicht zu unserem Netzwerk"
+msgstr "This IP does not belong to the network of the AGDSN"
+
 #: sipa/utils/graph_utils.py:20
 msgid "Traffic (MB)"
 msgstr "Traffic (MB)"
@@ -581,3 +587,6 @@ msgstr "Output"
 #: sipa/utils/graph_utils.py:35
 msgid "Gesamt"
 msgstr "Total"
+
+#~ msgid "Menütitel"
+#~ msgstr "Menu title"

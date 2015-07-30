@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-25 06:49+0200\n"
+"POT-Creation-Date: 2015-07-30 16:30+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -121,55 +121,55 @@ msgstr ""
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/views.py:38
+#: sipa/blueprints/generic.py:42
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: sipa/views.py:40
+#: sipa/blueprints/generic.py:44
 msgid "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"
 msgstr ""
 
-#: sipa/views.py:44
+#: sipa/blueprints/generic.py:48
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/views.py:57
+#: sipa/blueprints/generic.py:56
 msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/views.py:82
+#: sipa/blueprints/generic.py:81
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/views.py:122
+#: sipa/blueprints/generic.py:121
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/views.py:127
+#: sipa/blueprints/generic.py:126
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/views.py:155
+#: sipa/blueprints/generic.py:153
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/views.py:157
+#: sipa/blueprints/generic.py:155
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr ""
 
-#: sipa/views.py:160
+#: sipa/blueprints/generic.py:162
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: sipa/views.py:163
+#: sipa/blueprints/generic.py:165
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
 "einsehen."
 msgstr ""
 
-#: sipa/views.py:167
+#: sipa/blueprints/generic.py:169
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
 "anmelden."
@@ -262,10 +262,6 @@ msgstr ""
 msgid "Für Details klicken"
 msgstr ""
 
-#: sipa/templates/base.html:122
-msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
-msgstr ""
-
 #: sipa/templates/base.html:129
 msgid "Kontakt"
 msgstr ""
@@ -302,27 +298,27 @@ msgstr ""
 msgid "Quelle"
 msgstr ""
 
-#: sipa/templates/index.html:22
+#: sipa/templates/index.html:20
 msgid "geschrieben von"
 msgstr ""
 
-#: sipa/templates/index.html:26
+#: sipa/templates/index.html:27
 msgid "Keine News Vorhanden!"
 msgstr ""
 
-#: sipa/templates/index.html:34
+#: sipa/templates/index.html:35
 msgid "Neuer"
 msgstr ""
 
-#: sipa/templates/index.html:38
+#: sipa/templates/index.html:39
 msgid "Keine neueren Beiträge"
 msgstr ""
 
-#: sipa/templates/index.html:45
+#: sipa/templates/index.html:46
 msgid "Älter"
 msgstr ""
 
-#: sipa/templates/index.html:49
+#: sipa/templates/index.html:50
 msgid "Keine älteren Beiträge"
 msgstr ""
 
@@ -338,12 +334,8 @@ msgstr ""
 msgid "Einloggen"
 msgstr ""
 
-#: sipa/templates/template.html:9
+#: sipa/templates/template.html:7
 msgid "Geschrieben von"
-msgstr ""
-
-#: sipa/templates/template.html:10
-msgid "Menütitel"
 msgstr ""
 
 #: sipa/templates/drafts/_traffic_chart.html:2
@@ -557,6 +549,18 @@ msgstr ""
 
 #: sipa/templates/usersuite/index.html:2
 msgid "Usersuite von "
+msgstr ""
+
+#: sipa/utils/database_utils.py:96
+msgid "Unbekannt"
+msgstr ""
+
+#: sipa/utils/database_utils.py:238
+msgid "Fehler bei der Abfrage der Daten"
+msgstr ""
+
+#: sipa/utils/database_utils.py:241
+msgid "Diese IP gehört nicht zu unserem Netzwerk"
 msgstr ""
 
 #: sipa/utils/graph_utils.py:20
@@ -1016,5 +1020,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Es gab einen Fehler bei der Trafficabfrage"
+#~ msgstr ""
+
+#~ msgid "Diese IP gehört nicht zum Netzwerk der Sektion"
+#~ msgstr ""
+
+#~ msgid "Menütitel"
 #~ msgstr ""
 
