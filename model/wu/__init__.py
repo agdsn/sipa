@@ -33,19 +33,20 @@ class User(BaseUser):
     def __init__(self, uid, name, mail):
         super(User, self).__init__(uid)
         self.name = name
+        # TODO include group in user information
         self.group = self.define_group()
         self.mail = mail
 
 
     def __repr__(self):
-        # todo use here or in `__str__` real-world strings as "Alice Brown"
-        return "User<%s,%s,%s>" % (self.uid, self.name, self.group)
+        return "User<{},{}.{}>".format(self.uid, self.name, self.group)
 
+    def __str__(self):
+        return "User {} ({}), {}".format(self.name, self.uid, self.group)
 
     def define_group(self):
         """Define a user group from the LDAP group
         """
-        # todo check: does this work? has it _ever_ worked?
         if search_in_group(self.uid, 'Aktiv'):
             return 'active'
         elif search_in_group(self.uid, 'Exaktiv'):
