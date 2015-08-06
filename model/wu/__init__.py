@@ -13,7 +13,7 @@ from flask.ext.login import current_user
 from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
-from model.wu.database_utils import sql_query, query_userinfo
+from model.wu.database_utils import sql_query, query_userinfo, WEEKDAYS
 from model.wu.ldap_utils import search_in_group, LdapConnector, get_dn
 
 from sipa import logger, app
@@ -100,7 +100,6 @@ class User(BaseUser):
         else:
             logger.info('Password successfully changed')
 
-
     @staticmethod
     def from_ip(ip):
         result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
@@ -131,14 +130,11 @@ class User(BaseUser):
         # todo implement
         def rand():
             return round(random(), 2)
-        return {
-            'credit': 0,
-            # todo app is used in /model. this is bad.
-            # These are Weekdays, not anything app-related.
-            'history': [("HOMO",  # app.config['WEEKDAYS'][str(day)],
-                         rand(), rand(), rand())
-                        for day in range(7)]
-        }
+        # Probable implementation:
+        traf = 0
+        return {'credit': 0,
+                'history': [(WEEKDAYS[str(day)], rand(), rand(), rand())
+                            for day in range(7)]}
 
 
     def get_current_credit(self):

@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine
+import datetime
 
 from flask.ext.babel import gettext
 from sqlalchemy.exc import OperationalError
 
 from sipa import app, logger
-from sipa.utils import timetag_from_timestamp
+from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
 from sipa.utils.exceptions import DBQueryEmpty
 from .ldap_utils import get_current_uid
 
@@ -38,6 +39,16 @@ DORMITORIES = [
     u'Zellescher Weg 41C',
     u'Zellescher Weg 41D'
 ]
+
+WEEKDAYS = {
+    '0': gettext('Sonntag'),
+    '1': gettext('Montag'),
+    '2': gettext('Dienstag'),
+    '3': gettext('Mittwoch'),
+    '4': gettext('Donnerstag'),
+    '5': gettext('Freitag'),
+    '6': gettext('Samstag')
+}
 
 
 def sql_query(query, args=(), database=db_atlantis):
@@ -234,10 +245,10 @@ def query_trafficdata(ip=None, user_id=None):
                 for param in ['input', 'output', 'amount']
             )
             traffic['history'].append(
-                (app.config['WEEKDAYS'][day], input, output, credit))
+                (WEEKDAYS[day], input, output, credit))
         else:
             traffic['history'].append(
-                (app.config['WEEKDAYS'][day], 0.0, 0.0, 0.0))
+                (WEEKDAYS[day], 0.0, 0.0, 0.0))
 
     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
@@ -251,6 +262,7 @@ def update_macaddress(ip, oldmac, newmac):
     TODO: check, if 'LIMIT 1' causes problems (sqlalchemy says
     "Warning: Unsafe statement")
     """
+    # todo why does one the old mac_address?
     sql_query(
         "UPDATE computer "
         "SET c_etheraddr = %s "

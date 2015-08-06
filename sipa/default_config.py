@@ -9,6 +9,7 @@ which is a file not tracked in git containing IPs, user names, passwords, etc.
 """
 
 import os
+
 from flask.ext.babel import gettext
 
 SECRET_KEY = os.getenv("SIPA_SECRET_KEY", "insecuresecretKey")
@@ -67,16 +68,6 @@ STATUS = {
     7: gettext(u'Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
     9: gettext(u'Exaktiv'),
     12: gettext(u'Trafficlimit überschritten, Netzanschluss gesperrt')
-}
-
-WEEKDAYS = {
-    '0': gettext('Sonntag'),
-    '1': gettext('Montag'),
-    '2': gettext('Dienstag'),
-    '3': gettext('Mittwoch'),
-    '4': gettext('Donnerstag'),
-    '5': gettext('Freitag'),
-    '6': gettext('Samstag')
 }
 
 # Languages

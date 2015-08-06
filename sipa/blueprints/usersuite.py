@@ -185,7 +185,6 @@ def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
     form = ChangeMACForm()
-    # todo getting the whole userinfo is a complete waste. separate MAC?
     userinfo = query_userinfo(current_user.uid)
 
     if form.validate_on_submit():

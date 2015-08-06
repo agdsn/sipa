@@ -52,6 +52,9 @@ class BaseUser(object, AuthenticatedUserMixin):
     def change_password(self, old, new):
         raise NotImplementedError
 
+    def change_mac_address(self, old, new):
+        raise NotImplementedError
+
     def get_information(self):
         # TODO what should be returned here?i
         raise NotImplementedError
