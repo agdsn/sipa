@@ -32,6 +32,9 @@ class BaseUser(object, AuthenticatedUserMixin):
         """
         self.uid = uid
 
+    def __eq__(self, other):
+        return self.uid == other.uid
+
     def get_id(self):
         """Required by flask-login"""
         return self.uid

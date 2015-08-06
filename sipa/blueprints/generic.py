@@ -151,11 +151,11 @@ def logout():
 def usertraffic():
     """For anonymous users with a valid IP
     """
-    ip = request.remote_addr
+    ip_user = User.from_ip(request.remote_addr)
 
-    if user_id_from_ip(ip):
+    if ip_user:
         if current_user.is_authenticated():
-            if current_user.uid is user_id_from_ip(ip):
+            if current_user != ip_user:
                 flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"
                               u" Eingetragene ist angemeldet!"), "warning")
                 flash(gettext("Hier werden die Trafficdaten "
@@ -163,7 +163,7 @@ def usertraffic():
 
         # todo test if the template works if called from this position
         return render_template("usertraffic.html", usertraffic=(
-            User.from_ip(ip).get_traffic_data()))
+            ip_user.get_traffic_data()))
     else:
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
 

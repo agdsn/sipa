@@ -13,7 +13,8 @@ from flask.ext.login import current_user
 from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
-from model.wu.database_utils import sql_query, query_userinfo, WEEKDAYS
+from model.wu.database_utils import sql_query, query_userinfo, WEEKDAYS, \
+    query_trafficdata, ip_from_user_id, query_current_credit
 from model.wu.ldap_utils import search_in_group, LdapConnector, get_dn
 
 from sipa import logger, app
@@ -30,12 +31,19 @@ class User(BaseUser):
     the terms 'uid' and 'username' refer to the same thing.
     """
 
-    def __init__(self, uid, name, mail):
+    def __init__(self, uid, name, mail, ip=None):
         super(User, self).__init__(uid)
         self.name = name
         # TODO include group in user information
         self.group = self.define_group()
         self.mail = mail
+        self._ip = ip
+
+    @property
+    def ip(self):
+        if self._ip is None:
+            self._ip = ip_from_user_id(self.uid)
+        return self._ip
 
 
     def __repr__(self):
@@ -55,12 +63,12 @@ class User(BaseUser):
 
 
     @staticmethod
-    def get(username):
+    def get(username, **kwargs):
         """Static method for flask-login user_loader,
         used before _every_ request.
         """
         user = LdapConnector.fetch_user(username)
-        return User(user['uid'], user['name'], user['mail'])
+        return User(user['uid'], user['name'], user['mail'], **kwargs)
 
 
     def re_authenticate(self, password):
@@ -85,6 +93,15 @@ class User(BaseUser):
                         extra={'data': {'username': username}})
             raise
 
+    @staticmethod
+    def from_ip(ip):
+        result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
+                            (ip,)).fetchone()
+        if result is None:
+            return None
+
+        return User.get(result['nutzer_id'], ip=ip)
+
     def change_password(self, old, new):
         """Change a user's password from old to new
         """
@@ -99,15 +116,6 @@ class User(BaseUser):
             raise
         else:
             logger.info('Password successfully changed')
-
-    @staticmethod
-    def from_ip(ip):
-        result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
-                            (ip,)).fetchone()
-        if result is None:
-            return None
-
-        return User.get(result['nutzer_id'])
 
     def get_information(self):
         user_dict = {
@@ -127,18 +135,17 @@ class User(BaseUser):
 #        return query_userinfo(self.uid)
 
     def get_traffic_data(self):
-        # todo implement
+        # return query_trafficdata(self.ip, self.uid)
+
         def rand():
             return round(random(), 2)
-        # Probable implementation:
-        traf = 0
         return {'credit': 0,
                 'history': [(WEEKDAYS[str(day)], rand(), rand(), rand())
                             for day in range(7)]}
 
 
     def get_current_credit(self):
-        # todo implement
+        # return query_current_credit(self.uid, self.ip)
         return round(random(), 2)
 
 
@@ -150,7 +157,6 @@ def query_gauge_data():
         else:
             from model import User
             credit['data'] = User.from_ip(request.remote_addr).get_current_credit()
-            # query_current_credit(ip=request.remote_addr)
     except OperationalError:
         credit['error'] = gettext(u'Fehler bei der Abfrage der Daten')
     else:

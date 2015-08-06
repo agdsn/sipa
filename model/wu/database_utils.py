@@ -195,7 +195,7 @@ def query_current_credit(uid=None, ip=None):
         return round(result['current'] / 1024, 2)
 
 
-def query_trafficdata(ip=None, user_id=None):
+def query_trafficdata(ip, user_id):
     """Query traffic input/output for IP
 
     :param ip: a valid ip
@@ -203,14 +203,6 @@ def query_trafficdata(ip=None, user_id=None):
     :return: a dict containing the traffic data in the form of
     {'history': [('weekday', in, out, credit), …], 'credit': credit}
     """
-    if user_id is None:
-        if ip is None:
-            raise AttributeError('Either ip or user_id must be specified!')
-        user_id = user_id_from_ip(ip)
-    else:
-        # ip gotten from db is preferred to the ip possibly given as parameter
-        ip = ip_from_user_id(user_id)
-
     trafficdata = sql_query(
         "SELECT t.timetag - %(today)s AS day, input, output, amount "
         "FROM traffic.tuext AS t "
