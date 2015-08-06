@@ -31,8 +31,7 @@ class User(BaseUser):
     """
 
     def __init__(self, uid, name, mail):
-        super(BaseUser, self).__init__()
-        self.uid = uid
+        super(User, self).__init__(uid)
         self.name = name
         self.group = self.define_group()
         self.mail = mail
@@ -41,10 +40,6 @@ class User(BaseUser):
     def __repr__(self):
         # todo use here or in `__str__` real-world strings as "Alice Brown"
         return "User<%s,%s,%s>" % (self.uid, self.name, self.group)
-
-
-    def get_id(self):
-        return self.uid
 
 
     def define_group(self):
