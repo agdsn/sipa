@@ -16,8 +16,10 @@ from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
 from sipa import app, logger
-from sipa.base import init_app
 
+# todo don't init by accessing app globally. rather make_app() with params.
+
+### STEP ONE: CONFIG + DEFAULT VALUE EVALUATION
 
 # default configuration
 app.config.from_pyfile('default_config.py')
@@ -47,7 +49,12 @@ if os.getenv("SIPA_UWSGI", "False") == 'True':
     uwsgi.register_signal(20, "", update_uwsgi)
     uwsgi.add_cron(20, -5, -1, -1, -1, -1)
 
+### STEP TWO: INIT_APP
+
+from sipa.base import init_app
 init_app()
+
+### STEP THREE: LOGGING
 
 location_log_config = app.config['LOGGING_CONFIG_LOCATION']
 
@@ -73,7 +80,11 @@ if app.config['SENTRY_DSN']:
 else:
     logger.debug("No sentry DSN specified")
 
+### STEP FOUR: APP.RUN
+
 if __name__ == "__main__":
+    # from sipa import make_app
+    # app = make_app(*args, **kwargs)
     logger.info('Starting sipa...')
     logger.warning('Running in Debug mode')
     app.run(debug=True, host="0.0.0.0")
