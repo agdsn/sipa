@@ -25,6 +25,20 @@ db_helios = create_engine(
         app.config['DB_HELIOS_PORT']),
     echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
 
+DORMITORIES = [
+    u'Wundstraße 5',
+    u'Wundstraße 7',
+    u'Wundstraße 9',
+    u'Wundstraße 11',
+    u'Wundstraße 1',
+    u'Wundstraße 3',
+    u'Zellescher Weg 41',
+    u'Zellescher Weg 41A',
+    u'Zellescher Weg 41B',
+    u'Zellescher Weg 41C',
+    u'Zellescher Weg 41D'
+]
+
 
 def sql_query(query, args=(), database=db_atlantis):
     """Prepare and execute a raw sql query.
@@ -44,6 +58,7 @@ def query_userinfo(username):
     Returns "-1" if a query result was empty (None), else
     returns the prepared dict.
     """
+    userinfo = {}
     user = sql_query(
         "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
         "FROM nutzer "
@@ -53,6 +68,17 @@ def query_userinfo(username):
 
     if not user:
         raise DBQueryEmpty
+
+    userinfo.update(
+        id=user['nutzer_id'],
+        address=u"{0} / {1} {2}".format(
+            DORMITORIES[user['wheim_id'] - 1],
+            user['etage'],
+            user['zimmernr']
+        ),
+        status=status_string_from_id(user['status']),
+        status_is_good=user['status'] is 1
+    )
 
     computer = sql_query(
         "SELECT c_etheraddr, c_ip, c_hname, c_alias "
@@ -64,6 +90,13 @@ def query_userinfo(username):
     if not computer:
         raise DBQueryEmpty
 
+    userinfo.update(
+        ip=computer['c_ip'],
+        mac=computer['c_etheraddr'].upper(),
+        hostname=computer['c_hname'],
+        hostalias=computer['c_alias']
+    )
+
     try:
         has_mysql_db = user_has_mysql_db(username)
     except OperationalError:
@@ -71,23 +104,9 @@ def query_userinfo(username):
         # was a workaround to not abort due to this error
         has_mysql_db = False
 
-    user = {
-        'id': user['nutzer_id'],
-        'address': u"{0} / {1} {2}".format(
-            app.config['DORMITORIES'][user['wheim_id'] - 1],
-            user['etage'],
-            user['zimmernr']
-        ),
-        'status': status_string_from_id(user['status']),
-        'status_is_good': user['status'] == 1,
-        'ip': computer['c_ip'],
-        'mac': computer['c_etheraddr'].upper(),
-        'hostname': computer['c_hname'],
-        'hostalias': computer['c_alias'],
-        'heliosdb': has_mysql_db
-    }
+    userinfo.update(heliosdb=has_mysql_db)
 
-    return user
+    return userinfo
 
 
 def status_string_from_id(status_id):

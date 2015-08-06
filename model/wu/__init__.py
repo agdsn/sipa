@@ -13,7 +13,7 @@ from flask.ext.login import current_user
 from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
-from model.wu.database_utils import sql_query
+from model.wu.database_utils import sql_query, query_userinfo
 from model.wu.ldap_utils import search_in_group, LdapConnector, get_dn
 
 from sipa import logger, app
@@ -111,51 +111,6 @@ class User(BaseUser):
         return User.get(result['nutzer_id'])
 
     def get_information(self):
-        """Executes select query for the username and returns a prepared dict.
-
-        * Dormitory IDs in Mysql are from 1-11, so we map to 0-10 with "x-1".
-
-        Returns "-1" if a query result was empty (None), else
-        returns the prepared dict.
-        """
-        # user = sql_query(
-        #     "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
-        #     "FROM nutzer "
-        #     "WHERE unix_account = %s",
-        #     (self.uid,)
-        # ).fetchone()
-        #
-        # if not user:
-        #     raise DBQueryEmpty
-        #
-        # computer = sql_query(
-        #     "SELECT c_etheraddr, c_ip, c_hname, c_alias "
-        #     "FROM computer "
-        #     "WHERE nutzer_id = %s",
-        #     (user['nutzer_id'])
-        # ).fetchone()
-        #
-        # if not computer:
-        #     raise DBQueryEmpty
-
-        # todo fix helios && implement
-        #
-        # user_dict = {
-        #     'id': user['nutzer_id'],
-        #     'address': u"{0} / {1} {2}".format(
-        #         app.config['DORMITORIES'][user['wheim_id'] - 1],
-        #         user['etage'],
-        #         user['zimmernr']
-        #     ),
-        #     'status': status_string_from_id(user['status']),
-        #     'status_is_good': user['status'] == 1,
-        #     'ip': computer['c_ip'],
-        #     'mac': computer['c_etheraddr'].upper(),
-        #     'hostname': computer['c_hname'],
-        #     'hostalias': computer['c_alias'],
-        #     'heliosdb': has_mysql_db
-        # }
-
         user_dict = {
             'id': 1337,
             'checksum': 0,
@@ -170,7 +125,7 @@ class User(BaseUser):
         }
 
         return user_dict
-
+#        return query_userinfo(self.uid)
 
     def get_traffic_data(self):
         # todo implement

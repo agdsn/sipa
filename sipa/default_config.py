@@ -59,22 +59,6 @@ DB_HELIOS_PASSWORD = os.getenv("SIPA_DB_HELIOS_PASSWORD", "")
 
 SQL_TIMEOUT = int(os.getenv("SIPA_SQL_TIMEOUT", '15'))
 
-# todo further modularization. id mappings are rather specific than generous.
-# MySQL id mappings
-DORMITORIES = [
-    u'Wundstraße 5',
-    u'Wundstraße 7',
-    u'Wundstraße 9',
-    u'Wundstraße 11',
-    u'Wundstraße 1',
-    u'Wundstraße 3',
-    u'Zellescher Weg 41',
-    u'Zellescher Weg 41A',
-    u'Zellescher Weg 41B',
-    u'Zellescher Weg 41C',
-    u'Zellescher Weg 41D'
-]
-
 STATUS = {
     # todo vervollständigen oder mindestens fehlerresistent machen!
     # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
