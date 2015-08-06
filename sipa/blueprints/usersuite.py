@@ -7,20 +7,18 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
-from sipa import logger
 
+from model import User
+from sipa import logger
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from sipa.utils import calculate_userid_checksum
-from sipa.utils.database_utils import query_trafficdata, query_userinfo, \
+from model.wu.database_utils import query_userinfo, \
     update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db
-from sipa.utils.ldap_utils import change_password, change_email, \
-    authenticate
+from model.wu.ldap_utils import change_email
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
-
 
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
@@ -32,9 +30,9 @@ def usersuite():
     and traffic overview.
     """
     try:
-        userinfo = query_userinfo(current_user.uid)
-        userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
-        trafficdata = query_trafficdata(user_id=userinfo['id'])
+        # TODO all this should be done by the User() object
+        user_info = current_user.get_information()
+        traffic_data = current_user.get_traffic_data()
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
                      extra={'data': {'exception_args': e.args}, 'stack': True})
@@ -43,8 +41,8 @@ def usersuite():
         return redirect(url_for('generic.index'))
 
     return render_template("usersuite/index.html",
-                           userinfo=userinfo,
-                           usertraffic=trafficdata)
+                           userinfo=user_info,
+                           usertraffic=traffic_data)
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])
@@ -110,7 +108,7 @@ def usersuite_change_password():
             flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
             try:
-                change_password(current_user.uid, old, new)
+                current_user.change_password(old, new)
             except PasswordInvalid:
                 flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
             else:
@@ -187,6 +185,7 @@ def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
     form = ChangeMACForm()
+    # todo getting the whole userinfo is a complete waste. separate MAC?
     userinfo = query_userinfo(current_user.uid)
 
     if form.validate_on_submit():
@@ -194,7 +193,14 @@ def usersuite_change_mac():
         mac = form.mac.data
 
         try:
-            authenticate(current_user.uid, password)
+            # TODO do as told by Sebastian:
+            # sowas ist hässlich
+            # login_manager.anonymous_user auf eine Klasse setzen, die alle relevanten Sachen implementiert
+            # AnonymousUserMixin erben
+            # although the condition below is true due to @login_required:
+            if isinstance(current_user, User):
+                current_user.re_authenticate(password)
+
         except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         else:

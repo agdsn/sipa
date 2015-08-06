@@ -1,69 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-Everything used for authentication in sipa (Usersuite..).
-"""
 from flask.ext.login import current_user
 import ldap
 from ldap.ldapobject import SimpleLDAPObject
-
-from sipa import app, logger
-from .exceptions import UserNotFound, PasswordInvalid, LDAPConnectionError
-
-
-class User(object):
-    """User object will be created from LDAP credentials,
-    only stored in session.
-    """
-
-    def __init__(self, uid, name, mail):
-        self.uid = uid
-        self.name = name
-        self.group = self.define_group(uid)
-        self.mail = mail
-
-    def __repr__(self):
-        # todo use here or in `__str__` real-world strings as "Alice Brown"
-        return "User<%s,%s,%s>" % (self.uid, self.name, self.group)
-
-    def is_active(self):
-        """Needed for flask-login
-        """
-        return True
-
-    def is_authenticated(self):
-        """Needed for flask-login
-        """
-        return True
-
-    def is_anonymous(self):
-        """Needed for flask-login
-        """
-        return False
-
-    def get_id(self):
-        """Needed for flask-login
-        """
-        return self.uid
-
-    def define_group(self, username):
-        """Define a user group from the LDAP group
-        """
-        # todo check: does this work? has it _ever_ worked?
-        if search_in_group(username, 'Aktiv'):
-            return 'active'
-        elif search_in_group(username, 'Exaktiv'):
-            return 'exactive'
-        return 'passive'
-
-    @staticmethod
-    def get(username):
-        """Static method for flask-login user_loader,
-        used before _every_ request.
-        """
-        user = LdapConnector.fetch_user(username)
-        return User(user['uid'], user['name'], user['mail'])
+from sipa import app
+from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
+    LDAPConnectionError
 
 
 class LdapConnector(object):
@@ -146,24 +86,6 @@ def get_dn(l):
     return l.whoami_s()[3:]
 
 
-def authenticate(username, password):
-    """This method checks the user and password combination against LDAP
-
-    Returns the User object if successful.
-    """
-    try:
-        with LdapConnector(username, password):
-            return User.get(username)
-    except PasswordInvalid:
-        logger.info('Failed login attempt (Wrong %s)', 'password',
-                    extra={'data': {'username': username}})
-        raise
-    except UserNotFound:
-        logger.info('Failed login attempt (Wrong %s)', 'username',
-                    extra={'data': {'username': username}})
-        raise
-
-
 def search_in_group(username, group):
     """Searches for the given user in the given LDAP group memberuid list.
     This replaces the previous usage of hostflags.
@@ -176,22 +98,6 @@ def search_in_group(username, group):
         if group_object:
             return True
         return False
-
-
-def change_password(username, old, new):
-    """Change a user's password from old to new
-    """
-    try:
-        with LdapConnector(username, old) as l:
-            l.passwd_s(get_dn(l),
-                       old.encode('iso8859-1'),
-                       new.encode('iso8859-1'))
-    except PasswordInvalid:
-        logger.info('Wrong password provided when attempting '
-                    'change of password')
-        raise
-    else:
-        logger.info('Password successfully changed')
 
 
 def change_email(username, password, email):

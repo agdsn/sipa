@@ -3,20 +3,17 @@
 
 from __future__ import absolute_import
 
-
 from babel import Locale
-
 from flask import request, session
 from flask.ext.babel import get_locale
 from flask.ext.login import LoginManager
+from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
+from model import User
 from sipa import app, logger
 from sipa.babel import babel, possible_locales
 from sipa.flatpages import cf_pages
 from sipa.utils.graph_utils import render_traffic_chart
-from sipa.utils.ldap_utils import User
-
-from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 
 login_manager = LoginManager()
@@ -71,7 +68,7 @@ def init_app():
         file_handler.setLevel(logging.WARNING)
         app.logger.addHandler(file_handler)
 
-    from sipa.utils.database_utils import query_gauge_data
+    from model.wu import query_gauge_data
     logger.debug('Registering Jinja globals')
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
