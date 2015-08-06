@@ -185,66 +185,6 @@ class User(BaseUser):
                         for day in range(7)]
         }
 
-    # todo copy below function backup to above
-    # def _query_trafficdata(ip=None, user_id=None):
-    #     """Query traffic input/output for IP
-    #
-    #     :param ip: a valid ip
-    #     :param user_id: an id of a mysql user tuple
-    #     :return: a dict containing the traffic data in the form of
-    #     {'history': [('weekday', in, out, credit), …], 'credit': credit}
-    #     """
-    #     if user_id is None:
-    #         if ip is None:
-    #             raise AttributeError('Either ip or user_id must be specified!')
-    #         user_id = user_id_from_ip(ip)
-    #     else:
-    #         # ip gotten from db is preferred to the ip possibly given as parameter
-    #         ip = ip_from_user_id(user_id)
-    #
-    #     trafficdata = sql_query(
-    #         "SELECT t.timetag - %(today)s AS day, input, output, amount "
-    #         "FROM traffic.tuext AS t "
-    #         "LEFT OUTER JOIN credit AS c ON t.timetag = c.timetag "
-    #         "WHERE ip = %(ip)s AND c.user_id = %(uid)s "
-    #         "AND t.timetag BETWEEN %(weekago)s AND %(today)s "
-    #         "ORDER BY 'day' DESC ",
-    #         {'today': timetag_from_timestamp(),
-    #          'weekago': timetag_from_timestamp() - 6,
-    #          'ip': ip,
-    #          'uid': user_id}
-    #     ).fetchall()
-    #
-    #     if not trafficdata:
-    #         raise DBQueryEmpty('No trafficdata retrieved for user {}@{}'
-    #                            .format(user_id, ip))
-    #
-    #     traffic = {'history': [], 'credit': 0}
-    #     returned_days = [int(i['day']) for i in trafficdata]
-    #
-    #     # loop through expected days ([-6..0])
-    #     for d in range(-6, 1):
-    #         day = datetime.date.fromtimestamp(
-    #             timestamp_from_timetag(timetag_from_timestamp() + d)
-    #         ).strftime('%w')
-    #         if d in returned_days:
-    #             # pick the to `d` corresponding item of the mysql-result
-    #             i = next((x for x in trafficdata if x['day'] == d), None)
-    #
-    #             (input, output, credit) = (
-    #                 round(i[param] / 1024.0, 2)
-    #                 for param in ['input', 'output', 'amount']
-    #             )
-    #             traffic['history'].append(
-    #                 (app.config['WEEKDAYS'][day], input, output, credit))
-    #         else:
-    #             traffic['history'].append(
-    #                 (app.config['WEEKDAYS'][day], 0.0, 0.0, 0.0))
-    #
-    #     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
-    #
-    #     return traffic
-
 
     def get_current_credit(self):
         # todo implement
