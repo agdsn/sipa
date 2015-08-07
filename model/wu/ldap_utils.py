@@ -124,7 +124,7 @@ def change_email(username, password, email):
             attr = [(ldap.MOD_REPLACE, 'mail', str(email))]
             l.modify_s(get_dn(l), attr)
     except UserNotFound as e:
-        logger.error('LDAP-User not found  when attempting '
+        logger.error('LDAP-User not found when attempting '
                      'change of mail address',
                      extra={'data': {'exception_args': e.args},
                             'stack': True})
