@@ -9,12 +9,12 @@ from flask.ext.babel import get_locale
 from flask.ext.login import LoginManager
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
-from model import User
-from sipa import app, logger
+from model import User, init_context
+from sipa import logger
 from sipa.babel import babel, possible_locales
 from sipa.flatpages import cf_pages
+from sipa.initialization import init_env_and_config, init_logging
 from sipa.utils.graph_utils import render_traffic_chart
-
 
 login_manager = LoginManager()
 
@@ -27,10 +27,7 @@ class IntegerConverter(BaseIntegerConverter):
     regex = r'-?\d+'
 
 
-app.url_map.converters['int'] = IntegerConverter
-
-
-def init_app():
+def init_app(app):
     """Initialize the Flask app located in the module sipa.
     This initializes the Flask app by:
     * calling the internal init_app() procedures of each module
@@ -39,11 +36,14 @@ def init_app():
     * registering the Jinja global variables
     :return: None
     """
+    init_env_and_config(app)
     logger.debug('Initializing app')
     login_manager.init_app(app)
     babel.init_app(app)
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
+
+    app.url_map.converters['int'] = IntegerConverter
 
     from sipa.blueprints import bp_features, bp_usersuite, \
         bp_pages, bp_documents, bp_news, bp_generic
@@ -77,6 +77,10 @@ def init_app():
         possible_locales=possible_locales,
         chart=render_traffic_chart,
     )
+
+    init_logging(app)
+    init_context(app)
+
 
 
 @login_manager.user_loader

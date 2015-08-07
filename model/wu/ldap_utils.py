@@ -3,6 +3,7 @@ from flask.globals import current_app
 import ldap
 from ldap.ldapobject import SimpleLDAPObject
 from werkzeug.local import LocalProxy
+
 from sipa import logger
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     LDAPConnectionError
