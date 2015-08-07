@@ -51,6 +51,7 @@ class CustomAdapter(LoggerAdapter):
         extra = kwargs.pop('extra', {})
         tags = extra.pop('tags', {})
         if request:
+            # todo causes infinite recursion when used inside ldap processes.
             login = current_user_name()
             tags['user'] = login
             tags['ip'] = request.remote_addr

@@ -10,6 +10,7 @@
 
 import os.path
 import logging.config
+from model import init_context
 
 from sipa.utils.git_utils import update_repo, init_repo
 from raven import setup_logging
@@ -80,7 +81,11 @@ if app.config['SENTRY_DSN']:
 else:
     logger.debug("No sentry DSN specified")
 
-### STEP FOUR: APP.RUN
+
+### STEP FOUR: INIT EXTENSIONS
+init_context(app)
+
+### STEP FIVE: APP.RUN
 
 if __name__ == "__main__":
     # from sipa import make_app

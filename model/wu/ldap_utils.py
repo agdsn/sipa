@@ -1,9 +1,21 @@
 from flask.ext.login import current_user
+from flask.globals import current_app
 import ldap
 from ldap.ldapobject import SimpleLDAPObject
-from sipa import app
+from werkzeug.local import LocalProxy
+from sipa import logger
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     LDAPConnectionError
+
+
+def init_ldap(app):
+    app.extensions['ldap'] = {
+        'host': app.config['LDAP_HOST'],
+        'port': app.config['LDAP_PORT'],
+        'search_base': app.config['LDAP_SEARCH_BASE']
+    }
+
+CONF = LocalProxy(lambda: current_app.extensions['ldap'])
 
 
 class LdapConnector(object):
@@ -24,9 +36,8 @@ class LdapConnector(object):
             user = self.fetch_user(self.username)
             if not user:
                 raise UserNotFound
-            self.l = ldap.initialize("ldap://%s:%s" % (
-                app.config['LDAP_HOST'],
-                app.config['LDAP_PORT']))
+            self.l = ldap.initialize("ldap://{}:{}".format(CONF['host'],
+                                                           CONF['port']))
             self.l.protocol_version = ldap.VERSION3
 
             if self.password:
@@ -54,9 +65,8 @@ class LdapConnector(object):
         Returns a formatted dict with the LDAP dn, username and real name.
         If the username was not found, returns None.
         """
-        l = ldap.initialize("ldap://%s:%s" % (app.config['LDAP_HOST'],
-                                              app.config['LDAP_PORT']))
-        user = l.search_s(app.config['LDAP_SEARCH_BASE'],
+        l = ldap.initialize("ldap://{}:{}".format(CONF['host'], CONF['port']))
+        user = l.search_s(CONF['search_base'],
                           ldap.SCOPE_SUBTREE,
                           "(uid=%s)" % username,
                           ['uid', 'gecos', 'mail'])

@@ -5,26 +5,35 @@ from sqlalchemy import create_engine
 import datetime
 
 from flask.ext.babel import gettext
+from flask.globals import current_app
 from sqlalchemy.exc import OperationalError
+from werkzeug.local import LocalProxy
 
-from sipa import app, logger
+from sipa import logger
 from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
 from sipa.utils.exceptions import DBQueryEmpty
 from .ldap_utils import get_current_uid
 
-db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
-    app.config['DB_ATLANTIS_USER'],
-    app.config['DB_ATLANTIS_PASSWORD'],
-    app.config['DB_ATLANTIS_HOST']),
-    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
 
-db_helios = create_engine(
-    'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
-        app.config['DB_HELIOS_USER'],
-        app.config['DB_HELIOS_PASSWORD'],
-        app.config['DB_HELIOS_HOST'],
-        app.config['DB_HELIOS_PORT']),
-    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
+def init_db(app):
+    app.extensions['db_atlantis'] = create_engine(
+        'mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
+            app.config['DB_ATLANTIS_USER'],
+            app.config['DB_ATLANTIS_PASSWORD'],
+            app.config['DB_ATLANTIS_HOST']),
+        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
+    )
+    app.extensions['db_helios'] = create_engine(
+        'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
+            app.config['DB_HELIOS_USER'],
+            app.config['DB_HELIOS_PASSWORD'],
+            app.config['DB_HELIOS_HOST'],
+            app.config['DB_HELIOS_PORT']),
+        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
+
+
+db_atlantis = LocalProxy(lambda: current_app.extensions['db_atlantis'])
+db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
 
 DORMITORIES = [
     u'Wundstraße 5',

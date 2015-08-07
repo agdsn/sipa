@@ -2,24 +2,24 @@
 # -*- coding: utf-8 -*-
 
 from random import random
-import datetime
 
 from flask import request
-
 from flask.ext.babel import gettext
-
 from flask.ext.login import current_user
-
 from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
 from model.wu.database_utils import sql_query, query_userinfo, WEEKDAYS, \
-    query_trafficdata, ip_from_user_id, query_current_credit
-from model.wu.ldap_utils import search_in_group, LdapConnector, get_dn
+    query_trafficdata, ip_from_user_id, query_current_credit, init_db
+from model.wu.ldap_utils import search_in_group, LdapConnector, get_dn, \
+    init_ldap
+from sipa import logger
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
-from sipa import logger, app
-from sipa.utils import timestamp_from_timetag, timetag_from_timestamp
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
+
+def init_context(app):
+    init_db(app)
+    init_ldap(app)
 
 
 # TODO split into `SQLUser` and `LDAPUser` or similar
