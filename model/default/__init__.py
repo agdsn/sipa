@@ -39,10 +39,24 @@ class BaseUser(object, AuthenticatedUserMixin):
         """Required by flask-login"""
         return self.uid
 
+    def _get_ip(self):
+        """Get the IP (usually from self.uid)"""
+        raise NotImplementedError
+
+    @property
+    def ip(self):
+        if self._ip is None:
+            self._get_ip()
+        return self._ip
+
+
     @staticmethod
     def get(username):
         """Used by the user_loader. Shall return a User instance."""
         raise NotImplementedError
+
+    def re_authenticate(self, password):
+        self.authenticate(self.uid, password)
 
     @staticmethod
     def authenticate(username, password):
@@ -63,4 +77,7 @@ class BaseUser(object, AuthenticatedUserMixin):
         raise NotImplementedError
 
     def get_traffic_data(self):
+        raise NotImplementedError
+
+    def get_current_credit(self):
         raise NotImplementedError

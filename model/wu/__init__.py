@@ -39,12 +39,8 @@ class User(BaseUser):
         self.mail = mail
         self._ip = ip
 
-    @property
-    def ip(self):
-        if self._ip is None:
-            self._ip = ip_from_user_id(self.uid)
-        return self._ip
-
+    def _get_ip(self):
+        self._ip = ip_from_user_id(self.uid)
 
     def __repr__(self):
         return "User<{},{}.{}>".format(self.uid, self.name, self.group)
@@ -69,11 +65,6 @@ class User(BaseUser):
         """
         user = LdapConnector.fetch_user(username)
         return User(user['uid'], user['name'], user['mail'], **kwargs)
-
-
-    def re_authenticate(self, password):
-        self.authenticate(self.uid, password)
-
 
     @staticmethod
     def authenticate(username, password):
@@ -143,10 +134,12 @@ class User(BaseUser):
                 'history': [(WEEKDAYS[str(day)], rand(), rand(), rand())
                             for day in range(7)]}
 
-
     def get_current_credit(self):
         # return query_current_credit(self.uid, self.ip)
         return round(random(), 2)
+
+    def change_mac_address(self):
+        return False
 
 
 def query_gauge_data():
