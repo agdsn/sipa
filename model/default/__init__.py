@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # noinspection PyMethodMayBeStatic
+from functools import wraps
+
 class AuthenticatedUserMixin:
     """The user object which claims to be authenticated
     when “asked” by flask-login.
@@ -81,3 +83,25 @@ class BaseUser(object, AuthenticatedUserMixin):
 
     def get_current_credit(self):
         raise NotImplementedError
+
+
+def feature_required(needed_feature, given_features):
+    """
+
+    :param func: The wrapped function
+    :param needed_feature: The feature needed
+    :param given_features: The set of enabled features
+    :return:
+    """
+    def feature_decorator(func):
+        @wraps(func)
+        def decorated_view(*args, **kwargs):
+            if needed_feature in given_features:
+                return func(*args, **kwargs)
+            else:
+                raise NotImplementedError(
+                    "Function '{}' requires feature '{}'"
+                        .format(func.__name__, needed_feature)
+                )
+        return decorated_view
+    return feature_decorator
