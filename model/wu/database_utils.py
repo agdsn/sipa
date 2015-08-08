@@ -59,6 +59,16 @@ WEEKDAYS = {
     '6': gettext('Samstag')
 }
 
+STATUS = {
+    # todo vervollständigen oder mindestens fehlerresistent machen!
+    # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
+    1: gettext(u'Bezahlt, verbunden'),
+    2: gettext(u'Nicht bezahlt, Netzanschluss gesperrt'),
+    7: gettext(u'Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
+    9: gettext(u'Exaktiv'),
+    12: gettext(u'Trafficlimit überschritten, Netzanschluss gesperrt')
+}
+
 
 def sql_query(query, args=(), database=db_atlantis):
     """Prepare and execute a raw sql query.
@@ -130,7 +140,7 @@ def query_userinfo(username):
 
 
 def status_string_from_id(status_id):
-    return app.config['STATUS'].get(status_id, gettext(u"Unbekannt"))
+    return STATUS.get(status_id, gettext(u"Unbekannt"))
 
 
 def user_id_from_uid(uid=None):

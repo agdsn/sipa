@@ -60,16 +60,6 @@ DB_HELIOS_PASSWORD = os.getenv("SIPA_DB_HELIOS_PASSWORD", "")
 
 SQL_TIMEOUT = int(os.getenv("SIPA_SQL_TIMEOUT", '15'))
 
-STATUS = {
-    # todo vervollständigen oder mindestens fehlerresistent machen!
-    # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
-    1: gettext(u'Bezahlt, verbunden'),
-    2: gettext(u'Nicht bezahlt, Netzanschluss gesperrt'),
-    7: gettext(u'Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
-    9: gettext(u'Exaktiv'),
-    12: gettext(u'Trafficlimit überschritten, Netzanschluss gesperrt')
-}
-
 # Languages
 LANGUAGES = {
     'de': 'Deutsch',

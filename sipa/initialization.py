@@ -3,7 +3,6 @@ import os.path
 
 from raven import setup_logging
 from raven.contrib.flask import Sentry
-
 from raven.handlers.logging import SentryHandler
 
 from sipa import logger
