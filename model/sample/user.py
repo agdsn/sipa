@@ -97,7 +97,7 @@ class User(BaseUser):
                             for day in range(7)]}
 
     def get_current_credit(self):
-        return round(random(), 2)
+        return round(random() * 1024 * 63, 2)
 
     def change_mac_address(self):
         raise NotImplementedError("Function change_mac_address not implemented")
