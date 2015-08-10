@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from random import random
 
-from flask import request
-from flask.ext.babel import gettext
-from flask.ext.login import current_user, AnonymousUserMixin
-from sqlalchemy.exc import OperationalError
+from flask.ext.login import AnonymousUserMixin
 
 from model.default import BaseUser
 from model.wu.database_utils import WEEKDAYS
@@ -100,20 +97,3 @@ class User(BaseUser):
 
     def change_mac_address(self):
         raise NotImplementedError("Function change_mac_address not implemented")
-
-
-def query_gauge_data():
-    credit = {}
-    try:
-        if current_user.is_authenticated():
-            credit['data'] = current_user.get_current_credit()
-        else:
-            from model import User
-            credit['data'] = User.from_ip(request.remote_addr).get_current_credit()
-    except OperationalError:
-        credit['error'] = gettext(u'Fehler bei der Abfrage der Daten')
-    else:
-        if not credit['data']:
-            credit['error'] = gettext(u'Diese IP gehört nicht '
-                                      u'zu unserem Netzwerk')
-    return credit
