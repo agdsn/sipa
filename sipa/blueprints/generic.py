@@ -16,7 +16,6 @@ from model import User
 from sipa import logger, http_logger, app
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils import current_user_name
-from model.wu.database_utils import user_id_from_ip
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 
 bp_generic = Blueprint('generic', __name__)

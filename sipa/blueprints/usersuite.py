@@ -14,7 +14,6 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from model.wu.database_utils import drop_mysql_userdatabase, \
     create_mysql_userdatabase, change_mysql_userdatabase_password
-from model.wu.ldap_utils import change_email
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
@@ -134,8 +133,7 @@ def usersuite_change_mail():
         email = form.email.data
 
         try:
-            current_user.re_authenticate(password)
-            current_user.change_mail(current_user.uid, password, email)
+            current_user.change_mail(password, email)
         except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -163,7 +161,8 @@ def usersuite_delete_mail():
         password = form.password.data
 
         try:
-            change_email(current_user.uid, password, "")
+            # password is needed for the ldap bind
+            current_user.change_mail(password, "")
         except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:

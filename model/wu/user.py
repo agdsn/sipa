@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from random import random
 
 from flask import request
 from flask.ext.babel import gettext
@@ -8,9 +7,10 @@ from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
 from model.wu.database_utils import init_db, ip_from_user_id, sql_query, \
-    WEEKDAYS, update_macaddress
+    update_macaddress, query_userinfo, query_trafficdata, \
+    query_current_credit
 from model.wu.ldap_utils import init_ldap, search_in_group, LdapConnector, \
-    get_dn
+    get_dn, change_email
 from sipa import logger
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
@@ -117,6 +117,9 @@ class User(BaseUser):
 
     def change_mac_address(self, old_mac, new_mac):
         update_macaddress(self.ip, old_mac, new_mac)
+
+    def change_mail(self, password, new_mail):
+        change_email(self.uid, password, new_mail)
 
 
 def query_gauge_data():

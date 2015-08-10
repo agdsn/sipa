@@ -74,7 +74,7 @@ class BaseUser(object, AuthenticatedUserMixin):
     def change_mac_address(self, old, new):
         raise NotImplementedError
 
-    def change_mail(self):
+    def change_mail(self, password, new_mail):
         raise NotImplementedError
 
     def get_information(self):
