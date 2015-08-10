@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask.ext.login import current_user
 from flask.globals import current_app
 import ldap

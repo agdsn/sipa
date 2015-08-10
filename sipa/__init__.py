@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from logging import getLogger, LoggerAdapter
 
 from flask import Flask

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask.ext.babel import get_locale
 
 

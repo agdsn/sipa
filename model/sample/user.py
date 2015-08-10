@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from random import random
 
 from flask import request
@@ -76,7 +77,7 @@ class User(BaseUser):
         user_dict = {
             'id': 1337,
             'checksum': 0,
-            'address': 'Serverraum, Wundtstraße 5',
+            'address': u'Serverraum, Wundtstraße 5',
             'status': 'OK',
             'status_is_good': True,
             'ip': '127.0.0.1',
