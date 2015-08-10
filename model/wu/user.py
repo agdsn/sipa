@@ -2,7 +2,7 @@
 
 from flask import request
 from flask.ext.babel import gettext
-from flask.ext.login import current_user
+from flask.ext.login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
@@ -87,7 +87,7 @@ class User(BaseUser):
         result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
                             (ip,)).fetchone()
         if result is None:
-            return None
+            return AnonymousUserMixin
 
         return User.get(result['nutzer_id'], ip=ip)
 

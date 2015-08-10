@@ -67,8 +67,7 @@ class User(BaseUser):
 
     @staticmethod
     def from_ip(ip):
-        # dummy method assigning every ip the admin user
-        return User.get('admin', ip=ip)
+        return AnonymousUserMixin()
 
     def change_password(self, old, new):
         raise NotImplementedError("Function change_password not implemented")
