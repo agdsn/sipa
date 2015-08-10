@@ -107,34 +107,13 @@ class User(BaseUser):
             logger.info('Password successfully changed')
 
     def get_information(self):
-        user_dict = {
-            'id': 1337,
-            'checksum': 0,
-            'address': '<insert description here>',
-            'status': 'OK',
-            'status_is_good': True,
-            'ip': '127.0.0.1',
-            'mac': 'aa:bb:cc:dd:ee:ff',
-            'hostname': 'whdd231wh49xv',
-            'hostalias': 'leethaxor',
-            'heliosdb': False
-        }
-
-        return user_dict
-#        return query_userinfo(self.uid)
+        return query_userinfo(self.uid)
 
     def get_traffic_data(self):
-        # return query_trafficdata(self.ip, self.uid)
-
-        def rand():
-            return round(random(), 2)
-        return {'credit': 0,
-                'history': [(WEEKDAYS[str(day)], rand(), rand(), rand())
-                            for day in range(7)]}
+        return query_trafficdata(self.ip, self.uid)
 
     def get_current_credit(self):
-        # return query_current_credit(self.uid, self.ip)
-        return round(random(), 2)
+        return query_current_credit(self.uid, self.ip)
 
     def change_mac_address(self, old_mac, new_mac):
         update_macaddress(self.ip, old_mac, new_mac)
