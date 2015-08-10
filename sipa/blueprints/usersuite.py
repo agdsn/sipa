@@ -12,9 +12,8 @@ from model import User
 from sipa import logger
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from model.wu.database_utils import query_userinfo, \
-    update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
-    change_mysql_userdatabase_password, user_has_mysql_db
+from model.wu.database_utils import drop_mysql_userdatabase, \
+    create_mysql_userdatabase, change_mysql_userdatabase_password
 from model.wu.ldap_utils import change_email
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
@@ -135,7 +134,8 @@ def usersuite_change_mail():
         email = form.email.data
 
         try:
-            change_email(current_user.uid, password, email)
+            current_user.re_authenticate(password)
+            current_user.change_mail(current_user.uid, password, email)
         except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -185,7 +185,7 @@ def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
     form = ChangeMACForm()
-    userinfo = query_userinfo(current_user.uid)
+    userinfo = current_user.get_information()
 
     if form.validate_on_submit():
         password = form.password.data
@@ -196,14 +196,15 @@ def usersuite_change_mac():
             # sowas ist hässlich
             # login_manager.anonymous_user auf eine Klasse setzen, die alle relevanten Sachen implementiert
             # AnonymousUserMixin erben
-            # although the condition below is true due to @login_required:
             if isinstance(current_user, User):
                 current_user.re_authenticate(password)
 
         except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         else:
-            update_macaddress(userinfo['ip'], userinfo['mac'], mac)
+            current_user.change_mac_address(userinfo['ip'],
+                                            userinfo['mac'],
+                                            mac)
             logger.info('Successfully changed MAC address to %s', mac)
 
             subject = u"[Usersuite] %s hat seine/ihre MAC-Adresse " \
@@ -256,7 +257,7 @@ def usersuite_hosting(action=None):
     elif form.is_submitted():
         flash_formerrors(form)
 
-    user_has_db = user_has_mysql_db(current_user.uid)
+    user_has_db = current_user.has_user_db()
 
     return render_template('usersuite/hosting.html',
                            form=form, user_has_db=user_has_db, action=action)

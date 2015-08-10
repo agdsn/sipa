@@ -74,6 +74,9 @@ class BaseUser(object, AuthenticatedUserMixin):
     def change_mac_address(self, old, new):
         raise NotImplementedError
 
+    def change_mail(self):
+        raise NotImplementedError
+
     def get_information(self):
         # TODO what should be returned here?i
         raise NotImplementedError
@@ -82,6 +85,9 @@ class BaseUser(object, AuthenticatedUserMixin):
         raise NotImplementedError
 
     def get_current_credit(self):
+        raise NotImplementedError
+
+    def has_user_db(self):
         raise NotImplementedError
 
 

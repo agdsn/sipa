@@ -4,12 +4,11 @@ from random import random
 from flask import request
 from flask.ext.babel import gettext
 from flask.ext.login import current_user
-
 from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
 from model.wu.database_utils import init_db, ip_from_user_id, sql_query, \
-    WEEKDAYS
+    WEEKDAYS, update_macaddress
 from model.wu.ldap_utils import init_ldap, search_in_group, LdapConnector, \
     get_dn
 from sipa import logger
@@ -137,8 +136,8 @@ class User(BaseUser):
         # return query_current_credit(self.uid, self.ip)
         return round(random(), 2)
 
-    def change_mac_address(self):
-        return False
+    def change_mac_address(self, old_mac, new_mac):
+        update_macaddress(self.ip, old_mac, new_mac)
 
 
 def query_gauge_data():
