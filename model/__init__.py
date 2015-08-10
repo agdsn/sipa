@@ -1,8 +1,10 @@
-import model.wu.user
-from model.wu.user import User
+import os
 
+model_name = os.getenv('SIPA_MODEL', 'sample')
 
-def init_context(app):
-    model.wu.user.init_context(app)
+module = __import__('{}.{}.user'.format(__name__, model_name),
+                    fromlist='{}.{}'.format(__name__, model_name))
 
-# todo evaluate a parameter and decide which package to use (wu, hss, test(?))
+init_context = module.init_context
+User = module.User
+query_gauge_data = module.query_gauge_data
