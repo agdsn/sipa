@@ -68,7 +68,7 @@ def init_app(app):
         file_handler.setLevel(logging.WARNING)
         app.logger.addHandler(file_handler)
 
-    from model.wu import query_gauge_data
+    from model.wu.user import query_gauge_data
     logger.debug('Registering Jinja globals')
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
