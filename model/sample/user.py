@@ -24,8 +24,7 @@ class User(BaseUser):
     def __init__(self, uid, name, mail, ip=None):
         super(User, self).__init__(uid)
         self.name = name
-        # TODO include group in user information
-        self.group = self.define_group()
+        self.group = "static group"
         self.mail = mail
         self._ip = ip
 
@@ -37,9 +36,6 @@ class User(BaseUser):
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
-
-    def define_group(self):
-        return "static group"
 
     @staticmethod
     def get(username, **kwargs):
