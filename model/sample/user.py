@@ -2,7 +2,7 @@ from random import random
 
 from flask import request
 from flask.ext.babel import gettext
-from flask.ext.login import current_user
+from flask.ext.login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
 from model.default import BaseUser
@@ -37,23 +37,28 @@ class User(BaseUser):
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
 
+    login_list = {
+        'admin': ('test', 'Admin Istrator', 'admin@agdsn.de'),
+        'ag_dsn': ('test', 'Test Nutzer', 'ag_dsn@agdsn.de'),
+        'test': ('test', 'Test Nutzer', 'test@agdsn.de'),
+    }
+
     @staticmethod
     def get(username, **kwargs):
         """Static method for flask-login user_loader,
         used before _every_ request.
         """
-        return User(**kwargs)
+        if username in User.login_list:
+            return User(username, *(User.login_list[username][1:3]), **kwargs)
+        else:
+            return AnonymousUserMixin()
 
     @staticmethod
     def authenticate(username, password):
-        login_list = {
-            'admin': ('test', 'Admin Istrator', 'admin@agdsn.de'),
-            'ag_dsn': ('test', 'Test Nutzer', 'ag_dsn@agdsn.de'),
-            'test': ('test', 'Test Nutzer', 'test@agdsn.de'),
-        }
-        if username in login_list:
-            if login_list[username][0] == password:
-                return User.get(username, *login_list[1:2])
+
+        if username in User.login_list:
+            if User.login_list[username][0] == password:
+                return User.get(username)
             else:
                 raise PasswordInvalid
         else:
