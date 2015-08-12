@@ -65,7 +65,8 @@ def usersuite():
     user_info['mac']['action_links'] = {
         ACTIONS.EDIT: url_for('.usersuite_change_mac')
     }
-    user_info['userdb']['action_links'] = {ACTIONS.EDIT: url_for('.usersuite_hosting')}
+    user_info['userdb']['action_links'] = {
+        ACTIONS.EDIT: url_for('.usersuite_hosting')}
 
     return render_template("usersuite/index.html",
                            userinfo=user_info,

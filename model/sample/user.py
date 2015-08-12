@@ -2,9 +2,8 @@
 from random import random
 
 from flask.ext.login import AnonymousUserMixin
-from model.constants import FULL_FEATURE_SET, info_property, unsupported_property, \
-    ACTIONS, STATUS_COLORS
 
+from model.constants import FULL_FEATURE_SET, info_property, ACTIONS, STATUS_COLORS
 from model.default import BaseUser
 from model.wu.database_utils import WEEKDAYS
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound

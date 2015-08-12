@@ -21,10 +21,12 @@ LOG_FILE = '/tmp/error.log'
 CONTENT_URL = os.getenv("SIPA_CONTENT_URL")
 
 FLATPAGES_ROOT = os.getenv("SIPA_FLATPAGES_ROOT", "")
-FLATPAGES_EXTENSION =  os.getenv("SIPA_FLATPAGES_EXTENSION", '.md')
-sipa_flatpages_markdown_extensions = os.getenv("SIPA_FLATPAGES_MARKDOWN_EXTENSIONS")
+FLATPAGES_EXTENSION = os.getenv("SIPA_FLATPAGES_EXTENSION", '.md')
+sipa_flatpages_markdown_extensions = os.getenv(
+    "SIPA_FLATPAGES_MARKDOWN_EXTENSIONS")
 if sipa_flatpages_markdown_extensions is not None:
-    sipa_flatpages_markdown_extensions = sipa_flatpages_markdown_extensions.split(',')
+    sipa_flatpages_markdown_extensions = sipa_flatpages_markdown_extensions.split(
+        ',')
 else:
     sipa_flatpages_markdown_extensions = [
         'sane_lists',
@@ -35,7 +37,8 @@ else:
     ]
 FLATPAGES_MARKDOWN_EXTENSIONS = sipa_flatpages_markdown_extensions
 
-LOGGING_CONFIG_LOCATION = os.getenv("SIPA_LOGGING_CONFIG_LOCATION", "sipa/default_log_config")
+LOGGING_CONFIG_LOCATION = os.getenv("SIPA_LOGGING_CONFIG_LOCATION",
+                                    "sipa/default_log_config")
 GENERIC_LOGGING = True
 
 # Mail configuration
@@ -54,7 +57,8 @@ DB_ATLANTIS_PASSWORD = os.getenv("SIPA_DB_ATLANTIS_PASSWORD", "")
 
 # MySQL Helios configuration
 DB_HELIOS_HOST = os.getenv("SIPA_DB_HELIOS_HOST", "127.0.0.1")
-DB_HELIOS_PORT = int(os.getenv("SIPA_DB_HELIOS_PORT", '3307'))  # alternative port for 2nd db
+DB_HELIOS_PORT = int(
+    os.getenv("SIPA_DB_HELIOS_PORT", '3307'))  # alternative port for 2nd db
 DB_HELIOS_USER = os.getenv("SIPA_DB_HELIOS_USER", "")
 DB_HELIOS_PASSWORD = os.getenv("SIPA_DB_HELIOS_PASSWORD", "")
 
@@ -72,4 +76,3 @@ BUSSTOPS = [
     "Strehlener Platz",
     "Weberplatz"
 ]
-

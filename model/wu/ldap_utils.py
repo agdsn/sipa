@@ -17,6 +17,7 @@ def init_ldap(app):
         'search_base': app.config['LDAP_SEARCH_BASE']
     }
 
+
 CONF = LocalProxy(lambda: current_app.extensions['ldap'])
 
 

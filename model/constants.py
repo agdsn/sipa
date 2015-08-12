@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # every property displayable in the usersuite table is presented here
 DISPLAY_FEATURE_SET = {
     'user_id', 'name', 'state', 'room', 'ip', 'mac', 'mail', 'userdb'

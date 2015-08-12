@@ -52,7 +52,6 @@ class User(BaseUser):
             return 'exactive'
         return 'passive'
 
-
     @staticmethod
     def get(username, **kwargs):
         """Static method for flask-login user_loader,
@@ -82,7 +81,7 @@ class User(BaseUser):
     @staticmethod
     def from_ip(ip):
         result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
-                            (ip,)).fetchone()
+                           (ip,)).fetchone()
         if result is None:
             return AnonymousUserMixin
 
@@ -117,4 +116,3 @@ class User(BaseUser):
 
     def change_mail(self, password, new_mail):
         change_email(self.uid, password, new_mail)
-

@@ -8,6 +8,7 @@ from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
     HiddenField
 from wtforms.validators import Required, Email, MacAddress, ValidationError
 
+
 class ContactForm(Form):
     email = TextField(u"E-Mail", validators=[
         Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])

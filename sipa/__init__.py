@@ -24,8 +24,8 @@ class ReverseProxied(object):
 
     :param app: the WSGI application
     """
-    def __init__(self, app):
-        self.app = app
+    def __init__(self, flask_app):
+        self.app = flask_app
 
     def __call__(self, environ, start_response):
         script_name = environ.get('HTTP_X_SCRIPT_NAME', '')

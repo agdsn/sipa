@@ -58,7 +58,7 @@ def init_app(app):
     app.register_blueprint(bp_news)
 
     if not app.debug:
-        app.config.setdefault('LOG_MAX_BYTES', 1024**2)
+        app.config.setdefault('LOG_MAX_BYTES', 1024 ** 2)
         app.config.setdefault('LOG_BACKUP_COUNT', 10)
         import logging
         from logging.handlers import RotatingFileHandler
@@ -83,7 +83,6 @@ def init_app(app):
 
     init_logging(app)
     init_context(app)
-
 
 
 @login_manager.user_loader

@@ -6,10 +6,12 @@
 from model.constants import FULL_FEATURE_SET, DISPLAY_FEATURE_SET
 
 
+# noinspection PyMethodMayBeStatic
 class AuthenticatedUserMixin:
     """The user object which claims to be authenticated
     when “asked” by flask-login.
     """
+
     def is_authenticated(self):
         """Required by flask-login"""
         return True
@@ -52,7 +54,6 @@ class BaseUser(object, AuthenticatedUserMixin):
         if self._ip is None:
             self._get_ip()
         return self._ip
-
 
     @staticmethod
     def get(username):
@@ -116,6 +117,5 @@ def LdapHelper():
         @staticmethod
         def get(uid):
             raise NotImplementedError
-
 
     return _LdapHelper
