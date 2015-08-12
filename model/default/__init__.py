@@ -104,6 +104,15 @@ class BaseUser(object, AuthenticatedUserMixin):
     def has_user_db(self):
         raise NotImplementedError
 
+    def user_db_create(self, password):
+        raise NotImplementedError
+
+    def user_db_drop(self):
+        raise NotImplementedError
+
+    def user_db_password_change(self, password):
+        raise NotImplementedError
+
 
 def LdapHelper():
     class _LdapHelper(object):

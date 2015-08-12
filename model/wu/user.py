@@ -5,7 +5,8 @@ from flask.ext.login import AnonymousUserMixin
 from model.default import BaseUser
 from model.wu.database_utils import init_db, ip_from_user_id, sql_query, \
     update_macaddress, query_userinfo, query_trafficdata, \
-    query_current_credit
+    query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
+    change_mysql_userdatabase_password, user_has_mysql_db
 from model.wu.ldap_utils import init_ldap, search_in_group, LdapConnector, \
     get_dn, change_email
 from sipa import logger
@@ -116,3 +117,15 @@ class User(BaseUser):
 
     def change_mail(self, password, new_mail):
         change_email(self.uid, password, new_mail)
+
+    def has_user_db(self):
+        return user_has_mysql_db(self.uid)
+
+    def user_db_create(self, password):
+        return create_mysql_userdatabase(self.uid, password)
+
+    def user_db_drop(self):
+        return drop_mysql_userdatabase(self.uid)
+
+    def user_db_password_change(self, password):
+        return change_mysql_userdatabase_password(self.uid, password)

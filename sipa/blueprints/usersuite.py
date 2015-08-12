@@ -13,8 +13,6 @@ from model.constants import unsupported_property, ACTIONS
 from sipa import logger, feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from model.wu.database_utils import drop_mysql_userdatabase, \
-    create_mysql_userdatabase, change_mysql_userdatabase_password
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
@@ -272,7 +270,7 @@ def usersuite_hosting(action=None):
     """Change various settings for Helios.
     """
     if action == "confirm":
-        drop_mysql_userdatabase(current_user.uid)
+        current_user.user_db_drop()
         flash(gettext(u"Deine Datenbank wurde gelöscht."), "message")
         return redirect(url_for('.usersuite_hosting'))
 
@@ -283,11 +281,10 @@ def usersuite_hosting(action=None):
             flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
             if form.action.data == "create":
-                create_mysql_userdatabase(current_user.uid, form.password1.data)
+                current_user.user_db_create(form.password1.data)
                 flash(gettext(u"Deine Datenbank wurde erstellt."), "message")
             else:
-                change_mysql_userdatabase_password(current_user.uid,
-                                                   form.password1.data)
+                current_user.user_db_password_change(form.password1.data)
     elif form.is_submitted():
         flash_formerrors(form)
 
