@@ -2,7 +2,7 @@
 from random import random
 
 from flask.ext.login import AnonymousUserMixin
-from model.constants import FULL_FEATURE_LIST, info_property, unsupported_property, \
+from model.constants import FULL_FEATURE_SET, info_property, unsupported_property, \
     ACTIONS, STATUS_COLORS
 
 from model.default import BaseUser
@@ -14,6 +14,7 @@ def init_context(app):
     pass
 
 
+# noinspection PyMethodMayBeStatic
 class User(BaseUser):
     """User object will be created from LDAP credentials,
     only stored in session.
@@ -71,22 +72,19 @@ class User(BaseUser):
     def change_password(self, old, new):
         raise NotImplementedError("Function change_password not implemented")
 
-    # todo when is this gonna be accessed?
-    _supported_features = FULL_FEATURE_LIST - {
-        'userdb', 'mac_change', 'mail_change'  # , 'password_change'
+    _supported_features = FULL_FEATURE_SET - {
+        'userdb', 'mac_change', 'mail_change', 'password_change'
     }
 
     def get_information(self):
         return {
-            # todo return correct codes for is_good
             'id': info_property("1337-0"),
             'address': info_property(u"Serverraum, Wundtstraße 5"),
             'status': info_property("OK", STATUS_COLORS.GOOD),
             'ip': info_property("127.0.0.1", STATUS_COLORS.INFO),
             'mac': info_property("aa:bb:cc:dd:ee:ff"),
             'hostname': info_property("Serverkiste", actions={ACTIONS.EDIT}),
-            'hostalias': info_property("leethaxor"),
-            'userdb': unsupported_property()
+            'hostalias': info_property("leethaxor")
         }
 
     def get_traffic_data(self):

@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # noinspection PyMethodMayBeStatic
-from functools import wraps
 
-from model.constants import FULL_FEATURE_LIST
+from model.constants import FULL_FEATURE_SET, DISPLAY_FEATURE_SET
 
 
 class AuthenticatedUserMixin:
@@ -78,8 +77,9 @@ class BaseUser(object, AuthenticatedUserMixin):
         return cls._supported_features
 
     @classmethod
-    def unsupported(cls):
-        return cls._supported_features - FULL_FEATURE_LIST
+    def unsupported(cls, display=False):
+        return (DISPLAY_FEATURE_SET if display
+                else FULL_FEATURE_SET) - cls._supported_features
 
     def change_password(self, old, new):
         raise NotImplementedError
@@ -103,27 +103,6 @@ class BaseUser(object, AuthenticatedUserMixin):
     def has_user_db(self):
         raise NotImplementedError
 
-
-def feature_required(needed_feature, given_features):
-    """
-
-    :param func: The wrapped function
-    :param needed_feature: The feature needed
-    :param given_features: The set of enabled features
-    :return:
-    """
-    def feature_decorator(func):
-        @wraps(func)
-        def decorated_view(*args, **kwargs):
-            if needed_feature in given_features:
-                return func(*args, **kwargs)
-            else:
-                raise NotImplementedError(
-                    "Function '{}' requires feature '{}'"
-                        .format(func.__name__, needed_feature)
-                )
-        return decorated_view
-    return feature_decorator
 
 def LdapHelper():
     class _LdapHelper(object):

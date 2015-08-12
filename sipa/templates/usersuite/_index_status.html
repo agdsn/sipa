@@ -1,9 +1,16 @@
 <h3>{{ _("Statusinformationen") }}</h3>
 <div>
+    {% if 'password_change' in current_user.supported() %}
     <a href="{{ url_for(".usersuite_change_password") }}" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
         {{ _("Passwort ändern") }}
     </a>
+    {% else %}
+    <a class="btn btn-default" disabled title="{{ _('Nicht unterstützt') }}">
+        <span class="glyphicon glyphicon-pencil"></span>
+        {{ _("Passwort ändern") }}
+    </a>
+    {% endif %}
     <a href="{{ url_for(".usersuite_contact") }}" class="btn btn-default">
         <span class="glyphicon glyphicon-envelope"></span>
         {{ _("Kontaktformular") }}

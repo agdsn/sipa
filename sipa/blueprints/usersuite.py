@@ -9,7 +9,8 @@ from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
 from model import User
-from sipa import logger
+from model.constants import unsupported_property, ACTIONS
+from sipa import logger, feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from model.wu.database_utils import drop_mysql_userdatabase, \
@@ -29,7 +30,7 @@ def usersuite():
     """
     try:
         # TODO all this should be done by the User() object
-        user_info = current_user.get_information()
+        user_info = dict(current_user.get_information())
         traffic_data = current_user.get_traffic_data()
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
@@ -37,6 +38,9 @@ def usersuite():
         flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
               "error")
         return redirect(url_for('generic.index'))
+
+    user_info.update({prop: unsupported_property()
+                      for prop in current_user.unsupported(display=True)})
 
     descriptions = {
         'id': gettext("Nutzer-ID"),
@@ -50,8 +54,18 @@ def usersuite():
         'userdb': gettext("MySQL Datenbank"),
     }
 
-    for key, val in user_info.iteritems():
-        val['description'] = descriptions[key]
+    for key, property_row in user_info.iteritems():
+        property_row['description'] = descriptions[key]
+
+    # set {mail,mac,userdb}_{change,delete} urls
+    user_info['mail']['action_links'] = {
+        ACTIONS.EDIT: url_for('.usersuite_change_mail'),
+        ACTIONS.DELETE: url_for('.usersuite_delete_mail')
+    }
+    user_info['mac']['action_links'] = {
+        ACTIONS.EDIT: url_for('.usersuite_change_mac')
+    }
+    user_info['userdb']['action_links'] = {ACTIONS.EDIT: url_for('.usersuite_hosting')}
 
     return render_template("usersuite/index.html",
                            userinfo=user_info,
@@ -96,10 +110,9 @@ def usersuite_contact():
     return render_template("usersuite/contact.html", form=form)
 
 
-# todo access control: check if this can be done
-# todo implement decorator @feature_needed (default routing to an error page)
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
 @login_required
+@feature_required('password_change', User.supported())
 def usersuite_change_password():
     """Lets the user change his password.
     Requests the old password once (in case someone forgot to logout for
@@ -137,6 +150,7 @@ def usersuite_change_password():
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
+@feature_required('mail_change', User.supported())
 def usersuite_change_mail():
     """Changes the users forwarding mail attribute
     in his LDAP entry.
@@ -168,6 +182,7 @@ def usersuite_change_mail():
 
 @bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
 @login_required
+@feature_required('mail_change', User.supported())
 def usersuite_delete_mail():
     """Resets the users forwarding mail attribute
     in his LDAP entry.
@@ -197,6 +212,7 @@ def usersuite_delete_mail():
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
 @login_required
+@feature_required('mac_change', User.supported())
 def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
@@ -250,6 +266,7 @@ def usersuite_change_mac():
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
 @bp_usersuite.route("/hosting/<string:action>", methods=['GET', 'POST'])
 @login_required
+@feature_required('userdb_change', User.supported())
 def usersuite_hosting(action=None):
     """Change various settings for Helios.
     """

@@ -1,12 +1,9 @@
-from collections import namedtuple
-
 # every property displayable in the usersuite table is presented here
-FULL_FEATURE_LIST = {
-    'user_id', 'name', 'state', 'room', 'ip',
-    'mac', 'mac_change',
-    'mail', 'mail_change'
-    'userdb', 'userdb_change'
+DISPLAY_FEATURE_SET = {
+    'user_id', 'name', 'state', 'room', 'ip', 'mac', 'mail', 'userdb'
 }
+MANIPULATE_FEATURE_SET = {'mac_change', 'mail_change', 'userdb_change'}
+FULL_FEATURE_SET = DISPLAY_FEATURE_SET | MANIPULATE_FEATURE_SET
 
 
 def property_base(description, supported, value, status_color, actions):
@@ -16,7 +13,7 @@ def property_base(description, supported, value, status_color, actions):
         'value': value,
         'status_color': status_color,     # bool or None
         'actions': actions,
-        'action_links': dict()  # to be added later by the sipa gui
+        'action_links': dict()  # added later by sipa.usersuite.usersuite()
     }
 
 
