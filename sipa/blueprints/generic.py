@@ -152,7 +152,7 @@ def usertraffic():
     """
     ip_user = User.from_ip(request.remote_addr)
 
-    if ip_user:
+    if isinstance(ip_user, User):
         if current_user.is_authenticated():
             if current_user != ip_user:
                 flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"
