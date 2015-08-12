@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
-
+from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
+from sqlalchemy.exc import OperationalError
 
+from model.constants import info_property, STATUS_COLORS, ACTIONS
 from model.default import BaseUser
 from model.wu.database_utils import init_db, ip_from_user_id, sql_query, \
-    update_macaddress, query_userinfo, query_trafficdata, \
+    update_macaddress, query_trafficdata, \
     query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
-    change_mysql_userdatabase_password, user_has_mysql_db
+    change_mysql_userdatabase_password, user_has_mysql_db, \
+    calculate_userid_checksum, DORMITORIES, status_string_from_id
 from model.wu.ldap_utils import init_ldap, search_in_group, LdapConnector, \
     get_dn, change_email
 from sipa import logger
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
 
 
 def init_context(app):
@@ -101,7 +104,81 @@ class User(BaseUser):
             logger.info('Password successfully changed')
 
     def get_information(self):
-        return query_userinfo(self.uid)
+        """Executes select query for the username and returns a prepared dict.
+
+        * Dormitory IDs in Mysql are from 1-11, so we map to 0-10 with "x-1".
+
+        Returns "-1" if a query result was empty (None), else
+        returns the prepared dict.
+        """
+        userinfo = {}
+        user = sql_query(
+            "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
+            "FROM nutzer "
+            "WHERE unix_account = %s",
+            (self.uid,)
+        ).fetchone()
+
+        if not user:
+            raise DBQueryEmpty
+
+        mysql_id = user['nutzer_id']
+        userinfo.update(
+            id=info_property(
+                "{}-{}".format(mysql_id, calculate_userid_checksum(mysql_id))),
+            address=info_property(u"{0} / {1} {2}".format(
+                DORMITORIES[user['wheim_id'] - 1],
+                user['etage'],
+                user['zimmernr']
+            )),
+            # todo use more colors (yellow for finances etc.)
+            status=info_property(status_string_from_id(user['status']),
+                                 status_color=(STATUS_COLORS.GOOD
+                                               if user['status'] is 1
+                                               else None)),
+        )
+
+        computer = sql_query(
+            "SELECT c_etheraddr, c_ip, c_hname, c_alias "
+            "FROM computer "
+            "WHERE nutzer_id = %s",
+            (user['nutzer_id'])
+        ).fetchone()
+
+        if not computer:
+            raise DBQueryEmpty
+
+        userinfo.update(
+            ip=info_property(computer['c_ip']),
+            mail=info_property(self.mail, actions={ACTIONS.EDIT,
+                                                   ACTIONS.DELETE}),
+            mac=info_property(computer['c_etheraddr'].upper(),
+                              actions={ACTIONS.EDIT}),
+            # todo figure out where that's being used
+            hostname=info_property(computer['c_hname']),
+            hostalias=info_property(computer['c_alias'])
+        )
+
+        try:
+            if user_has_mysql_db(self.uid):
+                user_db_prop = info_property(
+                    gettext("Aktiviert"),
+                    status_color=STATUS_COLORS.GOOD,
+                    actions={ACTIONS.EDIT}
+                )
+            else:
+                user_db_prop = info_property(
+                    gettext("Nicht aktiviert"),
+                    status_color=STATUS_COLORS.INFO,
+                    actions={ACTIONS.EDIT}
+                )
+        except OperationalError:
+            logger.critical("User db unreachable")
+            user_db_prop = info_property(gettext(u"Datenbank nicht erreichbar"))
+        finally:
+            userinfo.update(userdb=user_db_prop)
+
+        return userinfo
 
     def get_traffic_data(self):
         return query_trafficdata(self.ip, self.uid)

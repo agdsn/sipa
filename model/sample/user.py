@@ -79,6 +79,7 @@ class User(BaseUser):
         return {
             'id': info_property("1337-0"),
             'address': info_property(u"Serverraum, Wundtstraße 5"),
+            'mail': info_property(self.mail),
             'status': info_property("OK", STATUS_COLORS.GOOD),
             'ip': info_property("127.0.0.1", STATUS_COLORS.INFO),
             'mac': info_property("aa:bb:cc:dd:ee:ff"),

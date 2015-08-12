@@ -10,7 +10,7 @@ from sqlalchemy.exc import OperationalError
 
 from werkzeug.local import LocalProxy
 
-from model.constants import info_property, STATUS_COLORS, ACTIONS, WEEKDAYS
+from model.constants import WEEKDAYS
 from sipa import logger
 from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
 from sipa.utils.exceptions import DBQueryEmpty
@@ -70,82 +70,6 @@ def sql_query(query, args=(), database=db_atlantis):
     result = conn.execute(query, args)
     conn.close()
     return result
-
-
-def query_userinfo(username):
-    """Executes select query for the username and returns a prepared dict.
-
-    * Dormitory IDs in Mysql are from 1-11, so we map to 0-10 with "x-1".
-
-    Returns "-1" if a query result was empty (None), else
-    returns the prepared dict.
-    """
-    userinfo = {}
-    user = sql_query(
-        "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
-        "FROM nutzer "
-        "WHERE unix_account = %s",
-        (username,)
-    ).fetchone()
-
-    if not user:
-        raise DBQueryEmpty
-
-    mysql_id = user['nutzer_id']
-    userinfo.update(
-        id=info_property(
-            "{}-{}".format(mysql_id, calculate_userid_checksum(mysql_id))),
-        address=info_property(u"{0} / {1} {2}".format(
-            DORMITORIES[user['wheim_id'] - 1],
-            user['etage'],
-            user['zimmernr']
-        )),
-        # todo use more colors (yellow for finances etc.)
-        status=info_property(status_string_from_id(user['status']),
-                             status_color=(STATUS_COLORS.GOOD
-                                           if user['status'] is 1
-                                           else None)),
-    )
-
-    computer = sql_query(
-        "SELECT c_etheraddr, c_ip, c_hname, c_alias "
-        "FROM computer "
-        "WHERE nutzer_id = %s",
-        (user['nutzer_id'])
-    ).fetchone()
-
-    if not computer:
-        raise DBQueryEmpty
-
-    userinfo.update(
-        ip=info_property(computer['c_ip']),
-        mac=info_property(computer['c_etheraddr'].upper(),
-                          actions={ACTIONS.EDIT}),
-        # todo figure out where that's being used
-        hostname=info_property(computer['c_hname']),
-        hostalias=info_property(computer['c_alias'])
-    )
-
-    try:
-        if user_has_mysql_db(username):
-            user_db_prop = info_property(
-                gettext("Aktiviert"),
-                status_color=STATUS_COLORS.GOOD,
-                actions={ACTIONS.EDIT}
-            )
-        else:
-            user_db_prop = info_property(
-                gettext("Nicht aktiviert"),
-                status_color=STATUS_COLORS.INFO,
-                actions={ACTIONS.EDIT}
-            )
-    except OperationalError:
-        logger.critical("User db unreachable")
-        user_db_prop = info_property(gettext(u"Datenbank nicht erreichbar"))
-    finally:
-        userinfo.update(userdb=user_db_prop)
-
-    return userinfo
 
 
 def status_string_from_id(status_id):
