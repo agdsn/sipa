@@ -4,6 +4,9 @@
 # noinspection PyMethodMayBeStatic
 from functools import wraps
 
+from model.constants import FULL_FEATURE_LIST
+
+
 class AuthenticatedUserMixin:
     """The user object which claims to be authenticated
     when “asked” by flask-login.
@@ -67,6 +70,16 @@ class BaseUser(object, AuthenticatedUserMixin):
 
     # Below this line: Actual feature functions
     # TODO complete set of used / needed functions (for all divisions)
+
+    _supported_features = set()
+
+    @classmethod
+    def supported(cls):
+        return cls._supported_features
+
+    @classmethod
+    def unsupported(cls):
+        return cls._supported_features - FULL_FEATURE_LIST
 
     def change_password(self, old, new):
         raise NotImplementedError

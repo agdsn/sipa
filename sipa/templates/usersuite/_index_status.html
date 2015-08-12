@@ -9,55 +9,26 @@
         {{ _("Kontaktformular") }}
     </a>
 </div><br>
+
 <table class="table table-striped table-bordered table-hover">
-<thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
+    <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
+    {# todo get the table sorted properly #}
+    {% for id, property in userinfo.iteritems() %}
     <tr>
-        <td class="col-md-3">{{ _('Nutzer-ID') }}</td>
-        <td class="col-md-3">{{ userinfo.id }}-{{ userinfo.checksum }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Accountname') }}</td>
-        <td>{{ current_user.uid }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Accountstatus') }}</td>
-        <td>{% if userinfo.status_is_good %}<span class="text-success">
-            {% else %}<span class="text-danger">{% endif %}
-            {{ _(userinfo.status) }}
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td>{{ _('Aktuelles Zimmer') }}</td>
-        <td>{{ userinfo.address }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Aktuelle IP-Adresse') }}</td>
-        <td>{{ userinfo.ip }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Aktuelle MAC-Adresse') }}</td>
-        <td>{{ userinfo.mac }}
-            <a href="{{ url_for(".usersuite_change_mac") }}"><span class="glyphicon glyphicon-pencil pull-right"></span></a>
-        </td>
-    </tr>
-    <tr>
-        <td>{{ _('E-Mail-Weiterleitung') }}</td>
-        <td>{% if current_user.mail %}
-            {{ current_user.mail }}
-            <a href="{{ url_for(".usersuite_delete_mail") }}"><span class="glyphicon glyphicon-remove pull-right"></span></a>
-        {% else %}
-            <span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
-        {% endif %}
-            <a href="{{ url_for(".usersuite_change_mail") }}"><span class="glyphicon glyphicon-pencil pull-right"></span></a>
-        </td>
-    </tr>
-    <tr>
-        <td>{{ _('MySQL Datenbank') }}</td>
-        <td>{% if userinfo.heliosdb %}<span class="text-success">{{ _('Eingerichtet') }}</span>
-            {% else %}<span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
+        <td class="col-md-3">{{ property.description }}</td>
+        <td class="col-md-3">
+        {% if property.is_supported %}
+            {# todo use {-1, 0, 1} instead of None/False ambiguity #}
+            {# todo implement more colors like blue for mail etc. #}
+            {% if property.is_good %}
+                <span class="text-success">{{ property.value }}</span>
+            {% else %}
+                {{ property.value }}
             {% endif %}
-            <a href="{{ url_for(".usersuite_hosting") }}"><span class="glyphicon glyphicon-pencil pull-right"></span></a>
+        {% else %}
+                <span class="text-muted">{{ _("Nicht unterstützt") }}</span>
+        {% endif %}
         </td>
     </tr>
+    {% endfor %}
 </table>

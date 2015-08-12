@@ -38,6 +38,21 @@ def usersuite():
               "error")
         return redirect(url_for('generic.index'))
 
+    descriptions = {
+        'id': gettext("Nutzer-ID"),
+        'address': gettext("Accountname"),
+        'status': gettext("Accountstatus"),
+        'ip': gettext("Aktuelles Zimmer"),
+        'mac': gettext("Aktuelle IP-Adresse"),
+        'mail': gettext("E-Mail-Weiterleitung"),
+        'hostname': "",
+        'hostalias': "",
+        'userdb': gettext("MySQL Datenbank"),
+    }
+
+    for key, val in user_info.iteritems():
+        val['description'] = descriptions[key]
+
     return render_template("usersuite/index.html",
                            userinfo=user_info,
                            usertraffic=traffic_data)
@@ -81,6 +96,8 @@ def usersuite_contact():
     return render_template("usersuite/contact.html", form=form)
 
 
+# todo access control: check if this can be done
+# todo implement decorator @feature_needed (default routing to an error page)
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
 @login_required
 def usersuite_change_password():

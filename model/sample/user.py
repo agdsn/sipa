@@ -2,6 +2,7 @@
 from random import random
 
 from flask.ext.login import AnonymousUserMixin
+from model.constants import FULL_FEATURE_LIST, Property, UnsupportedProperty
 
 from model.default import BaseUser
 from model.wu.database_utils import WEEKDAYS
@@ -69,25 +70,27 @@ class User(BaseUser):
     def change_password(self, old, new):
         raise NotImplementedError("Function change_password not implemented")
 
-    def get_information(self):
-        user_dict = {
-            'id': 1337,
-            'checksum': 0,
-            'address': u'Serverraum, Wundtstraße 5',
-            'status': 'OK',
-            'status_is_good': True,
-            'ip': '127.0.0.1',
-            'mac': 'aa:bb:cc:dd:ee:ff',
-            'hostname': 'Serverkiste',
-            'hostalias': 'leethaxor',
-            'heliosdb': False
-        }
+    # todo when is this gonna be accessed?
+    _supported_features = FULL_FEATURE_LIST - {
+        'userdb', 'mac_change', 'mail_change'  # , 'password_change'
+    }
 
-        return user_dict
+    def get_information(self):
+        return {
+            # todo return correct codes for is_good
+            'id': Property("1337-0"),
+            'address': Property(u"Serverraum, Wundtstraße 5"),
+            'status': Property("OK", True),
+            'ip': Property("127.0.0.1"),
+            'mac': Property("aa:bb:cc:dd:ee:ff"),
+            'hostname': Property("Serverkiste"),
+            'hostalias': Property("leethaxor"),
+            'userdb': UnsupportedProperty()
+        }
 
     def get_traffic_data(self):
         def rand():
-            return round(random(), 2)
+            return round(random() * 1024, 2)
         return {'credit': 0,
                 'history': [(WEEKDAYS[str(day)], rand(), rand(), rand())
                             for day in range(7)]}
