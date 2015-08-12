@@ -55,7 +55,7 @@ def display(start=None, end=None):
     if end < len(news) - 1:
         next_range = {'start': end + 1, 'end': min(end + delta, len(news) - 1)}
 
-    return render_template("index.html", articles=news[start:end],
+    return render_template("index.html", articles=news[start:end+1],
                            previous_range=prev_range, next_range=next_range)
 
 
