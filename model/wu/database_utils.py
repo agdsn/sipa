@@ -8,6 +8,7 @@ from flask.ext.babel import gettext
 from flask.globals import current_app
 from sqlalchemy.exc import OperationalError
 from werkzeug.local import LocalProxy
+from model.constants import Property
 
 from sipa import logger
 from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
@@ -99,15 +100,16 @@ def query_userinfo(username):
     if not user:
         raise DBQueryEmpty
 
+    # todo append checksum
     userinfo.update(
-        id=user['nutzer_id'],
-        address=u"{0} / {1} {2}".format(
+        id=Property(user['nutzer_id']),
+        address=Property(u"{0} / {1} {2}".format(
             DORMITORIES[user['wheim_id'] - 1],
             user['etage'],
             user['zimmernr']
-        ),
-        status=status_string_from_id(user['status']),
-        status_is_good=user['status'] is 1
+        )),
+        status=Property(status_string_from_id(user['status']),
+                        user['status'] is 1),
     )
 
     computer = sql_query(
@@ -121,10 +123,12 @@ def query_userinfo(username):
         raise DBQueryEmpty
 
     userinfo.update(
-        ip=computer['c_ip'],
-        mac=computer['c_etheraddr'].upper(),
-        hostname=computer['c_hname'],
-        hostalias=computer['c_alias']
+        ip=Property(computer['c_ip']),
+        # todo implement actions as a set of enums, e.g. {ACTIONS.EDIT}
+        mac=Property(computer['c_etheraddr'].upper()),
+        # todo figure out where that's being used
+        hostname=Property(computer['c_hname']),
+        hostalias=Property(computer['c_alias'])
     )
 
     try:
@@ -134,7 +138,7 @@ def query_userinfo(username):
         # was a workaround to not abort due to this error
         has_mysql_db = False
 
-    userinfo.update(heliosdb=has_mysql_db)
+    userinfo.update(heliosdb=Property(has_mysql_db))
 
     return userinfo
 
