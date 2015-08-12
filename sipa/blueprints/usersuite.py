@@ -46,8 +46,8 @@ def usersuite():
         'ip': gettext("Aktuelles Zimmer"),
         'mac': gettext("Aktuelle IP-Adresse"),
         'mail': gettext("E-Mail-Weiterleitung"),
-        'hostname': "",
-        'hostalias': "",
+        'hostname': gettext("Hostname"),
+        'hostalias': gettext("Hostalias"),
         'userdb': gettext("MySQL Datenbank"),
     }
 
