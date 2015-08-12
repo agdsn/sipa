@@ -8,6 +8,7 @@ General utilities
 import httplib
 import socket
 import time
+from flask import request, url_for
 
 from flask.ext.login import current_user
 
@@ -78,3 +79,7 @@ def current_user_name():
         return 'anonymous'
     else:
         return ''
+
+
+def redirect_url(default='index'):
+    return request.args.get('next') or request.referrer or url_for(default)

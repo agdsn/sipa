@@ -2,9 +2,10 @@
 from functools import wraps
 from logging import getLogger, LoggerAdapter
 
-from flask import Flask, flash, redirect, url_for
+from flask import Flask, flash, redirect
 from flask.globals import request
-from sipa.utils import current_user_name
+
+from sipa.utils import current_user_name, redirect_url
 
 
 class ReverseProxied(object):
@@ -88,9 +89,8 @@ def feature_required(needed_feature, given_features):
                 return func(*args, **kwargs)
             else:
                 def not_supported():
-                    # todo flash and redirect
                     flash(u"Diese Funktion ist nicht verfügbar.", 'error')
-                    return redirect(url_for('generic.index'))
+                    return redirect(redirect_url())
                 return not_supported()
 
         return decorated_view

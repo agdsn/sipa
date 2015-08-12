@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import create_engine
 import datetime
 
+from sqlalchemy import create_engine
 from flask.ext.babel import gettext
 from flask.globals import current_app
 from sqlalchemy.exc import OperationalError
-from werkzeug.local import LocalProxy
-from model.constants import info_property, STATUS_COLORS, ACTIONS
 
+from werkzeug.local import LocalProxy
+
+from model.constants import info_property, STATUS_COLORS, ACTIONS, WEEKDAYS
 from sipa import logger
 from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
 from sipa.utils.exceptions import DBQueryEmpty
@@ -49,16 +50,6 @@ DORMITORIES = [
     u'Zellescher Weg 41C',
     u'Zellescher Weg 41D'
 ]
-
-WEEKDAYS = {
-    '0': gettext('Sonntag'),
-    '1': gettext('Montag'),
-    '2': gettext('Dienstag'),
-    '3': gettext('Mittwoch'),
-    '4': gettext('Donnerstag'),
-    '5': gettext('Freitag'),
-    '6': gettext('Samstag')
-}
 
 STATUS = {
     # todo vervollständigen oder mindestens fehlerresistent machen!
