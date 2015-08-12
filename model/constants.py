@@ -9,7 +9,7 @@ FULL_FEATURE_LIST = {
 }
 
 
-def PropertyBase(description, supported, value, is_good, actions):
+def property_base(description, supported, value, is_good, actions):
     return {
         'description': description,
         'is_supported': supported,
@@ -19,17 +19,20 @@ def PropertyBase(description, supported, value, is_good, actions):
     }
 
 
-# noinspection PyPep8Naming
-def Property(value, is_good=None, actions=None):
+def info_property(value, is_good=None, actions=None):
+    # has been prefixed `info` to avoid using a builtin name
     if is_good is None:
         is_good = False
     if actions is None:
-        actions = []
-    return PropertyBase('', True, value, is_good, actions)
+        actions = {}
+    return property_base('', True, value, is_good, actions)
 
 
-# noinspection PyPep8Naming
-def UnsupportedProperty(description=None):
+def unsupported_property(description=None):
     if description is None:
         description = ""
-    return PropertyBase(description, False, None, None, None)
+    return property_base(description, False, None, None, None)
+
+
+class ACTIONS:
+    EDIT, DELETE = range(2)

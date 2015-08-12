@@ -2,7 +2,7 @@
 from random import random
 
 from flask.ext.login import AnonymousUserMixin
-from model.constants import FULL_FEATURE_LIST, Property, UnsupportedProperty
+from model.constants import FULL_FEATURE_LIST, info_property, unsupported_property
 
 from model.default import BaseUser
 from model.wu.database_utils import WEEKDAYS
@@ -78,14 +78,14 @@ class User(BaseUser):
     def get_information(self):
         return {
             # todo return correct codes for is_good
-            'id': Property("1337-0"),
-            'address': Property(u"Serverraum, Wundtstraße 5"),
-            'status': Property("OK", True),
-            'ip': Property("127.0.0.1"),
-            'mac': Property("aa:bb:cc:dd:ee:ff"),
-            'hostname': Property("Serverkiste"),
-            'hostalias': Property("leethaxor"),
-            'userdb': UnsupportedProperty()
+            'id': info_property("1337-0"),
+            'address': info_property(u"Serverraum, Wundtstraße 5"),
+            'status': info_property("OK", True),
+            'ip': info_property("127.0.0.1"),
+            'mac': info_property("aa:bb:cc:dd:ee:ff"),
+            'hostname': info_property("Serverkiste"),
+            'hostalias': info_property("leethaxor"),
+            'userdb': unsupported_property()
         }
 
     def get_traffic_data(self):
