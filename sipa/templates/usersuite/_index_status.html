@@ -1,63 +1,66 @@
 <h3>{{ _("Statusinformationen") }}</h3>
 <div>
+    {% if 'password_change' in current_user.supported() %}
     <a href="{{ url_for(".usersuite_change_password") }}" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
         {{ _("Passwort ändern") }}
     </a>
+    {% else %}
+    <a class="btn btn-default" disabled title="{{ _('Nicht unterstützt') }}">
+        <span class="glyphicon glyphicon-pencil"></span>
+        {{ _("Passwort ändern") }}
+    </a>
+    {% endif %}
     <a href="{{ url_for(".usersuite_contact") }}" class="btn btn-default">
         <span class="glyphicon glyphicon-envelope"></span>
         {{ _("Kontaktformular") }}
     </a>
 </div><br>
+
+{% macro color_class(status_color) %}
+{% if status_color == STATUS_COLORS.GOOD %}
+    text-success
+{% elif status_color == STATUS_COLORS.BAD %}
+    text-danger
+{% elif status_color == STATUS_COLORS.WARNING %}
+    text-warning
+{% elif status_color == STATUS_COLORS.INFO %}
+    text-info
+{% endif %}
+{% endmacro %}
+
 <table class="table table-striped table-bordered table-hover">
-<thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
+    <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
+    {# todo get the table sorted properly #}
+    {% for id, property in userinfo.iteritems() %}
     <tr>
-        <td class="col-md-3">{{ _('Nutzer-ID') }}</td>
-        <td class="col-md-3">{{ userinfo.id }}-{{ userinfo.checksum }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Accountname') }}</td>
-        <td>{{ current_user.uid }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Accountstatus') }}</td>
-        <td>{% if userinfo.status_is_good %}<span class="text-success">
-            {% else %}<span class="text-danger">{% endif %}
-            {{ _(userinfo.status) }}
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td>{{ _('Aktuelles Zimmer') }}</td>
-        <td>{{ userinfo.address }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Aktuelle IP-Adresse') }}</td>
-        <td>{{ userinfo.ip }}</td>
-    </tr>
-    <tr>
-        <td>{{ _('Aktuelle MAC-Adresse') }}</td>
-        <td>{{ userinfo.mac }}
-            <a href="{{ url_for(".usersuite_change_mac") }}"><span class="glyphicon glyphicon-pencil pull-right"></span></a>
-        </td>
-    </tr>
-    <tr>
-        <td>{{ _('E-Mail-Weiterleitung') }}</td>
-        <td>{% if current_user.mail %}
-            {{ current_user.mail }}
-            <a href="{{ url_for(".usersuite_delete_mail") }}"><span class="glyphicon glyphicon-remove pull-right"></span></a>
-        {% else %}
-            <span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
-        {% endif %}
-            <a href="{{ url_for(".usersuite_change_mail") }}"><span class="glyphicon glyphicon-pencil pull-right"></span></a>
-        </td>
-    </tr>
-    <tr>
-        <td>{{ _('MySQL Datenbank') }}</td>
-        <td>{% if userinfo.heliosdb %}<span class="text-success">{{ _('Eingerichtet') }}</span>
-            {% else %}<span class="text-muted">{{ _('Nicht eingerichtet') }}</span>
+        <td class="col-md-3">{{ property.description }}</td>
+        <td class="col-md-3">
+        {% if property.is_supported %}
+            {% if property.status_color %}
+                <span class="{{ color_class(property.status_color) }}">
+                    {{ property.value }}
+                </span>
+            {% else %}
+                {{ property.value }}
             {% endif %}
-            <a href="{{ url_for(".usersuite_hosting") }}"><span class="glyphicon glyphicon-pencil pull-right"></span></a>
+            {# todo check for prop.action_links.get(ACTIONS.action) #}
+            {% if ACTIONS.EDIT in property.actions
+                    and ACTIONS.EDIT in property.action_links %}
+                <a href="{{ property.action_links.get(ACTIONS.EDIT) }}">
+                    <span class="glyphicon glyphicon-pencil pull-right"></span>
+                </a>
+            {% endif %}
+            {% if ACTIONS.DELETE in property.actions
+                    and ACTIONS.DELETE in property.action_links %}
+                <a href="{{ property.action_links.get(ACTIONS.DELETE) }}">
+                    <span class="glyphicon glyphicon-remove pull-right"></span>
+                </a>
+            {% endif %}
+        {% else %}
+                <em class="text-muted">{{ _("Nicht unterstützt") }}</em>
+        {% endif %}
         </td>
     </tr>
+    {% endfor %}
 </table>

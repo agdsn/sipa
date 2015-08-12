@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+from functools import wraps
 from logging import getLogger, LoggerAdapter
 
-from flask import Flask
+from flask import Flask, flash, redirect, url_for
 from flask.globals import request
 from sipa.utils import current_user_name
+
 
 class ReverseProxied(object):
     """Wrap the application in this middleware and configure the
@@ -21,8 +24,8 @@ class ReverseProxied(object):
 
     :param app: the WSGI application
     """
-    def __init__(self, app):
-        self.app = app
+    def __init__(self, flask_app):
+        self.app = flask_app
 
     def __call__(self, environ, start_response):
         script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
@@ -51,6 +54,7 @@ class CustomAdapter(LoggerAdapter):
         extra = kwargs.pop('extra', {})
         tags = extra.pop('tags', {})
         if request:
+            # todo causes infinite recursion when used inside ldap processes.
             login = current_user_name()
             tags['user'] = login
             tags['ip'] = request.remote_addr
@@ -69,3 +73,26 @@ class CustomAdapter(LoggerAdapter):
 
 logger = CustomAdapter(logger=getLogger(name=__name__), extra={})
 http_logger = getLogger(name='{}.http'.format(__name__))    # 'sipa.http'
+
+
+def feature_required(needed_feature, given_features):
+    """A decorator used to disable functions (routes) if a certain feature
+    is not provided by the User class.
+    :param needed_feature: The feature needed
+    :param given_features: The set of enabled features (User.supported())
+    :return:
+    """
+    def feature_decorator(func):
+        @wraps(func)
+        def decorated_view(*args, **kwargs):
+            if needed_feature in given_features:
+                return func(*args, **kwargs)
+            else:
+                def not_supported():
+                    # todo flash and redirect
+                    flash(u"Diese Funktion ist nicht verfügbar.", 'error')
+                    return redirect(url_for('generic.index'))
+                return not_supported()
+
+        return decorated_view
+    return feature_decorator

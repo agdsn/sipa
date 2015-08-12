@@ -1,31 +1,74 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask.ext.babel import gettext
-from flask.ext.login import current_user
 
-from flask.globals import request
 from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError
-
 import datetime
-from sipa import app, logger
-from sipa.utils import timestamp_from_timetag, timetag_from_timestamp
-from .exceptions import DBQueryEmpty
-from sipa.utils.ldap_utils import get_current_uid
 
-db_atlantis = create_engine('mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
-    app.config['DB_ATLANTIS_USER'],
-    app.config['DB_ATLANTIS_PASSWORD'],
-    app.config['DB_ATLANTIS_HOST']),
-    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
+from flask.ext.babel import gettext
+from flask.globals import current_app
+from sqlalchemy.exc import OperationalError
+from werkzeug.local import LocalProxy
+from model.constants import info_property, STATUS_COLORS, ACTIONS
 
-db_helios = create_engine(
-    'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
-        app.config['DB_HELIOS_USER'],
-        app.config['DB_HELIOS_PASSWORD'],
-        app.config['DB_HELIOS_HOST'],
-        app.config['DB_HELIOS_PORT']),
-    echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
+from sipa import logger
+from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
+from sipa.utils.exceptions import DBQueryEmpty
+from .ldap_utils import get_current_uid
+
+
+def init_db(app):
+    app.extensions['db_atlantis'] = create_engine(
+        'mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
+            app.config['DB_ATLANTIS_USER'],
+            app.config['DB_ATLANTIS_PASSWORD'],
+            app.config['DB_ATLANTIS_HOST']),
+        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
+    )
+    app.extensions['db_helios'] = create_engine(
+        'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
+            app.config['DB_HELIOS_USER'],
+            app.config['DB_HELIOS_PASSWORD'],
+            app.config['DB_HELIOS_HOST'],
+            app.config['DB_HELIOS_PORT']),
+        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']})
+
+
+db_atlantis = LocalProxy(lambda: current_app.extensions['db_atlantis'])
+db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
+
+DORMITORIES = [
+    u'Wundstraße 5',
+    u'Wundstraße 7',
+    u'Wundstraße 9',
+    u'Wundstraße 11',
+    u'Wundstraße 1',
+    u'Wundstraße 3',
+    u'Zellescher Weg 41',
+    u'Zellescher Weg 41A',
+    u'Zellescher Weg 41B',
+    u'Zellescher Weg 41C',
+    u'Zellescher Weg 41D'
+]
+
+WEEKDAYS = {
+    '0': gettext('Sonntag'),
+    '1': gettext('Montag'),
+    '2': gettext('Dienstag'),
+    '3': gettext('Mittwoch'),
+    '4': gettext('Donnerstag'),
+    '5': gettext('Freitag'),
+    '6': gettext('Samstag')
+}
+
+STATUS = {
+    # todo vervollständigen oder mindestens fehlerresistent machen!
+    # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
+    1: gettext(u'Bezahlt, verbunden'),
+    2: gettext(u'Nicht bezahlt, Netzanschluss gesperrt'),
+    7: gettext(u'Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
+    9: gettext(u'Exaktiv'),
+    12: gettext(u'Trafficlimit überschritten, Netzanschluss gesperrt')
+}
 
 
 def sql_query(query, args=(), database=db_atlantis):
@@ -46,6 +89,7 @@ def query_userinfo(username):
     Returns "-1" if a query result was empty (None), else
     returns the prepared dict.
     """
+    userinfo = {}
     user = sql_query(
         "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
         "FROM nutzer "
@@ -55,6 +99,21 @@ def query_userinfo(username):
 
     if not user:
         raise DBQueryEmpty
+
+    # todo append checksum
+    userinfo.update(
+        id=info_property(user['nutzer_id']),
+        address=info_property(u"{0} / {1} {2}".format(
+            DORMITORIES[user['wheim_id'] - 1],
+            user['etage'],
+            user['zimmernr']
+        )),
+        # todo use more colors (yellow for finances etc.)
+        status=info_property(status_string_from_id(user['status']),
+                             status_color=(STATUS_COLORS.GOOD
+                                           if user['status'] is 1
+                                           else None)),
+    )
 
     computer = sql_query(
         "SELECT c_etheraddr, c_ip, c_hname, c_alias "
@@ -66,34 +125,41 @@ def query_userinfo(username):
     if not computer:
         raise DBQueryEmpty
 
+    userinfo.update(
+        ip=info_property(computer['c_ip']),
+        mac=info_property(computer['c_etheraddr'].upper(),
+                          actions={ACTIONS.EDIT}),
+        # todo figure out where that's being used
+        hostname=info_property(computer['c_hname']),
+        hostalias=info_property(computer['c_alias'])
+    )
+
     try:
-        has_mysql_db = user_has_mysql_db(username)
+        if user_has_mysql_db(username):
+            user_db_prop = info_property(
+                gettext("Aktiviert"),
+                status_color=STATUS_COLORS.GOOD,
+                actions={ACTIONS.DELETE}  # todo check if EDIT makes sense
+            )
+        else:
+            user_db_prop = info_property(
+                gettext("Nicht aktiviert"),
+                status_color=STATUS_COLORS.INFO,
+                actions={ACTIONS.EDIT}
+            )
     except OperationalError:
         # todo display error (helios unreachable)
         # was a workaround to not abort due to this error
-        has_mysql_db = False
+        logger.critical("User db unreachable")
+        user_db_prop = info_property(gettext(u"Datenbank nicht erreichbar"))
+    finally:
+        userinfo.update(userdb=user_db_prop)
 
-    user = {
-        'id': user['nutzer_id'],
-        'address': u"{0} / {1} {2}".format(
-            app.config['DORMITORIES'][user['wheim_id'] - 1],
-            user['etage'],
-            user['zimmernr']
-        ),
-        'status': status_string_from_id(user['status']),
-        'status_is_good': user['status'] == 1,
-        'ip': computer['c_ip'],
-        'mac': computer['c_etheraddr'].upper(),
-        'hostname': computer['c_hname'],
-        'hostalias': computer['c_alias'],
-        'heliosdb': has_mysql_db
-    }
-
-    return user
+    return userinfo
 
 
 def status_string_from_id(status_id):
-    return app.config['STATUS'].get(status_id, gettext(u"Unbekannt"))
+    return STATUS.get(status_id, gettext(u"Unbekannt"))
 
 
 def user_id_from_uid(uid=None):
@@ -144,7 +210,7 @@ def query_current_credit(uid=None, ip=None):
             raise AttributeError('Either ip or user_id must be specified!')
         user_id = user_id_from_ip(ip)
         if user_id is 0:
-            return False    # IP doesn't correspond to any user
+            return False  # IP doesn't correspond to any user
     else:
         user_id = user_id_from_uid(uid)
         ip = ip_from_user_id(user_id)
@@ -167,7 +233,7 @@ def query_current_credit(uid=None, ip=None):
         return round(result['current'] / 1024, 2)
 
 
-def query_trafficdata(ip=None, user_id=None):
+def query_trafficdata(ip, user_id):
     """Query traffic input/output for IP
 
     :param ip: a valid ip
@@ -175,14 +241,6 @@ def query_trafficdata(ip=None, user_id=None):
     :return: a dict containing the traffic data in the form of
     {'history': [('weekday', in, out, credit), …], 'credit': credit}
     """
-    if user_id is None:
-        if ip is None:
-            raise AttributeError('Either ip or user_id must be specified!')
-        user_id = user_id_from_ip(ip)
-    else:
-        # ip gotten from db is preferred to the ip possibly given as parameter
-        ip = ip_from_user_id(user_id)
-
     trafficdata = sql_query(
         "SELECT t.timetag - %(today)s AS day, input, output, amount "
         "FROM traffic.tuext AS t "
@@ -217,30 +275,14 @@ def query_trafficdata(ip=None, user_id=None):
                 for param in ['input', 'output', 'amount']
             )
             traffic['history'].append(
-                (app.config['WEEKDAYS'][day], input, output, credit))
+                (WEEKDAYS[day], input, output, credit))
         else:
             traffic['history'].append(
-                (app.config['WEEKDAYS'][day], 0.0, 0.0, 0.0))
+                (WEEKDAYS[day], 0.0, 0.0, 0.0))
 
     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
     return traffic
-
-
-def query_gauge_data():
-    credit = {}
-    try:
-        if current_user.is_authenticated():
-            credit['data'] = query_current_credit(uid=current_user.uid)
-        else:
-            credit['data'] = query_current_credit(ip=request.remote_addr)
-    except OperationalError:
-        credit['error'] = gettext(u'Fehler bei der Abfrage der Daten')
-    else:
-        if not credit['data']:
-            credit['error'] = gettext(u'Diese IP gehört nicht '
-                                      u'zu unserem Netzwerk')
-    return credit
 
 
 def update_macaddress(ip, oldmac, newmac):
@@ -249,6 +291,7 @@ def update_macaddress(ip, oldmac, newmac):
     TODO: check, if 'LIMIT 1' causes problems (sqlalchemy says
     "Warning: Unsafe statement")
     """
+    # todo why does one the old mac_address?
     sql_query(
         "UPDATE computer "
         "SET c_etheraddr = %s "

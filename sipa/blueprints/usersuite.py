@@ -7,20 +7,17 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
-from sipa import logger
 
+from model import User
+from model.constants import unsupported_property, ACTIONS
+from sipa import logger, feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from sipa.utils import calculate_userid_checksum
-from sipa.utils.database_utils import query_trafficdata, query_userinfo, \
-    update_macaddress, drop_mysql_userdatabase, create_mysql_userdatabase, \
-    change_mysql_userdatabase_password, user_has_mysql_db
-from sipa.utils.ldap_utils import change_password, change_email, \
-    authenticate
+from model.wu.database_utils import drop_mysql_userdatabase, \
+    create_mysql_userdatabase, change_mysql_userdatabase_password
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
-
 
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
@@ -32,9 +29,9 @@ def usersuite():
     and traffic overview.
     """
     try:
-        userinfo = query_userinfo(current_user.uid)
-        userinfo['checksum'] = calculate_userid_checksum(userinfo['id'])
-        trafficdata = query_trafficdata(user_id=userinfo['id'])
+        # TODO all this should be done by the User() object
+        user_info = dict(current_user.get_information())
+        traffic_data = current_user.get_traffic_data()
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
                      extra={'data': {'exception_args': e.args}, 'stack': True})
@@ -42,9 +39,38 @@ def usersuite():
               "error")
         return redirect(url_for('generic.index'))
 
+    user_info.update({prop: unsupported_property()
+                      for prop in current_user.unsupported(display=True)})
+
+    descriptions = {
+        'id': gettext("Nutzer-ID"),
+        'address': gettext("Accountname"),
+        'status': gettext("Accountstatus"),
+        'ip': gettext("Aktuelles Zimmer"),
+        'mac': gettext("Aktuelle IP-Adresse"),
+        'mail': gettext("E-Mail-Weiterleitung"),
+        'hostname': "",
+        'hostalias': "",
+        'userdb': gettext("MySQL Datenbank"),
+    }
+
+    for key, property_row in user_info.iteritems():
+        property_row['description'] = descriptions[key]
+
+    # set {mail,mac,userdb}_{change,delete} urls
+    user_info['mail']['action_links'] = {
+        ACTIONS.EDIT: url_for('.usersuite_change_mail'),
+        ACTIONS.DELETE: url_for('.usersuite_delete_mail')
+    }
+    user_info['mac']['action_links'] = {
+        ACTIONS.EDIT: url_for('.usersuite_change_mac')
+    }
+    user_info['userdb']['action_links'] = {
+        ACTIONS.EDIT: url_for('.usersuite_hosting')}
+
     return render_template("usersuite/index.html",
-                           userinfo=userinfo,
-                           usertraffic=trafficdata)
+                           userinfo=user_info,
+                           usertraffic=traffic_data)
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])
@@ -87,6 +113,7 @@ def usersuite_contact():
 
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
 @login_required
+@feature_required('password_change', User.supported())
 def usersuite_change_password():
     """Lets the user change his password.
     Requests the old password once (in case someone forgot to logout for
@@ -110,7 +137,7 @@ def usersuite_change_password():
             flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
             try:
-                change_password(current_user.uid, old, new)
+                current_user.change_password(old, new)
             except PasswordInvalid:
                 flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
             else:
@@ -124,6 +151,7 @@ def usersuite_change_password():
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
+@feature_required('mail_change', User.supported())
 def usersuite_change_mail():
     """Changes the users forwarding mail attribute
     in his LDAP entry.
@@ -137,7 +165,7 @@ def usersuite_change_mail():
         email = form.email.data
 
         try:
-            change_email(current_user.uid, password, email)
+            current_user.change_mail(password, email)
         except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -155,6 +183,7 @@ def usersuite_change_mail():
 
 @bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
 @login_required
+@feature_required('mail_change', User.supported())
 def usersuite_delete_mail():
     """Resets the users forwarding mail attribute
     in his LDAP entry.
@@ -165,7 +194,8 @@ def usersuite_delete_mail():
         password = form.password.data
 
         try:
-            change_email(current_user.uid, password, "")
+            # password is needed for the ldap bind
+            current_user.change_mail(password, "")
         except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -183,22 +213,31 @@ def usersuite_delete_mail():
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
 @login_required
+@feature_required('mac_change', User.supported())
 def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
     form = ChangeMACForm()
-    userinfo = query_userinfo(current_user.uid)
+    userinfo = current_user.get_information()
 
     if form.validate_on_submit():
         password = form.password.data
         mac = form.mac.data
 
         try:
-            authenticate(current_user.uid, password)
+            # TODO do as told by Sebastian:
+            # sowas ist hässlich
+            # login_manager.anonymous_user auf eine Klasse setzen, die alle relevanten Sachen implementiert
+            # AnonymousUserMixin erben
+            if isinstance(current_user, User):
+                current_user.re_authenticate(password)
+
         except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
         else:
-            update_macaddress(userinfo['ip'], userinfo['mac'], mac)
+            current_user.change_mac_address(userinfo['ip'],
+                                            userinfo['mac'],
+                                            mac)
             logger.info('Successfully changed MAC address to %s', mac)
 
             subject = u"[Usersuite] %s hat seine/ihre MAC-Adresse " \
@@ -228,6 +267,7 @@ def usersuite_change_mac():
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
 @bp_usersuite.route("/hosting/<string:action>", methods=['GET', 'POST'])
 @login_required
+@feature_required('userdb_change', User.supported())
 def usersuite_hosting(action=None):
     """Change various settings for Helios.
     """
@@ -251,7 +291,7 @@ def usersuite_hosting(action=None):
     elif form.is_submitted():
         flash_formerrors(form)
 
-    user_has_db = user_has_mysql_db(current_user.uid)
+    user_has_db = current_user.has_user_db()
 
     return render_template('usersuite/hosting.html',
                            form=form, user_has_db=user_has_db, action=action)

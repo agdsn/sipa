@@ -3,21 +3,19 @@
 
 from __future__ import absolute_import
 
-
 from babel import Locale
-
 from flask import request, session
 from flask.ext.babel import get_locale
 from flask.ext.login import LoginManager
-
-from sipa import app, logger
-from sipa.babel import babel, possible_locales
-from sipa.flatpages import cf_pages
-from sipa.utils.graph_utils import render_traffic_chart
-from sipa.utils.ldap_utils import User
-
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
+from model import User, init_context
+from model.constants import ACTIONS, STATUS_COLORS
+from sipa import logger
+from sipa.babel import babel, possible_locales
+from sipa.flatpages import cf_pages
+from sipa.initialization import init_env_and_config, init_logging
+from sipa.utils.graph_utils import render_traffic_chart
 
 login_manager = LoginManager()
 
@@ -30,10 +28,7 @@ class IntegerConverter(BaseIntegerConverter):
     regex = r'-?\d+'
 
 
-app.url_map.converters['int'] = IntegerConverter
-
-
-def init_app():
+def init_app(app):
     """Initialize the Flask app located in the module sipa.
     This initializes the Flask app by:
     * calling the internal init_app() procedures of each module
@@ -42,11 +37,14 @@ def init_app():
     * registering the Jinja global variables
     :return: None
     """
+    init_env_and_config(app)
     logger.debug('Initializing app')
     login_manager.init_app(app)
     babel.init_app(app)
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
+
+    app.url_map.converters['int'] = IntegerConverter
 
     from sipa.blueprints import bp_features, bp_usersuite, \
         bp_pages, bp_documents, bp_news, bp_generic
@@ -60,7 +58,7 @@ def init_app():
     app.register_blueprint(bp_news)
 
     if not app.debug:
-        app.config.setdefault('LOG_MAX_BYTES', 1024**2)
+        app.config.setdefault('LOG_MAX_BYTES', 1024 ** 2)
         app.config.setdefault('LOG_BACKUP_COUNT', 10)
         import logging
         from logging.handlers import RotatingFileHandler
@@ -71,7 +69,7 @@ def init_app():
         file_handler.setLevel(logging.WARNING)
         app.logger.addHandler(file_handler)
 
-    from sipa.utils.database_utils import query_gauge_data
+    from model import query_gauge_data
     logger.debug('Registering Jinja globals')
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
@@ -79,7 +77,12 @@ def init_app():
         get_locale=get_locale,
         possible_locales=possible_locales,
         chart=render_traffic_chart,
+        ACTIONS=ACTIONS,
+        STATUS_COLORS=STATUS_COLORS
     )
+
+    init_logging(app)
+    init_context(app)
 
 
 @login_manager.user_loader

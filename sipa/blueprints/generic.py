@@ -12,13 +12,11 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
+from model import User
 from sipa import logger, http_logger, app
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils import current_user_name
-from sipa.utils.database_utils import query_trafficdata, \
-    user_id_from_ip
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
-from sipa.utils.ldap_utils import User, authenticate
 
 bp_generic = Blueprint('generic', __name__)
 
@@ -116,11 +114,18 @@ def login():
         password = form.password.data
 
         try:
-            user = authenticate(username, password)
+            # this method will vary by division. it runs User.get(username) via
+            # ldap (with LdapConnector […])
+            # todo make static method: user = User.authenticate()
+            user = User.authenticate(username, password)
         except (UserNotFound, PasswordInvalid):
             flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
+
+                # todo perhaps implement user.login
+                # login_user() is a flask method
+                #
                 login_user(user)
                 logger.info('Authentication successful')
                 flash(gettext(u"Anmeldung erfolgreich!"), "success")
@@ -145,11 +150,11 @@ def logout():
 def usertraffic():
     """For anonymous users with a valid IP
     """
-    ip = request.remote_addr
+    ip_user = User.from_ip(request.remote_addr)
 
-    if user_id_from_ip(ip):
+    if isinstance(ip_user, User):
         if current_user.is_authenticated():
-            if current_user.userid is user_id_from_ip(ip):
+            if current_user != ip_user:
                 flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"
                               u" Eingetragene ist angemeldet!"), "warning")
                 flash(gettext("Hier werden die Trafficdaten "
@@ -157,7 +162,7 @@ def usertraffic():
 
         # todo test if the template works if called from this position
         return render_template("usertraffic.html", usertraffic=(
-            query_trafficdata(ip)))
+            ip_user.get_traffic_data()))
     else:
         flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
 
