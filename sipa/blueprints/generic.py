@@ -53,15 +53,8 @@ def exceptionhandler_sql(ex):
     """
     flash(gettext("Verbindung zum SQL-Server konnte nicht hergestellt werden!"),
           "error")
-    # todo include more valuable information
     logger.critical('Unable to connect to MySQL server',
                     extra={'data': {'exception_args': ex.args}})
-    # todo check if infinite redirection might still occur
-    # Proviously, requesting `/` w/o having a connection to the mysql database
-    # would result in an infinite loop of redirects to `/` since
-    # OperationalError is being handled globally.
-    # In the latter case, the cause was the request of the traffic chart data.
-    # A quick fix was catching it and returning an error status.
     return redirect(url_for('generic.index'))
 
 
@@ -114,18 +107,11 @@ def login():
         password = form.password.data
 
         try:
-            # this method will vary by division. it runs User.get(username) via
-            # ldap (with LdapConnector […])
-            # todo make static method: user = User.authenticate()
             user = User.authenticate(username, password)
         except (UserNotFound, PasswordInvalid):
             flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
-
-                # todo perhaps implement user.login
-                # login_user() is a flask method
-                #
                 login_user(user)
                 logger.info('Authentication successful')
                 flash(gettext(u"Anmeldung erfolgreich!"), "success")
@@ -160,7 +146,6 @@ def usertraffic():
                 flash(gettext("Hier werden die Trafficdaten "
                               "dieses Anschlusses angezeigt"), "info")
 
-        # todo test if the template works if called from this position
         return render_template("usertraffic.html", usertraffic=(
             ip_user.get_traffic_data()))
     else:

@@ -44,7 +44,6 @@
             {% else %}
                 {{ property.value }}
             {% endif %}
-            {# todo check for prop.action_links.get(ACTIONS.action) #}
             {% if ACTIONS.EDIT in property.actions
                     and ACTIONS.EDIT in property.action_links %}
                 <a href="{{ property.action_links.get(ACTIONS.EDIT) }}">

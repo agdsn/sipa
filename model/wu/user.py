@@ -18,8 +18,6 @@ def init_context(app):
     init_ldap(app)
 
 
-# TODO split into `SQLUser` and `LDAPUser` or similar
-# TODO split into AuthenticatedUserMixin and FlaskLoginUserMixin
 class User(BaseUser):
     """User object will be created from LDAP credentials,
     only stored in session.
@@ -30,7 +28,6 @@ class User(BaseUser):
     def __init__(self, uid, name, mail, ip=None):
         super(User, self).__init__(uid)
         self.name = name
-        # TODO include group in user information
         self.group = self.define_group()
         self.mail = mail
         self._ip = ip

@@ -68,9 +68,6 @@ class BaseUser(object, AuthenticatedUserMixin):
         """Shall return a User instance or raise PasswordInvalid"""
         raise NotImplementedError
 
-    # Below this line: Actual feature functions
-    # TODO complete set of used / needed functions (for all divisions)
-
     _supported_features = set()
 
     @classmethod
@@ -92,7 +89,6 @@ class BaseUser(object, AuthenticatedUserMixin):
         raise NotImplementedError
 
     def get_information(self):
-        # TODO what should be returned here?i
         raise NotImplementedError
 
     def get_traffic_data(self):
@@ -112,4 +108,3 @@ class BaseUser(object, AuthenticatedUserMixin):
 
     def user_db_password_change(self, password):
         raise NotImplementedError
-

@@ -100,9 +100,10 @@ def query_userinfo(username):
     if not user:
         raise DBQueryEmpty
 
-    # todo append checksum
+    mysql_id = user['nutzer_id']
     userinfo.update(
-        id=info_property(user['nutzer_id']),
+        id=info_property(
+            "{}-{}".format(mysql_id, calculate_userid_checksum(mysql_id))),
         address=info_property(u"{0} / {1} {2}".format(
             DORMITORIES[user['wheim_id'] - 1],
             user['etage'],
@@ -139,7 +140,7 @@ def query_userinfo(username):
             user_db_prop = info_property(
                 gettext("Aktiviert"),
                 status_color=STATUS_COLORS.GOOD,
-                actions={ACTIONS.DELETE}  # todo check if EDIT makes sense
+                actions={ACTIONS.EDIT}
             )
         else:
             user_db_prop = info_property(
@@ -148,8 +149,6 @@ def query_userinfo(username):
                 actions={ACTIONS.EDIT}
             )
     except OperationalError:
-        # todo display error (helios unreachable)
-        # was a workaround to not abort due to this error
         logger.critical("User db unreachable")
         user_db_prop = info_property(gettext(u"Datenbank nicht erreichbar"))
     finally:
@@ -225,7 +224,6 @@ def query_current_credit(uid=None, ip=None):
             {'today': timetag_from_timestamp(), 'ip': ip, 'user_id': user_id}
         ).fetchone()
     except OperationalError as e:
-        # todo include more valuable information
         logger.critical('Unable to connect to MySQL server',
                         extra={'data': {'exception_args': e.args}})
         raise
@@ -381,3 +379,12 @@ def drop_mysql_userdatabase(username):
         (username,),
         database=db_helios
     )
+
+
+def calculate_userid_checksum(user_id):
+    """Calculate checksum for a userid.
+    (Modulo 10 on the sum of all digits)
+
+    :param user_id: The id of the mysql user tuple
+    """
+    return sum(map(int, user_id)) % 10

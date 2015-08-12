@@ -27,7 +27,6 @@ def usersuite():
     and traffic overview.
     """
     try:
-        # TODO all this should be done by the User() object
         user_info = dict(current_user.get_information())
         traffic_data = current_user.get_traffic_data()
     except DBQueryEmpty as e:

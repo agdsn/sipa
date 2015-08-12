@@ -12,15 +12,6 @@ import time
 from flask.ext.login import current_user
 
 
-def calculate_userid_checksum(user_id):
-    """Calculate checksum for a userid.
-    (Modulo 10 on the sum of all digits)
-
-    :param user_id: The id of the mysql user tuple
-    """
-    return sum(map(int, user_id)) % 10
-
-
 def timetag_from_timestamp(timestamp=None):
     """Convert a UNIX timestamp to a timetag.
 
