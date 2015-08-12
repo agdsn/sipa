@@ -113,18 +113,3 @@ class BaseUser(object, AuthenticatedUserMixin):
     def user_db_password_change(self, password):
         raise NotImplementedError
 
-
-def LdapHelper():
-    class _LdapHelper(object):
-        # todo add generic LDAP features based on /wu
-        # todo find features / parameters to depend on
-
-        @staticmethod
-        def authenticate(uid, password):
-            raise NotImplementedError
-
-        @staticmethod
-        def get(uid):
-            raise NotImplementedError
-
-    return _LdapHelper
