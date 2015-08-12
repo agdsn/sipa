@@ -10,6 +10,18 @@
     </a>
 </div><br>
 
+{% macro color_class(status_color) %}
+{% if status_color == STATUS_COLORS.GOOD %}
+    text-success
+{% elif status_color == STATUS_COLORS.BAD %}
+    text-danger
+{% elif status_color == STATUS_COLORS.WARNING %}
+    text-warning
+{% elif status_color == STATUS_COLORS.INFO %}
+    text-info
+{% endif %}
+{% endmacro %}
+
 <table class="table table-striped table-bordered table-hover">
     <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
     {# todo get the table sorted properly #}
@@ -18,15 +30,28 @@
         <td class="col-md-3">{{ property.description }}</td>
         <td class="col-md-3">
         {% if property.is_supported %}
-            {# todo use {-1, 0, 1} instead of None/False ambiguity #}
-            {# todo implement more colors like blue for mail etc. #}
-            {% if property.is_good %}
-                <span class="text-success">{{ property.value }}</span>
+            {% if property.status_color %}
+                <span class="{{ color_class(property.status_color) }}">
+                    {{ property.value }}
+                </span>
             {% else %}
                 {{ property.value }}
             {% endif %}
+            {# todo check for prop.action_links.get(ACTIONS.action) #}
+            {% if ACTIONS.EDIT in property.actions
+                    and ACTIONS.EDIT in property.action_links %}
+                <a href="{{ property.action_links.get(ACTIONS.EDIT) }}">
+                    <span class="glyphicon glyphicon-pencil pull-right"></span>
+                </a>
+            {% endif %}
+            {% if ACTIONS.DELETE in property.actions
+                    and ACTIONS.DELETE in property.action_links %}
+                <a href="{{ property.action_links.get(ACTIONS.DELETE) }}">
+                    <span class="glyphicon glyphicon-remove pull-right"></span>
+                </a>
+            {% endif %}
         {% else %}
-                <span class="text-muted">{{ _("Nicht unterstützt") }}</span>
+                <em class="text-muted">{{ _("Nicht unterstützt") }}</em>
         {% endif %}
         </td>
     </tr>

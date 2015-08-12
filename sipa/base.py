@@ -10,6 +10,7 @@ from flask.ext.login import LoginManager
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from model import User, init_context
+from model.constants import ACTIONS, STATUS_COLORS
 from sipa import logger
 from sipa.babel import babel, possible_locales
 from sipa.flatpages import cf_pages
@@ -76,6 +77,8 @@ def init_app(app):
         get_locale=get_locale,
         possible_locales=possible_locales,
         chart=render_traffic_chart,
+        ACTIONS=ACTIONS,
+        STATUS_COLORS=STATUS_COLORS
     )
 
     init_logging(app)

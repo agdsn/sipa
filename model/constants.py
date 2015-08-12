@@ -9,23 +9,22 @@ FULL_FEATURE_LIST = {
 }
 
 
-def property_base(description, supported, value, is_good, actions):
+def property_base(description, supported, value, status_color, actions):
     return {
         'description': description,
         'is_supported': supported,
         'value': value,
-        'is_good': is_good,     # bool or None
-        'actions': actions
+        'status_color': status_color,     # bool or None
+        'actions': actions,
+        'action_links': dict()  # to be added later by the sipa gui
     }
 
 
-def info_property(value, is_good=None, actions=None):
+def info_property(value, status_color=None, actions=None):
     # has been prefixed `info` to avoid using a builtin name
-    if is_good is None:
-        is_good = False
     if actions is None:
         actions = {}
-    return property_base('', True, value, is_good, actions)
+    return property_base('', True, value, status_color, actions)
 
 
 def unsupported_property(description=None):
@@ -36,3 +35,7 @@ def unsupported_property(description=None):
 
 class ACTIONS:
     EDIT, DELETE = range(2)
+
+
+class STATUS_COLORS:
+    GOOD, BAD, WARNING, INFO = range(1, 5)  # 0 left for no status color

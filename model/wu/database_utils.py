@@ -8,7 +8,7 @@ from flask.ext.babel import gettext
 from flask.globals import current_app
 from sqlalchemy.exc import OperationalError
 from werkzeug.local import LocalProxy
-from model.constants import info_property
+from model.constants import info_property, STATUS_COLORS, ACTIONS
 
 from sipa import logger
 from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
@@ -108,8 +108,11 @@ def query_userinfo(username):
             user['etage'],
             user['zimmernr']
         )),
+        # todo use more colors (yellow for finances etc.)
         status=info_property(status_string_from_id(user['status']),
-                        user['status'] is 1),
+                             status_color=(STATUS_COLORS.GOOD
+                                           if user['status'] is 1
+                                           else None)),
     )
 
     computer = sql_query(
@@ -124,21 +127,33 @@ def query_userinfo(username):
 
     userinfo.update(
         ip=info_property(computer['c_ip']),
-        # todo implement actions as a set of enums, e.g. {ACTIONS.EDIT}
-        mac=info_property(computer['c_etheraddr'].upper()),
+        mac=info_property(computer['c_etheraddr'].upper(),
+                          actions={ACTIONS.EDIT}),
         # todo figure out where that's being used
         hostname=info_property(computer['c_hname']),
         hostalias=info_property(computer['c_alias'])
     )
 
     try:
-        has_mysql_db = user_has_mysql_db(username)
+        if user_has_mysql_db(username):
+            user_db_prop = info_property(
+                gettext("Aktiviert"),
+                status_color=STATUS_COLORS.GOOD,
+                actions={ACTIONS.DELETE}  # todo check if EDIT makes sense
+            )
+        else:
+            user_db_prop = info_property(
+                gettext("Nicht aktiviert"),
+                status_color=STATUS_COLORS.INFO,
+                actions={ACTIONS.EDIT}
+            )
     except OperationalError:
         # todo display error (helios unreachable)
         # was a workaround to not abort due to this error
-        has_mysql_db = False
-
-    userinfo.update(heliosdb=info_property(has_mysql_db))
+        logger.critical("User db unreachable")
+        user_db_prop = info_property(gettext(u"Datenbank nicht erreichbar"))
+    finally:
+        userinfo.update(userdb=user_db_prop)
 
     return userinfo
 
@@ -195,7 +210,7 @@ def query_current_credit(uid=None, ip=None):
             raise AttributeError('Either ip or user_id must be specified!')
         user_id = user_id_from_ip(ip)
         if user_id is 0:
-            return False    # IP doesn't correspond to any user
+            return False  # IP doesn't correspond to any user
     else:
         user_id = user_id_from_uid(uid)
         ip = ip_from_user_id(user_id)
@@ -268,7 +283,6 @@ def query_trafficdata(ip, user_id):
     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
     return traffic
-
 
 
 def update_macaddress(ip, oldmac, newmac):
