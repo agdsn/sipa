@@ -38,10 +38,9 @@ class User(BaseUser):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
 
     login_list = {
-        'admin': ('test', 'Admin Istrator', 'admin@agdsn.de'),
-        'ag_dsn': ('test', 'Test Nutzer', 'ag_dsn@agdsn.de'),
         'test': ('test', 'Test Nutzer', 'test@agdsn.de'),
     }
+
 
     @staticmethod
     def get(username, **kwargs):
@@ -78,6 +77,7 @@ class User(BaseUser):
     def get_information(self):
         return {
             'id': info_property("1337-0"),
+            'uid': info_property("test"),
             'address': info_property(u"Serverraum, Wundtstraße 5"),
             'mail': info_property(self.mail),
             'status': info_property("OK", STATUS_COLORS.GOOD),

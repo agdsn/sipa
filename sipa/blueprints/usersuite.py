@@ -17,6 +17,8 @@ from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
+from collections import OrderedDict
+
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
 
@@ -39,34 +41,40 @@ def usersuite():
     user_info.update({prop: unsupported_property()
                       for prop in current_user.unsupported(display=True)})
 
-    descriptions = {
-        'id': gettext("Nutzer-ID"),
-        'address': gettext("Accountname"),
-        'status': gettext("Accountstatus"),
-        'ip': gettext("Aktuelles Zimmer"),
-        'mac': gettext("Aktuelle IP-Adresse"),
-        'mail': gettext("E-Mail-Weiterleitung"),
-        'hostname': gettext("Hostname"),
-        'hostalias': gettext("Hostalias"),
-        'userdb': gettext("MySQL Datenbank"),
-    }
+    descriptions = OrderedDict([
+        ('id', gettext("Nutzer-ID")),
+        ('uid', gettext("Accountname")),
+        ('status', gettext("Accountstatus")),
+        ('address', gettext("Aktuelles Zimmer")),
+        ('ip', gettext("Aktuelle IP-Adresse")),
+        ('mac', gettext("Aktuelle MAC-Adresse")),
+        ('mail', gettext("E-Mail-Weiterleitung")),
+        ('hostname', gettext("Hostname")),
+        ('hostalias', gettext("Hostalias")),
+        ('userdb', gettext("MySQL Datenbank")),
+    ])
 
-    for key, property_row in user_info.iteritems():
-        property_row['description'] = descriptions[key]
+    ordered_user_info = OrderedDict()
+    for key, description in descriptions.iteritems():
+        if key in user_info:
+            ordered_user_info[key] = user_info[key]
+            ordered_user_info[key]['description'] = descriptions[key]
+
 
     # set {mail,mac,userdb}_{change,delete} urls
-    user_info['mail']['action_links'] = {
+    ordered_user_info['mail']['action_links'] = {
         ACTIONS.EDIT: url_for('.usersuite_change_mail'),
         ACTIONS.DELETE: url_for('.usersuite_delete_mail')
     }
-    user_info['mac']['action_links'] = {
+    ordered_user_info['mac']['action_links'] = {
         ACTIONS.EDIT: url_for('.usersuite_change_mac')
     }
-    user_info['userdb']['action_links'] = {
-        ACTIONS.EDIT: url_for('.usersuite_hosting')}
+    ordered_user_info['userdb']['action_links'] = {
+        ACTIONS.EDIT: url_for('.usersuite_hosting')
+    }
 
     return render_template("usersuite/index.html",
-                           userinfo=user_info,
+                           userinfo=ordered_user_info,
                            usertraffic=traffic_data)
 
 
