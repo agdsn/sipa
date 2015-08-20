@@ -170,6 +170,7 @@ def usersuite_change_mail():
         email = form.email.data
 
         try:
+            current_user.re_authenticate(password)
             current_user.change_mail(password, email)
         except UserNotFound:
             flash(gettext(u"Nutzer nicht gefunden!"), "error")
@@ -199,6 +200,7 @@ def usersuite_delete_mail():
         password = form.password.data
 
         try:
+            current_user.re_authenticate(password)
             # password is needed for the ldap bind
             current_user.change_mail(password, "")
         except UserNotFound:
