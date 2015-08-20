@@ -5,7 +5,10 @@ from flask.ext.babel import gettext
 DISPLAY_FEATURE_SET = {
     'user_id', 'name', 'state', 'room', 'ip', 'mac', 'mail', 'userdb'
 }
-MANIPULATE_FEATURE_SET = {'mac_change', 'mail_change', 'userdb_change'}
+MANIPULATE_FEATURE_SET = {
+    'mac_change', 'mail_change', 'userdb_change', 'password_change'
+}
+
 FULL_FEATURE_SET = DISPLAY_FEATURE_SET | MANIPULATE_FEATURE_SET
 
 
