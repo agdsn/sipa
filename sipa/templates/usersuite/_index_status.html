@@ -44,29 +44,34 @@
     <tr>
         <td class="col-md-3">{{ property.description }}</td>
         <td class="col-md-3">
-        {% if property.is_supported %}
-            {% if property.status_color %}
-                <span class="{{ color_class(property.status_color) }}">
-                    {{ property.value }}
-                </span>
-            {% else %}
-                {{ property.value }}
-            {% endif %}
-            {% if ACTIONS.EDIT in property.actions
-                    and ACTIONS.EDIT in property.action_links %}
-                <a href="{{ property.action_links.get(ACTIONS.EDIT) }}">
-                    <span class="glyphicon glyphicon-pencil pull-right"></span>
-                </a>
-            {% endif %}
-            {% if ACTIONS.DELETE in property.actions
-                    and ACTIONS.DELETE in property.action_links %}
-                <a href="{{ property.action_links.get(ACTIONS.DELETE) }}">
-                    <span class="glyphicon glyphicon-remove pull-right"></span>
-                </a>
-            {% endif %}
-        {% else %}
-                <em class="text-muted">{{ _("Nicht unterstützt") }}</em>
-        {% endif %}
+          {% if property.is_supported %}
+
+          {% if property.status_color %}
+              <span class="{{ color_class(property.status_color) }}">
+                {{ format_empty(property.value) }}
+              </span>
+          {% else %}
+              {{ format_empty(property.value) }}
+          {% endif %}
+
+          {% if ACTIONS.EDIT in property.actions
+          and ACTIONS.EDIT in property.action_links %}
+              <a href="{{ property.action_links.get(ACTIONS.EDIT) }}">
+                <span class="glyphicon glyphicon-pencil pull-right"></span>
+              </a>
+          {% endif %}
+
+          {% if ACTIONS.DELETE in property.actions
+          and ACTIONS.DELETE in property.action_links %}
+              <a href="{{ property.action_links.get(ACTIONS.DELETE) }}">
+                <span class="glyphicon glyphicon-remove pull-right"></span>
+              </a>
+          {% endif %}
+
+          {% else %}
+              <em class="text-muted">{{ _("Nicht unterstützt") }}</em>
+          {% endif %}
+
         </td>
     </tr>
     {% endfor %}
