@@ -31,8 +31,9 @@ class BaseUser(object, AuthenticatedUserMixin):
     """
 
     def __init__(self, uid):
-        """
-        Note that init itself is not called directly, but by the static methods.
+        """Note that init itself is not called directly,
+        but by the static methods.
+
         :param uid:A unique unicode identifier for the User
         :return:
         """
