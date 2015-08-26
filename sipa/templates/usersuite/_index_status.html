@@ -29,6 +29,14 @@
 {% endif %}
 {% endmacro %}
 
+{% macro format_empty(msg) %}
+  {% if not msg %}
+    <em class="text-muted">{{ _("Nicht angegeben") }}</em>
+  {% else %}
+    {{ msg }}
+  {% endif %}
+{% endmacro %}
+
 <table class="table table-striped table-bordered table-hover">
     <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
     {# todo get the table sorted properly #}

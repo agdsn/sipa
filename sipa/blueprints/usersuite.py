@@ -60,7 +60,6 @@ def usersuite():
             ordered_user_info[key] = user_info[key]
             ordered_user_info[key]['description'] = descriptions[key]
 
-
     # set {mail,mac,userdb}_{change,delete} urls
     ordered_user_info['mail']['action_links'] = {
         ACTIONS.EDIT: url_for('.usersuite_change_mail'),
