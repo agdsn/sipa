@@ -1,5 +1,5 @@
 FROM python:2.7
-MAINTAINER Peter Klausing <peter_klausing@wh2.tu-dresden.de>
+MAINTAINER Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>
 
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -35,4 +35,8 @@ RUN pip install -r requirements.txt
 EXPOSE 5000
 
 USER sipa
-CMD ["/home/sipa/sipa/start.sh"]
+
+CMD ["uwsgi", "--master", \
+    "--socket", "0.0.0.0:5000", \
+    "--wsgi-file", "sipa.py", \
+    "--callable", "app"]
