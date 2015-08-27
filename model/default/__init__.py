@@ -94,8 +94,9 @@ class BaseUser(object, AuthenticatedUserMixin):
     def change_password(self, old, new):
         """Change the user's password from old to new.
 
-        Previously, check the password and raise PasswordInvalid if
-        incorrect.
+        Although the password has been checked using
+        re_authenticate(), some data sources like those which have to
+        perform an LDAP bind need it anyways.
         """
         raise NotImplementedError
 

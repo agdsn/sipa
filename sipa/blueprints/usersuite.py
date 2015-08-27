@@ -141,6 +141,7 @@ def usersuite_change_password():
             flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
         else:
             try:
+                current_user.re_authenticate(old)
                 current_user.change_password(old, new)
             except PasswordInvalid:
                 flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
