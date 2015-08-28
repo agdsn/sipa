@@ -74,9 +74,8 @@ class LoginForm(Form):
     division = LocalProxy(lambda: SelectField(u"Sektion", choices=[
         (division.name, division.display_name)
         for division in registered_divisions
-        if division.debug_only or current_app.debug
+        if not division.debug_only or current_app.debug
     ]))
-
     username = TextField(u"Username", validators=[
         Required(gettext(u"Nutzername muss angegeben werden!"))])
     password = PasswordField(u"Password", validators=[
