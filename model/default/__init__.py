@@ -72,6 +72,14 @@ class BaseUser(object, AuthenticatedUserMixin):
         """Used by user_loader. Return a User instance."""
         raise NotImplementedError
 
+    @staticmethod
+    def from_ip(ip):
+        """Return a user based on an ip.
+
+        If there is no user associated with this ip, return AnonymousUserMixin.
+        """
+        raise NotImplementedError
+
     def re_authenticate(self, password):
         self.authenticate(self.uid, password)
 
