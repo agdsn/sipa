@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import flash
+from flask import flash, current_app
 from flask.ext.babel import gettext, lazy_gettext
 from flask_wtf import Form
+
+from werkzeug.local import LocalProxy
+
 from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
     HiddenField
 from wtforms.validators import Required, Email, MacAddress, ValidationError
+
+from model import registered_divisions
 
 
 class ContactForm(Form):
@@ -66,6 +71,12 @@ class ChangeMACForm(Form):
 
 
 class LoginForm(Form):
+    division = LocalProxy(lambda: SelectField(u"Sektion", choices=[
+        (division.name, division.display_name)
+        for division in registered_divisions
+        if division.debug_only or current_app.debug
+    ]))
+
     username = TextField(u"Username", validators=[
         Required(gettext(u"Nutzername muss angegeben werden!"))])
     password = PasswordField(u"Password", validators=[

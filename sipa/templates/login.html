@@ -7,6 +7,13 @@
             {{ form.csrf_token }}
             <div class="row">
                 <div class="col-md-3 form-group">
+                    <label>{{ _('Sektion') }}</label>
+                    {{ form.division(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 form-group">
                     <label>{{ _('Benutzername') }}</label>
                     {{ form.username(class="form-control") }}
                 </div>

@@ -8,7 +8,7 @@ from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
-from model import User
+from model import current_user_supported
 from model.constants import unsupported_property, ACTIONS
 from sipa import logger, feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
@@ -120,7 +120,7 @@ def usersuite_contact():
 
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
 @login_required
-@feature_required('password_change', User.supported())
+@feature_required('password_change', current_user_supported)
 def usersuite_change_password():
     """Lets the user change his password.
     Requests the old password once (in case someone forgot to logout for
@@ -159,7 +159,7 @@ def usersuite_change_password():
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
-@feature_required('mail_change', User.supported())
+@feature_required('mail_change', current_user_supported)
 def usersuite_change_mail():
     """Changes the users forwarding mail attribute
     in his LDAP entry.
@@ -192,7 +192,7 @@ def usersuite_change_mail():
 
 @bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
 @login_required
-@feature_required('mail_change', User.supported())
+@feature_required('mail_change', current_user_supported)
 def usersuite_delete_mail():
     """Resets the users forwarding mail attribute
     in his LDAP entry.
@@ -223,7 +223,7 @@ def usersuite_delete_mail():
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
 @login_required
-@feature_required('mac_change', User.supported())
+@feature_required('mac_change', current_user_supported)
 def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
@@ -235,12 +235,7 @@ def usersuite_change_mac():
         mac = form.mac.data
 
         try:
-            # TODO do as told by Sebastian:
-            # sowas ist hässlich
-            # login_manager.anonymous_user auf eine Klasse setzen, die alle relevanten Sachen implementiert
-            # AnonymousUserMixin erben
-            if isinstance(current_user, User):
-                current_user.re_authenticate(password)
+            current_user.re_authenticate(password)
 
         except PasswordInvalid:
             flash(gettext(u"Passwort war inkorrekt!"), "error")
@@ -277,7 +272,7 @@ def usersuite_change_mac():
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
 @bp_usersuite.route("/hosting/<string:action>", methods=['GET', 'POST'])
 @login_required
-@feature_required('userdb_change', User.supported())
+@feature_required('userdb_change', current_user_supported)
 def usersuite_hosting(action=None):
     """Change various settings for Helios.
     """

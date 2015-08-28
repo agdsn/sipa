@@ -12,7 +12,9 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from model import User
+from model import division_from_name, user_from_ip
+from model.default import BaseUser
+
 from sipa import logger, http_logger, app
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils import current_user_name
@@ -103,8 +105,10 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
+        division_name = form.division.data
         username = form.username.data
         password = form.password.data
+        User = division_from_name(division_name).user_class
 
         try:
             user = User.authenticate(username, password)
@@ -112,6 +116,8 @@ def login():
             flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
+                session['division'] = division_name
+                # TODO: enable User remembering
                 login_user(user)
                 logger.info('Authentication successful')
                 flash(gettext(u"Anmeldung erfolgreich!"), "success")
@@ -136,9 +142,9 @@ def logout():
 def usertraffic():
     """For anonymous users with a valid IP
     """
-    ip_user = User.from_ip(request.remote_addr)
+    ip_user = user_from_ip(request.remote_addr)
 
-    if isinstance(ip_user, User):
+    if isinstance(ip_user, BaseUser):
         if current_user.is_authenticated():
             if current_user != ip_user:
                 flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"

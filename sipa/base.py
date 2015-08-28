@@ -6,10 +6,10 @@ from __future__ import absolute_import
 from babel import Locale
 from flask import request, session
 from flask.ext.babel import get_locale
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, AnonymousUserMixin
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
-from model import User, init_context
+from model import registered_divisions, init_context, division_from_name
 from model.constants import ACTIONS, STATUS_COLORS
 from sipa import logger
 from sipa.babel import babel, possible_locales
@@ -89,7 +89,11 @@ def init_app(app):
 def load_user(username):
     """Loads a User object from/into the session at every request
     """
-    return User.get(username)
+    division_name = session.get('division', None)
+    if division_name:
+        return division_from_name(division_name).user_class.get(username)
+    else:
+        return AnonymousUserMixin
 
 
 def babel_selector():
