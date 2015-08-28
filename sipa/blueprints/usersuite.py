@@ -61,16 +61,19 @@ def usersuite():
             ordered_user_info[key]['description'] = descriptions[key]
 
     # set {mail,mac,userdb}_{change,delete} urls
-    ordered_user_info['mail']['action_links'] = {
-        ACTIONS.EDIT: url_for('.usersuite_change_mail'),
-        ACTIONS.DELETE: url_for('.usersuite_delete_mail')
-    }
-    ordered_user_info['mac']['action_links'] = {
-        ACTIONS.EDIT: url_for('.usersuite_change_mac')
-    }
-    ordered_user_info['userdb']['action_links'] = {
-        ACTIONS.EDIT: url_for('.usersuite_hosting')
-    }
+    if 'mail_change' in current_user.supported():
+        ordered_user_info['mail']['action_links'] = {
+            ACTIONS.EDIT: url_for('.usersuite_change_mail'),
+            ACTIONS.DELETE: url_for('.usersuite_delete_mail')
+        }
+    if 'mac_change' in current_user.supported():
+        ordered_user_info['mac']['action_links'] = {
+            ACTIONS.EDIT: url_for('.usersuite_change_mac')
+        }
+    if 'userdb_change' in current_user.supported():
+        ordered_user_info['userdb']['action_links'] = {
+            ACTIONS.EDIT: url_for('.usersuite_hosting')
+        }
 
     return render_template("usersuite/index.html",
                            userinfo=ordered_user_info,
