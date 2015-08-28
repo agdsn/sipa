@@ -8,13 +8,25 @@
 
 """
 
+import argparse
 from sipa import app, logger
 from sipa.base import init_app
 
 
 init_app(app)
-logger.info('Starting sipa...')
-logger.warning('Running in Debug mode')
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    parser = argparse.ArgumentParser(description="Sipa launcher")
+    parser.add_argument("--debug", action="store_true",
+                        help="run Sipa in debug mode")
+    parser.add_argument("--exposed", action="store_const", const='0.0.0.0',
+                        dest='host', help="expose Sipa on the network")
+    parser.add_argument("-p", "--port", action="store",
+                        help="tcp port to use", type=int, default=5000)
+    args = parser.parse_args()
+
+    logger.info('Starting sipa...')
+    if args.debug:
+        logger.warning('Running in Debug mode')
+
+    app.run(debug=args.debug, host=args.host, port=args.port)
