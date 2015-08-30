@@ -108,6 +108,7 @@ def login():
         division_name = form.division.data
         username = form.username.data
         password = form.password.data
+        remember = form.remember.data
         User = division_from_name(division_name).user_class
 
         try:
@@ -117,8 +118,7 @@ def login():
         else:
             if isinstance(user, User):
                 session['division'] = division_name
-                # TODO: enable User remembering
-                login_user(user)
+                login_user(user, remember=remember)
                 logger.info('Authentication successful')
                 flash(gettext(u"Anmeldung erfolgreich!"), "success")
     elif form.is_submitted():

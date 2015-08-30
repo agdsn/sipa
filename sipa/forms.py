@@ -8,7 +8,7 @@ from flask_wtf import Form
 from werkzeug.local import LocalProxy
 
 from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
-    HiddenField
+    HiddenField, BooleanField
 from wtforms.validators import Required, Email, MacAddress, ValidationError
 
 from model import registered_divisions
@@ -85,7 +85,6 @@ class LoginForm(Form):
             if not division.debug_only or current_app.debug
         ]
     ))
-
     username = TextField(
         label=lazy_gettext(u"Nutzername"),
         validators=[Required(gettext(u"Nutzername muss angegeben werden!"))]
@@ -94,6 +93,7 @@ class LoginForm(Form):
         label=lazy_gettext(u"Passwort"),
         validators=[Required(gettext(u"Kein Passwort eingegeben!"))]
     )
+    remember = BooleanField(default=lazy_gettext(u"Anmeldung merken"))
 
 
 class HostingForm(Form):
