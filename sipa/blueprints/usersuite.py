@@ -266,7 +266,7 @@ def usersuite_change_mac():
 
     old_mac = userinfo['mac']
     return render_template('usersuite/change_mac.html',
-                           form=form, old_mac=old_mac)
+                           form=form, old_mac=old_mac['value'])
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
