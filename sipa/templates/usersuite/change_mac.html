@@ -1,30 +1,16 @@
 {% extends "base.html" %}#
+{% import "macros/forms.html" as forms %}
 {% set page_title = _("MAC-Adresse ändern") %}
 
 {% block content %}
-    <div id="change-mac-form">
-        <form action="" method="post" class="form">
-            {{ form.csrf_token }}
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    <label>{{ _('Dein aktuelles Passwort') }}</label>
-                    {{ form.password(class="form-control") }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    <label>{{ _('Die neue MAC-Adresse') }}</label>
-                    {{ form.mac(class="form-control", value=old_mac) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    {{ _('Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt.') }}
-                    {{ _('Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben.') }}
-                    {{ _('Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!') }}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-default">{{ _('Abschicken') }}</button>
-        </form>
-    </div>
+{% call forms.render(form=form, form_id="change-mac-form", cancel_to=url_for('.usersuite')) -%}
+        <div class="col-sm-offset-2 col-sm-10 alert alert-info">
+            {{ _('Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt.') }}
+        </div>
+        <div class="col-sm-offset-2 col-sm-10 alert alert-warning">
+            {{ _('Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben.') }}
+            {{ _('Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!') }}
+        </div>
+    {%-endcall %}
+
 {% endblock %}

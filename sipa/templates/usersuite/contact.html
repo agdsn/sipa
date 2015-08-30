@@ -1,45 +1,12 @@
 {% extends "base.html" %}#
+{% import "macros/forms.html" as forms %}
 {% set page_title = _("Nachricht an die Sektionsadmins") %}
 
 {% block content %}
-    <div id="contact-form">
-        <form action="" method="post" id="usersuite-contact-form" class="form">
-            {{ form.csrf_token }}
-            <div class="row">
-                <div class="col-md-7 form-group">
-                    <label>{{ _('Deine E-Mail-Adresse') }}</label>
-                    {% if current_user.mail %}
-                        {{ form.email(class="form-control", value=current_user.mail) }}
-                    {% else %}
-                        {{ form.email(class="form-control", value=current_user.uid+"@wh2.tu-dresden.de") }}
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7 form-group">
-                    <label>{{ _('Kategorie') }}</label>
-                    {{ _(form.type(class="form-control")) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7 form-group">
-                    <label>{{ _('Betreff deiner Nachricht') }}</label>
-                    {{ form.subject(class="form-control") }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7 form-group">
-                    <label>{{ _('Deine Nachricht an uns') }}</label>
-                    {{ form.message(class="form-control", rows=5) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7">
-                    {{ _('Hinweis: Dein Username wird an die Nachricht angehängt.') }}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-default">{{ _('Abschicken') }}</button>
-            <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
-        </form>
-    </div>
+{% call forms.render(form=form, form_id="contact-form",
+                     reset_button=True, cancel_to=url_for('.usersuite')) -%}
+        <div class="col-sm-offset-2 col-sm-10 alert alert-info">
+            {{ _('Hinweis: Dein Username wird an die Nachricht angehängt.') }}
+        </div>
+    {%- endcall %}
 {% endblock %}

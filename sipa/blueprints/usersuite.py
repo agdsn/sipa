@@ -115,6 +115,15 @@ def usersuite_contact():
     elif form.is_submitted():
         flash_formerrors(form)
 
+    if current_user.mail:
+        form.email.default = current_user.mail
+    else:
+        # TODO: get something returning the current division
+        # TODO: register sth like a mail suffix for each division
+        # form.email.default = "{}@{}".format(current_user.uid,
+        #                                     session['division'].mail_prefix)
+        pass
+
     return render_template("usersuite/contact.html", form=form)
 
 
@@ -264,9 +273,9 @@ def usersuite_change_mac():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    old_mac = userinfo['mac']
-    return render_template('usersuite/change_mac.html',
-                           form=form, old_mac=old_mac)
+    form.mac.default = userinfo['mac']['value']
+
+    return render_template('usersuite/change_mac.html', form=form)
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])

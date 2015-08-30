@@ -8,41 +8,44 @@ from flask_wtf import Form
 from werkzeug.local import LocalProxy
 
 from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
-    HiddenField
+    HiddenField, BooleanField
 from wtforms.validators import Required, Email, MacAddress, ValidationError
 
 from model import registered_divisions
 
 
 class ContactForm(Form):
-    email = TextField(u"E-Mail", validators=[
+    email = TextField(label=lazy_gettext(u"Deine E-Mail-Adresse"), validators=[
         Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
-    subject = TextField(u"Betreff", validators=[
-        Required(gettext(u"Betreff muss angegeben werden!"))])
-    type = SelectField(u"Kategorie", choices=[
+    type = SelectField(label=lazy_gettext(u"Kategorie"), choices=[
         (u"frage", lazy_gettext(u"Allgemeine Frage an die Administratoren")),
         (u"stoerung",
          lazy_gettext(u"Störungen im Netzwerk Wundtstraße/Zellescher Weg")),
         (u"finanzen", lazy_gettext(u"Finanzfragen (Beiträge, Gebühren)")),
         (u"eigene-technik", lazy_gettext(u"Probleme mit privater Technik"))
     ])
-    message = TextAreaField(u"Nachricht",
-                            validators=[Required(gettext(u"Nachricht fehlt!"))])
+    subject = TextField(label=lazy_gettext(u"Betreff"), validators=[
+        Required(gettext(u"Betreff muss angegeben werden!"))])
+    message = TextAreaField(label=lazy_gettext(u"Nachricht"), validators=[
+        Required(gettext(u"Nachricht fehlt!"))
+    ])
 
 
 class ChangePasswordForm(Form):
-    old = PasswordField(validators=[
+    old = PasswordField(label=lazy_gettext(u"Altes Passwort"), validators=[
         Required(gettext(u"Altes Passwort muss angegeben werden!"))])
-    new = PasswordField(
-        validators=[Required(gettext(u"Neues Passwort fehlt!"))])
-    new2 = PasswordField(validators=[
+    new = PasswordField(label=lazy_gettext(u"Neues Passwort"), validators=[
+        Required(gettext(u"Neues Passwort fehlt!"))])
+    new2 = PasswordField(label=lazy_gettext(u"Bestätigung"), validators=[
         Required(gettext(u"Bestätigung des neuen Passworts fehlt!"))])
 
 
 class ChangeMailForm(Form):
     password = PasswordField(
+        label=lazy_gettext(u"Passwort"),
         validators=[Required(gettext(u"Passwort nicht angegeben!"))])
     email = TextField(
+        label=lazy_gettext(u"Neue Mail"),
         validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
 
 
@@ -63,23 +66,31 @@ def require_unicast_mac(form, field):
 
 class ChangeMACForm(Form):
     password = PasswordField(
+        label=lazy_gettext(u"Passwort"),
         validators=[Required(gettext(u"Passwort nicht angegeben!"))])
-    mac = TextField(validators=[Required(u"MAC-Adresse nicht angegeben!"),
-                                MacAddress(
-                                    u"MAC ist nicht in gültigem Format!"),
-                                require_unicast_mac])
+    mac = TextField(
+        label=lazy_gettext(u"Neue MAC"),
+        validators=[Required(u"MAC-Adresse nicht angegeben!"),
+                    MacAddress(u"MAC ist nicht in gültigem Format!"),
+                    require_unicast_mac])
 
 
 class LoginForm(Form):
-    division = LocalProxy(lambda: SelectField(u"Sektion", choices=[
-        (division.name, division.display_name)
-        for division in registered_divisions
-        if not division.debug_only or current_app.debug
-    ]))
-    username = TextField(u"Username", validators=[
-        Required(gettext(u"Nutzername muss angegeben werden!"))])
-    password = PasswordField(u"Password", validators=[
-        Required(gettext(u"Kein Passwort eingegeben!"))])
+    division = SelectField(lazy_gettext(u"Sektion"), choices=LocalProxy(
+        # TODO: sort by ip
+        lambda: [(division.name, division.display_name)
+                 for division in registered_divisions
+                 if not division.debug_only or current_app.debug]
+    ))
+    username = TextField(
+        label=lazy_gettext(u"Nutzername"),
+        validators=[Required(gettext(u"Nutzername muss angegeben werden!"))]
+    )
+    password = PasswordField(
+        label=lazy_gettext(u"Passwort"),
+        validators=[Required(gettext(u"Kein Passwort eingegeben!"))]
+    )
+    remember = BooleanField(default=lazy_gettext(u"Anmeldung merken"))
 
 
 class HostingForm(Form):

@@ -1,30 +1,7 @@
 {% extends "base.html" %}#
+{% import "macros/forms.html" as forms %}
 {% set page_title = "Login" %}
 
 {% block content %}
-    <div id="login-form">
-        <form action="{{ url_for('generic.login') }}" method="POST" class="form">
-            {{ form.csrf_token }}
-            <div class="row">
-                <div class="col-md-3 form-group">
-                    <label>{{ _('Sektion') }}</label>
-                    {{ form.division(class="form-control") }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3 form-group">
-                    <label>{{ _('Benutzername') }}</label>
-                    {{ form.username(class="form-control") }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 form-group">
-                    <label>{{ _('Passwort') }}</label>
-                    {{ form.password(class="form-control") }}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-default">{{ _('Einloggen') }}</button>
-        </form>
-    </div>
+    {{ forms.render_simple(form=form, form_id="test", cancel_to=url_for('.index')) }}
 {% endblock %}

@@ -1,0 +1,47 @@
+{% macro render_field(field) -%}
+    {% if field.default %}{% set default = field.default %}{% endif %}
+    {% if field.description %}{% set description = field.description %}{% endif %}
+    {{ field(class="form-control", value=default, placeholder=description ) }}
+{%- endmacro %}
+
+{% macro render(form, form_id, reset_button=False, cancel_to=None) -%}
+    <div id="{{ form_id }}" class="container col-sm-10">
+        <form action="" method="post" class="form form-horizontal">
+            {{ form.csrf_token }}
+            {% for field in form -%}{% if field and field.id != 'csrf_token' %}
+                <div class="form-group">
+                    {% if field.type == "BooleanField" %}
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> {{ field.default }}
+                            </label></div>
+                        </div>
+                    {% else %}
+                        <label class="col-sm-2 control-label">{{ field.label() }}</label>
+                        <div class="col-sm-10">{{ render_field(field) }}</div>
+                    {% endif %}
+                </div>
+            {% endif %}{%- endfor %}
+
+            {# Here can things like notes or alerts be placed #}
+            {{ caller() }}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">{{ _('Abschicken') }}</button>
+                    {% if reset_button -%}
+                        <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
+                    {%- endif %}
+                    {% if cancel_to -%}
+                        <a href="{{ cancel_to }}" class="btn btn-default">{{ _("Abbrechen") }}</a>
+                    {%- endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+{%- endmacro %}
+
+{% macro render_simple() -%}
+    {% call render(**kwargs) %}{% endcall %}
+{%- endmacro %}
