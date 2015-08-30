@@ -34,6 +34,5 @@
 {%- endmacro %}
 
 {% macro render_simple() -%}
-{#    {% call render(form, form_id, reset_button=False) %}{% endcall %}#}
     {% call render(**kwargs) %}{% endcall %}
-{% endmacro %}
+{%- endmacro %}
