@@ -1,23 +1,7 @@
 {% extends "base.html" %}#
+{% import "macros/forms.html" as forms %}
 {% set page_title = _("E-Mail ändern") %}
 
 {% block content %}
-    <div id="change-mail-form">
-        <form action="" method="post" class="form">
-            {{ form.csrf_token }}
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    <label>{{ _('Dein aktuelles Passwort') }}</label>
-                    {{ form.password(class="form-control") }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    <label>{{ _('Die neue E-Mail-Adresse') }}</label>
-                    {{ form.email(class="form-control") }}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-default">{{ _('Abschicken') }}</button>
-        </form>
-    </div>
+    {{ forms.render_simple(form=form, form_id="change-mail-form") }}
 {% endblock %}
