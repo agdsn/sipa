@@ -5,20 +5,15 @@ from sqlalchemy.exc import OperationalError
 
 from model.constants import info_property, STATUS_COLORS, ACTIONS
 from model.default import BaseUser
-from model.wu.database_utils import init_db, ip_from_user_id, sql_query, \
+from model.wu.database_utils import ip_from_user_id, sql_query, \
     update_macaddress, query_trafficdata, \
     query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db, \
     calculate_userid_checksum, DORMITORIES, status_string_from_id
-from model.wu.ldap_utils import init_ldap, search_in_group, LdapConnector, \
+from model.wu.ldap_utils import search_in_group, LdapConnector, \
     get_dn, change_email
 from sipa import logger
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
-
-
-def init_context(app):
-    init_db(app)
-    init_ldap(app)
 
 
 class User(BaseUser):

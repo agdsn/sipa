@@ -18,7 +18,7 @@ from .ldap_utils import get_current_uid
 
 
 def init_db(app):
-    app.extensions['db_atlantis'] = create_engine(
+    app.extensions['db_hss'] = create_engine(
         'mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
             app.config['DB_ATLANTIS_USER'],
             app.config['DB_ATLANTIS_PASSWORD'],
@@ -27,14 +27,12 @@ def init_db(app):
     )
 
 
+db_hss = LocalProxy(lambda: current_app.extensions['db_hss'])
 
-db_atlantis = LocalProxy(lambda: current_app.extensions['db_atlantis'])
-
-
-DORMITORIES = dict(HSS46= u'Hochschulstr. 46', HSS48= u'Hochschulstr. 48')
+DORMITORIES = dict(HSS46=u'Hochschulstr. 46', HSS48=u'Hochschulstr. 48')
 
 
-def sql_query(query, args=(), database=db_atlantis):
+def sql_query(query, args=(), database=db_hss):
     """Prepare and execute a raw sql query.
     'args' is a tuple needed for string replacement.
     """
@@ -45,16 +43,17 @@ def sql_query(query, args=(), database=db_atlantis):
 
 
 def status_string_from_flags(disabled, category, description, disable_date):
-    if disabled == False:
+    if not disabled:
         return gettext(u'Bezahlt, verbunden')
-    else: # todo Ares fragen welche Werte category haben kann, vergleichen mit NAT aus ABE:disable
+    else:
+        # todo Ares fragen welche Werte category haben kann,
+        # vergleichen mit NAT aus ABE:disable
         if category == u'f':
             return gettext(u'Nicht bezahlt, Netzanschluss gesperrt') + u': ' + description
         elif category == u's':
             return gettext(u'Verstoß gegen Netzordnung, Netzanschluss gesperrt') + u': ' + description
         else:
             return description
-
 
 
 def user_id_from_uid(uid=None):

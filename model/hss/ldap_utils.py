@@ -11,14 +11,14 @@ from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
 
 
 def init_ldap(app):
-    app.extensions['ldap'] = {
+    app.extensions['hss_ldap'] = {
         'host': app.config['LDAP_HOST'],
         'port': app.config['LDAP_PORT'],
         'search_base': app.config['LDAP_SEARCH_BASE']
     }
 
 
-CONF = LocalProxy(lambda: current_app.extensions['ldap'])
+CONF = LocalProxy(lambda: current_app.extensions['hss_ldap'])
 
 
 class LdapConnector(object):
