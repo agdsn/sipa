@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-30 04:11+0200\n"
-"PO-Revision-Date: 2015-08-30 04:11+0200\n"
+"POT-Creation-Date: 2015-08-30 17:16+0200\n"
+"PO-Revision-Date: 2015-08-30 17:17+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.0\n"
 "Language: en\n"
 "X-Generator: Poedit 1.8.4\n"
 
@@ -103,73 +103,113 @@ msgstr "Not activated"
 msgid "Datenbank nicht erreichbar"
 msgstr "Database cannot be reached"
 
-#: sipa/forms.py:21 sipa/forms.py:48
+#: sipa/forms.py:18
+msgid "Deine E-Mail-Adresse"
+msgstr "Your e-mail address"
+
+#: sipa/forms.py:19 sipa/forms.py:49
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr "E-Mail is invalid!"
 
-#: sipa/forms.py:23
+#: sipa/forms.py:20
+msgid "Betreff"
+msgstr "Subject"
+
+#: sipa/forms.py:21
 msgid "Betreff muss angegeben werden!"
 msgstr "Subject is missing!"
 
-#: sipa/forms.py:25
+#: sipa/forms.py:22
+msgid "Kategorie"
+msgstr "Category"
+
+#: sipa/forms.py:23
 msgid "Allgemeine Frage an die Administratoren"
 msgstr "General question for the administrators"
 
-#: sipa/forms.py:27
+#: sipa/forms.py:25
 msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
 msgstr "Disorders in the Wundtstraße/Zellescher Weg network"
 
-#: sipa/forms.py:28
+#: sipa/forms.py:26
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr "Financial concerns (contributions, fees)"
 
-#: sipa/forms.py:29
+#: sipa/forms.py:27
 msgid "Probleme mit privater Technik"
 msgstr "Problems with private technology"
 
-#: sipa/forms.py:32
+#: sipa/forms.py:29
+msgid "Nachricht"
+msgstr "Message"
+
+#: sipa/forms.py:30
 msgid "Nachricht fehlt!"
 msgstr "Message is missing!"
 
-#: sipa/forms.py:37
+#: sipa/forms.py:35
+msgid "Altes Passwort"
+msgstr "Old password"
+
+#: sipa/forms.py:36
 msgid "Altes Passwort muss angegeben werden!"
 msgstr "Old password has to be submitted!"
 
-#: sipa/forms.py:39
+#: sipa/forms.py:37
+msgid "Neues Passwort"
+msgstr "New password"
+
+#: sipa/forms.py:38
 msgid "Neues Passwort fehlt!"
 msgstr "New password is missing!"
 
-#: sipa/forms.py:41 sipa/forms.py:94
+#: sipa/forms.py:39
+msgid "Bestätigung"
+msgstr "Confirmation"
+
+#: sipa/forms.py:40 sipa/forms.py:103
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: sipa/forms.py:46 sipa/forms.py:53 sipa/forms.py:68
-msgid "Passwort nicht angegeben!"
-msgstr "No password submitted!"
-
-#: sipa/forms.py:63
-msgid "MAC muss unicast-Adresse sein!"
-msgstr "MAC has to be a unicast adress!"
-
-#: sipa/forms.py:77
-msgid "Sektion"
-msgstr "Division"
-
-#: sipa/forms.py:84
-msgid "Nutzername"
-msgstr "Username"
-
-#: sipa/forms.py:85
-msgid "Nutzername muss angegeben werden!"
-msgstr "No username submitted!"
-
-#: sipa/forms.py:86
+#: sipa/forms.py:45 sipa/forms.py:69 sipa/forms.py:93
 msgid "Passwort"
 msgstr "Password"
 
-#: sipa/forms.py:87 sipa/forms.py:92
+#: sipa/forms.py:46 sipa/forms.py:54 sipa/forms.py:70
+msgid "Passwort nicht angegeben!"
+msgstr "No password submitted!"
+
+#: sipa/forms.py:48
+msgid "Neue Mail"
+msgstr "New mail"
+
+#: sipa/forms.py:64
+msgid "MAC muss unicast-Adresse sein!"
+msgstr "MAC has to be a unicast adress!"
+
+#: sipa/forms.py:72
+msgid "Neue MAC"
+msgstr "New mac"
+
+#: sipa/forms.py:80
+msgid "Sektion"
+msgstr "Division"
+
+#: sipa/forms.py:89
+msgid "Nutzername"
+msgstr "Username"
+
+#: sipa/forms.py:90
+msgid "Nutzername muss angegeben werden!"
+msgstr "No username submitted!"
+
+#: sipa/forms.py:94 sipa/forms.py:101
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
+
+#: sipa/forms.py:96
+msgid "Anmeldung merken"
+msgstr "Remember me"
 
 #: sipa/blueprints/generic.py:42
 msgid "Seite nicht gefunden!"
@@ -191,7 +231,7 @@ msgstr "Connection to SQL server could not be established!"
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr "Connection to LDAP server could not be established!"
 
-#: sipa/blueprints/generic.py:116
+#: sipa/blueprints/generic.py:117
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
@@ -200,7 +240,8 @@ msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
 #: sipa/blueprints/generic.py:150
-msgid "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
+msgid ""
+"Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
 #: sipa/blueprints/generic.py:152
@@ -212,11 +253,15 @@ msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
 #: sipa/blueprints/generic.py:161
-msgid "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite einsehen."
-msgstr "Because you are logged in, you can view your traffic here in the usersuite."
+msgid ""
+"Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
+"einsehen."
+msgstr ""
+"Because you are logged in, you can view your traffic here in the usersuite."
 
 #: sipa/blueprints/generic.py:165
-msgid "Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
+msgid ""
+"Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
 msgstr "To view your traffic from outside the network, you have to log in."
 
 #: sipa/blueprints/usersuite.py:37
@@ -267,52 +312,56 @@ msgstr "MySQL database"
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/usersuite.py:110 sipa/blueprints/usersuite.py:260
-msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"
-msgstr "There was an error sending your message. Please contact us at support@wh2.tu-dresden.de"
+#: sipa/blueprints/usersuite.py:110 sipa/blueprints/usersuite.py:269
+msgid ""
+"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
+"eine E-Mail an support@wh2.tu-dresden.de"
+msgstr ""
+"There was an error sending your message. Please contact us at support@wh2.tu-"
+"dresden.de"
 
-#: sipa/blueprints/usersuite.py:144 sipa/blueprints/usersuite.py:288
+#: sipa/blueprints/usersuite.py:153 sipa/blueprints/usersuite.py:297
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: sipa/blueprints/usersuite.py:150
+#: sipa/blueprints/usersuite.py:159
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: sipa/blueprints/usersuite.py:152
+#: sipa/blueprints/usersuite.py:161
 msgid "Passwort wurde geändert"
 msgstr "Password has been changed"
 
-#: sipa/blueprints/usersuite.py:179 sipa/blueprints/usersuite.py:210
+#: sipa/blueprints/usersuite.py:188 sipa/blueprints/usersuite.py:219
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:212
-#: sipa/blueprints/usersuite.py:241
+#: sipa/blueprints/usersuite.py:190 sipa/blueprints/usersuite.py:221
+#: sipa/blueprints/usersuite.py:250
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:214
+#: sipa/blueprints/usersuite.py:192 sipa/blueprints/usersuite.py:223
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: sipa/blueprints/usersuite.py:185
+#: sipa/blueprints/usersuite.py:194
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"
 
-#: sipa/blueprints/usersuite.py:216
+#: sipa/blueprints/usersuite.py:225
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr "Email address has been reset"
 
-#: sipa/blueprints/usersuite.py:257
+#: sipa/blueprints/usersuite.py:266
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-#: sipa/blueprints/usersuite.py:281
+#: sipa/blueprints/usersuite.py:290
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
-#: sipa/blueprints/usersuite.py:292
+#: sipa/blueprints/usersuite.py:301
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
@@ -404,10 +453,6 @@ msgstr "Older"
 msgid "Keine älteren Beiträge"
 msgstr "No older entries"
 
-#: sipa/templates/login.html:27
-msgid "Einloggen"
-msgstr "Log in"
-
 #: sipa/templates/template.html:7
 msgid "Geschrieben von"
 msgstr "Written by"
@@ -427,6 +472,18 @@ msgstr "Weekday"
 #: sipa/templates/drafts/_traffic_overview.html:20
 msgid "Verbleibender Credit"
 msgstr "Remaining Credit"
+
+#: sipa/templates/macros/forms.html:32 sipa/templates/usersuite/hosting.html:37
+msgid "Abschicken"
+msgstr "Send"
+
+#: sipa/templates/macros/forms.html:34 sipa/templates/usersuite/hosting.html:38
+msgid "Zurücksetzen"
+msgstr "Reset"
+
+#: sipa/templates/macros/forms.html:37
+msgid "Abbrechen"
+msgstr "Abort"
 
 #: sipa/templates/usersuite/_index_status.html:1
 msgid "Statusinformationen"
@@ -450,93 +507,47 @@ msgstr "Contact form"
 msgid "Nicht angegeben"
 msgstr "Not submitted"
 
-#: sipa/templates/usersuite/change_mac.html:2
+#: sipa/templates/usersuite/change_mac.html:3
 msgid "MAC-Adresse ändern"
 msgstr "Change MAC address"
 
-#: sipa/templates/usersuite/change_mac.html:10
-#: sipa/templates/usersuite/change_mail.html:10
-#: sipa/templates/usersuite/delete_mail.html:10
-msgid "Dein aktuelles Passwort"
-msgstr "Your current password"
-
-#: sipa/templates/usersuite/change_mac.html:16
-msgid "Die neue MAC-Adresse"
-msgstr "Your new MAC address"
-
-#: sipa/templates/usersuite/change_mac.html:22
-msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
+#: sipa/templates/usersuite/change_mac.html:8
+msgid ""
+"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
+"Benachrichtigungsmail an uns gesandt."
 msgstr "Note: we will be notified about any change of your MAC address."
 
-#: sipa/templates/usersuite/change_mac.html:23
-msgid "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben."
-msgstr "Please be aware that every user needs his own account. It is not permitted to share an account!"
+#: sipa/templates/usersuite/change_mac.html:11
+msgid ""
+"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es "
+"ist nicht zulässig, den eigenen Account weiterzugeben."
+msgstr ""
+"Please be aware that every user needs his own account. It is not permitted "
+"to share an account!"
 
-#: sipa/templates/usersuite/change_mac.html:24
-msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
-msgstr "If you share your account with someone else (share login, enter someone else's MAC address) you are still liable for all activities of this account!"
+#: sipa/templates/usersuite/change_mac.html:12
+msgid ""
+"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-"
+"Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle "
+"Aktivitäten des Accounts!"
+msgstr ""
+"If you share your account with someone else (share login, enter someone "
+"else's MAC address) you are still liable for all activities of this account!"
 
-#: sipa/templates/usersuite/change_mac.html:27
-#: sipa/templates/usersuite/change_mail.html:20
-#: sipa/templates/usersuite/change_password.html:26
-#: sipa/templates/usersuite/contact.html:41
-#: sipa/templates/usersuite/delete_mail.html:14
-#: sipa/templates/usersuite/hosting.html:37
-msgid "Abschicken"
-msgstr "Send"
-
-#: sipa/templates/usersuite/change_mail.html:2
-#: sipa/templates/usersuite/delete_mail.html:2
+#: sipa/templates/usersuite/change_mail.html:3
+#: sipa/templates/usersuite/delete_mail.html:3
 msgid "E-Mail ändern"
 msgstr "Change email address"
 
-#: sipa/templates/usersuite/change_mail.html:16
-msgid "Die neue E-Mail-Adresse"
-msgstr "Your new e-mail address"
-
-#: sipa/templates/usersuite/change_password.html:2
+#: sipa/templates/usersuite/change_password.html:3
 msgid "Password ändern"
 msgstr "Change password"
 
-#: sipa/templates/usersuite/change_password.html:10
-msgid "Dein altes Passwort"
-msgstr "Your old password"
-
-#: sipa/templates/usersuite/change_password.html:16
-msgid "Dein neues Passwort"
-msgstr "Your new password"
-
-#: sipa/templates/usersuite/change_password.html:22
-msgid "Bestätigung des neuen Passworts"
-msgstr "Verification of your new password"
-
-#: sipa/templates/usersuite/change_password.html:27
-#: sipa/templates/usersuite/contact.html:42
-#: sipa/templates/usersuite/hosting.html:38
-msgid "Zurücksetzen"
-msgstr "Reset"
-
-#: sipa/templates/usersuite/contact.html:2
+#: sipa/templates/usersuite/contact.html:3
 msgid "Nachricht an die Sektionsadmins"
 msgstr "Message to the admins"
 
-#: sipa/templates/usersuite/contact.html:10
-msgid "Deine E-Mail-Adresse"
-msgstr "Your e-mail address"
-
-#: sipa/templates/usersuite/contact.html:20
-msgid "Kategorie"
-msgstr "Category"
-
-#: sipa/templates/usersuite/contact.html:26
-msgid "Betreff deiner Nachricht"
-msgstr "Subject of your message"
-
-#: sipa/templates/usersuite/contact.html:32
-msgid "Deine Nachricht an uns"
-msgstr "Your message"
-
-#: sipa/templates/usersuite/contact.html:38
+#: sipa/templates/usersuite/contact.html:9
 msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
 msgstr "Note: Your username will be appended to your message."
 
@@ -549,7 +560,9 @@ msgid "Jawohl!"
 msgstr "Yes sir!"
 
 #: sipa/templates/usersuite/hosting.html:12
-msgid "Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du hier."
+msgid ""
+"Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum "
+"Webhosting findest du hier."
 msgstr "You can create a MySQL database on our servers. More information here."
 
 #: sipa/templates/usersuite/hosting.html:18
@@ -599,21 +612,3 @@ msgstr "Output"
 #: sipa/utils/graph_utils.py:35
 msgid "Gesamt"
 msgstr "Sums"
-
-#~ msgid "Menütitel"
-#~ msgstr "Menu title"
-
-#~ msgid "Aktuelle MAC-Adresse"
-#~ msgstr "Current MAC address"
-
-#~ msgid "Nicht eingerichtet"
-#~ msgstr "Not set up"
-
-#~ msgid "Eingerichtet"
-#~ msgstr "Set up"
-
-#~ msgid "Password"
-#~ msgstr "Password"
-
-#~ msgid "Anmeldung merken"
-#~ msgstr "Remember me"
