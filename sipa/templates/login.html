@@ -7,20 +7,20 @@
             {{ form.csrf_token }}
             <div class="row">
                 <div class="col-md-3 form-group">
-                    <label>{{ _('Sektion') }}</label>
+                    <label>{{ form.division.label() }}</label>
                     {{ form.division(class="form-control") }}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-3 form-group">
-                    <label>{{ _('Benutzername') }}</label>
+                    <label>{{ form.username.label() }}</label>
                     {{ form.username(class="form-control") }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3 form-group">
-                    <label>{{ _('Passwort') }}</label>
+                    <label>{{ form.password.label() }}</label>
                     {{ form.password(class="form-control") }}
                 </div>
             </div>

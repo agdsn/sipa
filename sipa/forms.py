@@ -71,14 +71,17 @@ class ChangeMACForm(Form):
 
 
 class LoginForm(Form):
-    division = LocalProxy(lambda: SelectField(u"Sektion", choices=[
-        (division.name, division.display_name)
-        for division in registered_divisions
-        if not division.debug_only or current_app.debug
-    ]))
-    username = TextField(u"Username", validators=[
+    division = LocalProxy(lambda: SelectField(
+        lazy_gettext(u"Sektion"),
+        choices=[
+            (division.name, division.display_name)
+            for division in registered_divisions
+            if not division.debug_only or current_app.debug
+        ]
+    ))
+    username = TextField(lazy_gettext(u"Nutzername"), validators=[
         Required(gettext(u"Nutzername muss angegeben werden!"))])
-    password = PasswordField(u"Password", validators=[
+    password = PasswordField(lazy_gettext(u"Passwort"), validators=[
         Required(gettext(u"Kein Passwort eingegeben!"))])
 
 
