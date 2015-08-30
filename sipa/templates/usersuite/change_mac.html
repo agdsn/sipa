@@ -3,8 +3,7 @@
 {% set page_title = _("MAC-Adresse ändern") %}
 
 {% block content %}
-{% call forms.render(form=form, form_id="change-mac-form",
-                     reset_button=True, cancel_to=url_for('.usersuite')) -%}
+{% call forms.render(form=form, form_id="change-mac-form", cancel_to=url_for('.usersuite')) -%}
         <div class="col-sm-offset-2 col-sm-10 alert alert-info">
             {{ _('Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt.') }}
         </div>
