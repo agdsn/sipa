@@ -3,7 +3,8 @@
 {% set page_title = _("Nachricht an die Sektionsadmins") %}
 
 {% block content %}
-    {% call forms.render(form=form, form_id="contact-form", reset_button=True) -%}
+{% call forms.render(form=form, form_id="contact-form",
+                     reset_button=True, cancel_to=url_for('.usersuite')) -%}
         <div class="col-sm-offset-2 col-sm-10 alert alert-info">
             {{ _('Hinweis: Dein Username wird an die Nachricht angehängt.') }}
         </div>
