@@ -17,8 +17,6 @@ from model import registered_divisions
 class ContactForm(Form):
     email = TextField(label=lazy_gettext(u"Deine E-Mail-Adresse"), validators=[
         Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
-    subject = TextField(label=lazy_gettext(u"Betreff"), validators=[
-        Required(gettext(u"Betreff muss angegeben werden!"))])
     type = SelectField(label=lazy_gettext(u"Kategorie"), choices=[
         (u"frage", lazy_gettext(u"Allgemeine Frage an die Administratoren")),
         (u"stoerung",
@@ -26,6 +24,8 @@ class ContactForm(Form):
         (u"finanzen", lazy_gettext(u"Finanzfragen (Beiträge, Gebühren)")),
         (u"eigene-technik", lazy_gettext(u"Probleme mit privater Technik"))
     ])
+    subject = TextField(label=lazy_gettext(u"Betreff"), validators=[
+        Required(gettext(u"Betreff muss angegeben werden!"))])
     message = TextAreaField(label=lazy_gettext(u"Nachricht"), validators=[
         Required(gettext(u"Nachricht fehlt!"))
     ])
@@ -76,14 +76,11 @@ class ChangeMACForm(Form):
 
 
 class LoginForm(Form):
-    division = LocalProxy(lambda: SelectField(
-        lazy_gettext(u"Sektion"),
-        choices=[
-            # TODO: Sort by ip
-            (division.name, division.display_name)
-            for division in registered_divisions
-            if not division.debug_only or current_app.debug
-        ]
+    division = SelectField(lazy_gettext(u"Sektion"), choices=LocalProxy(
+        # TODO: sort by ip
+        lambda: [(division.name, division.display_name)
+                 for division in registered_divisions
+                 if not division.debug_only or current_app.debug]
     ))
     username = TextField(
         label=lazy_gettext(u"Nutzername"),
