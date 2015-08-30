@@ -74,15 +74,23 @@ class LoginForm(Form):
     division = LocalProxy(lambda: SelectField(
         lazy_gettext(u"Sektion"),
         choices=[
+            # TODO: Sort by ip
             (division.name, division.display_name)
             for division in registered_divisions
             if not division.debug_only or current_app.debug
         ]
     ))
-    username = TextField(lazy_gettext(u"Nutzername"), validators=[
-        Required(gettext(u"Nutzername muss angegeben werden!"))])
-    password = PasswordField(lazy_gettext(u"Passwort"), validators=[
-        Required(gettext(u"Kein Passwort eingegeben!"))])
+
+    username = TextField(
+        label=lazy_gettext(u"Nutzername"),
+        description=lazy_gettext(u"Nutzername"),
+        validators=[Required(gettext(u"Nutzername muss angegeben werden!"))]
+    )
+    password = PasswordField(
+        label=lazy_gettext(u"Passwort"),
+        description=lazy_gettext(u"Passwort"),
+        validators=[Required(gettext(u"Kein Passwort eingegeben!"))]
+    )
 
 
 class HostingForm(Form):
