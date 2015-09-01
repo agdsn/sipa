@@ -3,7 +3,8 @@ from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
-from model.constants import info_property, STATUS_COLORS, ACTIONS
+from model.constants import info_property, STATUS_COLORS, ACTIONS, \
+    FULL_FEATURE_SET
 from model.default import BaseUser
 from model.wu.database_utils import ip_from_user_id, sql_query, \
     update_macaddress, query_trafficdata, \
@@ -97,6 +98,8 @@ class User(BaseUser):
             raise
         else:
             logger.info('Password successfully changed')
+
+    _supported_features = FULL_FEATURE_SET
 
     def get_information(self):
         """Executes select query for the username and returns a prepared dict.
