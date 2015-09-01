@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging.config
+import os
 import os.path
 
 from raven import setup_logging
@@ -25,6 +26,10 @@ def init_env_and_config(app):
             '../content')
     if app.config['CONTENT_URL']:
         init_repo(app.config["FLATPAGES_ROOT"], app.config['CONTENT_URL'])
+    else:
+        if not os.path.isdir(app.config['FLATPAGES_ROOT']):
+            os.mkdir(app.config['FLATPAGES_ROOT'])
+
     if os.getenv("SIPA_UWSGI", "False") == 'True':
         import uwsgi
 
