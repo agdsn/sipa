@@ -302,4 +302,4 @@ def calculate_userid_checksum(user_id):
 
     :param user_id: The id of the mysql user tuple
     """
-    return sum(map(int, user_id)) % 10
+    return sum(map(int, str(user_id))) % 10
