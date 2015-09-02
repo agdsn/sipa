@@ -8,5 +8,6 @@ division = Division(
     name='sample',
     display_name=gettext("Beispielsektion"),
     user_class=user.User,
+    init_context=user.init_context,
     debug_only=True
 )
