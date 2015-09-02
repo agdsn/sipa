@@ -15,43 +15,41 @@ network Dresden.
 Usage
 -----
 
-Currently, we do not recommend using sipa, since it is still in a very early
-stage of production. It strongly depends on our infrastructure and is designed
-for our purposes.  This will change once further stages of development have been
-reached.
-
+Please note that SIPA has been built to fit our specific purposes.  This means
+that there will be features you probably won't need, such as the traffic
+monitoring or splitting the login process into certain divisions.
 
 Running on Docker
 -----------------
 
-To create a running instance of Sipa with Docker, you have to create the *image*
-first. This is determined by the Dockerfile, which is located in the top folder
-of the repository, in this case `.`.  Therefore, you have to run `docker build
--t sipa-base .` in order to create a valid docker image; “sipa-base” is an
-arbitrary name we chose to make identification easier. Else, `docker images`
-would just print the ID of the image.  To use Sipa, you have to run a container
-based on that image. Additionally, you will want to:
-
-* mount the top directory to apply changes in that directory (crucial for
-  development)
-
-* make the according tcp port accessible for you (i.e. `:5001`)
-
-* give the container a name (i.e. `sipa`)
-
-* run the server (via `python`)
-
-This leads to the following command, replacing `<path_to_sipa>` with the current
-location of the Sipa code (an absolute path is required):
+To build the image, `cd` into your instance of sipa (which contains the
+`Dockerfile`) and run
 
 ```shell
-docker run --rm \
-    --name=sipa \
-    -p=5001:5000 \
-    -v=<path_to_sipa>:/home/sipa/sipa \
-    sipa-base \
-    python sipa.wsgi
+docker build -t sipa .
 ```
+
+Now, you have basically two possibilities to use sipa:
+
+- Using uwsgi: This is the standard option. Just run:
+
+```shell
+docker run --name sipa -d sipa
+```
+
+Note that in order to use above example, you have to use another docker
+container, i.e. an nginx instance, which is linked to the `sipa` container. If
+you don't want to do this, you have to expose port 5000 adding `-p 5000:5000` as
+a parameter.
+
+- Using http: This is an option you have to envoke manually. To use it, run
+
+```shell
+docker run --name sipa -p 5000:5000 -d sipa python sipa.py --exposed
+```
+
+If you want to use sipa for development, adding `--debug` after `sipa.py` and
+mounting your sipa folder using `-v <path>:/home/sipa/sipa` is recommended.
 
 
 Required format for the markdown files
@@ -87,7 +85,7 @@ The *navigation bar* is built by scanning every directory for `*.md`-files.
 Directories containing the latter are then expected to contain an index file for
 every language code, e.g. `index.en.md` These index files decide whether it will
 appear in the navigation bar and which title it will be displayed with.
- 
+
 The index files have to contain certain metadata in the form `property:
 value`. This metadata section is terminated by an empty line (`\n\n`)
 
@@ -97,7 +95,7 @@ value`. This metadata section is terminated by an empty line (`\n\n`)
 * To *include* a folder, set the title of the navigation bar with `name:` as
   well as its position with `rank`.  Do not forget to set `index: true`
   explicitly.
- 
+
 If the parameter `index` does not exist, the corresponding folder will not
 appear in the navigation bar, although every folder containing a markdown file
 *must* contain an `index.xx.md` file.
@@ -109,10 +107,10 @@ complete .md file can look like this:
     author: alice
     date: 2015-03-27
     glyphicon: glyphicon-user
-    
+
     ### Stuff
     #### Part 1
-    
+
     To do stuff, you have to do stuff first.
 
 Another possibility is to include hyperlinks, which only have a metadata
