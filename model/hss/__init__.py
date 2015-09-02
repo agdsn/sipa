@@ -19,5 +19,6 @@ division = Division(
     name='hss',
     display_name=gettext(u"Hochschulstraße"),
     user_class=user.User,
+    mail_server=u"wh12.tu-dresden.de",
     init_context=init_context
 )

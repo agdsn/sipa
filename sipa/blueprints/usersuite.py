@@ -8,7 +8,7 @@ from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
-from model import current_user_supported
+from model import current_user_supported, current_division
 from model.constants import unsupported_property, ACTIONS
 from sipa import logger, feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
@@ -118,11 +118,8 @@ def usersuite_contact():
     if current_user.mail:
         form.email.default = current_user.mail
     else:
-        # TODO: get something returning the current division
-        # TODO: register sth like a mail suffix for each division
-        # form.email.default = "{}@{}".format(current_user.uid,
-        #                                     session['division'].mail_prefix)
-        pass
+        form.email.default = "{}@{}".format(current_user.uid,
+                                            current_division().mail_server)
 
     return render_template("usersuite/contact.html", form=form)
 

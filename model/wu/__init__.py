@@ -16,5 +16,6 @@ division = Division(
     name='wu',
     display_name=gettext(u"Wundtstraße & Zellescher Weg"),
     user_class=user.User,
+    mail_server=u"wh2.tu-dresden.de",
     init_context=init_context
 )

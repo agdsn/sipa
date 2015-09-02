@@ -25,6 +25,10 @@ def division_from_name(name):
     return None
 
 
+def current_division():
+    return division_from_name(session['division'])
+
+
 def division_from_ip(ip):
     # TODO: return correct division based on IP (dummy method)
     return sample.division
@@ -36,9 +40,7 @@ def user_from_ip(ip):
 
 def current_user_supported():
     return LocalProxy(
-        lambda: division_from_name(
-            session['division']
-        ).user_class.supported()
+        lambda: current_division().user_class.supported()
     )
 
 
