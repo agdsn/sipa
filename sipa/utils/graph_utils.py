@@ -17,7 +17,7 @@ def generate_traffic_chart(traffic_data, inline=True):
     :return: The graph object
     """
     traffic_chart = pygal.Bar(
-        title=gettext("Traffic (MB)"),
+        title=gettext("Traffic (MiB)"),
         height=350,
         show_y_guides=True,
         human_readable=False,
