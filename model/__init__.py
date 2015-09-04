@@ -7,10 +7,10 @@ from flask.ext.login import current_user
 from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
 
-from . import sample, wu, hss
+from . import sample, wu, hss, gerok
 
 
-registered_divisions = [sample.division, wu.division, hss.division]
+registered_divisions = [sample.division, wu.division, hss.division, gerok.division]
 
 
 def init_context(app):
