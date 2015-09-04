@@ -4,12 +4,18 @@ import datetime
 from flask.ext.login import AnonymousUserMixin
 from flask.globals import current_app
 
+from werkzeug.local import LocalProxy
+
 from model.constants import FULL_FEATURE_SET, info_property, \
     STATUS_COLORS, WEEKDAYS
 from model.default import BaseUser
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 import requests
+
+
+endpoint = LocalProxy(lambda: current_app.extensions['gerok_api']['endpoint'])
+token = LocalProxy(lambda: current_app.extensions['gerok_api']['token'])
 
 
 # noinspection PyMethodMayBeStatic
@@ -146,8 +152,8 @@ class User(BaseUser):
 def do_api_call(request, method='get', postdata=None):
     """Request the NVTool-Api for informations
     """
-    requestUri = current_app.config['GEROK_ENDPOINT'] + request
-    authHeaderStr = 'Token token=' + current_app.config['GEROK_API_TOKEN']
+    requestUri = endpoint + request
+    authHeaderStr = 'Token token=' + token
 
     if (method == 'get'):
         response = requests.get(requestUri, verify=False,
