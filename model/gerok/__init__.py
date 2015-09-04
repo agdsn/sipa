@@ -7,5 +7,6 @@ import user
 division = Division(
     name='gerok',
     display_name=gettext(u"Gerokstraße"),
-    user_class=user.User
+    user_class=user.User,
+    mail_server=u"wh17.tu-dresden.de",
 )
