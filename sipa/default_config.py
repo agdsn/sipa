@@ -62,7 +62,7 @@ DB_HELIOS_PORT = int(
 DB_HELIOS_USER = os.getenv("SIPA_DB_HELIOS_USER", "")
 DB_HELIOS_PASSWORD = os.getenv("SIPA_DB_HELIOS_PASSWORD", "")
 
-SQL_TIMEOUT = int(os.getenv("SIPA_SQL_TIMEOUT", '15'))
+SQL_TIMEOUT = int(os.getenv("SIPA_SQL_TIMEOUT", '2'))
 
 GEROK_ENDPOINT = os.getenv("SIPA_GEROK_ENDPOINT", "https://127.0.0.1/")
 GEROK_API_TOKEN = os.getenv("SIPA_GEROK_API_TOKEN", "")
