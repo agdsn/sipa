@@ -162,4 +162,10 @@ def do_api_call(request, method='get', postdata=None):
         response = requests.post(requestUri, data=postdata, verify=False,
                                  headers={'Authorization': authHeaderStr})
 
-    return response.json()
+    if response.status_code != 200:
+        raise ValueError("Gerok API returned status != 200 OK")
+
+    try:
+        return response.json()
+    except ValueError:
+        return response.text
