@@ -2,6 +2,8 @@
 
 from flask.ext.babel import gettext
 from ..division import Division
+from ipaddress import IPv4Network
+
 import user
 
 
@@ -17,5 +19,8 @@ division = Division(
     display_name=gettext(u"Gerokstraße"),
     user_class=user.User,
     mail_server=u"wh17.tu-dresden.de",
+    subnets=[
+        IPv4Network(u'141.76.124.0/24'),  # Gerok38
+    ],
     init_context=init_context
 )

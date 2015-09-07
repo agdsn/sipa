@@ -2,6 +2,8 @@
 from flask import request, session, current_app
 from flask.ext.babel import gettext
 from flask.ext.login import current_user
+from ipaddress import IPv4Address
+
 from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
 
@@ -36,8 +38,10 @@ def current_division():
 
 
 def division_from_ip(ip):
-    # TODO: return correct division based on IP (dummy method)
-    return sample.division
+    for division in current_app.extensions['divisions']:
+        if IPv4Address(unicode(ip)) in division.subnets:
+            return division
+    return None
 
 
 def user_from_ip(ip):
