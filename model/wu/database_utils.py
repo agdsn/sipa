@@ -39,28 +39,28 @@ db_atlantis = LocalProxy(lambda: current_app.extensions['db_atlantis'])
 db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
 
 DORMITORIES = [
-    u'Wundstraße 5',
-    u'Wundstraße 7',
-    u'Wundstraße 9',
-    u'Wundstraße 11',
-    u'Wundstraße 1',
-    u'Wundstraße 3',
-    u'Zellescher Weg 41',
-    u'Zellescher Weg 41A',
-    u'Zellescher Weg 41B',
-    u'Zellescher Weg 41C',
-    u'Zellescher Weg 41D',
-    u'Borsbergstraße 34'
+    'Wundstraße 5',
+    'Wundstraße 7',
+    'Wundstraße 9',
+    'Wundstraße 11',
+    'Wundstraße 1',
+    'Wundstraße 3',
+    'Zellescher Weg 41',
+    'Zellescher Weg 41A',
+    'Zellescher Weg 41B',
+    'Zellescher Weg 41C',
+    'Zellescher Weg 41D',
+    'Borsbergstraße 34',
 ]
 
 STATUS = {
     # todo vervollständigen oder mindestens fehlerresistent machen!
     # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
-    1: gettext(u'Bezahlt, verbunden'),
-    2: gettext(u'Nicht bezahlt, Netzanschluss gesperrt'),
-    7: gettext(u'Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
-    9: gettext(u'Exaktiv'),
-    12: gettext(u'Trafficlimit überschritten, Netzanschluss gesperrt')
+    1: gettext('Bezahlt, verbunden'),
+    2: gettext('Nicht bezahlt, Netzanschluss gesperrt'),
+    7: gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
+    9: gettext('Exaktiv'),
+    12: gettext('Trafficlimit überschritten, Netzanschluss gesperrt')
 }
 
 
@@ -75,7 +75,7 @@ def sql_query(query, args=(), database=db_atlantis):
 
 
 def status_string_from_id(status_id):
-    return STATUS.get(status_id, gettext(u"Unbekannt"))
+    return STATUS.get(status_id, gettext("Unbekannt"))
 
 
 def user_id_from_uid(uid=None):

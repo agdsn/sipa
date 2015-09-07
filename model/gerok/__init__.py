@@ -4,7 +4,7 @@ from flask.ext.babel import gettext
 from ..datasource import DataSource, Dormitory
 from ipaddress import IPv4Network
 
-import user
+from . import user
 
 
 def init_context(app):
@@ -16,14 +16,14 @@ def init_context(app):
 
 datasource = DataSource(
     name='gerok',
-    display_name=gettext(u"Gerokstraße"),
+    display_name=gettext("Gerokstraße"),
     user_class=user.User,
-    mail_server=u"wh17.tu-dresden.de",
-    support_mail=u"gerok@wh17.tu-dresden.de",
+    mail_server="wh17.tu-dresden.de",
+    support_mail="gerok@wh17.tu-dresden.de",
     init_context=init_context
 )
 
 dormitories = [
-    Dormitory(name='gerok', display_name=u"Gerokstraße",
-              datasource=datasource, subnets=[IPv4Network(u'141.76.124.0/24')])
+    Dormitory(name='gerok', display_name="Gerokstraße",
+              datasource=datasource, subnets=[IPv4Network('141.76.124.0/24')])
 ]

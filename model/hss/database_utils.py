@@ -29,7 +29,7 @@ def init_db(app):
 
 db_hss = LocalProxy(lambda: current_app.extensions['db_hss'])
 
-DORMITORIES = dict(HSS46=u'Hochschulstr. 46', HSS48=u'Hochschulstr. 48')
+DORMITORIES = dict(HSS46='Hochschulstr. 46', HSS48='Hochschulstr. 48')
 
 
 def sql_query(query, args=(), database=db_hss):
@@ -44,14 +44,14 @@ def sql_query(query, args=(), database=db_hss):
 
 def status_string_from_flags(disabled, category, description, disable_date):
     if not disabled:
-        return gettext(u'Bezahlt, verbunden')
+        return gettext('Bezahlt, verbunden')
     else:
         # todo Ares fragen welche Werte category haben kann,
         # vergleichen mit NAT aus ABE:disable
-        if category == u'f':
-            return gettext(u'Nicht bezahlt, Netzanschluss gesperrt') + u': ' + description
-        elif category == u's':
-            return gettext(u'Verstoß gegen Netzordnung, Netzanschluss gesperrt') + u': ' + description
+        if category == 'f':
+            return gettext('Nicht bezahlt, Netzanschluss gesperrt') + ': ' + description
+        elif category == 's':
+            return gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt') + ': ' + description
         else:
             return description
 

@@ -133,7 +133,7 @@ class User(BaseUser):
         userinfo.update(
             id=info_property(
                 "{}-{}".format(mysql_id, calculate_userid_checksum(mysql_id))),
-            address=info_property(u"{0} / {1} {2}".format(
+            address=info_property("{0} / {1} {2}".format(
                 DORMITORIES[user['wheim_id'] - 1],
                 user['etage'],
                 user['zimmernr']
@@ -182,7 +182,7 @@ class User(BaseUser):
         except OperationalError:
             logger.critical("User db unreachable")
             user_db_prop = info_property(gettext(
-                u"Datenbank nicht erreichbar"))
+                "Datenbank nicht erreichbar"))
         finally:
             userinfo.update(userdb=user_db_prop)
 

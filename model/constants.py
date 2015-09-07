@@ -37,11 +37,11 @@ def unsupported_property(description=None):
 
 
 class ACTIONS:
-    EDIT, DELETE = range(2)
+    EDIT, DELETE = list(range(2))
 
 
 class STATUS_COLORS:
-    GOOD, BAD, WARNING, INFO = range(1, 5)  # 0 left for no status color
+    GOOD, BAD, WARNING, INFO = list(range(1, 5))  # 0 left for no status color
 
 
 WEEKDAYS = {

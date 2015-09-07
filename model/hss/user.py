@@ -122,7 +122,7 @@ class User(BaseUser):
 
         userinfo.update(
 
-            address=info_property(u"{0} / {1} {2} {3}".format(
+            address=info_property("{0} / {1} {2} {3}".format(
                 DORMITORIES[user['building']],
                 user['level'],
                 user['flat'],

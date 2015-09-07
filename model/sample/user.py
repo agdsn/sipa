@@ -8,7 +8,7 @@ from model.constants import FULL_FEATURE_SET, info_property, ACTIONS, \
 from model.default import BaseUser
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
-import ConfigParser
+import configparser
 import os
 
 
@@ -16,7 +16,7 @@ PATH = "/tmp/sipa_sample.conf"
 
 
 def init_context(app):
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.add_section('test')
     config.set('test', 'name', 'Test User')
     config.set('test', 'id', '1337-0')
@@ -55,7 +55,7 @@ class User(BaseUser):
 
     @staticmethod
     def _get_config():
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.read(PATH)
         return config
 

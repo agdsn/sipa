@@ -49,13 +49,13 @@ def generate_traffic_chart(traffic_data, inline=True):
         js=[],  # prevent automatically fetching scripts from github
     )
 
-    days, in_values, out_values, credit = zip(*traffic_data['history'])
+    days, in_values, out_values, credit = list(zip(*traffic_data['history']))
     traffic_chart.x_labels = days
     traffic_chart.add(gettext('Input'), in_values,
                       stroke_style={'dasharray': '5'})
     traffic_chart.add(gettext('Output'), out_values,
                       stroke_style={'dasharray': '5'})
-    traffic_chart.add(gettext('Gesamt'), map(add, in_values, out_values),
+    traffic_chart.add(gettext('Gesamt'), list(map(add, in_values, out_values)),
                       stroke_style={'width': '2'})
 
     return traffic_chart

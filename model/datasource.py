@@ -40,10 +40,10 @@ class SubnetCollection(object):
         if type(subnets) == list:
             for subnet in subnets:
                 if not isinstance(subnet, IPv4Network):
-                    raise TypeError(u"List of IPv4Network objects expected "
+                    raise TypeError("List of IPv4Network objects expected "
                                     "in SubnetCollection.__init__")
         else:
-            raise TypeError(u"List expected in SubnetCollection.__init__")
+            raise TypeError("List expected in SubnetCollection.__init__")
 
         self.subnets = subnets
 

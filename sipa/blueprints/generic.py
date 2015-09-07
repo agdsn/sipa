@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+
 
 from flask import render_template, request, redirect, \
     url_for, flash, session
@@ -39,13 +39,13 @@ def error_handler_redirection(e):
     :return: A flask response, in this case `redirect(url_for('.index'))`
     """
     if e.code in (404,):
-        flash(gettext(u"Seite nicht gefunden!"), "warning")
+        flash(gettext("Seite nicht gefunden!"), "warning")
     elif e.code in (401, 403):
         flash(gettext(
-            u"Du hast nicht die notwendigen Rechte um die Seite zu sehen!"),
+            "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"),
             "warning")
     else:
-        flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")
+        flash(gettext("Es ist ein Fehler aufgetreten!"), "error")
     return redirect(url_for('generic.index'))
 
 
@@ -115,13 +115,13 @@ def login():
         try:
             user = User.authenticate(username, password)
         except (UserNotFound, PasswordInvalid):
-            flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
+            flash(gettext("Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
                 session['dormitory'] = dormitory.name
                 login_user(user, remember=remember)
                 logger.info('Authentication successful')
-                flash(gettext(u"Anmeldung erfolgreich!"), "success")
+                flash(gettext("Anmeldung erfolgreich!"), "success")
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -149,8 +149,8 @@ def usertraffic():
     if isinstance(ip_user, BaseUser):
         if current_user.is_authenticated():
             if current_user != ip_user:
-                flash(gettext(u"Ein anderer Nutzer als der für diesen"
-                              " Anschluss Eingetragene ist angemeldet!"),
+                flash(gettext("Ein anderer Nutzer als der für diesen "
+                              "Anschluss Eingetragene ist angemeldet!"),
                       'warning')
                 flash(gettext("Hier werden die Trafficdaten "
                               "dieses Anschlusses angezeigt"), "info")
@@ -158,13 +158,13 @@ def usertraffic():
         return render_template("usertraffic.html", usertraffic=(
             ip_user.get_traffic_data()))
     else:
-        flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
+        flash(gettext("Deine IP gehört nicht zum Wohnheim!"), "error")
 
         if current_user.is_authenticated():
-            flash(gettext(u"Da du angemeldet bist, kannst du deinen Traffic "
-                          u"hier in der Usersuite einsehen."), "info")
+            flash(gettext("Da du angemeldet bist, kannst du deinen Traffic "
+                          "hier in der Usersuite einsehen."), "info")
             return redirect(url_for('usersuite.usersuite'))
         else:
-            flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu "
-                          u"können, musst du dich anmelden."), 'info')
+            flash(gettext("Um deinen Traffic von außerhalb einsehen zu "
+                          "können, musst du dich anmelden."), 'info')
             return redirect(url_for('.login'))

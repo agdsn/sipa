@@ -87,7 +87,7 @@ def datasource_from_ip(ip):
 
 def dormitory_from_ip(ip):
     for dormitory in current_app.extensions['dormitories']:
-        if IPv4Address(unicode(ip)) in dormitory.subnets:
+        if IPv4Address(str(ip)) in dormitory.subnets:
             return dormitory
     return None
 

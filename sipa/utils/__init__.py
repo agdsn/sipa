@@ -5,7 +5,7 @@
 General utilities
 """
 
-import httplib
+import http.client
 import socket
 import time
 from flask import request, url_for
@@ -38,7 +38,7 @@ def get_bustimes(stopname, count=10):
     :param stopname: Requested stop.
     :param count: Limit the entries for the stop.
     """
-    conn = httplib.HTTPConnection('widgets.vvo-online.de', timeout=1)
+    conn = http.client.HTTPConnection('widgets.vvo-online.de', timeout=1)
 
     stopname = stopname.replace(' ', '%20')
     try:

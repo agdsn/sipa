@@ -34,7 +34,7 @@ def usersuite():
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
                      extra={'data': {'exception_args': e.args}, 'stack': True})
-        flash(gettext(u"Es gab einen Fehler bei der Datenbankanfrage!"),
+        flash(gettext("Es gab einen Fehler bei der Datenbankanfrage!"),
               "error")
         return redirect(url_for('generic.index'))
 
@@ -55,7 +55,7 @@ def usersuite():
     ])
 
     ordered_user_info = OrderedDict()
-    for key, description in descriptions.iteritems():
+    for key, description in descriptions.items():
         if key in user_info:
             ordered_user_info[key] = user_info[key]
             ordered_user_info[key]['description'] = descriptions[key]
@@ -95,23 +95,23 @@ def usersuite_contact():
 
     if form.validate_on_submit():
         types = {
-            'stoerung': u"Störung",
-            'finanzen': u"Finanzen",
-            'eigene-technik': u"Eigene Technik"
+            'stoerung': "Störung",
+            'finanzen': "Finanzen",
+            'eigene-technik': "Eigene Technik"
         }
 
-        cat = types.get(form.type.data, u"Allgemein")
+        cat = types.get(form.type.data, "Allgemein")
 
-        subject = u"[Usersuite] {0}: {1}".format(cat, form.subject.data)
+        subject = "[Usersuite] {0}: {1}".format(cat, form.subject.data)
 
-        message_text = u"Nutzerlogin: {0}\n\n".format(current_user.uid) \
+        message_text = "Nutzerlogin: {0}\n\n".format(current_user.uid) \
                        + form.message.data
 
         if send_mail(from_mail, support_mail, subject, message_text):
-            flash(gettext(u"Nachricht wurde versandt."), "success")
+            flash(gettext("Nachricht wurde versandt."), "success")
         else:
-            flash(gettext(u"Es gab einen Fehler beim Versenden der Nachricht. "
-                          u"Bitte schicke uns direkt eine E-Mail an {}".format(
+            flash(gettext("Es gab einen Fehler beim Versenden der Nachricht. "
+                          "Bitte schicke uns direkt eine E-Mail an {}".format(
                               support_mail)),
                   'error')
         return redirect(url_for(".usersuite"))
@@ -149,9 +149,9 @@ def usersuite_change_password():
             current_user.re_authenticate(old)
             current_user.change_password(old, new)
         except PasswordInvalid:
-            flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
+            flash(gettext("Altes Passwort war inkorrekt!"), "error")
         else:
-            flash(gettext(u"Passwort wurde geändert"), "success")
+            flash(gettext("Passwort wurde geändert"), "success")
             return redirect(url_for(".usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)
@@ -178,13 +178,13 @@ def usersuite_change_mail():
             current_user.re_authenticate(password)
             current_user.change_mail(password, email)
         except UserNotFound:
-            flash(gettext(u"Nutzer nicht gefunden!"), "error")
+            flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
-            flash(gettext(u"Passwort war inkorrekt!"), "error")
+            flash(gettext("Passwort war inkorrekt!"), "error")
         except LDAPConnectionError:
-            flash(gettext(u"Nicht genügend LDAP-Rechte!"), "error")
+            flash(gettext("Nicht genügend LDAP-Rechte!"), "error")
         else:
-            flash(gettext(u"E-Mail-Adresse wurde geändert"), "success")
+            flash(gettext("E-Mail-Adresse wurde geändert"), "success")
             return redirect(url_for('.usersuite'))
     elif form.is_submitted():
         flash_formerrors(form)
@@ -209,13 +209,13 @@ def usersuite_delete_mail():
             # password is needed for the ldap bind
             current_user.change_mail(password, "")
         except UserNotFound:
-            flash(gettext(u"Nutzer nicht gefunden!"), "error")
+            flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
-            flash(gettext(u"Passwort war inkorrekt!"), "error")
+            flash(gettext("Passwort war inkorrekt!"), "error")
         except LDAPConnectionError:
-            flash(gettext(u"Nicht genügend LDAP-Rechte!"), "error")
+            flash(gettext("Nicht genügend LDAP-Rechte!"), "error")
         else:
-            flash(gettext(u"E-Mail-Adresse wurde zurückgesetzt"), "success")
+            flash(gettext("E-Mail-Adresse wurde zurückgesetzt"), "success")
             return redirect(url_for('.usersuite'))
     elif form.is_submitted():
         flash_formerrors(form)
@@ -240,7 +240,7 @@ def usersuite_change_mac():
             current_user.re_authenticate(password)
 
         except PasswordInvalid:
-            flash(gettext(u"Passwort war inkorrekt!"), "error")
+            flash(gettext("Passwort war inkorrekt!"), "error")
         else:
             current_user.change_mac_address(userinfo['ip'],
                                             userinfo['mac'],
@@ -251,11 +251,11 @@ def usersuite_change_mac():
                                        current_datasource().mail_server)
             support_mail = current_datasource().support_mail
 
-            subject = (u"[Usersuite] {} hat seine/ihre MAC-Adresse "
-                       u"geändert".format(current_user.uid))
+            subject = ("[Usersuite] {} hat seine/ihre MAC-Adresse "
+                       "geändert".format(current_user.uid))
             message = (
-                u"Nutzer {name} ({uid}) hat seine/ihre MAC-Adresse geändert."
-                u"\nAlte MAC: {old_mac}\nNeue MAC: {new_mac}".format(
+                "Nutzer {name} ({uid}) hat seine/ihre MAC-Adresse geändert."
+                "\nAlte MAC: {old_mac}\nNeue MAC: {new_mac}".format(
                     name=current_user.name,
                     uid=current_user.uid,
                     old_mac=userinfo['mac'],
@@ -264,13 +264,13 @@ def usersuite_change_mac():
             )
 
             if send_mail(from_mail, support_mail, subject, message):
-                flash(gettext(u"MAC-Adresse wurde geändert!"), "success")
+                flash(gettext("MAC-Adresse wurde geändert!"), "success")
                 return redirect(url_for('.usersuite'))
             else:
                 flash(gettext(
-                    u"Es gab einen Fehler beim Versenden der Nachricht. "
-                    u"Bitte schicke uns direkt eine E-Mail "
-                    u"an support@wh2.tu-dresden.de"),
+                    "Es gab einen Fehler beim Versenden der Nachricht. "
+                    "Bitte schicke uns direkt eine E-Mail "
+                    "an support@wh2.tu-dresden.de"),
                     'error'
                 )
                 return redirect(url_for('.usersuite'))
@@ -291,7 +291,7 @@ def usersuite_hosting(action=None):
     """
     if action == "confirm":
         current_user.user_db_drop()
-        flash(gettext(u"Deine Datenbank wurde gelöscht."), 'success')
+        flash(gettext("Deine Datenbank wurde gelöscht."), 'success')
         return redirect(url_for('.usersuite_hosting'))
 
     form = HostingForm()
@@ -299,7 +299,7 @@ def usersuite_hosting(action=None):
     if form.validate_on_submit():
         if form.action.data == "create":
             current_user.user_db_create(form.password.data)
-            flash(gettext(u"Deine Datenbank wurde erstellt."), 'success')
+            flash(gettext("Deine Datenbank wurde erstellt."), 'success')
         else:
             current_user.user_db_password_change(form.password.data)
     elif form.is_submitted():
