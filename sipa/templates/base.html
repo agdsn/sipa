@@ -1,13 +1,13 @@
 {% set credit = gauge_data() %}
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
-	
+
 <head>
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Arbeitsgemeinschaft Dresdner Studentennetz">
 	<meta name="author" content="AG DSN Administrators">
-    
+
     <title>AG DSN {% if page_title %} - {{ page_title }}{% endif %}</title>
 
 	<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
@@ -27,7 +27,7 @@
             </button>
             <a class="navbar-brand" href="{{ url_for('generic.index') }}"><div id="logo"></div></a>
         </div>
-        
+
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
@@ -97,8 +97,8 @@
             </ul>
         </div>
     </div>
-</nav>    
-	
+</nav>
+
 <header class="pg-header">
 	<div class="container">
 		<h1>AG DSN</h1>
@@ -110,24 +110,27 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-3 col-sm-push-9">
-			<div class="row">
-				<div class="col-xs-6 col-sm-12">
-					<a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}"><div id="trafficgauge"></div>
-                        <div class="text-center"><small>({{ _("Für Details klicken") }})</small></div>
-					</a><br>
+		    <div class="row">
+                        {% if not credit.foreign_user -%}
+			    <div class="col-xs-6 col-sm-12">
+				<a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}">
+                                    <div id="trafficgauge"></div>
+                                    <div class="text-center"><small>({{ _("Für Details klicken") }})</small></div>
+				</a><br>
 
-                    <div class="row">
-                    {% if credit.error %}
-                        <div class="text-danger text-center">
-                            {{ credit.error }}!
-                        </div>
-                    {% endif %}
-                    </div>
-				</div>
-				
+                                <div class="row">
+                                    {% if credit.error -%}
+                                        <div class="text-danger text-center">
+                                            {{ _("Fehler bei der Abfrage der Daten") }}!
+                                        </div>
+                                    {%- endif %}
+                                </div>
+			    </div>
+                        {%- endif %}
+
 				<div class="col-xs-6 col-sm-12">
 					<h2>{{ _("Kontakt") }} </h2>
-					
+
 					<div>
 						<div class="row">
 							<div class="col-xs-1">
@@ -137,9 +140,9 @@
 								<a href="mailto:support@agdsn.de">support@agdsn.de</a>
 							</div>
 						</div>
-						
+
 						<br />
-						
+
 						<div class="row">
 							<div class="col-xs-1">
 								<span class="glyphicon glyphicon-home"></span>
@@ -174,9 +177,9 @@
 						</div>
 					</div>
 				</div>
-			</div>			
+			</div>
 		</div>
-		
+
 		<div class="col-sm-9 col-sm-pull-3">
 			{% with messages = get_flashed_messages(with_categories=True) %}
 				{% if messages %}

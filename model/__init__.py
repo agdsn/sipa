@@ -59,7 +59,7 @@ def current_user_supported():
 
 
 def query_gauge_data():
-    credit = {}
+    credit = {'data': None, 'error': False, 'foreign_user': False}
     try:
         if current_user.is_authenticated():
             user = current_user
@@ -67,8 +67,7 @@ def query_gauge_data():
             user = user_from_ip(request.remote_addr)
         credit['data'] = user.get_current_credit()
     except OperationalError:
-        credit['error'] = gettext(u'Fehler bei der Abfrage der Daten')
+        credit['error'] = True
     except AttributeError:
-        credit['error'] = gettext(u'Diese IP gehört nicht '
-                                  u'zu unserem Netzwerk')
+        credit['foreign_user'] = True
     return credit
