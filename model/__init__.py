@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import request, session
+from flask import request, session, current_app
 from flask.ext.babel import gettext
 from flask.ext.login import current_user
 from werkzeug.local import LocalProxy
@@ -12,13 +12,20 @@ registered_divisions = [sample.division, wu.division, hss.division,
                         gerok.division]
 
 
+def init_divisions(app):
+    app.extensions['divisions'] = [
+        div for div in registered_divisions
+        if not div.debug_only or app.debug
+    ]
+
+
 def init_context(app):
-    for division in registered_divisions:
+    for division in app.extensions['divisions']:
         division.init_context(app)
 
 
 def division_from_name(name):
-    for division in registered_divisions:
+    for division in current_app.extensions['divisions']:
         if division.name == name:
             return division
     return None
