@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-08 00:48+0200\n"
-"PO-Revision-Date: 2015-09-08 00:48+0200\n"
+"POT-Creation-Date: 2015-09-08 00:52+0200\n"
+"PO-Revision-Date: 2015-09-08 00:53+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -49,7 +49,7 @@ msgstr "Saturday"
 
 #: model/gerok/__init__.py:19
 msgid "Gerokstraße"
-msgstr ""
+msgstr "Gerokstraße"
 
 #: model/hss/__init__.py:18
 msgid "Hochschulstraße"
@@ -397,6 +397,14 @@ msgstr "An error occurred"
 msgid "Kontakt"
 msgstr "Contact"
 
+#: sipa/templates/base.html:153
+msgid "7. Etage"
+msgstr "7th floor"
+
+#: sipa/templates/base.html:163
+msgid "Keller"
+msgstr "Basement"
+
 #: sipa/templates/base.html:173
 msgid "Klingel"
 msgstr "Doorbell"
@@ -598,9 +606,8 @@ msgid "Usersuite von "
 msgstr "Usersuite of "
 
 #: sipa/utils/graph_utils.py:20
-#, fuzzy
 msgid "Traffic (MiB)"
-msgstr "Traffic (MB)"
+msgstr "Traffic (MiB)"
 
 #: sipa/utils/graph_utils.py:33
 msgid "Input"
