@@ -99,7 +99,7 @@ class User(BaseUser):
 
     @staticmethod
     def from_ip(ip):
-        return AnonymousUserMixin()
+        return User.get('test')
 
     def change_password(self, old, new):
         self.config.set('test', 'password', new)
