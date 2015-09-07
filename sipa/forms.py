@@ -75,7 +75,6 @@ class ChangeMACForm(Form):
 
 class LoginForm(Form):
     division = SelectField(lazy_gettext(u"Sektion"), choices=LocalProxy(
-        # TODO: sort by ip
         lambda: [(division.name, division.display_name)
                  for division in current_app.extensions['divisions']]
     ))
