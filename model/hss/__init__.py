@@ -7,9 +7,6 @@ from ldap_utils import init_ldap
 import user
 
 
-__author__ = 'Jan'
-
-
 def init_context(app):
     init_db(app)
     init_ldap(app)
