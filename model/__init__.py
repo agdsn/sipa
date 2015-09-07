@@ -41,7 +41,11 @@ def division_from_ip(ip):
 
 
 def user_from_ip(ip):
-    return division_from_ip(ip).user_class.from_ip(ip)
+    division = division_from_ip(ip)
+    if division is not None:
+        return division.user_class.from_ip(ip)
+    else:
+        return None
 
 
 def current_user_supported():
