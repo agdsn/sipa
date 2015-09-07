@@ -82,7 +82,11 @@ class User(BaseUser):
         if result is None:
             return AnonymousUserMixin
 
-        return User.get(result['nutzer_id'], ip=ip)
+        username = sql_query("SELECT unix_account FROM nutzer "
+                             "WHERE nutzer_id = %s",
+                             (result['nutzer_id'],)).fetchone()['unix_account']
+
+        return User.get(username, ip=ip)
 
     def change_password(self, old, new):
         """Change a user's password from old to new
