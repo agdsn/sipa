@@ -9,7 +9,7 @@ from flask.ext.babel import get_locale
 from flask.ext.login import LoginManager, AnonymousUserMixin
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
-from model import registered_divisions, init_context, division_from_name
+from model import init_context, division_from_name
 from model.constants import ACTIONS, STATUS_COLORS
 from sipa import logger
 from sipa.babel import babel, possible_locales
