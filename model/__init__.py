@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import request, session
+from flask import request, session, current_app
 from flask.ext.babel import gettext
 from flask.ext.login import current_user
+from ipaddress import IPv4Address
+
 from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
 
@@ -12,13 +14,20 @@ registered_divisions = [sample.division, wu.division, hss.division,
                         gerok.division]
 
 
+def init_divisions(app):
+    app.extensions['divisions'] = [
+        div for div in registered_divisions
+        if not div.debug_only or app.debug
+    ]
+
+
 def init_context(app):
-    for division in registered_divisions:
+    for division in app.extensions['divisions']:
         division.init_context(app)
 
 
 def division_from_name(name):
-    for division in registered_divisions:
+    for division in current_app.extensions['divisions']:
         if division.name == name:
             return division
     return None
@@ -29,12 +38,18 @@ def current_division():
 
 
 def division_from_ip(ip):
-    # TODO: return correct division based on IP (dummy method)
-    return sample.division
+    for division in current_app.extensions['divisions']:
+        if IPv4Address(unicode(ip)) in division.subnets:
+            return division
+    return None
 
 
 def user_from_ip(ip):
-    return division_from_ip(ip).user_class.from_ip(ip)
+    division = division_from_ip(ip)
+    if division is not None:
+        return division.user_class.from_ip(ip)
+    else:
+        return None
 
 
 def current_user_supported():

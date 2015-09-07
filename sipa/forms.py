@@ -11,8 +11,6 @@ from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
     HiddenField, BooleanField
 from wtforms.validators import Required, Email, MacAddress, ValidationError
 
-from model import registered_divisions
-
 
 class ContactForm(Form):
     email = TextField(label=lazy_gettext(u"Deine E-Mail-Adresse"), validators=[
@@ -77,10 +75,8 @@ class ChangeMACForm(Form):
 
 class LoginForm(Form):
     division = SelectField(lazy_gettext(u"Sektion"), choices=LocalProxy(
-        # TODO: sort by ip
         lambda: [(division.name, division.display_name)
-                 for division in registered_divisions
-                 if not division.debug_only or current_app.debug]
+                 for division in current_app.extensions['divisions']]
     ))
     username = TextField(
         label=lazy_gettext(u"Nutzername"),

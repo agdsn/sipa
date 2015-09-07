@@ -13,8 +13,6 @@ from sipa import app, logger
 from sipa.base import init_app
 
 
-init_app(app)
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sipa launcher")
     parser.add_argument("--debug", action="store_true",
@@ -27,6 +25,11 @@ if __name__ == "__main__":
 
     logger.info('Starting sipa...')
     if args.debug:
+        app.debug = True
         logger.warning('Running in Debug mode')
 
+    init_app(app)
     app.run(debug=args.debug, host=args.host, port=args.port)
+
+else:
+    init_app(app)
