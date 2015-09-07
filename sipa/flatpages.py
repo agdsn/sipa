@@ -18,7 +18,7 @@ def compare(x, y):
         return 1
 
 
-class Node(object):
+class Node:
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
@@ -104,7 +104,7 @@ class Category(Node):
             article.default_page = page
 
 
-class CategorizedFlatPages(object):
+class CategorizedFlatPages:
     def __init__(self):
         self.flat_pages = FlatPages()
         self.root_category = Category(None, '<root>')

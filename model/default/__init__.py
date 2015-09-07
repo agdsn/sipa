@@ -25,7 +25,7 @@ class AuthenticatedUserMixin:
         return False
 
 
-class BaseUser(object, AuthenticatedUserMixin):
+class BaseUser(AuthenticatedUserMixin):
     """The user object containing a minimal amount of functions in order to work
     properly (flask special functions, used methods by sipa)
     """

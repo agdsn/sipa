@@ -21,7 +21,7 @@ def init_ldap(app):
 CONF = LocalProxy(lambda: current_app.extensions['ldap'])
 
 
-class LdapConnector(object):
+class LdapConnector:
     """This class is a wrapper for all LDAP connections.
 
     * If you pass it a username only, it will use an anonymous bind.

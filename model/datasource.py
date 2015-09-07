@@ -5,7 +5,7 @@ def empty_function(app):
     pass
 
 
-class DataSource(object):
+class DataSource:
     """DataSource object Providing its name and the User object.
 
     """
@@ -30,7 +30,7 @@ class DataSource(object):
         return self._init_context(app)
 
 
-class SubnetCollection(object):
+class SubnetCollection:
     """A simple class for combining multiple IPv4Networks.
 
     Provides __contains__ functionality for IPv4Addresses.
