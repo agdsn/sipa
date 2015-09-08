@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.babel import gettext
-from ..division import Division
+from ..division import Division, Dormitory
 from ipaddress import IPv4Network
 
 import user
@@ -24,3 +24,8 @@ division = Division(
     ],
     init_context=init_context
 )
+
+dormitories = [
+    Dormitory(name='gerok', display_name=u"Gerokstraße",
+              division=division)
+]

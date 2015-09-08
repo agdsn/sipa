@@ -13,11 +13,19 @@ from . import sample, wu, hss, gerok
 registered_divisions = [sample.division, wu.division, hss.division,
                         gerok.division]
 
+registered_dormitories = sample.dormitories + wu.dormitories + \
+                         hss.dormitories + gerok.dormitories
+
 
 def init_divisions(app):
     app.extensions['divisions'] = [
         div for div in registered_divisions
         if not div.debug_only or app.debug
+    ]
+
+    app.extensions['dormitories'] = [
+        dorm for dorm in registered_dormitories
+        if not dorm.division.debug_only or app.debug
     ]
 
 
@@ -30,6 +38,13 @@ def division_from_name(name):
     for division in current_app.extensions['divisions']:
         if division.name == name:
             return division
+    return None
+
+
+def dormitory_from_name(name):
+    for dormitory in current_app.extensions['dormitories']:
+        if dormitory.name == name:
+            return dormitory
     return None
 
 

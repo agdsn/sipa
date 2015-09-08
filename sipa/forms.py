@@ -74,9 +74,9 @@ class ChangeMACForm(Form):
 
 
 class LoginForm(Form):
-    division = SelectField(lazy_gettext(u"Sektion"), choices=LocalProxy(
-        lambda: [(division.name, division.display_name)
-                 for division in current_app.extensions['divisions']]
+    dormitory = SelectField(lazy_gettext(u"Wohnheim"), choices=LocalProxy(
+        lambda: [(dormitory.name, dormitory.display_name)
+                 for dormitory in current_app.extensions['dormitories']]
     ))
     username = TextField(
         label=lazy_gettext(u"Nutzername"),

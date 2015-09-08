@@ -45,3 +45,13 @@ class SubnetCollection(object):
             if address in subnet:
                 return True
         return False
+
+
+class Dormitory:
+    """A dormitory as selectable on the login page."""
+
+    def __init__(self, name, display_name, division):
+        # TODO: add subnet functionality
+        self.name = name
+        self.display_name = display_name
+        self.division = division
