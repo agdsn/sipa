@@ -117,7 +117,7 @@ def login():
             flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
-                session['division'] = dormitory.division.name
+                session['dormitory'] = dormitory.name
                 login_user(user, remember=remember)
                 logger.info('Authentication successful')
                 flash(gettext(u"Anmeldung erfolgreich!"), "success")

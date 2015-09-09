@@ -17,7 +17,7 @@ registered_dormitories = sample.dormitories + wu.dormitories + \
                          hss.dormitories + gerok.dormitories
 
 
-def init_divisions(app):
+def init_divisions_dormitories(app):
     app.extensions['divisions'] = [
         div for div in registered_divisions
         if not div.debug_only or app.debug
@@ -34,13 +34,6 @@ def init_context(app):
         division.init_context(app)
 
 
-def division_from_name(name):
-    for division in current_app.extensions['divisions']:
-        if division.name == name:
-            return division
-    return None
-
-
 def dormitory_from_name(name):
     for dormitory in current_app.extensions['dormitories']:
         if dormitory.name == name:
@@ -49,13 +42,27 @@ def dormitory_from_name(name):
 
 
 def current_division():
-    return division_from_name(session['division'])
+    if current_dormitory():
+        return current_dormitory().division
+    else:
+        return None
+
+
+def current_dormitory():
+    return dormitory_from_name(session['dormitory'])
 
 
 def division_from_ip(ip):
+    dormitory = dormitory_from_ip(ip)
+    if dormitory:
+        return dormitory.division
+    return None
+
+
+def dormitory_from_ip(ip):
     for dormitory in current_app.extensions['dormitories']:
         if IPv4Address(unicode(ip)) in dormitory.subnets:
-            return dormitory.division
+            return dormitory
     return None
 
 

@@ -9,7 +9,7 @@ from flask.ext.babel import get_locale
 from flask.ext.login import LoginManager, AnonymousUserMixin
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
-from model import init_context, init_divisions, division_from_name
+from model import init_context, init_divisions_dormitories, dormitory_from_name
 from model.constants import ACTIONS, STATUS_COLORS
 from sipa import logger
 from sipa.babel import babel, possible_locales
@@ -82,7 +82,7 @@ def init_app(app):
     )
 
     init_logging(app)
-    init_divisions(app)
+    init_divisions_dormitories(app)
     init_context(app)
 
 
@@ -90,9 +90,9 @@ def init_app(app):
 def load_user(username):
     """Loads a User object from/into the session at every request
     """
-    division_name = session.get('division', None)
-    if division_name:
-        return division_from_name(division_name).user_class.get(username)
+    dormitory = dormitory_from_name(session.get('dormitory', None))
+    if dormitory:
+        return dormitory.division.user_class.get(username)
     else:
         return AnonymousUserMixin()
 
