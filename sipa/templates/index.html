@@ -17,7 +17,11 @@
 {% block content %}
     {% if articles %}{% for art in articles %}
         <h2>{{ art.title }}</h2>
-        <small>{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</small>
+        {% if art.author %}
+            <small>{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</small>
+        {% elif art.date %}
+            <small>{{ _("vom")}} {{ art.date }}</small>
+        {% endif %}
         <hr />
         <div>{{ art.html|safe }}</div>
 
