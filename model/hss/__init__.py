@@ -25,5 +25,6 @@ division = Division(
         IPv4Network(u'141.30.215.128/25'),  # HSS 48
         IPv4Network(u'141.30.219.0/24'),  # HSS 50
     ],
-    init_context=init_context
+    init_context=init_context,
+    debug_only=True
 )
