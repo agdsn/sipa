@@ -81,7 +81,7 @@ class User(BaseUser):
                            "WHERE  = %s",
                            (ip,)).fetchone()
         if result is None:
-            return AnonymousUserMixin
+            return AnonymousUserMixin()
 
         return User.get(result['id'], ip=ip)
 

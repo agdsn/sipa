@@ -94,7 +94,7 @@ def load_user(username):
     if division_name:
         return division_from_name(division_name).user_class.get(username)
     else:
-        return AnonymousUserMixin
+        return AnonymousUserMixin()
 
 
 def babel_selector():

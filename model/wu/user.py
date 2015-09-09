@@ -80,7 +80,7 @@ class User(BaseUser):
         result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
                            (ip,)).fetchone()
         if result is None:
-            return AnonymousUserMixin
+            return AnonymousUserMixin()
 
         username = sql_query("SELECT unix_account FROM nutzer "
                              "WHERE nutzer_id = %s",
