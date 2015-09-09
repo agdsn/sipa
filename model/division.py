@@ -10,7 +10,6 @@ class Division(object):
 
     """
     def __init__(self, name, display_name, user_class, mail_server,
-                 subnets=[],
                  init_context=empty_function,
                  debug_only=False):
         super(Division, self).__init__()
@@ -18,7 +17,6 @@ class Division(object):
         self.display_name = display_name
         self.user_class = user_class
         self.mail_server = mail_server
-        self.subnets = SubnetCollection(subnets)
         self._init_context = init_context
         self.debug_only = debug_only
 
@@ -27,7 +25,10 @@ class Division(object):
 
 
 class SubnetCollection(object):
-    """A simple class providing `ip in division.subnets`-like functionality."""
+    """A simple class for combining multiple IPv4Networks.
+
+    Provides __contains__ functionality for IPv4Addresses.
+    """
 
     def __init__(self, subnets):
         if type(subnets) == list:
@@ -50,8 +51,8 @@ class SubnetCollection(object):
 class Dormitory:
     """A dormitory as selectable on the login page."""
 
-    def __init__(self, name, display_name, division):
-        # TODO: add subnet functionality
+    def __init__(self, name, display_name, division, subnets=[]):
         self.name = name
         self.display_name = display_name
         self.division = division
+        self.subnets = SubnetCollection(subnets)

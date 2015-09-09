@@ -53,9 +53,9 @@ def current_division():
 
 
 def division_from_ip(ip):
-    for division in current_app.extensions['divisions']:
-        if IPv4Address(unicode(ip)) in division.subnets:
-            return division
+    for dormitory in current_app.extensions['dormitories']:
+        if IPv4Address(unicode(ip)) in dormitory.subnets:
+            return dormitory.division
     return None
 
 
