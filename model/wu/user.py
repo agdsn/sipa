@@ -10,7 +10,8 @@ from model.wu.database_utils import ip_from_user_id, sql_query, \
     update_macaddress, query_trafficdata, \
     query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db, \
-    calculate_userid_checksum, DORMITORIES, status_string_from_id
+    calculate_userid_checksum, DORMITORIES, status_string_from_id, \
+    user_id_from_uid
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     get_dn, change_email
 from sipa import logger
@@ -32,7 +33,7 @@ class User(BaseUser):
         self._ip = ip
 
     def _get_ip(self):
-        self._ip = ip_from_user_id(self.uid)
+        self._ip = ip_from_user_id(user_id_from_uid(self.uid))
 
     def __repr__(self):
         return "User<{},{}.{}>".format(self.uid, self.name, self.group)
@@ -183,7 +184,7 @@ class User(BaseUser):
         return userinfo
 
     def get_traffic_data(self):
-        return query_trafficdata(self.ip, self.uid)
+        return query_trafficdata(self.ip, user_id_from_uid(self.uid))
 
     def get_current_credit(self):
         return query_current_credit(self.uid, self.ip)
