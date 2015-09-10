@@ -24,7 +24,7 @@ gitdb==0.6.4
 itsdangerous==0.24
 lxml==3.4.3
 pycparser==2.10
-pygal==1.4.6
+pygal==2.0.6
 python-ldap==2.4.14
 pytz==2015.2
 raven==5.3.1
