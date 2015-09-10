@@ -9,3 +9,8 @@
         {% include 'drafts/_traffic_chart.html' %}
     </div>
 {% endblock %}
+
+{% block custom_script %}
+    <script type="text/javascript" src="{{ url_for("static", filename="js/svg.jquery.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename="js/pygal-tooltips.js") }}"></script>
+{% endblock %}
