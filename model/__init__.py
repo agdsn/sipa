@@ -29,6 +29,26 @@ def init_divisions_dormitories(app):
     ]
 
 
+def list_active_dormitories(ip=None):
+    """Generate a list of all available dormitories.
+    If an ip is given, try to place the according dormitory first.
+    """
+    if not ip and request:
+        ip = request.remote_addr
+
+    preferred = dormitory_from_ip(ip) if ip else None
+
+    if preferred:
+        return [(preferred.name, preferred.display_name)] + [
+            (dormitory.name, dormitory.display_name)
+            for dormitory in current_app.extensions['dormitories']
+            if not dormitory == preferred
+        ]
+
+    return [(dormitory.name, dormitory.display_name)
+            for dormitory in current_app.extensions['dormitories']]
+
+
 def init_context(app):
     for division in app.extensions['divisions']:
         division.init_context(app)

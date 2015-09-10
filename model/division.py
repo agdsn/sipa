@@ -20,6 +20,9 @@ class Division(object):
         self._init_context = init_context
         self.debug_only = debug_only
 
+    def __eq__(self, other):
+        return self.name == other.name
+
     def init_context(self, app):
         return self._init_context(app)
 
@@ -56,3 +59,6 @@ class Dormitory:
         self.display_name = display_name
         self.division = division
         self.subnets = SubnetCollection(subnets)
+
+    def __eq__(self, other):
+        return self.name == other.name and self.division == other.division
