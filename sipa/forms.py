@@ -14,10 +14,19 @@ from wtforms import StringField, TextAreaField, SelectField, PasswordField, \
 from wtforms.validators import Required, Email, MacAddress, ValidationError
 
 
+class ReadonlyStringField(StringField):
+    def __init__(self, *args, **kwargs):
+        super(ReadonlyStringField, self).__init__(*args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        return super(ReadonlyStringField, self).__call__(
+            *args, readonly=True, **kwargs)
+
+
 class ContactForm(Form):
-    email = StringField(
+    email = ReadonlyStringField(
         label=lazy_gettext(u"Deine E-Mail-Adresse"),
-        validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))]
+        validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))],
     )
     type = SelectField(label=lazy_gettext(u"Kategorie"), choices=[
         (u"frage", lazy_gettext(u"Allgemeine Frage an die Administratoren")),
