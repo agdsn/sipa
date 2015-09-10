@@ -9,14 +9,16 @@ from model import list_active_dormitories
 
 from werkzeug.local import LocalProxy
 
-from wtforms import TextField, TextAreaField, SelectField, PasswordField, \
+from wtforms import StringField, TextAreaField, SelectField, PasswordField, \
     HiddenField, BooleanField
 from wtforms.validators import Required, Email, MacAddress, ValidationError
 
 
 class ContactForm(Form):
-    email = TextField(label=lazy_gettext(u"Deine E-Mail-Adresse"), validators=[
-        Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
+    email = StringField(
+        label=lazy_gettext(u"Deine E-Mail-Adresse"),
+        validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))]
+    )
     type = SelectField(label=lazy_gettext(u"Kategorie"), choices=[
         (u"frage", lazy_gettext(u"Allgemeine Frage an die Administratoren")),
         (u"stoerung",
@@ -24,7 +26,7 @@ class ContactForm(Form):
         (u"finanzen", lazy_gettext(u"Finanzfragen (Beiträge, Gebühren)")),
         (u"eigene-technik", lazy_gettext(u"Probleme mit privater Technik"))
     ])
-    subject = TextField(label=lazy_gettext(u"Betreff"), validators=[
+    subject = StringField(label=lazy_gettext(u"Betreff"), validators=[
         Required(gettext(u"Betreff muss angegeben werden!"))])
     message = TextAreaField(label=lazy_gettext(u"Nachricht"), validators=[
         Required(gettext(u"Nachricht fehlt!"))
@@ -44,7 +46,7 @@ class ChangeMailForm(Form):
     password = PasswordField(
         label=lazy_gettext(u"Passwort"),
         validators=[Required(gettext(u"Passwort nicht angegeben!"))])
-    email = TextField(
+    email = StringField(
         label=lazy_gettext(u"Neue Mail"),
         validators=[Email(gettext(u"E-Mail ist nicht in gültigem Format!"))])
 
@@ -68,7 +70,7 @@ class ChangeMACForm(Form):
     password = PasswordField(
         label=lazy_gettext(u"Passwort"),
         validators=[Required(gettext(u"Passwort nicht angegeben!"))])
-    mac = TextField(
+    mac = StringField(
         label=lazy_gettext(u"Neue MAC"),
         validators=[Required(u"MAC-Adresse nicht angegeben!"),
                     MacAddress(u"MAC ist nicht in gültigem Format!"),
@@ -80,7 +82,7 @@ class LoginForm(Form):
         lazy_gettext(u"Wohnheim"),
         choices=LocalProxy(list_active_dormitories)
     )
-    username = TextField(
+    username = StringField(
         label=lazy_gettext(u"Nutzername"),
         validators=[Required(gettext(u"Nutzername muss angegeben werden!"))]
     )
