@@ -88,12 +88,12 @@ def usersuite_contact():
     '[Usersuite] Category: Subject' with userid and message.
     """
     form = ContactForm()
+    mail_server = current_division().mail_server
 
     if current_user.mail:
         from_mail = current_user.mail
     else:
-        from_mail = "{}@{}".format(current_user.uid,
-                                   current_division().mail_server)
+        from_mail = "{}@{}".format(current_user.uid, mail_server)
 
     if form.validate_on_submit():
         types = {
@@ -109,14 +109,15 @@ def usersuite_contact():
         message_text = u"Nutzerlogin: {0}\n\n".format(current_user.uid) \
                        + form.message.data
 
-        if send_mail(from_mail, "support@wh2.tu-dresden.de", subject,
+        if send_mail(from_mail, "support@{}".format(mail_server), subject,
                      message_text):
             flash(gettext(u"Nachricht wurde versandt."), "success")
         else:
             flash(gettext(
                 u"Es gab einen Fehler beim Versenden der Nachricht. Bitte "
-                u"schicke uns direkt eine E-Mail an support@agdsn.de"),
-                "error")
+                u"schicke uns direkt eine E-Mail an support@{}").format(
+                    mail_server
+                ), 'error')
         return redirect(url_for(".usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)

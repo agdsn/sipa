@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-10 08:10+0200\n"
+"POT-Creation-Date: 2015-09-10 08:24+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -303,64 +303,64 @@ msgstr ""
 msgid "MySQL Datenbank"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/usersuite.py:115
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:116
+#: sipa/blueprints/usersuite.py:117
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
-"direkt eine E-Mail an support@agdsn.de"
+"direkt eine E-Mail an support@{}"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:152 sipa/blueprints/usersuite.py:296
+#: sipa/blueprints/usersuite.py:155 sipa/blueprints/usersuite.py:299
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:158
+#: sipa/blueprints/usersuite.py:161
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:160
+#: sipa/blueprints/usersuite.py:163
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:187 sipa/blueprints/usersuite.py:218
+#: sipa/blueprints/usersuite.py:190 sipa/blueprints/usersuite.py:221
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:189 sipa/blueprints/usersuite.py:220
-#: sipa/blueprints/usersuite.py:249
+#: sipa/blueprints/usersuite.py:192 sipa/blueprints/usersuite.py:223
+#: sipa/blueprints/usersuite.py:252
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:191 sipa/blueprints/usersuite.py:222
+#: sipa/blueprints/usersuite.py:194 sipa/blueprints/usersuite.py:225
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:193
+#: sipa/blueprints/usersuite.py:196
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:224
+#: sipa/blueprints/usersuite.py:227
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:265
+#: sipa/blueprints/usersuite.py:268
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:268
+#: sipa/blueprints/usersuite.py:271
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:289
+#: sipa/blueprints/usersuite.py:292
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:300
+#: sipa/blueprints/usersuite.py:303
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
@@ -1125,5 +1125,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Sektion"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Es gab einen Fehler beim Versenden "
+#~ "der Nachricht. Bitte schicke uns direkt"
+#~ " eine E-Mail an support@agdsn.de"
 #~ msgstr ""
 

@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-10 08:10+0200\n"
-"PO-Revision-Date: 2015-09-10 08:10+0200\n"
+"POT-Creation-Date: 2015-09-10 08:24+0200\n"
+"PO-Revision-Date: 2015-09-10 08:24+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-"Language: de\n"
+"Language: en\n"
 "X-Generator: Poedit 1.8.4\n"
 
 #: model/constants.py:48
@@ -304,56 +304,55 @@ msgstr "Host alias"
 msgid "MySQL Datenbank"
 msgstr "MySQL database"
 
-#: sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/usersuite.py:115
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/usersuite.py:116
+#: sipa/blueprints/usersuite.py:117
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
-"eine E-Mail an support@agdsn.de"
+"eine E-Mail an support@{}"
 msgstr ""
-"There was an error sending your message. Please contact us at support@agdsn."
-"de"
+"There was an error sending your message. Please contact us at support@{}"
 
-#: sipa/blueprints/usersuite.py:152 sipa/blueprints/usersuite.py:296
+#: sipa/blueprints/usersuite.py:155 sipa/blueprints/usersuite.py:299
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: sipa/blueprints/usersuite.py:158
+#: sipa/blueprints/usersuite.py:161
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: sipa/blueprints/usersuite.py:160
+#: sipa/blueprints/usersuite.py:163
 msgid "Passwort wurde geändert"
 msgstr "Password has been changed"
 
-#: sipa/blueprints/usersuite.py:187 sipa/blueprints/usersuite.py:218
+#: sipa/blueprints/usersuite.py:190 sipa/blueprints/usersuite.py:221
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/blueprints/usersuite.py:189 sipa/blueprints/usersuite.py:220
-#: sipa/blueprints/usersuite.py:249
+#: sipa/blueprints/usersuite.py:192 sipa/blueprints/usersuite.py:223
+#: sipa/blueprints/usersuite.py:252
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/blueprints/usersuite.py:191 sipa/blueprints/usersuite.py:222
+#: sipa/blueprints/usersuite.py:194 sipa/blueprints/usersuite.py:225
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: sipa/blueprints/usersuite.py:193
+#: sipa/blueprints/usersuite.py:196
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"
 
-#: sipa/blueprints/usersuite.py:224
+#: sipa/blueprints/usersuite.py:227
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr "Email address has been reset"
 
-#: sipa/blueprints/usersuite.py:265
+#: sipa/blueprints/usersuite.py:268
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-#: sipa/blueprints/usersuite.py:268
+#: sipa/blueprints/usersuite.py:271
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
 "eine E-Mail an support@wh2.tu-dresden.de"
@@ -361,11 +360,11 @@ msgstr ""
 "There was an error sending your message. Please contact us at support@wh2.tu-"
 "dresden.de"
 
-#: sipa/blueprints/usersuite.py:289
+#: sipa/blueprints/usersuite.py:292
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
-#: sipa/blueprints/usersuite.py:300
+#: sipa/blueprints/usersuite.py:303
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
