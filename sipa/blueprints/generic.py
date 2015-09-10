@@ -12,7 +12,7 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from model import division_from_name, user_from_ip
+from model import dormitory_from_name, user_from_ip
 from model.default import BaseUser
 
 from sipa import logger, http_logger, app
@@ -105,11 +105,11 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        division_name = form.division.data
+        dormitory = dormitory_from_name(form.dormitory.data)
         username = form.username.data
         password = form.password.data
         remember = form.remember.data
-        User = division_from_name(division_name).user_class
+        User = dormitory.division.user_class
 
         try:
             user = User.authenticate(username, password)
@@ -117,7 +117,7 @@ def login():
             flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
-                session['division'] = division_name
+                session['dormitory'] = dormitory.name
                 login_user(user, remember=remember)
                 logger.info('Authentication successful')
                 flash(gettext(u"Anmeldung erfolgreich!"), "success")

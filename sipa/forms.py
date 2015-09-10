@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import flash, current_app
+from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
 from flask_wtf import Form
+
+from model import list_active_dormitories
 
 from werkzeug.local import LocalProxy
 
@@ -74,10 +76,10 @@ class ChangeMACForm(Form):
 
 
 class LoginForm(Form):
-    division = SelectField(lazy_gettext(u"Sektion"), choices=LocalProxy(
-        lambda: [(division.name, division.display_name)
-                 for division in current_app.extensions['divisions']]
-    ))
+    dormitory = SelectField(
+        lazy_gettext(u"Wohnheim"),
+        choices=LocalProxy(list_active_dormitories)
+    )
     username = TextField(
         label=lazy_gettext(u"Nutzername"),
         validators=[Required(gettext(u"Nutzername muss angegeben werden!"))]

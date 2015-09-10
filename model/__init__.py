@@ -13,12 +13,40 @@ from . import sample, wu, hss, gerok
 registered_divisions = [sample.division, wu.division, hss.division,
                         gerok.division]
 
+registered_dormitories = sample.dormitories + wu.dormitories + \
+                         hss.dormitories + gerok.dormitories
 
-def init_divisions(app):
+
+def init_divisions_dormitories(app):
     app.extensions['divisions'] = [
         div for div in registered_divisions
         if not div.debug_only or app.debug
     ]
+
+    app.extensions['dormitories'] = [
+        dorm for dorm in registered_dormitories
+        if not dorm.division.debug_only or app.debug
+    ]
+
+
+def list_active_dormitories(ip=None):
+    """Generate a list of all available dormitories.
+    If an ip is given, try to place the according dormitory first.
+    """
+    if not ip and request:
+        ip = request.remote_addr
+
+    preferred = dormitory_from_ip(ip) if ip else None
+
+    if preferred:
+        return [(preferred.name, preferred.display_name)] + [
+            (dormitory.name, dormitory.display_name)
+            for dormitory in current_app.extensions['dormitories']
+            if not dormitory == preferred
+        ]
+
+    return [(dormitory.name, dormitory.display_name)
+            for dormitory in current_app.extensions['dormitories']]
 
 
 def init_context(app):
@@ -26,21 +54,35 @@ def init_context(app):
         division.init_context(app)
 
 
-def division_from_name(name):
-    for division in current_app.extensions['divisions']:
-        if division.name == name:
-            return division
+def dormitory_from_name(name):
+    for dormitory in current_app.extensions['dormitories']:
+        if dormitory.name == name:
+            return dormitory
     return None
 
 
 def current_division():
-    return division_from_name(session['division'])
+    if current_dormitory():
+        return current_dormitory().division
+    else:
+        return None
+
+
+def current_dormitory():
+    return dormitory_from_name(session['dormitory'])
 
 
 def division_from_ip(ip):
-    for division in current_app.extensions['divisions']:
-        if IPv4Address(unicode(ip)) in division.subnets:
-            return division
+    dormitory = dormitory_from_ip(ip)
+    if dormitory:
+        return dormitory.division
+    return None
+
+
+def dormitory_from_ip(ip):
+    for dormitory in current_app.extensions['dormitories']:
+        if IPv4Address(unicode(ip)) in dormitory.subnets:
+            return dormitory
     return None
 
 
