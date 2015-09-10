@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-08 00:52+0200\n"
+"POT-Creation-Date: 2015-09-10 03:20+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.0\n"
+"Generated-By: Babel 1.3\n"
 
 #: model/constants.py:48
 msgid "Sonntag"
@@ -97,111 +97,111 @@ msgstr ""
 msgid "Datenbank nicht erreichbar"
 msgstr ""
 
-#: sipa/forms.py:16
+#: sipa/forms.py:18
 msgid "Deine E-Mail-Adresse"
 msgstr ""
 
-#: sipa/forms.py:17 sipa/forms.py:47
+#: sipa/forms.py:19 sipa/forms.py:49
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
-#: sipa/forms.py:18
+#: sipa/forms.py:20
 msgid "Kategorie"
 msgstr ""
 
-#: sipa/forms.py:19
+#: sipa/forms.py:21
 msgid "Allgemeine Frage an die Administratoren"
 msgstr ""
 
-#: sipa/forms.py:21
+#: sipa/forms.py:23
 msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
 msgstr ""
 
-#: sipa/forms.py:22
+#: sipa/forms.py:24
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr ""
 
-#: sipa/forms.py:23
+#: sipa/forms.py:25
 msgid "Probleme mit privater Technik"
 msgstr ""
 
-#: sipa/forms.py:25
+#: sipa/forms.py:27
 msgid "Betreff"
 msgstr ""
 
-#: sipa/forms.py:26
+#: sipa/forms.py:28
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:27
+#: sipa/forms.py:29
 msgid "Nachricht"
 msgstr ""
 
-#: sipa/forms.py:28
+#: sipa/forms.py:30
 msgid "Nachricht fehlt!"
 msgstr ""
 
-#: sipa/forms.py:33
+#: sipa/forms.py:35
 msgid "Altes Passwort"
 msgstr ""
 
-#: sipa/forms.py:34
+#: sipa/forms.py:36
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:35
+#: sipa/forms.py:37
 msgid "Neues Passwort"
 msgstr ""
 
-#: sipa/forms.py:36
+#: sipa/forms.py:38
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:37
+#: sipa/forms.py:39
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:38 sipa/forms.py:96
+#: sipa/forms.py:40 sipa/forms.py:98
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:43 sipa/forms.py:67 sipa/forms.py:86
+#: sipa/forms.py:45 sipa/forms.py:69 sipa/forms.py:88
 msgid "Passwort"
 msgstr ""
 
-#: sipa/forms.py:44 sipa/forms.py:52 sipa/forms.py:68
+#: sipa/forms.py:46 sipa/forms.py:54 sipa/forms.py:70
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sipa/forms.py:46
+#: sipa/forms.py:48
 msgid "Neue Mail"
 msgstr ""
 
-#: sipa/forms.py:62
+#: sipa/forms.py:64
 msgid "MAC muss unicast-Adresse sein!"
 msgstr ""
 
-#: sipa/forms.py:70
+#: sipa/forms.py:72
 msgid "Neue MAC"
 msgstr ""
 
-#: sipa/forms.py:77
-msgid "Sektion"
+#: sipa/forms.py:80
+msgid "Wohnheim"
 msgstr ""
 
-#: sipa/forms.py:82
+#: sipa/forms.py:84
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:83
+#: sipa/forms.py:85
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:87 sipa/forms.py:94
+#: sipa/forms.py:89 sipa/forms.py:96
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:89
+#: sipa/forms.py:91
 msgid "Anmeldung merken"
 msgstr ""
 
@@ -434,27 +434,31 @@ msgstr ""
 msgid "Quelle"
 msgstr ""
 
-#: sipa/templates/index.html:20
+#: sipa/templates/index.html:21
 msgid "geschrieben von"
 msgstr ""
 
-#: sipa/templates/index.html:27
+#: sipa/templates/index.html:23
+msgid "vom"
+msgstr ""
+
+#: sipa/templates/index.html:31
 msgid "Keine News Vorhanden!"
 msgstr ""
 
-#: sipa/templates/index.html:35
+#: sipa/templates/index.html:39
 msgid "Neuer"
 msgstr ""
 
-#: sipa/templates/index.html:39
+#: sipa/templates/index.html:43
 msgid "Keine neueren Beiträge"
 msgstr ""
 
-#: sipa/templates/index.html:46
+#: sipa/templates/index.html:50
 msgid "Älter"
 msgstr ""
 
-#: sipa/templates/index.html:50
+#: sipa/templates/index.html:54
 msgid "Keine älteren Beiträge"
 msgstr ""
 
@@ -1112,5 +1116,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Traffic (MB)"
+#~ msgstr ""
+
+#~ msgid "Sektion"
 #~ msgstr ""
 
