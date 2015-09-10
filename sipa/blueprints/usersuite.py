@@ -109,7 +109,7 @@ def usersuite_contact():
         else:
             flash(gettext(
                 u"Es gab einen Fehler beim Versenden der Nachricht. Bitte "
-                u"schicke uns direkt eine E-Mail an support@wh2.tu-dresden.de"),
+                u"schicke uns direkt eine E-Mail an support@agdsn.de"),
                 "error")
         return redirect(url_for(".usersuite"))
     elif form.is_submitted():
