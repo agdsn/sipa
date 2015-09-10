@@ -10,7 +10,7 @@
             {{ form.csrf_token }}
             {% for field in form -%}{% if field and field.id != 'csrf_token' %}
                 {% if loop.index0 == 0 %}{% set focus = true %}{% endif %}
-                <div class="form-group">
+                <div class="form-group {% if field.errors %}has-error{% endif %}">
                     {% if field.type == "BooleanField" %}
                         <div class="col-sm-offset-2 col-sm-10">
                             <div class="checkbox">
