@@ -12,7 +12,25 @@ from werkzeug.local import LocalProxy
 from wtforms import StringField, TextAreaField, SelectField, PasswordField, \
     HiddenField, BooleanField
 from wtforms.validators import DataRequired, Email, MacAddress, \
-    ValidationError, EqualTo
+    ValidationError, EqualTo, Regexp
+
+
+password_required_charset_message = lazy_gettext(
+    u"Passwort muss Buchstaben in Groß- und Kleinschreibung, Zahlen "
+    u"und Sonderzeichen enthalten sowie mindestens acht Zeichen lang sein"
+)
+
+password_validators = [
+    Regexp(
+        u"("
+        u"(?=.*\d)"                                     # ≥ 1 Digit
+        u"(?=.*[a-z])(?=.*[A-Z])"                       # ≥ 1 Letter (up/low
+        u"(?=.*[…_\[\]^!<>=&@:-?*}{/\#$|~`+%\"\';])"    # ≥ 1 Special char
+        u".{8,}"                                        # ≥ 8 chars
+        u")",
+        message=password_required_charset_message
+    ),
+]
 
 
 class ReadonlyStringField(StringField):
@@ -47,7 +65,8 @@ class ChangePasswordForm(Form):
     old = PasswordField(label=lazy_gettext(u"Altes Passwort"), validators=[
         DataRequired(gettext(u"Altes Passwort muss angegeben werden!"))])
     new = PasswordField(label=lazy_gettext(u"Neues Passwort"), validators=[
-        DataRequired(gettext(u"Neues Passwort fehlt!"))])
+        DataRequired(gettext(u"Neues Passwort fehlt!"))
+    ] + password_validators)
     confirm = PasswordField(label=lazy_gettext(u"Bestätigung"), validators=[
         DataRequired(gettext(u"Bestätigung des neuen Passworts fehlt!")),
         EqualTo('new',
@@ -109,7 +128,8 @@ class LoginForm(Form):
 
 class HostingForm(Form):
     password = PasswordField(u"Password", validators=[
-        DataRequired(gettext(u"Kein Passwort eingegeben!"))])
+        DataRequired(gettext(u"Kein Passwort eingegeben!"))
+    ] + password_validators)
     confirm = PasswordField(validators=[
         DataRequired(gettext(u"Bestätigung des neuen Passworts fehlt!")),
         EqualTo('password',
