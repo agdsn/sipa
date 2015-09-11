@@ -149,17 +149,14 @@ def usersuite_change_password():
         old = form.old.data
         new = form.new.data
 
-        if new != form.new2.data:
-            flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
+        try:
+            current_user.re_authenticate(old)
+            current_user.change_password(old, new)
+        except PasswordInvalid:
+            flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
         else:
-            try:
-                current_user.re_authenticate(old)
-                current_user.change_password(old, new)
-            except PasswordInvalid:
-                flash(gettext(u"Altes Passwort war inkorrekt!"), "error")
-            else:
-                flash(gettext(u"Passwort wurde geändert"), "success")
-                return redirect(url_for(".usersuite"))
+            flash(gettext(u"Passwort wurde geändert"), "success")
+            return redirect(url_for(".usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -293,14 +290,11 @@ def usersuite_hosting(action=None):
     form = HostingForm()
 
     if form.validate_on_submit():
-        if form.password1.data != form.password2.data:
-            flash(gettext(u"Neue Passwörter stimmen nicht überein!"), "error")
+        if form.action.data == "create":
+            current_user.user_db_create(form.password.data)
+            flash(gettext(u"Deine Datenbank wurde erstellt."), "message")
         else:
-            if form.action.data == "create":
-                current_user.user_db_create(form.password1.data)
-                flash(gettext(u"Deine Datenbank wurde erstellt."), "message")
-            else:
-                current_user.user_db_password_change(form.password1.data)
+            current_user.user_db_password_change(form.password.data)
     elif form.is_submitted():
         flash_formerrors(form)
 

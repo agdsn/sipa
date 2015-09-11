@@ -11,7 +11,8 @@ from werkzeug.local import LocalProxy
 
 from wtforms import StringField, TextAreaField, SelectField, PasswordField, \
     HiddenField, BooleanField
-from wtforms.validators import DataRequired, Email, MacAddress, ValidationError
+from wtforms.validators import DataRequired, Email, MacAddress, \
+    ValidationError, EqualTo
 
 
 class ReadonlyStringField(StringField):
@@ -47,8 +48,11 @@ class ChangePasswordForm(Form):
         DataRequired(gettext(u"Altes Passwort muss angegeben werden!"))])
     new = PasswordField(label=lazy_gettext(u"Neues Passwort"), validators=[
         DataRequired(gettext(u"Neues Passwort fehlt!"))])
-    new2 = PasswordField(label=lazy_gettext(u"Bestätigung"), validators=[
-        DataRequired(gettext(u"Bestätigung des neuen Passworts fehlt!"))])
+    confirm = PasswordField(label=lazy_gettext(u"Bestätigung"), validators=[
+        DataRequired(gettext(u"Bestätigung des neuen Passworts fehlt!")),
+        EqualTo('new',
+                message=gettext(u"Neue Passwörter stimmen nicht überein!"))
+    ])
 
 
 class ChangeMailForm(Form):
@@ -104,10 +108,13 @@ class LoginForm(Form):
 
 
 class HostingForm(Form):
-    password1 = PasswordField(u"Password", validators=[
+    password = PasswordField(u"Password", validators=[
         DataRequired(gettext(u"Kein Passwort eingegeben!"))])
-    password2 = PasswordField(validators=[
-        DataRequired(gettext(u"Bestätigung des neuen Passworts fehlt!"))])
+    confirm = PasswordField(validators=[
+        DataRequired(gettext(u"Bestätigung des neuen Passworts fehlt!")),
+        EqualTo('password',
+                message=gettext(u"Neue Passwörter stimmen nicht überein!"))
+    ])
     action = HiddenField()
 
 
