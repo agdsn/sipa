@@ -18,7 +18,7 @@ registered_dormitories = sample.dormitories + wu.dormitories + \
 
 unsupported_dormitories = {
     'hss': (u"Hochschulstraße", "https://wh12.tu-dresden.de"),
-    'zeu': (u"Zeunerstraße", "https://wh25.tu-dresden.de")
+    'zeu': (u"Zeunerstraße", "https://zeus.wh25.tu-dresden.de")
 }
 
 
