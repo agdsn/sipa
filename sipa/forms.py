@@ -5,7 +5,7 @@ from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
 from flask_wtf import Form
 
-from model import list_active_dormitories
+from model import list_all_dormitories
 
 from werkzeug.local import LocalProxy
 
@@ -112,7 +112,7 @@ class ChangeMACForm(Form):
 class LoginForm(Form):
     dormitory = SelectField(
         lazy_gettext(u"Wohnheim"),
-        choices=LocalProxy(list_active_dormitories)
+        choices=LocalProxy(list_all_dormitories)
     )
     username = StringField(
         label=lazy_gettext(u"Nutzername"),

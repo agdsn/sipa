@@ -21,7 +21,7 @@ def show_image(image):
 
 @bp_documents.route('/<document>')
 def show_pdf(document):
-    filename = '../cached_documents/{}'.format(document)
+    filename = '../content/documents/{}'.format(document)
     if not isfile(filename):
         abort(404)
 

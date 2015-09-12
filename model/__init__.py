@@ -7,14 +7,19 @@ from ipaddress import IPv4Address
 from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
 
-from . import sample, wu, hss, gerok
+from . import sample, wu, gerok
 
 
-registered_divisions = [sample.division, wu.division, hss.division,
+registered_divisions = [sample.division, wu.division,
                         gerok.division]
 
 registered_dormitories = sample.dormitories + wu.dormitories + \
-                         hss.dormitories + gerok.dormitories
+                         gerok.dormitories
+
+unsupported_dormitories = {
+    'hss': (u"Hochschulstraße", "https://wh12.tu-dresden.de"),
+    'zeu': (u"Zeunerstraße", "https://wh25.tu-dresden.de")
+}
 
 
 def init_divisions_dormitories(app):
@@ -29,8 +34,8 @@ def init_divisions_dormitories(app):
     ]
 
 
-def list_active_dormitories(ip=None):
-    """Generate a list of all available dormitories.
+def list_all_dormitories(ip=None):
+    """Generate a list of all available dormitories (active & external).
     If an ip is given, try to place the according dormitory first.
     """
     if not ip and request:
@@ -39,14 +44,18 @@ def list_active_dormitories(ip=None):
     preferred = dormitory_from_ip(ip) if ip else None
 
     if preferred:
-        return [(preferred.name, preferred.display_name)] + [
+        active = [(preferred.name, preferred.display_name)] + [
             (dormitory.name, dormitory.display_name)
             for dormitory in current_app.extensions['dormitories']
             if not dormitory == preferred
         ]
+    else:
+        active = [(dormitory.name, dormitory.display_name)
+                 for dormitory in current_app.extensions['dormitories']]
 
-    return [(dormitory.name, dormitory.display_name)
-            for dormitory in current_app.extensions['dormitories']]
+    extern = [(key, val[0]) for key, val in unsupported_dormitories.iteritems()]
+
+    return active + extern
 
 
 def init_context(app):

@@ -12,7 +12,7 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap import SERVER_DOWN
 
-from model import dormitory_from_name, user_from_ip
+from model import dormitory_from_name, user_from_ip, unsupported_dormitories
 from model.default import BaseUser
 
 from sipa import logger, http_logger, app
@@ -127,7 +127,8 @@ def login():
     if current_user.is_authenticated():
         return redirect(url_for('usersuite.usersuite'))
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form,
+                           unsupported=unsupported_dormitories)
 
 
 @bp_generic.route("/logout")

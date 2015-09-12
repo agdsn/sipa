@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-11 15:07+0200\n"
-"PO-Revision-Date: 2015-09-11 15:09+0200\n"
+"POT-Creation-Date: 2015-09-12 02:42+0200\n"
+"PO-Revision-Date: 2015-09-12 02:44+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -171,15 +171,15 @@ msgstr "New password is missing!"
 msgid "Bestätigung"
 msgstr "Confirmation"
 
-#: sipa/forms.py:71 sipa/forms.py:134
+#: sipa/forms.py:71 sipa/forms.py:135
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: sipa/forms.py:73 sipa/forms.py:136
+#: sipa/forms.py:73 sipa/forms.py:137
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:123
+#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:124
 msgid "Passwort"
 msgstr "Password"
 
@@ -203,19 +203,19 @@ msgstr "New mac"
 msgid "Wohnheim"
 msgstr "Dormitory"
 
-#: sipa/forms.py:118
+#: sipa/forms.py:119
 msgid "Nutzername"
 msgstr "Username"
 
-#: sipa/forms.py:119
+#: sipa/forms.py:120
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: sipa/forms.py:124 sipa/forms.py:131
+#: sipa/forms.py:125 sipa/forms.py:132
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:126
+#: sipa/forms.py:127
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
@@ -247,26 +247,26 @@ msgstr "Authentication data incorrect!"
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/blueprints/generic.py:150
+#: sipa/blueprints/generic.py:151
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:152
+#: sipa/blueprints/generic.py:153
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr "You will find here the traffic data for this connection"
 
-#: sipa/blueprints/generic.py:158
+#: sipa/blueprints/generic.py:159
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr "Your IP does not belong to this network!"
 
-#: sipa/blueprints/generic.py:161
+#: sipa/blueprints/generic.py:162
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite einsehen."
 msgstr ""
 "Because you are logged in, you can view your traffic here in the usersuite."
 
-#: sipa/blueprints/generic.py:165
+#: sipa/blueprints/generic.py:166
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
 msgstr "To view your traffic from outside the network, you have to log in."
@@ -477,6 +477,10 @@ msgstr "Older"
 #: sipa/templates/index.html:54
 msgid "Keine älteren Beiträge"
 msgstr "No older entries"
+
+#: sipa/templates/login.html:8
+msgid "Dieses Wohnheim erreichst du hier:"
+msgstr "You can reach this dormitory over here:"
 
 #: sipa/templates/template.html:8
 msgid "Geschrieben von"

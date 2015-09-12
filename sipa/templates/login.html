@@ -3,5 +3,34 @@
 {% set page_title = "Login" %}
 
 {% block content %}
-    {{ forms.render_simple(form=form, form_id="test", cancel_to=url_for('.index')) }}
+{% call forms.render(form=form, form_id="loginform", cancel_to=url_for('.index')) %}
+        <div class="col-sm-offset-2 col-sm-10 alert alert-info hidden" id="extern">
+            {{ _('Dieses Wohnheim erreichst du hier:') }} <a id="link" href="#"></a>
+        </div>
+{% endcall %}
 {% endblock %}
+
+{% block custom_script -%}
+<script type="text/javascript">
+    $("#dormitory").change(function(){
+        unsupported = {
+            {% for key, dorm in unsupported.iteritems() -%}
+                {{ key }}: ["{{ dorm[0] }}", "{{ dorm[1] }}"],
+            {%- endfor %}
+        }
+        selected = $("select#dormitory").find(":selected").prop("value")
+        if (selected in unsupported) {
+            $("#loginform form input.form-control, #loginform form input[type=checkbox]").prop(
+                "disabled", true);
+            $("#loginform #extern>a#link").prop("href", unsupported[selected][1]);
+            $("#loginform #extern>a#link").html(unsupported[selected][0]);
+            $("#loginform #extern").removeClass("hidden");
+        } else {
+            $("#loginform form input.form-control, #loginform form input[type=checkbox]").prop(
+                "disabled", false)
+            $("#loginform #extern").addClass("hidden")
+        }
+    });
+    $("#dormitory").on("load", function() {}).triggerHandler("change")
+</script>
+{%- endblock %}

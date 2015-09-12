@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-11 15:07+0200\n"
+"POT-Creation-Date: 2015-09-12 02:42+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -167,15 +167,15 @@ msgstr ""
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:71 sipa/forms.py:134
+#: sipa/forms.py:71 sipa/forms.py:135
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:73 sipa/forms.py:136
+#: sipa/forms.py:73 sipa/forms.py:137
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:123
+#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:124
 msgid "Passwort"
 msgstr ""
 
@@ -199,19 +199,19 @@ msgstr ""
 msgid "Wohnheim"
 msgstr ""
 
-#: sipa/forms.py:118
+#: sipa/forms.py:119
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:119
+#: sipa/forms.py:120
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:124 sipa/forms.py:131
+#: sipa/forms.py:125 sipa/forms.py:132
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:126
+#: sipa/forms.py:127
 msgid "Anmeldung merken"
 msgstr ""
 
@@ -243,27 +243,27 @@ msgstr ""
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:150
+#: sipa/blueprints/generic.py:151
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:152
+#: sipa/blueprints/generic.py:153
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr ""
 
-#: sipa/blueprints/generic.py:158
+#: sipa/blueprints/generic.py:159
 msgid "Deine IP gehört nicht zum Wohnheim!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:161
+#: sipa/blueprints/generic.py:162
 msgid ""
 "Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
 "einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:165
+#: sipa/blueprints/generic.py:166
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
 "anmelden."
@@ -472,6 +472,10 @@ msgstr ""
 
 #: sipa/templates/index.html:54
 msgid "Keine älteren Beiträge"
+msgstr ""
+
+#: sipa/templates/login.html:8
+msgid "Dieses Wohnheim erreichst du hier:"
 msgstr ""
 
 #: sipa/templates/template.html:8
