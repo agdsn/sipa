@@ -49,7 +49,8 @@ DORMITORIES = [
     u'Zellescher Weg 41A',
     u'Zellescher Weg 41B',
     u'Zellescher Weg 41C',
-    u'Zellescher Weg 41D'
+    u'Zellescher Weg 41D',
+    u'Borsbergstraße 34'
 ]
 
 STATUS = {
