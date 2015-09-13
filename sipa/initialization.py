@@ -13,7 +13,7 @@ from sipa.utils.git_utils import init_repo, update_repo
 
 def init_env_and_config(app):
     # default configuration
-    app.config.from_pyfile('default_config.py')
+    app.config.from_pyfile(os.path.realpath("sipa/default_config.py"))
     # if local config file exists, load everything into local space.
     config_dir = os.getenv('SIPA_CONFIG_DIR', '..')
     try:
