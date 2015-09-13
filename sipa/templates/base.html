@@ -132,6 +132,7 @@
 					<h2>{{ _("Kontakt") }} </h2>
 
 					<div>
+                                            {% if current_user.is_authenticated() %}
 						<div class="row">
 							<div class="col-xs-1">
 								<span class="glyphicon glyphicon-envelope"></span>
@@ -142,6 +143,7 @@
 						</div>
 
 						<br />
+                                            {% endif %}
 
 						<div class="row">
 							<div class="col-xs-1">
