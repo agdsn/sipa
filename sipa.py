@@ -10,7 +10,7 @@
 
 import argparse
 from sipa import app, logger
-from sipa.base import init_app
+from sipa.initialization import init_app
 
 
 if __name__ == "__main__":

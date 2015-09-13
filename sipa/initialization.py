@@ -3,12 +3,87 @@ import logging.config
 import os
 import os.path
 
+from flask import Flask
+
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
 
+from flask.ext.babel import get_locale
+
+from model import init_context, init_divisions_dormitories
+from model.constants import ACTIONS, STATUS_COLORS
+
 from sipa import logger
+from sipa.base import login_manager, babel_selector, IntegerConverter
+from sipa.babel import babel, possible_locales
+from sipa.flatpages import cf_pages
+from sipa.utils.graph_utils import render_traffic_chart
 from sipa.utils.git_utils import init_repo, update_repo
+
+
+def create_app(name=None):
+    app = Flask(name if name else __name__)
+    # TODO: call init_app
+    return app
+
+
+def init_app(app):
+    """Initialize the Flask app located in the module sipa.
+    This initializes the Flask app by:
+    * calling the internal init_app() procedures of each module
+    * registering the Blueprints
+    * configuring the rotatingFileHandler for loggin
+    * registering the Jinja global variables
+    :return: None
+    """
+    init_env_and_config(app)
+    logger.debug('Initializing app')
+    login_manager.init_app(app)
+    babel.init_app(app)
+    babel.localeselector(babel_selector)
+    cf_pages.init_app(app)
+
+    app.url_map.converters['int'] = IntegerConverter
+
+    from sipa.blueprints import bp_features, bp_usersuite, \
+        bp_pages, bp_documents, bp_news, bp_generic
+
+    logger.debug('Registering blueprints')
+    app.register_blueprint(bp_generic)
+    app.register_blueprint(bp_features)
+    app.register_blueprint(bp_usersuite)
+    app.register_blueprint(bp_pages)
+    app.register_blueprint(bp_documents)
+    app.register_blueprint(bp_news)
+
+    if not app.debug:
+        app.config.setdefault('LOG_MAX_BYTES', 1024 ** 2)
+        app.config.setdefault('LOG_BACKUP_COUNT', 10)
+        import logging
+        from logging.handlers import RotatingFileHandler
+        file_handler = RotatingFileHandler(
+            app.config['LOG_FILE'],
+            maxBytes=app.config['LOG_MAX_BYTES'],
+            backupCount=app.config['LOG_BACKUP_COUNT'])
+        file_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(file_handler)
+
+    from model import query_gauge_data
+    logger.debug('Registering Jinja globals')
+    app.jinja_env.globals.update(
+        cf_pages=cf_pages,
+        gauge_data=query_gauge_data,
+        get_locale=get_locale,
+        possible_locales=possible_locales,
+        chart=render_traffic_chart,
+        ACTIONS=ACTIONS,
+        STATUS_COLORS=STATUS_COLORS
+    )
+
+    init_logging(app)
+    init_divisions_dormitories(app)
+    init_context(app)
 
 
 def init_env_and_config(app):
