@@ -78,7 +78,10 @@ class User(BaseUser):
 
     @staticmethod
     def from_ip(ip):
-        result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
+        result = sql_query("SELECT c.nutzer_id FROM computer as c"
+                           "LEFT JOIN nutzer as n ON c.nutzer_id = n.nutzer_id"
+                           "WHERE c_ip = %(ip)"
+                           "AND (n.status < 8 OR n.status > 10)",
                            (ip,)).fetchone()
         if result is None:
             return AnonymousUserMixin()
