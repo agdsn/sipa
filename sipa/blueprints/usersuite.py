@@ -284,7 +284,7 @@ def usersuite_hosting(action=None):
     """
     if action == "confirm":
         current_user.user_db_drop()
-        flash(gettext(u"Deine Datenbank wurde gelöscht."), "message")
+        flash(gettext(u"Deine Datenbank wurde gelöscht."), 'success')
         return redirect(url_for('.usersuite_hosting'))
 
     form = HostingForm()
@@ -292,7 +292,7 @@ def usersuite_hosting(action=None):
     if form.validate_on_submit():
         if form.action.data == "create":
             current_user.user_db_create(form.password.data)
-            flash(gettext(u"Deine Datenbank wurde erstellt."), "message")
+            flash(gettext(u"Deine Datenbank wurde erstellt."), 'success')
         else:
             current_user.user_db_password_change(form.password.data)
     elif form.is_submitted():
