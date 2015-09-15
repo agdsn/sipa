@@ -250,21 +250,29 @@ def usersuite_change_mac():
                                             mac)
             logger.info('Successfully changed MAC address to %s', mac)
 
-            subject = u"[Usersuite] %s hat seine/ihre MAC-Adresse " \
-                      u"geändert" % current_user.uid
-            message = u"Nutzer %(name)s (%(uid)s) hat seine/ihre MAC-Adresse " \
-                      u"geändert.\nAlte MAC: %(old_mac)s\nNeue MAC: %(new_mac)s" % \
-                      {'name': current_user.name, 'uid': current_user.uid,
-                       'old_mac': userinfo['mac'], 'new_mac': mac}
+            subject = (u"[Usersuite] {} hat seine/ihre MAC-Adresse "
+                       u"geändert".format(current_user.uid))
+            message = (
+                u"Nutzer {name} ({uid}) hat seine/ihre MAC-Adresse geändert."
+                u"\nAlte MAC: {old_mac}\nNeue MAC: {new_mac}".format(
+                    name=current_user.name,
+                    uid=current_user.uid,
+                    old_mac=userinfo['mac'],
+                    new_mac=mac
+                )
+            )
 
             if send_mail(current_user.uid + u"@wh2.tu-dresden.de",
                          "support@wh2.tu-dresden.de", subject, message):
                 flash(gettext(u"MAC-Adresse wurde geändert!"), "success")
                 return redirect(url_for('.usersuite'))
             else:
-                flash(gettext(u"Es gab einen Fehler beim Versenden der "
-                              u"Nachricht. Bitte schicke uns direkt eine E-Mail"
-                              u" an support@wh2.tu-dresden.de"), "error")
+                flash(gettext(
+                    u"Es gab einen Fehler beim Versenden der Nachricht. "
+                    u"Bitte schicke uns direkt eine E-Mail "
+                    u"an support@wh2.tu-dresden.de"),
+                    'error'
+                )
                 return redirect(url_for('.usersuite'))
     elif form.is_submitted():
         flash_formerrors(form)

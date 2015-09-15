@@ -42,9 +42,10 @@ def get_bustimes(stopname, count=10):
 
     stopname = stopname.replace(' ', '%20')
     try:
-        conn.request('GET',
-                     '/abfahrtsmonitor/Abfahrten.do?ort=Dresden&hst={0}'.format(
-                         stopname))
+        conn.request(
+            'GET',
+            '/abfahrtsmonitor/Abfahrten.do?ort=Dresden&hst={}'.format(stopname)
+        )
         r = conn.getresponse()
     except socket.error:
         return None

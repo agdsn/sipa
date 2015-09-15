@@ -11,7 +11,8 @@ from raven.handlers.logging import SentryHandler
 
 from flask.ext.babel import get_locale
 
-from model import init_context, init_datasources_dormitories, current_datasource
+from model import init_context, init_datasources_dormitories, \
+    current_datasource
 from model.constants import ACTIONS, STATUS_COLORS
 
 from sipa import logger

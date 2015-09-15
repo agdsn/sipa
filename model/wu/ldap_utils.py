@@ -105,7 +105,8 @@ def search_in_group(username, group):
     """
     with LdapConnector(username) as l:
         group_object = l.search_s(
-            'cn=' + group + ',ou=Gruppen,ou=Sektion Wundtstrasse,o=AG DSN,c=de',
+            "cn={},ou=Gruppen,ou=Sektion Wundtstrasse,o=AG DSN,c=de".format(
+                group),
             ldap.SCOPE_SUBTREE, '(memberuid=%s)' % username)
 
         if group_object:

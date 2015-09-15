@@ -22,4 +22,3 @@ class DBQueryEmpty(Exception):
 
 class LDAPConnectionError(Exception):
     pass
-

@@ -79,7 +79,8 @@ class User(BaseUser):
     @staticmethod
     def from_ip(ip):
         result = sql_query("SELECT c.nutzer_id FROM computer as c "
-                           "LEFT JOIN nutzer as n ON c.nutzer_id = n.nutzer_id "
+                           "LEFT JOIN nutzer as n "
+                           "ON c.nutzer_id = n.nutzer_id "
                            "WHERE c_ip = %s "
                            "AND (n.status < 8 OR n.status > 10)",
                            (ip,)).fetchone()
@@ -180,7 +181,8 @@ class User(BaseUser):
                 )
         except OperationalError:
             logger.critical("User db unreachable")
-            user_db_prop = info_property(gettext(u"Datenbank nicht erreichbar"))
+            user_db_prop = info_property(gettext(
+                u"Datenbank nicht erreichbar"))
         finally:
             userinfo.update(userdb=user_db_prop)
 

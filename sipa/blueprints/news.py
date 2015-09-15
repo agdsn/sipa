@@ -29,11 +29,12 @@ def display(start=None, end=None):
     news = sorted(news, key=lambda a: a.date, reverse=True)
 
     default_step = 10
-    # calculating mod len() allows things like `end=-1` for the last article(s).
-    # this may lead to confusing behaviour because this allows values out of the
-    # range (|val|≥len(latest)), but this will only result in displaying
-    # articles instead of throwing an error.
-    # Apart from that, such values would just appear if edited manually.
+    # calculating mod len() allows things like `end=-1` for the last
+    # article(s).  this may lead to confusing behaviour because this
+    # allows values out of the range (|val|≥len(latest)), but this
+    # will only result in displaying articles instead of throwing an
+    # error.  Apart from that, such values would just appear if edited
+    # manually.
     if start is None:
         if end is None:
             start, end = 0, default_step

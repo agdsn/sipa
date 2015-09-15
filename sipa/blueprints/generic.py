@@ -53,7 +53,8 @@ def error_handler_redirection(e):
 def exceptionhandler_sql(ex):
     """Handles global MySQL errors (server down).
     """
-    flash(gettext("Verbindung zum SQL-Server konnte nicht hergestellt werden!"),
+    flash(gettext("Verbindung zum SQL-Server konnte nicht "
+                  "hergestellt werden!"),
           "error")
     logger.critical('Unable to connect to MySQL server',
                     extra={'data': {'exception_args': ex.args}})
@@ -148,8 +149,9 @@ def usertraffic():
     if isinstance(ip_user, BaseUser):
         if current_user.is_authenticated():
             if current_user != ip_user:
-                flash(gettext(u"Ein anderer Nutzer als der für diesen Anschluss"
-                              u" Eingetragene ist angemeldet!"), "warning")
+                flash(gettext(u"Ein anderer Nutzer als der für diesen"
+                              " Anschluss Eingetragene ist angemeldet!"),
+                      'warning')
                 flash(gettext("Hier werden die Trafficdaten "
                               "dieses Anschlusses angezeigt"), "info")
 
@@ -163,6 +165,6 @@ def usertraffic():
                           u"hier in der Usersuite einsehen."), "info")
             return redirect(url_for('usersuite.usersuite'))
         else:
-            flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu können,"
-                          u" musst du dich anmelden."), "info")
+            flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu "
+                          u"können, musst du dich anmelden."), 'info')
             return redirect(url_for('.login'))
