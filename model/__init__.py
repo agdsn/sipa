@@ -54,9 +54,10 @@ def list_all_dormitories(ip=None):
         ]
     else:
         active = [(dormitory.name, dormitory.display_name)
-                 for dormitory in current_app.extensions['dormitories']]
+                  for dormitory in current_app.extensions['dormitories']]
 
-    extern = [(key, val[0]) for key, val in unsupported_dormitories.iteritems()]
+    extern = [(key, val[0]) for key, val
+              in unsupported_dormitories.iteritems()]
 
     return active + extern
 
