@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.babel import gettext
-from ..division import Division, Dormitory
+from ..division import DataSource, Dormitory
 from ipaddress import IPv4Network
 
 import user
 
-division = Division(
+division = DataSource(
     name='sample',
     display_name=gettext("Beispielsektion"),
     user_class=user.User,

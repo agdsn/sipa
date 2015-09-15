@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.babel import gettext
-from ..division import Division, Dormitory
+from ..division import DataSource, Dormitory
 from database_utils import init_db
 from ipaddress import IPv4Network
 
@@ -14,7 +14,7 @@ def init_context(app):
     init_ldap(app)
 
 
-division = Division(
+division = DataSource(
     name='wu',
     display_name=gettext(u"Wundtstraße & Zellescher Weg"),
     user_class=user.User,
