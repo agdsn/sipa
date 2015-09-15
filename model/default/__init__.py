@@ -12,14 +12,17 @@ class AuthenticatedUserMixin:
     when “asked” by flask-login.
     """
 
+    @property
     def is_authenticated(self):
         """Required by flask-login"""
         return True
 
+    @property
     def is_active(self):
         """Required by flask-login"""
         return True
 
+    @property
     def is_anonymous(self):
         """Required by flask-login"""
         return False

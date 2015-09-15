@@ -125,7 +125,7 @@ def login():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('usersuite.usersuite'))
 
     return render_template('login.html', form=form,
@@ -147,7 +147,7 @@ def usertraffic():
     ip_user = user_from_ip(request.remote_addr)
 
     if isinstance(ip_user, BaseUser):
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             if current_user != ip_user:
                 flash(gettext("Ein anderer Nutzer als der für diesen "
                               "Anschluss Eingetragene ist angemeldet!"),
@@ -160,7 +160,7 @@ def usertraffic():
     else:
         flash(gettext("Deine IP gehört nicht zum Wohnheim!"), "error")
 
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             flash(gettext("Da du angemeldet bist, kannst du deinen Traffic "
                           "hier in der Usersuite einsehen."), "info")
             return redirect(url_for('usersuite.usersuite'))

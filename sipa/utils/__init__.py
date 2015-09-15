@@ -74,9 +74,9 @@ def get_bustimes(stopname, count=10):
 
 
 def current_user_name():
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return current_user.uid
-    elif current_user.is_anonymous():
+    elif current_user.is_anonymous:
         return 'anonymous'
     else:
         return ''

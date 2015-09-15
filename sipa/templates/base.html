@@ -87,7 +87,7 @@
                     </ul>
 
 				</li>
-                {% if current_user.is_anonymous() %}<li>
+                {% if current_user.is_anonymous %}<li>
                     <a href="{{ url_for('generic.login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
                 </li>{% else %}<li>
                     <a href="{{ url_for('usersuite.usersuite') }}"><span class="text-success"><span class="glyphicon glyphicon-user"></span> {{ current_user.name }}</span></a>
@@ -132,7 +132,7 @@
 					<h2>{{ _("Kontakt") }} </h2>
 
 					<div>
-                                            {% if current_user.is_authenticated() %}
+                                            {% if current_user.is_authenticated %}
                                                 {% set mail = current_datasource().support_mail %}
 						<div class="row">
 							<div class="col-xs-1">
