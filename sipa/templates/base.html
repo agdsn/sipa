@@ -189,7 +189,7 @@
 					{% for cat, msg in messages %}
 						{% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
 						<div class="alert{% if cat and cat != 'message' %} alert-{{ cat }}{% else %} alert-info{% endif %}">
-							{{ _(msg) }}
+							{{ msg }}
 						</div>
 					{% endfor %}
 				{% endif %}

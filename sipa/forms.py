@@ -149,4 +149,4 @@ def flash_formerrors(form):
     """
     for field, errors in list(form.errors.items()):
         for e in errors:
-            flash(gettext(e), "error")
+            flash(e, "error")
