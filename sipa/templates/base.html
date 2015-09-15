@@ -2,120 +2,162 @@
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 
-<head>
-    <meta charset="utf-8" />
+    <head>
+        <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Arbeitsgemeinschaft Dresdner Studentennetz">
 	<meta name="author" content="AG DSN Administrators">
 
-    <title>AG DSN {% if page_title %} - {{ page_title }}{% endif %}</title>
+        <title>AG DSN {% if page_title %} - {{ page_title }}{% endif %}</title>
 
 	<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
-</head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+    </head>
 
-<body>
+    <body>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">toggle</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ url_for('generic.index') }}"><div id="logo"></div></a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                        {{ _("News") }}<span class="caret"></span>
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">toggle</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ url_for('generic.index') }}">
+                        <div id="logo"></div>
                     </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="{{ url_for('news.newest') }}">
-                            <span class="glyphicon glyphicon-fast-backward"></span>&nbsp; {{ _("Neueste") }}</a></li>
-                        <li><a href="{{ url_for('news.oldest') }}">
-                            <span class="glyphicon glyphicon-fast-forward"></span>&nbsp; {{ _("Älteste") }}</a></li>
-                        <li><a href="{{ url_for('news.display_all') }}">
-                            <span class="glyphicon glyphicon-book"></span>&nbsp; {{ _("Alle") }}</a></li>
-                    </ul>
-                </li>
-                {% for c in cf_pages %}
-                {% if c.index %}
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" >{{ c.name }}<span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        {% for article in c.articles_itterator()  %}
-                        {% if not article.id == 'index' and article.title %}
-                        <li>
-                            <a href="
-                                {% if not article.link %}
-                                    {{url_for('pages.show', category_id=c.id, article_id=article.id) }}
-                                {% else %}
-                                    {{ article.link }}
-                                {% endif %}">
-                                <span class="glyphicon {{article.glyphicon}}"></span>
-                                &nbsp; {{ article.title }}
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                {{ _("News") }}<span class="caret"></span>
                             </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="{{ url_for('news.newest') }}">
+                                        <span class="glyphicon glyphicon-fast-backward"></span>
+                                        &nbsp; {{ _("Neueste") }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('news.oldest') }}">
+                                        <span class="glyphicon glyphicon-fast-forward"></span>
+                                        &nbsp; {{ _("Älteste") }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('news.display_all') }}">
+                                        <span class="glyphicon glyphicon-book"></span>
+                                        &nbsp; {{ _("Alle") }}
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        {% endif %}
+                        {% for c in cf_pages %}
+                            {% if c.index %}
+                                <li class="dropdown">
+                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle" >
+                                        {{ c.name }}<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        {% for article in c.articles_itterator()  %}
+                                            {% if not article.id == 'index' and article.title %}
+                                                {% if not article.link %}
+                                                    {% set href = url_for(
+                                                        'pages.show',
+                                                        category_id=c.id,
+                                                        article_id=article.id)
+                                                    %}
+                                                {% else %}
+                                                    {% set href = article.link %}
+                                                {% endif %}
+                                                <li>
+                                                    <a href="{{ href }}">
+                                                        <span class="glyphicon {{article.glyphicon}}"></span>
+                                                        &nbsp; {{ article.title }}
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                <li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
-                <li>
-                {% endif %}
-                {% endfor %}
-            </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="caret"></span>
-                        <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
-                        {{ get_locale().display_name}}
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        {% for locale in possible_locales() %}
-                        <li >
-                            <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
-                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
-                                {{locale.display_name}}
+                    <ul class="nav navbar-nav navbar-right">
+			<li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                <span class="caret"></span>
+                                <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
+                                {{ get_locale().display_name}}
                             </a>
-                        </li>
-                        {% endfor %}
+                            <ul class="dropdown-menu" role="menu">
+                                {% for locale in possible_locales() %}
+                                    <li>
+                                        <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
+                                            <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
+                                            {{locale.display_name}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+			</li>
+
+                        {% if current_user.is_anonymous() -%}
+                            <li>
+                                <a href="{{ url_for('generic.login') }}">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    {{ _("Login") }}
+                                </a>
+                            </li>
+                        {%- else -%}
+                            <li>
+                                <a href="{{ url_for('usersuite.usersuite') }}">
+                                    <span class="text-success">
+                                        <span class="glyphicon glyphicon-user"></span>
+                                        {{ current_user.name }}
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ url_for('generic.logout') }}">
+                                    <span class="text-danger">
+                                        <span class="glyphicon glyphicon-off"></span>
+                                        {{ _("Logout") }}
+                                    </span>
+                                </a>
+                            </li>
+                        {%- endif %}
                     </ul>
+                </div>
+            </div>
+        </nav>
 
-				</li>
-                {% if current_user.is_anonymous() %}<li>
-                    <a href="{{ url_for('generic.login') }}"><span class="glyphicon glyphicon-user"></span>  {{ _("Login") }}</a>
-                </li>{% else %}<li>
-                    <a href="{{ url_for('usersuite.usersuite') }}"><span class="text-success"><span class="glyphicon glyphicon-user"></span> {{ current_user.name }}</span></a>
-                </li><li>
-                    <a href="{{ url_for('generic.logout') }}"><span class="text-danger"><span class="glyphicon glyphicon-off"></span> {{ _("Logout") }}</span></a>
-                </li>{% endif %}
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<header class="pg-header">
-	<div class="container">
+        <header class="pg-header">
+	    <div class="container">
 		<h1>AG DSN</h1>
 		<p>Arbeitsgemeinschaft Dresdner Studentennetz</p>
-	</div>
-</header>
+	    </div>
+        </header>
 
 
-<div class="container">
-	<div class="row">
+        <div class="container">
+	    <div class="row">
 		<div class="col-sm-3 col-sm-push-9">
 		    <div class="row">
                         {% if not credit.foreign_user -%}
 			    <div class="col-xs-6 col-sm-12">
 				<a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}">
                                     <div id="trafficgauge"></div>
-                                    <div class="text-center"><small>({{ _("Für Details klicken") }})</small></div>
+                                    <div class="text-center">
+                                        <small>({{ _("Für Details klicken") }})</small>
+                                    </div>
 				</a><br>
 
                                 <div class="row">
@@ -128,117 +170,122 @@
 			    </div>
                         {%- endif %}
 
-				<div class="col-xs-6 col-sm-12">
-					<h2>{{ _("Kontakt") }} </h2>
+			<div class="col-xs-6 col-sm-12">
+			    <h2>{{ _("Kontakt") }} </h2>
 
-					<div>
-                                            {% if current_user.is_authenticated() %}
-                                                {% set mail = current_datasource().support_mail %}
-						<div class="row">
-							<div class="col-xs-1">
-								<span class="glyphicon glyphicon-envelope"></span>
-							</div>
-							<div class="col-xs-10">
-								<a href="mailto:{{ mail }}">{{ mail }}</a>
-							</div>
-						</div>
-
-						<br />
-                                            {% endif %}
-
-						<div class="row">
-							<div class="col-xs-1">
-								<span class="glyphicon glyphicon-home"></span>
-							</div>
-							<div class="col-xs-10">
-                                <address>
-                                    <strong>Borsbergstraße 34</strong><br>
-                                    {{ _("7. Etage") }}<br>
-                                    01309 Dresden<br>
-                                </address>
-                            </div>
-							<div class="col-xs-1">
-								<span class="glyphicon glyphicon-home"></span>
-							</div>
-							<div class="col-xs-10">
-                                <address>
-                                    <strong>Hochschulstraße 46</strong><br>
-                                    {{ _("Keller") }}<br>
-                                    01069 Dresden<br>
-                                </address>
-                            </div>
-							<div class="col-xs-1">
-								<span class="glyphicon glyphicon-home"></span>
-							</div>
-							<div class="col-xs-10">
-                                <address>
-                                    <strong>Wundtstraße 5</strong><br>
-                                    {{ _("Klingel") }} 0100<br>
-                                    01217 Dresden<br>
-                                </address>
-							</div>
-						</div>
+			    <div>
+                                {% if current_user.is_authenticated() %}
+                                    {% set mail = current_datasource().support_mail %}
+				    <div class="row">
+					<div class="col-xs-1">
+					    <span class="glyphicon glyphicon-envelope"></span>
 					</div>
+					<div class="col-xs-10">
+					    <a href="mailto:{{ mail }}">{{ mail }}</a>
+					</div>
+				    </div>
+
+				    <br />
+                                {% endif %}
+				<div class="row">
+				    <div class="col-xs-1">
+					<span class="glyphicon glyphicon-home"></span>
+				    </div>
+				    <div class="col-xs-10">
+                                        <address>
+                                            <strong>Borsbergstraße 34</strong><br>
+                                            {{ _("7. Etage") }}<br>
+                                            01309 Dresden<br>
+                                        </address>
+                                    </div>
+				    <div class="col-xs-1">
+					<span class="glyphicon glyphicon-home"></span>
+				    </div>
+				    <div class="col-xs-10">
+                                        <address>
+                                            <strong>Hochschulstraße 46</strong><br>
+                                            {{ _("Keller") }}<br>
+                                            01069 Dresden<br>
+                                        </address>
+                                    </div>
+				    <div class="col-xs-1">
+					<span class="glyphicon glyphicon-home"></span>
+				    </div>
+				    <div class="col-xs-10">
+                                        <address>
+                                            <strong>Wundtstraße 5</strong><br>
+                                            {{ _("Klingel") }} 0100<br>
+                                            01217 Dresden<br>
+                                        </address>
+				    </div>
 				</div>
+			    </div>
 			</div>
+		    </div>
 		</div>
 
 		<div class="col-sm-9 col-sm-pull-3">
-			{% with messages = get_flashed_messages(with_categories=True) %}
-				{% if messages %}
-					{% for cat, msg in messages %}
-						{% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
-						<div class="alert{% if cat and cat != 'message' %} alert-{{ cat }}{% else %} alert-info{% endif %}">
-							{{ _(msg) }}
-						</div>
-					{% endfor %}
-				{% endif %}
-			{% endwith %}
-			{% block content %}
-			{% endblock %}
-		</div>
-	</div>
-</div>
+		    {% with messages = get_flashed_messages(with_categories=True) %}
+			{% if messages %}
+			    {% for cat, msg in messages %}
+				{% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
+                                {% if cat and cat != 'message' %}
+                                    {% set alert_class = "alert-{}".format(cat) %}
+                                {% else %}
+                                    {% set alert_class = "alert-info" %}
+                                {% endif %}
+				<div class="alert {{ alert_class }}">
+				    {{ _(msg) }}
+				</div>
+			    {% endfor %}
+			{% endif %}
+		    {% endwith %}
 
-<footer>
-	<div class="container text-center">
-        <hr>
-        <div class="row">
-            <div class="col-lg-12 footer-below">
-                <p>AG DSN, 2015.
-                <br>Powered by <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
-            </div>
+		    {% block content %}
+		    {% endblock %}
+		</div>
+	    </div>
         </div>
-    </div>
-</footer>
+
+        <footer>
+	    <div class="container text-center">
+                <hr>
+                <div class="row">
+                    <div class="col-lg-12 footer-below">
+                        <p>AG DSN, 2015.
+                            <br>Powered by <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
 	<script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
 	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
-    {% set gauge_max = 63 %}
-    {% if credit.data %}
-        {% set gauge_val = (credit.data/1024)|round(2) %}
-        {% set gauge_label = "GiB" %}
-    {% else %}
-        {% set gauge_val = 0 %}
-        {% set gauge_label = "–" %}
-    {% endif %}
-    <script type="text/javascript">
-        $(function(){
+        {% set gauge_max = 63 %}
+        {% if credit.data %}
+            {% set gauge_val = (credit.data/1024)|round(2) %}
+            {% set gauge_label = "GiB" %}
+        {% else %}
+            {% set gauge_val = 0 %}
+            {% set gauge_label = "–" %}
+        {% endif %}
+        <script type="text/javascript">
+            $(function(){
             new JustGage({
-                id: "trafficgauge",
-                value: "{{ gauge_val }}",
-                min: 0,
-				relativeGaugeSize: true,
-                max: {{ gauge_max }},
-                title: "{{ _("Verbleibender Traffic") }}",
-                label: "{{ gauge_label }}",
-                levelColors: ["#ff7f7f", "#ffff7f", "#7fff7f"]
+            id: "trafficgauge",
+            value: "{{ gauge_val }}",
+            min: 0,
+	    relativeGaugeSize: true,
+            max: {{ gauge_max }},
+            title: "{{ _("Verbleibender Traffic") }}",
+            label: "{{ gauge_label }}",
+            levelColors: ["#ff7f7f", "#ffff7f", "#7fff7f"]
             });
-        });
-    </script>
-    {% block custom_script %}{% endblock %}
-</body>
+            });
+        </script>
+        {% block custom_script %}{% endblock %}
+    </body>
 </html>
