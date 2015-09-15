@@ -8,21 +8,21 @@ Project-specific options should be included in the `config_local.py`,
 which is a file not tracked in git containing IPs, user names, passwords, etc.
 """
 
-import os
+from os import getenv
 
-from flask.ext.babel import gettext
+SECRET_KEY = getenv("SIPA_SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SIPA_SECRET_KEY must not be empty")
 
-SECRET_KEY = os.getenv("SIPA_SECRET_KEY", "insecuresecretKey")
-
-SENTRY_DSN = os.getenv('SIPA_SENTRY_DSN', '')
+SENTRY_DSN = getenv('SIPA_SENTRY_DSN', '')
 
 LOG_FILE = '/tmp/error.log'
 
-CONTENT_URL = os.getenv("SIPA_CONTENT_URL")
+CONTENT_URL = getenv("SIPA_CONTENT_URL")
 
-FLATPAGES_ROOT = os.getenv("SIPA_FLATPAGES_ROOT", "")
-FLATPAGES_EXTENSION = os.getenv("SIPA_FLATPAGES_EXTENSION", '.md')
-sipa_markdown_extensions = os.getenv(
+FLATPAGES_ROOT = getenv("SIPA_FLATPAGES_ROOT", "")
+FLATPAGES_EXTENSION = getenv("SIPA_FLATPAGES_EXTENSION", '.md')
+sipa_markdown_extensions = getenv(
     "SIPA_FLATPAGES_MARKDOWN_EXTENSIONS")
 if sipa_markdown_extensions is not None:
     sipa_markdown_extensions = sipa_markdown_extensions.split(
@@ -37,35 +37,35 @@ else:
     ]
 FLATPAGES_MARKDOWN_EXTENSIONS = sipa_markdown_extensions
 
-LOGGING_CONFIG_LOCATION = os.getenv("SIPA_LOGGING_CONFIG_LOCATION",
+LOGGING_CONFIG_LOCATION = getenv("SIPA_LOGGING_CONFIG_LOCATION",
                                     "sipa/default_log_config")
 GENERIC_LOGGING = True
 
 # Mail configuration
-MAILSERVER_HOST = os.getenv("SIPA_MAILSERVER_HOST", "127.0.0.1")
-MAILSERVER_PORT = int(os.getenv("SIPA_MAILSERVER_PORT", '25'))
+MAILSERVER_HOST = getenv("SIPA_MAILSERVER_HOST", "127.0.0.1")
+MAILSERVER_PORT = int(getenv("SIPA_MAILSERVER_PORT", '25'))
 
 # LDAP configuration
-LDAP_HOST = os.getenv("SIPA_LDAP_HOST", "127.0.0.1")
-LDAP_PORT = int(os.getenv("SIPA_LDAP_PORT", '389'))
-LDAP_SEARCH_BASE = os.getenv("SIPA_LDAP_SEARCH_BASE", "")
+WU_LDAP_HOST = getenv("SIPA_WU_LDAP_HOST", "127.0.0.1")
+WU_LDAP_PORT = int(getenv("SIPA_WU_LDAP_PORT", '389'))
+WU_LDAP_SEARCH_BASE = getenv("SIPA_WU_LDAP_SEARCH_BASE", "")
 
 # MySQL configuration
-DB_ATLANTIS_HOST = os.getenv("SIPA_DB_ATLANTIS_HOST", "127.0.0.1")
-DB_ATLANTIS_USER = os.getenv("SIPA_DB_ATLANTIS_USER", "")
-DB_ATLANTIS_PASSWORD = os.getenv("SIPA_DB_ATLANTIS_PASSWORD", "")
+DB_ATLANTIS_HOST = getenv("SIPA_DB_ATLANTIS_HOST", "127.0.0.1")
+DB_ATLANTIS_USER = getenv("SIPA_DB_ATLANTIS_USER", "")
+DB_ATLANTIS_PASSWORD = getenv("SIPA_DB_ATLANTIS_PASSWORD", "")
 
 # MySQL Helios configuration
-DB_HELIOS_HOST = os.getenv("SIPA_DB_HELIOS_HOST", "127.0.0.1")
+DB_HELIOS_HOST = getenv("SIPA_DB_HELIOS_HOST", "127.0.0.1")
 DB_HELIOS_PORT = int(
-    os.getenv("SIPA_DB_HELIOS_PORT", '3307'))  # alternative port for 2nd db
-DB_HELIOS_USER = os.getenv("SIPA_DB_HELIOS_USER", "")
-DB_HELIOS_PASSWORD = os.getenv("SIPA_DB_HELIOS_PASSWORD", "")
+    getenv("SIPA_DB_HELIOS_PORT", '3307'))  # alternative port for 2nd db
+DB_HELIOS_USER = getenv("SIPA_DB_HELIOS_USER", "")
+DB_HELIOS_PASSWORD = getenv("SIPA_DB_HELIOS_PASSWORD", "")
 
-SQL_TIMEOUT = int(os.getenv("SIPA_SQL_TIMEOUT", '2'))
+SQL_TIMEOUT = int(getenv("SIPA_SQL_TIMEOUT", '2'))
 
-GEROK_ENDPOINT = os.getenv("SIPA_GEROK_ENDPOINT", "https://127.0.0.1/")
-GEROK_API_TOKEN = os.getenv("SIPA_GEROK_API_TOKEN", "")
+GEROK_ENDPOINT = getenv("SIPA_GEROK_ENDPOINT", "https://127.0.0.1/")
+GEROK_API_TOKEN = getenv("SIPA_GEROK_API_TOKEN", "")
 
 # Languages
 LANGUAGES = {
