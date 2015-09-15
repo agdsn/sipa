@@ -5,14 +5,14 @@ from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
 from flask_wtf import Form
 
-from model import list_all_dormitories
+from model import list_all_dormitories, supported_dormitories
 
 from werkzeug.local import LocalProxy
 
 from wtforms import StringField, TextAreaField, SelectField, PasswordField, \
     HiddenField, BooleanField
 from wtforms.validators import DataRequired, Email, MacAddress, \
-    ValidationError, EqualTo, Regexp
+    ValidationError, EqualTo, Regexp, AnyOf
 
 
 password_required_charset_message = lazy_gettext(
@@ -112,7 +112,9 @@ class ChangeMACForm(Form):
 class LoginForm(Form):
     dormitory = SelectField(
         lazy_gettext(u"Wohnheim"),
-        choices=LocalProxy(list_all_dormitories)
+        choices=LocalProxy(list_all_dormitories),
+        validators=[AnyOf(supported_dormitories,
+                          message=gettext(u"Kein gültiges Wohnheim!"))]
     )
     username = StringField(
         label=lazy_gettext(u"Nutzername"),

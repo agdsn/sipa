@@ -21,6 +21,9 @@ unsupported_dormitories = {
     'zeu': (u"Zeunerstraße", "https://zeus.wh25.tu-dresden.de")
 }
 
+supported_dormitories = {dormitory.name for dormitory
+                         in registered_dormitories}
+
 
 def init_divisions_dormitories(app):
     app.extensions['divisions'] = [
