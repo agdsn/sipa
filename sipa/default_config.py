@@ -4,7 +4,7 @@
 """
 all configuration options and dicts of external
 information (dormitory mapping etc.)
-Project-specific options should be included in the `config_local.py`,
+Project-specific options should be included in the `config.py`,
 which is a file not tracked in git containing IPs, user names, passwords, etc.
 """
 
