@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+
 from flask import abort
 from babel.core import UnknownLocaleError, Locale
 from flask.ext.flatpages import FlatPages
@@ -18,7 +18,7 @@ def compare(x, y):
         return 1
 
 
-class Node(object):
+class Node:
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
@@ -48,7 +48,7 @@ class Article(Node):
 
     @property
     def localized_page(self):
-        available_locales = self.localized_pages.keys()
+        available_locales = list(self.localized_pages.keys())
         for locale in locale_preferences():
             # Locale is unfortunately not hashable
             # so locale in self.localized_pages does not work
@@ -66,7 +66,7 @@ class Category(Node):
         self.articles = {}
 
     def articles_itterator(self):
-        return iter(sorted(self.articles.values(), cmp=compare))
+        return iter(sorted(list(self.articles.values())))
 
     def __getattr__(self, attr):
         try:
@@ -104,7 +104,7 @@ class Category(Node):
             article.default_page = page
 
 
-class CategorizedFlatPages(object):
+class CategorizedFlatPages:
     def __init__(self):
         self.flat_pages = FlatPages()
         self.root_category = Category(None, '<root>')
@@ -114,8 +114,7 @@ class CategorizedFlatPages(object):
         self._set_categories()
 
     def __iter__(self):
-        return iter(sorted(self.root_category.categories.values(),
-                    cmp=compare))
+        return iter(sorted(list(self.root_category.categories.values())))
 
     def get(self, category_id, article_id):
         category = self.root_category.categories.get(category_id)
@@ -128,7 +127,7 @@ class CategorizedFlatPages(object):
         category = self.root_category.categories.get(
             category_id)
         if category:
-            for a in category.articles.values():
+            for a in list(category.articles.values()):
                 if a.id != 'index':
                     barticles.append(a)
         return barticles

@@ -47,7 +47,7 @@ def list_all_dormitories():
         for dormitory in current_app.extensions['dormitories']
     ] + [
         (key, val[0]) for key, val
-        in unsupported_dormitories.iteritems()
+        in unsupported_dormitories.items()
     ], key=operator.itemgetter(1))
 
 
@@ -88,7 +88,7 @@ def datasource_from_ip(ip):
 
 def dormitory_from_ip(ip):
     for dormitory in current_app.extensions['dormitories']:
-        if IPv4Address(unicode(ip)) in dormitory.subnets:
+        if IPv4Address(str(ip)) in dormitory.subnets:
             return dormitory
     return None
 
@@ -110,7 +110,7 @@ def current_user_supported():
 def query_gauge_data():
     credit = {'data': None, 'error': False, 'foreign_user': False}
     try:
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             user = current_user
         else:
             user = user_from_ip(request.remote_addr)

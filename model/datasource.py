@@ -5,7 +5,7 @@ def empty_function(app):
     pass
 
 
-class DataSource(object):
+class DataSource:
     """DataSource object Providing its name and the User object.
 
     """
@@ -30,7 +30,7 @@ class DataSource(object):
         return self._init_context(app)
 
 
-class SubnetCollection(object):
+class SubnetCollection:
     """A simple class for combining multiple IPv4Networks.
 
     Provides __contains__ functionality for IPv4Addresses.
@@ -40,10 +40,10 @@ class SubnetCollection(object):
         if type(subnets) == list:
             for subnet in subnets:
                 if not isinstance(subnet, IPv4Network):
-                    raise TypeError(u"List of IPv4Network objects expected "
+                    raise TypeError("List of IPv4Network objects expected "
                                     "in SubnetCollection.__init__")
         else:
-            raise TypeError(u"List expected in SubnetCollection.__init__")
+            raise TypeError("List expected in SubnetCollection.__init__")
 
         self.subnets = subnets
 

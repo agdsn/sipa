@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
 
-from itertools import imap
+
+
 from babel.core import UnknownLocaleError, Locale
 from flask import request
 from flask.ext.babel import Babel, get_locale
@@ -19,7 +19,7 @@ def locale_preferences():
         except UnknownLocaleError:
             return main_locale
 
-    locales.extend(imap(to_locale, request.accept_languages.itervalues()))
+    locales.extend(map(to_locale, iter(request.accept_languages.values())))
     return locales
 
 

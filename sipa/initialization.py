@@ -125,6 +125,9 @@ def init_env_and_config(app):
         uwsgi.register_signal(20, "", update_uwsgi)
         uwsgi.add_timer(20, 300)
 
+    if not app.config['SECRET_KEY']:
+        raise ValueError("SECRET_KEY must not be empty")
+
 
 def init_logging(app):
     location_log_config = app.config['LOGGING_CONFIG_LOCATION']

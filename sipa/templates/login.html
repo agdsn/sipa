@@ -14,7 +14,7 @@
 <script type="text/javascript">
     $("#dormitory").change(function(){
         unsupported = {
-            {% for key, dorm in unsupported.iteritems() -%}
+            {% for key, dorm in unsupported.items() -%}
                 {{ key }}: ["{{ dorm[0] }}", "{{ dorm[1] }}"],
             {%- endfor %}
         }

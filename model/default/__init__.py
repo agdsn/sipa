@@ -12,20 +12,23 @@ class AuthenticatedUserMixin:
     when “asked” by flask-login.
     """
 
+    @property
     def is_authenticated(self):
         """Required by flask-login"""
         return True
 
+    @property
     def is_active(self):
         """Required by flask-login"""
         return True
 
+    @property
     def is_anonymous(self):
         """Required by flask-login"""
         return False
 
 
-class BaseUser(object, AuthenticatedUserMixin):
+class BaseUser(AuthenticatedUserMixin):
     """The user object containing a minimal amount of functions in order to work
     properly (flask special functions, used methods by sipa)
     """

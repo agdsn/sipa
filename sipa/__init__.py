@@ -58,7 +58,7 @@ def feature_required(needed_feature, given_features):
                 return func(*args, **kwargs)
             else:
                 def not_supported():
-                    flash(u"Diese Funktion ist nicht verfügbar.", 'error')
+                    flash("Diese Funktion ist nicht verfügbar.", 'error')
                     return redirect(redirect_url())
                 return not_supported()
 

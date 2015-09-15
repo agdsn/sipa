@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask.ext.login import current_user
 from flask.globals import current_app
-import ldap
-from ldap.ldapobject import SimpleLDAPObject
+import ldap3
 from werkzeug.local import LocalProxy
 
 from sipa import logger
@@ -12,16 +11,19 @@ from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
 
 def init_ldap(app):
     app.extensions['ldap'] = {
-        'host': app.config['LDAP_HOST'],
-        'port': app.config['LDAP_PORT'],
-        'search_base': app.config['LDAP_SEARCH_BASE']
+        'host': app.config['WU_LDAP_HOST'],
+        'port': app.config['WU_LDAP_PORT'],
+        'user': app.config['WU_LDAP_SEARCH_USER'],
+        'password': app.config['WU_LDAP_SEARCH_PASSWORD'],
+        'search_user_base': app.config['WU_LDAP_SEARCH_USER_BASE'],
+        'search_group_base': app.config['WU_LDAP_SEARCH_GROUP_BASE']
     }
 
 
 CONF = LocalProxy(lambda: current_app.extensions['ldap'])
 
 
-class LdapConnector(object):
+class LdapConnector(ldap3.Connection):
     """This class is a wrapper for all LDAP connections.
 
     * If you pass it a username only, it will use an anonymous bind.
@@ -32,33 +34,36 @@ class LdapConnector(object):
     def __init__(self, username, password=None):
         self.username = username
         self.password = password
-        self.l = None
 
-    def __enter__(self):
+        if not password:
+            # anonymous or system-user bind
+            bind_user = CONF['user']
+            bind_password = CONF['password']
+        else:
+            # bind with user
+            bind_user = "uid={},{}".format(self.username,
+                                           CONF['search_user_base'])
+            bind_password = self.password
+
+        self.server = ldap3.Server(host=CONF['host'],
+                                   port=CONF['port'],
+                                   get_info=ldap3.SCHEMA,
+                                   tls=None, # accept any certificate
+                                   connect_timeout=5)
         try:
-            user = self.fetch_user(self.username)
-            if not user:
-                raise UserNotFound
-            self.l = ldap.initialize("ldap://{}:{}".format(CONF['host'],
-                                                           CONF['port']))
-            self.l.protocol_version = ldap.VERSION3
-
-            if self.password:
-                self.l.simple_bind_s(user['dn'],
-                                     self.password.encode('iso8859-1'))
-
-            return self.l
-        except ldap.INVALID_CREDENTIALS:
+            super().__init__(server=self.server,
+                             user=bind_user,
+                             password=bind_password,
+                             check_names=True,
+                             raise_exceptions=True,
+                             auto_bind=ldap3.AUTO_BIND_TLS_BEFORE_BIND)
+        except ldap3.LDAPInvalidCredentialsResult:
             raise PasswordInvalid
-        except ldap.UNWILLING_TO_PERFORM:
-            # Empty password
+        except ldap3.LDAPUnwillingToPerformResult:
+            # Empty password, treat as invalid
             raise PasswordInvalid
-        except ldap.INSUFFICIENT_ACCESS:
+        except ldap3.LDAPInsufficientAccessRightsResult:
             raise LDAPConnectionError
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if isinstance(self.l, SimpleLDAPObject):
-            self.l.unbind_s()
 
     @staticmethod
     def fetch_user(username):
@@ -68,80 +73,80 @@ class LdapConnector(object):
         Returns a formatted dict with the LDAP dn, username and real name.
         If the username was not found, returns None.
         """
-        l = ldap.initialize("ldap://{}:{}".format(CONF['host'], CONF['port']))
-        user = l.search_s(CONF['search_base'],
-                          ldap.SCOPE_SUBTREE,
-                          "(uid=%s)" % username,
-                          ['uid', 'gecos', 'mail'])
-        l.unbind_s()
+        with LdapConnector(None) as l:
+            l.search(search_base=CONF['search_user_base'],
+                     search_scope=ldap3.SUBTREE,
+                     search_filter="(uid={})".format(username),
+                     attributes=['uid', 'gecos', 'mail'])
 
-        if user:
-            user = user.pop()
+        if l.response:
+            user = l.response.pop()
+            attributes = user['attributes']
             userdict = {
-                'dn': user[0],
-                'uid': user[1]['uid'].pop(),
-                'name': user[1]['gecos'].pop(),
+                'dn': user['dn'],
+                'uid': attributes['uid'].pop(),
+                'name':attributes['gecos'],
                 'mail': None
             }
 
             # If the user has mail set, put it in the dict
-            if 'mail' in user[1]:
-                userdict['mail'] = user[1]['mail'].pop()
+            if 'mail' in attributes:
+                userdict['mail'] = attributes['mail'].pop()
 
             return userdict
         return None
 
-
-def get_dn(l):
-    """l.whoami_s returns a string 'dn:<full dn>',
-    but we need the <full dn> part only.
-    """
-    return l.whoami_s()[3:]
-
+    def get_dn(self):
+        """who_am_i returns a string of the form 'dn:<full dn>',
+        but we are only interested in the <full dn> part.
+        """
+        return self.extend.standard.who_am_i()[3:]
 
 def search_in_group(username, group):
     """Searches for the given user in the given LDAP group memberuid list.
     This replaces the previous usage of hostflags.
     """
     with LdapConnector(username) as l:
-        group_object = l.search_s(
-            "cn={},ou=Gruppen,ou=Sektion Wundtstrasse,o=AG DSN,c=de".format(
-                group),
-            ldap.SCOPE_SUBTREE, '(memberuid=%s)' % username)
+        l.search(search_base=CONF['search_group_base'],
+                 search_scope=ldap3.SUBTREE,
+                 search_filter=("(&(objectClass=groupOfNames)"
+                                "(cn={})"
+                                "(memberuid={}))").format(group, username))
 
-        if group_object:
-            return True
-        return False
-
+        return bool(l.response)
 
 def change_email(username, password, email):
     """Change a user's email
 
-    Uses ldap.MOD_REPLACE in any case, it should add the
+    Uses ldap3.MODIFY_REPLACE in any case, it should add the
     attribute, if it is not yet set up (replace removes all
     attributes of the given kind and puts the new one in place)
     """
     try:
         with LdapConnector(username, password) as l:
-            # The attribute to modify. 'email' is casted to a string, because
-            # passing a unicode object will raise a TypeError
-            attr = [(ldap.MOD_REPLACE, 'mail', str(email))]
-            l.modify_s(get_dn(l), attr)
-    except UserNotFound as e:
-        logger.error('LDAP-User not found when attempting '
+            l.modify(dn=l.get_dn(),
+                     changes={'mail': [(ldap3.MODIFY_REPLACE, [email])]})
+    except ldap3.LDAPNoSuchObjectResult as e:
+        logger.error('LDAP user not found when attempting '
                      'change of mail address',
                      extra={'data': {'exception_args': e.args},
                             'stack': True})
-        raise
+        raise UserNotFound from e
     except PasswordInvalid:
         logger.info('Wrong password provided when attempting '
                     'change of mail address')
         raise
-    except LDAPConnectionError:
+    except ldap3.LDAPInsufficientAccessRightsResult:
         logger.error('Not sufficient rights to change the mail address')
-        raise
+        raise LDAPConnectionError
     else:
         logger.info('Mail address successfully changed to "%s"', email)
+
+def change_password(username, old, new):
+    with LdapConnector(username, old) as l:
+        l.extend.standard.modify_password(user=l.get_dn(),
+                                          old_password=old,
+                                          new_password=new)
 
 
 def get_current_uid():

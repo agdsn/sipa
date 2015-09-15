@@ -1,5 +1,5 @@
-FROM python:2.7
-MAINTAINER Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>
+FROM python:latest
+MAINTAINER Lukas Juhrich der Große <lukasjuhrich@wh2.tu-dresden.de>
 
 
 ENV DEBIAN_FRONTEND=noninteractive \

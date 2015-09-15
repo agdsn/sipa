@@ -108,7 +108,7 @@
                             </ul>
 			</li>
 
-                        {% if current_user.is_anonymous() -%}
+                        {% if current_user.is_anonymous -%}
                             <li>
                                 <a href="{{ url_for('generic.login') }}">
                                     <span class="glyphicon glyphicon-user"></span>
@@ -174,7 +174,7 @@
 			    <h2>{{ _("Kontakt") }} </h2>
 
 			    <div>
-                                {% if current_user.is_authenticated() %}
+                                {% if current_user.is_authenticated %}
                                     {% set mail = current_datasource().support_mail %}
 				    <div class="row">
 					<div class="col-xs-1">
@@ -235,7 +235,7 @@
                                     {% set alert_class = "alert-info" %}
                                 {% endif %}
 				<div class="alert {{ alert_class }}">
-				    {{ _(msg) }}
+				    {{ msg }}
 				</div>
 			    {% endfor %}
 			{% endif %}

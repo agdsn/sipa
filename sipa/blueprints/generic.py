@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+
 
 from flask import render_template, request, redirect, \
     url_for, flash, session
@@ -10,7 +10,7 @@ from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import OperationalError
-from ldap import SERVER_DOWN
+from ldap3 import LDAPCommunicationError
 
 from model import dormitory_from_name, user_from_ip, unsupported_dormitories
 from model.default import BaseUser
@@ -39,12 +39,12 @@ def error_handler_redirection(e):
     :return: A flask response, in this case `redirect(url_for('.index'))`
     """
     if e.code in (404,):
-        flash(gettext(u"Seite nicht gefunden!"), "warning")
+        flash(gettext("Seite nicht gefunden!"), "warning")
     elif e.code in (401, 403):
-        flash(gettext(u"Bitte melde Dich an, um die Seite zu sehen."),
+        flash(gettext("Bitte melde Dich an, um die Seite zu sehen."),
               'warning')
     else:
-        flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")
+        flash(gettext("Es ist ein Fehler aufgetreten!"), "error")
     return redirect(url_for('generic.index'))
 
 
@@ -60,9 +60,9 @@ def exceptionhandler_sql(ex):
     return redirect(url_for('generic.index'))
 
 
-@bp_generic.app_errorhandler(SERVER_DOWN)
+@bp_generic.app_errorhandler(LDAPCommunicationError)
 def exceptionhandler_ldap(ex):
-    """Handles global LDAP SERVER_DOWN exceptions.
+    """Handles global LDAPCommunicationError exceptions.
     The session must be reset, because if the user is logged in and the server
     fails during his session, it would cause a redirect loop.
     This also resets the language choice, btw.
@@ -76,10 +76,8 @@ def exceptionhandler_ldap(ex):
         "error"
     )
     logger.critical(
-        'Unable to connect to LDAP server %s:%s',
-        app.config['LDAP_HOST'], app.config['LDAP_PORT'],
-        extra={'data': {'ldap_base_dn': app.config['LDAP_SEARCH_BASE'],
-                        'exception_args': ex.args}}
+        'Unable to connect to LDAP server',
+        extra={'data': {'exception_args': ex.args}}
     )
     return redirect(url_for('generic.index'))
 
@@ -114,17 +112,17 @@ def login():
         try:
             user = User.authenticate(username, password)
         except (UserNotFound, PasswordInvalid):
-            flash(gettext(u"Anmeldedaten fehlerhaft!"), "error")
+            flash(gettext("Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
                 session['dormitory'] = dormitory.name
                 login_user(user, remember=remember)
                 logger.info('Authentication successful')
-                flash(gettext(u"Anmeldung erfolgreich!"), "success")
+                flash(gettext("Anmeldung erfolgreich!"), "success")
     elif form.is_submitted():
         flash_formerrors(form)
 
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('usersuite.usersuite'))
 
     return render_template('login.html', form=form,
@@ -146,10 +144,10 @@ def usertraffic():
     ip_user = user_from_ip(request.remote_addr)
 
     if isinstance(ip_user, BaseUser):
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             if current_user != ip_user:
-                flash(gettext(u"Ein anderer Nutzer als der für diesen"
-                              " Anschluss Eingetragene ist angemeldet!"),
+                flash(gettext("Ein anderer Nutzer als der für diesen "
+                              "Anschluss Eingetragene ist angemeldet!"),
                       'warning')
                 flash(gettext("Hier werden die Trafficdaten "
                               "dieses Anschlusses angezeigt"), "info")
@@ -157,14 +155,20 @@ def usertraffic():
         return render_template("usertraffic.html", usertraffic=(
             ip_user.get_traffic_data()))
     else:
-        flash(gettext(u"Deine IP gehört nicht zum Wohnheim!"), "error")
+        flash(gettext("Deine IP gehört nicht zum Wohnheim!"), "error")
 
+<<<<<<< HEAD
         if current_user.is_authenticated():
             flash(gettext(u"Da du angemeldet bist, kannst du deinen Traffic "
                           u"hier in den Benutzereinstellungen einsehen."),
                   "info")
+=======
+        if current_user.is_authenticated:
+            flash(gettext("Da du angemeldet bist, kannst du deinen Traffic "
+                          "hier in der Usersuite einsehen."), "info")
+>>>>>>> py3
             return redirect(url_for('usersuite.usersuite'))
         else:
-            flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu "
-                          u"können, musst du dich anmelden."), 'info')
+            flash(gettext("Um deinen Traffic von außerhalb einsehen zu "
+                          "können, musst du dich anmelden."), 'info')
             return redirect(url_for('.login'))
