@@ -66,7 +66,7 @@ class Category(Node):
         self.articles = {}
 
     def articles_itterator(self):
-        return iter(sorted(list(self.articles.values()), cmp=compare))
+        return iter(sorted(list(self.articles.values())))
 
     def __getattr__(self, attr):
         try:
@@ -114,8 +114,7 @@ class CategorizedFlatPages:
         self._set_categories()
 
     def __iter__(self):
-        return iter(sorted(list(self.root_category.categories.values()),
-                    cmp=compare))
+        return iter(sorted(list(self.root_category.categories.values())))
 
     def get(self, category_id, article_id):
         category = self.root_category.categories.get(category_id)
