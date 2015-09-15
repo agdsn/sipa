@@ -93,11 +93,17 @@ def init_env_and_config(app):
     # default configuration
     app.config.from_pyfile(os.path.realpath("sipa/default_config.py"))
     # if local config file exists, load everything into local space.
-    config_dir = os.getenv('SIPA_CONFIG_DIR', '..')
+    if 'SIPA_CONFIG_FILE' not in os.environ:
+        os.environ.set()
     try:
-        app.config.from_pyfile('{}/config.py'.format(config_dir))
+        app.config.from_envvar('SIPA_CONFIG_FILE', silent=True)
     except IOError:
         print("No Config found")
+
+    app.config.update({
+        name[len("SIPA_"):]: value for name, value in os.environ.items()
+        if name.startswith("SIPA_")
+    })
     if app.config['FLATPAGES_ROOT'] == "":
         app.config['FLATPAGES_ROOT'] = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),

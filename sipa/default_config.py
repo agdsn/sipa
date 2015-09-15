@@ -12,6 +12,7 @@ import os
 
 from flask.ext.babel import gettext
 
+# TODO: Remove os.getenv-Gedöns
 SECRET_KEY = os.getenv("SIPA_SECRET_KEY", "insecuresecretKey")
 
 SENTRY_DSN = os.getenv('SIPA_SENTRY_DSN', '')
