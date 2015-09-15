@@ -114,7 +114,7 @@ class LoginForm(Form):
     dormitory = SelectField(
         lazy_gettext(u"Wohnheim"),
         choices=LocalProxy(list_all_dormitories),
-        default=LocalProxy(lambda: preferred_dormitory_name().name),
+        default=LocalProxy(lambda: preferred_dormitory_name()),
         validators=[AnyOf(supported_dormitories,
                           message=gettext(u"Kein gültiges Wohnheim!"))]
     )
