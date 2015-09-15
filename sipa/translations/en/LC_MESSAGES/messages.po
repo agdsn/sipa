@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-15 06:24+0200\n"
-"PO-Revision-Date: 2015-09-15 06:24+0200\n"
+"POT-Creation-Date: 2015-09-15 09:13+0200\n"
+"PO-Revision-Date: 2015-09-15 09:15+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -167,19 +167,19 @@ msgstr "New password"
 msgid "Neues Passwort fehlt!"
 msgstr "New password is missing!"
 
-#: sipa/forms.py:70 sipa/forms.py:136
+#: sipa/forms.py:70 sipa/forms.py:135
 msgid "Bestätigung"
 msgstr "Confirmation"
 
-#: sipa/forms.py:71 sipa/forms.py:137
+#: sipa/forms.py:71 sipa/forms.py:136
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: sipa/forms.py:73 sipa/forms.py:139
+#: sipa/forms.py:73 sipa/forms.py:138
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:126 sipa/forms.py:133
+#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:125 sipa/forms.py:132
 msgid "Passwort"
 msgstr "Password"
 
@@ -203,23 +203,23 @@ msgstr "New mac"
 msgid "Wohnheim"
 msgstr "Dormitory"
 
-#: sipa/forms.py:118
+#: sipa/forms.py:117
 msgid "Kein gültiges Wohnheim!"
 msgstr "Not a valid dormitory!"
 
-#: sipa/forms.py:121
+#: sipa/forms.py:120
 msgid "Nutzername"
 msgstr "Username"
 
-#: sipa/forms.py:122
+#: sipa/forms.py:121
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: sipa/forms.py:127 sipa/forms.py:134
+#: sipa/forms.py:126 sipa/forms.py:133
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:129
+#: sipa/forms.py:128
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
@@ -585,38 +585,38 @@ msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
 msgstr "Note: Your username will be appended to your message."
 
 #: sipa/templates/usersuite/hosting.html:8
-msgid "Willst du deine Datenbank wirklich löschen?"
+msgid "Willst Du deine Datenbank wirklich löschen?"
 msgstr "Do you really want to delete your database?"
 
-#: sipa/templates/usersuite/hosting.html:8
+#: sipa/templates/usersuite/hosting.html:10
 msgid "Jawohl!"
 msgstr "Yes sir!"
 
-#: sipa/templates/usersuite/hosting.html:13
+#: sipa/templates/usersuite/hosting.html:16
 msgid ""
 "Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum "
-"Webhosting findest du hier."
+"Webhosting findest Du hier."
 msgstr "You can create a MySQL database on our servers. More information here."
 
-#: sipa/templates/usersuite/hosting.html:17
-msgid "Du hast noch keine Datenbank erstellt!"
-msgstr "You have not yet created a database!"
+#: sipa/templates/usersuite/hosting.html:21
+msgid "Datenbank Erstellen"
+msgstr "Create Database"
 
-#: sipa/templates/usersuite/hosting.html:18
-msgid "Im folgenden kannst du dir eine Datenbank anlegen."
-msgstr "Here you can create a database."
+#: sipa/templates/usersuite/hosting.html:34
+msgid "Deine Datenbank"
+msgstr "Your Database"
 
-#: sipa/templates/usersuite/hosting.html:20
-msgid "Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:"
-msgstr "If you want to delete your database, you can do so here:"
+#: sipa/templates/usersuite/hosting.html:39
+msgid "Hier kannst Du Deine Datenbank löschen:"
+msgstr "You can delete your database here:"
 
-#: sipa/templates/usersuite/hosting.html:20
+#: sipa/templates/usersuite/hosting.html:46
 msgid "Datenbank löschen"
 msgstr "Delete database"
 
-#: sipa/templates/usersuite/hosting.html:21
-msgid "Im folgenden kannst du dein aktuelles MySQL-Passwort ändern."
-msgstr "Here you can change your current database password."
+#: sipa/templates/usersuite/hosting.html:54
+msgid "Passwort Ändern"
+msgstr "Change Password"
 
 #: sipa/templates/usersuite/index.html:2
 msgid "Usersuite von "
@@ -637,9 +637,3 @@ msgstr "Output"
 #: sipa/utils/graph_utils.py:58
 msgid "Gesamt"
 msgstr "Sums"
-
-#~ msgid "Dein neues MySQL-Passwort"
-#~ msgstr "Your new database password"
-
-#~ msgid "Bestätige dein neues Passwort"
-#~ msgstr "Verification of your new password"

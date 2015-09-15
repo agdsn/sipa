@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-15 06:24+0200\n"
+"POT-Creation-Date: 2015-09-15 09:13+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -163,19 +163,19 @@ msgstr ""
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:70 sipa/forms.py:136
+#: sipa/forms.py:70 sipa/forms.py:135
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:71 sipa/forms.py:137
+#: sipa/forms.py:71 sipa/forms.py:136
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:73 sipa/forms.py:139
+#: sipa/forms.py:73 sipa/forms.py:138
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:126 sipa/forms.py:133
+#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:125 sipa/forms.py:132
 msgid "Passwort"
 msgstr ""
 
@@ -199,23 +199,23 @@ msgstr ""
 msgid "Wohnheim"
 msgstr ""
 
-#: sipa/forms.py:118
+#: sipa/forms.py:117
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
-#: sipa/forms.py:121
+#: sipa/forms.py:120
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:122
+#: sipa/forms.py:121
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:127 sipa/forms.py:134
+#: sipa/forms.py:126 sipa/forms.py:133
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:129
+#: sipa/forms.py:128
 msgid "Anmeldung merken"
 msgstr ""
 
@@ -577,37 +577,37 @@ msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
 msgstr ""
 
 #: sipa/templates/usersuite/hosting.html:8
-msgid "Willst du deine Datenbank wirklich löschen?"
+msgid "Willst Du deine Datenbank wirklich löschen?"
 msgstr ""
 
-#: sipa/templates/usersuite/hosting.html:8
+#: sipa/templates/usersuite/hosting.html:10
 msgid "Jawohl!"
 msgstr ""
 
-#: sipa/templates/usersuite/hosting.html:13
+#: sipa/templates/usersuite/hosting.html:16
 msgid ""
 "Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos "
-"zum Webhosting findest du hier."
-msgstr ""
-
-#: sipa/templates/usersuite/hosting.html:17
-msgid "Du hast noch keine Datenbank erstellt!"
-msgstr ""
-
-#: sipa/templates/usersuite/hosting.html:18
-msgid "Im folgenden kannst du dir eine Datenbank anlegen."
-msgstr ""
-
-#: sipa/templates/usersuite/hosting.html:20
-msgid "Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:"
-msgstr ""
-
-#: sipa/templates/usersuite/hosting.html:20
-msgid "Datenbank löschen"
+"zum Webhosting findest Du hier."
 msgstr ""
 
 #: sipa/templates/usersuite/hosting.html:21
-msgid "Im folgenden kannst du dein aktuelles MySQL-Passwort ändern."
+msgid "Datenbank Erstellen"
+msgstr ""
+
+#: sipa/templates/usersuite/hosting.html:34
+msgid "Deine Datenbank"
+msgstr ""
+
+#: sipa/templates/usersuite/hosting.html:39
+msgid "Hier kannst Du Deine Datenbank löschen:"
+msgstr ""
+
+#: sipa/templates/usersuite/hosting.html:46
+msgid "Datenbank löschen"
+msgstr ""
+
+#: sipa/templates/usersuite/hosting.html:54
+msgid "Passwort Ändern"
 msgstr ""
 
 #: sipa/templates/usersuite/index.html:2
@@ -1143,5 +1143,32 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Keine gültiges Wohnheim!"
+#~ msgstr ""
+
+#~ msgid "Du hast noch keine Datenbank erstellt!"
+#~ msgstr ""
+
+#~ msgid "Im folgenden kannst du dir eine Datenbank anlegen."
+#~ msgstr ""
+
+#~ msgid "Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:"
+#~ msgstr ""
+
+#~ msgid "Im folgenden kannst du dein aktuelles MySQL-Passwort ändern."
+#~ msgstr ""
+
+#~ msgid "Willst du deine Datenbank wirklich löschen?"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Du kannst auf unserem Server eine "
+#~ "MySQL-Datenbank anlegen. Weitere Infos zum"
+#~ " Webhosting findest du hier."
+#~ msgstr ""
+
+#~ msgid "Datenbank erstellen"
+#~ msgstr ""
+
+#~ msgid "Hier kannst du deine Datenbank löschen:"
 #~ msgstr ""
 

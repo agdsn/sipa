@@ -1,41 +1,64 @@
+{% import "macros/forms.html" as forms %}
 {% extends "base.html" %}#
 {% set page_title = _("MySQL Datenbank") %}
 
 {% block content %}
     {% if action == 'delete' %}
         <div class="alert alert-warning">
-            {{ _('Willst du deine Datenbank wirklich löschen?') }} <a href="{{ url_for('.usersuite_hosting', action='confirm') }}">{{ _('Jawohl!') }}</a>
+            {{ _('Willst Du deine Datenbank wirklich löschen?') }}
+            <a href="{{ url_for('.usersuite_hosting', action='confirm') }}">
+                {{ _('Jawohl!') }}
+            </a>
         </div>
     {% endif %}
 
-    <div id="change-mysql-form">
-        <p>{{ _('Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest du hier.') }}</p>
-        <form action="{{ url_for("usersuite.usersuite_hosting") }}" method="post" class="form">
-            {{ form.csrf_token }}
-
-            {% if not user_has_db %}
-                {{ form.action(value="create") }}
-                <p>{{ _('Du hast noch keine Datenbank erstellt!') }}</p>
-                <p>{{ _('Im folgenden kannst du dir eine Datenbank anlegen.') }}</p>
-            {% else %}
-                <p>{{ _('Falls du deine Datenbank löschen möchtest, kannst du dies hier tun:') }} <a href="{{ url_for('usersuite.usersuite_hosting', action='delete') }}">{{ _('Datenbank löschen') }}</a></p>
-                <p>{{ _('Im folgenden kannst du dein aktuelles MySQL-Passwort ändern.') }}</p>
-            {% endif %}
-
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    <label>{{ _('Dein neues MySQL-Passwort') }}</label>
-                    {{ form.password1(class="form-control") }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    <label>{{ _('Bestätige dein neues Passwort') }}</label>
-                    {{ form.password2(class="form-control") }}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-default">{{ _('Abschicken') }}</button>
-            <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
-        </form>
+    <div class="well">
+            {{ _('Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest Du hier.') }}
     </div>
+
+    {% if not user_has_db %}
+        <div class="panel panel-info">
+            <div class="panel-heading">{{ _("Datenbank Erstellen") }}</div>
+            <div class="panel-body">
+                <div id="create-mysql-form">
+                    {% call forms.render(form=form, form_id="hosting-form",
+                        cancel_to=url_for('.usersuite')) %}
+                        {{ form.action(value="create") }}
+                    {% endcall %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+
+        <div class="panel panel-warning">
+            <div class="panel-heading">{{ _("Deine Datenbank") }}</div>
+
+            <div class="panel-body">
+                <div class="form container col-sm-10">
+                    <div class="form-group">
+                            {{ _("Hier kannst Du Deine Datenbank löschen:") }}
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <a href="{{ url_for('usersuite.usersuite_hosting', action='delete') }}"
+                               class="btn btn-danger">
+                               <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                               {{ _("Datenbank löschen") }}
+                            </a>
+                        </div>
+                </div></div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">{{ _("Passwort Ändern") }}</div>
+            <div class="panel-body">
+                <div id="change-mysql-form">
+                    {% call forms.render(form=form, form_id="hosting-form",
+                        cancel_to=url_for('.usersuite')) %}
+                    {% endcall %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

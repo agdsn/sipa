@@ -129,10 +129,10 @@ class LoginForm(Form):
 
 
 class HostingForm(Form):
-    password = PasswordField(u"Password", validators=[
+    password = PasswordField(lazy_gettext(u"Passwort"), validators=[
         DataRequired(gettext(u"Kein Passwort eingegeben!"))
     ] + password_validators)
-    confirm = PasswordField(validators=[
+    confirm = PasswordField(lazy_gettext(u"Bestätigung"), validators=[
         DataRequired(gettext(u"Bestätigung des neuen Passworts fehlt!")),
         EqualTo('password',
                 message=gettext(u"Neue Passwörter stimmen nicht überein!"))
