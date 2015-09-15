@@ -88,13 +88,10 @@ def usersuite_contact():
     '[Usersuite] Category: Subject' with userid and message.
     """
     form = ContactForm()
-    mail_server = current_datasource().mail_server
-    support_mail = current_datasource().support_mail
 
-    if current_user.mail:
-        from_mail = current_user.mail
-    else:
-        from_mail = "{}@{}".format(current_user.uid, mail_server)
+    support_mail = current_datasource().support_mail
+    from_mail = "{}@{}".format(current_user.uid,
+                               current_datasource().mail_server)
 
     if form.validate_on_submit():
         types = {
@@ -250,6 +247,10 @@ def usersuite_change_mac():
                                             mac)
             logger.info('Successfully changed MAC address to %s', mac)
 
+            from_mail = "{}@{}".format(current_user.uid,
+                                       current_datasource().mail_server)
+            support_mail = current_datasource().support_mail
+
             subject = (u"[Usersuite] {} hat seine/ihre MAC-Adresse "
                        u"geändert".format(current_user.uid))
             message = (
@@ -262,8 +263,7 @@ def usersuite_change_mac():
                 )
             )
 
-            if send_mail(current_user.uid + u"@wh2.tu-dresden.de",
-                         "support@wh2.tu-dresden.de", subject, message):
+            if send_mail(from_mail, support_mail, subject, message):
                 flash(gettext(u"MAC-Adresse wurde geändert!"), "success")
                 return redirect(url_for('.usersuite'))
             else:
