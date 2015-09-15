@@ -47,7 +47,7 @@ def list_all_dormitories():
         for dormitory in current_app.extensions['dormitories']
     ] + [
         (key, val[0]) for key, val
-        in unsupported_dormitories.iteritems()
+        in unsupported_dormitories.items()
     ], key=operator.itemgetter(1))
 
 
