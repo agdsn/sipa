@@ -10,6 +10,7 @@ class DataSource(object):
 
     """
     def __init__(self, name, display_name, user_class, mail_server,
+                 support_mail=None,
                  init_context=empty_function,
                  debug_only=False):
         super(DataSource, self).__init__()
@@ -17,6 +18,8 @@ class DataSource(object):
         self.display_name = display_name
         self.user_class = user_class
         self.mail_server = mail_server
+        self.support_mail = (support_mail if support_mail
+                             else "support@{}".format(mail_server))
         self._init_context = init_context
         self.debug_only = debug_only
 

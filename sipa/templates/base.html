@@ -133,12 +133,13 @@
 
 					<div>
                                             {% if current_user.is_authenticated() %}
+                                                {% set mail = current_division().support_mail %}
 						<div class="row">
 							<div class="col-xs-1">
 								<span class="glyphicon glyphicon-envelope"></span>
 							</div>
 							<div class="col-xs-10">
-								<a href="mailto:support@agdsn.de">support@agdsn.de</a>
+								<a href="mailto:{{ mail }}">{{ mail }}</a>
 							</div>
 						</div>
 

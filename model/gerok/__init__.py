@@ -19,6 +19,7 @@ division = DataSource(
     display_name=gettext(u"Gerokstraße"),
     user_class=user.User,
     mail_server=u"wh17.tu-dresden.de",
+    support_mail=u"gerok@wh17.tu-dresden.de",
     init_context=init_context
 )
 

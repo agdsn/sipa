@@ -89,6 +89,7 @@ def usersuite_contact():
     """
     form = ContactForm()
     mail_server = current_division().mail_server
+    support_mail = current_division().support_mail
 
     if current_user.mail:
         from_mail = current_user.mail
@@ -109,15 +110,13 @@ def usersuite_contact():
         message_text = u"Nutzerlogin: {0}\n\n".format(current_user.uid) \
                        + form.message.data
 
-        if send_mail(from_mail, "support@{}".format(mail_server), subject,
-                     message_text):
+        if send_mail(from_mail, support_mail, subject, message_text):
             flash(gettext(u"Nachricht wurde versandt."), "success")
         else:
-            flash(gettext(
-                u"Es gab einen Fehler beim Versenden der Nachricht. Bitte "
-                u"schicke uns direkt eine E-Mail an support@{}").format(
-                    mail_server
-                ), 'error')
+            flash(gettext(u"Es gab einen Fehler beim Versenden der Nachricht. "
+                          u"Bitte schicke uns direkt eine E-Mail an {}".format(
+                              support_mail)),
+                  'error')
         return redirect(url_for(".usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)
