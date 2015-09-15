@@ -94,7 +94,7 @@ def init_env_and_config(app):
     app.config.from_pyfile(os.path.realpath("sipa/default_config.py"))
     # if local config file exists, load everything into local space.
     if 'SIPA_CONFIG_FILE' not in os.environ:
-        os.environ.set()
+        os.environ.set("config.py")
     try:
         app.config.from_envvar('SIPA_CONFIG_FILE', silent=True)
     except IOError:
