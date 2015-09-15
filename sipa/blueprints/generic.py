@@ -157,16 +157,9 @@ def usertraffic():
     else:
         flash(gettext("Deine IP gehört nicht zum Wohnheim!"), "error")
 
-<<<<<<< HEAD
-        if current_user.is_authenticated():
-            flash(gettext(u"Da du angemeldet bist, kannst du deinen Traffic "
-                          u"hier in den Benutzereinstellungen einsehen."),
-                  "info")
-=======
         if current_user.is_authenticated:
             flash(gettext("Da du angemeldet bist, kannst du deinen Traffic "
-                          "hier in der Usersuite einsehen."), "info")
->>>>>>> py3
+                          "hier in der Usersuite einsehen."), 'info')
             return redirect(url_for('usersuite.usersuite'))
         else:
             flash(gettext("Um deinen Traffic von außerhalb einsehen zu "
