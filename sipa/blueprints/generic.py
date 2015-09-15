@@ -41,9 +41,8 @@ def error_handler_redirection(e):
     if e.code in (404,):
         flash(gettext(u"Seite nicht gefunden!"), "warning")
     elif e.code in (401, 403):
-        flash(gettext(
-            u"Du hast nicht die notwendigen Rechte um die Seite zu sehen!"),
-            "warning")
+        flash(gettext(u"Bitte melde Dich an, um die Seite zu sehen."),
+              'warning')
     else:
         flash(gettext(u"Es ist ein Fehler aufgetreten!"), "error")
     return redirect(url_for('generic.index'))
