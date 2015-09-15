@@ -19,14 +19,14 @@ from .ldap_utils import get_current_uid
 
 def init_db(app):
     app.extensions['db_atlantis'] = create_engine(
-        'mysql+mysqldb://{0}:{1}@{2}:3306/netusers'.format(
+        'mysql+pymysql://{0}:{1}@{2}:3306/netusers'.format(
             app.config['DB_ATLANTIS_USER'],
             app.config['DB_ATLANTIS_PASSWORD'],
             app.config['DB_ATLANTIS_HOST']),
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
     app.extensions['db_helios'] = create_engine(
-        'mysql+mysqldb://{0}:{1}@{2}:{3}/'.format(
+        'mysql+pymysql://{0}:{1}@{2}:{3}/'.format(
             app.config['DB_HELIOS_USER'],
             app.config['DB_HELIOS_PASSWORD'],
             app.config['DB_HELIOS_HOST'],
