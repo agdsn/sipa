@@ -9,6 +9,8 @@ from sqlalchemy.exc import OperationalError
 
 from . import sample, wu, gerok
 
+import operator
+
 
 registered_divisions = [sample.division, wu.division,
                         gerok.division]
@@ -37,29 +39,17 @@ def init_divisions_dormitories(app):
     ]
 
 
-def list_all_dormitories(ip=None):
+def list_all_dormitories():
     """Generate a list of all available dormitories (active & external).
-    If an ip is given, try to place the according dormitory first.
+    The list is alphabetically sorted by the second item of the tuple.
     """
-    if not ip and request:
-        ip = request.remote_addr
-
-    preferred = dormitory_from_ip(ip) if ip else None
-
-    if preferred:
-        active = [(preferred.name, preferred.display_name)] + [
-            (dormitory.name, dormitory.display_name)
-            for dormitory in current_app.extensions['dormitories']
-            if not dormitory == preferred
-        ]
-    else:
-        active = [(dormitory.name, dormitory.display_name)
-                  for dormitory in current_app.extensions['dormitories']]
-
-    extern = [(key, val[0]) for key, val
-              in unsupported_dormitories.iteritems()]
-
-    return active + extern
+    return sorted([
+        (dormitory.name, dormitory.display_name)
+        for dormitory in current_app.extensions['dormitories']
+    ] + [
+        (key, val[0]) for key, val
+        in unsupported_dormitories.iteritems()
+    ], key=operator.itemgetter(1))
 
 
 def init_context(app):
@@ -72,6 +62,10 @@ def dormitory_from_name(name):
         if dormitory.name == name:
             return dormitory
     return None
+
+
+def preferred_dormitory():
+    return dormitory_from_ip(request.remote_addr)
 
 
 def current_division():

@@ -5,7 +5,8 @@ from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
 from flask_wtf import Form
 
-from model import list_all_dormitories, supported_dormitories
+from model import list_all_dormitories, supported_dormitories, \
+    preferred_dormitory
 
 from werkzeug.local import LocalProxy
 
@@ -113,6 +114,7 @@ class LoginForm(Form):
     dormitory = SelectField(
         lazy_gettext(u"Wohnheim"),
         choices=LocalProxy(list_all_dormitories),
+        default=LocalProxy(lambda: preferred_dormitory().name),
         validators=[AnyOf(supported_dormitories,
                           message=gettext(u"Kein gültiges Wohnheim!"))]
     )
