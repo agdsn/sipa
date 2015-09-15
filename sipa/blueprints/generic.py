@@ -161,7 +161,8 @@ def usertraffic():
 
         if current_user.is_authenticated():
             flash(gettext(u"Da du angemeldet bist, kannst du deinen Traffic "
-                          u"hier in der Usersuite einsehen."), "info")
+                          u"hier in den Benutzereinstellungen einsehen."),
+                  "info")
             return redirect(url_for('usersuite.usersuite'))
         else:
             flash(gettext(u"Um deinen Traffic von außerhalb einsehen zu "
