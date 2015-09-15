@@ -45,7 +45,7 @@ def feature_required(needed_feature, given_features):
     is not provided by the User class.
 
     given_features has to be a callable to ensure runtime distinction
-    between divisions.
+    between datasources.
 
     :param needed_feature: The feature needed
     :param given_features: A callable returning the set of supported features

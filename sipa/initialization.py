@@ -11,7 +11,7 @@ from raven.handlers.logging import SentryHandler
 
 from flask.ext.babel import get_locale
 
-from model import init_context, init_divisions_dormitories, current_division
+from model import init_context, init_datasources_dormitories, current_datasource
 from model.constants import ACTIONS, STATUS_COLORS
 
 from sipa import logger
@@ -78,13 +78,13 @@ def init_app(app):
         get_locale=get_locale,
         possible_locales=possible_locales,
         chart=render_traffic_chart,
-        current_division=current_division,
+        current_datasource=current_datasource,
         ACTIONS=ACTIONS,
         STATUS_COLORS=STATUS_COLORS
     )
 
     init_logging(app)
-    init_divisions_dormitories(app)
+    init_datasources_dormitories(app)
     init_context(app)
 
 

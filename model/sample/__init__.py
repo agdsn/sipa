@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.babel import gettext
-from ..division import DataSource, Dormitory
+from ..datasource import DataSource, Dormitory
 from ipaddress import IPv4Network
 
 import user
 
-division = DataSource(
+datasource = DataSource(
     name='sample',
     display_name=gettext("Beispielsektion"),
     user_class=user.User,
@@ -17,7 +17,7 @@ division = DataSource(
 
 dormitories = [
     Dormitory(name='localhost', display_name=u"Lokalgastgeber",
-              division=division,
+              datasource=datasource,
               subnets=[
                   IPv4Network(u'127.0.0.0/8'),  # loopback
                   IPv4Network(u'172.17.0.0/16'),  # used by docker

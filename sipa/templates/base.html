@@ -133,7 +133,7 @@
 
 					<div>
                                             {% if current_user.is_authenticated() %}
-                                                {% set mail = current_division().support_mail %}
+                                                {% set mail = current_datasource().support_mail %}
 						<div class="row">
 							<div class="col-xs-1">
 								<span class="glyphicon glyphicon-envelope"></span>

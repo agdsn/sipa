@@ -58,7 +58,7 @@ class User(BaseUser):
 
         uid = userData['login'] or username
         name = userData['name'] or username
-        # TODO: Somehow access the entry in the division constructor
+        # TODO: Somehow access the entry in the datasource constructor
         mail = username + "@wh17.tu-dresden.de"
 
         return User(uid, userData['id'], name, mail, "127.0.0.1")

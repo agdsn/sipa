@@ -132,9 +132,9 @@ class BaseUser(object, AuthenticatedUserMixin):
         from the constants module (like info_property) to generate
         them.  The properties returned should match what is given in
         FULL_FEATURE_SET of the constants module to ensure
-        division-wide similiarity.  This means, if a certain feature
+        datasource-wide similiarity.  This means, if a certain feature
         does not appear in said set, it should be added and, if
-        possible, implemented in the other division modules as well.
+        possible, implemented in the other datasource modules as well.
 
         A simple example yielding 'value' everywhere would look like
         this:

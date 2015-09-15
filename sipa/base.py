@@ -30,7 +30,7 @@ def load_user(username):
     """
     dormitory = dormitory_from_name(session.get('dormitory', None))
     if dormitory:
-        return dormitory.division.user_class.get(username)
+        return dormitory.datasource.user_class.get(username)
     else:
         return AnonymousUserMixin()
 

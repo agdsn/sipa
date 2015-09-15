@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.babel import gettext
-from ..division import DataSource, Dormitory
+from ..datasource import DataSource, Dormitory
 from ipaddress import IPv4Network
 
 import user
@@ -14,7 +14,7 @@ def init_context(app):
     }
 
 
-division = DataSource(
+datasource = DataSource(
     name='gerok',
     display_name=gettext(u"Gerokstraße"),
     user_class=user.User,
@@ -25,5 +25,5 @@ division = DataSource(
 
 dormitories = [
     Dormitory(name='gerok', display_name=u"Gerokstraße",
-              division=division, subnets=[IPv4Network(u'141.76.124.0/24')])
+              datasource=datasource, subnets=[IPv4Network(u'141.76.124.0/24')])
 ]

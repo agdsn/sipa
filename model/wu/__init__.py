@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.babel import gettext
-from ..division import DataSource, Dormitory
+from ..datasource import DataSource, Dormitory
 from database_utils import init_db
 from ipaddress import IPv4Network
 
@@ -14,7 +14,7 @@ def init_context(app):
     init_ldap(app)
 
 
-division = DataSource(
+datasource = DataSource(
     name='wu',
     display_name=gettext(u"Wundtstraße & Zellescher Weg"),
     user_class=user.User,
@@ -23,7 +23,7 @@ division = DataSource(
 )
 
 dormitories = [
-    Dormitory(name=dorm[0], display_name=dorm[1], division=division,
+    Dormitory(name=dorm[0], display_name=dorm[1], datasource=datasource,
               subnets=dorm[2])
     for dorm in [
             ('wu', u"Wundtstraße", [

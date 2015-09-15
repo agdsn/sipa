@@ -109,7 +109,7 @@ def login():
         username = form.username.data
         password = form.password.data
         remember = form.remember.data
-        User = dormitory.division.user_class
+        User = dormitory.datasource.user_class
 
         try:
             user = User.authenticate(username, password)

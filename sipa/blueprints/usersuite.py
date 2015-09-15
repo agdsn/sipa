@@ -8,7 +8,7 @@ from flask import Blueprint, render_template, url_for, redirect, flash
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
-from model import current_user_supported, current_division
+from model import current_user_supported, current_datasource
 from model.constants import unsupported_property, ACTIONS
 from sipa import logger, feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
@@ -88,8 +88,8 @@ def usersuite_contact():
     '[Usersuite] Category: Subject' with userid and message.
     """
     form = ContactForm()
-    mail_server = current_division().mail_server
-    support_mail = current_division().support_mail
+    mail_server = current_datasource().mail_server
+    support_mail = current_datasource().support_mail
 
     if current_user.mail:
         from_mail = current_user.mail
