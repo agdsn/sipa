@@ -11,8 +11,6 @@ which is a file not tracked in git containing IPs, user names, passwords, etc.
 from os import getenv
 
 SECRET_KEY = getenv("SIPA_SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("SIPA_SECRET_KEY must not be empty")
 
 SENTRY_DSN = getenv('SIPA_SENTRY_DSN', '')
 
