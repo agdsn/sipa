@@ -10,7 +10,7 @@ from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import OperationalError
-from ldap import SERVER_DOWN
+from ldap3 import LDAPCommunicationError
 
 from model import dormitory_from_name, user_from_ip, unsupported_dormitories
 from model.default import BaseUser
@@ -61,9 +61,9 @@ def exceptionhandler_sql(ex):
     return redirect(url_for('generic.index'))
 
 
-@bp_generic.app_errorhandler(SERVER_DOWN)
+@bp_generic.app_errorhandler(LDAPCommunicationError)
 def exceptionhandler_ldap(ex):
-    """Handles global LDAP SERVER_DOWN exceptions.
+    """Handles global LDAPCommunicationError exceptions.
     The session must be reset, because if the user is logged in and the server
     fails during his session, it would cause a redirect loop.
     This also resets the language choice, btw.
@@ -77,10 +77,8 @@ def exceptionhandler_ldap(ex):
         "error"
     )
     logger.critical(
-        'Unable to connect to LDAP server %s:%s',
-        app.config['LDAP_HOST'], app.config['LDAP_PORT'],
-        extra={'data': {'ldap_base_dn': app.config['LDAP_SEARCH_BASE'],
-                        'exception_args': ex.args}}
+        'Unable to connect to LDAP server',
+        extra={'data': {'exception_args': ex.args}}
     )
     return redirect(url_for('generic.index'))
 

@@ -13,7 +13,7 @@ from model.wu.database_utils import ip_from_user_id, sql_query, \
     calculate_userid_checksum, DORMITORIES, status_string_from_id, \
     user_id_from_uid
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
-    get_dn, change_email
+    change_email, change_password
 from sipa import logger
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
 
@@ -97,10 +97,7 @@ class User(BaseUser):
         """Change a user's password from old to new
         """
         try:
-            with LdapConnector(self.uid, old) as l:
-                l.passwd_s(get_dn(l),
-                           old.encode('iso8859-1'),
-                           new.encode('iso8859-1'))
+            change_password(self.uid, old, new)
         except PasswordInvalid:
             logger.info('Wrong password provided when attempting '
                         'change of password')

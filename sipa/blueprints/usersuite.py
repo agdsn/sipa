@@ -133,7 +133,7 @@ def usersuite_change_password():
 
     If the new password was entered correctly twice, LDAP performs a bind
     with the old credentials at the users DN and submits the passwords to
-    ldap.passwd_s(). This way every user can edit only his own data.
+    modify_password(). This way each user can edit only his own data.
 
     Error code "-1" is an incorrect old or empty password.
 
