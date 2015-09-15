@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-15 09:13+0200\n"
+"POT-Creation-Date: 2015-09-15 19:30+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -49,28 +49,24 @@ msgstr ""
 msgid "Gerokstraße"
 msgstr ""
 
-#: model/hss/__init__.py:18
-msgid "Hochschulstraße"
-msgstr ""
-
-#: model/hss/database_utils.py:47 model/wu/database_utils.py:59
-msgid "Bezahlt, verbunden"
-msgstr ""
-
-#: model/hss/database_utils.py:52 model/wu/database_utils.py:60
-msgid "Nicht bezahlt, Netzanschluss gesperrt"
-msgstr ""
-
-#: model/hss/database_utils.py:54 model/wu/database_utils.py:61
-msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
-msgstr ""
-
 #: model/sample/__init__.py:11
 msgid "Beispielsektion"
 msgstr ""
 
 #: model/wu/__init__.py:19
 msgid "Wundtstraße & Zellescher Weg"
+msgstr ""
+
+#: model/wu/database_utils.py:59
+msgid "Bezahlt, verbunden"
+msgstr ""
+
+#: model/wu/database_utils.py:60
+msgid "Nicht bezahlt, Netzanschluss gesperrt"
+msgstr ""
+
+#: model/wu/database_utils.py:61
+msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
 #: model/wu/database_utils.py:62
@@ -85,169 +81,169 @@ msgstr ""
 msgid "Unbekannt"
 msgstr ""
 
-#: model/wu/user.py:171
+#: model/wu/user.py:172
 msgid "Aktiviert"
 msgstr ""
 
-#: model/wu/user.py:177
+#: model/wu/user.py:178
 msgid "Nicht aktiviert"
 msgstr ""
 
-#: model/wu/user.py:183
+#: model/wu/user.py:184
 msgid "Datenbank nicht erreichbar"
 msgstr ""
 
-#: sipa/forms.py:18
+#: sipa/forms.py:19
 msgid ""
 "Passwort muss Buchstaben in Groß- und Kleinschreibung, Zahlen und "
 "Sonderzeichen enthalten sowie mindestens acht Zeichen lang sein"
 msgstr ""
 
-#: sipa/forms.py:47
+#: sipa/forms.py:48
 msgid "Deine E-Mail-Adresse"
 msgstr ""
 
-#: sipa/forms.py:48 sipa/forms.py:83
+#: sipa/forms.py:49 sipa/forms.py:84
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
-#: sipa/forms.py:50
+#: sipa/forms.py:51
 msgid "Kategorie"
 msgstr ""
 
-#: sipa/forms.py:51
+#: sipa/forms.py:52
 msgid "Allgemeine Frage an die Administratoren"
 msgstr ""
 
-#: sipa/forms.py:53
+#: sipa/forms.py:54
 msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
 msgstr ""
 
-#: sipa/forms.py:54
+#: sipa/forms.py:55
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr ""
 
-#: sipa/forms.py:55
+#: sipa/forms.py:56
 msgid "Probleme mit privater Technik"
 msgstr ""
 
-#: sipa/forms.py:57
+#: sipa/forms.py:58
 msgid "Betreff"
 msgstr ""
 
-#: sipa/forms.py:58
+#: sipa/forms.py:59
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:59
+#: sipa/forms.py:60
 msgid "Nachricht"
 msgstr ""
 
-#: sipa/forms.py:60
+#: sipa/forms.py:61
 msgid "Nachricht fehlt!"
 msgstr ""
 
-#: sipa/forms.py:65
+#: sipa/forms.py:66
 msgid "Altes Passwort"
 msgstr ""
 
-#: sipa/forms.py:66
+#: sipa/forms.py:67
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:67
+#: sipa/forms.py:68
 msgid "Neues Passwort"
 msgstr ""
 
-#: sipa/forms.py:68
+#: sipa/forms.py:69
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:70 sipa/forms.py:135
+#: sipa/forms.py:71 sipa/forms.py:137
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:71 sipa/forms.py:136
+#: sipa/forms.py:72 sipa/forms.py:138
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:73 sipa/forms.py:138
+#: sipa/forms.py:74 sipa/forms.py:140
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:79 sipa/forms.py:103 sipa/forms.py:125 sipa/forms.py:132
+#: sipa/forms.py:80 sipa/forms.py:104 sipa/forms.py:127 sipa/forms.py:134
 msgid "Passwort"
 msgstr ""
 
-#: sipa/forms.py:80 sipa/forms.py:88 sipa/forms.py:104
+#: sipa/forms.py:81 sipa/forms.py:89 sipa/forms.py:105
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sipa/forms.py:82
+#: sipa/forms.py:83
 msgid "Neue Mail"
 msgstr ""
 
-#: sipa/forms.py:98
+#: sipa/forms.py:99
 msgid "MAC muss unicast-Adresse sein!"
 msgstr ""
 
-#: sipa/forms.py:106
+#: sipa/forms.py:107
 msgid "Neue MAC"
 msgstr ""
 
-#: sipa/forms.py:114
+#: sipa/forms.py:115
 msgid "Wohnheim"
 msgstr ""
 
-#: sipa/forms.py:117
+#: sipa/forms.py:119
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
-#: sipa/forms.py:120
+#: sipa/forms.py:122
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:121
+#: sipa/forms.py:123
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:126 sipa/forms.py:133
+#: sipa/forms.py:128 sipa/forms.py:135
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:128
+#: sipa/forms.py:130
 msgid "Anmeldung merken"
 msgstr ""
 
-#: sipa/blueprints/generic.py:43
+#: sipa/blueprints/generic.py:42
 msgid "Seite nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:45
-msgid "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"
+#: sipa/blueprints/generic.py:44
+msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:49
+#: sipa/blueprints/generic.py:47
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:57
+#: sipa/blueprints/generic.py:55
 msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:75
+#: sipa/blueprints/generic.py:74
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:118
+#: sipa/blueprints/generic.py:117
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:124
+#: sipa/blueprints/generic.py:123
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:152
+#: sipa/blueprints/generic.py:151
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
@@ -263,11 +259,11 @@ msgstr ""
 
 #: sipa/blueprints/generic.py:163
 msgid ""
-"Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
-"einsehen."
+"Da du angemeldet bist, kannst du deinen Traffic hier in den "
+"Benutzereinstellungen einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:167
+#: sipa/blueprints/generic.py:168
 msgid ""
 "Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
 "anmelden."
@@ -317,60 +313,60 @@ msgstr ""
 msgid "MySQL Datenbank"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/usersuite.py:111
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:116
+#: sipa/blueprints/usersuite.py:114
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
-"direkt eine E-Mail an support@{}"
+"direkt eine E-Mail an {}"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:156
+#: sipa/blueprints/usersuite.py:152
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:158
+#: sipa/blueprints/usersuite.py:154
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:185 sipa/blueprints/usersuite.py:216
+#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:212
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:187 sipa/blueprints/usersuite.py:218
-#: sipa/blueprints/usersuite.py:247
+#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:214
+#: sipa/blueprints/usersuite.py:243
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:189 sipa/blueprints/usersuite.py:220
+#: sipa/blueprints/usersuite.py:185 sipa/blueprints/usersuite.py:216
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:191
+#: sipa/blueprints/usersuite.py:187
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:222
+#: sipa/blueprints/usersuite.py:218
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:263
+#: sipa/blueprints/usersuite.py:267
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:266
+#: sipa/blueprints/usersuite.py:270
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an support@wh2.tu-dresden.de"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:287
+#: sipa/blueprints/usersuite.py:294
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:295
+#: sipa/blueprints/usersuite.py:302
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
@@ -410,19 +406,19 @@ msgstr ""
 msgid "Kontakt"
 msgstr ""
 
-#: sipa/templates/base.html:155
+#: sipa/templates/base.html:156
 msgid "7. Etage"
 msgstr ""
 
-#: sipa/templates/base.html:165
+#: sipa/templates/base.html:166
 msgid "Keller"
 msgstr ""
 
-#: sipa/templates/base.html:175
+#: sipa/templates/base.html:176
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:235
+#: sipa/templates/base.html:236
 msgid "Verbleibender Traffic"
 msgstr ""
 
@@ -573,7 +569,21 @@ msgid "Nachricht an die Sektionsadmins"
 msgstr ""
 
 #: sipa/templates/usersuite/contact.html:9
-msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
+msgid "Hinweise:"
+msgstr ""
+
+#: sipa/templates/usersuite/contact.html:11
+msgid "Dein Username wird an die Nachricht angehängt."
+msgstr ""
+
+#: sipa/templates/usersuite/contact.html:12
+msgid "Die Antwort erhältst Du per Mail."
+msgstr ""
+
+#: sipa/templates/usersuite/contact.html:13
+msgid ""
+"Du kannst eine Weiterleitung deiner AGDSN-Mails in den "
+"Benutzereinstellungen einrichten."
 msgstr ""
 
 #: sipa/templates/usersuite/hosting.html:8
@@ -585,28 +595,34 @@ msgid "Jawohl!"
 msgstr ""
 
 #: sipa/templates/usersuite/hosting.html:16
-msgid ""
-"Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos "
-"zum Webhosting findest Du hier."
+msgid "Du kannst auf unserem Server eine MySQL-Datenbank anlegen."
 msgstr ""
 
-#: sipa/templates/usersuite/hosting.html:21
+#: sipa/templates/usersuite/hosting.html:17
+msgid "Weitere Infos zum Webhosting findest Du "
+msgstr ""
+
+#: sipa/templates/usersuite/hosting.html:19
+msgid "hier"
+msgstr ""
+
+#: sipa/templates/usersuite/hosting.html:24
 msgid "Datenbank Erstellen"
 msgstr ""
 
-#: sipa/templates/usersuite/hosting.html:34
+#: sipa/templates/usersuite/hosting.html:37
 msgid "Deine Datenbank"
 msgstr ""
 
-#: sipa/templates/usersuite/hosting.html:39
+#: sipa/templates/usersuite/hosting.html:42
 msgid "Hier kannst Du Deine Datenbank löschen:"
 msgstr ""
 
-#: sipa/templates/usersuite/hosting.html:46
+#: sipa/templates/usersuite/hosting.html:49
 msgid "Datenbank löschen"
 msgstr ""
 
-#: sipa/templates/usersuite/hosting.html:54
+#: sipa/templates/usersuite/hosting.html:57
 msgid "Passwort Ändern"
 msgstr ""
 
@@ -1160,15 +1176,24 @@ msgstr ""
 #~ msgid "Willst du deine Datenbank wirklich löschen?"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Du kannst auf unserem Server eine "
-#~ "MySQL-Datenbank anlegen. Weitere Infos zum"
-#~ " Webhosting findest du hier."
-#~ msgstr ""
-
 #~ msgid "Datenbank erstellen"
 #~ msgstr ""
 
 #~ msgid "Hier kannst du deine Datenbank löschen:"
+#~ msgstr ""
+
+#~ msgid "Hochschulstraße"
+#~ msgstr ""
+
+#~ msgid "Du hast nicht die notwendigen Rechte um die Seite zu sehen!"
+#~ msgstr ""
+
+#~ msgid "Hinweis: Dein Username wird an die Nachricht angehängt."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Du kannst auf unserem Server eine "
+#~ "MySQL-Datenbank anlegen. Weitere Infos zum"
+#~ " Webhosting findest Du hier."
 #~ msgstr ""
 
