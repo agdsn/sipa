@@ -49,7 +49,7 @@
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle" >{{ c.name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         {% for article in c.articles_itterator()  %}
-                        {% if not article.id == 'index' %}
+                        {% if not article.id == 'index' and article.title %}
                         <li>
                             <a href="
                                 {% if not article.link %}
