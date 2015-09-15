@@ -5,8 +5,14 @@
 {% block content %}
 {% call forms.render(form=form, form_id="contact-form",
                      reset_button=True, cancel_to=url_for('.usersuite')) -%}
-        <div class="col-sm-offset-2 col-sm-10 alert alert-info">
-            {{ _('Hinweis: Dein Username wird an die Nachricht angehängt.') }}
-        </div>
-    {%- endcall %}
+    <div class="col-sm-offset-2 col-sm-10 alert alert-info">
+        <strong>{{ _("Hinweise:")}}</strong>
+        <ul>
+            <li>{{ _("Dein Username wird an die Nachricht angehängt.") }}</li>
+            <li>{{ _("Die Antwort erhältst Du per Mail.") }}</li>
+            <li>{{ _("Du kannst eine Weiterleitung deiner AGDSN-Mails "
+                     "in den Benutzereinstellungen einrichten.") }}</li>
+        </ul>
+    </div>
+{%- endcall %}
 {% endblock %}
