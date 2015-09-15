@@ -63,8 +63,9 @@ def dormitory_from_name(name):
     return None
 
 
-def preferred_dormitory():
-    return dormitory_from_ip(request.remote_addr)
+def preferred_dormitory_name():
+    dormitory = dormitory_from_ip(request.remote_addr)
+    return dormitory.name if dormitory else None
 
 
 def current_datasource():
