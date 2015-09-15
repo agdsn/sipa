@@ -13,7 +13,10 @@
     {% endif %}
 
     <div class="well">
-            {{ _('Du kannst auf unserem Server eine MySQL-Datenbank anlegen. Weitere Infos zum Webhosting findest Du hier.') }}
+        {{ _("Du kannst auf unserem Server eine MySQL-Datenbank anlegen.") }}
+        {{ _("Weitere Infos zum Webhosting findest Du ") }}
+        <a href={{ url_for('pages.show', category_id="service", article_id="hosting") }}>
+            {{ _("hier") }}</a>.
     </div>
 
     {% if not user_has_db %}
