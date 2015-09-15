@@ -117,7 +117,7 @@ def init_env_and_config(app):
                 uwsgi.reload
 
         uwsgi.register_signal(20, "", update_uwsgi)
-        uwsgi.add_cron(20, -5, -1, -1, -1, -1)
+        uwsgi.add_timer(20, 300)
 
 
 def init_logging(app):
