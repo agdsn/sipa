@@ -14,7 +14,7 @@ body {
 		position: relative;
 		padding: 60px 50px;
 		color: white;
-        background: black url(../img/background.jpg);
+        	background: black url(../img/background.jpg);
 		background-size: cover;
 		margin-bottom: 40px;
 	}
@@ -28,7 +28,6 @@ body {
 
         .pg-header p {
         	margin-bottom: 0px;
-        	color: #CECECE;
         }
 
 	.pg-header .container {
