@@ -118,19 +118,15 @@
                         {%- else -%}
                             <li>
                                 <a href="{{ url_for('usersuite.usersuite') }}">
-                                    <span class="text-success">
-                                        <span class="glyphicon glyphicon-user"></span>
-                                        {{ current_user.name }}
-                                    </span>
+	                            <span class="glyphicon glyphicon-user"></span>
+	                            {{ current_user.name }}
                                 </a>
                             </li>
 
                             <li>
                                 <a href="{{ url_for('generic.logout') }}">
-                                    <span class="text-danger">
-                                        <span class="glyphicon glyphicon-off"></span>
-                                        {{ _("Logout") }}
-                                    </span>
+	                            <span class="glyphicon glyphicon-off"></span>
+	                            {{ _("Logout") }}
                                 </a>
                             </li>
                         {%- endif %}
