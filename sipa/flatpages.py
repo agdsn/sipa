@@ -5,17 +5,7 @@ from babel.core import UnknownLocaleError, Locale
 from flask.ext.flatpages import FlatPages
 
 from .babel import babel, locale_preferences
-
-
-def compare(x, y):
-    if x.rank is None:
-        return -1
-    if y.rank is None:
-        return 1
-    if x.rank < y.rank:
-        return -1
-    else:
-        return 1
+from operator import attrgetter
 
 
 class Node:
@@ -66,7 +56,8 @@ class Category(Node):
         self.articles = {}
 
     def articles_itterator(self):
-        return iter(sorted(list(self.articles.values())))
+        return iter(sorted(list(self.articles.values()),
+                           key=attrgetter('rank')))
 
     def __getattr__(self, attr):
         try:
@@ -114,7 +105,8 @@ class CategorizedFlatPages:
         self._set_categories()
 
     def __iter__(self):
-        return iter(sorted(list(self.root_category.categories.values())))
+        return iter(sorted(list(self.root_category.categories.values()),
+                           key=attrgetter('rank')))
 
     def get(self, category_id, article_id):
         category = self.root_category.categories.get(category_id)
