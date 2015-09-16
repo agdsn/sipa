@@ -90,24 +90,6 @@
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-			<li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                                <span class="caret"></span>
-                                <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
-                                {{ get_locale().display_name}}
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                {% for locale in possible_locales() %}
-                                    <li>
-                                        <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
-                                            <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
-                                            {{locale.display_name}}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-			</li>
-
                         {% if current_user.is_anonymous -%}
                             <li>
                                 <a href="{{ url_for('generic.login') }}">
@@ -130,6 +112,23 @@
                                 </a>
                             </li>
                         {%- endif %}
+                        
+			<li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                {% for locale in possible_locales() %}
+                                    <li>
+                                        <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
+                                            <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
+                                            {{locale.display_name}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+			</li>
                     </ul>
                 </div>
             </div>
