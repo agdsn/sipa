@@ -11,3 +11,4 @@ pygal==2.0.6
 GitPython==1.0.1
 Flask-WTF==0.12
 PyMySQL==0.6.6
+blinker==1.4
