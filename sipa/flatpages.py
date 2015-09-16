@@ -99,7 +99,7 @@ class Category(Node):
             article = Article(self, article_id)
             article.default_page = page
             self.articles[article_id] = article
-        article.localized_pages[locale] = page
+        article.localized_pages[str(locale)] = page
         if locale == babel.default_locale:
             article.default_page = page
 
