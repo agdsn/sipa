@@ -1,0 +1,16 @@
+.git
+.gitignore
+
+# Taken from .gitignore
+venv
+content
+documents
+*.pyc
+*.pyo
+*~
+*.log
+.idea
+
+messages.pot
+
+config.py
