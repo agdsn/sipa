@@ -72,4 +72,10 @@ td {
 	width: 100%;
 }
 
-img[alt=software_logo] { width: 100px; }
+img[alt=software_logo] {
+	width: 100px;
+}
+
+.form-control {
+	max-width: 350px;
+}
