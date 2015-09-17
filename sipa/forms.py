@@ -21,17 +21,15 @@ password_required_charset_message = lazy_gettext(
     "und Sonderzeichen enthalten sowie mindestens acht Zeichen lang sein"
 )
 
-password_validators = [
-    Regexp(
-        "("
-        "(?=.*\d)"                                     # ≥ 1 Digit
-        "(?=.*[a-z])(?=.*[A-Z])"                       # ≥ 1 Letter (up/low
-        "(?=.*[…_\[\]^!<>=&@:-?*}{/\#$|~`+%\"\';])"    # ≥ 1 Special char
-        ".{8,}"                                        # ≥ 8 chars
-        ")",
-        message=password_required_charset_message
-    ),
-]
+password_validator = Regexp(
+    "("
+    "(?=.*\d)"                                     # ≥ 1 Digit
+    "(?=.*[a-z])(?=.*[A-Z])"                       # ≥ 1 Letter (up/low
+    "(?=.*[…_\[\]^!<>=&@:-?*}{/\#$|~`+%\"\';])"    # ≥ 1 Special char
+    ".{8,}"                                        # ≥ 8 chars
+    ")",
+    message=password_required_charset_message
+)
 
 
 class ReadonlyStringField(StringField):
@@ -66,8 +64,9 @@ class ChangePasswordForm(Form):
     old = PasswordField(label=lazy_gettext("Altes Passwort"), validators=[
         DataRequired(gettext("Altes Passwort muss angegeben werden!"))])
     new = PasswordField(label=lazy_gettext("Neues Passwort"), validators=[
-        DataRequired(gettext("Neues Passwort fehlt!"))
-    ] + password_validators)
+        DataRequired(gettext("Neues Passwort fehlt!")),
+        password_validator
+    ])
     confirm = PasswordField(label=lazy_gettext("Bestätigung"), validators=[
         DataRequired(gettext("Bestätigung des neuen Passworts fehlt!")),
         EqualTo('new',
@@ -120,8 +119,13 @@ class LoginForm(Form):
     )
     username = StringField(
         label=lazy_gettext("Nutzername"),
-        validators=[DataRequired(gettext("Nutzername muss "
-                                         "angegeben werden!"))]
+        validators=[
+            DataRequired(gettext("Nutzername muss angegeben werden!")),
+            Regexp("^[^ ].*[^ ]$", message=gettext(
+                "Nutzername darf nicht von Leerzeichen umgeben sein!")),
+            Regexp("^[^,+\"\\<>;#]+$", message=gettext(
+                "Nutzername enthält ungültige Zeichen!")),
+        ]
     )
     password = PasswordField(
         label=lazy_gettext("Passwort"),
@@ -132,8 +136,9 @@ class LoginForm(Form):
 
 class HostingForm(Form):
     password = PasswordField(lazy_gettext("Passwort"), validators=[
-        DataRequired(gettext("Kein Passwort eingegeben!"))
-    ] + password_validators)
+        DataRequired(gettext("Kein Passwort eingegeben!")),
+        password_validator
+    ])
     confirm = PasswordField(lazy_gettext("Bestätigung"), validators=[
         DataRequired(gettext("Bestätigung des neuen Passworts fehlt!")),
         EqualTo('password',
