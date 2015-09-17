@@ -22,9 +22,6 @@ RUN pip install uwsgi
 RUN addgroup --gid 9999 sipa && \
 	adduser --uid 9999 --gid 9999 --disabled-password --gecos "Application" sipa
 
-RUN mkdir /var/log/sipa && \
-    chown sipa:sipa /var/log/sipa
-
 ADD . /home/sipa/sipa
 
 WORKDIR /home/sipa/sipa
