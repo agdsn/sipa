@@ -4,9 +4,11 @@ from flask.globals import current_app
 import ldap3
 from werkzeug.local import LocalProxy
 
-from sipa import logger
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     LDAPConnectionError
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 def init_ldap(app):

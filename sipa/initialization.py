@@ -15,12 +15,14 @@ from model import init_context, init_datasources_dormitories, \
     current_datasource
 from model.constants import ACTIONS, STATUS_COLORS
 
-from sipa import logger
 from sipa.base import login_manager, babel_selector, IntegerConverter
 from sipa.babel import babel, possible_locales
 from sipa.flatpages import cf_pages
 from sipa.utils.graph_utils import render_traffic_chart
 from sipa.utils.git_utils import init_repo, update_repo
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 def create_app(name=None):

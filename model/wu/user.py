@@ -14,8 +14,11 @@ from model.wu.database_utils import ip_from_user_id, sql_query, \
     user_id_from_uid
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
-from sipa import logger
+
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class User(BaseUser):

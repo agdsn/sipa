@@ -15,19 +15,28 @@ from ldap3 import LDAPCommunicationError
 from model import dormitory_from_name, user_from_ip, unsupported_dormitories
 from model.default import BaseUser
 
-from sipa import logger, http_logger, app
+
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils import current_user_name
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
+
+import logging
+logger = logging.getLogger(__name__)
 
 bp_generic = Blueprint('generic', __name__)
 
 
 @bp_generic.before_app_request
 def log_request():
-    http_logger.debug('Incoming request: %s %s', request.method, request.path,
-                      extra={'tags': {'user': current_user_name(),
-                                      'ip': request.remote_addr}})
+    # handler = SentryHandler(current_app.config['SENTRY_DSN'])
+    # THIS IS KEY!!! – if uncommented, logging to
+    # getLogger().addHandler(handler)
+
+    logging.getLogger(__name__ + '.http').debug(
+        'Incoming request: %s %s', request.method, request.path,
+        extra={'tags': {'user': current_user_name(),
+                        'ip': request.remote_addr}}
+    )
 
 
 @bp_generic.app_errorhandler(401)

@@ -11,10 +11,13 @@ from sqlalchemy.exc import OperationalError
 from werkzeug.local import LocalProxy
 
 from model.constants import WEEKDAYS
-from sipa import logger
+
 from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
 from sipa.utils.exceptions import DBQueryEmpty
 from .ldap_utils import get_current_uid
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 def init_db(app):

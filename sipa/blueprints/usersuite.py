@@ -10,7 +10,7 @@ from flask.ext.login import current_user, login_required
 
 from model import current_user_supported, current_datasource
 from model.constants import unsupported_property, ACTIONS
-from sipa import logger, feature_required
+from sipa import feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from sipa.utils.mail_utils import send_mail
@@ -18,6 +18,9 @@ from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
 from collections import OrderedDict
+
+import logging
+logger = logging.getLogger(__name__)
 
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 

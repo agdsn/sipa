@@ -9,8 +9,11 @@
 """
 
 import argparse
-from sipa import app, logger
+from sipa import app
 from sipa.initialization import init_app
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":

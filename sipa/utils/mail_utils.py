@@ -10,7 +10,10 @@ from email.mime.text import MIMEText
 import smtplib
 import textwrap
 
-from sipa import app, logger
+from sipa import app
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 def wrap_message(message, chars_in_line=80):
