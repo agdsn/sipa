@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
-from logging import getLogger, LoggerAdapter
-
 from flask import Flask, flash, redirect
-from flask.globals import request
-
-from sipa.utils import current_user_name, redirect_url
-
+from sipa.utils import redirect_url
 
 app = Flask('sipa')
 

@@ -50,7 +50,7 @@ class LdapConnector(ldap3.Connection):
         self.server = ldap3.Server(host=CONF['host'],
                                    port=CONF['port'],
                                    get_info=ldap3.SCHEMA,
-                                   tls=None, # accept any certificate
+                                   tls=None,  # accept any certificate
                                    connect_timeout=5)
         try:
             super().__init__(server=self.server,
@@ -87,7 +87,7 @@ class LdapConnector(ldap3.Connection):
             userdict = {
                 'dn': user['dn'],
                 'uid': attributes['uid'].pop(),
-                'name':attributes['gecos'],
+                'name': attributes['gecos'],
                 'mail': None
             }
 
@@ -104,6 +104,7 @@ class LdapConnector(ldap3.Connection):
         """
         return self.extend.standard.who_am_i()[3:]
 
+
 def search_in_group(username, group):
     """Searches for the given user in the given LDAP group memberuid list.
     This replaces the previous usage of hostflags.
@@ -116,6 +117,7 @@ def search_in_group(username, group):
                                 "(memberuid={}))").format(group, username))
 
         return bool(l.response)
+
 
 def change_email(username, password, email):
     """Change a user's email
@@ -143,6 +145,7 @@ def change_email(username, password, email):
         raise LDAPConnectionError
     else:
         logger.info('Mail address successfully changed to "%s"', email)
+
 
 def change_password(username, old, new):
     with LdapConnector(username, old) as l:

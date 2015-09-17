@@ -3,7 +3,7 @@
 
 
 from flask import render_template, request, redirect, \
-    url_for, flash, session, current_app
+    url_for, flash, session
 from flask.blueprints import Blueprint
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
@@ -14,11 +14,9 @@ from ldap3 import LDAPCommunicationError
 from model import dormitory_from_name, user_from_ip, unsupported_dormitories
 from model.default import BaseUser
 
-
 from sipa.forms import flash_formerrors, LoginForm
 from sipa.utils import current_user_name
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
-from raven.handlers.logging import SentryHandler
 
 import logging
 logger = logging.getLogger(__name__)
