@@ -12,10 +12,6 @@ import argparse
 from sipa import app
 from sipa.initialization import init_app
 
-import logging
-logger = logging.getLogger(__name__)
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sipa launcher")
     parser.add_argument("--debug", action="store_true",
@@ -26,6 +22,8 @@ if __name__ == "__main__":
                         help="tcp port to use", type=int, default=5000)
     args = parser.parse_args()
 
+    import logging
+    logger = logging.getLogger(__name__)
     logger.info('Starting sipa...')
     if args.debug:
         app.debug = True
