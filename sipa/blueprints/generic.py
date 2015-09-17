@@ -39,20 +39,22 @@ def log_request():
 
 @bp_generic.app_errorhandler(401)
 @bp_generic.app_errorhandler(403)
-@bp_generic.app_errorhandler(404)
 def error_handler_redirection(e):
     """Handles errors by flashing an according message and redirecting to /
     :param e: The error
     :return: A flask response, in this case `redirect(url_for('.index'))`
     """
-    if e.code in (404,):
-        flash(gettext("Seite nicht gefunden!"), "warning")
-    elif e.code in (401, 403):
+    if e.code in (401, 403):
         flash(gettext("Bitte melde Dich an, um die Seite zu sehen."),
               'warning')
     else:
         flash(gettext("Es ist ein Fehler aufgetreten!"), "error")
     return redirect(url_for('generic.index'))
+
+
+@bp_generic.app_errorhandler(404)
+def error_handler_not_found(args):
+    return render_template('404.html'), 404
 
 
 @bp_generic.app_errorhandler(OperationalError)
