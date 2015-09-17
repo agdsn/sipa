@@ -136,16 +136,20 @@ def init_logging(app):
         logger.warning('Error loading configuration file "%s"',
                        location_log_config)
     if app.config['SENTRY_DSN']:
+        # This could not be done in the default .ini because the
+        # handler has to be passed to `raven.setup_logging`.
+
         sentry = Sentry()
-        sentry.init_app(app)
+        # the following adds itself to app.extensions['sentry']
+        sentry.init_app(app, dsn=app.config['SENTRY_DSN'],
+                        logging=True, level=logging.DEBUG)
 
         handler = SentryHandler(app.config['SENTRY_DSN'])
         handler.level = logging.NOTSET
-
         setup_logging(handler)
 
-        # suppress INFO logging messages occurring every request
-        logging.getLogger('werkzeug').setLevel(logging.WARNING)
+        # app.logger.addHandler(app.extensions['sentry_handler'])
+
         logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
     else:
         logger.debug("No sentry DSN specified")
