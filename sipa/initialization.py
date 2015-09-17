@@ -144,16 +144,13 @@ def init_logging(app):
         # This could not be done in the default .ini because the
         # handler has to be passed to `raven.setup_logging`.
 
-        sentry = Sentry()
         # the following adds itself to app.extensions['sentry']
-        sentry.init_app(app, dsn=app.config['SENTRY_DSN'],
-                        logging=True, level=logging.DEBUG)
+        sentry = Sentry()
+        sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
-        handler = SentryHandler(app.config['SENTRY_DSN'])
+        handler = SentryHandler(app.extensions['sentry'].client)
         handler.level = logging.NOTSET
         setup_logging(handler)
-
-        # app.logger.addHandler(app.extensions['sentry_handler'])
 
         logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
     else:
