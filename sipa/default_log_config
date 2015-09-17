@@ -9,10 +9,10 @@ keys=form01
 
 
 [logger_root]
-level=DEBUG
 handlers=stdoutHandler
 
 [logger_sipa]
+level=DEBUG
 qualname=sipa
 handlers=
 propagate=1
