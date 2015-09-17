@@ -63,6 +63,8 @@ def init_app(app):
 
     from model import query_gauge_data
     logger.debug('Registering Jinja globals')
+    form_label_width = 3
+    form_input_width = 7
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
         gauge_data=query_gauge_data,
@@ -71,7 +73,10 @@ def init_app(app):
         chart=render_traffic_chart,
         current_datasource=current_datasource,
         ACTIONS=ACTIONS,
-        STATUS_COLORS=STATUS_COLORS
+        STATUS_COLORS=STATUS_COLORS,
+        form_label_width_class="col-sm-{}".format(form_label_width),
+        form_input_width_class="col-sm-{}".format(form_input_width),
+        form_input_offset_class="col-sm-offset-{}".format(form_label_width)
     )
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})

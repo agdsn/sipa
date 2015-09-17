@@ -4,10 +4,10 @@
 
 {% block content %}
 {% call forms.render(form=form, form_id="change-mac-form", cancel_to=url_for('.usersuite')) -%}
-        <div class="col-sm-offset-2 col-sm-10 alert alert-info">
+        <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
             {{ _('Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt.') }}
         </div>
-        <div class="col-sm-offset-2 col-sm-10 alert alert-warning">
+        <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-warning">
             {{ _('Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben.') }}
             {{ _('Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!') }}
         </div>

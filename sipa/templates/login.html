@@ -4,7 +4,7 @@
 
 {% block content %}
 {% call forms.render(form=form, form_id="loginform", cancel_to=url_for('.index')) %}
-        <div class="col-sm-offset-2 col-sm-10 alert alert-info hidden" id="extern">
+        <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info hidden" id="extern">
             {{ _('Dieses Wohnheim erreichst du hier:') }} <a id="link" href="#"></a>
         </div>
 {% endcall %}

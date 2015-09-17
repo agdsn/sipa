@@ -5,7 +5,7 @@
 {% block content %}
 {% call forms.render(form=form, form_id="contact-form",
                      reset_button=True, cancel_to=url_for('.usersuite')) -%}
-    <div class="col-sm-offset-2 col-sm-10 alert alert-info">
+    <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
         <strong>{{ _("Hinweise:")}}</strong>
         <ul>
             <li>{{ _("Dein Username wird an die Nachricht angehängt.") }}</li>

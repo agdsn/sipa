@@ -12,15 +12,19 @@
                 {% if loop.index0 == 0 %}{% set focus = true %}{% endif %}
                 <div class="form-group {% if field.errors %}has-error{% endif %}">
                     {% if field.type == "BooleanField" %}
-                        <div class="col-sm-offset-2 col-sm-10">
+                        <div class="{{ form_input_offset_class }} {{ form_input_width_class }}">
                             <div class="checkbox">
                             <label>
                                 <input type="checkbox"> {{ field.default }}
                             </label></div>
                         </div>
                     {% elif field.type != "HiddenField" %}
-                        <label class="col-sm-2 control-label">{{ field.label() }}</label>
-                        <div class="col-sm-10">{{ render_field(field, focus=focus) }}</div>
+                        <label class="{{ form_label_width_class }} control-label">
+                            {{ field.label() }}
+                        </label>
+                        <div class="{{ form_input_width_class }}">
+                            {{ render_field(field, focus=focus) }}
+                        </div>
                     {% endif %}
                 </div>
             {% endif %}{%- endfor %}
@@ -29,7 +33,7 @@
             {{ caller() }}
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="{{ form_input_offset_class }} {{ form_input_width_class }}">
                     <button type="submit" class="btn btn-primary">{{ _('Abschicken') }}</button>
                     {% if reset_button -%}
                         <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
