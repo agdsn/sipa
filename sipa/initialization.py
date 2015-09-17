@@ -73,6 +73,8 @@ def init_app(app):
         ACTIONS=ACTIONS,
         STATUS_COLORS=STATUS_COLORS
     )
+    logger.debug("Jinja globals have been set",
+                 extra={'data': {'jinja_globals': app.jinja_env.globals}})
 
     init_datasources_dormitories(app)
     init_context(app)
@@ -87,7 +89,11 @@ def init_env_and_config(app):
     try:
         app.config.from_envvar('SIPA_CONFIG_FILE', silent=True)
     except IOError:
-        print("No Config found")
+        logger.warning("SIPA_CONFIG_FILE not readable: %s",
+                       os.environ['SIPA_CONFIG_FILE'])
+    else:
+        logger.info("Successfully read config file %s",
+                    os.environ['SIPA_CONFIG_FILE'])
 
     app.config.update({
         name[len("SIPA_"):]: value for name, value in os.environ.items()
@@ -111,6 +117,7 @@ def init_env_and_config(app):
             if hasToReload:
                 uwsgi.reload
 
+        logger.info("Registering repo update to uwsgi_signal")
         uwsgi.register_signal(20, "", update_uwsgi)
         uwsgi.add_timer(20, 300)
 
