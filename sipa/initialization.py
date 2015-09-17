@@ -59,6 +59,7 @@ def init_app(app):
     app.register_blueprint(bp_pages)
     app.register_blueprint(bp_documents)
     app.register_blueprint(bp_news)
+    init_logging(app)
 
     from model import query_gauge_data
     logger.debug('Registering Jinja globals')
@@ -73,7 +74,6 @@ def init_app(app):
         STATUS_COLORS=STATUS_COLORS
     )
 
-    init_logging(app)
     init_datasources_dormitories(app)
     init_context(app)
 
