@@ -33,7 +33,7 @@ def init_db(app):
             app.config['DB_HELIOS_USER'],
             app.config['DB_HELIOS_PASSWORD'],
             app.config['DB_HELIOS_HOST'],
-            app.config['DB_HELIOS_PORT']),
+            int(app.config['DB_HELIOS_PORT'])),
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
 

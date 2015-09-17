@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def init_ldap(app):
     app.extensions['ldap'] = {
         'host': app.config['WU_LDAP_HOST'],
-        'port': app.config['WU_LDAP_PORT'],
+        'port': int(app.config['WU_LDAP_PORT']),
         'user': app.config['WU_LDAP_SEARCH_USER'],
         'password': app.config['WU_LDAP_SEARCH_PASSWORD'],
         'search_user_base': app.config['WU_LDAP_SEARCH_USER_BASE'],
