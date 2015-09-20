@@ -43,7 +43,7 @@ class Article(Node):
             # Locale is unfortunately not hashable
             # so locale in self.localized_pages does not work
             for available_locale in available_locales:
-                if available_locale == locale:
+                if available_locale == locale.language:
                     localized_page = self.localized_pages.get(available_locale)
                     return localized_page
         return self.default_page
@@ -105,7 +105,7 @@ class CategorizedFlatPages:
         self._set_categories()
 
     def __iter__(self):
-        return iter(sorted(list(self.root_category.categories.values()),
+        return iter(sorted(self.root_category.categories.values(),
                            key=attrgetter('rank')))
 
     def get(self, category_id, article_id):
