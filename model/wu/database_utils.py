@@ -4,7 +4,7 @@
 import datetime
 
 from sqlalchemy import create_engine
-from flask.ext.babel import gettext
+from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
 from sqlalchemy.exc import OperationalError
 
@@ -59,11 +59,11 @@ DORMITORIES = [
 STATUS = {
     # todo vervollständigen oder mindestens fehlerresistent machen!
     # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
-    1: gettext('Bezahlt, verbunden'),
-    2: gettext('Nicht bezahlt, Netzanschluss gesperrt'),
-    7: gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
-    9: gettext('Exaktiv'),
-    12: gettext('Trafficlimit überschritten, Netzanschluss gesperrt')
+    1: lazy_gettext('Bezahlt, verbunden'),
+    2: lazy_gettext('Nicht bezahlt, Netzanschluss gesperrt'),
+    7: lazy_gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
+    9: lazy_gettext('Exaktiv'),
+    12: lazy_gettext('Trafficlimit überschritten, Netzanschluss gesperrt')
 }
 
 
@@ -78,7 +78,7 @@ def sql_query(query, args=(), database=db_atlantis):
 
 
 def status_string_from_id(status_id):
-    return STATUS.get(status_id, gettext("Unbekannt"))
+    return STATUS.get(status_id, lazy_gettext("Unbekannt"))
 
 
 def user_id_from_uid(uid=None):
