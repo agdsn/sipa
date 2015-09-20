@@ -10,10 +10,10 @@
     {% for day in usertraffic['history'] %}
         <tr>
             <td>{{ _(day[0]) }}</td>
-            <td>{{ day[1] }}{# Input #} MiB</td>
-            <td>{{ day[2] }}{# Output #} MiB</td>
-            <td>{{ day[1]+day[2] }}{# Throughput #} MiB</td>
-            <td>{{ day[3] }}{# Credit #} MiB</td>
+            <td>{{ day[1] | round(2) }}{# Input #} MiB</td>
+            <td>{{ day[2] | round(2) }}{# Output #} MiB</td>
+            <td>{{ (day[1]+day[2]) | round(2) }}{# Throughput #} MiB</td>
+            <td>{{ day[3] | round(2) }}{# Credit #} MiB</td>
         </tr>
     {% endfor %}
         <tr>
