@@ -56,7 +56,7 @@ def error_handler_redirection(e):
 
 @bp_generic.app_errorhandler(404)
 def error_handler_not_found(args):
-    return render_template('404.html'), 404
+    return render_template('error.html'), 404
 
 
 @bp_generic.app_errorhandler(OperationalError)
