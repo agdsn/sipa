@@ -18,9 +18,15 @@
         <div class="panel">
             <div class="panel-heading">
                 <select id="dorm-select" class="form-control">
-                    <option selected>{{ _("Wohnheim auswählen") }}</option>
+                    <option {% if default_dormitory %}selected{% endif %}>
+                        {{ _("Wohnheim auswählen") }}
+                    </option>
                     {% for dormitory in dormitories %}
-                        <option value="{{ dormitory[0] }}">{{ dormitory[1] }}</option>
+                        <option value="{{ dormitory[0] }}"
+                                {% if dormitory[0] == default_dormitory %}selected{% endif %}
+                                >
+                            {{ dormitory[1] }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>

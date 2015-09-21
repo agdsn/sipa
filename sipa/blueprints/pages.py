@@ -8,7 +8,7 @@ Blueprint for the flatpages
 from flask import Blueprint, render_template, current_app
 import os.path
 from sipa.flatpages import cf_pages
-from model import registered_dormitories
+from model import registered_dormitories, preferred_dormitory_name
 from logging import getLogger
 import json
 
@@ -40,6 +40,7 @@ def show(category_id, article_id):
                                dynamic=False)
 
     return render_template('template.html', article=article,
+                           default_dormitory=preferred_dormitory_name(),
                            dynamic=True, **dynamic_data)
 
 
