@@ -85,7 +85,8 @@ class User(BaseUser):
                            "LEFT JOIN nutzer as n "
                            "ON c.nutzer_id = n.nutzer_id "
                            "WHERE c_ip = %s "
-                           "AND (n.status < 8 OR n.status > 10)",
+                           "AND (n.status < 8 OR n.status > 10) "
+                           "ORDER BY c.nutzer_id DESC",
                            (ip,)).fetchone()
         if result is None:
             return AnonymousUserMixin()
