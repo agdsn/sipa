@@ -11,3 +11,46 @@
     <div>{{ page.html|safe }}</div>
     <hr />
 {% endblock %}
+
+{% block dynamic_content %}
+    {% if dynamic %}
+        <h2>{{ title }}</h2>
+        <div class="panel">
+            <div class="panel-heading">
+                <select id="dorm-select" class="form-control">
+                    <option selected>{{ _("Wohnheim auswählen") }}</option>
+                    {% for dormitory in dormitories %}
+                        <option value="{{ dormitory[0] }}">{{ dormitory[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="panel-body">
+                {% for dorm in dormitories %}
+                    {% set dorm_id = dorm[0] %}
+                    {% if dorm_id in values %}
+                        <div class="dynamic-content" id="dynamic-{{ dorm_id }}" hidden>
+                            {% for id, desc in values[dorm_id].items() %}
+                                <dl id="dynamic-{{ dorm_id }}-{{ id }}">
+                                    <dt>{{ keys[id] }}</dt>
+                                    <dd>{{ desc }}</dd>
+                                </dl>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block custom_script -%}
+<script type="text/javascript">
+    $("#dorm-select").change(function(){
+        selected = $("select#dorm-select").find(":selected").prop("value");
+        $(".dynamic-content").hide();
+        $("#dynamic-" + selected).show();
+    });
+    $("#dorm-select").on("load", function() {}).triggerHandler("change")
+</script>
+{%- endblock %}
