@@ -3,7 +3,7 @@
 
 
 from flask import render_template, request, redirect, \
-    url_for, flash, session
+    url_for, flash, session, abort
 from flask.blueprints import Blueprint
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
@@ -174,9 +174,7 @@ def usertraffic():
             return render_template("usertraffic.html", usertraffic=(
                 current_user.get_traffic_data()))
         else:
-            flash(gettext("Um deinen Traffic von außerhalb einsehen zu "
-                          "können, musst du dich anmelden."), 'info')
-            return redirect(url_for('.login'))
+            abort(401)
 
 
 @bp_generic.route('/contact', methods=['GET', 'POST'])
