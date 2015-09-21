@@ -308,7 +308,10 @@ def usersuite_hosting(action=None):
     elif form.is_submitted():
         flash_formerrors(form)
 
-    user_has_db = current_user.has_user_db()
+    try:
+        user_has_db = current_user.has_user_db()
+    except NotImplementedError:
+        abort(403)
 
     return render_template('usersuite/hosting.html',
                            form=form, user_has_db=user_has_db, action=action)
