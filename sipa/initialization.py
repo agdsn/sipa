@@ -122,12 +122,9 @@ def init_env_and_config(app):
             if hasToReload:
                 uwsgi.reload
 
-        print("Registering repo update to uwsgi_signal")
+        logger.info("Registering repo update to uwsgi_signal")
         uwsgi.register_signal(20, "", update_uwsgi)
-        uwsgi.add_timer(20, 10)
-    else:
-        print("SIPA_UWSGI not 'True' (is %s), skipping",
-              os.getenv("SIPA_UWSGI", "False"))
+        uwsgi.add_timer(20, 300)
 
     if not app.config['SECRET_KEY']:
         raise ValueError("SECRET_KEY must not be empty")
