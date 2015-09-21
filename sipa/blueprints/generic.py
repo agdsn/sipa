@@ -170,12 +170,9 @@ def usertraffic():
         return render_template("usertraffic.html", usertraffic=(
             ip_user.get_traffic_data()))
     else:
-        flash(gettext("Deine IP gehört nicht zum Wohnheim!"), "error")
-
         if current_user.is_authenticated:
-            flash(gettext("Da du angemeldet bist, kannst du deinen Traffic "
-                          "hier in der Usersuite einsehen."), 'info')
-            return redirect(url_for('usersuite.usersuite'))
+            return render_template("usertraffic.html", usertraffic=(
+                current_user.get_traffic_data()))
         else:
             flash(gettext("Um deinen Traffic von außerhalb einsehen zu "
                           "können, musst du dich anmelden."), 'info')
