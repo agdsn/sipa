@@ -1,11 +1,11 @@
 {% extends "base.html" %}#
-{% set page_title = _("404: Seite nicht gefunden") %}
+{% set page_title = _("Fehler {} - {}").format(errorcode, message) %}
 
 {% block content %}
     {# TODO: choose randomly from dict #}
     <div class="jumbotron">
         <h1>{{ _("Nanu?!") }}</h1>
-        <p>{{ _("Fehler 404 - Das von Dir angeforderte Dokument gibt es nicht.") }}</p>
+        <p>{{ _("Fehler {} - {}").format(errorcode, message) }}</p>
 
         <p><a class="btn btn-primary btn-lg" href="{{ url_for('generic.index') }}" role="button">
                 {{ _("Zur Hauptseite") }}

@@ -41,22 +41,26 @@ def log_request():
 
 @bp_generic.app_errorhandler(401)
 @bp_generic.app_errorhandler(403)
-def error_handler_redirection(e):
-    """Handles errors by flashing an according message and redirecting to /
-    :param e: The error
-    :return: A flask response, in this case `redirect(url_for('.index'))`
-    """
-    if e.code in (401, 403):
-        flash(gettext("Bitte melde Dich an, um die Seite zu sehen."),
-              'warning')
-    else:
-        flash(gettext("Es ist ein Fehler aufgetreten!"), "error")
-    return redirect(url_for('generic.index'))
-
-
 @bp_generic.app_errorhandler(404)
-def error_handler_not_found(args):
-    return render_template('error.html'), 404
+def error_handler_redirection(e):
+    """Handles errors by flashing an according message
+    :param e: The error
+    :return: A flask response with the according HTTP error code
+    """
+    if e.code == 401:
+        message = gettext("Bitte melde Dich an, um die Seite zu sehen.")
+    elif e.code == 403:
+        message = gettext("Diese Funktion wird in deinem Wohnheim "
+                          "nicht unterstützt.")
+    elif e.code == 404:
+        message = gettext("Das von Dir angeforderte Dokument gibt es nicht.")
+    else:
+        message = gettext("Es ist ein Fehler aufgetreten!")
+    return render_template(
+        'error.html',
+        errorcode=e.code,
+        message=message
+    ), e.code
 
 
 @bp_generic.app_errorhandler(OperationalError)
