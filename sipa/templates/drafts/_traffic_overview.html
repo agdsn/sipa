@@ -18,6 +18,6 @@
     {% endfor %}
         <tr>
             <td id="usersuite-traffic-sum" colspan="4">{{ _("Verbleibender Credit") }}</td>
-            <td>{{ usertraffic.credit }} MiB</td>
+            <td>{{ usertraffic.credit | round(2) }} MiB</td>
         </tr>
 </table>
