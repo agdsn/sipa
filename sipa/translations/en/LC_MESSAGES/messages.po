@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-17 22:55+0200\n"
-"PO-Revision-Date: 2015-09-17 22:55+0200\n"
+"POT-Creation-Date: 2015-09-21 15:49+0200\n"
+"PO-Revision-Date: 2015-09-21 15:49+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.0\n"
+"Generated-By: Babel 1.3\n"
 "Language: en\n"
 "X-Generator: Poedit 1.8.4\n"
 
@@ -420,31 +420,31 @@ msgstr "Login"
 msgid "Logout"
 msgstr "Logout"
 
-#: sipa/templates/base.html:154
+#: sipa/templates/base.html:158
 msgid "Für Details klicken"
 msgstr "Click for details"
 
-#: sipa/templates/base.html:161
+#: sipa/templates/base.html:165
 msgid "Fehler bei der Abfrage der Daten"
 msgstr "An error occurred"
 
-#: sipa/templates/base.html:169
+#: sipa/templates/base.html:173
 msgid "Kontakt"
 msgstr "Contact"
 
-#: sipa/templates/base.html:192
-msgid "7. Etage"
-msgstr "7th floor"
-
-#: sipa/templates/base.html:202
-msgid "Keller"
-msgstr "Basement"
-
-#: sipa/templates/base.html:212
+#: sipa/templates/base.html:196
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:278
+#: sipa/templates/base.html:206
+msgid "Keller"
+msgstr "Basement"
+
+#: sipa/templates/base.html:216
+msgid "7. Etage"
+msgstr "7th floor"
+
+#: sipa/templates/base.html:283
 msgid "Verbleibender Traffic"
 msgstr "Remaining Credit"
 
@@ -507,6 +507,10 @@ msgstr "You can reach this dormitory over here:"
 #: sipa/templates/template.html:8
 msgid "Geschrieben von"
 msgstr "Written by"
+
+#: sipa/templates/template.html:22
+msgid "Wohnheim auswählen"
+msgstr "Choose dormitory"
 
 #: sipa/templates/drafts/_traffic_chart.html:2
 msgid "Trafficdiagramm"

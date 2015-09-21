@@ -145,6 +145,10 @@
         <div class="container">
 	    <div class="row">
 		<div class="col-sm-3 col-sm-push-9">
+                    <div class="row">
+                        {% block dynamic_content %}
+                        {% endblock %}
+                    </div>
 		    <div class="row">
                         {% if not credit.foreign_user -%}
 			    <div class="col-xs-6 col-sm-12">
@@ -214,6 +218,7 @@
                                         </address>
                                     </div>
 				</div>
+
 			    </div>
 			</div>
 		    </div>

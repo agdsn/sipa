@@ -51,6 +51,13 @@ def list_all_dormitories():
     ], key=operator.itemgetter(1))
 
 
+def list_supported_dormitories():
+    return sorted([
+        (dormitory.name, dormitory.display_name)
+        for dormitory in current_app.extensions['dormitories']
+    ])
+
+
 def init_context(app):
     for datasource in app.extensions['datasources']:
         datasource.init_context(app)
