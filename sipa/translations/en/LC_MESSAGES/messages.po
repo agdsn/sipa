@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-21 17:35+0200\n"
-"PO-Revision-Date: 2015-09-21 17:36+0200\n"
+"POT-Creation-Date: 2015-09-21 20:51+0200\n"
+"PO-Revision-Date: 2015-09-21 20:52+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -268,28 +268,11 @@ msgstr "Another user than the one registered for this connection is logged in!"
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr "You will find here the traffic data for this connection"
 
-#: sipa/blueprints/generic.py:173
-msgid "Deine IP gehört nicht zum Wohnheim!"
-msgstr "Your IP does not belong to this network!"
-
-#: sipa/blueprints/generic.py:176
-msgid ""
-"Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
-"einsehen."
-msgstr ""
-"Because you are logged in, you can view your traffic here on the user "
-"settings site."
-
-#: sipa/blueprints/generic.py:180
-msgid ""
-"Um deinen Traffic von außerhalb einsehen zu können, musst du dich anmelden."
-msgstr "To view your traffic from outside the network, you have to log in."
-
-#: sipa/blueprints/generic.py:197 sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/generic.py:192 sipa/blueprints/usersuite.py:114
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:199
+#: sipa/blueprints/generic.py:194
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 

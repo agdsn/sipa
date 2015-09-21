@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-21 17:35+0200\n"
+"POT-Creation-Date: 2015-09-21 20:51+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -265,27 +265,11 @@ msgstr ""
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 msgstr ""
 
-#: sipa/blueprints/generic.py:173
-msgid "Deine IP gehört nicht zum Wohnheim!"
-msgstr ""
-
-#: sipa/blueprints/generic.py:176
-msgid ""
-"Da du angemeldet bist, kannst du deinen Traffic hier in der Usersuite "
-"einsehen."
-msgstr ""
-
-#: sipa/blueprints/generic.py:180
-msgid ""
-"Um deinen Traffic von außerhalb einsehen zu können, musst du dich "
-"anmelden."
-msgstr ""
-
-#: sipa/blueprints/generic.py:197 sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/generic.py:192 sipa/blueprints/usersuite.py:114
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:199
+#: sipa/blueprints/generic.py:194
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
@@ -1230,5 +1214,13 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Fehler 404 - Das von Dir angeforderte Dokument gibt es nicht."
+#~ msgstr ""
+
+#~ msgid "Deine IP gehört nicht zum Wohnheim!"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Um deinen Traffic von außerhalb einsehen"
+#~ " zu können, musst du dich anmelden."
 #~ msgstr ""
 
