@@ -32,7 +32,17 @@ password_validator = Regexp(
 )
 
 
-class ReadonlyStringField(StringField):
+def strip_filter(string):
+    return string.strip() if string else None
+
+
+class StrippedStringField(StringField):
+    def __init__(self, *args, **kwargs):
+        kwargs['filters'] = kwargs.get('filters', []) + [strip_filter]
+        super(StrippedStringField, self).__init__(*args, **kwargs)
+
+
+class ReadonlyStringField(StrippedStringField):
     def __init__(self, *args, **kwargs):
         super(ReadonlyStringField, self).__init__(*args, **kwargs)
 
@@ -53,7 +63,7 @@ class ContactForm(Form):
         ("finanzen", lazy_gettext("Finanzfragen (Beiträge, Gebühren)")),
         ("eigene-technik", lazy_gettext("Probleme mit privater Technik"))
     ])
-    subject = StringField(label=lazy_gettext("Betreff"), validators=[
+    subject = StrippedStringField(label=lazy_gettext("Betreff"), validators=[
         DataRequired(gettext("Betreff muss angegeben werden!"))])
     message = TextAreaField(label=lazy_gettext("Nachricht"), validators=[
         DataRequired(gettext("Nachricht fehlt!"))
@@ -61,7 +71,7 @@ class ContactForm(Form):
 
 
 class AnonymousContactForm(Form):
-    email = StringField(
+    email = StrippedStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
         validators=[Email(gettext("E-Mail ist nicht in gültigem Format!"))],
     )
@@ -70,7 +80,7 @@ class AnonymousContactForm(Form):
         choices=LocalProxy(list_all_dormitories),
         default=LocalProxy(lambda: preferred_dormitory_name()),
     )
-    subject = StringField(label=lazy_gettext("Betreff"), validators=[
+    subject = StrippedStringField(label=lazy_gettext("Betreff"), validators=[
         DataRequired(gettext("Betreff muss angegeben werden!"))])
     message = TextAreaField(label=lazy_gettext("Nachricht"), validators=[
         DataRequired(gettext("Nachricht fehlt!"))
@@ -95,7 +105,7 @@ class ChangeMailForm(Form):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(gettext("Passwort nicht angegeben!"))])
-    email = StringField(
+    email = StrippedStringField(
         label=lazy_gettext("Neue Mail"),
         validators=[Email(gettext("E-Mail ist nicht in gültigem Format!"))])
 
@@ -119,7 +129,7 @@ class ChangeMACForm(Form):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(gettext("Passwort nicht angegeben!"))])
-    mac = StringField(
+    mac = StrippedStringField(
         label=lazy_gettext("Neue MAC"),
         validators=[DataRequired("MAC-Adresse nicht angegeben!"),
                     MacAddress("MAC ist nicht in gültigem Format!"),
@@ -134,15 +144,13 @@ class LoginForm(Form):
         validators=[AnyOf(supported_dormitories,
                           message=gettext("Kein gültiges Wohnheim!"))]
     )
-    username = StringField(
+    username = StrippedStringField(
         label=lazy_gettext("Nutzername"),
         validators=[
             DataRequired(gettext("Nutzername muss angegeben werden!")),
-            Regexp("^[^ ].*[^ ]$", message=gettext(
-                "Nutzername darf nicht von Leerzeichen umgeben sein!")),
             Regexp("^[^,+\"\\<>;#]+$", message=gettext(
                 "Nutzername enthält ungültige Zeichen!")),
-        ]
+        ],
     )
     password = PasswordField(
         label=lazy_gettext("Passwort"),
