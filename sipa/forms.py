@@ -60,6 +60,23 @@ class ContactForm(Form):
     ])
 
 
+class AnonymousContactForm(Form):
+    email = StringField(
+        label=lazy_gettext("Deine E-Mail-Adresse"),
+        validators=[Email(gettext("E-Mail ist nicht in gültigem Format!"))],
+    )
+    dormitory = SelectField(
+        label=lazy_gettext("Wohnheim"),
+        choices=LocalProxy(list_all_dormitories),
+        default=LocalProxy(lambda: preferred_dormitory_name()),
+    )
+    subject = StringField(label=lazy_gettext("Betreff"), validators=[
+        DataRequired(gettext("Betreff muss angegeben werden!"))])
+    message = TextAreaField(label=lazy_gettext("Nachricht"), validators=[
+        DataRequired(gettext("Nachricht fehlt!"))
+    ])
+
+
 class ChangePasswordForm(Form):
     old = PasswordField(label=lazy_gettext("Altes Passwort"), validators=[
         DataRequired(gettext("Altes Passwort muss angegeben werden!"))])

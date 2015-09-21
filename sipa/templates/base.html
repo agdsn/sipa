@@ -173,19 +173,23 @@
 			    <h2>{{ _("Kontakt") }} </h2>
 
 			    <div>
-                                {% if current_user.is_authenticated %}
-                                    {% set mail = current_datasource().support_mail %}
-				    <div class="row">
-					<div class="col-xs-1">
-					    <span class="glyphicon glyphicon-envelope"></span>
-					</div>
-					<div class="col-xs-10">
-					    <a href="mailto:{{ mail }}">{{ mail }}</a>
-					</div>
+				<div class="row">
+				    <div class="col-xs-1">
+					<span class="glyphicon glyphicon-envelope"></span>
 				    </div>
+				    <div class="col-xs-10">
+                                        {% if current_user.is_authenticated %}
+                                            {% set mail = current_datasource().support_mail %}
+					    <a href="mailto:{{ mail }}">{{ mail }}</a>
+                                        {% else %}
+                                            <a href="{{ url_for('generic.contact') }}">
+                                                {{ _("Kontaktformular") }}
+                                            </a>
+                                        {% endif %}
+				    </div>
+				</div>
 
-				    <br />
-                                {% endif %}
+				<br />
 				<div class="row">
 				    <div class="col-xs-1">
 					<span class="glyphicon glyphicon-home"></span>

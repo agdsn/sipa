@@ -14,9 +14,11 @@ from ldap3 import LDAPCommunicationError
 from model import dormitory_from_name, user_from_ip, unsupported_dormitories
 from model.default import BaseUser
 
-from sipa.forms import flash_formerrors, LoginForm
+from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
 from sipa.utils import current_user_name
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
+from sipa.utils.mail_utils import send_mail
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -174,3 +176,26 @@ def usertraffic():
             flash(gettext("Um deinen Traffic von außerhalb einsehen zu "
                           "können, musst du dich anmelden."), 'info')
             return redirect(url_for('.login'))
+
+
+@bp_generic.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = AnonymousContactForm()
+
+    if form.validate_on_submit():
+        from_mail = form.email.data
+        subject = "[Kontakt] {}".format(form.subject.data)
+        message = form.message.data
+        dormitory = dormitory_from_name(form.dormitory.data)
+        support_mail = dormitory.datasource.support_mail
+
+        if send_mail(from_mail, support_mail, subject, message):
+            flash(gettext("Nachricht wurde versandt."), "success")
+        else:
+            flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."),
+                  'error')
+        return redirect(url_for(".index"))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template('anonymous_contact.html', form=form)
