@@ -179,8 +179,9 @@
 				    </div>
 				    <div class="col-xs-10">
                                         {% if current_user.is_authenticated %}
-                                            {% set mail = current_datasource().support_mail %}
-					    <a href="mailto:{{ mail }}">{{ mail }}</a>
+                                            <a href="{{ url_for('usersuite.usersuite_contact') }}">
+                                                {{ _("Kontaktformular") }}
+                                            </a>
                                         {% else %}
                                             <a href="{{ url_for('generic.contact') }}">
                                                 {{ _("Kontaktformular") }}
