@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, send_file, abort
-from os.path import isfile, realpath
+from os.path import isfile, realpath, join
 
 bp_documents = Blueprint('documents', __name__)
 
@@ -22,9 +22,9 @@ def show_image(image):
         abort(404)
 
 
-@bp_documents.route('/documents/<document>')
+@bp_documents.route('/documents/<path:document>')
 def show_pdf(document):
-    filename = realpath("content/documents/{}".format(document))
+    filename = join(realpath("content/documents/"), document)
     if not isfile(filename):
         abort(404)
 
