@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-21 20:51+0200\n"
-"PO-Revision-Date: 2015-09-21 20:52+0200\n"
+"POT-Creation-Date: 2015-09-23 10:31+0200\n"
+"PO-Revision-Date: 2015-09-23 10:31+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -83,15 +83,15 @@ msgstr "Traffic limit reached, account blocked"
 msgid "Unbekannt"
 msgstr "Unknown"
 
-#: model/wu/user.py:172
+#: model/wu/user.py:173
 msgid "Aktiviert"
 msgstr "Activated"
 
-#: model/wu/user.py:178
+#: model/wu/user.py:179
 msgid "Nicht aktiviert"
 msgstr "Not activated"
 
-#: model/wu/user.py:184
+#: model/wu/user.py:185
 msgid "Datenbank nicht erreichbar"
 msgstr "Database cannot be reached"
 
@@ -103,127 +103,123 @@ msgstr ""
 "Password must contain letters in upper- and lowercase, numbers, special "
 "chars and cover at least eight chars"
 
-#: sipa/forms.py:46 sipa/forms.py:65
+#: sipa/forms.py:56 sipa/forms.py:75
 msgid "Deine E-Mail-Adresse"
 msgstr "Your e-mail address"
 
-#: sipa/forms.py:47 sipa/forms.py:66 sipa/forms.py:100
+#: sipa/forms.py:57 sipa/forms.py:76 sipa/forms.py:110
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr "E-Mail is invalid!"
 
-#: sipa/forms.py:49
+#: sipa/forms.py:59
 msgid "Kategorie"
 msgstr "Category"
 
-#: sipa/forms.py:50
+#: sipa/forms.py:60
 msgid "Allgemeine Frage an die Administratoren"
 msgstr "General question for the administrators"
 
-#: sipa/forms.py:52
+#: sipa/forms.py:62
 msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
 msgstr "Disorders in the Wundtstraße/Zellescher Weg network"
 
-#: sipa/forms.py:53
+#: sipa/forms.py:63
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr "Financial concerns (contributions, fees)"
 
-#: sipa/forms.py:54
+#: sipa/forms.py:64
 msgid "Probleme mit privater Technik"
 msgstr "Problems with private technology"
 
-#: sipa/forms.py:56 sipa/forms.py:73
+#: sipa/forms.py:66 sipa/forms.py:83
 msgid "Betreff"
 msgstr "Subject"
 
-#: sipa/forms.py:57 sipa/forms.py:74
+#: sipa/forms.py:67 sipa/forms.py:84
 msgid "Betreff muss angegeben werden!"
 msgstr "Subject is missing!"
 
-#: sipa/forms.py:58 sipa/forms.py:75
+#: sipa/forms.py:68 sipa/forms.py:85
 msgid "Nachricht"
 msgstr "Message"
 
-#: sipa/forms.py:59 sipa/forms.py:76
+#: sipa/forms.py:69 sipa/forms.py:86
 msgid "Nachricht fehlt!"
 msgstr "Message is missing!"
 
-#: sipa/forms.py:69 sipa/forms.py:131
+#: sipa/forms.py:79 sipa/forms.py:141
 msgid "Wohnheim"
 msgstr "Dormitory"
 
-#: sipa/forms.py:81
+#: sipa/forms.py:91
 msgid "Altes Passwort"
 msgstr "Old password"
 
-#: sipa/forms.py:82
+#: sipa/forms.py:92
 msgid "Altes Passwort muss angegeben werden!"
 msgstr "Old password has to be submitted!"
 
-#: sipa/forms.py:83
+#: sipa/forms.py:93
 msgid "Neues Passwort"
 msgstr "New password"
 
-#: sipa/forms.py:84
+#: sipa/forms.py:94
 msgid "Neues Passwort fehlt!"
 msgstr "New password is missing!"
 
-#: sipa/forms.py:87 sipa/forms.py:159
+#: sipa/forms.py:97 sipa/forms.py:167
 msgid "Bestätigung"
 msgstr "Confirmation"
 
-#: sipa/forms.py:88 sipa/forms.py:160
+#: sipa/forms.py:98 sipa/forms.py:168
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: sipa/forms.py:90 sipa/forms.py:162
+#: sipa/forms.py:100 sipa/forms.py:170
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: sipa/forms.py:96 sipa/forms.py:120 sipa/forms.py:148 sipa/forms.py:155
+#: sipa/forms.py:106 sipa/forms.py:130 sipa/forms.py:156 sipa/forms.py:163
 msgid "Passwort"
 msgstr "Password"
 
-#: sipa/forms.py:97 sipa/forms.py:105 sipa/forms.py:121
+#: sipa/forms.py:107 sipa/forms.py:115 sipa/forms.py:131
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:99
+#: sipa/forms.py:109
 msgid "Neue Mail"
 msgstr "New mail"
 
-#: sipa/forms.py:115
+#: sipa/forms.py:125
 msgid "MAC muss unicast-Adresse sein!"
 msgstr "MAC has to be a unicast adress!"
 
-#: sipa/forms.py:123
+#: sipa/forms.py:133
 msgid "Neue MAC"
 msgstr "New mac"
 
-#: sipa/forms.py:135
+#: sipa/forms.py:145
 msgid "Kein gültiges Wohnheim!"
 msgstr "Not a valid dormitory!"
 
-#: sipa/forms.py:138
+#: sipa/forms.py:148
 msgid "Nutzername"
 msgstr "Username"
 
-#: sipa/forms.py:140
+#: sipa/forms.py:150
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: sipa/forms.py:141
-msgid "Nutzername darf nicht von Leerzeichen umgeben sein!"
-msgstr "Username may not be surrounded by spaces!"
-
-#: sipa/forms.py:143
+#: sipa/forms.py:151
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr "Username contains invalid characters!"
 
-#: sipa/forms.py:149 sipa/forms.py:156
+#: sipa/forms.py:157 sipa/forms.py:164
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:151
+#: sipa/forms.py:159
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
@@ -355,23 +351,15 @@ msgstr "Email address has been changed"
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr "Email address has been reset"
 
-#: sipa/blueprints/usersuite.py:270
+#: sipa/blueprints/usersuite.py:252
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-#: sipa/blueprints/usersuite.py:273
-msgid ""
-"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
-"eine E-Mail an support@wh2.tu-dresden.de"
-msgstr ""
-"There was an error sending your message. Please contact us at support@wh2.tu-"
-"dresden.de"
-
-#: sipa/blueprints/usersuite.py:297
+#: sipa/blueprints/usersuite.py:291
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
-#: sipa/blueprints/usersuite.py:305
+#: sipa/blueprints/usersuite.py:299
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
@@ -411,23 +399,24 @@ msgstr "Click for details"
 msgid "Fehler bei der Abfrage der Daten"
 msgstr "An error occurred"
 
-#: sipa/templates/base.html:186 sipa/templates/usersuite/_index_status.html:16
+#: sipa/templates/base.html:183 sipa/templates/base.html:187
+#: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr "Contact form"
 
-#: sipa/templates/base.html:200
+#: sipa/templates/base.html:201
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:210
+#: sipa/templates/base.html:211
 msgid "Keller"
 msgstr "Basement"
 
-#: sipa/templates/base.html:220
+#: sipa/templates/base.html:221
 msgid "7. Etage"
 msgstr "7th floor"
 
-#: sipa/templates/base.html:287
+#: sipa/templates/base.html:288
 msgid "Verbleibender Traffic"
 msgstr "Remaining Credit"
 
