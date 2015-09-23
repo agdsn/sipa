@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-23 10:31+0200\n"
+"POT-Creation-Date: 2015-09-23 15:23+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.0\n"
 
 #: model/constants.py:48
 msgid "Sonntag"
@@ -352,11 +352,15 @@ msgstr ""
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:291
+#: sipa/blueprints/usersuite.py:253
+msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
+msgstr ""
+
+#: sipa/blueprints/usersuite.py:293
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:299
+#: sipa/blueprints/usersuite.py:301
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
@@ -1211,11 +1215,5 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Nutzername darf nicht von Leerzeichen umgeben sein!"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Es gab einen Fehler beim Versenden "
-#~ "der Nachricht. Bitte schicke uns direkt"
-#~ " eine E-Mail an support@wh2.tu-dresden.de"
 #~ msgstr ""
 

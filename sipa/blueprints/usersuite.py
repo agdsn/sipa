@@ -250,6 +250,8 @@ def usersuite_change_mac():
                         extra={'data': {'mac': mac}})
 
             flash(gettext("MAC-Adresse wurde geändert!"), 'success')
+            flash(gettext("Es kann bis zu 10 Minuten dauern, "
+                          "bis die Änderung wirksam ist."), 'info')
 
             from_mail = "{}@{}".format(current_user.uid,
                                        current_datasource().mail_server)
