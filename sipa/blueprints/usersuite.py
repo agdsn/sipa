@@ -245,10 +245,11 @@ def usersuite_change_mac():
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         else:
-            current_user.change_mac_address(userinfo['ip'],
-                                            userinfo['mac'],
-                                            mac)
-            logger.info('Successfully changed MAC address to %s', mac)
+            current_user.change_mac_address(userinfo['mac']['value'], mac)
+            logger.info('Successfully changed MAC address',
+                        extra={'data': {'mac': mac}})
+
+            flash(gettext("MAC-Adresse wurde geändert!"), 'success')
 
             from_mail = "{}@{}".format(current_user.uid,
                                        current_datasource().mail_server)
@@ -261,22 +262,15 @@ def usersuite_change_mac():
                 "\nAlte MAC: {old_mac}\nNeue MAC: {new_mac}".format(
                     name=current_user.name,
                     uid=current_user.uid,
-                    old_mac=userinfo['mac'],
+                    old_mac=userinfo['mac']['value'],
                     new_mac=mac
                 )
             )
 
-            if send_mail(from_mail, support_mail, subject, message):
-                flash(gettext("MAC-Adresse wurde geändert!"), "success")
-                return redirect(url_for('.usersuite'))
-            else:
-                flash(gettext(
-                    "Es gab einen Fehler beim Versenden der Nachricht. "
-                    "Bitte schicke uns direkt eine E-Mail "
-                    "an support@wh2.tu-dresden.de"),
-                    'error'
-                )
-                return redirect(url_for('.usersuite'))
+            if not send_mail(from_mail, support_mail, subject, message):
+                logger.error("Mac notification mail could not be sent")
+
+            return redirect(url_for('.usersuite'))
     elif form.is_submitted():
         flash_formerrors(form)
 
