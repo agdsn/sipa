@@ -247,30 +247,12 @@ def usersuite_change_mac():
         else:
             current_user.change_mac_address(userinfo['mac']['value'], mac)
             logger.info('Successfully changed MAC address',
-                        extra={'data': {'mac': mac}})
+                        extra={'data': {'mac': mac},
+                               'tags': {'rate_critical': True}})
 
             flash(gettext("MAC-Adresse wurde geändert!"), 'success')
             flash(gettext("Es kann bis zu 10 Minuten dauern, "
                           "bis die Änderung wirksam ist."), 'info')
-
-            from_mail = "{}@{}".format(current_user.uid,
-                                       current_datasource().mail_server)
-            support_mail = current_datasource().support_mail
-
-            subject = ("[Usersuite] {} hat seine/ihre MAC-Adresse "
-                       "geändert".format(current_user.uid))
-            message = (
-                "Nutzer {name} ({uid}) hat seine/ihre MAC-Adresse geändert."
-                "\nAlte MAC: {old_mac}\nNeue MAC: {new_mac}".format(
-                    name=current_user.name,
-                    uid=current_user.uid,
-                    old_mac=userinfo['mac']['value'],
-                    new_mac=mac
-                )
-            )
-
-            if not send_mail(from_mail, support_mail, subject, message):
-                logger.error("Mac notification mail could not be sent")
 
             return redirect(url_for('.usersuite'))
     elif form.is_submitted():
