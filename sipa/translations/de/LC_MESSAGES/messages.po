@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-23 15:23+0200\n"
+"POT-Creation-Date: 2015-09-28 01:02+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -400,24 +400,24 @@ msgstr ""
 msgid "Fehler bei der Abfrage der Daten"
 msgstr ""
 
-#: sipa/templates/base.html:183 sipa/templates/base.html:187
+#: sipa/templates/base.html:185 sipa/templates/base.html:189
 #: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr ""
 
-#: sipa/templates/base.html:201
+#: sipa/templates/base.html:203
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:211
+#: sipa/templates/base.html:213
 msgid "Keller"
 msgstr ""
 
-#: sipa/templates/base.html:221
+#: sipa/templates/base.html:223
 msgid "7. Etage"
 msgstr ""
 
-#: sipa/templates/base.html:288
+#: sipa/templates/base.html:290
 msgid "Verbleibender Traffic"
 msgstr ""
 
@@ -646,11 +646,11 @@ msgid "Traffic (MiB)"
 msgstr ""
 
 #: sipa/utils/graph_utils.py:54
-msgid "Input"
+msgid "Eingehend"
 msgstr ""
 
 #: sipa/utils/graph_utils.py:56
-msgid "Output"
+msgid "Ausgehend"
 msgstr ""
 
 #: sipa/utils/graph_utils.py:58
@@ -1215,5 +1215,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Nutzername darf nicht von Leerzeichen umgeben sein!"
+#~ msgstr ""
+
+#~ msgid "Input"
+#~ msgstr ""
+
+#~ msgid "Output"
 #~ msgstr ""
 

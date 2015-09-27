@@ -5,7 +5,7 @@ import pygal
 from pygal.style import Style
 from pygal.colors import hsl_to_rgb
 
-from _locale import gettext
+from flask.ext.babel import gettext
 from operator import add
 
 
@@ -51,11 +51,11 @@ def generate_traffic_chart(traffic_data, inline=True):
 
     days, in_values, out_values, credit = list(zip(*traffic_data['history']))
     traffic_chart.x_labels = days
-    traffic_chart.add(gettext('Input'), in_values,
+    traffic_chart.add(gettext("Eingehend"), in_values,
                       stroke_style={'dasharray': '5'})
-    traffic_chart.add(gettext('Output'), out_values,
+    traffic_chart.add(gettext("Ausgehend"), out_values,
                       stroke_style={'dasharray': '5'})
-    traffic_chart.add(gettext('Gesamt'), list(map(add, in_values, out_values)),
+    traffic_chart.add(gettext("Gesamt"), list(map(add, in_values, out_values)),
                       stroke_style={'width': '2'})
 
     return traffic_chart

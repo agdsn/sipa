@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-23 15:23+0200\n"
-"PO-Revision-Date: 2015-09-23 15:25+0200\n"
+"POT-Creation-Date: 2015-09-28 01:02+0200\n"
+"PO-Revision-Date: 2015-09-28 01:03+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -403,24 +403,24 @@ msgstr "Click for details"
 msgid "Fehler bei der Abfrage der Daten"
 msgstr "An error occurred"
 
-#: sipa/templates/base.html:183 sipa/templates/base.html:187
+#: sipa/templates/base.html:185 sipa/templates/base.html:189
 #: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr "Contact form"
 
-#: sipa/templates/base.html:201
+#: sipa/templates/base.html:203
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:211
+#: sipa/templates/base.html:213
 msgid "Keller"
 msgstr "Basement"
 
-#: sipa/templates/base.html:221
+#: sipa/templates/base.html:223
 msgid "7. Etage"
 msgstr "7th floor"
 
-#: sipa/templates/base.html:288
+#: sipa/templates/base.html:290
 msgid "Verbleibender Traffic"
 msgstr "Remaining Credit"
 
@@ -653,13 +653,13 @@ msgid "Traffic (MiB)"
 msgstr "Traffic (MiB)"
 
 #: sipa/utils/graph_utils.py:54
-msgid "Input"
-msgstr "Input"
+msgid "Eingehend"
+msgstr "Incoming"
 
 #: sipa/utils/graph_utils.py:56
-msgid "Output"
-msgstr "Output"
+msgid "Ausgehend"
+msgstr "Outgoing"
 
 #: sipa/utils/graph_utils.py:58
 msgid "Gesamt"
-msgstr "Sums"
+msgstr "Overall"
