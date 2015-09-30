@@ -2,12 +2,12 @@
 {% set page_title = _('Abfahrtszeiten') %}
 
 {% block content %}
-    {% if times %}
+    {% if stops %}
         <div class="row">
             <div class="col-md-5">
-                {% for stop in times %}
+                {% for stop in stops %}
                     <h3>{{ _('Haltestelle') }} {{ stop }}</h3>
-                    {% if not times[stop] %}
+                    {% if not stops[stop] %}
                         <div style="color: red;">{{ _('Fehler bei der Abfrage!') }}</div>
                     {% else %}
                         <table id="timetable" class="table table-bordered table-striped">
@@ -16,11 +16,11 @@
                                 <th class="col-md-3">{{ _('Richtung') }}</th>
                                 <th class="col-md-1">in</th>
                             </tr></thead>
-                            {% for i in times[stop] %}
+                            {% for i in stops[stop] %}
                                 <tr>
-                                    <td>{{ i[0] }}</td>
-                                    <td>{{ i[1] }}</td>
-                                    <td{% if i[2] < 6 %} style="font-weight: bold; color: red"{% endif %}>{{ i[2] }} Min</td>
+                                    <td>{{ i.line }}</td>
+                                    <td>{{ i.dest }}</td>
+                                    <td{% if i.minutes_left < 6 %} style="font-weight: bold; color: red"{% endif %}>{{ i.minutes_left }} Min</td>
                                 </tr>
                             {% endfor %}
                         </table>

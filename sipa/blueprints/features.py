@@ -31,4 +31,4 @@ def bustimes(stopname=None):
         for stop in app.config['BUSSTOPS']:
             data[stop] = get_bustimes(stop, 4)
 
-    return render_template('bustimes.html', times=data, stopname=stopname)
+    return render_template('bustimes.html', stops=data, stopname=stopname)

@@ -6,6 +6,7 @@ General utilities
 """
 
 import http.client
+import json
 import socket
 import time
 from flask import request, url_for
@@ -46,31 +47,18 @@ def get_bustimes(stopname, count=10):
             'GET',
             '/abfahrtsmonitor/Abfahrten.do?ort=Dresden&hst={}'.format(stopname)
         )
-        r = conn.getresponse()
+        response = conn.getresponse()
     except socket.error:
         return None
 
-    r_data = r.read()
+    response_data = json.loads(response.read().decode())
 
-    data = []
-    entry_count = 0
-
-    for i in r_data[2:-2].split('],['):
-        if entry_count == count:
-            break
-        entry_count += 1
-
-        tmpdata = i[1:-1].split('","')
-        try:
-            try:
-                data.append(
-                    [tmpdata[0], tmpdata[1].decode('utf8'), int(tmpdata[2])])
-            except ValueError:
-                data.append([tmpdata[0], tmpdata[1].decode('utf8'), 0])
-        except IndexError:
-            return None
-
-    return data
+    return ({
+        'line': i[0],
+        'dest': i[1],
+        'minutes_left': int(i[2]) if i[2] else 0,
+    } for i in response_data)
+# TODO: check whether this is the correct format
 
 
 def current_user_name():
