@@ -59,7 +59,9 @@ class User(BaseUser):
         used before _every_ request.
         """
         user = LdapConnector.fetch_user(username)
-        return User(user['uid'], user['name'], user['mail'], **kwargs)
+        if user:
+            return User(user['uid'], user['name'], user['mail'], **kwargs)
+        return AnonymousUserMixin()
 
     @staticmethod
     def authenticate(username, password):
@@ -95,7 +97,16 @@ class User(BaseUser):
                              "WHERE nutzer_id = %s",
                              (result['nutzer_id'],)).fetchone()['unix_account']
 
-        return User.get(username, ip=ip)
+        user = User.get(username, ip=ip)
+        if not user:
+            logger.warning("User %s could not be fetched from LDAP",
+                           username, extra={'data': {
+                               'username': username,
+                               'user_id': result['nutzer_id'],
+                           }})
+            return AnonymousUserMixin()
+
+        return user
 
     def change_password(self, old, new):
         """Change a user's password from old to new
