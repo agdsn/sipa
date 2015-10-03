@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from flask import abort
+from flask import abort, request
 from babel.core import UnknownLocaleError, Locale
 from flask.ext.flatpages import FlatPages
 
 from .babel import babel, locale_preferences
 from operator import attrgetter
+from os.path import dirname
 
 
 class Node:
@@ -29,8 +30,12 @@ class Article(Node):
 
     def __getattr__(self, attr):
         try:
-            if attr is 'html':
+            if attr == 'html':
                 return self.localized_page.html
+            elif attr == 'link':
+                raw_link = self.localized_page.meta[attr]
+                if raw_link and raw_link[0] == "/":
+                    return dirname(request.url_root) + raw_link
             else:
                 return self.localized_page.meta[attr]
         except KeyError:
