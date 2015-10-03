@@ -148,7 +148,12 @@ def query_current_credit(uid=None, ip=None):
                         extra={'data': {'exception_args': e.args}})
         raise
     else:
-        return round(result['current'] / 1024, 2)
+        if result and 'current' in result.keys():
+            return round(result['current'] / 1024, 2)
+        else:
+            logger.warning("Credit query was empty", extra={'data': {
+                'today': timetag_from_timestamp(), 'ip': ip, 'user_id': user_id
+            }})
 
 
 def query_trafficdata(ip, user_id):
