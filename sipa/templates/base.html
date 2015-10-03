@@ -4,19 +4,19 @@
 
     <head>
         <meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Arbeitsgemeinschaft Dresdner Studentennetz">
-	<meta name="author" content="AG DSN Administrators">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Arbeitsgemeinschaft Dresdner Studentennetz">
+        <meta name="author" content="AG DSN Administrators">
 
         <title>AG DSN {% if page_title %} - {{ page_title }}{% endif %}</title>
 
-	<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
     </head>
 
     <body>
-	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -68,9 +68,9 @@
                                             {% if not article.id == 'index' and article.title %}
                                                 {% if not article.link %}
                                                     {% set href = url_for(
-                                                        'pages.show',
-                                                        category_id=c.id,
-                                                        article_id=article.id)
+                                                    'pages.show',
+                                                    category_id=c.id,
+                                                    article_id=article.id)
                                                     %}
                                                 {% else %}
                                                     {% set href = article.link %}
@@ -100,20 +100,20 @@
                         {%- else -%}
                             <li>
                                 <a href="{{ url_for('usersuite.usersuite') }}">
-	                            <span class="glyphicon glyphicon-user"></span>
-	                            {{ current_user.name }}
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    {{ current_user.name }}
                                 </a>
                             </li>
 
                             <li>
                                 <a href="{{ url_for('generic.logout') }}">
-	                            <span class="glyphicon glyphicon-off"></span>
-	                            {{ _("Logout") }}
+                                    <span class="glyphicon glyphicon-off"></span>
+                                    {{ _("Logout") }}
                                 </a>
                             </li>
                         {%- endif %}
 
-			<li class="dropdown">
+                        <li class="dropdown">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
                                 <span class="caret"></span>
@@ -128,36 +128,36 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-			</li>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
         <header class="pg-header">
-	    <div class="container">
-		<h1>AG DSN</h1>
-		<p>Arbeitsgemeinschaft Dresdner Studentennetz</p>
-	    </div>
+            <div class="container">
+                <h1>AG DSN</h1>
+                <p>Arbeitsgemeinschaft Dresdner Studentennetz</p>
+            </div>
         </header>
 
 
         <div class="container">
-	    <div class="row">
-		<div class="col-sm-3 col-sm-push-9">
+            <div class="row">
+                <div class="col-sm-3 col-sm-push-9">
                     <div class="row">
                         {% block dynamic_content %}
                         {% endblock %}
                     </div>
-		    <div class="row">
+                    <div class="row">
                         {% if not credit.foreign_user -%}
-			    <div class="col-xs-6 col-sm-12">
-				<a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}">
+                            <div class="col-xs-6 col-sm-12">
+                                <a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}">
                                     <div id="trafficgauge"></div>
                                     <div class="text-center">
                                         <small>({{ _("Für Details klicken") }})</small>
                                     </div>
-				</a><br>
+                                </a><br>
 
                                 <div class="row">
                                     {% if credit.error -%}
@@ -166,18 +166,18 @@
                                         </div>
                                     {%- endif %}
                                 </div>
-			    </div>
+                            </div>
                         {%- endif %}
 
-			<div class="col-xs-6 col-sm-12">
-			    <h2>{{ _("Kontakt") }} </h2>
+                        <div class="col-xs-6 col-sm-12">
+                            <h2>{{ _("Kontakt") }} </h2>
 
-			    <div>
-				<div class="row">
-				    <div class="col-xs-1">
-					<span class="glyphicon glyphicon-envelope"></span>
-				    </div>
-				    <div class="col-xs-10">
+                            <div>
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-envelope"></span>
+                                    </div>
+                                    <div class="col-xs-10">
                                         {% if current_user.is_authenticated %}
                                             {% set mail = current_datasource().support_mail %}
                                             <a href="mailto:{{ mail }}">{{ mail }}</a>
@@ -197,73 +197,73 @@
                                                 {{ _("Kontaktformular") }}
                                             </a>
                                         {% endif %}
-				    </div>
-				</div>
+                                    </div>
+                                </div>
 
-				<br />
-				<div class="row">
-				    <div class="col-xs-1">
-					<span class="glyphicon glyphicon-home"></span>
-				    </div>
-				    <div class="col-xs-10">
+                                <br />
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-home"></span>
+                                    </div>
+                                    <div class="col-xs-10">
                                         <address>
                                             <strong>Wundtstraße 5</strong><br>
                                             {{ _("Klingel") }} 0100<br>
                                             01217 Dresden<br>
                                         </address>
-				    </div>
-				    <div class="col-xs-1">
-					<span class="glyphicon glyphicon-home"></span>
-				    </div>
-				    <div class="col-xs-10">
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-home"></span>
+                                    </div>
+                                    <div class="col-xs-10">
                                         <address>
                                             <strong>Hochschulstraße 46</strong><br>
                                             {{ _("Keller") }}<br>
                                             01069 Dresden<br>
                                         </address>
                                     </div>
-				    <div class="col-xs-1">
-					<span class="glyphicon glyphicon-home"></span>
-				    </div>
-				    <div class="col-xs-10">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-home"></span>
+                                    </div>
+                                    <div class="col-xs-10">
                                         <address>
                                             <strong>Borsbergstraße 34</strong><br>
                                             {{ _("7. Etage") }}<br>
                                             01309 Dresden<br>
                                         </address>
                                     </div>
-				</div>
+                                </div>
 
-			    </div>
-			</div>
-		    </div>
-		</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<div class="col-sm-9 col-sm-pull-3">
-		    {% with messages = get_flashed_messages(with_categories=True) %}
-			{% if messages %}
-			    {% for cat, msg in messages %}
-				{% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
+                <div class="col-sm-9 col-sm-pull-3">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages %}
+                            {% for cat, msg in messages %}
+                                {% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
                                 {% if cat and cat != 'message' %}
                                     {% set alert_class = "alert-{}".format(cat) %}
                                 {% else %}
                                     {% set alert_class = "alert-info" %}
                                 {% endif %}
-				<div class="alert {{ alert_class }}">
-				    {{ msg }}
-				</div>
-			    {% endfor %}
-			{% endif %}
-		    {% endwith %}
+                                <div class="alert {{ alert_class }}">
+                                    {{ msg }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
 
-		    {% block content %}
-		    {% endblock %}
-		</div>
-	    </div>
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
         </div>
 
         <footer>
-	    <div class="container text-center">
+            <div class="container text-center">
                 <hr>
                 <div class="row">
                     <div class="col-lg-12 text-muted footer-below">
@@ -273,11 +273,11 @@
             </div>
         </footer>
 
-	<script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
-	<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
-	<script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
-	<script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
-	<script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
+        <script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
+        <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
+        <script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
+        <script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
+        <script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
         {% set gauge_max = 63 %}
         {% if credit.data %}
             {% set gauge_val = (credit.data/1024)|round(2) %}
@@ -288,17 +288,17 @@
         {% endif %}
         <script type="text/javascript">
             $(function(){
-            new JustGage({
-            id: "trafficgauge",
-            value: "{{ gauge_val }}",
-            min: 0,
-            startAnimationTime: 0,
-	    relativeGaugeSize: true,
-            max: {{ gauge_max }},
-            title: "{{ _("Verbleibender Traffic") }}",
-            label: "{{ gauge_label }}",
-            levelColors: ["#ff7f7f", "#ffff7f", "#7fff7f"]
-            });
+                new JustGage({
+                    id: "trafficgauge",
+                    value: "{{ gauge_val }}",
+                    min: 0,
+                    startAnimationTime: 0,
+                    relativeGaugeSize: true,
+                    max: {{ gauge_max }},
+                    title: "{{ _("Verbleibender Traffic") }}",
+                    label: "{{ gauge_label }}",
+                    levelColors: ["#ff7f7f", "#ffff7f", "#7fff7f"]
+                });
             });
         </script>
         {% block custom_script %}{% endblock %}
