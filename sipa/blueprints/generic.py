@@ -28,10 +28,6 @@ bp_generic = Blueprint('generic', __name__)
 
 @bp_generic.before_app_request
 def log_request():
-    # handler = SentryHandler(current_app.config['SENTRY_DSN'])
-    # THIS IS KEY!!! – if uncommented, logging to
-    # getLogger().addHandler(handler)
-
     logging.getLogger(__name__ + '.http').debug(
         'Incoming request: %s %s', request.method, request.path,
         extra={'tags': {'user': current_user_name(),
