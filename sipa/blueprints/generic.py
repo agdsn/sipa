@@ -3,7 +3,7 @@
 
 
 from flask import render_template, request, redirect, \
-    url_for, flash, session, abort
+    url_for, flash, session, abort, current_app
 from flask.blueprints import Blueprint
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
@@ -28,6 +28,11 @@ bp_generic = Blueprint('generic', __name__)
 
 @bp_generic.before_app_request
 def log_request():
+    current_app.extensions['sentry'].client.extra_context({
+        'current_user': current_user,
+        'ip_user': user_from_ip(request.remote_addr)
+    })
+
     logging.getLogger(__name__ + '.http').debug(
         'Incoming request: %s %s', request.method, request.path,
         extra={'tags': {'user': current_user_name(),
