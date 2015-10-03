@@ -10,7 +10,11 @@ from email.mime.text import MIMEText
 import smtplib
 import textwrap
 
+from flask import current_app
+from random import getrandbits
 from sipa import app
+from time import time
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -39,6 +43,7 @@ def send_mail(sender, receipient, subject, message):
     message = wrap_message(message)
     mail = MIMEText(message, _charset='utf-8')
 
+    mail['Message-Id'] = generate_message_id(fqdn=current_app.name)
     mail['From'] = sender
     mail['To'] = receipient
     mail['Subject'] = subject
@@ -46,6 +51,7 @@ def send_mail(sender, receipient, subject, message):
 
     mailserver_host = app.config['MAILSERVER_HOST']
     mailserver_port = app.config['MAILSERVER_PORT']
+
     try:
         smtp = smtplib.SMTP()
         smtp.connect(host=mailserver_host,
@@ -69,3 +75,46 @@ def send_mail(sender, receipient, subject, message):
             'data': {'subject': subject, 'message': message}
         })
         return True
+
+
+def generate_message_id(fqdn):
+    """Generate a statistically secure message-id.
+
+    This uses [recommendations](https://www.jwz.org/doc/mid.html)
+    referenced on
+    [github](https://github.com/agdsn/sipa/issues/117#issuecomment-145005142)
+    """
+    return "<{}.{}@{}>".format(
+        base36encode(int(round(time() * 1000))),
+        base36encode(getrandbits(64)),
+        fqdn,
+    )
+
+
+def base36encode(number, alphabet="0123456789abcdefghijklmnopqrstuvwxyz"):
+    """Convert an integer to a base36 string.
+
+    Taken from [Stackoverflow](http://stackoverflow.com/a/1181922/2443886).
+
+    Slightly modified: `base36` is now reversed because appending the
+    higher digits is easier than prepending, and reversing in the end
+    is done easily using `[::-1]`.
+    """
+    if not isinstance(number, int):
+        raise TypeError("Number must be an integer")
+
+    base36 = ""
+    sign = ""
+
+    if number < 0:
+        sign = "-"
+        number = -number
+
+    if 0 <= number < len(alphabet):
+        return sign + alphabet[number]
+
+    while number != 0:
+        number, i = divmod(number, len(alphabet))
+        base36 += alphabet[i]
+
+    return sign + base36[::-1]
