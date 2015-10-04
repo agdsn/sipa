@@ -53,7 +53,7 @@
                             {% for id, desc in values[dorm_id].items() %}
                                 <dl id="dynamic-{{ dorm_id }}-{{ id }}">
                                     <dt>{{ keys[id] }}</dt>
-                                    <dd>{{ desc }}</dd>
+                                    <dd><code>{{ desc }}</code></dd>
                                 </dl>
                             {% endfor %}
                         </div>
