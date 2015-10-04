@@ -59,10 +59,6 @@ a#traffic_gauge_link {
     -o-transition: text-shadow 1s ease, color 1s ease;
 }
 
-a#traffic_gauge_link:hover {
-    text-shadow: 3px 3px 8px hsl(0, 0%, 82%);
-}
-
 td {
 	vertical-align: top;
 	padding-bottom: 20px;
