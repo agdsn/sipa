@@ -27,9 +27,12 @@
 
 {% block dynamic_content %}
     {% if dynamic %}
-        <h2>{{ title }}</h2>
-        <div class="panel">
-            <div class="panel-heading">
+        <div class="col-xs-6 col-sm-12">
+            <div class="module">
+                <h2>{{ title }}</h2>
+
+                <hr class="full">
+
                 <select id="dorm-select" class="form-control">
                     <option {% if default_dormitory %}selected{% endif %}>
                         {{ _("Wohnheim auswählen") }}
@@ -38,13 +41,11 @@
                         <option value="{{ dormitory[0] }}"
                                 {% if dormitory[0] == default_dormitory %}selected{% endif %}
                                 >
-                            {{ dormitory[1] }}
+                                {{ dormitory[1] }}
                         </option>
                     {% endfor %}
                 </select>
-            </div>
-
-            <div class="panel-body">
+                <hr>
                 {% for dorm in dormitories %}
                     {% set dorm_id = dorm[0] %}
                     {% if dorm_id in values %}
