@@ -19,7 +19,7 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
                         <span class="sr-only">toggle</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -30,7 +30,7 @@
                     </a>
                 </div>
 
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="collapse navbar-collapse" id="navbar">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
@@ -142,104 +142,9 @@
         </header>
 
 
-        <div class="container">
+        <div id="center" class="container">
             <div class="row">
-                <div class="col-sm-3 col-sm-push-9">
-                    <div class="row">
-                        {% block dynamic_content %}
-                        {% endblock %}
-                    </div>
-                    <div class="row">
-                        {% if not credit.foreign_user -%}
-                            <div class="col-xs-6 col-sm-12">
-                                <a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}">
-                                    <div id="trafficgauge"></div>
-                                    <div class="text-center">
-                                        <small>({{ _("Für Details klicken") }})</small>
-                                    </div>
-                                </a><br>
-
-                                <div class="row">
-                                    {% if credit.error -%}
-                                        <div class="text-danger text-center">
-                                            {{ _("Fehler bei der Abfrage der Daten") }}!
-                                        </div>
-                                    {%- endif %}
-                                </div>
-                            </div>
-                        {%- endif %}
-
-                        <div class="col-xs-6 col-sm-12">
-                            <h2>{{ _("Kontakt") }} </h2>
-
-                            <div>
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
-                                    </div>
-                                    <div class="col-xs-10">
-                                        {% if current_user.is_authenticated %}
-                                            {% set mail = current_datasource().support_mail %}
-                                            <a href="mailto:{{ mail }}">{{ mail }}</a>
-
-                                    </div>
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
-                                    </div>
-                                    <div class="col-xs-10">
-
-                                        <a href="{{ url_for('usersuite.usersuite_contact') }}">
-                                            {{ _("Kontaktformular") }}
-                                        </a>
-
-                                        {% else %}
-                                            <a href="{{ url_for('generic.contact') }}">
-                                                {{ _("Kontaktformular") }}
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <br />
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-home"></span>
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <address>
-                                            <strong>Wundtstraße 5</strong><br>
-                                            {{ _("Klingel") }} 0100<br>
-                                            01217 Dresden<br>
-                                        </address>
-                                    </div>
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-home"></span>
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <address>
-                                            <strong>Hochschulstraße 46</strong><br>
-                                            {{ _("Keller") }}<br>
-                                            01069 Dresden<br>
-                                        </address>
-                                    </div>
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-home"></span>
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <address>
-                                            <strong>Borsbergstraße 34</strong><br>
-                                            {{ _("7. Etage") }}<br>
-                                            01309 Dresden<br>
-                                        </address>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-9 col-sm-pull-3">
+                <div class="col-sm-9">
                     {% with messages = get_flashed_messages(with_categories=True) %}
                         {% if messages %}
                             {% for cat, msg in messages %}
@@ -259,6 +164,120 @@
                     {% block content %}
                     {% endblock %}
                 </div>
+
+                <div id="sidebar" class="col-sm-3">
+                    <div id="content">
+                        {% block dynamic_content %}
+                        {% endblock %}
+                    </div>
+                    <div>
+                        {% if not credit.foreign_user -%}
+                            <div id="row-traffic">
+                                <div class="module">
+                                    <h2>{{ _("Verbleibender Traffic") }}</h2>
+
+                                    <hr class="full">
+
+                                    <a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}">
+                                        <div id="trafficgauge"></div>
+                                        <div class="text-center">
+                                            <small>({{ _("Für Details klicken") }})</small>
+                                        </div>
+                                    </a>
+
+                                    <div>
+                                        {% if credit.error -%}
+                                            <br><div class="text-danger text-center">
+                                                {{ _("Fehler bei der Abfrage der Daten") }}!
+                                            </div>
+                                        {%- endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {%- endif %}
+
+                        <div>
+                            <div class="module">
+                                <h2>{{ _("Kontakt") }} </h2>
+                                <hr class="full">
+
+                                <div>
+                                    <div class="row">
+                                        <div class="col-xs-1">
+                                            <span class="glyphicon glyphicon-envelope"></span>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            {% if current_user.is_authenticated %}
+                                                {% set mail = current_datasource().support_mail %}
+                                                <a href="mailto:{{ mail }}">{{ mail }}</a>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-1">
+                                            <span class="glyphicon glyphicon-envelope"></span>
+                                        </div>
+                                        <div class="col-xs-10">
+
+                                            <a href="{{ url_for('usersuite.usersuite_contact') }}">
+                                                {{ _("Kontaktformular") }}
+                                            </a>
+
+                                        {% else %}
+                                            <a href="{{ url_for('generic.contact') }}">
+                                                {{ _("Kontaktformular") }}
+                                            </a>
+                                        {% endif %}
+
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-xs-1">
+                                            <span class="glyphicon glyphicon-home"></span>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <address>
+                                                <strong>Wundtstraße 5</strong><br>
+                                                {{ _("Klingel") }} 0100<br>
+                                                01217 Dresden
+                                            </address>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-1">
+                                            <span class="glyphicon glyphicon-home"></span>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <address>
+                                                <strong>Hochschulstraße 46</strong><br>
+                                                {{ _("Keller") }}<br>
+                                                01069 Dresden
+                                            </address>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-1">
+                                            <span class="glyphicon glyphicon-home"></span>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <address>
+                                                <strong>Borsbergstraße 34</strong><br>
+                                                {{ _("7. Etage") }}<br>
+                                                01309 Dresden
+                                            </address>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
 
@@ -295,7 +314,6 @@
                     startAnimationTime: 0,
                     relativeGaugeSize: true,
                     max: {{ gauge_max }},
-                    title: "{{ _("Verbleibender Traffic") }}",
                     label: "{{ gauge_label }}",
                     levelColors: ["#ff7f7f", "#ffff7f", "#7fff7f"]
                 });
