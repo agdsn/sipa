@@ -142,7 +142,7 @@
         </header>
 
 
-        <div class="container">
+        <div id="center" class="container">
             <div class="row">
                 <div class="col-sm-9">
                     {% with messages = get_flashed_messages(with_categories=True) %}
@@ -166,13 +166,13 @@
                 </div>
 
                 <div id="sidebar" class="col-sm-3">
-                    <div class="row">
+                    <div id="content">
                         {% block dynamic_content %}
                         {% endblock %}
                     </div>
-                    <div class="row">
+                    <div>
                         {% if not credit.foreign_user -%}
-                            <div class="col-xs-6 col-sm-12" id="row-traffic">
+                            <div id="row-traffic">
                                 <div class="module">
                                     <h2>{{ _("Verbleibender Traffic") }}</h2>
 
@@ -185,7 +185,7 @@
                                         </div>
                                     </a>
 
-                                    <div class="row">
+                                    <div>
                                         {% if credit.error -%}
                                             <br><div class="text-danger text-center">
                                                 {{ _("Fehler bei der Abfrage der Daten") }}!
@@ -196,7 +196,7 @@
                             </div>
                         {%- endif %}
 
-                        <div class="col-xs-6 col-sm-12">
+                        <div>
                             <div class="module">
                                 <h2>{{ _("Kontakt") }} </h2>
                                 <hr class="full">
@@ -212,6 +212,8 @@
                                                 <a href="mailto:{{ mail }}">{{ mail }}</a>
 
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-xs-1">
                                             <span class="glyphicon glyphicon-envelope"></span>
                                         </div>
@@ -243,6 +245,8 @@
                                                 01217 Dresden
                                             </address>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-xs-1">
                                             <span class="glyphicon glyphicon-home"></span>
                                         </div>
@@ -253,6 +257,8 @@
                                                 01069 Dresden
                                             </address>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-xs-1">
                                             <span class="glyphicon glyphicon-home"></span>
                                         </div>
