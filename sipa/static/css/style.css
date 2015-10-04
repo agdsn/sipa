@@ -47,6 +47,10 @@ body {
 	background-image: url(../img/logo_hover.png);
 }
 
+#navbar {
+    max-height: none;
+}
+
 #trafficgauge {
     height: 200px;
     /* Hack to remove upper spacing of the trafficgauge
