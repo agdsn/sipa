@@ -144,7 +144,28 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-sm-3 col-sm-push-9">
+                <div class="col-sm-9">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages %}
+                            {% for cat, msg in messages %}
+                                {% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
+                                {% if cat and cat != 'message' %}
+                                    {% set alert_class = "alert-{}".format(cat) %}
+                                {% else %}
+                                    {% set alert_class = "alert-info" %}
+                                {% endif %}
+                                <div class="alert {{ alert_class }}">
+                                    {{ msg }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    {% block content %}
+                    {% endblock %}
+                </div>
+
+                <div id="sidebar" class="col-sm-3">
                     <div class="row">
                         {% block dynamic_content %}
                         {% endblock %}
@@ -250,26 +271,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-9 col-sm-pull-3">
-                    {% with messages = get_flashed_messages(with_categories=True) %}
-                        {% if messages %}
-                            {% for cat, msg in messages %}
-                                {% if cat == 'error' %}{% set cat = 'danger' %}{% endif %}
-                                {% if cat and cat != 'message' %}
-                                    {% set alert_class = "alert-{}".format(cat) %}
-                                {% else %}
-                                    {% set alert_class = "alert-info" %}
-                                {% endif %}
-                                <div class="alert {{ alert_class }}">
-                                    {{ msg }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
 
-                    {% block content %}
-                    {% endblock %}
-                </div>
             </div>
         </div>
 
