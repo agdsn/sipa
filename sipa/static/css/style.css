@@ -47,24 +47,13 @@ body {
 	background-image: url(../img/logo_hover.png);
 }
 
-
-/* Toggle navbar cutting at 480px. This should be enough for most
-entries, and it is not planned to change this in the current sipa
-deployment */
-
-@media(max-height: 480px) {
+@media (max-width: 767px) {
     #navbar {
-        max-height: 200px;
-    }
-}
-
-@media(min-height: 480px) {
-    #navbar {
-        max-height: none;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), white 40%);
     }
 
-    #scroll-hint {
-        display: none;
+    #navbar > ul:last-child {
+        border-bottom: 4px double rgba(0, 0, 0, 0.1);
     }
 }
 
