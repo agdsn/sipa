@@ -112,6 +112,10 @@ a#traffic_gauge_link {
     -o-transition: text-shadow 1s ease, color 1s ease;
 }
 
+div#row-contact div.module > div > div.row + div.row{
+    margin-top: 1em;
+}
+
 td {
 	vertical-align: top;
 	padding-bottom: 20px;
