@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 06:35+0200\n"
+"POT-Creation-Date: 2015-10-06 06:41+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -540,6 +540,7 @@ msgstr ""
 
 #: sipa/templates/usersuite/_index_status.html:6
 #: sipa/templates/usersuite/_index_status.html:11
+#: sipa/templates/usersuite/change_password.html:3
 msgid "Passwort ändern"
 msgstr ""
 
@@ -578,10 +579,6 @@ msgstr ""
 #: sipa/templates/usersuite/change_mail.html:3
 #: sipa/templates/usersuite/delete_mail.html:3
 msgid "E-Mail ändern"
-msgstr ""
-
-#: sipa/templates/usersuite/change_password.html:3
-msgid "Password ändern"
 msgstr ""
 
 #: sipa/templates/usersuite/contact.html:3
@@ -1233,5 +1230,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Nutzer"
+#~ msgstr ""
+
+#~ msgid "Password ändern"
 #~ msgstr ""
 
