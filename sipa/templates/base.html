@@ -1,4 +1,28 @@
 {%- set credit = gauge_data() -%}
+{%- macro user_nav_items() -%}
+    {% if current_user.is_anonymous -%}
+        <li>
+            <a href="{{ url_for('generic.login') }}">
+                <span class="glyphicon glyphicon-user"></span>
+                {{ _("Login") }}
+            </a>
+        </li>
+    {%- else -%}
+        <li>
+            <a href="{{ url_for('usersuite.usersuite') }}">
+                <span class="glyphicon glyphicon-user"></span>
+                {{ current_user.name }}
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('generic.logout') }}">
+                <span class="glyphicon glyphicon-off"></span>
+                {{ _("Logout") }}
+            </a>
+        </li>
+    {%- endif %}
+{%- endmacro -%}
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 
@@ -89,31 +113,41 @@
                         {%- endfor %}
                     </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if current_user.is_anonymous -%}
-                            <li>
-                                <a href="{{ url_for('generic.login') }}">
-                                    <span class="glyphicon glyphicon-user"></span>
-                                    {{ _("Login") }}
-                                </a>
-                            </li>
-                        {%- else -%}
-                            <li>
-                                <a href="{{ url_for('usersuite.usersuite') }}">
-                                    <span class="glyphicon glyphicon-user"></span>
-                                    {{ current_user.name }}
-                                </a>
-                            </li>
+                    <ul id="navbar-right-dropdown" class="nav navbar-nav navbar-right visible-md-block visible-sm-block">
+                        <li id="language-dropdown">
+                            <button id="language-dropdown-button" type="button" class="btn btn-default navbar-btn" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon glyphicon-option-horizontal"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="language-dropdown-button">
+                                <li class="dropdown-header">{{ _("Anmeldung") }}</li>
 
-                            <li>
-                                <a href="{{ url_for('generic.logout') }}">
-                                    <span class="glyphicon glyphicon-off"></span>
-                                    {{ _("Logout") }}
-                                </a>
-                            </li>
-                        {%- endif %}
+                                {{ user_nav_items() }}
 
-                        <li id="language-dropdown" class="dropdown">
+                                <li class="dropdown-header">{{ _("Sprache") }}</li>
+
+                                <li id="language-dropdown-small">
+                                    {%- for locale in possible_locales() %}
+                                        <li {% if get_locale() == locale -%}
+                                                 class="active"
+                                             {%- endif %}>
+                                            <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
+                                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
+                                                {{locale.display_name}}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+
+                                </li>
+
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                    <ul id="navbar-right" class="nav navbar-nav navbar-right hidden-sm hidden-md">
+                        {{ user_nav_items() }}
+
+                        <li id="language-dropdown">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
                                 <span class="caret"></span>

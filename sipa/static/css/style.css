@@ -47,6 +47,18 @@ body {
 	background-image: url(../img/logo_hover.png);
 }
 
+@media (max-height: 480px) {
+    #navbar {
+        max-height: 200px;
+    }
+}
+
+@media (max-height: 300px) {
+    #navbar {
+        max-height: 150px;
+    }
+}
+
 @media (max-width: 767px) {
     #navbar {
         background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), white 40%);
