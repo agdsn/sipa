@@ -224,13 +224,11 @@
                                         </div>
                                     </a>
 
-                                    <div>
-                                        {% if credit.error -%}
-                                            <br><div class="text-danger text-center">
-                                                {{ _("Fehler bei der Abfrage der Daten") }}!
-                                            </div>
-                                        {%- endif %}
-                                    </div>
+                                    {% if credit.error -%}
+                                        <div id="traffic_gauge_error" class="text-danger text-center">
+                                            {{ _("Fehler bei der Abfrage der Daten") }}!
+                                        </div>
+                                    {%- endif %}
                                 </div>
                             </div>
                         {%- endif %}
