@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 10:07+0200\n"
+"POT-Creation-Date: 2015-10-06 12:58+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -372,7 +372,7 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:236
+#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:240
 msgid "Kontakt"
 msgstr ""
 
@@ -408,56 +408,56 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: sipa/templates/base.html:61
+#: sipa/templates/base.html:65
 msgid "News"
 msgstr ""
 
-#: sipa/templates/base.html:67
+#: sipa/templates/base.html:71
 msgid "Neueste"
 msgstr ""
 
-#: sipa/templates/base.html:73
+#: sipa/templates/base.html:77
 msgid "Älteste"
 msgstr ""
 
-#: sipa/templates/base.html:79
+#: sipa/templates/base.html:83
 msgid "Alle"
 msgstr ""
 
-#: sipa/templates/base.html:122
+#: sipa/templates/base.html:126
 msgid "Anmeldung"
 msgstr ""
 
-#: sipa/templates/base.html:126
+#: sipa/templates/base.html:130
 msgid "Sprache"
 msgstr ""
 
-#: sipa/templates/base.html:212
+#: sipa/templates/base.html:216
 msgid "Verbleibender Traffic"
 msgstr ""
 
-#: sipa/templates/base.html:219
+#: sipa/templates/base.html:223
 msgid "Für Details klicken"
 msgstr ""
 
-#: sipa/templates/base.html:226
+#: sipa/templates/base.html:230
 msgid "Fehler bei der Abfrage der Daten"
 msgstr ""
 
-#: sipa/templates/base.html:258 sipa/templates/base.html:263
+#: sipa/templates/base.html:262 sipa/templates/base.html:267
 #: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr ""
 
-#: sipa/templates/base.html:279
+#: sipa/templates/base.html:283
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:291
+#: sipa/templates/base.html:295
 msgid "Keller"
 msgstr ""
 
-#: sipa/templates/base.html:303
+#: sipa/templates/base.html:307
 msgid "7. Etage"
 msgstr ""
 
@@ -513,16 +513,8 @@ msgstr ""
 msgid "Neuer"
 msgstr ""
 
-#: sipa/templates/index.html:56
-msgid "Keine neueren Beiträge"
-msgstr ""
-
-#: sipa/templates/index.html:63
+#: sipa/templates/index.html:59
 msgid "Älter"
-msgstr ""
-
-#: sipa/templates/index.html:67
-msgid "Keine älteren Beiträge"
 msgstr ""
 
 #: sipa/templates/login.html:8
@@ -1264,5 +1256,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Password ändern"
+#~ msgstr ""
+
+#~ msgid "Keine neueren Beiträge"
+#~ msgstr ""
+
+#~ msgid "Keine älteren Beiträge"
 #~ msgstr ""
 

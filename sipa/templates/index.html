@@ -46,27 +46,19 @@
     {%- endif %}
     <nav>
         <ul class="pager">
-        {% if previous_range %}
+        {% if previous_range -%}
             <li class="previous">
                 <a href="{{ url_for(".display", start=previous_range.start, end=previous_range.end) }}">
-                <span aria-hidden="true">&larr;</span> {{ _("Neuer") }}</a>
+                <span aria-hidden="true">&larr;</span>&nbsp;{{ _("Neuer") }}</a>
             </li>
-        {% else %}
-            <li class="previous disabled">
-                <a href="#">{{ _("Keine neueren Beiträge") }}</a>
-            </li>
-        {% endif %}
+        {%- endif %}
 
-        {% if next_range %}
+        {% if next_range -%}
             <li class="next">
                 <a href="{{ url_for(".display", start=next_range.start, end=next_range.end) }}">
-                {{ _("Älter") }} <span aria-hidden="true">&rarr;</span></a>
+                {{ _("Älter") }}&nbsp;<span aria-hidden="true">&rarr;</span></a>
             </li>
-        {% else %}
-            <li class="next disabled">
-                <a href="#">{{ _("Keine älteren Beiträge") }}</a>
-            </li>
-        {% endif %}
+        {%- endif %}
         </ul>
     </nav>
 {% endblock %}

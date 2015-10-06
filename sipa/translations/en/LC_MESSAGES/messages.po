@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 10:07+0200\n"
-"PO-Revision-Date: 2015-10-06 10:13+0200\n"
+"POT-Creation-Date: 2015-10-06 12:58+0200\n"
+"PO-Revision-Date: 2015-10-06 12:58+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -376,7 +376,7 @@ msgstr "Your database has been deleted."
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
-#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:236
+#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:240
 msgid "Kontakt"
 msgstr "Contact"
 
@@ -416,56 +416,56 @@ msgstr "Login"
 msgid "Logout"
 msgstr "Logout"
 
-#: sipa/templates/base.html:61
+#: sipa/templates/base.html:65
 msgid "News"
 msgstr "News"
 
-#: sipa/templates/base.html:67
+#: sipa/templates/base.html:71
 msgid "Neueste"
 msgstr "Newest"
 
-#: sipa/templates/base.html:73
+#: sipa/templates/base.html:77
 msgid "Älteste"
 msgstr "Oldest"
 
-#: sipa/templates/base.html:79
+#: sipa/templates/base.html:83
 msgid "Alle"
 msgstr "Everything"
 
-#: sipa/templates/base.html:122
+#: sipa/templates/base.html:126
 msgid "Anmeldung"
 msgstr "Registration"
 
-#: sipa/templates/base.html:126
+#: sipa/templates/base.html:130
 msgid "Sprache"
 msgstr "Language"
 
-#: sipa/templates/base.html:212
+#: sipa/templates/base.html:216
 msgid "Verbleibender Traffic"
 msgstr "Remaining Credit"
 
-#: sipa/templates/base.html:219
+#: sipa/templates/base.html:223
 msgid "Für Details klicken"
 msgstr "Click for details"
 
-#: sipa/templates/base.html:226
+#: sipa/templates/base.html:230
 msgid "Fehler bei der Abfrage der Daten"
 msgstr "An error occurred"
 
-#: sipa/templates/base.html:258 sipa/templates/base.html:263
+#: sipa/templates/base.html:262 sipa/templates/base.html:267
 #: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr "Contact form"
 
-#: sipa/templates/base.html:279
+#: sipa/templates/base.html:283
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:291
+#: sipa/templates/base.html:295
 msgid "Keller"
 msgstr "Basement"
 
-#: sipa/templates/base.html:303
+#: sipa/templates/base.html:307
 msgid "7. Etage"
 msgstr "7th floor"
 
@@ -521,17 +521,9 @@ msgstr "No News available!"
 msgid "Neuer"
 msgstr "Newer"
 
-#: sipa/templates/index.html:56
-msgid "Keine neueren Beiträge"
-msgstr "No newer entries"
-
-#: sipa/templates/index.html:63
+#: sipa/templates/index.html:59
 msgid "Älter"
 msgstr "Older"
-
-#: sipa/templates/index.html:67
-msgid "Keine älteren Beiträge"
-msgstr "No older entries"
 
 #: sipa/templates/login.html:8
 msgid "Dieses Wohnheim erreichst du hier:"
