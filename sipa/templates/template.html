@@ -6,20 +6,20 @@
     <h2>{{ page.meta.title }}</h2>
     {% if page.meta.outage or page.meta.information or page.meta.event %}
         <p>
-        {% for out in page.meta.outage %}
+        {%- for out in page.meta.outage %}
             <span class="label label-danger">{{ out }}</span>
-        {% endfor %}
-        {% for info in page.meta.information %}
+        {%- endfor %}
+        {%- for info in page.meta.information %}
             <span class="label label-warning">{{ info }}</span>
-        {% endfor %}
-        {% for ev in page.meta.event %}
+        {%- endfor %}
+        {%- for ev in page.meta.event %}
             <span class="label label-success">{{ ev }}</span>
-        {% endfor %}
+        {%- endfor %}
         </p>
     {% endif %}
-    {% if page.meta.author %}
+    {% if page.meta.author -%}
         <small>{{ _("Geschrieben von") }} {{ page.meta.author }}, {{ page.meta.date }}.</small>
-    {% endif %}
+    {%- endif %}
     <hr />
     <div>{{ page.html|safe }}</div>
     <hr />

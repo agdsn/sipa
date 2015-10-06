@@ -19,31 +19,31 @@
         <h2>{{ art.title }}</h2>
         {% if art.outage or art.information or art.event %}
             <p>
-            {% for out in art.outage %}
+            {%- for out in art.outage %}
                 <span class="label label-danger">{{ out }}</span>
-            {% endfor %}
-            {% for info in art.information %}
+            {%- endfor %}
+            {%- for info in art.information %}
                 <span class="label label-warning">{{ info }}</span>
-            {% endfor %}
-            {% for ev in art.event %}
+            {%- endfor %}
+            {%- for ev in art.event %}
                 <span class="label label-success">{{ ev }}</span>
-            {% endfor %}
+            {%- endfor %}
             </p>
         {% endif %}
-        {% if art.author %}
+        {% if art.author -%}
             <small>{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</small>
-        {% elif art.date %}
+        {%- elif art.date -%}
             <small>{{ _("vom")}} {{ art.date }}</small>
-        {% endif %}
+        {%- endif %}
         <hr />
         <div>{{ art.html|safe }}</div>
 
         <br />
-    {% endfor %}{% else %}
+    {%- endfor %}{%- else -%}
         <div class="alert alert-info">
             {{ _("Keine News Vorhanden!") }}
         </div>
-    {% endif %}
+    {%- endif %}
     <nav>
         <ul class="pager">
         {% if previous_range %}
