@@ -150,6 +150,7 @@ def login():
 def logout():
     logger.info('Logging out')
     logout_user()
+    flash(gettext("Abmeldung erfolgreich!"), 'success')
     return redirect(url_for('.index'))
 
 
@@ -166,7 +167,7 @@ def usertraffic():
                               "Anschluss Eingetragene ist angemeldet!"),
                       'warning')
                 flash(gettext("Hier werden die Trafficdaten "
-                              "dieses Anschlusses angezeigt"), "info")
+                              "dieses Anschlusses angezeigt."), "info")
 
         return render_template("usertraffic.html", usertraffic=(
             ip_user.get_traffic_data()))

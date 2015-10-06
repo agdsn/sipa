@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 12:58+0200\n"
-"PO-Revision-Date: 2015-10-06 12:58+0200\n"
+"POT-Creation-Date: 2015-10-06 13:15+0200\n"
+"PO-Revision-Date: 2015-10-06 13:15+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -255,24 +255,28 @@ msgstr "Authentication data incorrect!"
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/blueprints/generic.py:165
+#: sipa/blueprints/generic.py:153
+msgid "Abmeldung erfolgreich!"
+msgstr "Logout successful!"
+
+#: sipa/blueprints/generic.py:166
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:168
-msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
-msgstr "You will find here the traffic data for this connection"
+#: sipa/blueprints/generic.py:169
+msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
+msgstr "You will find here the traffic data for this connection."
 
-#: sipa/blueprints/generic.py:193 sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/generic.py:194 sipa/blueprints/usersuite.py:114
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:195
+#: sipa/blueprints/generic.py:196
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
-#: sipa/blueprints/generic.py:201
+#: sipa/blueprints/generic.py:202
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "

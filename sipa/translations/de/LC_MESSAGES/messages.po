@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 12:58+0200\n"
+"POT-Creation-Date: 2015-10-06 13:15+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -252,25 +252,29 @@ msgstr ""
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:165
+#: sipa/blueprints/generic.py:153
+msgid "Abmeldung erfolgreich!"
+msgstr ""
+
+#: sipa/blueprints/generic.py:166
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:168
-msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
+#: sipa/blueprints/generic.py:169
+msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:193 sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/generic.py:194 sipa/blueprints/usersuite.py:114
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:195
+#: sipa/blueprints/generic.py:196
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:201
+#: sipa/blueprints/generic.py:202
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -1262,5 +1266,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Keine älteren Beiträge"
+#~ msgstr ""
+
+#~ msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
 #~ msgstr ""
 
