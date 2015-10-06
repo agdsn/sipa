@@ -2,13 +2,13 @@
 {% set page_title = _('Usersuite von ') + current_user.name %}
 
 {% block content %}
-    <div class="row"><div class="col-md-7">
+    <div class="row"><div class="col-md-8">
         {% include 'usersuite/_index_status.html' %}
         {% include 'drafts/_traffic_overview.html' %}
     </div></div>
-    <div class="row">
+    <div class="row"><div class="col-md-12">
         {% include 'drafts/_traffic_chart.html' %}
-    </div>
+    </div></div>
 {% endblock %}
 
 {% block custom_script %}

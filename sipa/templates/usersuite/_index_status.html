@@ -1,5 +1,5 @@
-<h3>{{ _("Statusinformationen") }}</h3>
-<div>
+<h2>{{ _("Statusinformationen") }}</h2>
+<p>
     {% if 'password_change' in current_user.supported() %}
     <a href="{{ url_for(".usersuite_change_password") }}" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
@@ -15,7 +15,7 @@
         <span class="glyphicon glyphicon-envelope"></span>
         {{ _("Kontaktformular") }}
     </a>
-</div><br>
+</p>
 
 {% macro color_class(status_color) %}
 {% if status_color == STATUS_COLORS.GOOD %}
