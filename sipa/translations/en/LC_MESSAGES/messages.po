@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 06:41+0200\n"
-"PO-Revision-Date: 2015-10-06 06:41+0200\n"
+"POT-Creation-Date: 2015-10-06 10:07+0200\n"
+"PO-Revision-Date: 2015-10-06 10:13+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -272,6 +272,15 @@ msgstr "Message was sent."
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
+#: sipa/blueprints/generic.py:201
+msgid ""
+"Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
+"erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
+"willst."
+msgstr ""
+"Are you sure you want to use the anonymous contact form? This is necessary "
+"only if you wish to contact administrators of a different dormitory."
+
 #: sipa/blueprints/usersuite.py:40
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
@@ -370,6 +379,34 @@ msgstr "Your database has been created."
 #: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:236
 msgid "Kontakt"
 msgstr "Contact"
+
+#: sipa/templates/anonymous_contact.html:8
+msgid "Hinweis:"
+msgstr "Note:"
+
+#: sipa/templates/anonymous_contact.html:9
+msgid ""
+"Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
+"identifizieren und Deine Anfrage schneller bearbeiten!"
+msgstr ""
+"If you write us after you signed in, we can identify you as a member and are "
+"able to process your query faster!"
+
+#: sipa/templates/anonymous_contact.html:11
+msgid ""
+"Außerdem kannst Du in Deinen Einstellungen bereits einige Daten wie z.B. die "
+"MAC-Adresse selbstständig ändern."
+msgstr ""
+"Also, on the settings page you can change certain data like the MAC address "
+"by yourself."
+
+#: sipa/templates/anonymous_contact.html:17
+msgid "Zum Kontaktformular für angemeldete Nutzer"
+msgstr "To the contact form for authenticated users"
+
+#: sipa/templates/anonymous_contact.html:20
+msgid "Zum Login"
+msgstr "To the login page"
 
 #: sipa/templates/base.html:7
 msgid "Login"

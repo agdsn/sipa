@@ -197,5 +197,10 @@ def contact():
         return redirect(url_for(".index"))
     elif form.is_submitted():
         flash_formerrors(form)
+    elif current_user.is_authenticated:
+        flash(gettext("Sicher, dass Du das anonyme Formular "
+                      "benutzen möchtest? Dies ist nur erforderlich, wenn Du "
+                      "Administratoren eines anderen Wohnheims "
+                      "kontaktieren willst."), 'info')
 
     return render_template('anonymous_contact.html', form=form)

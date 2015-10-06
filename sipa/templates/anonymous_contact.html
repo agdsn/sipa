@@ -3,6 +3,23 @@
 {% set page_title = _("Kontakt") %}
 
 {% block content %}
-    {{ forms.render_simple(form=form, form_id='anonymous_contact_form', reset_button=False, cancel_to=url_for('generic.index')) }}
-    {# TODO #}
+    {% call forms.render(form=form, form_id='anonymous_contact_form', reset_button=False, cancel_to=url_for('generic.index')) %}
+        <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
+            <strong>{{ _("Hinweis:") }}</strong>
+            {{ _("Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
+            "identifizieren und Deine Anfrage schneller bearbeiten!") }}
+            {{ _("Außerdem kannst Du in Deinen Einstellungen bereits einige Daten "
+            "wie z.B. die MAC-Adresse selbstständig ändern.") }}
+            <div>
+                <span class="glyphicon glyphicon-share-alt"></span>
+                {% if current_user.is_authenticated -%}
+                    <a href="{{ url_for('usersuite.usersuite_contact') }}">&nbsp;
+                        {{- _("Zum Kontaktformular für angemeldete Nutzer") -}}
+                    </a>
+                {%- else %}
+                    <a href="{{ url_for('generic.login') }}">&nbsp;{{ _("Zum Login") }}</a>
+                {%- endif %}
+            </div>
+        </div>
+    {% endcall %}
 {% endblock %}

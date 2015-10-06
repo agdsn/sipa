@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 06:41+0200\n"
+"POT-Creation-Date: 2015-10-06 10:07+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -270,6 +270,13 @@ msgstr ""
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
+#: sipa/blueprints/generic.py:201
+msgid ""
+"Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
+"erforderlich, wenn Du Administratoren eines anderen Wohnheims "
+"kontaktieren willst."
+msgstr ""
+
 #: sipa/blueprints/usersuite.py:40
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
@@ -367,6 +374,30 @@ msgstr ""
 
 #: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:236
 msgid "Kontakt"
+msgstr ""
+
+#: sipa/templates/anonymous_contact.html:8
+msgid "Hinweis:"
+msgstr ""
+
+#: sipa/templates/anonymous_contact.html:9
+msgid ""
+"Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
+"identifizieren und Deine Anfrage schneller bearbeiten!"
+msgstr ""
+
+#: sipa/templates/anonymous_contact.html:11
+msgid ""
+"Außerdem kannst Du in Deinen Einstellungen bereits einige Daten wie z.B. "
+"die MAC-Adresse selbstständig ändern."
+msgstr ""
+
+#: sipa/templates/anonymous_contact.html:17
+msgid "Zum Kontaktformular für angemeldete Nutzer"
+msgstr ""
+
+#: sipa/templates/anonymous_contact.html:20
+msgid "Zum Login"
 msgstr ""
 
 #: sipa/templates/base.html:7
