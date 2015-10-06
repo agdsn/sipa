@@ -6,7 +6,7 @@ from ipaddress import IPv4Address
 from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
 
-from . import sample, wu, gerok
+from . import sample, wu, gerok, hss, zeu
 
 import operator
 
@@ -17,13 +17,7 @@ registered_datasources = [sample.datasource, wu.datasource,
 registered_dormitories = sample.dormitories + wu.dormitories + \
                          gerok.dormitories
 
-unsupported_dormitories = {
-    'hss': (u"Hochschulstraße", "https://wh12.tu-dresden.de"),
-    'zeu': (u"Zeunerstraße", "https://zeus.wh25.tu-dresden.de")
-}
-
-supported_dormitories = {dormitory.name for dormitory
-                         in registered_dormitories}
+premature_dormitories = hss.dormitories + zeu.dormitories
 
 
 def init_datasources_dormitories(app):
@@ -37,6 +31,10 @@ def init_datasources_dormitories(app):
         if not dorm.datasource.debug_only or app.debug
     ]
 
+    app.extensions['all_dormitories'] = (
+        app.extensions['dormitories'] + premature_dormitories
+    )
+
 
 def list_all_dormitories():
     """Generate a list of all available dormitories (active & external).
@@ -44,10 +42,7 @@ def list_all_dormitories():
     """
     return sorted([
         (dormitory.name, dormitory.display_name)
-        for dormitory in current_app.extensions['dormitories']
-    ] + [
-        (key, val[0]) for key, val
-        in unsupported_dormitories.items()
+        for dormitory in current_app.extensions['all_dormitories']
     ], key=operator.itemgetter(1))
 
 
@@ -64,7 +59,7 @@ def init_context(app):
 
 
 def dormitory_from_name(name):
-    for dormitory in current_app.extensions['dormitories']:
+    for dormitory in current_app.extensions['all_dormitories']:
         if dormitory.name == name:
             return dormitory
     return None

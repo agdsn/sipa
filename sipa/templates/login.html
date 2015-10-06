@@ -14,8 +14,8 @@
 <script type="text/javascript">
     $("#dormitory").change(function(){
         unsupported = {
-            {% for key, dorm in unsupported.items() -%}
-                {{ key }}: ["{{ dorm[0] }}", "{{ dorm[1] }}"],
+            {% for dorm in unsupported -%}
+                {{ dorm.name }}: ["{{ dorm.display_name }}", "{{ dorm.datasource.website_url }}"],
             {%- endfor %}
         }
         selected = $("select#dormitory").find(":selected").prop("value")

@@ -65,3 +65,13 @@ class Dormitory:
 
     def __eq__(self, other):
         return self.name == other.name and self.datasource == other.datasource
+
+
+class PrematureDataSource:
+    """A dormitory not yet supported by SIPA"""
+
+    def __init__(self, name, display_name, website_url, support_mail):
+        self.name = name
+        self.display_name = display_name
+        self.website_url = website_url
+        self.support_mail = support_mail
