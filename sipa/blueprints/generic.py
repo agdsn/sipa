@@ -177,12 +177,12 @@ def usertraffic():
 
         return render_template("usertraffic.html", usertraffic=(
             ip_user.get_traffic_data()))
-    else:
-        if current_user.is_authenticated:
-            return render_template("usertraffic.html", usertraffic=(
-                current_user.get_traffic_data()))
-        else:
-            abort(401)
+
+    if current_user.is_authenticated:
+        return render_template("usertraffic.html", usertraffic=(
+            current_user.get_traffic_data()))
+
+    abort(401)
 
 
 @bp_generic.route('/contact', methods=['GET', 'POST'])
