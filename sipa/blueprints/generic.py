@@ -127,13 +127,18 @@ def login():
 
         try:
             user = User.authenticate(username, password)
-        except (UserNotFound, PasswordInvalid):
+        except (UserNotFound, PasswordInvalid) as e:
+            cause = "username" if isinstance(e, UserNotFound) else "password"
+            logger.info("Authentication failed: Wrong %s", cause, extra={
+                'tags': {'user': username, 'rate_critical': True}
+            })
             flash(gettext("Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
                 session['dormitory'] = dormitory.name
                 login_user(user, remember=remember)
-                logger.info('Authentication successful')
+                logger.info('Authentication successful',
+                            extra={'tags': {'user': username}})
                 flash(gettext("Anmeldung erfolgreich!"), "success")
     elif form.is_submitted():
         flash_formerrors(form)
@@ -148,7 +153,8 @@ def login():
 @bp_generic.route("/logout")
 @login_required
 def logout():
-    logger.info('Logging out')
+    logger.info("Logging out",
+                extra={'tags': {'user': current_user.uid}})
     logout_user()
     flash(gettext("Abmeldung erfolgreich!"), 'success')
     return redirect(url_for('.index'))
