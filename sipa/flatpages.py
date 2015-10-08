@@ -6,7 +6,7 @@ from flask.ext.flatpages import FlatPages
 
 from .babel import babel, locale_preferences
 from operator import attrgetter
-from os.path import dirname
+from os.path import dirname, basename, splitext
 
 
 class Node:
@@ -52,6 +52,10 @@ class Article(Node):
                     localized_page = self.localized_pages.get(available_locale)
                     return localized_page
         return self.default_page
+
+    @property
+    def file_basename(self):
+        return splitext(basename(self.localized_page.path))[0]
 
 
 class Category(Node):

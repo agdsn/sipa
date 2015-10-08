@@ -5,9 +5,9 @@
 Blueprint providing features regarding the news entries.
 """
 
-from flask import Blueprint, render_template, url_for, redirect
-
+from flask import Blueprint, render_template, url_for, redirect, abort
 from sipa.flatpages import cf_pages
+
 
 bp_news = Blueprint('news', __name__, url_prefix='/news')
 
@@ -58,6 +58,20 @@ def display(start=None, end=None):
 
     return render_template("index.html", articles=news[start:end+1],
                            previous_range=prev_range, next_range=next_range)
+
+
+@bp_news.route("/permalink/<filename>")
+def permalink(filename):
+    news = cf_pages.get_articles_of_category('news')
+
+    for article in news:
+        print("article: {}".format(article))
+        print("article.localized_page: {}".format(article.localized_page))
+
+        if article.file_basename == filename:
+            return render_template("template.html", article=article)
+
+    abort(404)
 
 
 @bp_news.route("/newest")

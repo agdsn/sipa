@@ -35,6 +35,11 @@
         {%- elif art.date -%}
             <small>{{ _("vom")}} {{ art.date }}</small>
         {%- endif %}
+        <a href="{{ url_for('news.permalink', filename=art.file_basename) }}">
+            <small>
+                Permalink <span class="glyphicon glyphicon-link"></span>
+            </small>
+        </a>
         <hr />
         <div>{{ art.html|safe }}</div>
 
