@@ -31,9 +31,9 @@
             </p>
         {% endif %}
         {% if art.author -%}
-            <small>{{ _("geschrieben von") }} {{ art.author }}, {{ art.date }}</small>
+            <small>{{ _("Geschrieben von") }} {{ art.author }}, {{ art.date }}.</small>
         {%- elif art.date -%}
-            <small>{{ _("vom")}} {{ art.date }}</small>
+            <small>{{ _("Vom")}} {{ art.date }}.</small>
         {%- endif %}
         <a href="{{ url_for('news.permalink', filename=art.file_basename) }}">
             <small>
