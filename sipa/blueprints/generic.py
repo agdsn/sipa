@@ -3,7 +3,7 @@
 
 
 from flask import render_template, request, redirect, \
-    url_for, flash, session, abort, current_app
+    url_for, flash, session, abort, current_app, jsonify
 from flask.blueprints import Blueprint
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
@@ -183,6 +183,22 @@ def usertraffic():
             current_user.get_traffic_data()))
 
     abort(401)
+
+
+@bp_generic.route('/usertraffic/json')
+def traffic_api():
+    user = (current_user if current_user.is_authenticated
+            else user_from_ip(request.remote_addr))
+    trafficdata = user.get_traffic_data()
+    print("trafficdata: {}".format(trafficdata))
+    trafficdata['quota'] = trafficdata.pop('credit')
+
+    history = trafficdata.pop('history')
+
+    trafficdata['traffic'] = [{'in': day[1], 'out': day[2]}
+                              for day in history]
+
+    return jsonify(version=2, **trafficdata)
 
 
 @bp_generic.route('/contact', methods=['GET', 'POST'])
