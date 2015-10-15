@@ -24,8 +24,8 @@ password_required_charset_message = lazy_gettext(
 password_validator = Regexp(
     "("
     "(?=.*\d)"                                     # ≥ 1 Digit
-    "(?=.*[a-z])(?=.*[A-Z])"                       # ≥ 1 Letter (up/low
-    "(?=.*[…_\[\]^!<>=&@:-?*}{/\#$|~`+%\"\';])"    # ≥ 1 Special char
+    "(?=.*[a-z])(?=.*[A-Z])"                       # ≥ 1 Letter (up/low)
+    "(?=.*[,.…_\[\]^!<>=&@:-?*}{/\#$|~`+%\"\';])"  # ≥ 1 Special char
     ".{8,}"                                        # ≥ 8 chars
     ")",
     message=password_required_charset_message
