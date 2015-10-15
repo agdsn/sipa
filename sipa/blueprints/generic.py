@@ -162,23 +162,29 @@ def logout():
 
 @bp_generic.route("/usertraffic")
 def usertraffic():
-    """For anonymous users with a valid IP
+    """Show a user's traffic on a static site just as in the usersuite.
+
+    If a user is logged but the ip corresponds to another user, a hint
+    is flashed and the traffic of the `ip_user` is displayed.
     """
     ip_user = user_from_ip(request.remote_addr)
 
-    if isinstance(ip_user, BaseUser):
-        if current_user.is_authenticated:
-            if current_user != ip_user:
-                flash(gettext("Ein anderer Nutzer als der für diesen "
-                              "Anschluss Eingetragene ist angemeldet!"),
-                      'warning')
-                flash(gettext("Hier werden die Trafficdaten "
-                              "dieses Anschlusses angezeigt."), "info")
-
-        return render_template("usertraffic.html", usertraffic=(
-            ip_user.get_traffic_data()))
+    chosen_user = None
 
     if current_user.is_authenticated:
+        chosen_user = current_user
+
+    if ip_user.is_authenticated:
+        chosen_user = ip_user
+
+        if current_user != ip_user:
+            flash(gettext("Ein anderer Nutzer als der für diesen "
+                          "Anschluss Eingetragene ist angemeldet!"),
+                  'warning')
+            flash(gettext("Hier werden die Trafficdaten "
+                          "dieses Anschlusses angezeigt."), "info")
+
+    if chosen_user:
         return render_template("usertraffic.html", usertraffic=(
             current_user.get_traffic_data()))
 
