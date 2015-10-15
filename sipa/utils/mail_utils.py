@@ -7,10 +7,10 @@ Utils for sending emails via SMTP on localhost.
 
 from email.utils import formatdate, make_msgid
 from email.mime.text import MIMEText
+from flask import current_app
+
 import smtplib
 import textwrap
-
-from sipa import app
 
 
 import logging
@@ -46,8 +46,8 @@ def send_mail(sender, receipient, subject, message):
     mail['Subject'] = subject
     mail['Date'] = formatdate(localtime=True)
 
-    mailserver_host = app.config['MAILSERVER_HOST']
-    mailserver_port = app.config['MAILSERVER_PORT']
+    mailserver_host = current_app.config['MAILSERVER_HOST']
+    mailserver_port = current_app.config['MAILSERVER_PORT']
 
     try:
         smtp = smtplib.SMTP()
