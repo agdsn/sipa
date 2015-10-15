@@ -1,20 +1,20 @@
-# English translations for PROJECT.
+# English translations for .
 # Copyright (C) 2014 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
+# This file is distributed under the same license as the  project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
+"Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 13:15+0200\n"
-"PO-Revision-Date: 2015-10-06 13:15+0200\n"
+"POT-Creation-Date: 2015-10-16 18:43+0200\n"
+"PO-Revision-Date: 2015-10-16 18:43+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
-"Language: en\n"
-"Language-Team: en <LL@li.org>\n"
+"Language: de\n"
+"Language-Team: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 "X-Generator: Poedit 1.8.5\n"
@@ -247,36 +247,36 @@ msgstr "Connection to SQL server could not be established!"
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr "Connection to LDAP server could not be established!"
 
-#: sipa/blueprints/generic.py:131
+#: sipa/blueprints/generic.py:135
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
-#: sipa/blueprints/generic.py:137
+#: sipa/blueprints/generic.py:142
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/blueprints/generic.py:153
+#: sipa/blueprints/generic.py:159
 msgid "Abmeldung erfolgreich!"
 msgstr "Logout successful!"
 
-#: sipa/blueprints/generic.py:166
+#: sipa/blueprints/generic.py:181
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:169
+#: sipa/blueprints/generic.py:184
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr "You will find here the traffic data for this connection."
 
-#: sipa/blueprints/generic.py:194 sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/generic.py:222 sipa/blueprints/usersuite.py:114
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:196
+#: sipa/blueprints/generic.py:224
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
-#: sipa/blueprints/generic.py:202
+#: sipa/blueprints/generic.py:230
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
@@ -380,7 +380,7 @@ msgstr "Your database has been deleted."
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
-#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:240
+#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:238
 msgid "Kontakt"
 msgstr "Contact"
 
@@ -452,24 +452,24 @@ msgstr "Remaining Credit"
 msgid "Für Details klicken"
 msgstr "Click for details"
 
-#: sipa/templates/base.html:230
+#: sipa/templates/base.html:229
 msgid "Fehler bei der Abfrage der Daten"
 msgstr "An error occurred"
 
-#: sipa/templates/base.html:262 sipa/templates/base.html:267
+#: sipa/templates/base.html:260 sipa/templates/base.html:265
 #: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr "Contact form"
 
-#: sipa/templates/base.html:283
+#: sipa/templates/base.html:281
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:295
+#: sipa/templates/base.html:293
 msgid "Keller"
 msgstr "Basement"
 
-#: sipa/templates/base.html:307
+#: sipa/templates/base.html:305
 msgid "7. Etage"
 msgstr "7th floor"
 
@@ -509,23 +509,23 @@ msgstr "Oops!"
 msgid "Zur Hauptseite"
 msgstr "Return to homepage"
 
-#: sipa/templates/index.html:34
-msgid "geschrieben von"
-msgstr "written by"
+#: sipa/templates/index.html:34 sipa/templates/template.html:21
+msgid "Geschrieben von"
+msgstr "Written by"
 
 #: sipa/templates/index.html:36
-msgid "vom"
-msgstr "on"
+msgid "Vom"
+msgstr "On"
 
-#: sipa/templates/index.html:44
+#: sipa/templates/index.html:48
 msgid "Keine News Vorhanden!"
 msgstr "No News available!"
 
-#: sipa/templates/index.html:52
+#: sipa/templates/index.html:56
 msgid "Neuer"
 msgstr "Newer"
 
-#: sipa/templates/index.html:59
+#: sipa/templates/index.html:63
 msgid "Älter"
 msgstr "Older"
 
@@ -533,17 +533,9 @@ msgstr "Older"
 msgid "Dieses Wohnheim erreichst du hier:"
 msgstr "You can reach this dormitory over here:"
 
-#: sipa/templates/template.html:21
-msgid "Geschrieben von"
-msgstr "Written by"
-
 #: sipa/templates/template.html:38
 msgid "Wohnheim auswählen"
 msgstr "Choose dormitory"
-
-#: sipa/templates/drafts/_traffic_chart.html:2
-msgid "Trafficdiagramm"
-msgstr "Traffic chart"
 
 #: sipa/templates/drafts/_traffic_overview.html:1
 msgid "Dein Traffic"
@@ -603,8 +595,8 @@ msgid ""
 "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es "
 "ist nicht zulässig, den eigenen Account weiterzugeben."
 msgstr ""
-"Please be aware that every user needs his own account. It is not permitted "
-"to share an account!"
+"Please be aware that every user needs his own account. Sharing the account "
+"is not permitted."
 
 #: sipa/templates/usersuite/change_mac.html:12
 msgid ""

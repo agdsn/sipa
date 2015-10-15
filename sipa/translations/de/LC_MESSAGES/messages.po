@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-06 13:15+0200\n"
+"POT-Creation-Date: 2015-10-16 18:43+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -244,37 +244,37 @@ msgstr ""
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:131
+#: sipa/blueprints/generic.py:135
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:137
+#: sipa/blueprints/generic.py:142
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:153
+#: sipa/blueprints/generic.py:159
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:166
+#: sipa/blueprints/generic.py:181
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:169
+#: sipa/blueprints/generic.py:184
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:194 sipa/blueprints/usersuite.py:114
+#: sipa/blueprints/generic.py:222 sipa/blueprints/usersuite.py:114
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:196
+#: sipa/blueprints/generic.py:224
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:202
+#: sipa/blueprints/generic.py:230
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -376,7 +376,7 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:240
+#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:238
 msgid "Kontakt"
 msgstr ""
 
@@ -444,24 +444,24 @@ msgstr ""
 msgid "Für Details klicken"
 msgstr ""
 
-#: sipa/templates/base.html:230
+#: sipa/templates/base.html:229
 msgid "Fehler bei der Abfrage der Daten"
 msgstr ""
 
-#: sipa/templates/base.html:262 sipa/templates/base.html:267
+#: sipa/templates/base.html:260 sipa/templates/base.html:265
 #: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr ""
 
-#: sipa/templates/base.html:283
+#: sipa/templates/base.html:281
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:295
+#: sipa/templates/base.html:293
 msgid "Keller"
 msgstr ""
 
-#: sipa/templates/base.html:307
+#: sipa/templates/base.html:305
 msgid "7. Etage"
 msgstr ""
 
@@ -501,23 +501,23 @@ msgstr ""
 msgid "Zur Hauptseite"
 msgstr ""
 
-#: sipa/templates/index.html:34
-msgid "geschrieben von"
+#: sipa/templates/index.html:34 sipa/templates/template.html:21
+msgid "Geschrieben von"
 msgstr ""
 
 #: sipa/templates/index.html:36
-msgid "vom"
+msgid "Vom"
 msgstr ""
 
-#: sipa/templates/index.html:44
+#: sipa/templates/index.html:48
 msgid "Keine News Vorhanden!"
 msgstr ""
 
-#: sipa/templates/index.html:52
+#: sipa/templates/index.html:56
 msgid "Neuer"
 msgstr ""
 
-#: sipa/templates/index.html:59
+#: sipa/templates/index.html:63
 msgid "Älter"
 msgstr ""
 
@@ -525,16 +525,8 @@ msgstr ""
 msgid "Dieses Wohnheim erreichst du hier:"
 msgstr ""
 
-#: sipa/templates/template.html:21
-msgid "Geschrieben von"
-msgstr ""
-
 #: sipa/templates/template.html:38
 msgid "Wohnheim auswählen"
-msgstr ""
-
-#: sipa/templates/drafts/_traffic_chart.html:2
-msgid "Trafficdiagramm"
 msgstr ""
 
 #: sipa/templates/drafts/_traffic_overview.html:1
@@ -1269,5 +1261,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt"
+#~ msgstr ""
+
+#~ msgid "geschrieben von"
+#~ msgstr ""
+
+#~ msgid "vom"
+#~ msgstr ""
+
+#~ msgid "Trafficdiagramm"
 #~ msgstr ""
 
