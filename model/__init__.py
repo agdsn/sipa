@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, current_app
-from flask.ext.login import current_user
+from flask.ext.login import current_user, AnonymousUserMixin
 from ipaddress import IPv4Address
 
 from werkzeug.local import LocalProxy
@@ -100,7 +100,7 @@ def user_from_ip(ip):
     if datasource is not None:
         return datasource.user_class.from_ip(ip)
     else:
-        return None
+        return AnonymousUserMixin()
 
 
 def current_user_supported():
