@@ -177,16 +177,17 @@ def usertraffic():
     if ip_user.is_authenticated:
         chosen_user = ip_user
 
-        if current_user != ip_user:
-            flash(gettext("Ein anderer Nutzer als der für diesen "
-                          "Anschluss Eingetragene ist angemeldet!"),
-                  'warning')
-            flash(gettext("Hier werden die Trafficdaten "
-                          "dieses Anschlusses angezeigt."), "info")
+        if current_user.is_authenticated:
+            if current_user != ip_user:
+                flash(gettext("Ein anderer Nutzer als der für diesen "
+                              "Anschluss Eingetragene ist angemeldet!"),
+                      'warning')
+                flash(gettext("Hier werden die Trafficdaten "
+                              "dieses Anschlusses angezeigt."), "info")
 
     if chosen_user:
         return render_template("usertraffic.html", usertraffic=(
-            current_user.get_traffic_data()))
+            chosen_user.get_traffic_data()))
 
     abort(401)
 
