@@ -7,7 +7,7 @@ datasource = PrematureDataSource(
     name='hss',
     display_name="Hochschulstraße",
     website_url="https://wh12.tu-dresden.de",
-    support_mail="suppor@wh12.tu-dresden.de",
+    support_mail="support@wh12.tu-dresden.de",
 )
 
 dormitories = [Dormitory(
