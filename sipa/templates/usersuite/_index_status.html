@@ -1,6 +1,6 @@
 <h2>{{ _("Statusinformationen") }}</h2>
 <p>
-    {% if 'password_change' in current_user.supported() %}
+    {% if current_user.can_change_password %}
     <a href="{{ url_for(".usersuite_change_password") }}" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
         {{ _("Passwort ändern") }}
@@ -39,39 +39,27 @@
 
 <table class="table table-striped table-bordered table-hover">
     <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
-    {# todo get the table sorted properly #}
-    {% for id, property in userinfo.items() %}
+    {% for description, property in rows %}
     <tr>
-        <td class="col-md-3">{{ property.description }}</td>
-        <td class="col-md-3">
-          {% if property.is_supported %}
+        <td class="col-md-3">{{ description }}</td>
+        {%- set style = ("text-{}".format(property.style) if property.style else '') %}
+        <td class="col-md-3 {{ style }}">
+            {# TODO check whether supported(?) #}
+            {# TODO include style information (color) #}
+            {{ property.value }}
 
-          {% if property.status_color %}
-              <span class="{{ color_class(property.status_color) }}">
-                {{ format_empty(property.value) }}
-              </span>
-          {% else %}
-              {{ format_empty(property.value) }}
-          {% endif %}
+            {# TODO proper links #}
+            {% if property.capabilities.edit %}
+                <a href="{{ url_for('usersuite.edit', attribute=property.name) }}">
+                    <span class="glyphicon glyphicon-pencil pull-right"></span>
+                </a>
+            {% endif %}
 
-          {% if ACTIONS.EDIT in property.actions
-          and ACTIONS.EDIT in property.action_links %}
-              <a href="{{ property.action_links.get(ACTIONS.EDIT) }}">
-                <span class="glyphicon glyphicon-pencil pull-right"></span>
-              </a>
-          {% endif %}
-
-          {% if ACTIONS.DELETE in property.actions
-          and ACTIONS.DELETE in property.action_links %}
-              <a href="{{ property.action_links.get(ACTIONS.DELETE) }}">
-                <span class="glyphicon glyphicon-remove pull-right"></span>
-              </a>
-          {% endif %}
-
-          {% else %}
-              <em class="text-muted">{{ _("Nicht unterstützt") }}</em>
-          {% endif %}
-
+            {% if property.capabilities.delete %}
+                <a href="{{ url_for('usersuite.delete', attribute=property.name) }}">
+                    <span class="glyphicon glyphicon-remove pull-right"></span>
+                </a>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

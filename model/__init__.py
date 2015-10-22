@@ -6,16 +6,15 @@ from ipaddress import IPv4Address
 from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
 
-from . import sample, wu, gerok, hss, zeu
+from . import sample, wu, hss, zeu
 
 import operator
 
 
-registered_datasources = [sample.datasource, wu.datasource,
-                          gerok.datasource]
+# TODO: Add temporarily disabled gerok module + dormitories
+registered_datasources = [sample.datasource, wu.datasource]
 
-registered_dormitories = sample.dormitories + wu.dormitories + \
-                         gerok.dormitories
+registered_dormitories = sample.dormitories + wu.dormitories
 
 premature_dormitories = hss.dormitories + zeu.dormitories
 

@@ -13,7 +13,7 @@ from flask.ext.babel import get_locale
 
 from model import init_context, init_datasources_dormitories, \
     current_datasource
-from model.constants import ACTIONS, STATUS_COLORS
+from model.constants import STATUS_COLORS
 
 from sipa.base import login_manager, babel_selector, IntegerConverter
 from sipa.babel import babel, possible_locales
@@ -72,7 +72,6 @@ def init_app(app):
         possible_locales=possible_locales,
         chart=render_traffic_chart,
         current_datasource=current_datasource,
-        ACTIONS=ACTIONS,
         STATUS_COLORS=STATUS_COLORS,
         form_label_width_class="col-sm-{}".format(form_label_width),
         form_input_width_class="col-sm-{}".format(form_input_width),

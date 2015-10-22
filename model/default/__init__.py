@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # noinspection PyMethodMayBeStatic
-
-from model.constants import FULL_FEATURE_SET, DISPLAY_FEATURE_SET
+from collections import namedtuple
+from model.property import active_prop
 
 
 # noinspection PyMethodMayBeStatic
@@ -91,17 +91,6 @@ class BaseUser(AuthenticatedUserMixin):
         """Return a User instance or raise PasswordInvalid"""
         raise NotImplementedError
 
-    _supported_features = set()
-
-    @classmethod
-    def supported(cls):
-        return cls._supported_features
-
-    @classmethod
-    def unsupported(cls, display=False):
-        return (DISPLAY_FEATURE_SET if display
-                else FULL_FEATURE_SET) - cls._supported_features
-
     def change_password(self, old, new):
         """Change the user's password from old to new.
 
@@ -111,6 +100,7 @@ class BaseUser(AuthenticatedUserMixin):
         """
         raise NotImplementedError
 
+    # TODO: check whether this is needed, *should* be obsolete
     def change_mac_address(self, old, new):
         """Change the user's mac address.
 
@@ -125,40 +115,6 @@ class BaseUser(AuthenticatedUserMixin):
 
         Although reauthentication has already happened, some modules
         neeed the password to execute the LDAP-bind.
-        """
-        raise NotImplementedError
-
-    def get_information(self):
-        """Return a set of properties.
-
-        Although the properties are actually dicts, use the methods
-        from the constants module (like info_property) to generate
-        them.  The properties returned should match what is given in
-        FULL_FEATURE_SET of the constants module to ensure
-        datasource-wide similiarity.  This means, if a certain feature
-        does not appear in said set, it should be added and, if
-        possible, implemented in the other datasource modules as well.
-
-        A simple example yielding 'value' everywhere would look like
-        this:
-
-        return {
-            'id': info_property('value'),
-            'uid': info_property('value'),
-            'address': info_property('value'),
-            'mail': info_property('value',
-                                  actions={ACTIONS.DELETE}),
-            'status': info_property("OK", STATUS_COLORS.GOOD),
-            'ip': info_property('value',
-                                STATUS_COLORS.INFO),
-            'mac': info_property('value',
-                                 actions={ACTIONS.EDIT}),
-            'hostname': info_property('value'),
-            'hostalias': info_property('value')
-        }
-
-        NOTE: remember to set _supported_features accordingly.
-        Else, fields might get marked `Unsupported`!
         """
         raise NotImplementedError
 
@@ -180,6 +136,8 @@ class BaseUser(AuthenticatedUserMixin):
         """Return the current credit in MiB"""
         raise NotImplementedError
 
+    # TODO: somehow structure that user_db
+
     def has_user_db(self):
         """Return whether the user activated his userdb"""
         raise NotImplementedError
@@ -198,3 +156,56 @@ class BaseUser(AuthenticatedUserMixin):
     def user_db_password_change(self, password):
         """Change the password of the userdb"""
         raise NotImplementedError
+
+    def rows(self, description_dict):
+        # TODO: move to useful direction
+        Row = namedtuple('Row', ['description', 'property'])
+
+        # TODO: check whether the thing given actually is a property
+        # perhaps implement a custom `__contains__` and `__dict__`?
+
+        return (
+            Row(description=val, property=self.__getattribute__(key))
+            for key, val in description_dict.items()
+            if key in self.__dir__()
+        )
+
+    @active_prop
+    def login(self):
+        return self.uid
+
+    @active_prop
+    def mac(self):
+        raise NotImplementedError
+
+    @active_prop
+    def mail(self):
+        raise NotImplementedError
+
+    @active_prop
+    def user_id(self):
+        raise NotImplementedError
+
+    @active_prop
+    def address(self):
+        raise NotImplementedError
+
+    @active_prop
+    def status(self):
+        return "OK"
+
+    @active_prop
+    def id(self):
+        raise NotImplementedError
+
+    @active_prop
+    def hostname(self):
+        raise NotImplementedError
+
+    @active_prop
+    def hostalias(self):
+        raise NotImplementedError
+
+    @property
+    def userdb(self):
+        return None

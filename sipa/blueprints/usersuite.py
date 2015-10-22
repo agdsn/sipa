@@ -9,7 +9,6 @@ from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
 from model import current_user_supported, current_datasource
-from model.constants import unsupported_property, ACTIONS
 from sipa import feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
@@ -31,22 +30,9 @@ def usersuite():
     """Usersuite landing page with user account information
     and traffic overview.
     """
-    try:
-        user_info = dict(current_user.get_information())
-        traffic_data = current_user.get_traffic_data()
-    except DBQueryEmpty as e:
-        logger.error('Userinfo DB query could not be finished',
-                     extra={'data': {'exception_args': e.args}, 'stack': True})
-        flash(gettext("Es gab einen Fehler bei der Datenbankanfrage!"),
-              "error")
-        return redirect(url_for('generic.index'))
-
-    user_info.update({prop: unsupported_property()
-                      for prop in current_user.unsupported(display=True)})
-
     descriptions = OrderedDict([
         ('id', gettext("Nutzer-ID")),
-        ('uid', gettext("Accountname")),
+        ('login', gettext("Accountname")),
         ('status', gettext("Accountstatus")),
         ('address', gettext("Aktuelles Zimmer")),
         ('ip', gettext("Aktuelle IP-Adresse")),
@@ -57,29 +43,18 @@ def usersuite():
         ('userdb', gettext("MySQL Datenbank")),
     ])
 
-    ordered_user_info = OrderedDict()
-    for key, description in descriptions.items():
-        if key in user_info:
-            ordered_user_info[key] = user_info[key]
-            ordered_user_info[key]['description'] = descriptions[key]
-
-    # set {mail,mac,userdb}_{change,delete} urls
-    if 'mail_change' in current_user.supported():
-        ordered_user_info['mail']['action_links'] = {
-            ACTIONS.EDIT: url_for('.usersuite_change_mail'),
-            ACTIONS.DELETE: url_for('.usersuite_delete_mail')
-        }
-    if 'mac_change' in current_user.supported():
-        ordered_user_info['mac']['action_links'] = {
-            ACTIONS.EDIT: url_for('.usersuite_change_mac')
-        }
-    if 'userdb_change' in current_user.supported():
-        ordered_user_info['userdb']['action_links'] = {
-            ACTIONS.EDIT: url_for('.usersuite_hosting')
-        }
+    try:
+        rows = current_user.rows(descriptions)
+        traffic_data = current_user.get_traffic_data()
+    except DBQueryEmpty as e:
+        logger.error('Userinfo DB query could not be finished',
+                     extra={'data': {'exception_args': e.args}, 'stack': True})
+        flash(gettext("Es gab einen Fehler bei der Datenbankanfrage!"),
+              "error")
+        return redirect(url_for('generic.index'))
 
     return render_template("usersuite/index.html",
-                           userinfo=ordered_user_info,
+                           rows=rows,
                            usertraffic=traffic_data)
 
 
@@ -124,6 +99,20 @@ def usersuite_contact():
     form.email.default = from_mail
 
     return render_template("usersuite/contact.html", form=form)
+
+
+@bp_usersuite.route("/edit/<attribute>")
+@login_required
+def edit(attribute):
+    # TODO: implement
+    abort(501)
+
+
+@bp_usersuite.route("/delete/<attribute>")
+@login_required
+def delete(attribute):
+    # TODO: implement
+    abort(501)
 
 
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])

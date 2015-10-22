@@ -3,8 +3,8 @@ from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
-from model.constants import info_property, STATUS_COLORS, ACTIONS, \
-    FULL_FEATURE_SET
+from model.property import active_prop
+
 from model.default import BaseUser
 from model.wu.database_utils import ip_from_user_id, sql_query, \
     update_macaddress, query_trafficdata, \
@@ -32,8 +32,9 @@ class User(BaseUser):
         super(User, self).__init__(uid)
         self.name = name
         self.group = self.define_group()
-        self.mail = mail
+        self._mail = mail
         self._ip = ip
+        self.cache_information()
 
     def _get_ip(self):
         self._ip = ip_from_user_id(user_id_from_uid(self.uid))
@@ -43,6 +44,8 @@ class User(BaseUser):
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
+
+    can_change_password = True
 
     def define_group(self):
         """Define a user group from the LDAP group
@@ -120,17 +123,7 @@ class User(BaseUser):
         else:
             logger.info('Password successfully changed')
 
-    _supported_features = FULL_FEATURE_SET
-
-    def get_information(self):
-        """Executes select query for the username and returns a prepared dict.
-
-        * Dormitory IDs in Mysql are from 1-11, so we map to 0-10 with "x-1".
-
-        Returns "-1" if a query result was empty (None), else
-        returns the prepared dict.
-        """
-        userinfo = {}
+    def cache_information(self):
         user = sql_query(
             "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
             "FROM nutzer "
@@ -139,23 +132,20 @@ class User(BaseUser):
         ).fetchone()
 
         if not user:
+            # TODO: more information on this very specific issue.
             raise DBQueryEmpty
 
         mysql_id = user['nutzer_id']
-        userinfo.update(
-            id=info_property(
-                "{}-{}".format(mysql_id, calculate_userid_checksum(mysql_id))),
-            address=info_property("{0} / {1} {2}".format(
-                DORMITORIES[user['wheim_id'] - 1],
-                user['etage'],
-                user['zimmernr']
-            )),
-            # todo use more colors (yellow for finances etc.)
-            status=info_property(status_string_from_id(user['status']),
-                                 status_color=(STATUS_COLORS.GOOD
-                                               if user['status'] is 1
-                                               else None)),
+        self._id = "{}-{}".format(mysql_id,
+                                  calculate_userid_checksum(mysql_id))
+        self._address = "{0} / {1} {2}".format(
+            # MySQL Dormitory IDs in are from 1-11, so we map to 0-10 with x-1
+            DORMITORIES[user['wheim_id'] - 1],
+            user['etage'],
+            user['zimmernr']
         )
+        # todo use more colors (yellow for finances etc.)
+        self._status = status_string_from_id(user['status'])
 
         computer = sql_query(
             "SELECT c_etheraddr, c_ip, c_hname, c_alias "
@@ -167,47 +157,32 @@ class User(BaseUser):
         if not computer:
             raise DBQueryEmpty
 
-        userinfo.update(
-            ip=info_property(computer['c_ip']),
-            mail=info_property(self.mail, actions={ACTIONS.EDIT,
-                                                   ACTIONS.DELETE}),
-            mac=info_property(computer['c_etheraddr'].upper(),
-                              actions={ACTIONS.EDIT}),
-            # todo figure out where that's being used
-            hostname=info_property(computer['c_hname']),
-            hostalias=info_property(computer['c_alias'])
-        )
+        self._ip = computer['c_ip']
+        self._mac = computer['c_etheraddr'].upper()
+        # todo figure out where that's being used
+        self._hostname = computer['c_hname']
+        self._hostalias = computer['c_alias']
 
+        # TODO: figure out where the formatting should be handled
         try:
             if user_has_mysql_db(self.uid):
-                user_db_prop = info_property(
-                    gettext("Aktiviert"),
-                    status_color=STATUS_COLORS.GOOD,
-                    actions={ACTIONS.EDIT}
-                )
+                self._user_db = gettext("Aktiviert")
             else:
-                user_db_prop = info_property(
-                    gettext("Nicht aktiviert"),
-                    status_color=STATUS_COLORS.INFO,
-                    actions={ACTIONS.EDIT}
-                )
+                self._user_db = gettext("Nicht aktiviert")
         except OperationalError:
             logger.critical("User db unreachable")
-            user_db_prop = info_property(gettext(
-                "Datenbank nicht erreichbar"))
-        finally:
-            userinfo.update(userdb=user_db_prop)
-
-        return userinfo
+            self._user_db = gettext("Datenbank nicht erreichbar")
 
     def get_traffic_data(self):
-        return query_trafficdata(self.ip, user_id_from_uid(self.uid))
+        # TODO: this throws DBQueryEmpty
+        print("self._ip: {}".format(self._ip))
+        return query_trafficdata(self._ip, user_id_from_uid(self.uid))
 
     def get_current_credit(self):
-        return query_current_credit(self.uid, self.ip)
+        return query_current_credit(self.uid, self._ip)
 
     def change_mac_address(self, old_mac, new_mac):
-        update_macaddress(self.ip, old_mac, new_mac)
+        update_macaddress(self._ip, old_mac, new_mac)
 
     def change_mail(self, password, new_mail):
         change_email(self.uid, password, new_mail)
@@ -223,3 +198,66 @@ class User(BaseUser):
 
     def user_db_password_change(self, password):
         return change_mysql_userdatabase_password(self.uid, password)
+
+    @active_prop
+    def login(self):
+        return self.uid
+
+    @active_prop
+    def mac(self):
+        return self._mac
+
+    @mac.setter
+    def mac(self, value):
+        raise NotImplementedError("TODO!")
+
+    @active_prop
+    def mail(self):
+        return self._mail
+
+    @mail.setter
+    def mail(self, value):
+        raise NotImplementedError("TODO!")
+
+    @mail.deleter
+    def mail(self):
+        raise NotImplementedError("TODO!")
+
+    @active_prop
+    def user_id(self):
+        return self._user
+
+    @active_prop
+    def address(self):
+        return self._address
+
+    @active_prop
+    def ip(self):
+        return self._ip
+
+    @active_prop
+    def status(self):
+        return self._status
+
+    @active_prop
+    def id(self):
+        return self._id
+
+    @active_prop
+    def hostname(self):
+        return self._hostname
+
+    @active_prop
+    def hostalias(self):
+        return self._hostalias
+
+    @active_prop
+    def userdb(self):
+        # TODO: format accordingly if error
+        return self._user_db
+
+    @userdb.setter
+    def userdb(self):
+        # TODO: find a better way which does not set `__get__`
+        # (but only the capability)
+        assert False, "This function should never be reached"

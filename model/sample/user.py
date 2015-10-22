@@ -3,9 +3,10 @@ from random import random
 
 from flask.ext.login import AnonymousUserMixin
 
-from model.constants import FULL_FEATURE_SET, info_property, ACTIONS, \
-    STATUS_COLORS, WEEKDAYS
+from model.constants import WEEKDAYS
 from model.default import BaseUser
+from model.property import active_prop, unsupported_prop
+
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 import configparser
@@ -34,18 +35,12 @@ def init_context(app):
 
 # noinspection PyMethodMayBeStatic
 class User(BaseUser):
-    """User object will be created from LDAP credentials,
-    only stored in session.
-
-    the terms 'uid' and 'username' refer to the same thing.
-    """
-
     def __init__(self, uid, name=None, mail=None, ip=None):
         super(User, self).__init__(uid)
         self.config = self._get_config()
         self.name = self.config.get(uid, 'name')
         self.group = "static group"
-        self.mail = self.config.get(uid, 'mail')
+        self.old_mail = self.config.get(uid, 'mail')
         self._ip = ip
 
     def _get_ip(self):
@@ -68,6 +63,8 @@ class User(BaseUser):
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
+
+    can_change_password = True
 
     login_list = {
         'test': ('test', 'Test Nutzer', 'test@agdsn.de'),
@@ -104,30 +101,6 @@ class User(BaseUser):
         self.config.set('test', 'password', new)
         self._write_config()
 
-    _supported_features = FULL_FEATURE_SET - {'userdb'}
-
-    def get_information(self):
-        mail = self.config.get('test', 'mail')
-        if mail:
-            mail_actions = {ACTIONS.EDIT, ACTIONS.DELETE}
-        else:
-            mail_actions = {ACTIONS.EDIT}
-
-        return {
-            'id': info_property(self.config.get('test', 'id')),
-            'uid': info_property(self.config.get('test', 'uid')),
-            'address': info_property(self.config.get('test', 'address')),
-            'mail': info_property(self.config.get('test', 'mail'),
-                                  actions=mail_actions),
-            'status': info_property("OK", STATUS_COLORS.GOOD),
-            'ip': info_property(self.config.get('test', 'ip'),
-                                STATUS_COLORS.INFO),
-            'mac': info_property(self.config.get('test', 'mac'),
-                                 actions={ACTIONS.EDIT}),
-            'hostname': info_property(self.config.get('test', 'hostname')),
-            'hostalias': info_property(self.config.get('test', 'hostalias'))
-        }
-
     def get_traffic_data(self):
         def rand():
             return round(random() * 1024, 2)
@@ -138,10 +111,62 @@ class User(BaseUser):
     def get_current_credit(self):
         return round(random() * 1024 * 63, 2)
 
-    def change_mac_address(self, old, new):
-        self.config.set(self.uid, 'mac', new)
+    @active_prop
+    def login(self):
+        return self.uid
+
+    @active_prop
+    def mac(self):
+        return self.config.get('test', 'mac')
+
+    @mac.setter
+    def mac(self, value):
+        self.config.set(self.uid, 'mac', value)
         self._write_config()
 
-    def change_mail(self, password, new_mail):
-        self.config.set(self.uid, 'mail', new_mail)
+    @active_prop
+    def mail(self):
+        return self.config.get('test', 'mail')
+
+    @mail.setter
+    def mail(self, value):
+        self.config.set(self.uid, 'mail', value)
         self._write_config()
+
+    @mail.deleter
+    def mail(self):
+        self.config.set(self.uid, 'mail', "")
+        self._write_config()
+
+    @active_prop
+    def user_id(self):
+        return self.config.get('test', 'user_id')
+
+    @active_prop
+    def address(self):
+        return self.config.get('test', 'address')
+
+    @active_prop
+    def ip(self):
+        return self.config.get('test', 'ip')
+
+    @active_prop
+    def status(self):
+        return "OK"
+
+    @active_prop
+    def id(self):
+        return self.config.get('test', 'id')
+
+    @active_prop
+    def hostname(self):
+        return self.config.get('test', 'hostname')
+
+    @active_prop
+    def hostalias(self):
+        return self.config.get('test', 'hostalias')
+
+    @property
+    @unsupported_prop
+    def userdb(self):
+        return None
