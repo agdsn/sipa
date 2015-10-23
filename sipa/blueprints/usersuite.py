@@ -182,8 +182,9 @@ def usersuite_change_mail():
         email = form.email.data
 
         try:
+            # TODO: “store” the password, as it is needed for the bind
             current_user.re_authenticate(password)
-            current_user.change_mail(password, email)
+            current_user.mail = email
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -212,8 +213,8 @@ def usersuite_delete_mail():
 
         try:
             current_user.re_authenticate(password)
-            # password is needed for the ldap bind
-            current_user.change_mail(password, "")
+            # TODO: see `change_mail` above
+            current_user.mail = ""
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -235,7 +236,6 @@ def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
     form = ChangeMACForm()
-    userinfo = current_user.get_information()
 
     if form.validate_on_submit():
         password = form.password.data
@@ -247,7 +247,7 @@ def usersuite_change_mac():
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         else:
-            current_user.change_mac_address(userinfo['mac']['value'], mac)
+            current_user.mac = mac
             logger.info('Successfully changed MAC address',
                         extra={'data': {'mac': mac},
                                'tags': {'rate_critical': True}})
@@ -260,7 +260,7 @@ def usersuite_change_mac():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    form.mac.default = userinfo['mac']['value']
+    form.mac.default = current_user.mac.value
 
     return render_template('usersuite/change_mac.html', form=form)
 
