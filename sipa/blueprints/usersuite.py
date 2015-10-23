@@ -101,18 +101,34 @@ def usersuite_contact():
     return render_template("usersuite/contact.html", form=form)
 
 
-@bp_usersuite.route("/edit/<attribute>")
-@login_required
-def edit(attribute):
-    # TODO: implement
-    abort(501)
+def get_attribute_endpoint(attribute, capability='edit'):
+    if capability == 'edit':
+        assert (getattr(current_user, attribute).capabilities.edit,
+                "`edit_endpoint` called for non-editable "
+                "attribute `{}`".format(attribute))
 
+        attribute_mappings = {
+            'mac': 'usersuite_change_mac',
+            'userdb': 'usersuite_hosting',
+            'mail': 'usersuite_change_mail',
+        }
 
-@bp_usersuite.route("/delete/<attribute>")
-@login_required
-def delete(attribute):
-    # TODO: implement
-    abort(501)
+        assert (attribute in attribute_mappings.keys(),
+                "No edit endpoint for attribute `{}`".format(attribute))
+    else:
+        assert capability == 'delete', "capability must be 'delete' or 'edit'"
+        assert (getattr(current_user, attribute).capabilities.delete,
+                "`edit_endpoint` called for non-deletable "
+                "attribute `{}`".format(attribute))
+
+        attribute_mappings = {
+            'mail': 'usersuite_delete_mail',
+        }
+
+        assert (attribute in attribute_mappings.keys(),
+                "No delete endpoint for attribute `{}`".format(attribute))
+
+    return "{}.{}".format(bp_usersuite.name, attribute_mappings[attribute])
 
 
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
@@ -153,7 +169,6 @@ def usersuite_change_password():
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
-@feature_required('mail_change', current_user_supported)
 def usersuite_change_mail():
     """Changes the users forwarding mail attribute
     in his LDAP entry.
@@ -186,7 +201,6 @@ def usersuite_change_mail():
 
 @bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
 @login_required
-@feature_required('mail_change', current_user_supported)
 def usersuite_delete_mail():
     """Resets the users forwarding mail attribute
     in his LDAP entry.
@@ -217,7 +231,6 @@ def usersuite_delete_mail():
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
 @login_required
-@feature_required('mac_change', current_user_supported)
 def usersuite_change_mac():
     """As user, change the MAC address of your device.
     """
@@ -255,7 +268,6 @@ def usersuite_change_mac():
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
 @bp_usersuite.route("/hosting/<string:action>", methods=['GET', 'POST'])
 @login_required
-@feature_required('userdb_change', current_user_supported)
 def usersuite_hosting(action=None):
     """Change various settings for Helios.
     """

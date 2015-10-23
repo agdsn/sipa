@@ -11,7 +11,6 @@ class PropertyBase:
     def __init__(self, name, value, capabilities=no_capabilities, style=None):
         self.name = name
         self.value = value
-        # TODO: Where to store the links? perhaps a generic route?
         self.capabilities = capabilities
         # TODO: shall we include more (semantic) information in `style`?
         # e.g. to use `<em>` when unsupported etc.

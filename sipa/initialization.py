@@ -17,6 +17,7 @@ from model.constants import STATUS_COLORS
 
 from sipa.base import login_manager, babel_selector, IntegerConverter
 from sipa.babel import babel, possible_locales
+from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.flatpages import cf_pages
 from sipa.utils.graph_utils import render_traffic_chart
 from sipa.utils.git_utils import init_repo, update_repo
@@ -70,6 +71,7 @@ def init_app(app):
         gauge_data=query_gauge_data,
         get_locale=get_locale,
         possible_locales=possible_locales,
+        get_attribute_endpoint=get_attribute_endpoint,
         chart=render_traffic_chart,
         current_datasource=current_datasource,
         STATUS_COLORS=STATUS_COLORS,

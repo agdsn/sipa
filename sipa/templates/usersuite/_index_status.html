@@ -48,15 +48,14 @@
             {# TODO include style information (color) #}
             {{ property.value }}
 
-            {# TODO proper links #}
             {% if property.capabilities.edit %}
-                <a href="{{ url_for('usersuite.edit', attribute=property.name) }}">
+                <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
                     <span class="glyphicon glyphicon-pencil pull-right"></span>
                 </a>
             {% endif %}
 
             {% if property.capabilities.delete %}
-                <a href="{{ url_for('usersuite.delete', attribute=property.name) }}">
+                <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}">
                     <span class="glyphicon glyphicon-remove pull-right"></span>
                 </a>
             {% endif %}
