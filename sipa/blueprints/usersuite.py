@@ -108,9 +108,9 @@ def get_attribute_endpoint(attribute, capability='edit'):
                 "attribute `{}`".format(attribute))
 
         attribute_mappings = {
-            'mac': 'usersuite_change_mac',
-            'userdb': 'usersuite_hosting',
-            'mail': 'usersuite_change_mail',
+            'mac': 'change_mac',
+            'userdb': 'hosting',
+            'mail': 'change_mail',
         }
 
         assert (attribute in attribute_mappings.keys(),
@@ -122,7 +122,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
                 "attribute `{}`".format(attribute))
 
         attribute_mappings = {
-            'mail': 'usersuite_delete_mail',
+            'mail': 'delete_mail',
         }
 
         assert (attribute in attribute_mappings.keys(),
@@ -169,7 +169,7 @@ def usersuite_change_password():
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
-def usersuite_change_mail():
+def change_mail():
     """Changes the users forwarding mail attribute
     in his LDAP entry.
 
@@ -202,7 +202,7 @@ def usersuite_change_mail():
 
 @bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
 @login_required
-def usersuite_delete_mail():
+def delete_mail():
     """Resets the users forwarding mail attribute
     in his LDAP entry.
     """
@@ -232,7 +232,7 @@ def usersuite_delete_mail():
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
 @login_required
-def usersuite_change_mac():
+def change_mac():
     """As user, change the MAC address of your device.
     """
     form = ChangeMACForm()
@@ -268,13 +268,13 @@ def usersuite_change_mac():
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
 @bp_usersuite.route("/hosting/<string:action>", methods=['GET', 'POST'])
 @login_required
-def usersuite_hosting(action=None):
+def hosting(action=None):
     """Change various settings for Helios.
     """
     if action == "confirm":
         current_user.user_db_drop()
         flash(gettext("Deine Datenbank wurde gelöscht."), 'success')
-        return redirect(url_for('.usersuite_hosting'))
+        return redirect(url_for('.hosting'))
 
     form = HostingForm()
 

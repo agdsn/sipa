@@ -6,7 +6,7 @@
     {% if action == 'delete' %}
         <div class="alert alert-warning">
             {{ _('Willst Du deine Datenbank wirklich löschen?') }}
-            <a href="{{ url_for('.usersuite_hosting', action='confirm') }}">
+            <a href="{{ url_for('.hosting', action='confirm') }}">
                 {{ _('Jawohl!') }}
             </a>
         </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <a href="{{ url_for('usersuite.usersuite_hosting', action='delete') }}"
+                            <a href="{{ url_for('usersuite.hosting', action='delete') }}"
                                class="btn btn-danger">
                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                                {{ _("Datenbank löschen") }}
