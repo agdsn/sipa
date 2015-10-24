@@ -59,7 +59,8 @@ class active_prop(property):
     """
 
     # TODO: support (pass) custom things like color etc.
-    def __init__(self, fget, fset=None, fdel=None, doc=None):
+    def __init__(self, fget, fset=None, fdel=None, doc=None,
+                 fake_setter=False):
         """Return a property object and wrap fget with `ActiveProperty`.
 
         The first argument is the function given to `active_prop`
@@ -94,8 +95,10 @@ class active_prop(property):
             return ActiveProperty(
                 name=fget.__name__,
                 value=value,
-                capabilities=Capabilities(edit=(fset is not None),
-                                          delete=(fdel is not None)),
+                capabilities=Capabilities(
+                    edit=(fset is not None or fake_setter),
+                    delete=(fdel is not None),
+                ),
                 style=style,
             )
 
@@ -110,3 +113,8 @@ class active_prop(property):
 
     def deleter(self, func):
         return type(self)(self.__raw_getter, self.fset, func, self.__doc__)
+
+    def fake_setter(self):
+        return type(self)(self.__raw_getter, self.fset, self.fdel,
+                          self.__doc__,
+                          fake_setter=True)

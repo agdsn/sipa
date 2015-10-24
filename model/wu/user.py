@@ -278,8 +278,4 @@ class User(BaseUser):
             assert self._user_db == 1
             return gettext("Aktiviert")
 
-    @userdb.setter
-    def userdb(self):
-        # TODO: find a better way which does not set `__get__`
-        # (but only the capability)
-        assert False, "This function should never be reached"
+    userdb = userdb.fake_setter()
