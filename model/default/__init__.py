@@ -28,6 +28,7 @@ class AuthenticatedUserMixin:
         return False
 
 
+# TODO: update Baseuser after migration
 class BaseUser(AuthenticatedUserMixin):
     """The user object containing a minimal amount of functions in order to work
     properly (flask special functions, used methods by sipa)
