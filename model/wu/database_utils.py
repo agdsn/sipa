@@ -207,16 +207,17 @@ def query_trafficdata(ip, user_id):
 def update_macaddress(ip, oldmac, newmac):
     """Update a MAC address in computer table.
 
-    TODO: check, if 'LIMIT 1' causes problems (sqlalchemy says
-    "Warning: Unsafe statement")
+    Adding a `LIMIT 1` would be an “unsafe statement”, because using a
+    `LIMIT` w/o an `ORDER BY` does not give control over which row
+    actually would be affected, if the `WHERE` clauses would apply to
+    more than one row.
+
     """
-    # todo why does one the old mac_address?
     sql_query(
         "UPDATE computer "
         "SET c_etheraddr = %s "
         "WHERE c_ip = %s "
         "AND c_etheraddr = %s "
-        "LIMIT 1",
         (newmac.lower(), ip, oldmac)
     )
 
