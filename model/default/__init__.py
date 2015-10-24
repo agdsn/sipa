@@ -83,7 +83,7 @@ class BaseUser(AuthenticatedUserMixin):
         The dict syntax is as follows:
 
         return {'credit': 0,
-                'history': [(WEEKDAYS[str(day)], <in>, <out>, <credit>)
+                'history': [(WEEKDAYS[day], <in>, <out>, <credit>)
                             for day in range(7)]}
 
         """

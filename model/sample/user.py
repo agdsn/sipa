@@ -101,7 +101,7 @@ class User(BaseUser):
         def rand():
             return round(random() * 1024, 2)
         return {'credit': 0,
-                'history': [(WEEKDAYS[str(day)], rand(), rand()*0.1, rand())
+                'history': [(WEEKDAYS[day], rand(), rand()*0.1, rand())
                             for day in range(7)]}
 
     def get_current_credit(self):

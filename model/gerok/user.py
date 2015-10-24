@@ -117,10 +117,10 @@ class User(BaseUser):
                         for param in ['in', 'out', 'credit']
                     )
                     traffic['history'].append(
-                        (WEEKDAYS[day], input, output, credit))
+                        (WEEKDAYS[int(day)], input, output, credit))
                 else:
                     traffic['history'].append(
-                        (WEEKDAYS[day], 0.0, 0.0, 0.0))
+                        (WEEKDAYS[int(day)], 0.0, 0.0, 0.0))
 
             traffic['credit'] = (lambda x: x['credit']/1048576)(
                 hostOneTraffic[-1])
@@ -128,7 +128,7 @@ class User(BaseUser):
             return traffic
         else:
             return {'credit': 0,
-                    'history': [(WEEKDAYS[str(day)], 0, 0, 0)
+                    'history': [(WEEKDAYS[int(day)], 0, 0, 0)
                                 for day in range(7)]}
 
     def get_current_credit(self):

@@ -198,10 +198,10 @@ def query_trafficdata(ip, user_id):
                 for param in ['input', 'output', 'amount']
             )
             traffic['history'].append(
-                (WEEKDAYS[day], input, output, credit))
+                (WEEKDAYS[int(day)], input, output, credit))
         else:
             traffic['history'].append(
-                (WEEKDAYS[day], 0.0, 0.0, 0.0))
+                (WEEKDAYS[int(day)], 0.0, 0.0, 0.0))
 
     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
