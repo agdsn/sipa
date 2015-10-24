@@ -265,12 +265,13 @@ class User(BaseUser):
     def userdb(self):
         if not self._user_db:
             return {'value': gettext("Nicht aktiviert"),
-                    'style': 'muted'}
+                    'empty': True}
         elif self._user_db == -1:
             return {'value': gettext("Datenbank nicht erreichbar"),
-                    'style': 'danger'}
+                    'style': 'danger', 'empty': True}
         else:
             assert self._user_db == 1
-            return gettext("Aktiviert")
+            return {'value': gettext("Aktiviert"),
+                    'style': 'success'}
 
     userdb = userdb.fake_setter()
