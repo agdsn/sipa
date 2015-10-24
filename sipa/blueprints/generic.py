@@ -186,8 +186,10 @@ def usertraffic():
                               "dieses Anschlusses angezeigt."), "info")
 
     if chosen_user:
-        return render_template("usertraffic.html", usertraffic=(
-            chosen_user.get_traffic_data()))
+        user_id = chosen_user.id.value if chosen_user.id.supported else None
+        return render_template("usertraffic.html",
+                               user_id=user_id,
+                               usertraffic=chosen_user.get_traffic_data())
 
     abort(401)
 

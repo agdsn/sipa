@@ -2,6 +2,14 @@
 {% set page_title = "Usertraffic" %}
 
 {% block content %}
+
+    {% if user_id %}
+        <h2>{{ _("Nutzer-ID") }}</h2>
+        <p class="lead">
+            {{ _("Deine Nutzer-ID lautet") }}
+            <strong><code class="text-bold">{{ user_id }}</code></strong>
+        </p>
+    {% endif %}
     <div class="row"><div class="col-md-8">
         {% include 'drafts/_traffic_overview.html' %}
     </div></div>
