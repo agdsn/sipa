@@ -137,9 +137,7 @@ class User(BaseUser):
             # TODO: more information on this very specific issue.
             raise DBQueryEmpty
 
-        mysql_id = user['nutzer_id']
-        self._id = "{}-{}".format(mysql_id,
-                                  calculate_userid_checksum(mysql_id))
+        self._id = user['nutzer_id']
         self._address = "{0} / {1} {2}".format(
             # MySQL Dormitory IDs in are from 1-11, so we map to 0-10 with x-1
             DORMITORIES[user['wheim_id'] - 1],
@@ -239,10 +237,6 @@ class User(BaseUser):
         self.mail = ''
 
     @active_prop
-    def user_id(self):
-        return self._user
-
-    @active_prop
     def address(self):
         return self._address
 
@@ -256,7 +250,10 @@ class User(BaseUser):
 
     @active_prop
     def id(self):
-        return self._id
+        return "{}-{}".format(
+            self._id,
+            calculate_userid_checksum(self._id),
+        )
 
     @active_prop
     def hostname(self):

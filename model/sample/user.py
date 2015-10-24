@@ -139,10 +139,6 @@ class User(BaseUser):
         self._write_config()
 
     @active_prop
-    def user_id(self):
-        return self.config.get('test', 'user_id')
-
-    @active_prop
     def address(self):
         return self.config.get('test', 'address')
 
