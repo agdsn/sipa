@@ -44,8 +44,6 @@
         <td class="col-md-3">{{ description }}</td>
         {%- set style = ("text-{}".format(property.style) if property.style else '') %}
         <td class="col-md-3 {{ style }}">
-            {# TODO check whether supported(?) #}
-            {# TODO include style information (color) #}
             {{ property.value }}
 
             {% if property.capabilities.edit %}

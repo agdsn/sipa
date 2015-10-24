@@ -7,13 +7,10 @@ no_capabilities = Capabilities(edit=None, delete=None)
 
 
 class PropertyBase:
-    # TODO: how's that “warning/mute/etc.” bootstrap stuff called? “context”?
     def __init__(self, name, value, capabilities=no_capabilities, style=None):
         self.name = name
         self.value = value
         self.capabilities = capabilities
-        # TODO: shall we include more (semantic) information in `style`?
-        # e.g. to use `<em>` when unsupported etc.
         self.style = style
 
 
@@ -28,12 +25,18 @@ class UnsupportedProperty(PropertyBase):
 
 
 class ActiveProperty(PropertyBase):
-    def __init__(self, name, value=None, capabilities=no_capabilities):
+    def __init__(self, name, value=None, capabilities=no_capabilities,
+                 style=None):
+        # Enforce bootstrap css classes: getbootstrap.com/css/#helper-classes
+        assert (style in {None, 'muted', 'primary', 'success',
+                          'info', 'warning', 'danger'},
+                "Style must be a bootstrap class string")
+
         super(ActiveProperty, self).__init__(
             name=name,
             value=(value if value else lazy_gettext("Nicht angegeben")),
             capabilities=capabilities,
-            style=('muted' if not value else None),
+            style=(style if style else 'muted' if not value else None),
         )
 
 
@@ -61,17 +64,39 @@ class active_prop(property):
 
         The first argument is the function given to `active_prop`
         (perhaps as a decorator).
-        """
 
-        # fget is supposed to be the non-wrapped function
+        `fget` is always wrapped by `ActiveProperty`in a way depending
+        of the return value of `fget`.  If it returns
+
+        - Something subscriptable to `'value'`: Pass `['value']` and
+          `['style']` (defaults to `None`) to `ActiveProperty`s
+          `__init__`, respectively.
+
+        - Something else: Pass it as `value` to `ActiveProperty`s
+          `__init__`.
+
+        """
         self.__raw_getter = fget
 
         def wrapped_getter(*args, **kwargs):
+            result = fget(*args, **kwargs)
+            try:
+                value = result['value']
+            except TypeError:
+                # `KeyError` should not happen, since that means a
+                # dict would have been returned not including `value`,
+                # which would make no sense and likely is a mistake.
+                value = result
+                style = None
+            else:
+                style = result.get('style', None)
+
             return ActiveProperty(
                 name=fget.__name__,
-                value=fget(*args, **kwargs),
+                value=value,
                 capabilities=Capabilities(edit=(fset is not None),
                                           delete=(fdel is not None)),
+                style=style,
             )
 
         # Let `property` handle the initialization of `__get__`, `__set__` etc.
