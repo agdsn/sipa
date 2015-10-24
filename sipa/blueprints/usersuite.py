@@ -182,9 +182,11 @@ def change_mail():
         email = form.email.data
 
         try:
-            # TODO: “store” the password, as it is needed for the bind
-            current_user.re_authenticate(password)
-            current_user.mail = email
+            try:
+                current_user.mail = email
+            except AttributeError:
+                with current_user.tmp_authentication(password):
+                    current_user.mail = email
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -212,9 +214,11 @@ def delete_mail():
         password = form.password.data
 
         try:
-            current_user.re_authenticate(password)
-            # TODO: see `change_mail` above
-            current_user.mail = ""
+            try:
+                del current_user.mail
+            except AttributeError:
+                with current_user.tmp_authentication(password):
+                    del current_user.mail
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:

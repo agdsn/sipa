@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from contextlib import contextmanager
+
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
@@ -159,7 +161,6 @@ class User(BaseUser):
 
         self._ip = computer['c_ip']
         self._mac = computer['c_etheraddr'].upper()
-        # todo figure out where that's being used
         self._hostname = computer['c_hname']
         self._hostalias = computer['c_alias']
 
@@ -175,17 +176,10 @@ class User(BaseUser):
 
     def get_traffic_data(self):
         # TODO: this throws DBQueryEmpty
-        print("self._ip: {}".format(self._ip))
         return query_trafficdata(self._ip, user_id_from_uid(self.uid))
 
     def get_current_credit(self):
         return query_current_credit(self.uid, self._ip)
-
-    def change_mac_address(self, old_mac, new_mac):
-        update_macaddress(self._ip, old_mac, new_mac)
-
-    def change_mail(self, password, new_mail):
-        change_email(self.uid, password, new_mail)
 
     def has_user_db(self):
         return user_has_mysql_db(self.uid)
@@ -199,6 +193,27 @@ class User(BaseUser):
     def user_db_password_change(self, password):
         return change_mysql_userdatabase_password(self.uid, password)
 
+    @contextmanager
+    def tmp_authentication(self, password):
+        """Check and temporarily store the given password.
+
+        Returns a context manager.  The password is stored in
+        `self.__password`.
+
+        This is quite an ugly hack, only existing because sipa does
+        not have an ldap bind for this datasource and needs the user's
+        password.  THe need for the password breaks compatability with
+        the usual `instance.property = value` – now, an AttributeError
+        has to be catched and in that case this wrapper has to be used.
+
+        I could not think of a better way to get around this.
+
+        """
+        self.re_authenticate(password)
+        self.__password = password
+        yield
+        del self.__password
+
     @active_prop
     def login(self):
         return self.uid
@@ -208,20 +223,21 @@ class User(BaseUser):
         return self._mac
 
     @mac.setter
-    def mac(self, value):
-        raise NotImplementedError("TODO!")
+    def mac(self, new_mac):
+        # TODO: elaborate whether this works w/ multiple hosts!
+        update_macaddress(self.ip.value, self.mac.value, new_mac)
 
     @active_prop
     def mail(self):
         return self._mail
 
     @mail.setter
-    def mail(self, value):
-        raise NotImplementedError("TODO!")
+    def mail(self, new_mail):
+        change_email(self.uid, self.__password, new_mail)
 
     @mail.deleter
     def mail(self):
-        raise NotImplementedError("TODO!")
+        self.mail = ''
 
     @active_prop
     def user_id(self):
