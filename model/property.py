@@ -76,7 +76,6 @@ class active_prop(property):
 
     """
 
-    # TODO: support (pass) custom things like color etc.
     def __init__(self, fget, fset=None, fdel=None, doc=None,
                  fake_setter=False):
         """Return a property object and wrap fget with `ActiveProperty`.

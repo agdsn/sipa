@@ -31,7 +31,6 @@ def usersuite():
     and traffic overview.
     """
     descriptions = OrderedDict([
-        # TODO: add the full name as a property
         ('id', gettext("Nutzer-ID")),
         ('login', gettext("Accountname")),
         ('status', gettext("Accountstatus")),
@@ -136,18 +135,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
 @login_required
 @feature_required('password_change', current_user_supported)
 def usersuite_change_password():
-    """Lets the user change his password.
-    Requests the old password once (in case someone forgot to logout for
-    example) and the new password two times.
-
-    If the new password was entered correctly twice, LDAP performs a bind
-    with the old credentials at the users DN and submits the passwords to
-    modify_password(). This way each user can edit only his own data.
-
-    Error code "-1" is an incorrect old or empty password.
-
-    TODO: set a minimum character limit for new passwords.
-    """
+    """Frontend page to change the user's password"""
     form = ChangePasswordForm()
 
     if form.validate_on_submit():
@@ -171,11 +159,8 @@ def usersuite_change_password():
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
 def change_mail():
-    """Changes the users forwarding mail attribute
-    in his LDAP entry.
+    """Frontend page to change the user's mail address"""
 
-    TODO: LDAP schema forbids add/replace 'mail' attribute
-    """
     form = ChangeMailForm()
 
     if form.validate_on_submit():
