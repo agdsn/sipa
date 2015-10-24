@@ -57,25 +57,25 @@ class User(BaseUser):
             return 'exactive'
         return 'passive'
 
-    @staticmethod
-    def get(username, **kwargs):
+    @classmethod
+    def get(cls, username, **kwargs):
         """Static method for flask-login user_loader,
         used before _every_ request.
         """
         user = LdapConnector.fetch_user(username)
         if user:
-            return User(user['uid'], user['name'], user['mail'], **kwargs)
+            return cls(user['uid'], user['name'], user['mail'], **kwargs)
         return AnonymousUserMixin()
 
-    @staticmethod
-    def authenticate(username, password):
+    @classmethod
+    def authenticate(cls, username, password):
         """This method checks the user and password combination against LDAP
 
         Returns the User object if successful.
         """
         try:
             with LdapConnector(username, password):
-                return User.get(username)
+                return cls.get(username)
         except PasswordInvalid:
             logger.info('Failed login attempt (Wrong %s)', 'password',
                         extra={'data': {'username': username}})
@@ -85,8 +85,8 @@ class User(BaseUser):
                         extra={'data': {'username': username}})
             raise
 
-    @staticmethod
-    def from_ip(ip):
+    @classmethod
+    def from_ip(cls, ip):
         result = sql_query("SELECT c.nutzer_id FROM computer as c "
                            "LEFT JOIN nutzer as n "
                            "ON c.nutzer_id = n.nutzer_id "
@@ -101,7 +101,7 @@ class User(BaseUser):
                              "WHERE nutzer_id = %s",
                              (result['nutzer_id'],)).fetchone()['unix_account']
 
-        user = User.get(username, ip=ip)
+        user = cls.get(username, ip=ip)
         if not user:
             logger.warning("User %s could not be fetched from LDAP",
                            username, extra={'data': {

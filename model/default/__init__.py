@@ -56,13 +56,13 @@ class BaseUser(AuthenticatedUserMixin):
         """Required by flask-login"""
         return self.uid
 
-    @staticmethod
-    def get(username):
+    @classmethod
+    def get(cls, username):
         """Used by user_loader. Return a User instance."""
         raise NotImplementedError
 
-    @staticmethod
-    def from_ip(ip):
+    @classmethod
+    def from_ip(cls, ip):
         """Return a user based on an ip.
 
         If there is no user associated with this ip, return AnonymousUserMixin.
@@ -72,8 +72,8 @@ class BaseUser(AuthenticatedUserMixin):
     def re_authenticate(self, password):
         self.authenticate(self.uid, password)
 
-    @staticmethod
-    def authenticate(username, password):
+    @classmethod
+    def authenticate(cls, username, password):
         """Return a User instance or raise PasswordInvalid"""
         raise NotImplementedError
 

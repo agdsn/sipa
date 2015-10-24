@@ -41,8 +41,8 @@ class User(BaseUser):
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
 
-    @staticmethod
-    def get(username, **kwargs):
+    @classmethod
+    def get(cls, username, **kwargs):
         """Static method for flask-login user_loader,
         used before _every_ request.
         """
@@ -56,10 +56,10 @@ class User(BaseUser):
         # TODO: Somehow access the entry in the datasource constructor
         mail = username + "@wh17.tu-dresden.de"
 
-        return User(uid, userData['id'], name, mail)
+        return cls(uid, userData['id'], name, mail)
 
-    @staticmethod
-    def authenticate(username, password):
+    @classmethod
+    def authenticate(cls, username, password):
         auth = do_api_call('auth', 'post', {'login': username,
                                             'pass': password})
 
@@ -67,16 +67,16 @@ class User(BaseUser):
             raise UserNotFound
 
         if auth:
-            return User.get(username)
+            return cls.get(username)
         else:
             raise PasswordInvalid
 
-    @staticmethod
-    def from_ip(ip):
+    @classmethod
+    def from_ip(cls, ip):
         userData = do_api_call('find?ip=' + ip)
 
         if userData is not None:
-            return User(userData['login'], userData['name'], 'passive')
+            return cls(userData['login'], userData['name'], 'passive')
         else:
             return AnonymousUserMixin()
 

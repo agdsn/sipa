@@ -66,32 +66,32 @@ class User(BaseUser):
         'test': ('test', 'Test Nutzer', 'test@agdsn.de'),
     }
 
-    @staticmethod
-    def get(username, **kwargs):
+    @classmethod
+    def get(cls, username, **kwargs):
         """Static method for flask-login user_loader,
         used before _every_ request.
         """
-        config = User._get_config()
+        config = cls._get_config()
         if config.has_section(username):
-            return User(username)
+            return cls(username)
         else:
             return AnonymousUserMixin()
 
-    @staticmethod
-    def authenticate(username, password):
-        config = User._get_config()
+    @classmethod
+    def authenticate(cls, username, password):
+        config = cls._get_config()
 
         if config.has_section(username):
             if config.get(username, 'password') == password:
-                return User.get(username)
+                return cls.get(username)
             else:
                 raise PasswordInvalid
         else:
             raise UserNotFound
 
-    @staticmethod
-    def from_ip(ip):
-        return User.get('test')
+    @classmethod
+    def from_ip(cls, ip):
+        return cls.get('test')
 
     def change_password(self, old, new):
         self.config.set('test', 'password', new)
