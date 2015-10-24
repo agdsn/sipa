@@ -27,6 +27,8 @@ class User(BaseUser):
     the terms 'uid' and 'username' refer to the same thing.
     """
 
+    datasource = 'gerok'
+
     def __init__(self, uid, id, name=None, mail=None):
         super(User, self).__init__(uid)
         self.id = id

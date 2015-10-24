@@ -35,6 +35,8 @@ def init_context(app):
 
 # noinspection PyMethodMayBeStatic
 class User(BaseUser):
+    datasource = 'sample'
+
     def __init__(self, uid, name=None, mail=None, ip=None):
         super(User, self).__init__(uid)
         self.config = self._get_config()

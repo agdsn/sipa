@@ -30,6 +30,8 @@ class User(BaseUser):
     the terms 'uid' and 'username' refer to the same thing.
     """
 
+    datasource = 'wu'
+
     def __init__(self, uid, name, mail, ip=None):
         super(User, self).__init__(uid)
         self.name = name

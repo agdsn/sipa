@@ -39,7 +39,11 @@ class BaseUser(AuthenticatedUserMixin):
         self.uid = uid
 
     def __eq__(self, other):
-        return self.uid == other.uid
+        return self.uid == other.uid and self.datasource == other.datasource
+
+    @property
+    def datasource(self):
+        raise NotImplementedError
 
     def get_id(self):
         """Required by flask-login"""
