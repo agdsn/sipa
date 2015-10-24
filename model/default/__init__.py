@@ -65,12 +65,6 @@ class BaseUser(AuthenticatedUserMixin):
         """
         raise NotImplementedError
 
-    @property
-    def ip(self):
-        if self._ip is None:
-            self._get_ip()
-        return self._ip
-
     @staticmethod
     def get(username):
         """Used by user_loader. Return a User instance."""
@@ -170,6 +164,12 @@ class BaseUser(AuthenticatedUserMixin):
             for key, val in description_dict.items()
             if key in self.__dir__()
         )
+
+    @active_prop
+    def ip(self):
+        if self._ip is None:
+            self._get_ip()
+        return self._ip
 
     @active_prop
     def login(self):
