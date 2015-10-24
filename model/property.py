@@ -15,6 +15,13 @@ class PropertyBase:
         self.style = style
         self.empty = empty or not value
 
+    def __repr__(self):
+        return ("{}.{}(name='{}', value='{}', capabilities={}, "
+                "style='{}', empty={})"
+                .format(__name__, type(self).__name__,
+                        self.name, self.value, self.capabilities,
+                        self.style, self.empty))
+
 
 class UnsupportedProperty(PropertyBase):
     def __init__(self, name):
@@ -25,6 +32,10 @@ class UnsupportedProperty(PropertyBase):
             style='muted',
             empty=True,
         )
+
+    def __repr__(self):
+        return ("{}.{}(name='{}')"
+                .format(__name__, type(self).__name__, self.name))
 
 
 class ActiveProperty(PropertyBase):
@@ -44,6 +55,13 @@ class ActiveProperty(PropertyBase):
                    else None),
             empty=empty or not value,
         )
+
+    def __repr__(self):
+        return ("{}.{}(name='{}', value='{}', capabilities={}, "
+                "style='{}', empty={})"
+                .format(__name__, type(self).__name__,
+                        self.name, self.value, self.capabilities,
+                        self.style, self.empty))
 
 
 def unsupported_prop(name):
@@ -79,6 +97,7 @@ class active_prop(property):
 
         """
         self.__raw_getter = fget
+        self.__fake_setter = fake_setter  # only for the __repr__
 
         def wrapped_getter(*args, **kwargs):
             result = fget(*args, **kwargs)
@@ -108,6 +127,12 @@ class active_prop(property):
 
         # Let `property` handle the initialization of `__get__`, `__set__` etc.
         super(active_prop, self).__init__(wrapped_getter, fset, fdel, doc)
+
+    def __repr__(self):
+        return ("{}.{}(fget={}, fset={}, fdel={}, doc='{}', fake_setter={})"
+                .format(__name__, type(self).__name__,
+                        self.__raw_getter, self.fset, self.fdel, self.__doc__,
+                        self.__fake_setter))
 
     def getter(self, func):
         return type(self)(func, self.fset, self.fdel, self.__doc__)
