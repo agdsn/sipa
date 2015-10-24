@@ -161,3 +161,27 @@ class BaseUser(AuthenticatedUserMixin):
     @property
     def userdb_status(self):
         return None
+
+    @property
+    def userdb(self):
+        """The actual `BaseUserDB` object"""
+        raise NotImplementedError
+
+
+class BaseUserDB:
+    def __init__(self, user):
+        """Set the `BaseUser` object `user`"""
+        self.user = user
+
+    @property
+    def status(self):
+        raise NotImplementedError
+
+    def create(self, password):
+        raise NotImplementedError
+
+    def drop(self):
+        raise NotImplementedError
+
+    def change_password(self, password):
+        raise NotImplementedError
