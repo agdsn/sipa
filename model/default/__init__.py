@@ -147,14 +147,8 @@ class BaseUser(AuthenticatedUserMixin):
         # TODO: move to useful direction
         Row = namedtuple('Row', ['description', 'property'])
 
-        # TODO: check whether the thing given actually is a property
-        # perhaps implement a custom `__contains__` and `__dict__`?
-
-        return (
-            Row(description=val, property=self.__getattribute__(key))
-            for key, val in description_dict.items()
-            if key in self.__dir__()
-        )
+        for key, val in description_dict.items():
+            yield Row(description=val, property=self.__getattribute__(key))
 
     @active_prop
     def ips(self):
