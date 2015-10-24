@@ -15,8 +15,9 @@ class AuthenticatedUserMixin:
     is_active = True
     is_anonymous = False
 
+Row = namedtuple('Row', ['description', 'property'])
 
-# TODO: update Baseuser after migration
+
 class BaseUser(AuthenticatedUserMixin):
     """The user object containing a minimal amount of functions in order to work
     properly (flask special functions, used methods by sipa)
@@ -74,24 +75,6 @@ class BaseUser(AuthenticatedUserMixin):
         """
         raise NotImplementedError
 
-    # TODO: check whether this is needed, *should* be obsolete
-    def change_mac_address(self, old, new):
-        """Change the user's mac address.
-
-        No reauthentication necessary, this is done in usersuite.
-        """
-        # TODO: Refactor if old address is necessary
-        # TODO: implement possibility for multiple devices
-        raise NotImplementedError
-
-    def change_mail(self, password, new_mail):
-        """Change the user's mail address.
-
-        Although reauthentication has already happened, some modules
-        neeed the password to execute the LDAP-bind.
-        """
-        raise NotImplementedError
-
     def get_traffic_data(self):
         """Return the current credit and the traffic history as a dict.
 
@@ -110,8 +93,8 @@ class BaseUser(AuthenticatedUserMixin):
         """Return the current credit in MiB"""
         raise NotImplementedError
 
-    # TODO: somehow structure that user_db
-
+    # TODO: refactor `user_db` to its own class
+    # that most certainly improves the structure
     def has_user_db(self):
         """Return whether the user activated his userdb"""
         raise NotImplementedError
@@ -131,10 +114,7 @@ class BaseUser(AuthenticatedUserMixin):
         """Change the password of the userdb"""
         raise NotImplementedError
 
-    def rows(self, description_dict):
-        # TODO: move to useful direction
-        Row = namedtuple('Row', ['description', 'property'])
-
+    def generate_rows(self, description_dict):
         for key, val in description_dict.items():
             yield Row(description=val, property=self.__getattribute__(key))
 
