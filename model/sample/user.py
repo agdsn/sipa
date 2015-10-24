@@ -158,7 +158,4 @@ class User(BaseUser):
     def hostalias(self):
         return self.config.get('test', 'hostalias')
 
-    @property
-    @unsupported_prop
-    def userdb(self):
-        return None
+    userdb = unsupported_prop('userdb')

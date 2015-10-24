@@ -40,13 +40,8 @@ class ActiveProperty(PropertyBase):
         )
 
 
-def unsupported_prop(func):
-    def _unsupported_prop(*args, **kwargs):
-        # TODO: is this the best way? shouldn't this be rather the
-        # default in BaseUser?
-        return UnsupportedProperty(name=func.__name__)
-
-    return _unsupported_prop
+def unsupported_prop(name):
+    return property(lambda self: UnsupportedProperty(name=name))
 
 
 class active_prop(property):
