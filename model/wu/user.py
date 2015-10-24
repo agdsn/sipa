@@ -164,15 +164,14 @@ class User(BaseUser):
         self._hostname = computer['c_hname']
         self._hostalias = computer['c_alias']
 
-        # TODO: figure out where the formatting should be handled
         try:
             if user_has_mysql_db(self.uid):
-                self._user_db = gettext("Aktiviert")
+                self._user_db = 1
             else:
-                self._user_db = gettext("Nicht aktiviert")
+                self._user_db = None
         except OperationalError:
             logger.critical("User db unreachable")
-            self._user_db = gettext("Datenbank nicht erreichbar")
+            self._user_db = -1
 
     def get_traffic_data(self):
         # TODO: this throws DBQueryEmpty
@@ -269,8 +268,15 @@ class User(BaseUser):
 
     @active_prop
     def userdb(self):
-        # TODO: format accordingly if error
-        return self._user_db
+        if not self._user_db:
+            return {'value': gettext("Nicht aktiviert"),
+                    'style': 'muted'}
+        elif self._user_db == -1:
+            return {'value': gettext("Datenbank nicht erreichbar"),
+                    'style': 'danger'}
+        else:
+            assert self._user_db == 1
+            return gettext("Aktiviert")
 
     @userdb.setter
     def userdb(self):
