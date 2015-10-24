@@ -103,9 +103,9 @@ def usersuite_contact():
 
 def get_attribute_endpoint(attribute, capability='edit'):
     if capability == 'edit':
-        assert (getattr(current_user, attribute).capabilities.edit,
-                "`edit_endpoint` called for non-editable "
-                "attribute `{}`".format(attribute))
+        assert getattr(current_user, attribute).capabilities.edit, \
+            ("`edit_endpoint` called for non-editable "
+             "attribute `{}`".format(attribute))
 
         attribute_mappings = {
             'mac': 'change_mac',
@@ -113,20 +113,20 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mail': 'change_mail',
         }
 
-        assert (attribute in attribute_mappings.keys(),
-                "No edit endpoint for attribute `{}`".format(attribute))
+        assert attribute in attribute_mappings.keys(), \
+            "No edit endpoint for attribute `{}`".format(attribute)
     else:
         assert capability == 'delete', "capability must be 'delete' or 'edit'"
-        assert (getattr(current_user, attribute).capabilities.delete,
-                "`edit_endpoint` called for non-deletable "
-                "attribute `{}`".format(attribute))
+        assert getattr(current_user, attribute).capabilities.delete, \
+            ("`edit_endpoint` called for non-deletable attribute `{}`"
+             .format(attribute))
 
         attribute_mappings = {
             'mail': 'delete_mail',
         }
 
-        assert (attribute in attribute_mappings.keys(),
-                "No delete endpoint for attribute `{}`".format(attribute))
+        assert attribute in attribute_mappings.keys(), \
+            "No delete endpoint for attribute `{}`".format(attribute)
 
     return "{}.{}".format(bp_usersuite.name, attribute_mappings[attribute])
 
