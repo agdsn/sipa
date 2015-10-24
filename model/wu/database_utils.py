@@ -4,7 +4,7 @@
 import datetime
 
 from sqlalchemy import create_engine
-from flask.ext.babel import lazy_gettext
+from flask.ext.babel import gettext
 from flask.globals import current_app
 from sqlalchemy.exc import OperationalError
 
@@ -57,13 +57,13 @@ DORMITORIES = [
 ]
 
 STATUS = {
-    # todo vervollständigen oder mindestens fehlerresistent machen!
-    # (Hat ein Nutzer einen unten nicht enthaltenen Status, gibts einen Fehler)
-    1: lazy_gettext('Bezahlt, verbunden'),
-    2: lazy_gettext('Nicht bezahlt, Netzanschluss gesperrt'),
-    7: lazy_gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
-    9: lazy_gettext('Exaktiv'),
-    12: lazy_gettext('Trafficlimit überschritten, Netzanschluss gesperrt')
+    1: (gettext('Bezahlt, verbunden'), 'success'),
+    2: (gettext('Nicht bezahlt, Netzanschluss gesperrt'), 'warning'),
+    7: (gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
+        'danger'),
+    9: (gettext('Exaktiv'), 'muted'),
+    12: (gettext('Trafficlimit überschritten, Netzanschluss gesperrt'),
+         'danger')
 }
 
 
@@ -75,10 +75,6 @@ def sql_query(query, args=(), database=db_atlantis):
     result = conn.execute(query, args)
     conn.close()
     return result
-
-
-def status_string_from_id(status_id):
-    return STATUS.get(status_id, lazy_gettext("Unbekannt"))
 
 
 def user_id_from_uid(uid=None):
@@ -198,10 +194,10 @@ def query_trafficdata(ip, user_id):
                 for param in ['input', 'output', 'amount']
             )
             traffic['history'].append(
-                (WEEKDAYS[day], input, output, credit))
+                (WEEKDAYS[int(day)], input, output, credit))
         else:
             traffic['history'].append(
-                (WEEKDAYS[day], 0.0, 0.0, 0.0))
+                (WEEKDAYS[int(day)], 0.0, 0.0, 0.0))
 
     traffic['credit'] = (lambda x: x[3] - x[1] - x[2])(traffic['history'][-1])
 
@@ -211,16 +207,17 @@ def query_trafficdata(ip, user_id):
 def update_macaddress(ip, oldmac, newmac):
     """Update a MAC address in computer table.
 
-    TODO: check, if 'LIMIT 1' causes problems (sqlalchemy says
-    "Warning: Unsafe statement")
+    Adding a `LIMIT 1` would be an “unsafe statement”, because using a
+    `LIMIT` w/o an `ORDER BY` does not give control over which row
+    actually would be affected, if the `WHERE` clauses would apply to
+    more than one row.
+
     """
-    # todo why does one the old mac_address?
     sql_query(
         "UPDATE computer "
         "SET c_etheraddr = %s "
         "WHERE c_ip = %s "
         "AND c_etheraddr = %s "
-        "LIMIT 1",
         (newmac.lower(), ip, oldmac)
     )
 

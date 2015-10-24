@@ -11,11 +11,11 @@ from . import sample, wu, gerok, hss, zeu
 import operator
 
 
-registered_datasources = [sample.datasource, wu.datasource,
-                          gerok.datasource]
+registered_datasources = [sample.datasource, wu.datasource, gerok.datasource]
 
-registered_dormitories = sample.dormitories + wu.dormitories + \
-                         gerok.dormitories
+registered_dormitories = (
+    sample.dormitories + wu.dormitories + gerok.dormitories
+)
 
 premature_dormitories = hss.dormitories + zeu.dormitories
 

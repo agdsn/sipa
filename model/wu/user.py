@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
+from contextlib import contextmanager
+
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
-from model.constants import info_property, STATUS_COLORS, ACTIONS, \
-    FULL_FEATURE_SET
-from model.default import BaseUser
+from model.property import active_prop
+
+from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import ip_from_user_id, sql_query, \
     update_macaddress, query_trafficdata, \
     query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db, \
-    calculate_userid_checksum, DORMITORIES, status_string_from_id, \
+    calculate_userid_checksum, DORMITORIES, STATUS, \
     user_id_from_uid
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
@@ -28,21 +30,26 @@ class User(BaseUser):
     the terms 'uid' and 'username' refer to the same thing.
     """
 
+    datasource = 'wu'
+
     def __init__(self, uid, name, mail, ip=None):
         super(User, self).__init__(uid)
         self.name = name
         self.group = self.define_group()
-        self.mail = mail
-        self._ip = ip
-
-    def _get_ip(self):
-        self._ip = ip_from_user_id(user_id_from_uid(self.uid))
+        self._mail = mail
+        self.cache_information()
+        self._ip = (ip if ip
+                    else self._ip if self._ip
+                    else ip_from_user_id(self._id))
+        self._userdb = UserDB(self)
 
     def __repr__(self):
         return "User<{},{}.{}>".format(self.uid, self.name, self.group)
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
+
+    can_change_password = True
 
     def define_group(self):
         """Define a user group from the LDAP group
@@ -53,25 +60,25 @@ class User(BaseUser):
             return 'exactive'
         return 'passive'
 
-    @staticmethod
-    def get(username, **kwargs):
+    @classmethod
+    def get(cls, username, **kwargs):
         """Static method for flask-login user_loader,
         used before _every_ request.
         """
         user = LdapConnector.fetch_user(username)
         if user:
-            return User(user['uid'], user['name'], user['mail'], **kwargs)
+            return cls(user['uid'], user['name'], user['mail'], **kwargs)
         return AnonymousUserMixin()
 
-    @staticmethod
-    def authenticate(username, password):
+    @classmethod
+    def authenticate(cls, username, password):
         """This method checks the user and password combination against LDAP
 
         Returns the User object if successful.
         """
         try:
             with LdapConnector(username, password):
-                return User.get(username)
+                return cls.get(username)
         except PasswordInvalid:
             logger.info('Failed login attempt (Wrong %s)', 'password',
                         extra={'data': {'username': username}})
@@ -81,8 +88,8 @@ class User(BaseUser):
                         extra={'data': {'username': username}})
             raise
 
-    @staticmethod
-    def from_ip(ip):
+    @classmethod
+    def from_ip(cls, ip):
         result = sql_query("SELECT c.nutzer_id FROM computer as c "
                            "LEFT JOIN nutzer as n "
                            "ON c.nutzer_id = n.nutzer_id "
@@ -97,7 +104,7 @@ class User(BaseUser):
                              "WHERE nutzer_id = %s",
                              (result['nutzer_id'],)).fetchone()['unix_account']
 
-        user = User.get(username, ip=ip)
+        user = cls.get(username, ip=ip)
         if not user:
             logger.warning("User %s could not be fetched from LDAP",
                            username, extra={'data': {
@@ -120,17 +127,7 @@ class User(BaseUser):
         else:
             logger.info('Password successfully changed')
 
-    _supported_features = FULL_FEATURE_SET
-
-    def get_information(self):
-        """Executes select query for the username and returns a prepared dict.
-
-        * Dormitory IDs in Mysql are from 1-11, so we map to 0-10 with "x-1".
-
-        Returns "-1" if a query result was empty (None), else
-        returns the prepared dict.
-        """
-        userinfo = {}
+    def cache_information(self):
         user = sql_query(
             "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
             "FROM nutzer "
@@ -139,23 +136,17 @@ class User(BaseUser):
         ).fetchone()
 
         if not user:
+            # TODO: more information on this very specific issue.
             raise DBQueryEmpty
 
-        mysql_id = user['nutzer_id']
-        userinfo.update(
-            id=info_property(
-                "{}-{}".format(mysql_id, calculate_userid_checksum(mysql_id))),
-            address=info_property("{0} / {1} {2}".format(
-                DORMITORIES[user['wheim_id'] - 1],
-                user['etage'],
-                user['zimmernr']
-            )),
-            # todo use more colors (yellow for finances etc.)
-            status=info_property(status_string_from_id(user['status']),
-                                 status_color=(STATUS_COLORS.GOOD
-                                               if user['status'] is 1
-                                               else None)),
+        self._id = user['nutzer_id']
+        self._address = "{0} / {1} {2}".format(
+            # MySQL Dormitory IDs in are from 1-11, so we map to 0-10 with x-1
+            DORMITORIES[user['wheim_id'] - 1],
+            user['etage'],
+            user['zimmernr']
         )
+        self._status_id = user['status']
 
         computer = sql_query(
             "SELECT c_etheraddr, c_ip, c_hname, c_alias "
@@ -167,59 +158,135 @@ class User(BaseUser):
         if not computer:
             raise DBQueryEmpty
 
-        userinfo.update(
-            ip=info_property(computer['c_ip']),
-            mail=info_property(self.mail, actions={ACTIONS.EDIT,
-                                                   ACTIONS.DELETE}),
-            mac=info_property(computer['c_etheraddr'].upper(),
-                              actions={ACTIONS.EDIT}),
-            # todo figure out where that's being used
-            hostname=info_property(computer['c_hname']),
-            hostalias=info_property(computer['c_alias'])
-        )
-
-        try:
-            if user_has_mysql_db(self.uid):
-                user_db_prop = info_property(
-                    gettext("Aktiviert"),
-                    status_color=STATUS_COLORS.GOOD,
-                    actions={ACTIONS.EDIT}
-                )
-            else:
-                user_db_prop = info_property(
-                    gettext("Nicht aktiviert"),
-                    status_color=STATUS_COLORS.INFO,
-                    actions={ACTIONS.EDIT}
-                )
-        except OperationalError:
-            logger.critical("User db unreachable")
-            user_db_prop = info_property(gettext(
-                "Datenbank nicht erreichbar"))
-        finally:
-            userinfo.update(userdb=user_db_prop)
-
-        return userinfo
+        self._ip = computer['c_ip']
+        self._mac = computer['c_etheraddr'].upper()
+        self._hostname = computer['c_hname']
+        self._hostalias = computer['c_alias']
 
     def get_traffic_data(self):
-        return query_trafficdata(self.ip, user_id_from_uid(self.uid))
+        # TODO: this throws DBQueryEmpty
+        return query_trafficdata(self._ip, user_id_from_uid(self.uid))
 
     def get_current_credit(self):
-        return query_current_credit(self.uid, self.ip)
+        return query_current_credit(self.uid, self._ip)
 
-    def change_mac_address(self, old_mac, new_mac):
-        update_macaddress(self.ip, old_mac, new_mac)
+    @contextmanager
+    def tmp_authentication(self, password):
+        """Check and temporarily store the given password.
 
-    def change_mail(self, password, new_mail):
-        change_email(self.uid, password, new_mail)
+        Returns a context manager.  The password is stored in
+        `self.__password`.
 
-    def has_user_db(self):
-        return user_has_mysql_db(self.uid)
+        This is quite an ugly hack, only existing because sipa does
+        not have an ldap bind for this datasource and needs the user's
+        password.  THe need for the password breaks compatability with
+        the usual `instance.property = value` – now, an AttributeError
+        has to be catched and in that case this wrapper has to be used.
 
-    def user_db_create(self, password):
-        return create_mysql_userdatabase(self.uid, password)
+        I could not think of a better way to get around this.
 
-    def user_db_drop(self):
-        return drop_mysql_userdatabase(self.uid)
+        """
+        self.re_authenticate(password)
+        self.__password = password
+        yield
+        del self.__password
 
-    def user_db_password_change(self, password):
-        return change_mysql_userdatabase_password(self.uid, password)
+    @active_prop
+    def login(self):
+        return self.uid
+
+    @active_prop
+    def mac(self):
+        return self._mac
+
+    @mac.setter
+    def mac(self, new_mac):
+        update_macaddress(self._ip, self.mac.value, new_mac)
+
+    @active_prop
+    def mail(self):
+        return self._mail
+
+    @mail.setter
+    def mail(self, new_mail):
+        change_email(self.uid, self.__password, new_mail)
+
+    @mail.deleter
+    def mail(self):
+        self.mail = ''
+
+    @active_prop
+    def address(self):
+        return self._address
+
+    @active_prop
+    def ips(self):
+        return self._ip
+
+    @active_prop
+    def status(self):
+        if self._status_id in STATUS:
+            status_tuple = STATUS[self._status_id]
+            return {'value': status_tuple[0], 'style': status_tuple[1]}
+
+        return {'value': STATUS.get(self._status_id, gettext("Unbekannt")),
+                'empty': True}
+
+    @active_prop
+    def id(self):
+        return "{}-{}".format(
+            self._id,
+            calculate_userid_checksum(self._id),
+        )
+
+    @active_prop
+    def hostname(self):
+        return self._hostname
+
+    @active_prop
+    def hostalias(self):
+        return self._hostalias
+
+    @active_prop
+    def userdb_status(self):
+        try:
+            status = self.userdb.has_db
+        except OperationalError:
+            return {'value': gettext("Datenbank nicht erreichbar"),
+                    'style': 'danger', 'empty': True}
+
+        if status:
+            return {'value': gettext("Aktiviert"),
+                    'style': 'success'}
+        return {'value': gettext("Nicht aktiviert"),
+                'empty': True}
+
+    userdb_status = userdb_status.fake_setter()
+
+    @property
+    def userdb(self):
+        return self._userdb
+
+
+class UserDB(BaseUserDB):
+    def __init__(self, user):
+        super(UserDB, self).__init__(user)
+
+    @property
+    def has_db(self):
+        try:
+            if user_has_mysql_db(self.user.uid):
+                return True
+            return False
+        except OperationalError:
+            logger.critical("User db of %s unreachable", self.user)
+            raise
+
+    def create(self, password):
+        create_mysql_userdatabase(self.user.uid, password)
+
+    def drop(self):
+        drop_mysql_userdatabase(self.user.uid)
+
+    def change_password(self, password):
+        change_mysql_userdatabase_password(self.user.uid, password)

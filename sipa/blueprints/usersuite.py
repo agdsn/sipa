@@ -9,7 +9,6 @@ from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
 from model import current_user_supported, current_datasource
-from model.constants import unsupported_property, ACTIONS
 from sipa import feature_required
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
@@ -31,8 +30,21 @@ def usersuite():
     """Usersuite landing page with user account information
     and traffic overview.
     """
+    descriptions = OrderedDict([
+        ('id', gettext("Nutzer-ID")),
+        ('login', gettext("Accountname")),
+        ('status', gettext("Accountstatus")),
+        ('address', gettext("Aktuelles Zimmer")),
+        ('ips', gettext("Aktuelle IP-Adresse")),
+        ('mac', gettext("Aktuelle MAC-Adresse")),
+        ('mail', gettext("E-Mail-Weiterleitung")),
+        ('hostname', gettext("Hostname")),
+        ('hostalias', gettext("Hostalias")),
+        ('userdb_status', gettext("MySQL Datenbank")),
+    ])
+
     try:
-        user_info = dict(current_user.get_information())
+        rows = current_user.generate_rows(descriptions)
         traffic_data = current_user.get_traffic_data()
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
@@ -41,45 +53,8 @@ def usersuite():
               "error")
         return redirect(url_for('generic.index'))
 
-    user_info.update({prop: unsupported_property()
-                      for prop in current_user.unsupported(display=True)})
-
-    descriptions = OrderedDict([
-        ('id', gettext("Nutzer-ID")),
-        ('uid', gettext("Accountname")),
-        ('status', gettext("Accountstatus")),
-        ('address', gettext("Aktuelles Zimmer")),
-        ('ip', gettext("Aktuelle IP-Adresse")),
-        ('mac', gettext("Aktuelle MAC-Adresse")),
-        ('mail', gettext("E-Mail-Weiterleitung")),
-        ('hostname', gettext("Hostname")),
-        ('hostalias', gettext("Hostalias")),
-        ('userdb', gettext("MySQL Datenbank")),
-    ])
-
-    ordered_user_info = OrderedDict()
-    for key, description in descriptions.items():
-        if key in user_info:
-            ordered_user_info[key] = user_info[key]
-            ordered_user_info[key]['description'] = descriptions[key]
-
-    # set {mail,mac,userdb}_{change,delete} urls
-    if 'mail_change' in current_user.supported():
-        ordered_user_info['mail']['action_links'] = {
-            ACTIONS.EDIT: url_for('.usersuite_change_mail'),
-            ACTIONS.DELETE: url_for('.usersuite_delete_mail')
-        }
-    if 'mac_change' in current_user.supported():
-        ordered_user_info['mac']['action_links'] = {
-            ACTIONS.EDIT: url_for('.usersuite_change_mac')
-        }
-    if 'userdb_change' in current_user.supported():
-        ordered_user_info['userdb']['action_links'] = {
-            ACTIONS.EDIT: url_for('.usersuite_hosting')
-        }
-
     return render_template("usersuite/index.html",
-                           userinfo=ordered_user_info,
+                           rows=rows,
                            usertraffic=traffic_data)
 
 
@@ -126,22 +101,41 @@ def usersuite_contact():
     return render_template("usersuite/contact.html", form=form)
 
 
+def get_attribute_endpoint(attribute, capability='edit'):
+    if capability == 'edit':
+        assert getattr(current_user, attribute).capabilities.edit, \
+            ("`edit_endpoint` called for non-editable "
+             "attribute `{}`".format(attribute))
+
+        attribute_mappings = {
+            'mac': 'change_mac',
+            'userdb_status': 'hosting',
+            'mail': 'change_mail',
+        }
+
+        assert attribute in attribute_mappings.keys(), \
+            "No edit endpoint for attribute `{}`".format(attribute)
+    else:
+        assert capability == 'delete', "capability must be 'delete' or 'edit'"
+        assert getattr(current_user, attribute).capabilities.delete, \
+            ("`edit_endpoint` called for non-deletable attribute `{}`"
+             .format(attribute))
+
+        attribute_mappings = {
+            'mail': 'delete_mail',
+        }
+
+        assert attribute in attribute_mappings.keys(), \
+            "No delete endpoint for attribute `{}`".format(attribute)
+
+    return "{}.{}".format(bp_usersuite.name, attribute_mappings[attribute])
+
+
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
 @login_required
 @feature_required('password_change', current_user_supported)
 def usersuite_change_password():
-    """Lets the user change his password.
-    Requests the old password once (in case someone forgot to logout for
-    example) and the new password two times.
-
-    If the new password was entered correctly twice, LDAP performs a bind
-    with the old credentials at the users DN and submits the passwords to
-    modify_password(). This way each user can edit only his own data.
-
-    Error code "-1" is an incorrect old or empty password.
-
-    TODO: set a minimum character limit for new passwords.
-    """
+    """Frontend page to change the user's password"""
     form = ChangePasswordForm()
 
     if form.validate_on_submit():
@@ -164,13 +158,9 @@ def usersuite_change_password():
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
-@feature_required('mail_change', current_user_supported)
-def usersuite_change_mail():
-    """Changes the users forwarding mail attribute
-    in his LDAP entry.
+def change_mail():
+    """Frontend page to change the user's mail address"""
 
-    TODO: LDAP schema forbids add/replace 'mail' attribute
-    """
     form = ChangeMailForm()
 
     if form.validate_on_submit():
@@ -178,8 +168,11 @@ def usersuite_change_mail():
         email = form.email.data
 
         try:
-            current_user.re_authenticate(password)
-            current_user.change_mail(password, email)
+            try:
+                current_user.mail = email
+            except AttributeError:
+                with current_user.tmp_authentication(password):
+                    current_user.mail = email
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -197,8 +190,7 @@ def usersuite_change_mail():
 
 @bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
 @login_required
-@feature_required('mail_change', current_user_supported)
-def usersuite_delete_mail():
+def delete_mail():
     """Resets the users forwarding mail attribute
     in his LDAP entry.
     """
@@ -208,9 +200,11 @@ def usersuite_delete_mail():
         password = form.password.data
 
         try:
-            current_user.re_authenticate(password)
-            # password is needed for the ldap bind
-            current_user.change_mail(password, "")
+            try:
+                del current_user.mail
+            except AttributeError:
+                with current_user.tmp_authentication(password):
+                    del current_user.mail
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -228,12 +222,10 @@ def usersuite_delete_mail():
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
 @login_required
-@feature_required('mac_change', current_user_supported)
-def usersuite_change_mac():
+def change_mac():
     """As user, change the MAC address of your device.
     """
     form = ChangeMACForm()
-    userinfo = current_user.get_information()
 
     if form.validate_on_submit():
         password = form.password.data
@@ -245,7 +237,7 @@ def usersuite_change_mac():
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         else:
-            current_user.change_mac_address(userinfo['mac']['value'], mac)
+            current_user.mac = mac
             logger.info('Successfully changed MAC address',
                         extra={'data': {'mac': mac},
                                'tags': {'rate_critical': True}})
@@ -258,7 +250,7 @@ def usersuite_change_mac():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    form.mac.default = userinfo['mac']['value']
+    form.mac.default = current_user.mac.value
 
     return render_template('usersuite/change_mac.html', form=form)
 
@@ -266,28 +258,27 @@ def usersuite_change_mac():
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
 @bp_usersuite.route("/hosting/<string:action>", methods=['GET', 'POST'])
 @login_required
-@feature_required('userdb_change', current_user_supported)
-def usersuite_hosting(action=None):
+def hosting(action=None):
     """Change various settings for Helios.
     """
     if action == "confirm":
-        current_user.user_db_drop()
+        current_user.userdb.drop()
         flash(gettext("Deine Datenbank wurde gelöscht."), 'success')
-        return redirect(url_for('.usersuite_hosting'))
+        return redirect(url_for('.hosting'))
 
     form = HostingForm()
 
     if form.validate_on_submit():
         if form.action.data == "create":
-            current_user.user_db_create(form.password.data)
+            current_user.userdb.create(form.password.data)
             flash(gettext("Deine Datenbank wurde erstellt."), 'success')
         else:
-            current_user.user_db_password_change(form.password.data)
+            current_user.userdb.change_password(form.password.data)
     elif form.is_submitted():
         flash_formerrors(form)
 
     try:
-        user_has_db = current_user.has_user_db()
+        user_has_db = current_user.userdb.has_db
     except NotImplementedError:
         abort(403)
 

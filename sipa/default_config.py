@@ -10,7 +10,6 @@ which is a file not tracked in git containing IPs, user names, passwords, etc.
 
 from os import getenv
 
-# TODO: Remove os.getenv-Gedoens
 SECRET_KEY = getenv("SIPA_SECRET_KEY")
 
 SENTRY_DSN = getenv('SIPA_SENTRY_DSN', '')
