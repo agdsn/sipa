@@ -31,6 +31,7 @@ def usersuite():
     and traffic overview.
     """
     descriptions = OrderedDict([
+        # TODO: add the full name as a property
         ('id', gettext("Nutzer-ID")),
         ('login', gettext("Accountname")),
         ('status', gettext("Accountstatus")),
