@@ -7,7 +7,7 @@ from sqlalchemy.exc import OperationalError
 
 from model.property import active_prop
 
-from model.default import BaseUser
+from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import ip_from_user_id, sql_query, \
     update_macaddress, query_trafficdata, \
     query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
@@ -39,6 +39,7 @@ class User(BaseUser):
         self._ip = (ip if ip
                     else self._ip if self._ip
                     else ip_from_user_id(self._id))
+        self._userdb = UserDB(self)
 
     def __repr__(self):
         return "User<{},{}.{}>".format(self.uid, self.name, self.group)
@@ -160,33 +161,12 @@ class User(BaseUser):
         self._hostname = computer['c_hname']
         self._hostalias = computer['c_alias']
 
-        try:
-            if user_has_mysql_db(self.uid):
-                self._user_db = 1
-            else:
-                self._user_db = None
-        except OperationalError:
-            logger.critical("User db unreachable")
-            self._user_db = -1
-
     def get_traffic_data(self):
         # TODO: this throws DBQueryEmpty
         return query_trafficdata(self._ip, user_id_from_uid(self.uid))
 
     def get_current_credit(self):
         return query_current_credit(self.uid, self._ip)
-
-    def has_user_db(self):
-        return user_has_mysql_db(self.uid)
-
-    def user_db_create(self, password):
-        return create_mysql_userdatabase(self.uid, password)
-
-    def user_db_drop(self):
-        return drop_mysql_userdatabase(self.uid)
-
-    def user_db_password_change(self, password):
-        return change_mysql_userdatabase_password(self.uid, password)
 
     @contextmanager
     def tmp_authentication(self, password):
@@ -267,15 +247,44 @@ class User(BaseUser):
 
     @active_prop
     def userdb_status(self):
-        if not self._user_db:
-            return {'value': gettext("Nicht aktiviert"),
-                    'empty': True}
-        elif self._user_db == -1:
+        try:
+            status = self.userdb.has_db
+        except OperationalError:
             return {'value': gettext("Datenbank nicht erreichbar"),
                     'style': 'danger', 'empty': True}
-        else:
-            assert self._user_db == 1
+
+        if status:
             return {'value': gettext("Aktiviert"),
                     'style': 'success'}
+        return {'value': gettext("Nicht aktiviert"),
+                'empty': True}
 
     userdb_status = userdb_status.fake_setter()
+
+    @property
+    def userdb(self):
+        return self._userdb
+
+
+class UserDB(BaseUserDB):
+    def __init__(self, user):
+        super(UserDB, self).__init__(user)
+
+    @property
+    def has_db(self):
+        try:
+            if user_has_mysql_db(self.user.uid):
+                return True
+            return False
+        except OperationalError:
+            logger.critical("User db of %s unreachable", self.user)
+            raise
+
+    def create(self, password):
+        create_mysql_userdatabase(self.user.uid, password)
+
+    def drop(self):
+        drop_mysql_userdatabase(self.user.uid)
+
+    def change_password(self, password):
+        change_mysql_userdatabase_password(self.user.uid, password)

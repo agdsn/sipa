@@ -93,27 +93,6 @@ class BaseUser(AuthenticatedUserMixin):
         """Return the current credit in MiB"""
         raise NotImplementedError
 
-    # TODO: refactor `user_db` to its own class
-    # that most certainly improves the structure
-    def has_user_db(self):
-        """Return whether the user activated his userdb"""
-        raise NotImplementedError
-
-    def user_db_create(self, password):
-        """Create a userdb for the user
-
-        :param password: The password for the userdb
-        """
-        raise NotImplementedError
-
-    def user_db_drop(self):
-        """Delete the userdb completely"""
-        raise NotImplementedError
-
-    def user_db_password_change(self, password):
-        """Change the password of the userdb"""
-        raise NotImplementedError
-
     def generate_rows(self, description_dict):
         for key, val in description_dict.items():
             yield Row(description=val, property=self.__getattribute__(key))

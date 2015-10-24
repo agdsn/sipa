@@ -262,7 +262,7 @@ def hosting(action=None):
     """Change various settings for Helios.
     """
     if action == "confirm":
-        current_user.user_db_drop()
+        current_user.userdb.drop()
         flash(gettext("Deine Datenbank wurde gelöscht."), 'success')
         return redirect(url_for('.hosting'))
 
@@ -270,15 +270,15 @@ def hosting(action=None):
 
     if form.validate_on_submit():
         if form.action.data == "create":
-            current_user.user_db_create(form.password.data)
+            current_user.userdb.create(form.password.data)
             flash(gettext("Deine Datenbank wurde erstellt."), 'success')
         else:
-            current_user.user_db_password_change(form.password.data)
+            current_user.userdb.change_password(form.password.data)
     elif form.is_submitted():
         flash_formerrors(form)
 
     try:
-        user_has_db = current_user.has_user_db()
+        user_has_db = current_user.userdb.has_db
     except NotImplementedError:
         abort(403)
 
