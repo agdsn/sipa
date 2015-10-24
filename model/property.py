@@ -1,12 +1,13 @@
 from collections import namedtuple
 from flask.ext.babel import gettext
+from abc import ABCMeta, abstractmethod
 
 
 Capabilities = namedtuple('capabilities', ['edit', 'delete'])
 no_capabilities = Capabilities(edit=None, delete=None)
 
 
-class PropertyBase:
+class PropertyBase(metaclass=ABCMeta):
     def __init__(self, name, value, capabilities=no_capabilities,
                  style=None, empty=False):
         self.name = name
@@ -22,8 +23,15 @@ class PropertyBase:
                         self.name, self.value, self.capabilities,
                         self.style, self.empty))
 
+    @property
+    @abstractmethod
+    def supported(self):
+        pass
+
 
 class UnsupportedProperty(PropertyBase):
+    supported = False
+
     def __init__(self, name):
         super(UnsupportedProperty, self).__init__(
             name=name,
@@ -38,6 +46,8 @@ class UnsupportedProperty(PropertyBase):
 
 
 class ActiveProperty(PropertyBase):
+    supported = True
+
     def __init__(self, name, value=None, capabilities=no_capabilities,
                  style=None, empty=False):
         # Enforce bootstrap css classes: getbootstrap.com/css/#helper-classes
