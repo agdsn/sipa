@@ -160,4 +160,8 @@ class User(BaseUser):
     def hostalias(self):
         return self.config.get('test', 'hostalias')
 
-    userdb_status = unsupported_prop('userdb_status')
+    @unsupported_prop
+    def userdb_status(self):
+        pass
+
+    userdb = None

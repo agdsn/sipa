@@ -173,7 +173,11 @@ class User(BaseUser):
     def hostalias(self):
         return ", ".join(self._hostaliases)
 
-    userdb_status = unsupported_prop('userdb_status')
+    @unsupported_prop
+    def userdb_status(self):
+        pass
+
+    userdb = None
 
 
 def do_api_call(request, method='get', postdata=None):

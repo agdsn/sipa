@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # noinspection PyMethodMayBeStatic
+from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 from model.property import active_prop
 
@@ -18,7 +19,7 @@ class AuthenticatedUserMixin:
 Row = namedtuple('Row', ['description', 'property'])
 
 
-class BaseUser(AuthenticatedUserMixin):
+class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     """The user object containing a minimal amount of functions in order to work
     properly (flask special functions, used methods by sipa)
     """
@@ -42,34 +43,39 @@ class BaseUser(AuthenticatedUserMixin):
         return self.uid == other.uid and self.datasource == other.datasource
 
     @property
+    @abstractmethod
     def datasource(self):
-        raise NotImplementedError
+        pass
 
     def get_id(self):
         """Required by flask-login"""
         return self.uid
 
     @classmethod
+    @abstractmethod
     def get(cls, username):
         """Used by user_loader. Return a User instance."""
-        raise NotImplementedError
+        pass
 
     @classmethod
+    @abstractmethod
     def from_ip(cls, ip):
         """Return a user based on an ip.
 
         If there is no user associated with this ip, return AnonymousUserMixin.
         """
-        raise NotImplementedError
+        pass
 
     def re_authenticate(self, password):
         self.authenticate(self.uid, password)
 
     @classmethod
+    @abstractmethod
     def authenticate(cls, username, password):
         """Return a User instance or raise PasswordInvalid"""
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def change_password(self, old, new):
         """Change the user's password from old to new.
 
@@ -77,8 +83,9 @@ class BaseUser(AuthenticatedUserMixin):
         re_authenticate(), some data sources like those which have to
         perform an LDAP bind need it anyways.
         """
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def get_traffic_data(self):
         """Return the current credit and the traffic history as a dict.
 
@@ -91,11 +98,12 @@ class BaseUser(AuthenticatedUserMixin):
                             for day in range(7)]}
 
         """
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def get_current_credit(self):
         """Return the current credit in MiB"""
-        raise NotImplementedError
+        pass
 
     def generate_rows(self, description_dict):
         for key, val in description_dict.items():
@@ -103,68 +111,83 @@ class BaseUser(AuthenticatedUserMixin):
 
     @active_prop
     def ips(self):
-        raise NotImplementedError
+        pass
 
     @active_prop
+    @abstractmethod
     def login(self):
         return self.uid
 
     @active_prop
+    @abstractmethod
     def mac(self):
-        raise NotImplementedError
+        pass
 
     @active_prop
+    @abstractmethod
     def mail(self):
-        raise NotImplementedError
+        pass
 
     @active_prop
+    @abstractmethod
     def user_id(self):
-        raise NotImplementedError
+        pass
 
     @active_prop
+    @abstractmethod
     def address(self):
-        raise NotImplementedError
+        pass
 
     @active_prop
+    @abstractmethod
     def status(self):
-        return "OK"
+        pass
 
     @active_prop
+    @abstractmethod
     def id(self):
-        raise NotImplementedError
+        pass
 
     @active_prop
+    @abstractmethod
     def hostname(self):
-        raise NotImplementedError
+        pass
 
     @active_prop
+    @abstractmethod
     def hostalias(self):
-        raise NotImplementedError
+        pass
 
     @property
+    @abstractmethod
     def userdb_status(self):
-        return None
+        pass
 
     @property
+    @abstractmethod
     def userdb(self):
         """The actual `BaseUserDB` object"""
-        raise NotImplementedError
+        pass
 
 
-class BaseUserDB:
+class BaseUserDB(metaclass=ABCMeta):
     def __init__(self, user):
         """Set the `BaseUser` object `user`"""
         self.user = user
 
     @property
-    def status(self):
-        raise NotImplementedError
+    @abstractmethod
+    def has_db(self):
+        pass
 
+    @abstractmethod
     def create(self, password):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def drop(self):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def change_password(self, password):
-        raise NotImplementedError
+        pass
