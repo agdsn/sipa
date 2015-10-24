@@ -266,7 +266,7 @@ class User(BaseUser):
         return self._hostalias
 
     @active_prop
-    def userdb(self):
+    def userdb_status(self):
         if not self._user_db:
             return {'value': gettext("Nicht aktiviert"),
                     'empty': True}
@@ -278,4 +278,4 @@ class User(BaseUser):
             return {'value': gettext("Aktiviert"),
                     'style': 'success'}
 
-    userdb = userdb.fake_setter()
+    userdb_status = userdb_status.fake_setter()

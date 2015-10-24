@@ -40,7 +40,7 @@ def usersuite():
         ('mail', gettext("E-Mail-Weiterleitung")),
         ('hostname', gettext("Hostname")),
         ('hostalias', gettext("Hostalias")),
-        ('userdb', gettext("MySQL Datenbank")),
+        ('userdb_status', gettext("MySQL Datenbank")),
     ])
 
     try:
@@ -109,7 +109,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
 
         attribute_mappings = {
             'mac': 'change_mac',
-            'userdb': 'hosting',
+            'userdb_status': 'hosting',
             'mail': 'change_mail',
         }
 

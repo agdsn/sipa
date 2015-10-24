@@ -159,5 +159,5 @@ class BaseUser(AuthenticatedUserMixin):
         raise NotImplementedError
 
     @property
-    def userdb(self):
+    def userdb_status(self):
         return None
