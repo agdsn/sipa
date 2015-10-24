@@ -1,5 +1,5 @@
 from collections import namedtuple
-from flask.ext.babel import lazy_gettext
+from flask.ext.babel import gettext
 
 
 Capabilities = namedtuple('capabilities', ['edit', 'delete'])
@@ -26,9 +26,8 @@ class PropertyBase:
 class UnsupportedProperty(PropertyBase):
     def __init__(self, name):
         super(UnsupportedProperty, self).__init__(
-            # TODO: is lazy_gettext necessary?
             name=name,
-            value=lazy_gettext("Nicht unterstützt"),
+            value=gettext("Nicht unterstützt"),
             style='muted',
             empty=True,
         )
@@ -48,7 +47,7 @@ class ActiveProperty(PropertyBase):
 
         super(ActiveProperty, self).__init__(
             name=name,
-            value=(value if value else lazy_gettext("Nicht angegeben")),
+            value=(value if value else gettext("Nicht angegeben")),
             capabilities=capabilities,
             style=(style if style  # customly given style is most important
                    else 'muted' if empty or not value
