@@ -7,11 +7,13 @@ no_capabilities = Capabilities(edit=None, delete=None)
 
 
 class PropertyBase:
-    def __init__(self, name, value, capabilities=no_capabilities, style=None):
+    def __init__(self, name, value, capabilities=no_capabilities,
+                 style=None, empty=False):
         self.name = name
         self.value = value
         self.capabilities = capabilities
         self.style = style
+        self.empty = empty or not value
 
 
 class UnsupportedProperty(PropertyBase):
@@ -21,12 +23,13 @@ class UnsupportedProperty(PropertyBase):
             name=name,
             value=lazy_gettext("Nicht unterstützt"),
             style='muted',
+            empty=True,
         )
 
 
 class ActiveProperty(PropertyBase):
     def __init__(self, name, value=None, capabilities=no_capabilities,
-                 style=None):
+                 style=None, empty=False):
         # Enforce bootstrap css classes: getbootstrap.com/css/#helper-classes
         assert style in {None, 'muted', 'primary', 'success',
                          'info', 'warning', 'danger'}, \
@@ -36,7 +39,10 @@ class ActiveProperty(PropertyBase):
             name=name,
             value=(value if value else lazy_gettext("Nicht angegeben")),
             capabilities=capabilities,
-            style=(style if style else 'muted' if not value else None),
+            style=(style if style  # customly given style is most important
+                   else 'muted' if empty or not value
+                   else None),
+            empty=empty or not value,
         )
 
 
@@ -84,8 +90,10 @@ class active_prop(property):
                 # which would make no sense and likely is a mistake.
                 value = result
                 style = None
+                empty = None
             else:
                 style = result.get('style', None)
+                empty = result.get('empty', None)
 
             return ActiveProperty(
                 name=fget.__name__,
@@ -95,6 +103,7 @@ class active_prop(property):
                     delete=(fdel is not None),
                 ),
                 style=style,
+                empty=empty,
             )
 
         # Let `property` handle the initialization of `__get__`, `__set__` etc.
