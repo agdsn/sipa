@@ -6,9 +6,10 @@ from flask.globals import current_app
 
 from werkzeug.local import LocalProxy
 
-from model.constants import FULL_FEATURE_SET, info_property, \
-    STATUS_COLORS, WEEKDAYS
+from model.constants import WEEKDAYS
 from model.default import BaseUser
+from model.property import active_prop, unsupported_prop
+
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 import requests
@@ -26,25 +27,19 @@ class User(BaseUser):
     the terms 'uid' and 'username' refer to the same thing.
     """
 
-    def __init__(self, uid, id, name=None, mail=None, ip=None):
+    def __init__(self, uid, id, name=None, mail=None):
         super(User, self).__init__(uid)
         self.id = id
         self.name = name
         self.group = "static group"
         self.mail = mail
-        self._ip = ip
-
-    def _get_ip(self):
-        self._ip = "127.0.0.1"
+        self.cache_information()
 
     def __repr__(self):
         return "User<{},{}.{}>".format(self.uid, self.name, self.group)
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
-
-    _supported_features = FULL_FEATURE_SET - {'userdb', 'mac_change',
-                                              'mail_change', 'password_change'}
 
     @staticmethod
     def get(username, **kwargs):
@@ -61,7 +56,7 @@ class User(BaseUser):
         # TODO: Somehow access the entry in the datasource constructor
         mail = username + "@wh17.tu-dresden.de"
 
-        return User(uid, userData['id'], name, mail, "127.0.0.1")
+        return User(uid, userData['id'], name, mail)
 
     @staticmethod
     def authenticate(username, password):
@@ -85,31 +80,23 @@ class User(BaseUser):
         else:
             return AnonymousUserMixin()
 
-    def get_information(self):
-        userData = do_api_call(str(self.id))
-        ips = ", ".join([h['ip'] for h in userData['hosts']
-                         if h['ip'] is not None])
-        macs = ", ".join([h['mac'] for h in userData['hosts']
-                          if h['mac'] is not None])
-        hosts = ", ".join([h['hostname'] for h in userData['hosts']
-                           if h['hostname'] is not None])
-        aliases = ", ".join([h['alias'] for h in userData['hosts']
-                             if h['alias'] is not None])
+    def cache_information(self):
+        user_data = do_api_call(str(self.id))
 
-        return {
-            'id': info_property(userData['id']),
-            'uid': info_property(userData['login']),
-            'address': info_property(userData['address']),
-            'mail': info_property(userData['mail']),
-            'status': info_property(userData['status'], STATUS_COLORS.GOOD),
-            'ip': info_property(ips, STATUS_COLORS.INFO),
-            'mac': info_property(macs),
-            'hostname': info_property(hosts),
-            'hostalias': info_property(aliases)
-        }
+        self._id = user_data['id']
+        self._login = user_data['login']
+        self._address = user_data['address']
+        self._mail = user_data['mail']
+        self._status = user_data['status']
+
+        hosts = user_data['hosts']
+        self._ips = {h['ip'] for h in hosts} - {None}
+        self._macs = {h['mac'] for h in hosts} - {None}
+        self._hostnames = {h['hostname'] for h in hosts} - {None}
+        self._hostaliases = {h['alias'] for h in hosts} - {None}
 
     def get_traffic_data(self):
-        trafficData = do_api_call(str(self.id) + '/traffic')
+        trafficData = do_api_call("{}/traffic".format(self.id))
 
         if (trafficData):
             hostOneTraffic = trafficData[0]['traffic']
@@ -147,6 +134,46 @@ class User(BaseUser):
     def get_current_credit(self):
         creditData = do_api_call(str(self.id) + '/credit')
         return creditData[0]['credit']/1048576 if creditData else 0
+
+    @active_prop
+    def id(self):
+        return self._id
+
+    @active_prop
+    def login(self):
+        return self._login
+
+    @active_prop
+    def status(self):
+        return self._status
+
+    @active_prop
+    def address(self):
+        return self._address
+
+    @active_prop
+    def ips(self):
+        return ", ".join(self._ips)
+
+    @active_prop
+    def mac(self):
+        return ", ".join(self._macs)
+
+    @active_prop
+    def mail(self):
+        return self._mail
+
+    @active_prop
+    def hostname(self):
+        return ", ".join(self._hostnames)
+
+    @active_prop
+    def hostalias(self):
+        return ", ".join(self._hostaliases)
+
+    @unsupported_prop
+    def userdb(self):
+        pass
 
 
 def do_api_call(request, method='get', postdata=None):
