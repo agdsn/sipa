@@ -56,15 +56,6 @@ class BaseUser(AuthenticatedUserMixin):
         """Required by flask-login"""
         return self.uid
 
-    def _get_ip(self):
-        """Get the IP (usually from self.uid)
-
-        This method sets self._ip accordingly.
-
-        It is used to provide the `ip` property as implemented below.
-        """
-        raise NotImplementedError
-
     @staticmethod
     def get(username):
         """Used by user_loader. Return a User instance."""
@@ -166,10 +157,8 @@ class BaseUser(AuthenticatedUserMixin):
         )
 
     @active_prop
-    def ip(self):
-        if self._ip is None:
-            self._get_ip()
-        return self._ip
+    def ips(self):
+        raise NotImplementedError
 
     @active_prop
     def login(self):

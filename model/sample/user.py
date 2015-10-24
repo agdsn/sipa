@@ -41,11 +41,7 @@ class User(BaseUser):
         self.name = self.config.get(uid, 'name')
         self.group = "static group"
         self.old_mail = self.config.get(uid, 'mail')
-        self._ip = ip
-
-    def _get_ip(self):
-        # TODO: check whether / how this function is used.
-        self._ip = "127.0.0.1"
+        self._ip = ip if ip else "127.0.0.1"
 
     @staticmethod
     def _get_config():
@@ -143,7 +139,7 @@ class User(BaseUser):
         return self.config.get('test', 'address')
 
     @active_prop
-    def ip(self):
+    def ips(self):
         return self.config.get('test', 'ip')
 
     @active_prop

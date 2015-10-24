@@ -35,7 +35,7 @@ def usersuite():
         ('login', gettext("Accountname")),
         ('status', gettext("Accountstatus")),
         ('address', gettext("Aktuelles Zimmer")),
-        ('ip', gettext("Aktuelle IP-Adresse")),
+        ('ips', gettext("Aktuelle IP-Adresse")),
         ('mac', gettext("Aktuelle MAC-Adresse")),
         ('mail', gettext("E-Mail-Weiterleitung")),
         ('hostname', gettext("Hostname")),

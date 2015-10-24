@@ -35,11 +35,10 @@ class User(BaseUser):
         self.name = name
         self.group = self.define_group()
         self._mail = mail
-        self._ip = ip
         self.cache_information()
-
-    def _get_ip(self):
-        self._ip = ip_from_user_id(user_id_from_uid(self.uid))
+        self._ip = (ip if ip
+                    else self._ip if self._ip
+                    else ip_from_user_id(self._id))
 
     def __repr__(self):
         return "User<{},{}.{}>".format(self.uid, self.name, self.group)
@@ -221,8 +220,7 @@ class User(BaseUser):
 
     @mac.setter
     def mac(self, new_mac):
-        # TODO: elaborate whether this works w/ multiple hosts!
-        update_macaddress(self.ip.value, self.mac.value, new_mac)
+        update_macaddress(self._ip, self.mac.value, new_mac)
 
     @active_prop
     def mail(self):
@@ -241,7 +239,7 @@ class User(BaseUser):
         return self._address
 
     @active_prop
-    def ip(self):
+    def ips(self):
         return self._ip
 
     @active_prop
