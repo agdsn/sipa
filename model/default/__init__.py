@@ -11,21 +11,9 @@ class AuthenticatedUserMixin:
     """The user object which claims to be authenticated
     when “asked” by flask-login.
     """
-
-    @property
-    def is_authenticated(self):
-        """Required by flask-login"""
-        return True
-
-    @property
-    def is_active(self):
-        """Required by flask-login"""
-        return True
-
-    @property
-    def is_anonymous(self):
-        """Required by flask-login"""
-        return False
+    is_authenticated = True
+    is_active = True
+    is_anonymous = False
 
 
 # TODO: update Baseuser after migration
