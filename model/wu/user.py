@@ -12,7 +12,7 @@ from model.wu.database_utils import ip_from_user_id, sql_query, \
     update_macaddress, query_trafficdata, \
     query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db, \
-    calculate_userid_checksum, DORMITORIES, status_string_from_id, \
+    calculate_userid_checksum, DORMITORIES, STATUS, \
     user_id_from_uid
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
@@ -143,8 +143,7 @@ class User(BaseUser):
             user['etage'],
             user['zimmernr']
         )
-        # todo use more colors (yellow for finances etc.)
-        self._status = status_string_from_id(user['status'])
+        self._status_id = user['status']
 
         computer = sql_query(
             "SELECT c_etheraddr, c_ip, c_hname, c_alias "
@@ -244,7 +243,12 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        return self._status
+        if self._status_id in STATUS:
+            status_tuple = STATUS[self._status_id]
+            return {'value': status_tuple[0], 'style': status_tuple[1]}
+
+        return {'value': STATUS.get(self._status_id, gettext("Unbekannt")),
+                'empty': True}
 
     @active_prop
     def id(self):
