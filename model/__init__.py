@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, current_app
 from flask.ext.login import current_user, AnonymousUserMixin
-from ipaddress import IPv4Address
+from ipaddress import IPv4Address, AddressValueError
 
 from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
@@ -89,9 +89,14 @@ def datasource_from_ip(ip):
 
 
 def dormitory_from_ip(ip):
-    for dormitory in current_app.extensions['dormitories']:
-        if IPv4Address(str(ip)) in dormitory.subnets:
-            return dormitory
+    try:
+        address = IPv4Address(str(ip))
+    except AddressValueError:
+        pass
+    else:
+        for dormitory in current_app.extensions['dormitories']:
+            if address in dormitory.subnets:
+                return dormitory
     return None
 
 
