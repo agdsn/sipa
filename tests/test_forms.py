@@ -11,7 +11,6 @@ class PasswordComplexityValidatorTest(TestCase):
     def validate(self, validator, password):
         form = self.TestForm(data={'password': password})
         field = form.password
-        print("Failed :" + password)
         validator(form, field)
 
     def test_min_length(self):
