@@ -97,6 +97,9 @@ class User(BaseUser):
         self._hostnames = {h['hostname'] for h in hosts} - {None}
         self._hostaliases = {h['alias'] for h in hosts} - {None}
 
+    def change_password(self):
+        raise NotImplementedError
+
     def get_traffic_data(self):
         trafficData = do_api_call("{}/traffic".format(self.id))
 
