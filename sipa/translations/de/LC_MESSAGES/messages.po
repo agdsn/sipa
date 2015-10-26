@@ -101,10 +101,27 @@ msgstr ""
 msgid "Nicht aktiviert"
 msgstr ""
 
-#: sipa/forms.py:19
+#: sipa/forms.py:21
+msgid "Kleinbuchstaben (a-z)"
+msgstr ""
+
+#: sipa/forms.py:22
+msgid "Großbuchstaben (A-Z)"
+msgstr ""
+
+#: sipa/forms.py:23
+msgid "Ziffern (0-9)"
+msgstr ""
+
+#: sipa/forms.py:24
+msgid "andere Zeichen"
+msgstr ""
+
+#: sipa/forms.py:25
 msgid ""
-"Passwort muss Buchstaben in Groß- und Kleinschreibung, Zahlen und "
-"Sonderzeichen enthalten sowie mindestens acht Zeichen lang sein"
+"Dein Passwort muss mindestens {min_length} Zeichen lang sein und "
+"mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. "
+"Zeichen von Klassen sind: {classes}."
 msgstr ""
 
 #: sipa/forms.py:56 sipa/forms.py:75
