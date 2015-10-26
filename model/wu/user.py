@@ -17,6 +17,7 @@ from model.wu.database_utils import ip_from_user_id, sql_query, \
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
 
+from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
 
 import logging
@@ -44,7 +45,12 @@ class User(BaseUser):
         self._userdb = UserDB(self)
 
     def __repr__(self):
-        return "User<{},{}.{}>".format(self.uid, self.name, self.group)
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            uid=self.uid,
+            name=self.name,
+            mail=self._mail,
+            ip=self._ip
+        ))
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)

@@ -1,6 +1,7 @@
 from collections import namedtuple
 from flask.ext.babel import gettext
 from abc import ABCMeta, abstractmethod
+from sipa.utils import argstr
 
 
 Capabilities = namedtuple('capabilities', ['edit', 'delete'])
@@ -17,11 +18,13 @@ class PropertyBase(metaclass=ABCMeta):
         self.empty = empty or not value
 
     def __repr__(self):
-        return ("{}.{}(name='{}', value='{}', capabilities={}, "
-                "style='{}', empty={})"
-                .format(__name__, type(self).__name__,
-                        self.name, self.value, self.capabilities,
-                        self.style, self.empty))
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            name=self.name,
+            value=self.value,
+            capabilities=self.capabilities,
+            style=self.style,
+            empty=self.empty,
+        ))
 
     @property
     @abstractmethod
@@ -41,8 +44,9 @@ class UnsupportedProperty(PropertyBase):
         )
 
     def __repr__(self):
-        return ("{}.{}(name='{}')"
-                .format(__name__, type(self).__name__, self.name))
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            name=self.name
+        ))
 
 
 class ActiveProperty(PropertyBase):
@@ -66,11 +70,13 @@ class ActiveProperty(PropertyBase):
         )
 
     def __repr__(self):
-        return ("{}.{}(name='{}', value='{}', capabilities={}, "
-                "style='{}', empty={})"
-                .format(__name__, type(self).__name__,
-                        self.name, self.value, self.capabilities,
-                        self.style, self.empty))
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            name=self.name,
+            value=self.value,
+            capabilities=self.capabilities,
+            style=self.style,
+            empty=self.empty,
+        ))
 
 
 def unsupported_prop(name):
@@ -137,10 +143,13 @@ class active_prop(property):
         super(active_prop, self).__init__(wrapped_getter, fset, fdel, doc)
 
     def __repr__(self):
-        return ("{}.{}(fget={}, fset={}, fdel={}, doc='{}', fake_setter={})"
-                .format(__name__, type(self).__name__,
-                        self.__raw_getter, self.fset, self.fdel, self.__doc__,
-                        self.__fake_setter))
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            fget=self.__raw_getter,
+            fset=self.fset,
+            fdel=self.fdel,
+            doc=self.__doc__,
+            fake_setter=self.__fake_setter,
+        ))
 
     def getter(self, func):
         return type(self)(func, self.fset, self.fdel, self.__doc__)

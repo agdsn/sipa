@@ -45,6 +45,15 @@ class User(BaseUser):
         self.old_mail = self.config.get(uid, 'mail')
         self._ip = ip if ip else "127.0.0.1"
 
+    def __repr__(self):
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            uid=self.uid,
+            name=self.name,
+            mail=self.mail,
+
+        ))
+
+
     @staticmethod
     def _get_config():
         config = configparser.RawConfigParser()

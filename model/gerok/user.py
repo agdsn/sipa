@@ -11,6 +11,7 @@ from model.default import BaseUser
 from model.property import active_prop, unsupported_prop
 
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.utils import argstr
 
 import requests
 
@@ -31,14 +32,19 @@ class User(BaseUser):
 
     def __init__(self, uid, id, name=None, mail=None):
         super(User, self).__init__(uid)
-        self.id = id
+        self._id = id
         self.name = name
         self.group = "static group"
         self.mail = mail
         self.cache_information()
 
     def __repr__(self):
-        return "User<{},{}.{}>".format(self.uid, self.name, self.group)
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            uid=self.uid,
+            id=self._id,
+            name=self.name,
+            mail=self.mail,
+        ))
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)

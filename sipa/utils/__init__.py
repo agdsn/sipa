@@ -9,8 +9,8 @@ import json
 import socket
 import time
 from flask import request, url_for
-
 from flask.ext.login import current_user
+from itertools import chain
 
 
 def timetag_from_timestamp(timestamp=None):
@@ -71,3 +71,10 @@ def current_user_name():
 
 def redirect_url(default='index'):
     return request.args.get('next') or request.referrer or url_for(default)
+
+
+def argstr(*args, **kwargs):
+    return ", ".join(chain(
+        ("{}".format(arg) for arg in args),
+        ("{}={!r}".format(key, val) for key, val in kwargs.items()),
+    ))
