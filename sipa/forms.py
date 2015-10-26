@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from operator import itemgetter
+import re
 
 from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
@@ -15,20 +17,43 @@ from wtforms.validators import DataRequired, Email, MacAddress, \
     ValidationError, EqualTo, Regexp, AnyOf
 
 
-password_required_charset_message = lazy_gettext(
-    "Passwort muss Buchstaben in Groß- und Kleinschreibung, Zahlen "
-    "und Sonderzeichen enthalten sowie mindestens acht Zeichen lang sein"
-)
+class PasswordComplexity(object):
+    character_classes = ((re.compile(r'[a-z]'), lazy_gettext("Kleinbuchstaben (a-z)")),
+                         (re.compile(r'[A-Z]'), lazy_gettext("Großbuchstaben (A-Z)")),
+                         (re.compile(r'[0-9]'), lazy_gettext("Ziffern (0-9)")),
+                         (re.compile(r'[^a-zA-Z0-9]'), lazy_gettext("andere Zeichen")))
+    default_message = lazy_gettext(
+        "Dein Passwort muss mindestens {min_length} Zeichen lang sein und "
+        "mindestens {min_classes} verschiedene Klassen von Zeichen "
+        "enthalten. Zeichen von Klassen sind: {classes}."
+    )
 
-password_validator = Regexp(
-    "("
-    "(?=.*\d)"                                     # ≥ 1 Digit
-    "(?=.*[a-z])(?=.*[A-Z])"                       # ≥ 1 Letter (up/low)
-    "(?=.*[,.…_\[\]^!<>=&@:-?*}{/\#$|~`+%\"\';])"  # ≥ 1 Special char
-    ".{8,}"                                        # ≥ 8 chars
-    ")",
-    message=password_required_charset_message
-)
+    def __init__(self, min_length=8, min_classes=3, message=None):
+        self.min_length = min_length
+        self.min_classes = min_classes
+        self.message = message
+
+    def __call__(self, form, field, message=None):
+        password = field.data or ''
+
+        if len(password) < self.min_length:
+            self.raise_error(message)
+        matched_classes = sum(1 for pattern, name in self.character_classes
+                              if pattern.search(password))
+        if matched_classes < self.min_classes:
+            self.raise_error(message)
+
+    def raise_error(self, message):
+        if message is None:
+            if self.message is None:
+                message = self.default_message
+            else:
+                message = self.message
+        classes_descriptions = map(itemgetter(1), self.character_classes)
+        classes = ', '.join(map(str, classes_descriptions))
+        raise ValidationError(message.format(min_length=self.min_length,
+                                             min_classes=self.min_classes,
+                                             classes=classes))
 
 
 def strip_filter(string):
@@ -91,7 +116,7 @@ class ChangePasswordForm(Form):
         DataRequired(gettext("Altes Passwort muss angegeben werden!"))])
     new = PasswordField(label=lazy_gettext("Neues Passwort"), validators=[
         DataRequired(gettext("Neues Passwort fehlt!")),
-        password_validator
+        PasswordComplexity(),
     ])
     confirm = PasswordField(label=lazy_gettext("Bestätigung"), validators=[
         DataRequired(gettext("Bestätigung des neuen Passworts fehlt!")),
@@ -161,7 +186,7 @@ class LoginForm(Form):
 class HostingForm(Form):
     password = PasswordField(lazy_gettext("Passwort"), validators=[
         DataRequired(gettext("Kein Passwort eingegeben!")),
-        password_validator
+        PasswordComplexity(),
     ])
     confirm = PasswordField(lazy_gettext("Bestätigung"), validators=[
         DataRequired(gettext("Bestätigung des neuen Passworts fehlt!")),
