@@ -216,7 +216,7 @@ def update_macaddress(ip, oldmac, newmac):
         "UPDATE computer "
         "SET c_etheraddr = %s "
         "WHERE c_ip = %s "
-        "AND c_etheraddr = %s "
+        "AND c_etheraddr = %s ",
         (newmac.lower(), ip, oldmac)
     )
 
