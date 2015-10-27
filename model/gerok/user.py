@@ -49,6 +49,8 @@ class User(BaseUser):
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
 
+    can_change_password = False
+
     @classmethod
     def get(cls, username, **kwargs):
         """Static method for flask-login user_loader,

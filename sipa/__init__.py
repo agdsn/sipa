@@ -6,7 +6,7 @@ from sipa.utils import redirect_url
 app = Flask('sipa')
 
 
-def feature_required(needed_feature, given_features):
+def password_changeable(user):
     """A decorator used to disable functions (routes) if a certain feature
     is not provided by the User class.
 
@@ -20,7 +20,7 @@ def feature_required(needed_feature, given_features):
     def feature_decorator(func):
         @wraps(func)
         def decorated_view(*args, **kwargs):
-            if needed_feature in given_features():
+            if user.is_authenticated and user.can_change_password:
                 return func(*args, **kwargs)
             else:
                 def not_supported():

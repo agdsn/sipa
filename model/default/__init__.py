@@ -74,6 +74,11 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """Return a User instance or raise PasswordInvalid"""
         pass
 
+    @property
+    @abstractmethod
+    def can_change_password(self):
+        pass
+
     @abstractmethod
     def change_password(self, old, new):
         """Change the user's password from old to new.

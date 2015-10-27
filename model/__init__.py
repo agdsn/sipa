@@ -108,12 +108,6 @@ def user_from_ip(ip):
         return AnonymousUserMixin()
 
 
-def current_user_supported():
-    return LocalProxy(
-        lambda: current_datasource().user_class.supported()
-    )
-
-
 def query_gauge_data():
     credit = {'data': None, 'error': False, 'foreign_user': False}
     try:

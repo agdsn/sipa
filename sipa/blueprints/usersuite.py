@@ -7,8 +7,8 @@ from flask import Blueprint, render_template, url_for, redirect, flash, abort
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
-from model import current_user_supported, current_datasource
-from sipa import feature_required
+from model import current_datasource
+from sipa import password_changeable
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from sipa.utils.mail_utils import send_mail
@@ -132,7 +132,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
 
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
 @login_required
-@feature_required('password_change', current_user_supported)
+@password_changeable(current_user)
 def usersuite_change_password():
     """Frontend page to change the user's password"""
     form = ChangePasswordForm()
