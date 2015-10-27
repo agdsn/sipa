@@ -138,8 +138,10 @@ class User(BaseUser):
         ).fetchone()
 
         if not user:
-            # TODO: more information on this very specific issue.
-            raise DBQueryEmpty
+            logger.critical("User %s does not have a database entry", self.uid,
+                            extra={'stack': True})
+            raise DBQueryEmpty("No User found for unix_account '{}'"
+                               .format(self.uid))
 
         self._id = user['nutzer_id']
         self._address = "{0} / {1} {2}".format(
