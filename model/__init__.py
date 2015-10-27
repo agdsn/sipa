@@ -115,7 +115,7 @@ def query_gauge_data():
             user = current_user
         else:
             user = user_from_ip(request.remote_addr)
-        credit['data'] = user.get_current_credit()
+        credit['data'] = user.credit
     except OperationalError:
         credit['error'] = True
     except AttributeError:

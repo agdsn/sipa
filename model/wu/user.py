@@ -173,7 +173,14 @@ class User(BaseUser):
         # TODO: this throws DBQueryEmpty
         return query_trafficdata(self._ip, user_id_from_uid(self.uid))
 
-    def get_current_credit(self):
+    @property
+    def credit(self):
+        """Return the current credit that is left
+
+        Note that the data doesn't have to be cached again, because
+        `__init__` is called before every request.
+        """
+        # TODO: return self._credit
         return query_current_credit(self.uid, self._ip)
 
     @contextmanager

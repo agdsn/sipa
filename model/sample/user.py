@@ -115,7 +115,8 @@ class User(BaseUser):
                 'history': [(WEEKDAYS[day], rand(), rand()*0.1, rand())
                             for day in range(7)]}
 
-    def get_current_credit(self):
+    @property
+    def credit(self):
         return round(random() * 1024 * 63, 2)
 
     @active_prop

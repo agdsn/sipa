@@ -144,7 +144,8 @@ class User(BaseUser):
                     'history': [(WEEKDAYS[int(day)], 0, 0, 0)
                                 for day in range(7)]}
 
-    def get_current_credit(self):
+    @property
+    def credit(self):
         creditData = do_api_call(str(self.id) + '/credit')
         return creditData[0]['credit']/1048576 if creditData else 0
 

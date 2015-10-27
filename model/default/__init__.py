@@ -104,8 +104,9 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
+    @property
     @abstractmethod
-    def get_current_credit(self):
+    def credit(self):
         """Return the current credit in MiB"""
         pass
 
