@@ -169,7 +169,8 @@ class User(BaseUser):
         self._hostname = computer['c_hname']
         self._hostalias = computer['c_alias']
 
-    def get_traffic_data(self):
+    @property
+    def traffic_history(self):
         # TODO: this throws DBQueryEmpty
         return query_trafficdata(self._ip, user_id_from_uid(self.uid))
 

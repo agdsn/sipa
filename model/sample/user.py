@@ -108,7 +108,8 @@ class User(BaseUser):
         self.config.set('test', 'password', new)
         self._write_config()
 
-    def get_traffic_data(self):
+    @property
+    def traffic_history(self):
         def rand():
             return round(random() * 1024, 2)
         return {'credit': 0,

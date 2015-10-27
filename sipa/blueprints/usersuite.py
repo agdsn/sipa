@@ -44,7 +44,7 @@ def usersuite():
 
     try:
         rows = current_user.generate_rows(descriptions)
-        traffic_data = current_user.get_traffic_data()
+        traffic_data = current_user.traffic_history
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
                      extra={'data': {'exception_args': e.args}, 'stack': True})

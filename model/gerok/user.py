@@ -108,7 +108,8 @@ class User(BaseUser):
     def change_password(self):
         raise NotImplementedError
 
-    def get_traffic_data(self):
+    @property
+    def traffic_history(self):
         trafficData = do_api_call("{}/traffic".format(self.id))
 
         if (trafficData):

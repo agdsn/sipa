@@ -89,8 +89,9 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
+    @property
     @abstractmethod
-    def get_traffic_data(self):
+    def traffic_history(self):
         """Return the current credit and the traffic history as a dict.
 
         The history should cover one week.
