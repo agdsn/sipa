@@ -10,10 +10,8 @@ from model.property import active_prop
 from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
     update_macaddress, query_trafficdata, \
-    create_mysql_userdatabase, drop_mysql_userdatabase, \
-    change_mysql_userdatabase_password, user_has_mysql_db, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
-    timetag_from_timestamp
+    timetag_from_timestamp, db_helios
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
 
@@ -325,18 +323,69 @@ class UserDB(BaseUserDB):
     @property
     def has_db(self):
         try:
-            if user_has_mysql_db(self.user.uid):
-                return True
-            return False
+            userdb = sql_query(
+                "SELECT SCHEMA_NAME "
+                "FROM INFORMATION_SCHEMA.SCHEMATA "
+                "WHERE SCHEMA_NAME = %s",
+                (self.user.uid,),
+                database=db_helios
+            ).fetchone()
+
+            return userdb is not None
         except OperationalError:
-            logger.critical("User db of %s unreachable", self.user)
+            logger.critical("User db of user %s unreachable", self.user.uid)
             raise
 
     def create(self, password):
-        create_mysql_userdatabase(self.user.uid, password)
+        sql_query(
+            "CREATE DATABASE "
+            "IF NOT EXISTS `%s`" % self.user.uid,
+            database=db_helios
+        )
+        self.change_password(password)
 
     def drop(self):
-        drop_mysql_userdatabase(self.user.uid)
+        sql_query(
+            "DROP DATABASE "
+            "IF EXISTS `%s`" % self.user.uid,
+            database=db_helios
+        )
+
+        sql_query(
+            "DROP USER %s@'10.1.7.%%'",
+            (self.user.uid,),
+            database=db_helios
+        )
 
     def change_password(self, password):
-        change_mysql_userdatabase_password(self.user.uid, password)
+        user = sql_query(
+            "SELECT user "
+            "FROM mysql.user "
+            "WHERE user = %s",
+            (self.user.uid,),
+            database=db_helios
+        ).fetchall()
+
+        if not user:
+            sql_query(
+                "CREATE USER %s@'10.1.7.%%' "
+                "IDENTIFIED BY %s",
+                (self.user.uid, password),
+                database=db_helios
+            )
+        else:
+            sql_query(
+                "SET PASSWORD "
+                "FOR %s@'10.1.7.%%' = PASSWORD(%s)",
+                (self.user.uid, password),
+                database=db_helios
+            )
+
+        sql_query(
+            "GRANT SELECT, INSERT, UPDATE, DELETE, "
+            "ALTER, CREATE, DROP, INDEX, LOCK TABLES "
+            "ON `%s`.* "
+            "TO %%s@'10.1.7.%%%%'" % self.user.uid,
+            (self.user.uid,),
+            database=db_helios
+        )
