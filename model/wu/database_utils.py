@@ -5,7 +5,6 @@ import datetime
 from sqlalchemy import create_engine
 from flask.ext.babel import gettext
 from flask.globals import current_app
-from sqlalchemy.exc import OperationalError
 
 from werkzeug.local import LocalProxy
 
