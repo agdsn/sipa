@@ -8,12 +8,12 @@ from sqlalchemy.exc import OperationalError
 from model.property import active_prop
 
 from model.default import BaseUser, BaseUserDB
-from model.wu.database_utils import ip_from_user_id, sql_query, \
+from model.wu.database_utils import sql_query, \
     update_macaddress, query_trafficdata, \
-    query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
+    create_mysql_userdatabase, drop_mysql_userdatabase, \
     change_mysql_userdatabase_password, user_has_mysql_db, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
-    user_id_from_uid
+    timetag_from_timestamp
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
 
@@ -33,15 +33,12 @@ class User(BaseUser):
 
     datasource = 'wu'
 
-    def __init__(self, uid, name, mail, ip=None):
+    def __init__(self, uid, name, mail):
         super(User, self).__init__(uid)
         self.name = name
         self.group = self.define_group()
         self._mail = mail
         self.cache_information()
-        self._ip = (ip if ip
-                    else self._ip if self._ip
-                    else ip_from_user_id(self._id))
         self._userdb = UserDB(self)
 
     def __repr__(self):
@@ -49,7 +46,6 @@ class User(BaseUser):
             uid=self.uid,
             name=self.name,
             mail=self._mail,
-            ip=self._ip
         ))
 
     def __str__(self):
@@ -110,7 +106,7 @@ class User(BaseUser):
                              "WHERE nutzer_id = %s",
                              (result['nutzer_id'],)).fetchone()['unix_account']
 
-        user = cls.get(username, ip=ip)
+        user = cls.get(username)
         if not user:
             logger.warning("User %s could not be fetched from LDAP",
                            username, extra={'data': {
@@ -154,25 +150,62 @@ class User(BaseUser):
         )
         self._status_id = user['status']
 
-        computer = sql_query(
+        devices = sql_query(
             "SELECT c_etheraddr, c_ip, c_hname, c_alias "
             "FROM computer "
             "WHERE nutzer_id = %s",
             (user['nutzer_id'])
-        ).fetchone()
+        ).fetchall()
 
-        if not computer:
-            raise DBQueryEmpty
+        if devices:
+            self._devices = [{
+                'ip': device['c_ip'],
+                'mac': device['c_etheraddr'].upper(),
+                'hostname': device['c_hname'],
+                'hostalias': device['c_alias'],
+            } for device in devices]
+        else:
+            logger.warning("User {} (id {}) does not have any devices"
+                           .format(self.uid, self._id))
+            self._devices = []
 
-        self._ip = computer['c_ip']
-        self._mac = computer['c_etheraddr'].upper()
-        self._hostname = computer['c_hname']
-        self._hostalias = computer['c_alias']
+        # cache credit
+        current_timetag = timetag_from_timestamp()
+
+        try:
+            # aggregated credit from 1(MEZ)/2(MESZ) AM
+            credit = sql_query(
+                "SELECT amount FROM credit "
+                "WHERE user_id = %(id)s "
+                "AND timetag = %(today)s ",
+                {'today': current_timetag, 'id': self. _id}
+            ).fetchone()['amount']
+
+            # subtract the current traffic not yet aggregated in `credit`
+            traffic = sql_query(
+                "SELECT input + output as throughput "
+                "FROM traffic.tuext AS t "
+                "LEFT JOIN computer AS c on c.c_ip = t.ip "
+                "WHERE c.nutzer_id =  %(id)s AND t.timetag = %(today)s",
+                {'today': current_timetag, 'id': self._id}
+            ).fetchone()
+
+            credit -= traffic['throughput']
+
+        except OperationalError as e:
+            logger.critical("Unable to connect to MySQL server",
+                            extra={'data': {'exception_args': e.args}})
+            self._credit = None
+            raise
+
+        else:
+            self._credit = round(credit / 1024, 2)
 
     @property
     def traffic_history(self):
+        # TODO: which IP to use?
         # TODO: this throws DBQueryEmpty
-        return query_trafficdata(self._ip, user_id_from_uid(self.uid))
+        return query_trafficdata(self._devices[0]['ip'], self._id)
 
     @property
     def credit(self):
@@ -181,8 +214,7 @@ class User(BaseUser):
         Note that the data doesn't have to be cached again, because
         `__init__` is called before every request.
         """
-        # TODO: return self._credit
-        return query_current_credit(self.uid, self._ip)
+        return self._credit
 
     @contextmanager
     def tmp_authentication(self, password):
@@ -211,11 +243,13 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
-        return self._mac
+        return {'value': ", ".join(device['mac'] for device in self._devices),
+                'tmp_readonly': len(self._devices) > 1}
 
     @mac.setter
     def mac(self, new_mac):
-        update_macaddress(self._ip, self.mac.value, new_mac)
+        assert len(self._devices) == 1, ""
+        update_macaddress(self._devices[0]['ip'], self.mac.value, new_mac)
 
     @active_prop
     def mail(self):
@@ -235,7 +269,7 @@ class User(BaseUser):
 
     @active_prop
     def ips(self):
-        return self._ip
+        return ", ".join(device['ip'] for device in self._devices)
 
     @active_prop
     def status(self):
@@ -255,11 +289,11 @@ class User(BaseUser):
 
     @active_prop
     def hostname(self):
-        return self._hostname
+        return ", ".join(device['hostname'] for device in self._devices)
 
     @active_prop
     def hostalias(self):
-        return self._hostalias
+        return ", ".join(device['hostalias'] for device in self._devices)
 
     @active_prop
     def userdb_status(self):
