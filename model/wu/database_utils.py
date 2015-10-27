@@ -89,68 +89,6 @@ def user_id_from_uid(uid=None):
                      (uid,)).fetchone()['nutzer_id']
 
 
-def ip_from_user_id(user_id):
-    result = (sql_query(
-        "SELECT c_ip FROM computer WHERE nutzer_id = %s",
-        (user_id,)
-    ).fetchone())
-    if not result:
-        raise DBQueryEmpty('Nutzer hat keine IP')
-    return result['c_ip']
-
-
-def user_id_from_ip(ip):
-    """Returns the MySQL user.id corresponding to the ip or 0 if foreign to the db
-    :param ip: A valid IP address
-    :return: A user id
-    """
-
-    result = sql_query("SELECT nutzer_id FROM computer WHERE c_ip = %s",
-                       (ip,)).fetchone()
-    if result is None:
-        return 0
-
-    return result['nutzer_id']
-
-
-def query_current_credit(uid=None, ip=None):
-    """Returns the current credit in MiB
-    :param uid: The id of the user
-    :param ip: The ip of the user
-    :return: The current amount of credit or False if foreign IP
-    """
-    if uid is None:
-        if ip is None:
-            raise AttributeError('Either ip or user_id must be specified!')
-        user_id = user_id_from_ip(ip)
-        if user_id is 0:
-            return False  # IP doesn't correspond to any user
-    else:
-        user_id = user_id_from_uid(uid)
-        ip = ip_from_user_id(user_id)
-
-    try:
-        result = sql_query(
-            "SELECT amount - input - output as current "
-            "FROM traffic.tuext AS t "
-            "LEFT OUTER JOIN credit AS c ON t.timetag = c.timetag "
-            "WHERE ip = %(ip)s AND c.user_id = %(user_id)s "
-            "AND t.timetag = %(today)s",
-            {'today': timetag_from_timestamp(), 'ip': ip, 'user_id': user_id}
-        ).fetchone()
-    except OperationalError as e:
-        logger.critical('Unable to connect to MySQL server',
-                        extra={'data': {'exception_args': e.args}})
-        raise
-    else:
-        if result and 'current' in result.keys():
-            return round(result['current'] / 1024, 2)
-        else:
-            logger.warning("Credit query was empty", extra={'data': {
-                'today': timetag_from_timestamp(), 'ip': ip, 'user_id': user_id
-            }})
-
-
 def query_trafficdata(ip, user_id):
     """Query traffic input/output for IP
 
