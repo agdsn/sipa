@@ -124,9 +124,11 @@ class active_prop(property):
                 value = result
                 style = None
                 empty = None
+                tmp_readonly = False
             else:
                 style = result.get('style', None)
                 empty = result.get('empty', None)
+                tmp_readonly = result.get('tmp_readonly', False)
 
             return ActiveProperty(
                 name=fget.__name__,
@@ -134,7 +136,7 @@ class active_prop(property):
                 capabilities=Capabilities(
                     edit=(fset is not None or fake_setter),
                     delete=(fdel is not None),
-                ),
+                ) if not tmp_readonly else no_capabilities,
                 style=style,
                 empty=empty,
             )
