@@ -109,9 +109,8 @@ class User(BaseUser):
     def traffic_history(self):
         def rand():
             return round(random() * 1024, 2)
-        return {'credit': 0,
-                'history': [(WEEKDAYS[day], rand(), rand()*0.1, rand())
-                            for day in range(7)]}
+        return [(WEEKDAYS[day], rand(), rand()*0.1, rand())
+                for day in range(7)]
 
     @property
     def credit(self):
