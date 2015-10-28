@@ -188,7 +188,7 @@ def usertraffic():
         user_id = chosen_user.id.value if chosen_user.id.supported else None
         return render_template("usertraffic.html",
                                user_id=user_id,
-                               usertraffic=chosen_user.get_traffic_data())
+                               traffic_user=chosen_user)
 
     abort(401)
 
@@ -197,7 +197,7 @@ def usertraffic():
 def traffic_api():
     user = (current_user if current_user.is_authenticated
             else user_from_ip(request.remote_addr))
-    trafficdata = user.get_traffic_data()
+    trafficdata = user.traffic_history
     print("trafficdata: {}".format(trafficdata))
     trafficdata['quota'] = trafficdata.pop('credit')
 

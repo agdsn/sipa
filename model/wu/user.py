@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 from contextlib import contextmanager
 
+from datetime import datetime, timedelta
+
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
 from model.property import active_prop
 
+from model.constants import WEEKDAYS
 from model.default import BaseUser, BaseUserDB
-from model.wu.database_utils import ip_from_user_id, sql_query, \
-    update_macaddress, query_trafficdata, \
-    query_current_credit, create_mysql_userdatabase, drop_mysql_userdatabase, \
-    change_mysql_userdatabase_password, user_has_mysql_db, \
+from model.wu.database_utils import sql_query, \
+    update_macaddress, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
-    user_id_from_uid
+    timetag_from_timestamp, db_helios
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
 
@@ -33,15 +34,12 @@ class User(BaseUser):
 
     datasource = 'wu'
 
-    def __init__(self, uid, name, mail, ip=None):
+    def __init__(self, uid, name, mail):
         super(User, self).__init__(uid)
         self.name = name
         self.group = self.define_group()
         self._mail = mail
         self.cache_information()
-        self._ip = (ip if ip
-                    else self._ip if self._ip
-                    else ip_from_user_id(self._id))
         self._userdb = UserDB(self)
 
     def __repr__(self):
@@ -49,7 +47,6 @@ class User(BaseUser):
             uid=self.uid,
             name=self.name,
             mail=self._mail,
-            ip=self._ip
         ))
 
     def __str__(self):
@@ -110,7 +107,7 @@ class User(BaseUser):
                              "WHERE nutzer_id = %s",
                              (result['nutzer_id'],)).fetchone()['unix_account']
 
-        user = cls.get(username, ip=ip)
+        user = cls.get(username)
         if not user:
             logger.warning("User %s could not be fetched from LDAP",
                            username, extra={'data': {
@@ -142,8 +139,10 @@ class User(BaseUser):
         ).fetchone()
 
         if not user:
-            # TODO: more information on this very specific issue.
-            raise DBQueryEmpty
+            logger.critical("User %s does not have a database entry", self.uid,
+                            extra={'stack': True})
+            raise DBQueryEmpty("No User found for unix_account '{}'"
+                               .format(self.uid))
 
         self._id = user['nutzer_id']
         self._address = "{0} / {1} {2}".format(
@@ -154,27 +153,102 @@ class User(BaseUser):
         )
         self._status_id = user['status']
 
-        computer = sql_query(
+        devices = sql_query(
             "SELECT c_etheraddr, c_ip, c_hname, c_alias "
             "FROM computer "
             "WHERE nutzer_id = %s",
             (user['nutzer_id'])
-        ).fetchone()
+        ).fetchall()
 
-        if not computer:
-            raise DBQueryEmpty
+        if devices:
+            self._devices = [{
+                'ip': device['c_ip'],
+                'mac': device['c_etheraddr'].upper(),
+                'hostname': device['c_hname'],
+                'hostalias': device['c_alias'],
+            } for device in devices]
+        else:
+            logger.warning("User {} (id {}) does not have any devices"
+                           .format(self.uid, self._id))
+            self._devices = []
 
-        self._ip = computer['c_ip']
-        self._mac = computer['c_etheraddr'].upper()
-        self._hostname = computer['c_hname']
-        self._hostalias = computer['c_alias']
+        # cache credit
+        current_timetag = timetag_from_timestamp()
 
-    def get_traffic_data(self):
-        # TODO: this throws DBQueryEmpty
-        return query_trafficdata(self._ip, user_id_from_uid(self.uid))
+        try:
+            # aggregated credit from 1(MEZ)/2(MESZ) AM
+            credit = sql_query(
+                "SELECT amount FROM credit "
+                "WHERE user_id = %(id)s "
+                "AND timetag >= %(today)s - 1 "
+                "ORDER BY timetag DESC LIMIT 1",
+                {'today': current_timetag, 'id': self._id}
+            ).fetchone()['amount']
 
-    def get_current_credit(self):
-        return query_current_credit(self.uid, self._ip)
+            # subtract the current traffic not yet aggregated in `credit`
+            traffic = sql_query(
+                "SELECT input + output as throughput "
+                "FROM traffic.tuext AS t "
+                "LEFT JOIN computer AS c on c.c_ip = t.ip "
+                "WHERE c.nutzer_id =  %(id)s AND t.timetag = %(today)s",
+                {'today': current_timetag, 'id': self._id}
+            ).fetchone()
+
+            credit -= traffic['throughput']
+
+        except OperationalError as e:
+            logger.critical("Unable to connect to MySQL server",
+                            extra={'data': {'exception_args': e.args}})
+            self._credit = None
+            raise
+
+        else:
+            self._credit = round(credit / 1024, 2)
+
+        # cache traffic history
+        self._traffic_history = []
+
+        for delta in range(-6, 1):
+            current_timetag = timetag_from_timestamp() + delta
+            day = datetime.today() - timedelta(days=delta)
+
+            traffic_of_the_day = sql_query(
+                "SELECT sum(t.input) as input, sum(t.output) as output, "
+                "sum(t.input+t.output) as throughput "
+                "FROM traffic.tuext as t "
+                "LEFT JOIN computer AS c ON c.c_ip = t.ip "
+                "WHERE t.timetag = %(timetag)s AND c.nutzer_id = %(id)s",
+                {'timetag': current_timetag, 'id': self._id},
+            ).fetchone()
+
+            credit_of_the_day = sql_query(
+                "SELECT amount FROM credit "
+                "WHERE user_id = %(id)s "
+                "AND timetag >= %(timetag)s - 1 "
+                "ORDER BY timetag DESC LIMIT 1",
+                {'timetag': current_timetag, 'id': self._id},
+            ).fetchone()['amount']
+
+            self._traffic_history.append({
+                'day': WEEKDAYS[day.weekday()],
+                'input': traffic_of_the_day['input'] / 1024,
+                'output': traffic_of_the_day['output'] / 1024,
+                'throughput': traffic_of_the_day['throughput'] / 1024,
+                'credit': credit_of_the_day / 1024,
+            })
+
+    @property
+    def traffic_history(self):
+        return self._traffic_history
+
+    @property
+    def credit(self):
+        """Return the current credit that is left
+
+        Note that the data doesn't have to be cached again, because
+        `__init__` is called before every request.
+        """
+        return self._credit
 
     @contextmanager
     def tmp_authentication(self, password):
@@ -203,11 +277,13 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
-        return self._mac
+        return {'value': ", ".join(device['mac'] for device in self._devices),
+                'tmp_readonly': len(self._devices) > 1}
 
     @mac.setter
     def mac(self, new_mac):
-        update_macaddress(self._ip, self.mac.value, new_mac)
+        assert len(self._devices) == 1, ""
+        update_macaddress(self._devices[0]['ip'], self.mac.value, new_mac)
 
     @active_prop
     def mail(self):
@@ -227,7 +303,7 @@ class User(BaseUser):
 
     @active_prop
     def ips(self):
-        return self._ip
+        return ", ".join(device['ip'] for device in self._devices)
 
     @active_prop
     def status(self):
@@ -247,11 +323,11 @@ class User(BaseUser):
 
     @active_prop
     def hostname(self):
-        return self._hostname
+        return ", ".join(device['hostname'] for device in self._devices)
 
     @active_prop
     def hostalias(self):
-        return self._hostalias
+        return ", ".join(device['hostalias'] for device in self._devices)
 
     @active_prop
     def userdb_status(self):
@@ -281,18 +357,69 @@ class UserDB(BaseUserDB):
     @property
     def has_db(self):
         try:
-            if user_has_mysql_db(self.user.uid):
-                return True
-            return False
+            userdb = sql_query(
+                "SELECT SCHEMA_NAME "
+                "FROM INFORMATION_SCHEMA.SCHEMATA "
+                "WHERE SCHEMA_NAME = %s",
+                (self.user.uid,),
+                database=db_helios
+            ).fetchone()
+
+            return userdb is not None
         except OperationalError:
-            logger.critical("User db of %s unreachable", self.user)
+            logger.critical("User db of user %s unreachable", self.user.uid)
             raise
 
     def create(self, password):
-        create_mysql_userdatabase(self.user.uid, password)
+        sql_query(
+            "CREATE DATABASE "
+            "IF NOT EXISTS `%s`" % self.user.uid,
+            database=db_helios
+        )
+        self.change_password(password)
 
     def drop(self):
-        drop_mysql_userdatabase(self.user.uid)
+        sql_query(
+            "DROP DATABASE "
+            "IF EXISTS `%s`" % self.user.uid,
+            database=db_helios
+        )
+
+        sql_query(
+            "DROP USER %s@'10.1.7.%%'",
+            (self.user.uid,),
+            database=db_helios
+        )
 
     def change_password(self, password):
-        change_mysql_userdatabase_password(self.user.uid, password)
+        user = sql_query(
+            "SELECT user "
+            "FROM mysql.user "
+            "WHERE user = %s",
+            (self.user.uid,),
+            database=db_helios
+        ).fetchall()
+
+        if not user:
+            sql_query(
+                "CREATE USER %s@'10.1.7.%%' "
+                "IDENTIFIED BY %s",
+                (self.user.uid, password),
+                database=db_helios
+            )
+        else:
+            sql_query(
+                "SET PASSWORD "
+                "FOR %s@'10.1.7.%%' = PASSWORD(%s)",
+                (self.user.uid, password),
+                database=db_helios
+            )
+
+        sql_query(
+            "GRANT SELECT, INSERT, UPDATE, DELETE, "
+            "ALTER, CREATE, DROP, INDEX, LOCK TABLES "
+            "ON `%s`.* "
+            "TO %%s@'10.1.7.%%%%'" % self.user.uid,
+            (self.user.uid,),
+            database=db_helios
+        )

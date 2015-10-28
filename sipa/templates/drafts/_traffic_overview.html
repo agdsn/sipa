@@ -7,17 +7,17 @@
         <th>Gesamt</th>
         <th>Credit</th>
     </tr></thead>
-    {% for day in usertraffic['history'] %}
+    {% for day in traffic_user.traffic_history %}
         <tr>
-            <td>{{ _(day[0]) }}</td>
-            <td>{{ day[1] | round(2) }}{# Input #} MiB</td>
-            <td>{{ day[2] | round(2) }}{# Output #} MiB</td>
-            <td>{{ (day[1]+day[2]) | round(2) }}{# Throughput #} MiB</td>
-            <td>{{ day[3] | round(2) }}{# Credit #} MiB</td>
+            <td>{{ _(day['day']) }}</td>
+            <td>{{ day['input'] | round(2) }} MiB</td>
+            <td>{{ day['output'] | round(2) }} MiB</td>
+            <td>{{ day['throughput'] | round(2) }} MiB</td>
+            <td>{{ day['credit'] | round(2) }} MiB</td>
         </tr>
     {% endfor %}
         <tr>
             <td id="usersuite-traffic-sum" colspan="4">{{ _("Verbleibender Credit") }}</td>
-            <td>{{ usertraffic.credit | round(2) }} MiB</td>
+            <td>{{ traffic_user.credit | round(2) }} MiB</td>
         </tr>
 </table>

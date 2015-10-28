@@ -108,7 +108,8 @@ class User(BaseUser):
     def change_password(self):
         raise NotImplementedError
 
-    def get_traffic_data(self):
+    @property
+    def traffic_history(self):
         trafficData = do_api_call("{}/traffic".format(self.id))
 
         if (trafficData):
@@ -118,22 +119,23 @@ class User(BaseUser):
             # loop through expected days ([-6..0])
             for d in range(-6, 1):
                 date = datetime.date.today() + datetime.timedelta(d)
-                day = date.strftime('%w')
+                day = date.weekday()
                 # pick the to `date` corresponding data
                 d = next((
                     x for x in hostOneTraffic
                     if x['date'] == date.strftime("%Y-%m-%d")
                 ), None)
                 if d:
+                    # TODO: check whether `WEEKDAYS[day]` is correct
                     (input, output, credit) = (
                         round(d[param] / 1048576.0, 2)
                         for param in ['in', 'out', 'credit']
                     )
                     traffic['history'].append(
-                        (WEEKDAYS[int(day)], input, output, credit))
+                        (WEEKDAYS[day], input, output, credit))
                 else:
                     traffic['history'].append(
-                        (WEEKDAYS[int(day)], 0.0, 0.0, 0.0))
+                        (WEEKDAYS[day], 0.0, 0.0, 0.0))
 
             traffic['credit'] = (lambda x: x['credit']/1048576)(
                 hostOneTraffic[-1])
@@ -141,10 +143,11 @@ class User(BaseUser):
             return traffic
         else:
             return {'credit': 0,
-                    'history': [(WEEKDAYS[int(day)], 0, 0, 0)
+                    'history': [(WEEKDAYS[day], 0, 0, 0)
                                 for day in range(7)]}
 
-    def get_current_credit(self):
+    @property
+    def credit(self):
         creditData = do_api_call(str(self.id) + '/credit')
         return creditData[0]['credit']/1048576 if creditData else 0
 

@@ -7,6 +7,7 @@ from model.constants import WEEKDAYS
 from model.default import BaseUser
 from model.property import active_prop, unsupported_prop
 
+from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 import configparser
@@ -50,9 +51,8 @@ class User(BaseUser):
             uid=self.uid,
             name=self.name,
             mail=self.mail,
-
+            ip=self._ip,
         ))
-
 
     @staticmethod
     def _get_config():
@@ -64,9 +64,6 @@ class User(BaseUser):
         with open(PATH, 'wb') as conf_file:
             self.config.write(conf_file)
         self.config = User._get_config()
-
-    def __repr__(self):
-        return "User<{},{}.{}>".format(self.uid, self.name, self.group)
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
@@ -108,15 +105,21 @@ class User(BaseUser):
         self.config.set('test', 'password', new)
         self._write_config()
 
-    def get_traffic_data(self):
+    @property
+    def traffic_history(self):
         def rand():
-            return round(random() * 1024, 2)
-        return {'credit': 0,
-                'history': [(WEEKDAYS[day], rand(), rand()*0.1, rand())
-                            for day in range(7)]}
+            return random() * 1024
+        return [{
+            'day': WEEKDAYS[day],
+            'input': rand(),
+            'output': rand()*0.1,
+            'throughput': rand(),
+            'credit': random() * 1024 * 63,
+        } for day in range(7)]
 
-    def get_current_credit(self):
-        return round(random() * 1024 * 63, 2)
+    @property
+    def credit(self):
+        return random() * 1024 * 63
 
     @active_prop
     def login(self):
