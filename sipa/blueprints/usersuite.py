@@ -44,7 +44,6 @@ def usersuite():
 
     try:
         rows = current_user.generate_rows(descriptions)
-        traffic_data = current_user.traffic_history
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
                      extra={'data': {'exception_args': e.args}, 'stack': True})
@@ -54,7 +53,7 @@ def usersuite():
 
     return render_template("usersuite/index.html",
                            rows=rows,
-                           usertraffic=traffic_data)
+                           traffic_user=current_user)
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])

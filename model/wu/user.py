@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 from contextlib import contextmanager
 
+from datetime import datetime, timedelta
+
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
 from model.property import active_prop
 
+from model.constants import WEEKDAYS
 from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
-    update_macaddress, query_trafficdata, \
+    update_macaddress, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
     timetag_from_timestamp, db_helios
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
@@ -177,8 +180,9 @@ class User(BaseUser):
             credit = sql_query(
                 "SELECT amount FROM credit "
                 "WHERE user_id = %(id)s "
-                "AND timetag = %(today)s ",
-                {'today': current_timetag, 'id': self. _id}
+                "AND timetag >= %(today)s - 1 "
+                "ORDER BY timetag DESC LIMIT 1",
+                {'today': current_timetag, 'id': self._id}
             ).fetchone()['amount']
 
             # subtract the current traffic not yet aggregated in `credit`
@@ -201,11 +205,41 @@ class User(BaseUser):
         else:
             self._credit = round(credit / 1024, 2)
 
+        # cache traffic history
+        self._traffic_history = []
+
+        for delta in range(-6, 1):
+            current_timetag = timetag_from_timestamp() + delta
+            day = datetime.today() - timedelta(days=delta)
+
+            traffic_of_the_day = sql_query(
+                "SELECT sum(t.input) as input, sum(t.output) as output, "
+                "sum(t.input+t.output) as throughput "
+                "FROM traffic.tuext as t "
+                "LEFT JOIN computer AS c ON c.c_ip = t.ip "
+                "WHERE t.timetag = %(timetag)s AND c.nutzer_id = %(id)s",
+                {'timetag': current_timetag, 'id': self._id},
+            ).fetchone()
+
+            credit_of_the_day = sql_query(
+                "SELECT amount FROM credit "
+                "WHERE user_id = %(id)s "
+                "AND timetag >= %(timetag)s - 1 "
+                "ORDER BY timetag DESC LIMIT 1",
+                {'timetag': current_timetag, 'id': self._id},
+            ).fetchone()['amount']
+
+            self._traffic_history.append({
+                'day': WEEKDAYS[day.weekday()],
+                'input': traffic_of_the_day['input'] / 1024,
+                'output': traffic_of_the_day['output'] / 1024,
+                'throughput': traffic_of_the_day['throughput'] / 1024,
+                'credit': credit_of_the_day / 1024,
+            })
+
     @property
     def traffic_history(self):
-        # TODO: which IP to use?
-        # TODO: this throws DBQueryEmpty
-        return query_trafficdata(self._devices[0]['ip'], self._id)
+        return self._traffic_history
 
     @property
     def credit(self):

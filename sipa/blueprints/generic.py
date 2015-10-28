@@ -188,7 +188,7 @@ def usertraffic():
         user_id = chosen_user.id.value if chosen_user.id.supported else None
         return render_template("usertraffic.html",
                                user_id=user_id,
-                               usertraffic=chosen_user.traffic_history)
+                               traffic_user=chosen_user)
 
     abort(401)
 

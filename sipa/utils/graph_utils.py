@@ -32,7 +32,7 @@ def generate_traffic_chart(traffic_data, inline=True):
      If inline is set, the chart is being passed the option to not add an xml
      declaration header to the beginning of the `render()` output, so it can
       be directly included in HTML code (wrapped by a `<figure>`)
-    :param traffic_data: The traffic data as given by `query_trafficdata()`
+    :param traffic_data: The traffic data as given by `user.traffic_history`
     :param inline: Determines the option `disable_xml_declaration`
     :return: The graph object
     """
@@ -48,13 +48,15 @@ def generate_traffic_chart(traffic_data, inline=True):
         js=[],  # prevent automatically fetching scripts from github
     )
 
-    days, in_values, out_values, credit = list(zip(*traffic_data['history']))
-    traffic_chart.x_labels = days
-    traffic_chart.add(gettext("Eingehend"), in_values,
+    traffic_chart.x_labels = (day['day'] for day in traffic_data)
+    traffic_chart.add(gettext("Eingehend"),
+                      [day['input'] for day in traffic_data],
                       stroke_style={'dasharray': '5'})
-    traffic_chart.add(gettext("Ausgehend"), out_values,
+    traffic_chart.add(gettext("Ausgehend"),
+                      [day['output'] for day in traffic_data],
                       stroke_style={'dasharray': '5'})
-    traffic_chart.add(gettext("Gesamt"), list(map(add, in_values, out_values)),
+    traffic_chart.add(gettext("Gesamt"),
+                      [day['throughput'] for day in traffic_data],
                       stroke_style={'width': '2'})
 
     return traffic_chart

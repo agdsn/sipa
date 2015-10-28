@@ -108,13 +108,18 @@ class User(BaseUser):
     @property
     def traffic_history(self):
         def rand():
-            return round(random() * 1024, 2)
-        return [(WEEKDAYS[day], rand(), rand()*0.1, rand())
-                for day in range(7)]
+            return random() * 1024
+        return [{
+            'day': WEEKDAYS[day],
+            'input': rand(),
+            'output': rand()*0.1,
+            'throughput': rand(),
+            'credit': random() * 1024 * 63,
+        } for day in range(7)]
 
     @property
     def credit(self):
-        return round(random() * 1024 * 63, 2)
+        return random() * 1024 * 63
 
     @active_prop
     def login(self):
