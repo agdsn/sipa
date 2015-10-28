@@ -1,3 +1,5 @@
+run:
+	docker-compose -f development.yml up
 translate:
 	pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot ./
 	pybabel update -i messages.pot -d sipa/translations/
