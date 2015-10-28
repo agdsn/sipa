@@ -14,11 +14,11 @@ from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
     update_macaddress, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
-    timetag_from_timestamp, db_helios
+    db_helios
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
 
-from sipa.utils import argstr
+from sipa.utils import argstr, timetag_today
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
 
 import logging
@@ -173,7 +173,7 @@ class User(BaseUser):
             self._devices = []
 
         # cache credit
-        current_timetag = timetag_from_timestamp()
+        current_timetag = timetag_today()
 
         try:
             # aggregated credit from 1(MEZ)/2(MESZ) AM
@@ -209,7 +209,7 @@ class User(BaseUser):
         self._traffic_history = []
 
         for delta in range(-6, 1):
-            current_timetag = timetag_from_timestamp() + delta
+            current_timetag = timetag_today() + delta
             day = datetime.today() + timedelta(days=delta)
 
             traffic_of_the_day = sql_query(

@@ -13,21 +13,9 @@ from flask.ext.login import current_user
 from itertools import chain
 
 
-def timetag_from_timestamp(timestamp=None):
-    """Convert a UNIX timestamp to a timetag.
-
-    If timestamp is None, use the current time.
-    COPIED FROM LEGACY
-    """
-    return int((time.time() if timestamp is None else timestamp) // 86400)
-
-
-def timestamp_from_timetag(timetag):
-    """Convert a timetag to a UNIX timestamp.
-
-    COPIED FROM LEGACY
-    """
-    return timetag * 86400
+def timetag_today():
+    """Return the timetag for today"""
+    return int(time.time() // 86400)
 
 
 def get_bustimes(stopname, count=10):
