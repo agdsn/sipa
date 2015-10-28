@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import datetime
-
 from sqlalchemy import create_engine
 from flask.ext.babel import gettext
 from flask.globals import current_app
 
 from werkzeug.local import LocalProxy
 
-from model.constants import WEEKDAYS
-
-from sipa.utils import timetag_from_timestamp, timestamp_from_timetag
-from sipa.utils.exceptions import DBQueryEmpty
 from .ldap_utils import get_current_uid
 
 import logging
