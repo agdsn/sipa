@@ -87,7 +87,7 @@ class User(BaseUser):
             return AnonymousUserMixin()
 
     def cache_information(self):
-        user_data = do_api_call(str(self.id))
+        user_data = do_api_call(str(self._id))
 
         self._id = user_data['id']
         self._login = user_data['login']
@@ -106,7 +106,7 @@ class User(BaseUser):
 
     @property
     def traffic_history(self):
-        trafficData = do_api_call("{}/traffic".format(self.id))
+        trafficData = do_api_call("{}/traffic".format(self._id))
 
         if (trafficData):
             hostOneTraffic = trafficData[0]['traffic']
@@ -144,7 +144,7 @@ class User(BaseUser):
 
     @property
     def credit(self):
-        creditData = do_api_call(str(self.id) + '/credit')
+        creditData = do_api_call(str(self._id) + '/credit')
         return creditData[0]['credit']/1048576 if creditData else 0
 
     @active_prop
