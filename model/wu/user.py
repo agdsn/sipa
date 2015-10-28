@@ -276,6 +276,10 @@ class User(BaseUser):
         return self.uid
 
     @active_prop
+    def realname(self):
+        return self.name
+
+    @active_prop
     def mac(self):
         return {'value': ", ".join(device['mac'] for device in self._devices),
                 'tmp_readonly': len(self._devices) > 1}

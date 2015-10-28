@@ -163,6 +163,10 @@ class User(BaseUser):
         return self._id
 
     @active_prop
+    def realname(self):
+        return self.name
+
+    @active_prop
     def login(self):
         return self._login
 

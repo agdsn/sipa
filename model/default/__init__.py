@@ -121,6 +121,11 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @active_prop
     @abstractmethod
+    def realname(self):
+        pass
+
+    @active_prop
+    @abstractmethod
     def login(self):
         pass
 

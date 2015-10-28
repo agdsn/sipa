@@ -31,6 +31,7 @@ def usersuite():
     """
     descriptions = OrderedDict([
         ('id', gettext("Nutzer-ID")),
+        ('realname', gettext("Voller Name")),
         ('login', gettext("Accountname")),
         ('status', gettext("Accountstatus")),
         ('address', gettext("Aktuelles Zimmer")),

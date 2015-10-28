@@ -122,6 +122,10 @@ class User(BaseUser):
         return random() * 1024 * 63
 
     @active_prop
+    def realname(self):
+        return self.name
+
+    @active_prop
     def login(self):
         return self.uid
 
