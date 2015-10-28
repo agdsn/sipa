@@ -34,8 +34,7 @@ class User(BaseUser):
         super(User, self).__init__(uid)
         self._id = id
         self.name = name
-        self.group = "static group"
-        self.mail = mail
+        self._mail = mail
         self.cache_information()
 
     def __repr__(self):
@@ -43,11 +42,8 @@ class User(BaseUser):
             uid=self.uid,
             id=self._id,
             name=self.name,
-            mail=self.mail,
+            mail=self._mail,
         ))
-
-    def __str__(self):
-        return "User {} ({}), {}".format(self.name, self.uid, self.group)
 
     can_change_password = False
 
