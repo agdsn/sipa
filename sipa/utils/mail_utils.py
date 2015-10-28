@@ -71,32 +71,3 @@ def send_mail(sender, receipient, subject, message):
             'data': {'subject': subject, 'message': message}
         })
         return True
-
-
-def base36encode(number, alphabet="0123456789abcdefghijklmnopqrstuvwxyz"):
-    """Convert an integer to a base36 string.
-
-    Taken from [Stackoverflow](http://stackoverflow.com/a/1181922/2443886).
-
-    Slightly modified: `base36` is now reversed because appending the
-    higher digits is easier than prepending, and reversing in the end
-    is done easily using `[::-1]`.
-    """
-    if not isinstance(number, int):
-        raise TypeError("Number must be an integer")
-
-    base36 = ""
-    sign = ""
-
-    if number < 0:
-        sign = "-"
-        number = -number
-
-    if 0 <= number < len(alphabet):
-        return sign + alphabet[number]
-
-    while number != 0:
-        number, i = divmod(number, len(alphabet))
-        base36 += alphabet[i]
-
-    return sign + base36[::-1]
