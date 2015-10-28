@@ -108,39 +108,50 @@ class User(BaseUser):
     def traffic_history(self):
         trafficData = do_api_call("{}/traffic".format(self._id))
 
-        if (trafficData):
+        if trafficData:
             hostOneTraffic = trafficData[0]['traffic']
-            traffic = {'history': [], 'credit': 0}
+            traffic_history = []
 
             # loop through expected days ([-6..0])
             for d in range(-6, 1):
                 date = datetime.date.today() + datetime.timedelta(d)
                 day = date.weekday()
                 # pick the to `date` corresponding data
-                d = next((
+                host = next((
                     x for x in hostOneTraffic
                     if x['date'] == date.strftime("%Y-%m-%d")
                 ), None)
-                if d:
-                    # TODO: check whether `WEEKDAYS[day]` is correct
+                if host:
                     (input, output, credit) = (
-                        round(d[param] / 1048576.0, 2)
+                        round(host[param] / 1048576.0, 2)
                         for param in ['in', 'out', 'credit']
                     )
-                    traffic['history'].append(
-                        (WEEKDAYS[day], input, output, credit))
+
+                    traffic_history.append({
+                        'day': WEEKDAYS[day],
+                        'input': input,
+                        'output': output,
+                        'throughput': input+output,
+                        'credit': credit,
+                    })
                 else:
-                    traffic['history'].append(
-                        (WEEKDAYS[day], 0.0, 0.0, 0.0))
+                    traffic_history.append({
+                        'day': WEEKDAYS[day],
+                        'input': 0.0,
+                        'output': 0.0,
+                        'throughput': 0.0,
+                        'credit': 0.0,
+                    })
 
-            traffic['credit'] = (lambda x: x['credit']/1048576)(
-                hostOneTraffic[-1])
-
-            return traffic
+            return traffic_history
         else:
-            return {'credit': 0,
-                    'history': [(WEEKDAYS[day], 0, 0, 0)
-                                for day in range(7)]}
+            return [{
+                'day': WEEKDAYS[day],
+                'input': 0.0,
+                'output': 0.0,
+                'throughput': 0.0,
+                'credit': 0.0,
+            } for day in range(7)]
 
     @property
     def credit(self):
