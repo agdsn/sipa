@@ -210,7 +210,7 @@ class User(BaseUser):
 
         for delta in range(-6, 1):
             current_timetag = timetag_from_timestamp() + delta
-            day = datetime.today() - timedelta(days=delta)
+            day = datetime.today() + timedelta(days=delta)
 
             traffic_of_the_day = sql_query(
                 "SELECT sum(t.input) as input, sum(t.output) as output, "
