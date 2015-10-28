@@ -122,7 +122,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @active_prop
     @abstractmethod
     def login(self):
-        return self.uid
+        pass
 
     @active_prop
     @abstractmethod
