@@ -124,6 +124,11 @@ def login():
         remember = form.remember.data
         User = dormitory.datasource.user_class
 
+        valid_suffix = "@{}".format(dormitory.datasource.mail_server)
+
+        if username.endswith(valid_suffix):
+            username = username[:-len(valid_suffix)]
+
         try:
             user = User.authenticate(username, password)
         except (UserNotFound, PasswordInvalid) as e:
