@@ -7,6 +7,7 @@ from model.constants import WEEKDAYS
 from model.default import BaseUser
 from model.property import active_prop, unsupported_prop
 
+from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 import configparser
@@ -50,9 +51,8 @@ class User(BaseUser):
             uid=self.uid,
             name=self.name,
             mail=self.mail,
-
+            ip=self._ip,
         ))
-
 
     @staticmethod
     def _get_config():
@@ -64,9 +64,6 @@ class User(BaseUser):
         with open(PATH, 'wb') as conf_file:
             self.config.write(conf_file)
         self.config = User._get_config()
-
-    def __repr__(self):
-        return "User<{},{}.{}>".format(self.uid, self.name, self.group)
 
     def __str__(self):
         return "User {} ({}), {}".format(self.name, self.uid, self.group)
