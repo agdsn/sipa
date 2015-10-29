@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine
-from flask.ext.babel import gettext
+from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
 
 from werkzeug.local import LocalProxy
@@ -49,12 +49,12 @@ DORMITORIES = [
 ]
 
 STATUS = {
-    1: (gettext('Bezahlt, verbunden'), 'success'),
-    2: (gettext('Nicht bezahlt, Netzanschluss gesperrt'), 'warning'),
-    7: (gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
+    1: (lazy_gettext('Bezahlt, verbunden'), 'success'),
+    2: (lazy_gettext('Nicht bezahlt, Netzanschluss gesperrt'), 'warning'),
+    7: (lazy_gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
         'danger'),
-    9: (gettext('Exaktiv'), 'muted'),
-    12: (gettext('Trafficlimit überschritten, Netzanschluss gesperrt'),
+    9: (lazy_gettext('Exaktiv'), 'muted'),
+    12: (lazy_gettext('Trafficlimit überschritten, Netzanschluss gesperrt'),
          'danger')
 }
 

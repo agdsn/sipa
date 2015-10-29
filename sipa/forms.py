@@ -78,7 +78,8 @@ class ReadonlyStringField(StrippedStringField):
 class ContactForm(Form):
     email = ReadonlyStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
-        validators=[Email(gettext("E-Mail ist nicht in gültigem Format!"))],
+        validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem "
+                                       "Format!"))],
     )
     type = SelectField(label=lazy_gettext("Kategorie"), choices=[
         ("frage", lazy_gettext("Allgemeine Frage an die Administratoren")),
@@ -88,16 +89,16 @@ class ContactForm(Form):
         ("eigene-technik", lazy_gettext("Probleme mit privater Technik"))
     ])
     subject = StrippedStringField(label=lazy_gettext("Betreff"), validators=[
-        DataRequired(gettext("Betreff muss angegeben werden!"))])
+        DataRequired(lazy_gettext("Betreff muss angegeben werden!"))])
     message = TextAreaField(label=lazy_gettext("Nachricht"), validators=[
-        DataRequired(gettext("Nachricht fehlt!"))
+        DataRequired(lazy_gettext("Nachricht fehlt!"))
     ])
 
 
 class AnonymousContactForm(Form):
     email = StrippedStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
-        validators=[Email(gettext("E-Mail ist nicht in gültigem Format!"))],
+        validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))],
     )
     dormitory = SelectField(
         label=lazy_gettext("Wohnheim"),
@@ -105,38 +106,38 @@ class AnonymousContactForm(Form):
         default=LocalProxy(lambda: preferred_dormitory_name()),
     )
     subject = StrippedStringField(label=lazy_gettext("Betreff"), validators=[
-        DataRequired(gettext("Betreff muss angegeben werden!"))])
+        DataRequired(lazy_gettext("Betreff muss angegeben werden!"))])
     message = TextAreaField(label=lazy_gettext("Nachricht"), validators=[
-        DataRequired(gettext("Nachricht fehlt!"))
+        DataRequired(lazy_gettext("Nachricht fehlt!"))
     ])
 
 
 class ChangePasswordForm(Form):
     old = PasswordField(label=lazy_gettext("Altes Passwort"), validators=[
-        DataRequired(gettext("Altes Passwort muss angegeben werden!"))])
+        DataRequired(lazy_gettext("Altes Passwort muss angegeben werden!"))])
     new = PasswordField(label=lazy_gettext("Neues Passwort"), validators=[
-        DataRequired(gettext("Neues Passwort fehlt!")),
+        DataRequired(lazy_gettext("Neues Passwort fehlt!")),
         PasswordComplexity(),
     ])
     confirm = PasswordField(label=lazy_gettext("Bestätigung"), validators=[
-        DataRequired(gettext("Bestätigung des neuen Passworts fehlt!")),
+        DataRequired(lazy_gettext("Bestätigung des neuen Passworts fehlt!")),
         EqualTo('new',
-                message=gettext("Neue Passwörter stimmen nicht überein!"))
+                message=lazy_gettext("Neue Passwörter stimmen nicht überein!"))
     ])
 
 
 class ChangeMailForm(Form):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
-        validators=[DataRequired(gettext("Passwort nicht angegeben!"))])
+        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     email = StrippedStringField(
         label=lazy_gettext("Neue Mail"),
-        validators=[Email(gettext("E-Mail ist nicht in gültigem Format!"))])
+        validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))])
 
 
 class DeleteMailForm(Form):
     password = PasswordField(
-        validators=[DataRequired(gettext("Passwort nicht angegeben!"))])
+        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
 
 
 def require_unicast_mac(form, field):
@@ -152,7 +153,7 @@ def require_unicast_mac(form, field):
 class ChangeMACForm(Form):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
-        validators=[DataRequired(gettext("Passwort nicht angegeben!"))])
+        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     mac = StrippedStringField(
         label=lazy_gettext("Neue MAC"),
         validators=[DataRequired("MAC-Adresse nicht angegeben!"),
@@ -166,32 +167,32 @@ class LoginForm(Form):
         choices=LocalProxy(list_all_dormitories),
         default=LocalProxy(lambda: preferred_dormitory_name()),
         validators=[AnyOf([dorm.name for dorm in registered_dormitories],
-                          message=gettext("Kein gültiges Wohnheim!"))]
+                          message=lazy_gettext("Kein gültiges Wohnheim!"))]
     )
     username = StrippedStringField(
         label=lazy_gettext("Nutzername"),
         validators=[
-            DataRequired(gettext("Nutzername muss angegeben werden!")),
-            Regexp("^[^,+\"\\<>;#]+$", message=gettext(
+            DataRequired(lazy_gettext("Nutzername muss angegeben werden!")),
+            Regexp("^[^,+\"\\<>;#]+$", message=lazy_gettext(
                 "Nutzername enthält ungültige Zeichen!")),
         ],
     )
     password = PasswordField(
         label=lazy_gettext("Passwort"),
-        validators=[DataRequired(gettext("Kein Passwort eingegeben!"))]
+        validators=[DataRequired(lazy_gettext("Kein Passwort eingegeben!"))]
     )
     remember = BooleanField(default=lazy_gettext("Anmeldung merken"))
 
 
 class HostingForm(Form):
     password = PasswordField(lazy_gettext("Passwort"), validators=[
-        DataRequired(gettext("Kein Passwort eingegeben!")),
+        DataRequired(lazy_gettext("Kein Passwort eingegeben!")),
         PasswordComplexity(),
     ])
     confirm = PasswordField(lazy_gettext("Bestätigung"), validators=[
-        DataRequired(gettext("Bestätigung des neuen Passworts fehlt!")),
+        DataRequired(lazy_gettext("Bestätigung des neuen Passworts fehlt!")),
         EqualTo('password',
-                message=gettext("Neue Passwörter stimmen nicht überein!"))
+                message=lazy_gettext("Neue Passwörter stimmen nicht überein!"))
     ])
     action = HiddenField()
 

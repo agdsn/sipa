@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.babel import gettext
+from flask.ext.babel import lazy_gettext
 from ..datasource import DataSource, Dormitory
 from ipaddress import IPv4Network
 
@@ -16,7 +16,7 @@ def init_context(app):
 
 datasource = DataSource(
     name='gerok',
-    display_name=gettext("Gerokstraße"),
+    display_name=lazy_gettext("Gerokstraße"),
     user_class=user.User,
     mail_server="wh17.tu-dresden.de",
     support_mail="gerok@wh17.tu-dresden.de",
