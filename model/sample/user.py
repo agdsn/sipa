@@ -17,20 +17,21 @@ PATH = "/tmp/sipa_sample.conf"
 
 
 def init_context(app):
-    config = configparser.RawConfigParser()
-    config.add_section('test')
-    config.set('test', 'name', 'Test User')
-    config.set('test', 'id', '1337-0')
-    config.set('test', 'uid', 'test')
-    config.set('test', 'password', 'test')
-    config.set('test', 'address', "Keller, Wundtstr. 5")
-    config.set('test', 'mail', 'test@agdsn.de')
-    config.set('test', 'mac', 'aa:bb:cc:dd:ee:ff')
-    config.set('test', 'ip', '141.30.228.39')
-    config.set('test', 'hostname', 'My_Server')
-    config.set('test', 'hostalias', 'leethax0r')
+    config = configparser.ConfigParser()
+    config['test'] = {
+        'name': 'Test User',
+        'id': '1337-0',
+        'uid': 'test',
+        'password': 'test',
+        'address': "Keller, Wundtstr. 5",
+        'mail': 'test@agdsn.de',
+        'mac': 'aa:bb:cc:dd:ee:ff',
+        'ip': '141.30.228.39',
+        'hostname': 'My_Server',
+        'hostalias': 'leethax0r',
+    }
 
-    with open(PATH, 'w', encoding='utf-8') as conf_file:
+    with open(PATH, 'w') as conf_file:
         config.write(conf_file)
 
 
@@ -38,13 +39,12 @@ def init_context(app):
 class User(BaseUser):
     datasource = 'sample'
 
-    def __init__(self, uid, name=None, mail=None, ip=None):
+    def __init__(self, uid):
         super(User, self).__init__(uid)
         self.config = self._get_config()
-        self.name = self.config.get(uid, 'name')
-        self.group = "static group"
-        self.old_mail = self.config.get(uid, 'mail')
-        self._ip = ip if ip else "127.0.0.1"
+        self.name = self.config[uid]['name']
+        self.old_mail = self.config[uid]['mail']
+        self._ip = "127.0.0.1"
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
@@ -56,17 +56,14 @@ class User(BaseUser):
 
     @staticmethod
     def _get_config():
-        config = configparser.RawConfigParser()
+        config = configparser.ConfigParser()
         config.read(PATH)
         return config
 
     def _write_config(self):
-        with open(PATH, 'wb') as conf_file:
+        with open(PATH, 'w') as conf_file:
             self.config.write(conf_file)
         self.config = User._get_config()
-
-    def __str__(self):
-        return "User {} ({}), {}".format(self.name, self.uid, self.group)
 
     can_change_password = True
 
@@ -102,7 +99,7 @@ class User(BaseUser):
         return cls.get('test')
 
     def change_password(self, old, new):
-        self.config.set('test', 'password', new)
+        self.config[self.uid]['password'] = new
         self._write_config()
 
     @property
@@ -135,7 +132,7 @@ class User(BaseUser):
 
     @mac.setter
     def mac(self, value):
-        self.config.set(self.uid, 'mac', value)
+        self.config.set('test', 'mac', value)
         self._write_config()
 
     @active_prop
