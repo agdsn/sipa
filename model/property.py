@@ -94,8 +94,8 @@ class ActiveProperty(PropertyBase):
         ))
 
 
-def unsupported_prop(name):
-    return property(lambda self: UnsupportedProperty(name=name))
+def unsupported_prop(func):
+    return property(lambda self: UnsupportedProperty(name=func.__name__))
 
 
 class active_prop(property):
