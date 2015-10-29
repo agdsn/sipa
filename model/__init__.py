@@ -3,7 +3,6 @@ from flask import request, session, current_app
 from flask.ext.login import current_user, AnonymousUserMixin
 from ipaddress import IPv4Address, AddressValueError
 
-from werkzeug.local import LocalProxy
 from sqlalchemy.exc import OperationalError
 
 from . import sample, wu, gerok, hss, zeu
