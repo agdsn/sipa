@@ -1,15 +1,9 @@
-from sipa.initialization import create_app
 from flask import url_for
-from flask.ext.testing import TestCase
+from prepare import AppInitialized
 
 
-class TestSipaFrontendCase(TestCase):
+class TestSipaFrontendCase(AppInitialized):
     """A minimal first test case to build upon."""
-
-    def create_app(self):
-        test_app = create_app()
-        test_app.config['TESTING'] = True
-        return test_app
 
     def setUp(self):
         pass

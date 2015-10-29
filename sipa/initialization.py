@@ -25,8 +25,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def create_app(name=None):
-    app = Flask(name if name else __name__)
+def create_app(name=None, app=None):
+    app = app if app else Flask(name if name else __name__)
     init_app(app)
     return app
 
