@@ -11,23 +11,26 @@ from model.property import active_prop, unsupported_prop
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
+from werkzeug import LocalProxy
+
 
 def init_context(app):
-    config = app.extensions['sample_users']
-    config['test'] = {
-        'name': 'Test User',
-        'id': '1337-0',
-        'uid': 'test',
-        'password': 'test',
-        'address': "Keller, Wundtstr. 5",
-        'mail': 'test@agdsn.de',
-        'mac': 'aa:bb:cc:dd:ee:ff',
-        'ip': '141.30.228.39',
-        'hostname': 'My_Server',
-        'hostalias': 'leethax0r',
+    app.extensions['sample_users'] = {
+        'test': {
+            'name': 'Test User',
+            'id': '1337-0',
+            'uid': 'test',
+            'password': 'test',
+            'address': "Keller, Wundtstr. 5",
+            'mail': 'test@agdsn.de',
+            'mac': 'aa:bb:cc:dd:ee:ff',
+            'ip': '141.30.228.39',
+            'hostname': 'My_Server',
+            'hostalias': 'leethax0r',
+        }
     }
 
-config = current_app.extensions['sample_users']
+config = LocalProxy(lambda: current_app.extensions['sample_users'])
 
 
 # noinspection PyMethodMayBeStatic
@@ -36,6 +39,7 @@ class User(BaseUser):
 
     def __init__(self, uid):
         super(User, self).__init__(uid)
+        self.config = config
         self.name = config[uid]['name']
         self.old_mail = config[uid]['mail']
         self._ip = "127.0.0.1"
