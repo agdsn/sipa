@@ -49,7 +49,7 @@ DORMITORIES = [
 ]
 
 STATUS = {
-    1: (lazy_gettext('Bezahlt, verbunden'), 'success'),
+    1: (lazy_gettext('ok'), 'success'),
     2: (lazy_gettext('Nicht bezahlt, Netzanschluss gesperrt'), 'warning'),
     7: (lazy_gettext('Verstoß gegen Netzordnung, Netzanschluss gesperrt'),
         'danger'),
