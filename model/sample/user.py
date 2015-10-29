@@ -54,17 +54,6 @@ class User(BaseUser):
             ip=self._ip,
         ))
 
-    @staticmethod
-    def _get_config():
-        config = configparser.ConfigParser()
-        config.read(PATH)
-        return config
-
-    def _write_config(self):
-        with open(PATH, 'w') as conf_file:
-            self.config.write(conf_file)
-        self.config = User._get_config()
-
     can_change_password = True
 
     login_list = {
