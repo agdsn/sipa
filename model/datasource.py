@@ -1,4 +1,5 @@
 from ipaddress import IPv4Network
+from sipa.utils import argstr
 
 
 def empty_function(app):
@@ -26,6 +27,17 @@ class DataSource:
     def __eq__(self, other):
         return self.name == other.name
 
+    def __repr__(self):
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            name=self.name,
+            display_name=self.display_name,
+            user_class=self.user_class,
+            mail_server=self.mail_server,
+            support_mail=self.support_mail,
+            init_context=self._init_context,
+            debug_only=self.debug_only,
+        ))
+
     def init_context(self, app):
         return self._init_context(app)
 
@@ -47,6 +59,11 @@ class SubnetCollection:
 
         self.subnets = subnets
 
+    def __repr__(self):
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            subnets=self.subnets,
+        ))
+
     def __contains__(self, address):
         for subnet in self.subnets:
             if address in subnet:
@@ -63,6 +80,14 @@ class Dormitory:
         self.datasource = datasource
         self.subnets = SubnetCollection(subnets)
 
+    def __repr__(self):
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            name=self.name,
+            display_name=self.display_name,
+            datasource=self.datasource,
+            subnets=self.subnets.subnets,
+        ))
+
     def __eq__(self, other):
         return self.name == other.name and self.datasource == other.datasource
 
@@ -75,3 +100,11 @@ class PrematureDataSource:
         self.display_name = display_name
         self.website_url = website_url
         self.support_mail = support_mail
+
+    def __repr__(self):
+        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+            name=self.name,
+            display_name=self.display_name,
+            website_url=self.website_url,
+            support_mail=self.support_mail,
+        ))
