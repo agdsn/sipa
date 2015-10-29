@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from random import random
 
+from flask import current_app
 from flask.ext.login import AnonymousUserMixin
 
 from model.constants import WEEKDAYS
@@ -10,14 +11,9 @@ from model.property import active_prop, unsupported_prop
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
-import configparser
-
-
-PATH = "/tmp/sipa_sample.conf"
-
 
 def init_context(app):
-    config = configparser.ConfigParser()
+    config = app.extensions['sample_users']
     config['test'] = {
         'name': 'Test User',
         'id': '1337-0',
@@ -31,8 +27,7 @@ def init_context(app):
         'hostalias': 'leethax0r',
     }
 
-    with open(PATH, 'w') as conf_file:
-        config.write(conf_file)
+config = current_app.extensions['sample_users']
 
 
 # noinspection PyMethodMayBeStatic
@@ -41,9 +36,8 @@ class User(BaseUser):
 
     def __init__(self, uid):
         super(User, self).__init__(uid)
-        self.config = self._get_config()
-        self.name = self.config[uid]['name']
-        self.old_mail = self.config[uid]['mail']
+        self.name = config[uid]['name']
+        self.old_mail = config[uid]['mail']
         self._ip = "127.0.0.1"
 
     def __repr__(self):
@@ -61,22 +55,19 @@ class User(BaseUser):
     }
 
     @classmethod
-    def get(cls, username, **kwargs):
+    def get(cls, username):
         """Static method for flask-login user_loader,
         used before _every_ request.
         """
-        config = cls._get_config()
-        if config.has_section(username):
+        if username in config:
             return cls(username)
         else:
             return AnonymousUserMixin()
 
     @classmethod
     def authenticate(cls, username, password):
-        config = cls._get_config()
-
-        if config.has_section(username):
-            if config.get(username, 'password') == password:
+        if username in config:
+            if config[username]['password'] == password:
                 return cls.get(username)
             else:
                 raise PasswordInvalid
@@ -88,8 +79,7 @@ class User(BaseUser):
         return cls.get('test')
 
     def change_password(self, old, new):
-        self.config[self.uid]['password'] = new
-        self._write_config()
+        config[self.uid]['password'] = new
 
     @property
     def traffic_history(self):
@@ -117,34 +107,31 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
-        return self.config.get('test', 'mac')
+        return config['test']['mac']
 
     @mac.setter
     def mac(self, value):
-        self.config.set('test', 'mac', value)
-        self._write_config()
+        config['test']['mac'] = value
 
     @active_prop
     def mail(self):
-        return self.config.get('test', 'mail')
+        return config['test']['mail']
 
     @mail.setter
     def mail(self, value):
-        self.config.set(self.uid, 'mail', value)
-        self._write_config()
+        config[self.uid]['mail'] = value
 
     @mail.deleter
     def mail(self):
-        self.config.set(self.uid, 'mail', "")
-        self._write_config()
+        self.config[self.uid]['mail'] = ""
 
     @active_prop
     def address(self):
-        return self.config.get('test', 'address')
+        return self.config['test']['address']
 
     @active_prop
     def ips(self):
-        return self.config.get('test', 'ip')
+        return self.config['test']['ip']
 
     @active_prop
     def status(self):
@@ -152,15 +139,15 @@ class User(BaseUser):
 
     @active_prop
     def id(self):
-        return self.config.get('test', 'id')
+        return self.config['test']['id']
 
     @active_prop
     def hostname(self):
-        return self.config.get('test', 'hostname')
+        return self.config['test']['hostname']
 
     @active_prop
     def hostalias(self):
-        return self.config.get('test', 'hostalias')
+        return self.config['test']['hostalias']
 
     @unsupported_prop
     def userdb_status(self):
