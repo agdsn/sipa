@@ -31,6 +31,18 @@ class PropertyBase(metaclass=ABCMeta):
     def supported(self):
         pass
 
+    def __eq__(self, other):
+        try:
+            return all((
+                self.name == other.name,
+                self.value == other.value,
+                self.capabilities == other.capabilities,
+                self.style == other.style,
+                self.empty == other.empty,
+            ))
+        except AttributeError:
+            return False
+
 
 class UnsupportedProperty(PropertyBase):
     supported = False
@@ -47,6 +59,9 @@ class UnsupportedProperty(PropertyBase):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             name=self.name
         ))
+
+    def __eq__(self, other):
+        return self.name == other.name
 
 
 class ActiveProperty(PropertyBase):
