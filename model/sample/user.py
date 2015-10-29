@@ -111,15 +111,15 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
-        return config['test']['mac']
+        return config[self.uid]['mac']
 
     @mac.setter
     def mac(self, value):
-        config['test']['mac'] = value
+        config[self.uid]['mac'] = value
 
     @active_prop
     def mail(self):
-        return config['test']['mail']
+        return config[self.uid]['mail']
 
     @mail.setter
     def mail(self, value):
@@ -131,11 +131,11 @@ class User(BaseUser):
 
     @active_prop
     def address(self):
-        return self.config['test']['address']
+        return self.config[self.uid]['address']
 
     @active_prop
     def ips(self):
-        return self.config['test']['ip']
+        return self.config[self.uid]['ip']
 
     @active_prop
     def status(self):
@@ -143,15 +143,15 @@ class User(BaseUser):
 
     @active_prop
     def id(self):
-        return self.config['test']['id']
+        return self.config[self.uid]['id']
 
     @active_prop
     def hostname(self):
-        return self.config['test']['hostname']
+        return self.config[self.uid]['hostname']
 
     @active_prop
     def hostalias(self):
-        return self.config['test']['hostalias']
+        return self.config[self.uid]['hostalias']
 
     @unsupported_prop
     def userdb_status(self):
