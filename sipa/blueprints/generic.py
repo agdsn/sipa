@@ -203,16 +203,13 @@ def usertraffic():
 def traffic_api():
     user = (current_user if current_user.is_authenticated
             else user_from_ip(request.remote_addr))
-    trafficdata = user.traffic_history
-    print("trafficdata: {}".format(trafficdata))
-    trafficdata['quota'] = trafficdata.pop('credit')
 
-    history = trafficdata.pop('history')
+    data = {}
+    data['quota'] = user.credit
+    data['history'] = [{'day': day['day'], 'in': day['input'], 'out': day['output']}
+                       for day in user.traffic_history]
 
-    trafficdata['traffic'] = [{'in': day[1], 'out': day[2]}
-                              for day in history]
-
-    return jsonify(version=2, **trafficdata)
+    return jsonify(version=3, **data)
 
 
 @bp_generic.route('/contact', methods=['GET', 'POST'])
