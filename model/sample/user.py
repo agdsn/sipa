@@ -89,10 +89,12 @@ class User(BaseUser):
         def rand():
             return random() * 1024
         return [{
-            'input': rand(),
-            'output': rand()*0.1,
-            'throughput': rand(),
             'day': day,
+            **(lambda i, o: {
+                'input': i,
+                'output': o,
+                'throughput': i + o,
+            })(rand(), rand()*0.04),
             'credit': random() * 1024 * 63,
         } for day in range(7)]
 
