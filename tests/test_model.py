@@ -20,6 +20,18 @@ class TestBaseUserCase(TestCase):
 
 
 class TestSampleUserCase(AppInitialized):
+    rows = [
+        'realname',
+        'login',
+        'mac',
+        'mail',
+        'address',
+        'ips',
+        'status',
+        'id',
+        'hostname',
+        'hostalias',
+    ]
 
     def setUp(self):
         self.User = model.sample.datasource.user_class
@@ -74,5 +86,25 @@ class TestSampleUserCase(AppInitialized):
             self.assertEqual(day['throughput'], day['input'] + day['output'])
             assert 0 <= day['credit'] <= 1024 * 63
 
-    # TODO: generically check whether the setter works
-    # (by using the capabilities :O)
+    def test_row_setters(self):
+        for attr in self.rows:
+            class_attr = getattr(self.user.__class__, attr)
+
+            if class_attr.fset:
+                value = "given_value"
+                setattr(self.user, attr, value)
+                self.assertEqual(getattr(self.user, attr).value, value)
+            elif not getattr(self.user, attr).capabilities.edit:
+                assert not class_attr.fset
+
+    def test_row_deleters(self):
+        for attr in self.rows:
+            class_attr = getattr(self.user.__class__, attr)
+
+            if class_attr.fdel:
+                delattr(self.user, attr)
+                assert not getattr(self.user, attr).raw_value
+                assert getattr(self.user, attr).empty
+
+            elif not getattr(self.user, attr).capabilities.delete:
+                assert not class_attr.fdel
