@@ -3,8 +3,9 @@
 import pygal
 from pygal.style import Style
 from pygal.colors import hsl_to_rgb
-
+from sipa.utils.babel_utils import get_weekday
 from flask.ext.babel import gettext
+
 from operator import add
 
 
@@ -48,7 +49,7 @@ def generate_traffic_chart(traffic_data, inline=True):
         js=[],  # prevent automatically fetching scripts from github
     )
 
-    traffic_chart.x_labels = (day['day'] for day in traffic_data)
+    traffic_chart.x_labels = (get_weekday(day['day']) for day in traffic_data)
     traffic_chart.add(gettext("Eingehend"),
                       [day['input'] for day in traffic_data],
                       stroke_style={'dasharray': '5'})

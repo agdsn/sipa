@@ -9,7 +9,7 @@
     </tr></thead>
     {% for day in traffic_user.traffic_history %}
         <tr>
-            <td>{{ _(day['day']) }}</td>
+            <td>{{ get_weekday(day['day']) }}</td>
             <td>{{ day['input'] | round(2) }} MiB</td>
             <td>{{ day['output'] | round(2) }} MiB</td>
             <td>{{ day['throughput'] | round(2) }} MiB</td>

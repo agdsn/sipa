@@ -4,7 +4,6 @@ from random import random
 from flask import current_app
 from flask.ext.login import AnonymousUserMixin
 
-from model.constants import WEEKDAYS
 from model.default import BaseUser
 from model.property import active_prop, unsupported_prop
 
@@ -90,10 +89,10 @@ class User(BaseUser):
         def rand():
             return random() * 1024
         return [{
-            'day': WEEKDAYS[day],
             'input': rand(),
             'output': rand()*0.1,
             'throughput': rand(),
+            'day': day,
             'credit': random() * 1024 * 63,
         } for day in range(7)]
 

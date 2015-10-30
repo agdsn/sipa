@@ -9,7 +9,6 @@ from sqlalchemy.exc import OperationalError
 
 from model.property import active_prop
 
-from model.constants import WEEKDAYS
 from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
     update_macaddress, \
@@ -230,7 +229,7 @@ class User(BaseUser):
             ).fetchone()['amount']
 
             self._traffic_history.append({
-                'day': WEEKDAYS[day.weekday()],
+                'day': day.weekday(),
                 'input': traffic_of_the_day['input'] / 1024,
                 'output': traffic_of_the_day['output'] / 1024,
                 'throughput': traffic_of_the_day['throughput'] / 1024,

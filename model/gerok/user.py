@@ -6,7 +6,6 @@ from flask.globals import current_app
 
 from werkzeug.local import LocalProxy
 
-from model.constants import WEEKDAYS
 from model.default import BaseUser
 from model.property import active_prop, unsupported_prop
 
@@ -128,7 +127,7 @@ class User(BaseUser):
                     )
 
                     traffic_history.append({
-                        'day': WEEKDAYS[day],
+                        'day': day,
                         'input': input,
                         'output': output,
                         'throughput': input+output,
@@ -136,7 +135,7 @@ class User(BaseUser):
                     })
                 else:
                     traffic_history.append({
-                        'day': WEEKDAYS[day],
+                        'day': day,
                         'input': 0.0,
                         'output': 0.0,
                         'throughput': 0.0,
@@ -146,7 +145,7 @@ class User(BaseUser):
             return traffic_history
         else:
             return [{
-                'day': WEEKDAYS[day],
+                'day': day,
                 'input': 0.0,
                 'output': 0.0,
                 'throughput': 0.0,
