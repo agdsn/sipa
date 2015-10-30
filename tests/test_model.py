@@ -49,7 +49,7 @@ class TestSampleUserCase(AppInitialized):
     def test_uid_correct(self):
         self.assertEqual(self.user.uid, self.sample_users['test']['uid'])
 
-    def test_row_properties(self):
+    def test_row_getters(self):
         """Test if the basic properties have been implemented accordingly.
         """
 
@@ -71,26 +71,6 @@ class TestSampleUserCase(AppInitialized):
 
         self.assertEqual(self.user.userdb_status,
                          UnsupportedProperty('userdb_status'))
-
-    def test_correct_password(self):
-        user = self.User('test')
-        # TODO: check authenticate
-        user.re_authenticate(
-            self.sample_users['test']['password']
-        )
-
-    def test_credit_valid(self):
-        """check whether the credit is positive and below 63GiB.
-        """
-        assert 0 <= self.user.credit <= 1024 * 63
-
-    def test_traffic_history(self):
-        for day in self.user.traffic_history:
-            assert 0 <= day['day'] <= 6
-            assert 0 <= day['input']
-            assert 0 <= day['output']
-            self.assertEqual(day['throughput'], day['input'] + day['output'])
-            assert 0 <= day['credit'] <= 1024 * 63
 
     def test_row_setters(self):
         for attr in self.rows:
@@ -114,3 +94,23 @@ class TestSampleUserCase(AppInitialized):
 
             elif not getattr(self.user, attr).capabilities.delete:
                 assert not class_attr.fdel
+
+    def test_correct_password(self):
+        user = self.User('test')
+        # TODO: check authenticate
+        user.re_authenticate(
+            self.sample_users['test']['password']
+        )
+
+    def test_credit_valid(self):
+        """check whether the credit is positive and below 63GiB.
+        """
+        assert 0 <= self.user.credit <= 1024 * 63
+
+    def test_traffic_history(self):
+        for day in self.user.traffic_history:
+            assert 0 <= day['day'] <= 6
+            assert 0 <= day['input']
+            assert 0 <= day['output']
+            self.assertEqual(day['throughput'], day['input'] + day['output'])
+            assert 0 <= day['credit'] <= 1024 * 63
