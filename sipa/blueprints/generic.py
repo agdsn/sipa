@@ -165,6 +165,15 @@ def logout():
     return redirect(url_for('.index'))
 
 
+@bp_generic.app_template_filter('unit')
+def unit(number):
+    unit = 'MiB'
+    if number > 1024:
+        unit = 'GiB'
+        number /= 1024
+    return '{} {}'.format(round(number, 2), unit)
+
+
 @bp_generic.route("/usertraffic")
 def usertraffic():
     """Show a user's traffic on a static site just as in the usersuite.
