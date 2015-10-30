@@ -3,7 +3,8 @@ from prepare import AppInitialized
 
 from model.default import BaseUser
 import model.sample
-from model.property import UnsupportedProperty
+from model.property import (ActiveProperty, UnsupportedProperty,
+                            no_capabilities, Capabilities)
 
 
 class TestBaseUserCase(TestCase):
@@ -20,18 +21,21 @@ class TestBaseUserCase(TestCase):
 
 
 class TestSampleUserCase(AppInitialized):
-    rows = [
-        'realname',
-        'login',
-        'mac',
-        'mail',
-        'address',
-        'ips',
-        'status',
-        'id',
-        'hostname',
-        'hostalias',
-    ]
+    expected_result = {
+        # 'attr_name': ('key_in_sample_dict', Capabilities())
+        'realname': ('name', no_capabilities),
+        'login': ('uid', no_capabilities),
+        'mac': ('mac', Capabilities(edit=True, delete=False)),
+        'mail': ('mail', Capabilities(edit=True, delete=True)),
+        'address': ('address', no_capabilities),
+        'ips': ('ip', no_capabilities),
+        'status': ('status', no_capabilities),
+        'id': ('id', no_capabilities),
+        'hostname': ('hostname', no_capabilities),
+        'hostalias': ('hostalias', no_capabilities),
+    }
+
+    rows = expected_result.keys()
 
     def setUp(self):
         self.User = model.sample.datasource.user_class
@@ -49,20 +53,22 @@ class TestSampleUserCase(AppInitialized):
         """Test if the basic properties have been implemented accordingly.
         """
 
-        # TODO: implement custom asserton for user
-        data = self.app.extensions['sample_users']['test']
+        for key, val in self.expected_result.items():
+            if val:
+                self.assertEqual(
+                    getattr(self.user, key),
+                    ActiveProperty(
+                        name=key,
+                        value=self.sample_users['test'][val[0]],
+                        capabilities=val[1],
+                    ),
+                )
+            else:
+                self.assertEqual(
+                    getattr(self.user, key),
+                    UnsupportedProperty(key),
+                )
 
-        # TODO: check the whole Property, not just .value
-        self.assertEqual(self.user.realname.value, data['name'])
-        self.assertEqual(self.user.login.value, data['uid'])
-        self.assertEqual(self.user.mac.value, data['mac'])
-        self.assertEqual(self.user.mail.value, data['mail'])
-        self.assertEqual(self.user.address.value, data['address'])
-        self.assertEqual(self.user.ips.value, data['ip'])
-        self.assertEqual(self.user.status.value, "OK")
-        self.assertEqual(self.user.id.value, data['id'])
-        self.assertEqual(self.user.hostname.value, data['hostname'])
-        self.assertEqual(self.user.hostalias.value, data['hostalias'])
         self.assertEqual(self.user.userdb_status,
                          UnsupportedProperty('userdb_status'))
 
