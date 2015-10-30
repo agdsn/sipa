@@ -5,7 +5,7 @@ from sipa.utils import argstr
 
 
 Capabilities = namedtuple('capabilities', ['edit', 'delete'])
-no_capabilities = Capabilities(edit=None, delete=None)
+no_capabilities = Capabilities(edit=False, delete=False)
 
 
 class PropertyBase(metaclass=ABCMeta):
