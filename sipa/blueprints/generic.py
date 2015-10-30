@@ -167,6 +167,12 @@ def logout():
 
 @bp_generic.app_template_filter('unit')
 def unit(number):
+    """Display number in MiB or GiB depending on size.
+
+    If the argument (expected in MiB) is greater than 1024 MiB, it’ll be
+    displayed in GiB. The unit string is automatically appended and the number
+    is displayed with two decimal places.
+    """
     unit = 'MiB'
     if number > 1024:
         unit = 'GiB'
