@@ -10,14 +10,14 @@
     {% for day in traffic_user.traffic_history %}
         <tr>
             <td>{{ get_weekday(day['day']) }}</td>
-            <td>{{ day['input'] | round(2) }} MiB</td>
-            <td>{{ day['output'] | round(2) }} MiB</td>
-            <td>{{ day['throughput'] | round(2) }} MiB</td>
-            <td>{{ day['credit'] | round(2) }} MiB</td>
+            <td>{{ day['input'] | unit }}</td>
+            <td>{{ day['output'] | unit }}</td>
+            <td>{{ day['throughput'] | unit }}</td>
+            <td>{{ day['credit'] | unit }}</td>
         </tr>
     {% endfor %}
         <tr>
             <td id="usersuite-traffic-sum" colspan="4">{{ _("Verbleibender Credit") }}</td>
-            <td>{{ traffic_user.credit | round(2) }} MiB</td>
+            <td>{{ traffic_user.credit | unit }}</td>
         </tr>
 </table>
