@@ -293,7 +293,7 @@ class User(BaseUser):
 
     @mac.setter
     def mac(self, new_mac):
-        assert len(self._devices) == 1, ""
+        assert len(self._devices) == 1
         update_macaddress(self._devices[0]['ip'], self.mac.value, new_mac)
 
     @active_prop
