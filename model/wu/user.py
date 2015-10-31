@@ -288,6 +288,9 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
+        if not self._devices:
+            return
+
         return {'value': ", ".join(device['mac'] for device in self._devices),
                 'tmp_readonly': len(self._devices) > 1}
 
@@ -314,6 +317,8 @@ class User(BaseUser):
 
     @active_prop
     def ips(self):
+        if not self._devices:
+            return
         return ", ".join(device['ip'] for device in self._devices)
 
     @active_prop
@@ -334,10 +339,14 @@ class User(BaseUser):
 
     @active_prop
     def hostname(self):
+        if not self._devices:
+            return
         return ", ".join(device['hostname'] for device in self._devices)
 
     @active_prop
     def hostalias(self):
+        if not self._devices:
+            return
         return ", ".join(device['hostalias'] for device in self._devices)
 
     @active_prop
