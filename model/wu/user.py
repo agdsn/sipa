@@ -176,16 +176,16 @@ class User(BaseUser):
 
         try:
             # aggregated credit from 1(MEZ)/2(MESZ) AM
-            credit = sql_query(
+            credit_result = sql_query(
                 "SELECT amount FROM credit "
                 "WHERE user_id = %(id)s "
                 "AND timetag >= %(today)s - 1 "
                 "ORDER BY timetag DESC LIMIT 1",
                 {'today': current_timetag, 'id': self._id}
-            ).fetchone()['amount']
+            ).fetchone()
 
             # subtract the current traffic not yet aggregated in `credit`
-            traffic = sql_query(
+            traffic_result = sql_query(
                 "SELECT input + output as throughput "
                 "FROM traffic.tuext AS t "
                 "LEFT JOIN computer AS c on c.c_ip = t.ip "
@@ -193,14 +193,16 @@ class User(BaseUser):
                 {'today': current_timetag, 'id': self._id}
             ).fetchone()
 
-            credit -= traffic['throughput']
-
         except OperationalError as e:
             logger.critical("Unable to connect to MySQL server",
                             extra={'data': {'exception_args': e.args}})
             self._credit = None
             raise
 
+        try:
+            credit = credit_result['amount'] - traffic_result['throughput']
+        except TypeError:
+            self._credit = 0
         else:
             self._credit = round(credit / 1024, 2)
 
@@ -211,22 +213,28 @@ class User(BaseUser):
             current_timetag = timetag_today() + delta
             day = datetime.today() + timedelta(days=delta)
 
-            traffic_of_the_day = sql_query(
-                "SELECT sum(t.input) as input, sum(t.output) as output, "
-                "sum(t.input+t.output) as throughput "
-                "FROM traffic.tuext as t "
-                "LEFT JOIN computer AS c ON c.c_ip = t.ip "
-                "WHERE t.timetag = %(timetag)s AND c.nutzer_id = %(id)s",
-                {'timetag': current_timetag, 'id': self._id},
-            ).fetchone()
+            try:
+                traffic_of_the_day = dict(sql_query(
+                    "SELECT sum(t.input) as input, sum(t.output) as output, "
+                    "sum(t.input+t.output) as throughput "
+                    "FROM traffic.tuext as t "
+                    "LEFT JOIN computer AS c ON c.c_ip = t.ip "
+                    "WHERE t.timetag = %(timetag)s AND c.nutzer_id = %(id)s",
+                    {'timetag': current_timetag, 'id': self._id},
+                ).fetchone())
+            except TypeError:
+                traffic_of_the_day = {'input': 0, 'output': 0, 'throughput': 0}
 
-            credit_of_the_day = sql_query(
-                "SELECT amount FROM credit "
-                "WHERE user_id = %(id)s "
-                "AND timetag >= %(timetag)s - 1 "
-                "ORDER BY timetag DESC LIMIT 1",
-                {'timetag': current_timetag, 'id': self._id},
-            ).fetchone()['amount']
+            try:
+                credit_of_the_day = dict(sql_query(
+                    "SELECT amount FROM credit "
+                    "WHERE user_id = %(id)s "
+                    "AND timetag >= %(timetag)s - 1 "
+                    "ORDER BY timetag DESC LIMIT 1",
+                    {'timetag': current_timetag, 'id': self._id},
+                ).fetchone()).get('amount', 0)
+            except TypeError:
+                credit_of_the_day = 0
 
             self._traffic_history.append({
                 'day': day.weekday(),
