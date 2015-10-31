@@ -218,8 +218,11 @@ def usertraffic():
 def traffic_api():
     user = (current_user if current_user.is_authenticated
             else user_from_ip(request.remote_addr))
+
+    if not user.is_authenticated:
+        return jsonify(version=0)
+
     trafficdata = user.traffic_history
-    print("trafficdata: {}".format(trafficdata))
     trafficdata['quota'] = trafficdata.pop('credit')
 
     history = trafficdata.pop('history')
