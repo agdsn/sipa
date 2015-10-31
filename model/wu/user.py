@@ -229,7 +229,7 @@ class User(BaseUser):
                 credit_of_the_day = dict(sql_query(
                     "SELECT amount FROM credit "
                     "WHERE user_id = %(id)s "
-                    "AND timetag >= %(timetag)s - 1 "
+                    "AND (timetag = %(timetag)s - 1 OR timetag = %(timetag)s)"
                     "ORDER BY timetag DESC LIMIT 1",
                     {'timetag': current_timetag, 'id': self._id},
                 ).fetchone()).get('amount', 0)
