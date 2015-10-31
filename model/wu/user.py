@@ -34,7 +34,7 @@ class User(BaseUser):
     datasource = 'wu'
 
     def __init__(self, uid, name, mail):
-        super(User, self).__init__(uid)
+        super().__init__(uid)
         self.name = name
         self.group = self.define_group()
         self._mail = mail
@@ -372,7 +372,7 @@ class User(BaseUser):
 
 class UserDB(BaseUserDB):
     def __init__(self, user):
-        super(UserDB, self).__init__(user)
+        super().__init__(user)
 
     @property
     def has_db(self):

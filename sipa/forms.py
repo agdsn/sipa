@@ -63,15 +63,15 @@ def strip_filter(string):
 class StrippedStringField(StringField):
     def __init__(self, *args, **kwargs):
         kwargs['filters'] = kwargs.get('filters', []) + [strip_filter]
-        super(StrippedStringField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class ReadonlyStringField(StrippedStringField):
     def __init__(self, *args, **kwargs):
-        super(ReadonlyStringField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
-        return super(ReadonlyStringField, self).__call__(
+        return super().__call__(
             *args, readonly=True, **kwargs)
 
 

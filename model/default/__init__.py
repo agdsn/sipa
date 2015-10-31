@@ -30,7 +30,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         static methods.
 
         This method should be called by any subclass.  Therefore,
-        prepend `super(User, self).__init__(uid)`.  After this, other
+        prepend `super().__init__(uid)`.  After this, other
         variables like `mail`, `group` or `name` can be initialized
         similiarly.
 

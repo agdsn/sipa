@@ -50,7 +50,7 @@ class UnsupportedProperty(PropertyBase):
     supported = False
 
     def __init__(self, name):
-        super(UnsupportedProperty, self).__init__(
+        super().__init__(
             name=name,
             value=gettext("Nicht unterstützt"),
             raw_value=None,
@@ -77,7 +77,7 @@ class ActiveProperty(PropertyBase):
                          'info', 'warning', 'danger'}, \
                          "Style must be a bootstrap class string"
 
-        super(ActiveProperty, self).__init__(
+        super().__init__(
             name=name,
             value=(value if value else gettext("Nicht angegeben")),
             raw_value=value,
@@ -161,7 +161,7 @@ class active_prop(property):
             )
 
         # Let `property` handle the initialization of `__get__`, `__set__` etc.
-        super(active_prop, self).__init__(wrapped_getter, fset, fdel, doc)
+        super().__init__(wrapped_getter, fset, fdel, doc)
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(

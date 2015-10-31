@@ -17,7 +17,7 @@ class Node:
 
 class Article(Node):
     def __init__(self, parent, id):
-        super(Article, self).__init__(parent, id)
+        super().__init__(parent, id)
         self.localized_pages = {}
         self.default_page = None
 
@@ -60,7 +60,7 @@ class Article(Node):
 
 class Category(Node):
     def __init__(self, parent, id):
-        super(Category, self).__init__(parent, id)
+        super().__init__(parent, id)
         self.categories = {}
         self.articles = {}
 

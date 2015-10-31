@@ -38,7 +38,7 @@ class User(BaseUser):
     datasource = 'sample'
 
     def __init__(self, uid):
-        super(User, self).__init__(uid)
+        super().__init__(uid)
         self.config = config
         self.name = config[uid]['name']
         self.old_mail = config[uid]['mail']

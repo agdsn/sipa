@@ -30,7 +30,7 @@ class User(BaseUser):
     datasource = 'gerok'
 
     def __init__(self, uid, id, name=None, mail=None):
-        super(User, self).__init__(uid)
+        super().__init__(uid)
         self._id = id
         self.name = name
         self._mail = mail

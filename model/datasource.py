@@ -14,7 +14,7 @@ class DataSource:
                  support_mail=None,
                  init_context=empty_function,
                  debug_only=False):
-        super(DataSource, self).__init__()
+        super().__init__()
         self.name = name
         self.display_name = display_name
         self.user_class = user_class
