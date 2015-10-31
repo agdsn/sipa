@@ -5,14 +5,15 @@ from sipa.utils import argstr
 
 
 Capabilities = namedtuple('capabilities', ['edit', 'delete'])
-no_capabilities = Capabilities(edit=None, delete=None)
+no_capabilities = Capabilities(edit=False, delete=False)
 
 
 class PropertyBase(metaclass=ABCMeta):
-    def __init__(self, name, value, capabilities=no_capabilities,
+    def __init__(self, name, value, raw_value, capabilities=no_capabilities,
                  style=None, empty=False):
         self.name = name
         self.value = value
+        self.raw_value = raw_value
         self.capabilities = capabilities
         self.style = style
         self.empty = empty or not value
@@ -21,6 +22,7 @@ class PropertyBase(metaclass=ABCMeta):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             name=self.name,
             value=self.value,
+            raw_value=self.raw_value,
             capabilities=self.capabilities,
             style=self.style,
             empty=self.empty,
@@ -51,6 +53,7 @@ class UnsupportedProperty(PropertyBase):
         super(UnsupportedProperty, self).__init__(
             name=name,
             value=gettext("Nicht unterstützt"),
+            raw_value=None,
             style='muted',
             empty=True,
         )
@@ -77,6 +80,7 @@ class ActiveProperty(PropertyBase):
         super(ActiveProperty, self).__init__(
             name=name,
             value=(value if value else gettext("Nicht angegeben")),
+            raw_value=value,
             capabilities=capabilities,
             style=(style if style  # customly given style is most important
                    else 'muted' if empty or not value

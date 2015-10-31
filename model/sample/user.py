@@ -24,6 +24,7 @@ def init_context(app):
             'mail': 'test@agdsn.de',
             'mac': 'aa:bb:cc:dd:ee:ff',
             'ip': '141.30.228.39',
+            'status': "OK",
             'hostname': 'My_Server',
             'hostalias': 'leethax0r',
         }
@@ -140,7 +141,7 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        return "OK"
+        return self.config[self.uid]['status']
 
     @active_prop
     def id(self):
