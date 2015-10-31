@@ -222,13 +222,17 @@ def traffic_api():
     if not user.is_authenticated:
         return jsonify(version=0)
 
-    trafficdata = user.traffic_history
-    trafficdata['quota'] = trafficdata.pop('credit')
+    traffic_history = ({
+        'in': x['input'],
+        'out': x['output'],
+    } for x in reversed(user.traffic_history))
 
-    history = trafficdata.pop('history')
-
-    trafficdata['traffic'] = [{'in': day[1], 'out': day[2]}
-                              for day in history]
+    trafficdata = {
+        'quota': user.credit,
+        # `next` gets the first entry (“today”)
+        'traffic': next(traffic_history),
+        'history': list(traffic_history),
+    }
 
     return jsonify(version=2, **trafficdata)
 
