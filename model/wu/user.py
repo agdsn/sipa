@@ -133,7 +133,6 @@ class User(BaseUser):
             logger.info('Password successfully changed')
 
     def cache_information(self):
-        # TODO: refactor out this quite frequent „self-sql-nutzer“ object
         try:
             sql_nutzer = session_atlantis.query(Nutzer).filter_by(
                 unix_account=self.uid
@@ -161,34 +160,6 @@ class User(BaseUser):
             raise DBQueryEmpty("No User found for unix_account '{}'"
                                .format(self.uid))
 
-        self._id = user['nutzer_id']
-        self._address = "{0} / {1} {2}".format(
-            # MySQL Dormitory IDs in are from 1-11, so we map to 0-10 with x-1
-            DORMITORIES[user['wheim_id'] - 1],
-            user['etage'],
-            user['zimmernr']
-        )
-        self._status_id = user['status']
-
-        devices = sql_query(
-            "SELECT c_etheraddr, c_ip, c_hname, c_alias "
-            "FROM computer "
-            "WHERE nutzer_id = %s",
-            (user['nutzer_id'])
-        ).fetchall()
-
-        if devices:
-            self._devices = [{
-                'ip': device['c_ip'],
-                'mac': device['c_etheraddr'].upper(),
-                'hostname': device['c_hname'],
-                'hostalias': device['c_alias'],
-            } for device in devices]
-        else:
-            logger.warning("User {} (id {}) does not have any devices"
-                           .format(self.uid, self._id))
-            self._devices = []
-
         # cache credit
         current_timetag = timetag_today()
 
@@ -199,7 +170,7 @@ class User(BaseUser):
                 "WHERE user_id = %(id)s "
                 "AND timetag >= %(today)s - 1 "
                 "ORDER BY timetag DESC LIMIT 1",
-                {'today': current_timetag, 'id': self._id}
+                {'today': current_timetag, 'id': self._nutzer.nutzer_id}
             ).fetchone()
 
             # subtract the current traffic not yet aggregated in `credit`
@@ -208,7 +179,7 @@ class User(BaseUser):
                 "FROM traffic.tuext AS t "
                 "LEFT JOIN computer AS c on c.c_ip = t.ip "
                 "WHERE c.nutzer_id =  %(id)s AND t.timetag = %(today)s",
-                {'today': current_timetag, 'id': self._id}
+                {'today': current_timetag, 'id': self._nutzer.nutzer_id}
             ).fetchone()
 
         except OperationalError as e:
@@ -238,7 +209,7 @@ class User(BaseUser):
                     "FROM traffic.tuext as t "
                     "LEFT JOIN computer AS c ON c.c_ip = t.ip "
                     "WHERE t.timetag = %(timetag)s AND c.nutzer_id = %(id)s",
-                    {'timetag': current_timetag, 'id': self._id},
+                    {'timetag': current_timetag, 'id': self._nutzer.nutzer_id},
                 ).fetchone())
             except TypeError:
                 traffic_of_the_day = {'input': 0, 'output': 0, 'throughput': 0}
@@ -249,7 +220,7 @@ class User(BaseUser):
                     "WHERE user_id = %(id)s "
                     "AND (timetag = %(timetag)s - 1 OR timetag = %(timetag)s)"
                     "ORDER BY timetag DESC LIMIT 1",
-                    {'timetag': current_timetag, 'id': self._id},
+                    {'timetag': current_timetag, 'id': self._nutzer.nutzer_id},
                 ).fetchone()).get('amount', 0)
             except TypeError:
                 credit_of_the_day = 0
@@ -306,11 +277,9 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
-        if not self._devices:
-            return
-
-        return {'value': ", ".join(device['mac'] for device in self._devices),
-                'tmp_readonly': len(self._devices) > 1}
+        computer = self._nutzer.computer
+        return {'value': ", ".join(c.c_etheraddr.upper() for c in computer),
+                'tmp_readonly': len(computer) > 1}
 
     @mac.setter
     def mac(self, new_mac):
@@ -332,41 +301,39 @@ class User(BaseUser):
 
     @active_prop
     def address(self):
-        return self._address
+        return "{} / {} {}".format(
+            DORMITORIES[self._nutzer.wheim_id - 1],
+            self._nutzer.etage,
+            self._nutzer.zimmernr,
+        )
 
     @active_prop
     def ips(self):
-        if not self._devices:
-            return
-        return ", ".join(device['ip'] for device in self._devices)
+        return ", ".join(c.c_ip for c in self._nutzer.computer)
 
     @active_prop
     def status(self):
-        if self._status_id in STATUS:
-            status_tuple = STATUS[self._status_id]
+        if self._nutzer.status in STATUS:
+            status_tuple = STATUS[self._nutzer.status]
             return {'value': status_tuple[0], 'style': status_tuple[1]}
 
-        return {'value': STATUS.get(self._status_id, gettext("Unbekannt")),
+        return {'value': STATUS.get(self._nutzer.status, gettext("Unbekannt")),
                 'empty': True}
 
     @active_prop
     def id(self):
         return "{}-{}".format(
-            self._id,
-            calculate_userid_checksum(self._id),
+            self._nutzer.nutzer_id,
+            calculate_userid_checksum(self._nutzer.nutzer_id),
         )
 
     @active_prop
     def hostname(self):
-        if not self._devices:
-            return
-        return ", ".join(device['hostname'] for device in self._devices)
+        return ", ".join(c.c_hname for c in self._nutzer.computer)
 
     @active_prop
     def hostalias(self):
-        if not self._devices:
-            return
-        return ", ".join(device['hostalias'] for device in self._devices)
+        return ", ".join(c.c_alias for c in self._nutzer.computer)
 
     @active_prop
     def userdb_status(self):
