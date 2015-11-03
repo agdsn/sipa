@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
-
 from werkzeug.local import LocalProxy
 
 from .ldap_utils import get_current_uid
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -28,10 +30,15 @@ def init_db(app):
             int(app.config['DB_HELIOS_PORT'])),
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
+    Session = sessionmaker(bind=db_atlantis)
+    app.extensions['wu_session_atlantis'] = Session()
 
 
 db_atlantis = LocalProxy(lambda: current_app.extensions['db_atlantis'])
 db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
+session_atlantis = LocalProxy(
+    lambda: current_app.extensions['wu_session_atlantis']
+)
 
 DORMITORIES = [
     'Wundstraße 5',

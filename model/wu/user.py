@@ -13,12 +13,15 @@ from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
     update_macaddress, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
-    db_helios
+    db_helios, session_atlantis
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
+from .netusers import Credit, Computer, Nutzer, Traffic
 
 from sipa.utils import argstr, timetag_today
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
+
+from sqlalchemy.orm.exc import NoResultFound
 
 import logging
 logger = logging.getLogger(__name__)
@@ -130,6 +133,21 @@ class User(BaseUser):
             logger.info('Password successfully changed')
 
     def cache_information(self):
+        # TODO: refactor out this quite frequent „self-sql-nutzer“ object
+        try:
+            sql_nutzer = session_atlantis.query(Nutzer).filter_by(
+                unix_account=self.uid
+            ).one()
+        except NoResultFound:
+            logger.critical("User %s does not have a database entry", self.uid,
+                            extra={'stack': True})
+            # TODO: think about how `DBQueryEmpty` is necessary
+            self._nutzer = None
+        else:
+            self._nutzer = sql_nutzer
+            # TODO: use this self._nutzer attribute accordingly
+            # – THEN delete the old stuff
+
         user = sql_query(
             "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
             "FROM nutzer "
