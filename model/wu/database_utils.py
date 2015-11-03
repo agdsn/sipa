@@ -85,19 +85,6 @@ def sql_query(query, args=(), database=db_atlantis):
     return result
 
 
-def user_id_from_uid(uid=None):
-    """Fetch user.id (MySQL) from user.uid (LDAP)
-
-    :param uid: The uid of the LDAP user object
-    :return: The user id of the MySQL user
-    """
-    if uid is None:
-        uid = get_current_uid()
-
-    return sql_query("SELECT nutzer_id FROM nutzer WHERE unix_account = %s",
-                     (uid,)).fetchone()['nutzer_id']
-
-
 def calculate_userid_checksum(user_id):
     """Calculate checksum for a userid.
     (Modulo 10 on the sum of all digits)

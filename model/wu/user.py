@@ -11,7 +11,6 @@ from model.property import active_prop
 
 from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
-    update_macaddress, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
     db_helios, session_atlantis
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
@@ -19,7 +18,7 @@ from model.wu.ldap_utils import search_in_group, LdapConnector, \
 from .netusers import Credit, Computer, Nutzer, Traffic
 
 from sipa.utils import argstr, timetag_today
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
@@ -144,56 +143,6 @@ class User(BaseUser):
             self._nutzer = None
         else:
             self._nutzer = sql_nutzer
-            # TODO: use this self._nutzer attribute accordingly
-            # – THEN delete the old stuff
-
-        user = sql_query(
-            "SELECT nutzer_id, wheim_id, etage, zimmernr, status "
-            "FROM nutzer "
-            "WHERE unix_account = %s",
-            (self.uid,)
-        ).fetchone()
-
-        if not user:
-            logger.critical("User %s does not have a database entry", self.uid,
-                            extra={'stack': True})
-            raise DBQueryEmpty("No User found for unix_account '{}'"
-                               .format(self.uid))
-
-        # cache credit
-        current_timetag = timetag_today()
-
-        try:
-            # aggregated credit from 1(MEZ)/2(MESZ) AM
-            credit_result = sql_query(
-                "SELECT amount FROM credit "
-                "WHERE user_id = %(id)s "
-                "AND timetag >= %(today)s - 1 "
-                "ORDER BY timetag DESC LIMIT 1",
-                {'today': current_timetag, 'id': self._nutzer.nutzer_id}
-            ).fetchone()
-
-            # subtract the current traffic not yet aggregated in `credit`
-            traffic_result = sql_query(
-                "SELECT input + output as throughput "
-                "FROM traffic.tuext AS t "
-                "LEFT JOIN computer AS c on c.c_ip = t.ip "
-                "WHERE c.nutzer_id =  %(id)s AND t.timetag = %(today)s",
-                {'today': current_timetag, 'id': self._nutzer.nutzer_id}
-            ).fetchone()
-
-        except OperationalError as e:
-            logger.critical("Unable to connect to MySQL server",
-                            extra={'data': {'exception_args': e.args}})
-            self._credit = None
-            raise
-
-        try:
-            credit = credit_result['amount'] - traffic_result['throughput']
-        except TypeError:
-            self._credit = 0
-        else:
-            self._credit = round(credit / 1024, 2)
 
     @property
     def traffic_history(self):
