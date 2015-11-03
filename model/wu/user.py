@@ -240,11 +240,23 @@ class User(BaseUser):
     @property
     def credit(self):
         """Return the current credit that is left
-
-        Note that the data doesn't have to be cached again, because
-        `__init__` is called before every request.
         """
-        return self._credit
+        today = timetag_today()
+        credit = session_atlantis.query(Credit).filter_by(
+            user_id=self._nutzer.nutzer_id,
+            timetag=today
+        ).one().amount
+
+        accountable_ips = [c.c_ip for c in self._nutzer.computer]
+
+        traffic_today = sum(
+            t.overall for t
+            in session_atlantis.query(Traffic)
+            .filter_by(timetag=today)
+            .filter(Traffic.ip.in_(accountable_ips))
+        )
+
+        return (credit - traffic_today) / 1024
 
     @contextmanager
     def tmp_authentication(self, password):
