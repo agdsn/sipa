@@ -195,47 +195,36 @@ class User(BaseUser):
         else:
             self._credit = round(credit / 1024, 2)
 
-        # cache traffic history
-        self._traffic_history = []
-
-        for delta in range(-6, 1):
-            current_timetag = timetag_today() + delta
-            day = datetime.today() + timedelta(days=delta)
-
-            try:
-                traffic_of_the_day = dict(sql_query(
-                    "SELECT sum(t.input) as input, sum(t.output) as output, "
-                    "sum(t.input+t.output) as throughput "
-                    "FROM traffic.tuext as t "
-                    "LEFT JOIN computer AS c ON c.c_ip = t.ip "
-                    "WHERE t.timetag = %(timetag)s AND c.nutzer_id = %(id)s",
-                    {'timetag': current_timetag, 'id': self._nutzer.nutzer_id},
-                ).fetchone())
-            except TypeError:
-                traffic_of_the_day = {'input': 0, 'output': 0, 'throughput': 0}
-
-            try:
-                credit_of_the_day = dict(sql_query(
-                    "SELECT amount FROM credit "
-                    "WHERE user_id = %(id)s "
-                    "AND (timetag = %(timetag)s - 1 OR timetag = %(timetag)s)"
-                    "ORDER BY timetag DESC LIMIT 1",
-                    {'timetag': current_timetag, 'id': self._nutzer.nutzer_id},
-                ).fetchone()).get('amount', 0)
-            except TypeError:
-                credit_of_the_day = 0
-
-            self._traffic_history.append({
-                'day': day.weekday(),
-                'input': traffic_of_the_day['input'] / 1024,
-                'output': traffic_of_the_day['output'] / 1024,
-                'throughput': traffic_of_the_day['throughput'] / 1024,
-                'credit': credit_of_the_day / 1024,
-            })
-
     @property
     def traffic_history(self):
-        return self._traffic_history
+        traffic_history = []
+
+        credit_entries = reversed(
+            session_atlantis.query(Credit)
+            .filter_by(user_id=10564)
+            .order_by(Credit.timetag.desc())
+            .limit(7).all()
+        )
+
+        accountable_ips = [c.c_ip for c in self._nutzer.computer]
+
+        for credit_entry in credit_entries:
+            traffic_entries = (session_atlantis.query(Traffic)
+                               .filter_by(timetag=credit_entry.timetag)
+                               .filter(Traffic.ip.in_(accountable_ips))
+                               .all())
+
+            traffic_history.append({
+                'day': (datetime.today() + timedelta(
+                    days=credit_entry.timetag - timetag_today()
+                )).weekday(),
+                'input': sum(t.input for t in traffic_entries) / 1024,
+                'output': sum(t.output for t in traffic_entries) / 1024,
+                'throughput': sum(t.overall for t in traffic_entries) / 1024,
+                'credit': credit_entry.amount / 1024,
+            })
+
+        return traffic_history
 
     @property
     def credit(self):
