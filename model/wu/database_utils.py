@@ -98,24 +98,6 @@ def user_id_from_uid(uid=None):
                      (uid,)).fetchone()['nutzer_id']
 
 
-def update_macaddress(ip, oldmac, newmac):
-    """Update a MAC address in computer table.
-
-    Adding a `LIMIT 1` would be an “unsafe statement”, because using a
-    `LIMIT` w/o an `ORDER BY` does not give control over which row
-    actually would be affected, if the `WHERE` clauses would apply to
-    more than one row.
-
-    """
-    sql_query(
-        "UPDATE computer "
-        "SET c_etheraddr = %s "
-        "WHERE c_ip = %s "
-        "AND c_etheraddr = %s ",
-        (newmac.lower(), ip, oldmac)
-    )
-
-
 def calculate_userid_checksum(user_id):
     """Calculate checksum for a userid.
     (Modulo 10 on the sum of all digits)

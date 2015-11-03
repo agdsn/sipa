@@ -285,8 +285,14 @@ class User(BaseUser):
     @mac.setter
     def mac(self, new_mac):
         # if this has been reached despite `tmp_readonly`, this is a bug.
-        assert len(self._devices) == 1
-        update_macaddress(self._devices[0]['ip'], self.mac.value, new_mac)
+        assert len(self._nutzer.computer) == 1
+
+        # TODO: test this function!
+        computer = self._nutzer.computer[0]
+        computer.c_etheraddr = new_mac
+
+        session_atlantis.add(computer)
+        session_atlantis.commit()
 
     @active_prop
     def mail(self):
