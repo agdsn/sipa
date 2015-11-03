@@ -21,6 +21,7 @@ from .netusers import Credit, Computer, Nutzer, Traffic
 from sipa.utils import argstr, timetag_today
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
 
+from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 import logging
@@ -95,26 +96,25 @@ class User(BaseUser):
 
     @classmethod
     def from_ip(cls, ip):
-        result = sql_query("SELECT c.nutzer_id FROM computer as c "
-                           "LEFT JOIN nutzer as n "
-                           "ON c.nutzer_id = n.nutzer_id "
-                           "WHERE c_ip = %s "
-                           "AND (n.status < 8 OR n.status > 10) "
-                           "ORDER BY c.nutzer_id DESC",
-                           (ip,)).fetchone()
-        if result is None:
-            return AnonymousUserMixin()
+        # TODO: TEST THIS! – no idea if this works.
+        try:
+            sql_nutzer = (session_atlantis.query(Computer)
+                          .filter_by(c_ip=ip)
+                          .join(Nutzer)
+                          # TODO: look whether these are all statūs
+                          .filter(Nutzer.status.in_([1, 2, 7, 12]))
+                          .one())
+        except NoResultFound:
+            return AnonymousUserMixin
 
-        username = sql_query("SELECT unix_account FROM nutzer "
-                             "WHERE nutzer_id = %s",
-                             (result['nutzer_id'],)).fetchone()['unix_account']
+        username = sql_nutzer.unix_account
 
         user = cls.get(username)
         if not user:
             logger.warning("User %s could not be fetched from LDAP",
                            username, extra={'data': {
                                'username': username,
-                               'user_id': result['nutzer_id'],
+                               'user_id': sql_nutzer.nutzer_id,
                            }})
             return AnonymousUserMixin()
 
