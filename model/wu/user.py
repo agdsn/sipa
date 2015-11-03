@@ -296,6 +296,7 @@ class User(BaseUser):
 
     @mac.setter
     def mac(self, new_mac):
+        # if this has been reached despite `tmp_readonly`, this is a bug.
         assert len(self._devices) == 1
         update_macaddress(self._devices[0]['ip'], self.mac.value, new_mac)
 
