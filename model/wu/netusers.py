@@ -1,7 +1,7 @@
 # -*- coding: utf-8; -*-
 from sqlalchemy import (Column, Index, Integer, String,
                         text, ForeignKey, DECIMAL, BigInteger)
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, column_property
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -53,3 +53,4 @@ class Traffic(Base):
     ip = Column(String(15), nullable=False, index=True, primary_key=True)
     input = Column(DECIMAL(20, 0))
     output = Column(DECIMAL(20, 0))
+    overall = column_property(input + output)
