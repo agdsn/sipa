@@ -47,7 +47,7 @@ class Credit(Base):
 
 
 class Traffic(Base):
-    __tablename__ = u'traffic.tuext'
+    __tablename__ = 'tuext'
 
     timetag = Column(BigInteger(), primary_key=True)
     ip = Column(String(15), nullable=False, index=True, primary_key=True)

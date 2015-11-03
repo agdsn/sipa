@@ -8,6 +8,7 @@ from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
 from .ldap_utils import get_current_uid
+from .netusers import Traffic
 
 
 import logging
@@ -15,6 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 def init_db(app):
+    # TODO: refactor these things
+    # e.g.: db_atlantis is not needed directly anymore
     app.extensions['db_atlantis'] = create_engine(
         'mysql+pymysql://{0}:{1}@{2}:3306/netusers'.format(
             app.config['DB_ATLANTIS_USER'],
@@ -30,7 +33,13 @@ def init_db(app):
             int(app.config['DB_HELIOS_PORT'])),
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
-    Session = sessionmaker(bind=db_atlantis)
+    Session = sessionmaker(bind=db_atlantis, binds={Traffic: create_engine(
+        'mysql+pymysql://{0}:{1}@{2}:3306/traffic'.format(
+            app.config['DB_ATLANTIS_USER'],
+            app.config['DB_ATLANTIS_PASSWORD'],
+            app.config['DB_ATLANTIS_HOST']),
+        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
+    )})
     app.extensions['wu_session_atlantis'] = Session()
 
 
