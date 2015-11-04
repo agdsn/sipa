@@ -16,15 +16,24 @@ logger = logging.getLogger(__name__)
 
 
 def init_db(app):
-    # TODO: refactor these things
-    # e.g.: db_atlantis is not needed directly anymore
-    app.extensions['db_atlantis'] = create_engine(
-        'mysql+pymysql://{0}:{1}@{2}:3306/netusers'.format(
-            app.config['DB_ATLANTIS_USER'],
-            app.config['DB_ATLANTIS_PASSWORD'],
-            app.config['DB_ATLANTIS_HOST']),
+    atlantis_connection_string = 'mysql+pymysql://{0}:{1}@{2}:3306'.format(
+        app.config['DB_ATLANTIS_USER'],
+        app.config['DB_ATLANTIS_PASSWORD'],
+        app.config['DB_ATLANTIS_HOST']
+    ),
+
+    db_atlantis_netusers = create_engine(
+        "{}/netusers".format(atlantis_connection_string),
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
+    db_atlantis_traffic = create_engine(
+        "{}/traffic".format(atlantis_connection_string),
+        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
+    )
+    Session = sessionmaker(bind=db_atlantis_netusers,
+                           binds={Traffic: db_atlantis_traffic})
+    app.extensions['wu_session_atlantis'] = Session()
+
     app.extensions['db_helios'] = create_engine(
         'mysql+pymysql://{0}:{1}@{2}:{3}/'.format(
             app.config['DB_HELIOS_USER'],
@@ -33,17 +42,8 @@ def init_db(app):
             int(app.config['DB_HELIOS_PORT'])),
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
-    Session = sessionmaker(bind=db_atlantis, binds={Traffic: create_engine(
-        'mysql+pymysql://{0}:{1}@{2}:3306/traffic'.format(
-            app.config['DB_ATLANTIS_USER'],
-            app.config['DB_ATLANTIS_PASSWORD'],
-            app.config['DB_ATLANTIS_HOST']),
-        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
-    )})
-    app.extensions['wu_session_atlantis'] = Session()
 
 
-db_atlantis = LocalProxy(lambda: current_app.extensions['db_atlantis'])
 db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
 session_atlantis = LocalProxy(
     lambda: current_app.extensions['wu_session_atlantis']
