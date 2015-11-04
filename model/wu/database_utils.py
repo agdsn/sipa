@@ -75,7 +75,7 @@ STATUS = {
 }
 
 
-def sql_query(query, args=(), database=db_atlantis):
+def sql_query(query, args=(), database=db_helios):
     """Prepare and execute a raw sql query.
     'args' is a tuple needed for string replacement.
     """

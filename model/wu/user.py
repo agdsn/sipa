@@ -12,7 +12,7 @@ from model.property import active_prop
 from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
     calculate_userid_checksum, DORMITORIES, STATUS, \
-    db_helios, session_atlantis
+    session_atlantis
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
 from .netusers import Credit, Computer, Nutzer, Traffic
@@ -324,7 +324,6 @@ class UserDB(BaseUserDB):
                 "FROM INFORMATION_SCHEMA.SCHEMATA "
                 "WHERE SCHEMA_NAME = %s",
                 (self.user.uid,),
-                database=db_helios
             ).fetchone()
 
             return userdb is not None
@@ -336,7 +335,6 @@ class UserDB(BaseUserDB):
         sql_query(
             "CREATE DATABASE "
             "IF NOT EXISTS `%s`" % self.user.uid,
-            database=db_helios
         )
         self.change_password(password)
 
@@ -344,13 +342,11 @@ class UserDB(BaseUserDB):
         sql_query(
             "DROP DATABASE "
             "IF EXISTS `%s`" % self.user.uid,
-            database=db_helios
         )
 
         sql_query(
             "DROP USER %s@'10.1.7.%%'",
             (self.user.uid,),
-            database=db_helios
         )
 
     def change_password(self, password):
@@ -359,7 +355,6 @@ class UserDB(BaseUserDB):
             "FROM mysql.user "
             "WHERE user = %s",
             (self.user.uid,),
-            database=db_helios
         ).fetchall()
 
         if not user:
@@ -367,14 +362,12 @@ class UserDB(BaseUserDB):
                 "CREATE USER %s@'10.1.7.%%' "
                 "IDENTIFIED BY %s",
                 (self.user.uid, password),
-                database=db_helios
             )
         else:
             sql_query(
                 "SET PASSWORD "
                 "FOR %s@'10.1.7.%%' = PASSWORD(%s)",
                 (self.user.uid, password),
-                database=db_helios
             )
 
         sql_query(
@@ -383,5 +376,4 @@ class UserDB(BaseUserDB):
             "ON `%s`.* "
             "TO %%s@'10.1.7.%%%%'" % self.user.uid,
             (self.user.uid,),
-            database=db_helios
         )
