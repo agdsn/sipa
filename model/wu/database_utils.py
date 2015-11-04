@@ -19,7 +19,7 @@ def init_db(app):
         app.config['DB_ATLANTIS_USER'],
         app.config['DB_ATLANTIS_PASSWORD'],
         app.config['DB_ATLANTIS_HOST']
-    ),
+    )
 
     db_atlantis_netusers = create_engine(
         "{}/netusers".format(atlantis_connection_string),
