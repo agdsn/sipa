@@ -95,12 +95,10 @@ class User(BaseUser):
 
     @classmethod
     def from_ip(cls, ip):
-        # TODO: TEST THIS! – no idea if this works.
         try:
             sql_nutzer = (session_atlantis.query(Computer)
                           .filter_by(c_ip=ip)
                           .join(Nutzer)
-                          # TODO: look whether these are all statūs
                           .filter(Nutzer.status.in_([1, 2, 7, 12]))
                           .one())
         except NoResultFound:
@@ -139,7 +137,6 @@ class User(BaseUser):
         except NoResultFound:
             logger.critical("User %s does not have a database entry", self.uid,
                             extra={'stack': True})
-            # TODO: think about how `DBQueryEmpty` is necessary
             self._nutzer = None
         else:
             self._nutzer = sql_nutzer
@@ -240,7 +237,6 @@ class User(BaseUser):
         # if this has been reached despite `tmp_readonly`, this is a bug.
         assert len(self._nutzer.computer) == 1
 
-        # TODO: test this function!
         computer = self._nutzer.computer[0]
         computer.c_etheraddr = new_mac
 
