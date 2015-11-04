@@ -95,9 +95,9 @@ class User(BaseUser):
     @classmethod
     def from_ip(cls, ip):
         try:
-            sql_nutzer = (session_atlantis.query(Computer)
+            sql_nutzer = (session_atlantis.query(Nutzer)
+                          .join(Computer)
                           .filter_by(c_ip=ip)
-                          .join(Nutzer)
                           .filter(Nutzer.status.in_([1, 2, 7, 12]))
                           .one())
         except NoResultFound:
