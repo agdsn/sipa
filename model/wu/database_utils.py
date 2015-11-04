@@ -8,7 +8,7 @@ from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
 from .ldap_utils import get_current_uid
-from .netusers import Traffic
+from .schema import Traffic
 
 
 import logging

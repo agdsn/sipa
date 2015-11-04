@@ -15,7 +15,7 @@ from model.wu.database_utils import sql_query, \
     session_atlantis
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
-from .netusers import Credit, Computer, Nutzer, Traffic
+from .schema import Credit, Computer, Nutzer, Traffic
 
 from sipa.utils import argstr, timetag_today
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
