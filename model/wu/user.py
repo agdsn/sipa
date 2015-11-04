@@ -179,11 +179,15 @@ class User(BaseUser):
     def credit(self):
         """Return the current credit that is left
         """
-        today = timetag_today()
-        credit = session_atlantis.query(Credit).filter_by(
-            user_id=self._nutzer.nutzer_id,
-            timetag=today
-        ).one().amount
+        latest_credit_entry = (
+            session_atlantis.query(Credit)
+            .filter_by(user_id=self._nutzer.nutzer_id)
+            .order_by(Credit.timetag.desc())
+            .first()
+        )
+
+        credit = latest_credit_entry.amount
+        today = latest_credit_entry.timetag
 
         accountable_ips = [c.c_ip for c in self._nutzer.computer]
 
