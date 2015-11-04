@@ -83,12 +83,3 @@ def sql_query(query, args=(), database=db_helios):
     result = conn.execute(query, args)
     conn.close()
     return result
-
-
-def calculate_userid_checksum(user_id):
-    """Calculate checksum for a userid.
-    (Modulo 10 on the sum of all digits)
-
-    :param user_id: The id of the mysql user tuple
-    """
-    return sum(map(int, str(user_id))) % 10

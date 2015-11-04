@@ -11,7 +11,7 @@ from model.property import active_prop
 
 from model.default import BaseUser, BaseUserDB
 from model.wu.database_utils import sql_query, \
-    calculate_userid_checksum, DORMITORIES, STATUS, \
+    DORMITORIES, STATUS, \
     session_atlantis
 from model.wu.ldap_utils import search_in_group, LdapConnector, \
     change_email, change_password
@@ -280,7 +280,7 @@ class User(BaseUser):
     def id(self):
         return "{}-{}".format(
             self._nutzer.nutzer_id,
-            calculate_userid_checksum(self._nutzer.nutzer_id),
+            sum(int(digit) for digit in str(self._nutzer.nutzer_id)) % 10,
         )
 
     @active_prop
