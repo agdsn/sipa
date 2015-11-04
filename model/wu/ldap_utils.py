@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from flask.ext.login import current_user
 from flask.globals import current_app
 import ldap3
 from werkzeug.local import LocalProxy
@@ -152,9 +151,3 @@ def change_password(username, old, new):
         l.extend.standard.modify_password(user=l.get_dn(),
                                           old_password=old,
                                           new_password=new)
-
-
-def get_current_uid():
-    if not current_user.is_authenticated:
-        raise AttributeError("current user not authenticated")
-    return current_user.uid

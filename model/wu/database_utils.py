@@ -7,7 +7,6 @@ from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
-from .ldap_utils import get_current_uid
 from .schema import Traffic
 
 
