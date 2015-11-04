@@ -1,25 +1,38 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
-
 from werkzeug.local import LocalProxy
 
-from .ldap_utils import get_current_uid
+from .schema import Traffic
+
 
 import logging
 logger = logging.getLogger(__name__)
 
 
 def init_db(app):
-    app.extensions['db_atlantis'] = create_engine(
-        'mysql+pymysql://{0}:{1}@{2}:3306/netusers'.format(
-            app.config['DB_ATLANTIS_USER'],
-            app.config['DB_ATLANTIS_PASSWORD'],
-            app.config['DB_ATLANTIS_HOST']),
+    atlantis_connection_string = 'mysql+pymysql://{0}:{1}@{2}:3306'.format(
+        app.config['DB_ATLANTIS_USER'],
+        app.config['DB_ATLANTIS_PASSWORD'],
+        app.config['DB_ATLANTIS_HOST']
+    ),
+
+    db_atlantis_netusers = create_engine(
+        "{}/netusers".format(atlantis_connection_string),
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
+    db_atlantis_traffic = create_engine(
+        "{}/traffic".format(atlantis_connection_string),
+        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
+    )
+    Session = sessionmaker(bind=db_atlantis_netusers,
+                           binds={Traffic: db_atlantis_traffic})
+    app.extensions['wu_session_atlantis'] = Session()
+
     app.extensions['db_helios'] = create_engine(
         'mysql+pymysql://{0}:{1}@{2}:{3}/'.format(
             app.config['DB_HELIOS_USER'],
@@ -30,8 +43,10 @@ def init_db(app):
     )
 
 
-db_atlantis = LocalProxy(lambda: current_app.extensions['db_atlantis'])
 db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
+session_atlantis = LocalProxy(
+    lambda: current_app.extensions['wu_session_atlantis']
+)
 
 DORMITORIES = [
     'Wundstraße 5',
@@ -59,7 +74,7 @@ STATUS = {
 }
 
 
-def sql_query(query, args=(), database=db_atlantis):
+def sql_query(query, args=(), database=db_helios):
     """Prepare and execute a raw sql query.
     'args' is a tuple needed for string replacement.
     """
@@ -67,43 +82,3 @@ def sql_query(query, args=(), database=db_atlantis):
     result = conn.execute(query, args)
     conn.close()
     return result
-
-
-def user_id_from_uid(uid=None):
-    """Fetch user.id (MySQL) from user.uid (LDAP)
-
-    :param uid: The uid of the LDAP user object
-    :return: The user id of the MySQL user
-    """
-    if uid is None:
-        uid = get_current_uid()
-
-    return sql_query("SELECT nutzer_id FROM nutzer WHERE unix_account = %s",
-                     (uid,)).fetchone()['nutzer_id']
-
-
-def update_macaddress(ip, oldmac, newmac):
-    """Update a MAC address in computer table.
-
-    Adding a `LIMIT 1` would be an “unsafe statement”, because using a
-    `LIMIT` w/o an `ORDER BY` does not give control over which row
-    actually would be affected, if the `WHERE` clauses would apply to
-    more than one row.
-
-    """
-    sql_query(
-        "UPDATE computer "
-        "SET c_etheraddr = %s "
-        "WHERE c_ip = %s "
-        "AND c_etheraddr = %s ",
-        (newmac.lower(), ip, oldmac)
-    )
-
-
-def calculate_userid_checksum(user_id):
-    """Calculate checksum for a userid.
-    (Modulo 10 on the sum of all digits)
-
-    :param user_id: The id of the mysql user tuple
-    """
-    return sum(map(int, str(user_id))) % 10
