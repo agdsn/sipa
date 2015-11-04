@@ -20,7 +20,6 @@ from .schema import Credit, Computer, Nutzer, Traffic
 from sipa.utils import argstr, timetag_today
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
-from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 import logging
