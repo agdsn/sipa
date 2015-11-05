@@ -80,13 +80,6 @@ def current_dormitory():
     return dormitory_from_name(session['dormitory'])
 
 
-def datasource_from_ip(ip):
-    dormitory = dormitory_from_ip(ip)
-    if dormitory:
-        return dormitory.datasource
-    return None
-
-
 def dormitory_from_ip(ip):
     try:
         address = IPv4Address(str(ip))
@@ -100,11 +93,15 @@ def dormitory_from_ip(ip):
 
 
 def user_from_ip(ip):
-    datasource = datasource_from_ip(ip)
-    if datasource is not None:
-        return datasource.user_class.from_ip(ip)
-    else:
+    dormitory = dormitory_from_ip(ip)
+    if not dormitory:
         return AnonymousUserMixin()
+
+    datasource = dormitory.datasource
+    if datasource is None:
+        return AnonymousUserMixin()
+
+    return datasource.user_class.from_ip(ip)
 
 
 def query_gauge_data():
