@@ -38,6 +38,15 @@ class DataSource:
             debug_only=self.debug_only,
         ))
 
+    def __hash__(self):
+        return (
+            hash(self.name) ^
+            hash(self.user_class) ^
+            hash(self.support_mail) ^
+            hash(self.mail_server) ^
+            hash(self.debug_only)
+        )
+
     def init_context(self, app):
         return self._init_context(app)
 
@@ -70,6 +79,16 @@ class SubnetCollection:
                 return True
         return False
 
+    def __eq__(self, other):
+        return self.subnets == other.subnets
+
+    def __hash__(self):
+        _hash = 0
+        for subnet in self.subnets:
+            _hash ^= hash(subnet)
+
+        return _hash
+
 
 class Dormitory:
     """A dormitory as selectable on the login page."""
@@ -90,6 +109,14 @@ class Dormitory:
 
     def __eq__(self, other):
         return self.name == other.name and self.datasource == other.datasource
+
+    def __hash__(self):
+        return (
+            hash(self.name) ^
+            hash(self.display_name) ^
+            hash(self.datasource) ^
+            hash(self.subnets)
+        )
 
 
 class PrematureDataSource:
