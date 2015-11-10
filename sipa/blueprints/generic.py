@@ -107,7 +107,7 @@ def set_language(lang='de'):
 @bp_generic.route('/index.php')
 @bp_generic.route('/')
 def index():
-    return redirect(url_for('news.display'))
+    return redirect(url_for('news.show'))
 
 
 @bp_generic.route("/login", methods=['GET', 'POST'])

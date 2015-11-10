@@ -22,4 +22,4 @@ class TestSipaFrontendCase(AppInitialized):
 
     def test_root_redirect(self):
         response = self.client.get('/')
-        self.assert_redirects(response, url_for('news.display'))
+        self.assert_redirects(response, url_for('news.show'))

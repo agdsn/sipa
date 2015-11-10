@@ -82,19 +82,19 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="{{ url_for('news.newest') }}">
+                                    <a href="{{ url_for('news.show', start=0) }}">
                                         <span class="glyphicon glyphicon-fast-backward"></span>
                                         &nbsp; {{ _("Neueste") }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url_for('news.oldest') }}">
+                                    <a href="{{ url_for('news.show', end=-1) }}">
                                         <span class="glyphicon glyphicon-fast-forward"></span>
                                         &nbsp; {{ _("Älteste") }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url_for('news.display_all') }}">
+                                    <a href="{{ url_for('news.show', start=0, end=-1) }}">
                                         <span class="glyphicon glyphicon-book"></span>
                                         &nbsp; {{ _("Alle") }}
                                     </a>

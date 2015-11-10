@@ -5,7 +5,7 @@ Blueprint providing features regarding the news entries.
 """
 from operator import attrgetter
 
-from flask import Blueprint, render_template, url_for, redirect, abort
+from flask import Blueprint, render_template, url_for, redirect, abort, request
 from sipa.flatpages import cf_pages
 
 
@@ -13,14 +13,13 @@ bp_news = Blueprint('news', __name__, url_prefix='/news')
 
 
 @bp_news.route("/")
-@bp_news.route("/start/<int:start>")
-@bp_news.route("/end/<int:end>")
-@bp_news.route("/range/<int:start>:<int:end>")
-def display(start=None, end=None):
+def show():
     """Get all markdown files from 'content/news/', parse them and put
     them in a list for the template.
     The formatting of these files is described in the readme.
     """
+    start = request.args.get('start', None, int)
+    end = request.args.get('end', None, int)
     cf_pages.reload()
     news = cf_pages.get_articles_of_category('news')
     if len(news) is 0:
@@ -72,18 +71,3 @@ def show_news(filename):
             return render_template("template.html", article=article)
 
     abort(404)
-
-
-@bp_news.route("/newest")
-def newest():
-    return redirect(url_for(".display"))
-
-
-@bp_news.route("/oldest")
-def oldest():
-    return redirect(url_for(".display", end=-1))
-
-
-@bp_news.route("/all")
-def display_all():
-    return redirect(url_for(".display", start=0, end=-1))

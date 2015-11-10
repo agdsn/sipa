@@ -52,14 +52,14 @@
         <ul class="pager">
         {% if previous_range -%}
             <li class="previous">
-                <a href="{{ url_for(".display", start=previous_range.start, end=previous_range.end) }}">
+                <a href="{{ url_for(".show", start=previous_range.start, end=previous_range.end) }}">
                 <span aria-hidden="true">&larr;</span>&nbsp;{{ _("Neuer") }}</a>
             </li>
         {%- endif %}
 
         {% if next_range -%}
             <li class="next">
-                <a href="{{ url_for(".display", start=next_range.start, end=next_range.end) }}">
+                <a href="{{ url_for(".show", start=next_range.start, end=next_range.end) }}">
                 {{ _("Älter") }}&nbsp;<span aria-hidden="true">&rarr;</span></a>
             </li>
         {%- endif %}
