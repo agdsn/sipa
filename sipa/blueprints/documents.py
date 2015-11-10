@@ -1,33 +1,32 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, send_file, abort
+from flask import Blueprint, send_file, abort, send_from_directory, current_app
 from os.path import isfile, realpath, join
+from flask.views import View
+import os
 
 bp_documents = Blueprint('documents', __name__)
 
 
-@bp_documents.route('/images/<image>')
-def show_image(image):
-    print("Trying to show image {}".format(image))
-    filename = realpath("content/images/{}".format(image))
-    print("filename: {}".format(filename))
-    if not isfile(filename):
-        print("aborting")
-        abort(404)
+class StaticFiles(View):
+    def __init__(self, directory):
+        self.directory = directory
 
-    try:
-        return send_file(filename)
-    except IOError:
-        abort(404)
+    def dispatch_request(self, filename):
+        if os.path.isabs(self.directory):
+            directory = self.directory
+        else:
+            directory = os.path.join(current_app.root_path, self.directory)
+        cache_timeout = current_app.get_send_file_max_age(filename)
+        return send_from_directory(directory, filename,
+                                   cache_timeout=cache_timeout)
 
 
-@bp_documents.route('/documents/<path:document>')
-def show_pdf(document):
-    filename = join(realpath("content/documents/"), document)
-    if not isfile(filename):
-        abort(404)
+bp_documents.add_url_rule('/images/<path:filename>',
+                          view_func=StaticFiles.as_view('show_image',
+                                                        'content/images'))
 
-    try:
-        return send_file(filename)
-    except IOError:
-        abort(404)
+
+bp_documents.add_url_rule('/documents/<path:filename>',
+                          view_func=StaticFiles.as_view('show_document',
+                                                        'content/documents'))
