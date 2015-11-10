@@ -1,3 +1,5 @@
+.PHONY: run translate
+
 run:
 	docker-compose -f development.yml up
 translate:
