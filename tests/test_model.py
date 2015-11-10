@@ -1,10 +1,9 @@
 from unittest import TestCase
-from prepare import AppInitialized
 
-from model.default import BaseUser
-import model.sample
-from model.property import (ActiveProperty, UnsupportedProperty,
-                            no_capabilities, Capabilities)
+from prepare import AppInitialized
+from sipa.model.default import BaseUser
+from sipa.model.property import (
+    ActiveProperty, UnsupportedProperty, no_capabilities, Capabilities)
 
 
 class TestBaseUserCase(TestCase):
@@ -38,7 +37,7 @@ class TestSampleUserCase(AppInitialized):
     rows = expected_result.keys()
 
     def setUp(self):
-        self.User = model.sample.datasource.user_class
+        self.User = sipa.model.sample.datasource.user_class
         self.user = self.User('test')
         self.sample_users = self.app.extensions['sample_users']
 

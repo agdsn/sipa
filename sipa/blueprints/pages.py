@@ -4,13 +4,14 @@
 Blueprint for the flatpages
 """
 
-from flask import Blueprint, render_template, current_app
 import os.path
-from sipa.flatpages import cf_pages
-from model import registered_dormitories, preferred_dormitory_name
 from logging import getLogger
 import json
 
+from flask import Blueprint, render_template, current_app
+
+from sipa.flatpages import cf_pages
+from sipa.model import registered_dormitories, preferred_dormitory_name
 
 logger = getLogger(__name__)
 

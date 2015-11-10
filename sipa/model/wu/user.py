@@ -1,28 +1,23 @@
 # -*- coding: utf-8 -*-
 from contextlib import contextmanager
-
 from datetime import datetime, timedelta
+import logging
 
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
-
-from model.property import active_prop
-
-from model.default import BaseUser, BaseUserDB
-from model.wu.database_utils import sql_query, \
-    DORMITORIES, STATUS, \
-    session_atlantis
-from model.wu.ldap_utils import search_in_group, LdapConnector, \
-    change_email, change_password
-from .schema import Credit, Computer, Nutzer, Traffic
-
-from sipa.utils import argstr, timetag_today
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
-
 from sqlalchemy.orm.exc import NoResultFound
 
-import logging
+from sipa.model.default import BaseUser, BaseUserDB
+from sipa.model.property import active_prop
+from sipa.model.wu.database_utils import (
+    DORMITORIES, STATUS, session_atlantis, sql_query)
+from sipa.model.wu.ldap_utils import (
+    LdapConnector, change_email, change_password, search_in_group)
+from sipa.utils import argstr, timetag_today
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
+from .schema import Credit, Computer, Nutzer, Traffic
+
 logger = logging.getLogger(__name__)
 
 

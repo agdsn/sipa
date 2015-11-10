@@ -3,7 +3,8 @@
 # noinspection PyMethodMayBeStatic
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
-from model.property import active_prop
+
+from sipa.model.property import active_prop
 
 
 # noinspection PyMethodMayBeStatic

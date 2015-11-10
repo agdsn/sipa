@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
+import logging
+
 from flask import render_template, request, redirect, \
     url_for, flash, session, abort, current_app, jsonify
 from flask.blueprints import Blueprint
@@ -10,16 +12,12 @@ from flask.ext.login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import OperationalError
 from ldap3 import LDAPCommunicationError
 
-from model import dormitory_from_name, user_from_ip, premature_dormitories
-from model.default import BaseUser
-
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
+from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
 from sipa.utils import current_user_name
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 from sipa.utils.mail_utils import send_mail
 
-
-import logging
 logger = logging.getLogger(__name__)
 
 bp_generic = Blueprint('generic', __name__)

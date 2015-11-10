@@ -2,27 +2,24 @@
 import logging.config
 import os
 import os.path
+import logging
 
 from flask import Flask
-
+from flask.ext.babel import get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
 
-from flask.ext.babel import get_locale
-
-from model import init_context, init_datasources_dormitories, \
-    current_datasource
-
-from sipa.base import login_manager, babel_selector, IntegerConverter
+from sipa.model import (
+    init_context, init_datasources_dormitories, current_datasource)
 from sipa.babel import babel, possible_locales
+from sipa.base import login_manager, babel_selector, IntegerConverter
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.flatpages import cf_pages
 from sipa.utils.graph_utils import render_traffic_chart
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.babel_utils import get_weekday
 
-import logging
 logger = logging.getLogger(__name__)
 
 
@@ -62,7 +59,7 @@ def init_app(app):
     app.register_blueprint(bp_documents)
     app.register_blueprint(bp_news)
 
-    from model import query_gauge_data
+    from sipa.model import query_gauge_data
     logger.debug('Registering Jinja globals')
     form_label_width = 3
     form_input_width = 7

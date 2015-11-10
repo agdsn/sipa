@@ -5,16 +5,14 @@ import re
 from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
 from flask_wtf import Form
-
-from model import list_all_dormitories, registered_dormitories, \
-    preferred_dormitory_name
-
 from werkzeug.local import LocalProxy
-
 from wtforms import StringField, TextAreaField, SelectField, PasswordField, \
     HiddenField, BooleanField
 from wtforms.validators import DataRequired, Email, MacAddress, \
     ValidationError, EqualTo, Regexp, AnyOf
+
+from sipa.model import (
+    list_all_dormitories, registered_dormitories, preferred_dormitory_name)
 
 
 class PasswordComplexity(object):

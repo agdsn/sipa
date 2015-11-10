@@ -3,16 +3,13 @@ import datetime
 
 from flask.ext.login import AnonymousUserMixin
 from flask.globals import current_app
-
+import requests
 from werkzeug.local import LocalProxy
 
-from model.default import BaseUser
-from model.property import active_prop, unsupported_prop
-
+from sipa.model.default import BaseUser
+from sipa.model.property import active_prop, unsupported_prop
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 from sipa.utils import argstr
-
-import requests
 
 
 endpoint = LocalProxy(lambda: current_app.extensions['gerok_api']['endpoint'])

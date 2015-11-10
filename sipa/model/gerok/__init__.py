@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.babel import lazy_gettext
-from ..datasource import DataSource, Dormitory
 from ipaddress import IPv4Network
 
+from flask.ext.babel import lazy_gettext
+
+from ..datasource import DataSource, Dormitory
 from . import user
 
 

@@ -3,14 +3,12 @@ from random import random
 
 from flask import current_app
 from flask.ext.login import AnonymousUserMixin
+from werkzeug import LocalProxy
 
-from model.default import BaseUser
-from model.property import active_prop, unsupported_prop
-
+from sipa.model.default import BaseUser
+from sipa.model.property import active_prop, unsupported_prop
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
-
-from werkzeug import LocalProxy
 
 
 def init_context(app):

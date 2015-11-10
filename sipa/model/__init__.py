@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
+from ipaddress import IPv4Address, AddressValueError
+import operator
+
 from flask import request, session, current_app
 from flask.ext.login import current_user, AnonymousUserMixin
-from ipaddress import IPv4Address, AddressValueError
-
 from sqlalchemy.exc import OperationalError
 
 from . import sample, wu, gerok, hss, zeu
-
-import operator
-
 
 registered_datasources = [sample.datasource, wu.datasource, gerok.datasource]
 

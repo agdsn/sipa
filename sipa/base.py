@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
-
-
-
 from babel import Locale
-
 from flask import request, session
 from flask.ext.login import LoginManager, AnonymousUserMixin
-
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
-from model import dormitory_from_name
 from sipa.babel import possible_locales
+from sipa.model import dormitory_from_name
 
 login_manager = LoginManager()
 

@@ -3,21 +3,21 @@
 """Blueprint for Usersuite components
 """
 
+from collections import OrderedDict
+import logging
+
 from flask import Blueprint, render_template, url_for, redirect, flash, abort
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
-from model import current_datasource
 from sipa import password_changeable
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
+from sipa.model import current_datasource
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
-from collections import OrderedDict
-
-import logging
 logger = logging.getLogger(__name__)
 
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
