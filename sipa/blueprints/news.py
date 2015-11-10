@@ -64,9 +64,6 @@ def show_news(filename):
     news = cf_pages.get_articles_of_category('news')
 
     for article in news:
-        print("article: {}".format(article))
-        print("article.localized_page: {}".format(article.localized_page))
-
         if article.file_basename == filename:
             return render_template("template.html", article=article)
 
