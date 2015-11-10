@@ -60,8 +60,8 @@ def display(start=None, end=None):
                            previous_range=prev_range, next_range=next_range)
 
 
-@bp_news.route("/permalink/<filename>")
-def permalink(filename):
+@bp_news.route("/<filename>")
+def show_news(filename):
     news = cf_pages.get_articles_of_category('news')
 
     for article in news:
