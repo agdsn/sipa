@@ -17,6 +17,7 @@ from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
 from sipa.utils import current_user_name
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 from sipa.utils.mail_utils import send_mail
+from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
 
 logger = logging.getLogger(__name__)
 
@@ -261,3 +262,13 @@ def contact():
                       "kontaktieren willst."), 'info')
 
     return render_template('anonymous_contact.html', form=form)
+
+
+@bp_generic.route('/version')
+def version():
+    """ Display version information from local repo """
+    sipa_dir = '/home/sipa/sipa'
+    return render_template('version.html',
+                           active_branch=get_repo_active_branch(sipa_dir),
+                           commits=get_latest_commits(sipa_dir, 20)
+                           )
