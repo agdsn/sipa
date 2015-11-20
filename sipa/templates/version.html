@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% set page_title = "Version" %}
+
+{% block content %}
+    <h2>{{ _("Aktuelle Version") }}</h2>
+
+    <p class="lead">
+        {{ _("Verwendeter Branch:") }}
+        <strong><code class="text-bold">{{ active_branch }}</code></strong>
+    </p>
+
+    <h3>{{ _("Letzte Commits") }}</h3>
+
+    {% if commits %}
+        <table class="table table-striped table-bordered col-md-8">
+            <thead><tr>
+                <th>{{ _("Datum des Commits") }}</th>
+                <th>{{ _("Hash") }}</th>
+                <th>{{ _("Beschreibung") }}</th>
+                <th>{{ _("Autor") }}</th>
+            </tr></thead>
+            {% for commit in commits %}
+                <tr>
+                    <td>{{ commit['date'] }}</td>
+                    <td><a href="https://github.com/agdsn/sipa/commit/{{ commit['hexsha'] }}">
+                            {{ commit['hexsha'][:8] }}</a>
+                        </td>
+                    <td>{{ commit['message'] }}</td>
+                    <td>{{ commit['author'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
