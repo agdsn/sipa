@@ -3,15 +3,21 @@
 
 {% block content %}
     <h2>Current version</h2>
-        <b>Branch running: {{ active_branch }}</b>
+
+    <p class="lead">
+        Branch running:
+        <strong><code class="text-bold">{{ active_branch }}</code></strong>
+    </p>
+
+    <h3>Latest commits</h3>
 
     {% if commits %}
         <table class="table table-striped table-bordered col-md-8">
             <thead><tr>
-                <td>commit date</td>
-                <td>latest commits</td>
-                <td>message</td>
-                <td>author</td>
+                <th>Commit Date</th>
+                <th>Hash</th>
+                <th>Message</th>
+                <th>Author</th>
             </tr></thead>
             {% for commit in commits %}
                 <tr>
