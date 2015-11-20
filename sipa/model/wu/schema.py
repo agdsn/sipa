@@ -1,14 +1,14 @@
 # -*- coding: utf-8; -*-
+from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import (Column, Index, Integer, String,
                         text, ForeignKey, DECIMAL, BigInteger)
 from sqlalchemy.orm import relationship, column_property
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-metadata = Base.metadata
 
 
-class Nutzer(Base):
+db = SQLAlchemy()
+
+
+class Nutzer(db.Model):
     __tablename__ = 'nutzer'
     __table_args__ = (
         Index(u'zimmer', u'etage', u'zimmernr'),
@@ -26,7 +26,7 @@ class Nutzer(Base):
     computer = relationship("Computer", backref="nutzer")
 
 
-class Computer(Base):
+class Computer(db.Model):
     __tablename__ = 'computer'
 
     nutzer_id = Column(Integer, ForeignKey('nutzer.nutzer_id'), nullable=False)
@@ -38,7 +38,7 @@ class Computer(Base):
     c_alias = Column(String(20))
 
 
-class Credit(Base):
+class Credit(db.Model):
     __tablename__ = u'credit'
 
     user_id = Column(Integer, primary_key=True, nullable=False)
@@ -46,7 +46,7 @@ class Credit(Base):
     timetag = Column(Integer, primary_key=True, nullable=False)
 
 
-class Traffic(Base):
+class Traffic(db.Model):
     __tablename__ = 'tuext'
 
     timetag = Column(BigInteger(), primary_key=True)

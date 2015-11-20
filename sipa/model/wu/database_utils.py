@@ -7,7 +7,7 @@ from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
-from .schema import Traffic
+from .schema import Traffic, db
 
 
 import logging
@@ -15,6 +15,11 @@ logger = logging.getLogger(__name__)
 
 
 def init_db(app):
+    app.config['SQLALCHEMY_BINDS'] = {
+    }
+
+    db.init_app(app)
+
     atlantis_connection_string = 'mysql+pymysql://{0}:{1}@{2}:3306'.format(
         app.config['DB_ATLANTIS_USER'],
         app.config['DB_ATLANTIS_PASSWORD'],
@@ -34,8 +39,8 @@ def init_db(app):
 
     app.extensions['wu_session_atlantis'] = Session()
 
-    for db in [db_atlantis_netusers, db_atlantis_traffic]:
-        conn = db.connect()
+    for db_engine in [db_atlantis_netusers, db_atlantis_traffic]:
+        conn = db_engine.connect()
         conn.execute("SET lock_wait_timeout=%s", (2,))
         conn.close()
 
