@@ -31,7 +31,13 @@ def init_db(app):
     )
     Session = sessionmaker(bind=db_atlantis_netusers,
                            binds={Traffic: db_atlantis_traffic})
+
     app.extensions['wu_session_atlantis'] = Session()
+
+    for db in [db_atlantis_netusers, db_atlantis_traffic]:
+        conn = db.connect()
+        conn.execute("SET lock_wait_timeout=%s", (2,))
+        conn.close()
 
     app.extensions['db_helios'] = create_engine(
         'mysql+pymysql://{0}:{1}@{2}:{3}/'.format(
