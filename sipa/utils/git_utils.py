@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from logging import getLogger
-from git.exc import GitCommandError
 from datetime import datetime
+from flask.ext.babel import format_datetime
+from git.exc import GitCommandError, InvalidGitRepositoryError, CacheError
+from logging import getLogger
 import git
 
 logger = getLogger(__name__)
@@ -67,15 +68,16 @@ def get_latest_commits(repo_dir, commit_count):
     """
     try:
         sipa_repo = git.Repo(repo_dir)
-        commits = list(sipa_repo.iter_commits(get_repo_active_branch(repo_dir),
-                                              max_count=commit_count))
-        return [{'hexsha': commit.hexsha,
-                 'message': commit.message,
-                 'author': commit.author,
-                 'date': datetime.fromtimestamp(int(commit.committed_date))
-                 .strftime('%Y-%m-%dT' '%H:%M'),
-                 } for commit in commits]
-    except:
-        logger.error("Could not get latest commits", extra={'data': {
+        commits = sipa_repo.iter_commits(get_repo_active_branch(repo_dir),
+                                         max_count=commit_count)
+        return [{
+            'hexsha': commit.hexsha,
+            'message': commit.summary,
+            'author': commit.author,
+            'date': format_datetime(datetime.fromtimestamp(
+                commit.committed_date)),
+        } for commit in commits]
+    except (InvalidGitRepositoryError, CacheError, GitCommandError):
+        logger.exception("Could not get latest commits", extra={'data': {
             'repo_dir': repo_dir}})
         return []
