@@ -339,7 +339,12 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <hr>
                 <div class="row">
                     <div class="col-lg-12 text-muted footer-below">
-                        <p>AG DSN, 2015.</p>
+                        <p>
+                            AG DSN, 2015.
+                            <a href="{{ url_for('generic.version') }}">
+                                {{ _("Informationen zur Version") }}
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>

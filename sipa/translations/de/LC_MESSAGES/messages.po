@@ -465,6 +465,10 @@ msgstr ""
 msgid "7. Etage"
 msgstr ""
 
+#: sipa/templates/base.html:344
+msgid "Informationen zur Version"
+msgstr ""
+
 #: sipa/templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr ""

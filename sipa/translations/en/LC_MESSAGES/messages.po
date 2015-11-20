@@ -475,6 +475,10 @@ msgstr "Basement"
 msgid "7. Etage"
 msgstr "7th floor"
 
+#: sipa/templates/base.html:344
+msgid "Informationen zur Version"
+msgstr "Version info"
+
 #: sipa/templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr "Times of departure"
