@@ -57,7 +57,7 @@ def current_user_name():
         return ''
 
 
-def redirect_url(default='index'):
+def redirect_url(default='generic.index'):
     return request.args.get('next') or request.referrer or url_for(default)
 
 

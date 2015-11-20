@@ -14,7 +14,7 @@ from ldap3 import LDAPCommunicationError
 
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
 from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
-from sipa.utils import current_user_name
+from sipa.utils import current_user_name, redirect_url
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
@@ -102,7 +102,7 @@ def set_language(lang='de'):
     """Set the session language via URL
     """
     session['locale'] = lang
-    return redirect(request.referrer)
+    return redirect(redirect_url())
 
 
 @bp_generic.route('/index.php')
