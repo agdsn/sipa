@@ -50,10 +50,8 @@ def get_repo_active_branch(repo_dir):
     try:
         sipa_repo = git.Repo(repo_dir)
         return sipa_repo.active_branch.name
-    except:
-        logger.error("Could not get active branch", extra={'data': {
-            'repo_dir': repo_dir}})
-        return 'repo problem'
+    except TypeError:  # detatched HEAD
+        return "@{}".format(sipa_repo.head.commit.hexsha[:8])
 
 
 def get_latest_commits(repo_dir, commit_count):
@@ -68,8 +66,7 @@ def get_latest_commits(repo_dir, commit_count):
     """
     try:
         sipa_repo = git.Repo(repo_dir)
-        commits = sipa_repo.iter_commits(get_repo_active_branch(repo_dir),
-                                         max_count=commit_count)
+        commits = sipa_repo.iter_commits(max_count=commit_count)
         return [{
             'hexsha': commit.hexsha,
             'message': commit.summary,
