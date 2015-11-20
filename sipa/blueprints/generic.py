@@ -9,7 +9,7 @@ from flask.blueprints import Blueprint
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_user, logout_user, \
     login_required
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import DatabaseError
 from ldap3 import LDAPCommunicationError
 
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
@@ -63,14 +63,16 @@ def error_handler_redirection(e):
     ), e.code
 
 
-@bp_generic.app_errorhandler(OperationalError)
+@bp_generic.app_errorhandler(DatabaseError)
 def exceptionhandler_sql(ex):
-    """Handles global MySQL errors (server down).
+    """Handles global Database errors like:
+
+    Server down, Lock wait timeout exceeded, …
     """
-    flash(gettext("Verbindung zum SQL-Server konnte nicht "
-                  "hergestellt werden!"),
+    flash(gettext("Es gab einen Fehler bei der Datenbankabfrage. "
+                  "Bitte probiere es in ein paar Minuten noch mal."),
           "error")
-    logger.critical('Unable to connect to MySQL server',
+    logger.critical('DatabaseError caught',
                     extra={'data': {'exception_args': ex.args}})
     return redirect(url_for('generic.index'))
 

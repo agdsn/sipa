@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-20 19:13+0100\n"
+"POT-Creation-Date: 2015-11-20 20:57+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -176,45 +176,47 @@ msgstr ""
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:70
-msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
+#: sipa/blueprints/generic.py:72
+msgid ""
+"Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein "
+"paar Minuten noch mal."
 msgstr ""
 
-#: sipa/blueprints/generic.py:89
+#: sipa/blueprints/generic.py:91
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:139
+#: sipa/blueprints/generic.py:141
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:146
+#: sipa/blueprints/generic.py:148
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:163
+#: sipa/blueprints/generic.py:165
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:201
+#: sipa/blueprints/generic.py:203
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:204
+#: sipa/blueprints/generic.py:206
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:251 sipa/blueprints/usersuite.py:88
+#: sipa/blueprints/generic.py:253 sipa/blueprints/usersuite.py:88
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:253
+#: sipa/blueprints/generic.py:255
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:259
+#: sipa/blueprints/generic.py:261
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -340,23 +342,23 @@ msgstr ""
 msgid "Wundtstraße & Zellescher Weg"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:67
+#: sipa/model/wu/database_utils.py:73
 msgid "ok"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:68
+#: sipa/model/wu/database_utils.py:74
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:69
+#: sipa/model/wu/database_utils.py:75
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:71
+#: sipa/model/wu/database_utils.py:77
 msgid "Exaktiv"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:72
+#: sipa/model/wu/database_utils.py:78
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
@@ -465,7 +467,7 @@ msgstr ""
 msgid "7. Etage"
 msgstr ""
 
-#: sipa/templates/base.html:344
+#: sipa/templates/base.html:345
 msgid "Informationen zur Version"
 msgstr ""
 
@@ -1334,5 +1336,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Message"
+#~ msgstr ""
+
+#~ msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
 #~ msgstr ""
 
