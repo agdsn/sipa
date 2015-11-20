@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-30 02:08+0100\n"
+"POT-Creation-Date: 2015-11-20 18:58+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -531,6 +531,34 @@ msgstr ""
 
 #: sipa/templates/usertraffic.html:9
 msgid "Deine Nutzer-ID lautet"
+msgstr ""
+
+#: sipa/templates/version.html:5
+msgid "Aktuelle Version"
+msgstr ""
+
+#: sipa/templates/version.html:8
+msgid "Verwendeter Branch:"
+msgstr ""
+
+#: sipa/templates/version.html:12
+msgid "Letzte Commits"
+msgstr ""
+
+#: sipa/templates/version.html:17
+msgid "Datum des Commits"
+msgstr ""
+
+#: sipa/templates/version.html:18
+msgid "Hash"
+msgstr ""
+
+#: sipa/templates/version.html:19
+msgid "Beschreibung"
+msgstr ""
+
+#: sipa/templates/version.html:20
+msgid "Autor"
 msgstr ""
 
 #: sipa/templates/drafts/_traffic_overview.html:1
@@ -1290,5 +1318,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Sonntag"
+#~ msgstr ""
+
+#~ msgid "Current version"
+#~ msgstr ""
+
+#~ msgid "Branch running:"
+#~ msgstr ""
+
+#~ msgid "Commit Date"
+#~ msgstr ""
+
+#~ msgid "Message"
 #~ msgstr ""
 

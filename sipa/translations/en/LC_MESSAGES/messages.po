@@ -543,6 +543,34 @@ msgstr "Choose dormitory"
 msgid "Deine Nutzer-ID lautet"
 msgstr "Your user ID is"
 
+#: sipa/templates/version.html:5
+msgid "Aktuelle Version"
+msgstr "Current Version"
+
+#: sipa/templates/version.html:8
+msgid "Verwendeter Branch:"
+msgstr "Branch running:"
+
+#: sipa/templates/version.html:12
+msgid "Letzte Commits"
+msgstr "Latest Commits"
+
+#: sipa/templates/version.html:17
+msgid "Datum des Commits"
+msgstr "Commit date"
+
+#: sipa/templates/version.html:18
+msgid "Hash"
+msgstr "Hash"
+
+#: sipa/templates/version.html:19
+msgid "Beschreibung"
+msgstr "Description"
+
+#: sipa/templates/version.html:20
+msgid "Autor"
+msgstr "Author"
+
 #: sipa/templates/drafts/_traffic_overview.html:1
 msgid "Dein Traffic"
 msgstr "Your traffic"
