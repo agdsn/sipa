@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
-from .schema import Traffic, db
+from .schema import db
 
 
 import logging
@@ -15,32 +14,26 @@ logger = logging.getLogger(__name__)
 
 
 def init_db(app):
-    app.config['SQLALCHEMY_BINDS'] = {
-    }
-
-    db.init_app(app)
-
     atlantis_connection_string = 'mysql+pymysql://{0}:{1}@{2}:3306'.format(
         app.config['DB_ATLANTIS_USER'],
         app.config['DB_ATLANTIS_PASSWORD'],
         app.config['DB_ATLANTIS_HOST']
     )
 
-    db_atlantis_netusers = create_engine(
-        "{}/netusers".format(atlantis_connection_string),
-        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
+    # set netusers as default binding
+    app.config['SQLALCHEMY_DATABASE_URI'] = (
+        "{}/netusers".format(atlantis_connection_string)
     )
-    db_atlantis_traffic = create_engine(
-        "{}/traffic".format(atlantis_connection_string),
-        echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
-    )
-    Session = sessionmaker(bind=db_atlantis_netusers,
-                           binds={Traffic: db_atlantis_traffic})
+    app.config['SQLALCHEMY_BINDS'] = {
+        # 'netusers': "{}/netusers".format(atlantis_connection_string),
+        'traffic': "{}/traffic".format(atlantis_connection_string),
+    }
 
-    app.extensions['wu_session_atlantis'] = Session()
+    db.init_app(app)
 
-    for db_engine in [db_atlantis_netusers, db_atlantis_traffic]:
-        conn = db_engine.connect()
+    for bind in [None, 'traffic']:
+        engine = db.get_engine(app, bind=bind)
+        conn = engine.connect()
         conn.execute("SET lock_wait_timeout=%s", (2,))
         conn.close()
 
@@ -55,9 +48,6 @@ def init_db(app):
 
 
 db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
-session_atlantis = LocalProxy(
-    lambda: current_app.extensions['wu_session_atlantis']
-)
 
 DORMITORIES = [
     'Wundstraße 5',

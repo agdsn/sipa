@@ -48,6 +48,7 @@ class Credit(db.Model):
 
 class Traffic(db.Model):
     __tablename__ = 'tuext'
+    __bind_key__ = 'traffic'
 
     timetag = Column(BigInteger(), primary_key=True)
     ip = Column(String(15), nullable=False, index=True, primary_key=True)

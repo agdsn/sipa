@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import logging
 from contextlib import contextmanager
 from datetime import datetime, timedelta
-import logging
 
+from .schema import Computer, Credit, Nutzer, Traffic
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
@@ -10,13 +11,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.default import BaseUser, BaseUserDB
 from sipa.model.property import active_prop
-from sipa.model.wu.database_utils import (
-    DORMITORIES, STATUS, session_atlantis, sql_query)
-from sipa.model.wu.ldap_utils import (
-    LdapConnector, change_email, change_password, search_in_group)
+from sipa.model.wu.database_utils import DORMITORIES, STATUS, sql_query
+from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
+    change_password, search_in_group
+from sipa.model.wu.schema import db
 from sipa.utils import argstr, timetag_today
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound, DBQueryEmpty
-from .schema import Credit, Computer, Nutzer, Traffic
+from sipa.utils.exceptions import DBQueryEmpty, PasswordInvalid, UserNotFound
+
 
 logger = logging.getLogger(__name__)
 
@@ -90,7 +91,7 @@ class User(BaseUser):
     @classmethod
     def from_ip(cls, ip):
         try:
-            sql_nutzer = (session_atlantis.query(Nutzer)
+            sql_nutzer = (db.session.query(Nutzer)
                           .join(Computer)
                           .filter_by(c_ip=ip)
                           .filter(Nutzer.status.in_([1, 2, 7, 12]))
@@ -125,7 +126,7 @@ class User(BaseUser):
 
     def cache_information(self):
         try:
-            sql_nutzer = session_atlantis.query(Nutzer).filter_by(
+            sql_nutzer = db.session.query(Nutzer).filter_by(
                 unix_account=self.uid
             ).one()
         except NoResultFound:
@@ -140,7 +141,7 @@ class User(BaseUser):
         traffic_history = []
 
         credit_entries = reversed(
-            session_atlantis.query(Credit)
+            db.session.query(Credit)
             .filter_by(user_id=10564)
             .order_by(Credit.timetag.desc())
             .limit(7).all()
@@ -149,7 +150,7 @@ class User(BaseUser):
         accountable_ips = [c.c_ip for c in self._nutzer.computer]
 
         for credit_entry in credit_entries:
-            traffic_entries = (session_atlantis.query(Traffic)
+            traffic_entries = (db.session.query(Traffic)
                                .filter_by(timetag=credit_entry.timetag)
                                .filter(Traffic.ip.in_(accountable_ips))
                                .all())
@@ -171,7 +172,7 @@ class User(BaseUser):
         """Return the current credit that is left
         """
         latest_credit_entry = (
-            session_atlantis.query(Credit)
+            db.session.query(Credit)
             .filter_by(user_id=self._nutzer.nutzer_id)
             .order_by(Credit.timetag.desc())
             .first()
@@ -184,7 +185,7 @@ class User(BaseUser):
 
         traffic_today = sum(
             t.overall for t
-            in session_atlantis.query(Traffic)
+            in db.session.query(Traffic)
             .filter_by(timetag=today)
             .filter(Traffic.ip.in_(accountable_ips))
         )
@@ -234,8 +235,8 @@ class User(BaseUser):
         computer = self._nutzer.computer[0]
         computer.c_etheraddr = new_mac
 
-        session_atlantis.add(computer)
-        session_atlantis.commit()
+        db.session.add(computer)
+        db.session.commit()
 
     @active_prop
     def mail(self):
