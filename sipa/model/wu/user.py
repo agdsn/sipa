@@ -11,7 +11,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.default import BaseUser, BaseUserDB
 from sipa.model.property import active_prop
-from sipa.model.wu.database_utils import DORMITORIES, STATUS, sql_query
+from sipa.model.wu.database_utils import STATUS, sql_query
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
 from sipa.model.wu.schema import db
@@ -252,11 +252,7 @@ class User(BaseUser):
 
     @active_prop
     def address(self):
-        return "{} / {} {}".format(
-            DORMITORIES[self._nutzer.wheim_id - 1],
-            self._nutzer.etage,
-            self._nutzer.zimmernr,
-        )
+        return self._nutzer.address
 
     @active_prop
     def ips(self):

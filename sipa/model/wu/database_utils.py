@@ -49,21 +49,6 @@ def init_db(app):
 
 db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
 
-DORMITORIES = [
-    'Wundstraße 5',
-    'Wundstraße 7',
-    'Wundstraße 9',
-    'Wundstraße 11',
-    'Wundstraße 1',
-    'Wundstraße 3',
-    'Zellescher Weg 41',
-    'Zellescher Weg 41A',
-    'Zellescher Weg 41B',
-    'Zellescher Weg 41C',
-    'Zellescher Weg 41D',
-    'Borsbergstraße 34',
-]
-
 STATUS = {
     1: (lazy_gettext('ok'), 'success'),
     2: (lazy_gettext('Nicht bezahlt, Netzanschluss gesperrt'), 'warning'),

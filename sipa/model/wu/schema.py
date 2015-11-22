@@ -4,8 +4,27 @@ from sqlalchemy import (Column, Index, Integer, String,
                         text, ForeignKey, DECIMAL, BigInteger)
 from sqlalchemy.orm import relationship, column_property
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 db = SQLAlchemy()
+
+
+DORMITORY_MAPPINGS = [
+    'Wundstraße 5',
+    'Wundstraße 7',
+    'Wundstraße 9',
+    'Wundstraße 11',
+    'Wundstraße 1',
+    'Wundstraße 3',
+    'Zellescher Weg 41',
+    'Zellescher Weg 41A',
+    'Zellescher Weg 41B',
+    'Zellescher Weg 41C',
+    'Zellescher Weg 41D',
+    'Borsbergstraße 34',
+]
 
 
 class Nutzer(db.Model):
@@ -24,6 +43,19 @@ class Nutzer(db.Model):
                     server_default=text("'1'"))
 
     computer = relationship("Computer", backref="nutzer")
+
+    @property
+    def address(self):
+        try:
+            return "{} / {} {}".format(
+                DORMITORY_MAPPINGS[self.wheim_id - 1],
+                self.etage,
+                self.zimmernr,
+            )
+        except IndexError:
+            logger.warning("No dormitory mapping given for `wheim_id`=%s",
+                           self.wheim_id)
+            return ""
 
 
 class Computer(db.Model):
