@@ -4,7 +4,6 @@ import os
 import os.path
 import logging
 
-from flask import Flask
 from flask.ext.babel import get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
@@ -21,12 +20,6 @@ from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.babel_utils import get_weekday
 
 logger = logging.getLogger(__name__)
-
-
-def create_app(name=None, app=None):
-    app = app if app else Flask(name if name else __name__)
-    init_app(app)
-    return app
 
 
 def init_app(app):

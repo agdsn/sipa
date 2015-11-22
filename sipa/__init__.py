@@ -1,32 +1,12 @@
 # -*- coding: utf-8 -*-
-from functools import wraps
-from flask import Flask, flash, redirect
-from sipa.utils import redirect_url
+from flask import Flask
 
-app = Flask('sipa')
+from sipa.initialization import init_app
 
 
-def password_changeable(user):
-    """A decorator used to disable functions (routes) if a certain feature
-    is not provided by the User class.
-
-    given_features has to be a callable to ensure runtime distinction
-    between datasources.
-
-    :param needed_feature: The feature needed
-    :param given_features: A callable returning the set of supported features
-    :return:
-    """
-    def feature_decorator(func):
-        @wraps(func)
-        def decorated_view(*args, **kwargs):
-            if user.is_authenticated and user.can_change_password:
-                return func(*args, **kwargs)
-            else:
-                def not_supported():
-                    flash("Diese Funktion ist nicht verfügbar.", 'error')
-                    return redirect(redirect_url())
-                return not_supported()
-
-        return decorated_view
-    return feature_decorator
+def create_app(app=None, prepare_callable=None):
+    app = app if app else Flask(__name__)
+    if prepare_callable:
+        prepare_callable(app=app)
+    init_app(app)
+    return app

@@ -10,10 +10,10 @@ from flask import Blueprint, render_template, url_for, redirect, flash, abort
 from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 
-from sipa import password_changeable
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from sipa.model import current_datasource
+from sipa.utils import password_changeable
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound

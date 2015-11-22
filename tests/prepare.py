@@ -1,7 +1,7 @@
 from flask import Flask
 from flask.ext.testing import TestCase
 
-from sipa.initialization import create_app
+from sipa import create_app
 
 
 class AppInitialized(TestCase):
