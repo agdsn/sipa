@@ -23,8 +23,10 @@ from sipa.utils.babel_utils import get_weekday
 logger = logging.getLogger(__name__)
 
 
-def create_app(name=None, app=None):
-    app = app if app else Flask(name if name else __name__)
+def create_app(app=None, prepare_callable=None):
+    app = app if app else Flask(__name__)
+    if prepare_callable:
+        prepare_callable(app=app)
     init_app(app)
     return app
 

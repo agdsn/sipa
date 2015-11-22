@@ -10,8 +10,7 @@
 """
 
 import argparse
-from sipa import app
-from sipa.initialization import init_app
+from sipa.initialization import create_app
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sipa launcher")
@@ -26,12 +25,14 @@ if __name__ == "__main__":
     import logging
     logger = logging.getLogger(__name__)
     logger.info('Starting sipa...')
-    if args.debug:
-        app.debug = True
-        logger.warning('Running in Debug mode')
 
-    init_app(app)
+    def preparation(app):
+        if args.debug:
+            app.debug = True
+            logger.warning('Running in Debug mode')
+
+    app = create_app(prepare_callable=preparation)
     app.run(debug=args.debug, host=args.host, port=args.port)
 
 else:
-    init_app(app)
+    app = create_app()
