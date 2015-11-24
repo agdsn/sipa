@@ -14,19 +14,21 @@ logger = logging.getLogger(__name__)
 
 
 def init_db(app):
-    atlantis_connection_string = 'mysql+pymysql://{0}:{1}@{2}:3306'.format(
-        app.config['DB_ATLANTIS_USER'],
-        app.config['DB_ATLANTIS_PASSWORD'],
-        app.config['DB_ATLANTIS_HOST']
-    )
+    def get_atlantis_db_url(database):
+        return ("mysql+pymysql://{user}:{pw}@{host}:3306/{db}"
+                "?connect_timeout={timeout}"
+                .format(
+                    user=app.config['DB_ATLANTIS_USER'],
+                    pw=app.config['DB_ATLANTIS_PASSWORD'],
+                    host=app.config['DB_ATLANTIS_HOST'],
+                    db=database,
+                    timeout=app.config['SQL_TIMEOUT'],
+                ))
 
     # set netusers as default binding
-    app.config['SQLALCHEMY_DATABASE_URI'] = (
-        "{}/netusers".format(atlantis_connection_string)
-    )
+    app.config['SQLALCHEMY_DATABASE_URI'] = get_atlantis_db_url('netusers')
     app.config['SQLALCHEMY_BINDS'] = {
-        # 'netusers': "{}/netusers".format(atlantis_connection_string),
-        'traffic': "{}/traffic".format(atlantis_connection_string),
+        'traffic': get_atlantis_db_url('traffic')
     }
 
     db.init_app(app)
