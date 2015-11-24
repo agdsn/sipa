@@ -16,7 +16,7 @@ from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
 from sipa.model.wu.schema import db
 from sipa.utils import argstr, timetag_today
-from sipa.utils.exceptions import DBQueryEmpty, PasswordInvalid, UserNotFound
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,6 @@ class User(BaseUser):
         self.name = name
         self.group = self.define_group()
         self._mail = mail
-        self.cache_information()
         self._userdb = UserDB(self)
 
     def __repr__(self):
@@ -124,17 +123,28 @@ class User(BaseUser):
         else:
             logger.info('Password successfully changed')
 
-    def cache_information(self):
-        try:
-            sql_nutzer = db.session.query(Nutzer).filter_by(
-                unix_account=self.uid
-            ).one()
-        except NoResultFound:
-            logger.critical("User %s does not have a database entry", self.uid,
-                            extra={'stack': True})
-            self._nutzer = None
-        else:
-            self._nutzer = sql_nutzer
+    @property
+    def _nutzer(self):
+        """Returns the corresponding Orm `Nutzer` object from netusers
+
+        When firstly invoked, the ORM object is being cached in
+        `self._cached_nutzer` to avoid multiple transactions for every
+        property access.
+
+        """
+        if not getattr(self, '_cached_nutzer', None):
+            sql_nutzer = None
+            try:
+                sql_nutzer = db.session.query(Nutzer).filter_by(
+                    unix_account=self.uid
+                ).one()
+            except NoResultFound:
+                logger.critical("User %s does not have a database entry",
+                                self.uid)
+            finally:
+                self._cached_nutzer = sql_nutzer
+
+        return self._cached_nutzer
 
     @property
     def traffic_history(self):
