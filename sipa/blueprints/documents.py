@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, send_file, abort, send_from_directory, current_app
-from os.path import isfile, realpath, join
-from flask.views import View
 import os
+
+from flask import Blueprint, send_from_directory, current_app
+from flask.views import View
 
 bp_documents = Blueprint('documents', __name__)
 
