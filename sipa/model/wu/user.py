@@ -243,7 +243,7 @@ class User(BaseUser):
         assert len(self._nutzer.computer) == 1
 
         computer = self._nutzer.computer[0]
-        computer.c_etheraddr = new_mac
+        computer.c_etheraddr = new_mac.lower()
 
         db.session.add(computer)
         db.session.commit()
