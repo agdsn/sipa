@@ -77,13 +77,14 @@ def password_changeable(user):
     return feature_decorator
 
 
-def current_user_name():
-    if current_user.is_authenticated:
-        return current_user.uid
-    elif current_user.is_anonymous:
+def get_user_name(user=current_user):
+    if user.is_authenticated:
+        return user.uid
+
+    if user.is_anonymous:
         return 'anonymous'
-    else:
-        return ''
+
+    return ''
 
 
 def redirect_url(default='generic.index'):

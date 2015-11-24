@@ -14,7 +14,7 @@ from ldap3 import LDAPCommunicationError
 
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
 from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
-from sipa.utils import current_user_name, redirect_url
+from sipa.utils import get_user_name, redirect_url
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
@@ -28,13 +28,13 @@ bp_generic = Blueprint('generic', __name__)
 def log_request():
     if 'sentry' in current_app.extensions:
         current_app.extensions['sentry'].client.extra_context({
-            'current_user': current_user_name(),
-            'ip_user': user_from_ip(request.remote_addr).uid
+            'current_user': get_user_name(current_user),
+            'ip_user': get_user_name(user_from_ip(request.remote_addr))
         })
 
     logging.getLogger(__name__ + '.http').debug(
         'Incoming request: %s %s', request.method, request.path,
-        extra={'tags': {'user': current_user_name(),
+        extra={'tags': {'user': get_user_name(current_user),
                         'ip': request.remote_addr}}
     )
 
