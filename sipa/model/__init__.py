@@ -52,7 +52,8 @@ def list_supported_dormitories():
 
 def init_context(app):
     for datasource in app.extensions['datasources']:
-        datasource.init_context(app)
+        if datasource.init_context:
+            datasource.init_context(app)
 
 
 def dormitory_from_name(name):

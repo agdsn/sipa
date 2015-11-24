@@ -2,17 +2,13 @@ from ipaddress import IPv4Network
 from sipa.utils import argstr
 
 
-def empty_function(app):
-    pass
-
-
 class DataSource:
     """DataSource object Providing its name and the User object.
 
     """
     def __init__(self, name, display_name, user_class, mail_server,
                  support_mail=None,
-                 init_context=empty_function,
+                 init_context=None,
                  debug_only=False):
         super().__init__()
         self.name = name
@@ -48,7 +44,10 @@ class DataSource:
         )
 
     def init_context(self, app):
-        return self._init_context(app)
+        if self._init_context:
+            return self._init_context(app)
+
+        return
 
 
 class SubnetCollection:
