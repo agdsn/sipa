@@ -24,9 +24,9 @@ class StaticFiles(View):
 
 bp_documents.add_url_rule('/images/<path:filename>',
                           view_func=StaticFiles.as_view('show_image',
-                                                        'content/images'))
+                                                        '../content/images'))
 
 
 bp_documents.add_url_rule('/documents/<path:filename>',
                           view_func=StaticFiles.as_view('show_document',
-                                                        'content/documents'))
+                                                        '../content/documents'))
