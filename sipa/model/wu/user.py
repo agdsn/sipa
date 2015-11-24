@@ -152,7 +152,7 @@ class User(BaseUser):
 
         credit_entries = reversed(
             db.session.query(Credit)
-            .filter_by(user_id=10564)
+            .filter_by(user_id=self._nutzer.nutzer_id)
             .order_by(Credit.timetag.desc())
             .limit(7).all()
         )
