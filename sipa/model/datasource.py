@@ -6,13 +6,12 @@ class DataSource:
     """DataSource object Providing its name and the User object.
 
     """
-    def __init__(self, name, display_name, user_class, mail_server,
+    def __init__(self, name, user_class, mail_server,
                  support_mail=None,
                  init_context=None,
                  debug_only=False):
         super().__init__()
         self.name = name
-        self.display_name = display_name
         self.user_class = user_class
         self.mail_server = mail_server
         self.support_mail = (support_mail if support_mail
@@ -26,7 +25,6 @@ class DataSource:
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             name=self.name,
-            display_name=self.display_name,
             user_class=self.user_class,
             mail_server=self.mail_server,
             support_mail=self.support_mail,
@@ -121,16 +119,14 @@ class Dormitory:
 class PrematureDataSource:
     """A dormitory not yet supported by SIPA"""
 
-    def __init__(self, name, display_name, website_url, support_mail):
+    def __init__(self, name, website_url, support_mail):
         self.name = name
-        self.display_name = display_name
         self.website_url = website_url
         self.support_mail = support_mail
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             name=self.name,
-            display_name=self.display_name,
             website_url=self.website_url,
             support_mail=self.support_mail,
         ))

@@ -2,14 +2,11 @@
 
 from ipaddress import IPv4Network
 
-from flask.ext.babel import lazy_gettext
-
 from ..datasource import DataSource, Dormitory
 from . import user
 
 datasource = DataSource(
     name='sample',
-    display_name=lazy_gettext("Beispielsektion"),
     user_class=user.User,
     mail_server="test.agdsn.de",
     init_context=user.init_context,
