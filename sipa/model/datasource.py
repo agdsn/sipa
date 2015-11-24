@@ -7,6 +7,7 @@ class DataSource:
 
     """
     def __init__(self, name, user_class, mail_server,
+                 webmailer_url=None,
                  support_mail=None,
                  init_context=None,
                  debug_only=False):
@@ -14,6 +15,7 @@ class DataSource:
         self.name = name
         self.user_class = user_class
         self.mail_server = mail_server
+        self.webmailer_url = webmailer_url
         self.support_mail = (support_mail if support_mail
                              else "support@{}".format(mail_server))
         self._init_context = init_context
@@ -27,6 +29,7 @@ class DataSource:
             name=self.name,
             user_class=self.user_class,
             mail_server=self.mail_server,
+            webmailer_url=self.webmailer_url,
             support_mail=self.support_mail,
             init_context=self._init_context,
             debug_only=self.debug_only,
