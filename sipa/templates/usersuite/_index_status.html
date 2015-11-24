@@ -12,9 +12,15 @@
     </a>
     {% endif %}
     <a href="{{ url_for(".usersuite_contact") }}" class="btn btn-default">
-        <span class="glyphicon glyphicon-envelope"></span>
+        <span class="glyphicon glyphicon-question-sign"></span>
         {{ _("Kontaktformular") }}
     </a>
+    {% if webmailer_url %}
+    <a href="{{ webmailer_url }}" class="btn btn-default">
+        <span class="glyphicon glyphicon-envelope"></span>
+        {{ _("Webmailer") }}
+    </a>
+    {% endif %}
 </p>
 
 <table class="table table-striped table-bordered table-hover">

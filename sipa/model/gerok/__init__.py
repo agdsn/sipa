@@ -17,6 +17,7 @@ datasource = DataSource(
     name='gerok',
     user_class=user.User,
     mail_server="wh17.tu-dresden.de",
+    webmailer_url="https://wh17.tu-dresden.de/webmail/",
     support_mail="gerok@wh17.tu-dresden.de",
     init_context=init_context
 )

@@ -63,6 +63,13 @@ def dormitory_from_name(name):
     return None
 
 
+def datasource_from_name(name):
+    for datasource in current_app.extensions['datasources']:
+        if datasource.name == name:
+            return datasource
+    return
+
+
 def preferred_dormitory_name():
     dormitory = dormitory_from_ip(request.remote_addr)
     return dormitory.name if dormitory else None
