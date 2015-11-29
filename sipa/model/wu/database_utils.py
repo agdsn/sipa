@@ -14,22 +14,22 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def init_db(app):
-    def get_atlantis_db_url(database):
-        return ("mysql+pymysql://{user}:{pw}@{host}:3306/{db}"
-                "?connect_timeout={timeout}"
-                .format(
-                    user=app.config['DB_ATLANTIS_USER'],
-                    pw=app.config['DB_ATLANTIS_PASSWORD'],
-                    host=app.config['DB_ATLANTIS_HOST'],
-                    db=database,
-                    timeout=app.config['SQL_TIMEOUT'],
-                ))
+def init_atlantis(app):
+    url_base = (
+        "mysql+pymysql://{user}:{pw}@{host}:3306/{{}}"
+        "?connect_timeout={timeout}"
+        .format(
+            user=app.config['DB_ATLANTIS_USER'],
+            pw=app.config['DB_ATLANTIS_PASSWORD'],
+            host=app.config['DB_ATLANTIS_HOST'],
+            timeout=app.config['SQL_TIMEOUT'],
+        )
+    )
 
     # set netusers as default binding
-    app.config['SQLALCHEMY_DATABASE_URI'] = get_atlantis_db_url('netusers')
+    app.config['SQLALCHEMY_DATABASE_URI'] = url_base.format('netusers')
     app.config['SQLALCHEMY_BINDS'] = {
-        'traffic': get_atlantis_db_url('traffic')
+        'traffic': url_base.format('traffic')
     }
 
     db.init_app(app)
@@ -52,6 +52,8 @@ def init_db(app):
             conn.execute("SET lock_wait_timeout=%s", (2,))
             conn.close()
 
+
+def init_userdb(app):
     app.extensions['db_helios'] = create_engine(
         'mysql+pymysql://{0}:{1}@{2}:{3}/'.format(
             app.config['DB_HELIOS_USER'],
@@ -61,6 +63,18 @@ def init_db(app):
         echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
     )
 
+
+def init_db(app):
+    """Register atlantis and userdb extensions onto the app object"""
+    if app.config.get('DB_ATLANTIS_HOST'):
+        init_atlantis(app)
+    elif not app.debug:
+        logger.info("DB_ATLANTIS_HOST not set. Skipping `init_atlantis()`.")
+
+    if app.config.get('DB_HELIOS_HOST'):
+        init_userdb(app)
+    elif not app.debug:
+        logger.info("DB_HELIOS_HOST not set. Skipping `init_userdb()`.")
 
 db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
 
