@@ -29,6 +29,7 @@ class Article(Node):
             return 100
 
     def __getattr__(self, attr):
+        """Return the meta attribute of the localized page"""
         try:
             if attr == 'html':
                 return self.localized_page.html
@@ -43,6 +44,7 @@ class Article(Node):
 
     @property
     def localized_page(self):
+        """Return a flatpage of the current locale or the default page"""
         available_locales = list(self.localized_pages.keys())
         for locale in locale_preferences():
             # Locale is unfortunately not hashable
@@ -55,10 +57,20 @@ class Article(Node):
 
     @property
     def file_basename(self):
+        """Return the basename of the file without extension.
+
+        Example: `categ/article.en.md` → `article.en`
+        """
         return splitext(basename(self.localized_page.path))[0]
 
 
 class Category(Node):
+    """The Category class
+
+    * What's it used for?
+
+    - Containing articles → should be iterable!
+    """
     def __init__(self, parent, id):
         super().__init__(parent, id)
         self.categories = {}
@@ -66,9 +78,14 @@ class Category(Node):
 
     def articles_itterator(self):
         return iter(sorted(list(self.articles.values()),
+        """Return an iterator over the articles sorted by rank"""
                            key=attrgetter('rank')))
 
     def __getattr__(self, attr):
+        """An attribute interface.
+
+        - Used for: ['rank', 'index', 'id', 'name']
+        """
         try:
             return getattr(self.articles['index'], attr, False)
         except KeyError:
@@ -108,6 +125,14 @@ class Category(Node):
 
 
 class CategorizedFlatPages:
+    """The main interface to gather pages and categories
+
+    * What is it used for?
+
+    - Looping: E.g. In the navbar
+    - get news → get_articles_of_category('news')
+    - get static page → get_or_404()
+    """
     def __init__(self):
         self.flat_pages = FlatPages()
         self.root_category = Category(None, '<root>')
@@ -128,6 +153,10 @@ class CategorizedFlatPages:
 
     def get_articles_of_category(self, category_id):
         barticles = []
+        """Get the articles of a category
+
+        - ONLY used for fetching news
+        """
         category = self.root_category.categories.get(
             category_id)
         if category:
@@ -137,13 +166,17 @@ class CategorizedFlatPages:
         return barticles
 
     def get_or_404(self, category_id, article_id):
+        """Fetch a static page"""
         page = self.get(category_id, article_id)
         if page is None:
             abort(404)
         return page
 
     def _set_categories(self):
+        # TODO: Store categories, not articles
         for page in self.flat_pages:
+            # get category + page name
+            # plus, assert that there is nothing more to that.
             components = page.path.split('/')
             parent = self.root_category
             for category_id in components[:-1]:
