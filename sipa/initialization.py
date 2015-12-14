@@ -15,7 +15,9 @@ from sipa.babel import babel, possible_locales
 from sipa.base import login_manager, babel_selector, IntegerConverter
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.flatpages import cf_pages
-from sipa.utils.graph_utils import render_traffic_chart
+from sipa.utils.graph_utils import (
+    generate_traffic_chart, generate_credit_chart, provide_render_function
+)
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.babel_utils import get_weekday
 
@@ -63,7 +65,8 @@ def init_app(app):
         get_weekday=get_weekday,
         possible_locales=possible_locales,
         get_attribute_endpoint=get_attribute_endpoint,
-        chart=render_traffic_chart,
+        traffic_chart=provide_render_function(generate_traffic_chart),
+        credit_chart=provide_render_function(generate_credit_chart),
         current_datasource=current_datasource,
         form_label_width_class="col-sm-{}".format(form_label_width),
         form_input_width_class="col-sm-{}".format(form_input_width),
