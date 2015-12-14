@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 
 from flask import abort, request
 from babel.core import UnknownLocaleError, Locale
@@ -7,6 +8,8 @@ from flask.ext.flatpages import FlatPages
 from .babel import babel, locale_preferences
 from operator import attrgetter
 from os.path import dirname, basename, splitext
+
+logger = logging.getLogger(__name__)
 
 
 class Node:
@@ -50,6 +53,8 @@ class Article(Node):
             return self.localized_page.meta[attr]
         except KeyError:
             raise AttributeError()
+            logger.warning("Article does not contain attribute %s", attr,
+                           extra={'data': {'id': self.id}})
 
     @property
     def localized_page(self):
