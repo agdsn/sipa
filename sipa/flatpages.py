@@ -76,10 +76,9 @@ class Category(Node):
         self.categories = {}
         self.articles = {}
 
-    def articles_itterator(self):
-        return iter(sorted(list(self.articles.values()),
+    def get_articles(self):
         """Return an iterator over the articles sorted by rank"""
-                           key=attrgetter('rank')))
+        return iter(sorted(self.articles.values(), key=attrgetter('rank')))
 
     def __getattr__(self, attr):
         """An attribute interface.

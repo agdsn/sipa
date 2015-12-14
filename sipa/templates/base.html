@@ -108,7 +108,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                         {{ c.name }}<span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
-                                        {%- for article in c.articles_itterator()  -%}
+                                        {%- for article in c.get_articles()  -%}
                                             {%- if not article.id == 'index' and article.title -%}
                                                 {% if not article.link -%}
                                                     {% set href = url_for(
