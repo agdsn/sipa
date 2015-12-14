@@ -74,13 +74,16 @@ class Category(Node):
         except KeyError:
             raise AttributeError()
 
-    def add_category(self, id):
-        category = self.categories.get(id)
-        if category is not None:
-            return category
-        category = Category(self, id)
-        self.categories[id] = category
-        return category
+    def add_child_category(self, id):
+        """Create a new Category from an id, keep it and return it."""
+
+        # if already existent, return and proceed
+        if id in self.categories:
+            return self.categories[id]
+
+        child_category = Category(self, id)
+        self.categories[id] = child_category
+        return child_category
 
     def add_article(self, page_name, page):
         components = page_name.split('.')
@@ -144,7 +147,7 @@ class CategorizedFlatPages:
             components = page.path.split('/')
             parent = self.root_category
             for category_id in components[:-1]:
-                parent = parent.add_category(category_id)
+                parent = parent.add_child_category(category_id)
             page_name = components[-1]
             parent.add_article(page_name, page)
 
