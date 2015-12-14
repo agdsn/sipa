@@ -28,17 +28,26 @@ class Article(Node):
         except KeyError:
             return 100
 
+    @property
+    def html(self):
+        return self.localized_page.html
+
+    @property
+    def link(self):
+        try:
+            raw_link = self.localized_page.meta['link']
+        except KeyError:
+            raise AttributeError
+        else:
+            if raw_link and raw_link[0] == "/":
+                return dirname(request.url_root) + raw_link
+
+        return
+
     def __getattr__(self, attr):
         """Return the meta attribute of the localized page"""
         try:
-            if attr == 'html':
-                return self.localized_page.html
-            elif attr == 'link':
-                raw_link = self.localized_page.meta[attr]
-                if raw_link and raw_link[0] == "/":
-                    return dirname(request.url_root) + raw_link
-            else:
-                return self.localized_page.meta[attr]
+            return self.localized_page.meta[attr]
         except KeyError:
             raise AttributeError()
 
