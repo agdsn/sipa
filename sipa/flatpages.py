@@ -139,7 +139,7 @@ class CategorizedFlatPages:
 
     def init_app(self, app):
         self.flat_pages.init_app(app)
-        self._set_categories()
+        self._init_categories()
 
     def __iter__(self):
         return iter(sorted(self.root_category.categories.values(),
@@ -152,18 +152,18 @@ class CategorizedFlatPages:
         return category.articles.get(article_id)
 
     def get_articles_of_category(self, category_id):
-        barticles = []
         """Get the articles of a category
 
         - ONLY used for fetching news
         """
+        articles = []
         category = self.root_category.categories.get(
             category_id)
         if category:
             for a in list(category.articles.values()):
                 if a.id != 'index':
-                    barticles.append(a)
-        return barticles
+                    articles.append(a)
+        return articles
 
     def get_or_404(self, category_id, article_id):
         """Fetch a static page"""
@@ -172,7 +172,7 @@ class CategorizedFlatPages:
             abort(404)
         return page
 
-    def _set_categories(self):
+    def _init_categories(self):
         # TODO: Store categories, not articles
         for page in self.flat_pages:
             # get category + page name
@@ -186,7 +186,7 @@ class CategorizedFlatPages:
 
     def reload(self):
         self.flat_pages.reload()
-        self._set_categories()
+        self._init_categories()
 
 
 cf_pages = CategorizedFlatPages()
