@@ -28,6 +28,7 @@ else:
     sipa_markdown_extensions = [
         'sane_lists',
         'sipa.utils.bootstraped_tables',
+        'sipa.utils.link_patch',
         'meta',
         'attr_list'
     ]
