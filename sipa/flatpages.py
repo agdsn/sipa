@@ -162,14 +162,18 @@ class CategorizedFlatPages:
             return None
         return category.articles.get(article_id)
 
+    def get_category(self, category_id):
+        """Return the `Category` object from a given name (id)
+        """
+        return self.root_category.categories.get(category_id)
+
     def get_articles_of_category(self, category_id):
         """Get the articles of a category
 
         - ONLY used for fetching news
         """
         articles = []
-        category = self.root_category.categories.get(
-            category_id)
+        category = self.get_category(category_id)
         if category:
             for a in list(category.articles.values()):
                 if a.id != 'index':
