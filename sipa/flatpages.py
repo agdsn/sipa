@@ -83,11 +83,17 @@ class Category(Node):
     def __init__(self, parent, id):
         super().__init__(parent, id)
         self.categories = {}
-        self.articles = {}
+        self._articles = {}
 
-    def get_articles(self):
-        """Return an iterator over the articles sorted by rank"""
-        return iter(sorted(self.articles.values(), key=attrgetter('rank')))
+    @property
+    def articles(self):
+        """Return an iterator over the articles sorted by rank
+
+        Only used for building the navigation bar
+        """
+        if not self._articles:
+            return iter()
+        return iter(sorted(self._articles.values(), key=attrgetter('rank')))
 
     def __getattr__(self, attr):
         """An attribute interface.
@@ -95,7 +101,7 @@ class Category(Node):
         - Used for: ['rank', 'index', 'id', 'name']
         """
         try:
-            return getattr(self.articles['index'], attr, False)
+            return getattr(self._articles['index'], attr, False)
         except KeyError:
             raise AttributeError()
 
@@ -122,11 +128,11 @@ class Category(Node):
             except UnknownLocaleError:
                 article_id = page_name
                 locale = babel.default_locale
-        article = self.articles.get(article_id)
+        article = self._articles.get(article_id)
         if article is None:
             article = Article(self, article_id)
             article.default_page = page
-            self.articles[article_id] = article
+            self._articles[article_id] = article
         article.localized_pages[str(locale)] = page
         if locale == babel.default_locale:
             article.default_page = page
@@ -160,7 +166,7 @@ class CategorizedFlatPages:
         category = self.root_category.categories.get(category_id)
         if category is None:
             return None
-        return category.articles.get(article_id)
+        return category._articles.get(article_id)
 
     def get_category(self, category_id):
         """Return the `Category` object from a given name (id)
@@ -175,7 +181,7 @@ class CategorizedFlatPages:
         articles = []
         category = self.get_category(category_id)
         if category:
-            for a in list(category.articles.values()):
+            for a in category._articles.values():
                 if a.id != 'index':
                     articles.append(a)
         return articles
