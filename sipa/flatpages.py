@@ -149,9 +149,12 @@ class CategorizedFlatPages:
         self.flat_pages.init_app(app)
         self._init_categories()
 
-    def __iter__(self):
-        return iter(sorted(self.root_category.categories.values(),
-                           key=attrgetter('rank')))
+    @property
+    def categories(self):
+        """Yield all categories as an iterable
+        """
+        return sorted(self.root_category.categories.values(),
+                      key=attrgetter('rank'))
 
     def get(self, category_id, article_id):
         category = self.root_category.categories.get(category_id)
