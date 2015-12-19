@@ -1,18 +1,21 @@
 import re
-import os
-import os.path
 
+from flask import request
 from markdown.extensions import Extension
 from markdown.postprocessors import Postprocessor
 
 
-prefix = os.getenv('SIPA_UWSGI_PREFIX', '/sipa_debug')
-
-
 def absolute_path_replacer(match):
+    """Correct the url in a regex match prepending the absolute path"""
+    assert len(match.groups()) == 2
+
+    prefix = request.script_root
+    if prefix.endswith("/"):
+        prefix = prefix[:-1]
+
     return "{key}=\"{path}\"".format(
         key=match.group(1),
-        path=os.path.join(prefix, match.group(2)[1:]),
+        path=prefix + match.group(2)
     )
 
 
