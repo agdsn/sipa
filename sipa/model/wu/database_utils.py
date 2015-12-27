@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 
 from flask.ext.babel import lazy_gettext
 from flask.globals import current_app
@@ -32,12 +33,24 @@ def init_db(app):
     }
 
     db.init_app(app)
-
     for bind in [None, 'traffic']:
         engine = db.get_engine(app, bind=bind)
-        conn = engine.connect()
-        conn.execute("SET lock_wait_timeout=%s", (2,))
-        conn.close()
+        try:
+            conn = engine.connect()
+        except OperationalError:
+            logger.error(
+                # the password in the engine repr is replaced by '***'
+                "Connect to engine %s failed", engine,
+                extra={'data': {
+                    'engine': engine,
+                    'bind': bind,
+                }},
+            )
+        else:
+            # If an exception got cought, `conn` does not exist
+            # thus it cannot be closed in a `finally` clause
+            conn.execute("SET lock_wait_timeout=%s", (2,))
+            conn.close()
 
     app.extensions['db_helios'] = create_engine(
         'mysql+pymysql://{0}:{1}@{2}:{3}/'.format(
