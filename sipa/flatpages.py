@@ -24,6 +24,16 @@ class Article(Node):
         self.localized_pages = {}
         self.default_page = None
 
+    def add_page(self, page, locale):
+        """Add a page to the pages list.
+
+        If no `default_page` is set or the locale equals
+        `babel.default_locale`, set `default_page` to the given page.
+        """
+        self.localized_pages[str(locale)] = page
+        if self.default_page is None or locale == babel.default_locale:
+            self.default_page = page
+
     @property
     def rank(self):
         try:
@@ -121,26 +131,46 @@ class Category(Node):
         self.categories[id] = child_category
         return child_category
 
-    def add_article(self, page_name, page):
-        components = page_name.split('.')
+    @staticmethod
+    def _parse_page_basename(basename):
+        """Split the page basename into the article id and locale.
+
+        `basename` is (supposed to be) of the form
+        `<article_id>.<locale>`, e.g. `news.en`.
+
+        If either there is no dot or the locale is unknown,
+        `babel.default_locale` is returned.
+
+        :return: The tuple `(article_id, locale)`.
+        """
+        default_locale = babel.default_locale
+        components = basename.split('.')
+
         if len(components) == 1:
-            article_id = page_name
-            locale = babel.default_locale
-        else:
-            try:
-                article_id = '.'.join(components[:-1])
-                locale = Locale(components[-1])
-            except UnknownLocaleError:
-                article_id = page_name
-                locale = babel.default_locale
+            return basename, default_locale
+
+        article_id = '.'.join(components[:-1])
+        try:
+            return article_id, Locale(components[-1])
+        except UnknownLocaleError:
+            return basename, default_locale
+
+    def add_article(self, basename, page):
+        """Add a page to an article and create the latter if nonexistent.
+
+        Firstly, the article_id is being extracted according to
+        above scheme.  If an `Article` of this id already exists, it
+        is asked to add the page accordingly.
+
+        """
+        article_id, locale = self._parse_page_basename(basename)
+
         article = self._articles.get(article_id)
         if article is None:
             article = Article(self, article_id)
-            article.default_page = page
             self._articles[article_id] = article
-        article.localized_pages[str(locale)] = page
-        if locale == babel.default_locale:
-            article.default_page = page
+
+        article.add_page(page, locale)
 
 
 class CategorizedFlatPages:
@@ -207,8 +237,8 @@ class CategorizedFlatPages:
             parent = self.root_category
             for category_id in components[:-1]:
                 parent = parent.add_child_category(category_id)
-            page_name = components[-1]
-            parent.add_article(page_name, page)
+            basename = components[-1]
+            parent.add_article(basename, page)
 
     def reload(self):
         self.flat_pages.reload()
