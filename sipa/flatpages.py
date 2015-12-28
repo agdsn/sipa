@@ -29,6 +29,11 @@ class Article(Node):
 
         If no `default_page` is set or the locale equals
         `babel.default_locale`, set `default_page` to the given page.
+
+        Here would be a good place to implement constraints on the
+        headers – just don't include the page (return None) if it does
+        not meet the constraints.
+
         """
         self.localized_pages[str(locale)] = page
         if self.default_page is None or locale == babel.default_locale:
