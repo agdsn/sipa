@@ -22,8 +22,8 @@ def show():
     end = request.args.get('end', None, int)
     cf_pages.reload()
     news = sorted(
-        [article for article in cf_pages.get_articles_of_category('news')
-         if hasattr(article, 'date')],
+        (article for article in cf_pages.get_articles_of_category('news')
+         if hasattr(article, 'date')),
         key=attrgetter('date'),
         reverse=True,
     )
