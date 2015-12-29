@@ -247,7 +247,7 @@ class Category(Node):
         except UnknownLocaleError:
             return basename, default_locale
 
-    def add_article(self, basename, page):
+    def add_article(self, prefix, page):
         """Add a page to an article and create the latter if nonexistent.
 
         Firstly, the article_id is being extracted according to
@@ -255,7 +255,7 @@ class Category(Node):
         is asked to add the page accordingly.
 
         """
-        article_id, locale = self._parse_page_basename(basename)
+        article_id, locale = self._parse_page_basename(prefix)
 
         article = self._articles.get(article_id)
         if article is None:
@@ -329,8 +329,8 @@ class CategorizedFlatPages:
             parent = self.root_category
             for category_id in components[:-1]:
                 parent = parent.add_child_category(category_id)
-            basename = components[-1]
-            parent.add_article(basename, page)
+            prefix = components[-1]
+            parent.add_article(prefix, page)
 
     def reload(self):
         self.flat_pages.reload()
