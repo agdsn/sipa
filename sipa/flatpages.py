@@ -210,9 +210,10 @@ class Category(Node):
         - Used for: ['rank', 'index', 'id', 'name']
         """
         try:
-            return getattr(self._articles['index'], attr, False)
+            index = self._articles['index']
         except KeyError:
             raise AttributeError()
+        return getattr(index, attr)
 
     def add_child_category(self, id):
         """Create a new Category from an id, keep it and return it.
