@@ -4,6 +4,7 @@ import logging
 from flask import abort, request
 from babel.core import UnknownLocaleError, Locale
 from flask.ext.flatpages import FlatPages
+from yaml.scanner import ScannerError
 
 from .babel import babel, locale_preferences
 from operator import attrgetter
@@ -29,15 +30,30 @@ class Article(Node):
 
         If no `default_page` is set or the locale equals
         `babel.default_locale`, set `default_page` to the given page.
-
-        Here would be a good place to implement constraints on the
-        headers – just don't include the page (return None) if it does
-        not meet the constraints.
-
         """
+        if not (self.id == 'index' or self.validate_page_meta(page)):
+            return
+
         self.localized_pages[str(locale)] = page
         if self.default_page is None or locale == babel.default_locale:
             self.default_page = page
+
+    @staticmethod
+    def validate_page_meta(page):
+        """Validate that the given page fits the constraints.
+
+        Currently, the only constraints are having a title, and not
+        failing to parse the metadata.  The latter is achieved by just
+        accessing `page.meta` in any way, since it is cached and will
+        start parsing on even the lightest, first touch.
+
+        :return: True if the constraints are met, else False.
+
+        """
+        try:
+            return 'title' in page.meta
+        except ScannerError:
+            return False
 
     @property
     def rank(self):
