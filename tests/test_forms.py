@@ -1,7 +1,8 @@
 from itertools import permutations
-from wtforms import ValidationError, Form, PasswordField
-from sipa import forms
 from unittest import TestCase
+
+from sipa import forms
+from wtforms import Form, PasswordField, ValidationError
 
 
 class PasswordComplexityValidatorTest(TestCase):

@@ -1,6 +1,5 @@
 from flask import Flask
 from flask.ext.testing import TestCase
-
 from sipa import create_app
 
 

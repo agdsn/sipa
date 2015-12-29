@@ -1,6 +1,7 @@
-from unittest import TestCase
-from sipa.utils import timetag_today
 from time import time
+from unittest import TestCase
+
+from sipa.utils import timetag_today
 
 
 class TimetagValidator(TestCase):

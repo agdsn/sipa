@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from babel.core import UnknownLocaleError, Locale
+from babel.core import Locale, UnknownLocaleError
+
 from flask import request
 from flask.ext.babel import Babel, get_locale
 

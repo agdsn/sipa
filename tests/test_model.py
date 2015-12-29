@@ -1,19 +1,17 @@
-from unittest import TestCase
-
-from flask import Flask
-from flask.ext.testing import TestCase as FlaskTestCase
-
-from sipa.model import (init_datasources_dormitories, list_all_dormitories,
-                        list_supported_dormitories, dormitory_from_name,
-                        dormitory_from_ip)
-from sipa.model.default import BaseUser
-import sipa.model.sample
-from sipa.model.property import (ActiveProperty, UnsupportedProperty,
-                                 no_capabilities, Capabilities)
-from tests.prepare import AppInitialized
-
 from base64 import urlsafe_b64encode
 from os import urandom
+from unittest import TestCase
+
+import sipa.model.sample
+from flask import Flask
+from flask.ext.testing import TestCase as FlaskTestCase
+from sipa.model import (dormitory_from_ip, dormitory_from_name,
+                        init_datasources_dormitories, list_all_dormitories,
+                        list_supported_dormitories)
+from sipa.model.default import BaseUser
+from sipa.model.property import (ActiveProperty, Capabilities,
+                                 UnsupportedProperty, no_capabilities)
+from tests.prepare import AppInitialized
 
 
 class TestUninitializedBackendCase(FlaskTestCase):

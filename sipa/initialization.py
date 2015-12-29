@@ -1,25 +1,24 @@
 # -*- coding: utf-8 -*-
+import logging
 import logging.config
 import os
 import os.path
-import logging
 
 from flask.ext.babel import get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
-
-from sipa.model import (
-    init_context, init_datasources_dormitories, current_datasource)
 from sipa.babel import babel, possible_locales
-from sipa.base import login_manager, babel_selector, IntegerConverter
+from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.flatpages import cf_pages
-from sipa.utils.graph_utils import (
-    generate_traffic_chart, generate_credit_chart, provide_render_function
-)
-from sipa.utils.git_utils import init_repo, update_repo
+from sipa.model import (current_datasource, init_context,
+                        init_datasources_dormitories)
 from sipa.utils.babel_utils import get_weekday
+from sipa.utils.git_utils import init_repo, update_repo
+from sipa.utils.graph_utils import (generate_credit_chart,
+                                    generate_traffic_chart,
+                                    provide_render_function)
 
 logger = logging.getLogger(__name__)
 

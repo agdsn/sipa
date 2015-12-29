@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging
+from operator import attrgetter
+from os.path import basename, dirname, splitext
 
-from flask import abort, request
-from babel.core import UnknownLocaleError, Locale
-from flask.ext.flatpages import FlatPages
+from babel.core import Locale, UnknownLocaleError
 from yaml.scanner import ScannerError
 
+from flask import abort, request
+from flask.ext.flatpages import FlatPages
+
 from .babel import babel, locale_preferences
-from operator import attrgetter
-from os.path import dirname, basename, splitext
 
 logger = logging.getLogger(__name__)
 
