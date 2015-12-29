@@ -3,12 +3,18 @@ import logging
 
 from flask_babel import lazy_gettext
 from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.event import listen
 
 from .schema import db
 from sipa.model.exceptions import InvalidConfiguration
 
 logger = logging.getLogger(__name__)
+
+
+# pylint: disable=unused-argument
+def set_timeouts(dbapi_connection, connection_record):
+    with dbapi_connection.cursor() as cursor:
+        cursor.execute("SET lock_wait_timeout=%s", (2,))
 
 
 def init_atlantis(app):
@@ -35,22 +41,7 @@ def init_atlantis(app):
         if 'sqlite' in engine.driver:
             continue
 
-        try:
-            conn = engine.connect()
-        except OperationalError:
-            logger.error(
-                # the password in the engine repr is replaced by '***'
-                "Connect to engine %s failed", engine,
-                extra={'data': {
-                    'engine': engine,
-                    'bind': bind,
-                }},
-            )
-        else:
-            # If an exception got cought, `conn` does not exist
-            # thus it cannot be closed in a `finally` clause
-            conn.execute("SET lock_wait_timeout=%s", (2,))
-            conn.close()
+        listen(engine.pool, "connect", set_timeouts)
 
 
 def init_userdb(app):
