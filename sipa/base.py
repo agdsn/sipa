@@ -22,6 +22,9 @@ class IntegerConverter(BaseIntegerConverter):
 def load_user(username):
     """Loads a User object from/into the session at every request
     """
+    if request.blueprint == "documents" or request.endpoint == "static":
+        return AnonymousUserMixin()
+
     dormitory = dormitory_from_name(session.get('dormitory', None))
     if dormitory:
         return dormitory.datasource.user_class.get(username)
