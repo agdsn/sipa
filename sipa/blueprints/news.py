@@ -5,7 +5,7 @@ Blueprint providing features regarding the news entries.
 """
 from operator import attrgetter
 
-from flask import Blueprint, render_template, url_for, redirect, abort, request
+from flask import Blueprint, render_template, abort, request
 from sipa.flatpages import cf_pages
 
 
@@ -21,11 +21,15 @@ def show():
     start = request.args.get('start', None, int)
     end = request.args.get('end', None, int)
     cf_pages.reload()
-    news = cf_pages.get_articles_of_category('news')
+    news = sorted(
+        [article for article in cf_pages.get_articles_of_category('news')
+         if hasattr(article, 'date')],
+        key=attrgetter('date'),
+        reverse=True,
+    )
     if len(news) is 0:
         return render_template("index.html", articles=None,
                                previous_range=0, next_range=0)
-    news = sorted(news, key=attrgetter('date'), reverse=True)
 
     default_step = 10
     # calculating mod len() allows things like `end=-1` for the last
