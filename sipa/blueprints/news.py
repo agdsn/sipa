@@ -5,7 +5,7 @@ Blueprint providing features regarding the news entries.
 """
 from operator import attrgetter
 
-from flask import Blueprint, render_template, url_for, redirect, abort, request
+from flask import Blueprint, render_template, abort, request
 from sipa.flatpages import cf_pages
 
 
