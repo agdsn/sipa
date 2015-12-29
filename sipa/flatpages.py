@@ -129,7 +129,7 @@ class Category(Node):
         Only used for building the navigation bar
         """
         if not self._articles:
-            return iter()
+            return iter([])
         return iter(sorted(self._articles.values(), key=attrgetter('rank')))
 
     def __getattr__(self, attr):
