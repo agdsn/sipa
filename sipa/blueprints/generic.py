@@ -255,7 +255,7 @@ def contact():
     if form.validate_on_submit():
         from_mail = form.email.data
         subject = "[Kontakt] {}".format(form.subject.data)
-        message = form.message.data
+        message = "Name: {0}\n\n{1}".format(form.name.data, form.message.data)
         dormitory = dormitory_from_name(form.dormitory.data)
         support_mail = dormitory.datasource.support_mail
 
