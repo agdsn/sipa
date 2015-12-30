@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
 from operator import attrgetter
 from os.path import basename, dirname, splitext
 
@@ -10,8 +9,6 @@ from flask import abort, request
 from flask.ext.flatpages import FlatPages
 
 from .babel import babel, locale_preferences
-
-logger = logging.getLogger(__name__)
 
 
 class Node:
@@ -85,8 +82,6 @@ class Article(Node):
             return self.localized_page.meta[attr]
         except KeyError:
             raise AttributeError()
-            logger.warning("Article does not contain attribute %s", attr,
-                           extra={'data': {'id': self.id}})
 
     @property
     def localized_page(self):
