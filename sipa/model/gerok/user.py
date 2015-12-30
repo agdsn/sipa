@@ -120,7 +120,7 @@ class User(BaseUser):
                 ), None)
                 if host:
                     (input, output, credit) = (
-                        round(host[param] / 1048576.0, 2)
+                        round(host[param] / 1024, 2)
                         for param in ['in', 'out', 'credit']
                     )
 
@@ -153,7 +153,7 @@ class User(BaseUser):
     @property
     def credit(self):
         creditData = do_api_call(str(self._id) + '/credit')
-        return creditData[0]['credit']/1048576 if creditData else 0
+        return creditData[0]['credit'] / 1024if creditData else 0
 
     @active_prop
     def id(self):
