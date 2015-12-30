@@ -138,15 +138,17 @@ class Category(Node):
             raise AttributeError()
 
     def add_child_category(self, id):
-        """Create a new Category from an id, keep it and return it."""
+        """Create a new Category from an id, keep it and return it.
 
-        # if already existent, return and proceed
-        if id in self.categories:
-            return self.categories[id]
+        If the category already exists, return it instead and do nothing.
+        """
+        category = self.categories.get(id)
+        if category is not None:
+            return category
 
-        child_category = Category(self, id)
-        self.categories[id] = child_category
-        return child_category
+        category = Category(self, id)
+        self.categories[id] = category
+        return category
 
     @staticmethod
     def _parse_page_basename(basename):
