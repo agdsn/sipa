@@ -96,10 +96,7 @@ class Article(Node):
 
         :rtype: int
         """
-        try:
-            return self.localized_page.meta['rank']
-        except KeyError:
-            return 100
+        return self.localized_page.meta.get('rank', 100)
 
     @property
     def html(self):
