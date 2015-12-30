@@ -86,8 +86,8 @@ def usersuite_contact():
 
         subject = "[Usersuite] {0}: {1}".format(cat, form.subject.data)
 
-        message_text = "Nutzerlogin: {0}\n\n".format(current_user.uid) \
-                       + form.message.data
+        message_text = "Nutzerlogin: {0}\n\n{1}".format(current_user.uid,
+                                                        form.message.data)
 
         if send_mail(from_mail, support_mail, subject, message_text):
             flash(gettext("Nachricht wurde versandt."), "success")
