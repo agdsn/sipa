@@ -140,17 +140,19 @@ class active_prop(property):
                 # `KeyError` should not happen, since that means a
                 # dict would have been returned not including `value`,
                 # which would make no sense and likely is a mistake.
+                name = fget.__name__
                 value = result
                 style = None
                 empty = None
                 tmp_readonly = False
             else:
+                name = result.get('name', fget.__name__)
                 style = result.get('style', None)
                 empty = result.get('empty', None)
                 tmp_readonly = result.get('tmp_readonly', False)
 
             return ActiveProperty(
-                name=fget.__name__,
+                name=name,
                 value=value,
                 capabilities=Capabilities(
                     edit=(fset is not None or fake_setter),
@@ -185,3 +187,27 @@ class active_prop(property):
         return type(self)(self.__raw_getter, self.fset, self.fdel,
                           self.__doc__,
                           fake_setter=True)
+
+
+def connection_dependent(func):
+    """A decorator to “deactivate” the property if the user's not active.
+    """
+
+    def _connection_dependent(self, *args, **kwargs):
+        if not self.has_connection:
+            return {
+                'name': func.__name__,
+                'value': gettext("Nicht verfügbar"),
+                'empty': True,
+                'tmp_readonly': True,
+            }
+
+        ret = func(self, *args, **kwargs)
+        try:
+            ret.update({'name': func.__name__})
+        except AttributeError:
+            ret = {'value': ret, 'name': func.__name__}
+
+        return ret
+
+    return _connection_dependent

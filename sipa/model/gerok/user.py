@@ -7,7 +7,8 @@ import requests
 from werkzeug.local import LocalProxy
 
 from sipa.model.default import BaseUser
-from sipa.model.property import active_prop, unsupported_prop
+from sipa.model.property import (active_prop, unsupported_prop,
+                                 connection_dependent)
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 from sipa.utils import argstr
 
@@ -177,10 +178,12 @@ class User(BaseUser):
         return self._address
 
     @active_prop
+    @connection_dependent
     def ips(self):
         return ", ".join(self._ips)
 
     @active_prop
+    @connection_dependent
     def mac(self):
         return ", ".join(self._macs)
 
@@ -189,10 +192,12 @@ class User(BaseUser):
         return self._mail
 
     @active_prop
+    @connection_dependent
     def hostname(self):
         return ", ".join(self._hostnames)
 
     @active_prop
+    @connection_dependent
     def hostalias(self):
         return ", ".join(self._hostaliases)
 
