@@ -170,6 +170,8 @@ class User(BaseUser):
     def status(self):
         return self._status
 
+    has_connection = True
+
     @active_prop
     def address(self):
         return self._address

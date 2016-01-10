@@ -141,6 +141,8 @@ class User(BaseUser):
     def status(self):
         return self.config[self.uid]['status']
 
+    has_connection = True
+
     @active_prop
     def id(self):
         return self.config[self.uid]['id']

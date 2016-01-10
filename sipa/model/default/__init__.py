@@ -181,6 +181,11 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """The actual `BaseUserDB` object"""
         pass
 
+    @property
+    @abstractmethod
+    def has_connection(self):
+        pass
+
 
 class BaseUserDB(metaclass=ABCMeta):
     def __init__(self, user):

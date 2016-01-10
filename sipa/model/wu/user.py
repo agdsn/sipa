@@ -279,6 +279,15 @@ class User(BaseUser):
         return {'value': STATUS.get(self._nutzer.status, gettext("Unbekannt")),
                 'empty': True}
 
+    @property
+    def has_connection(self):
+        return self._nutzer.status in [
+            1,  # ok
+            2,  # not paid
+            7,  # abuse
+            12,  # traffic
+        ]
+
     @active_prop
     def id(self):
         return "{}-{}".format(
