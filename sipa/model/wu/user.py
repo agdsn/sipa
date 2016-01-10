@@ -2,8 +2,10 @@
 import logging
 from contextlib import contextmanager
 from datetime import datetime, timedelta
+from ipaddress import IPv4Address, AddressValueError
 
 from .schema import Computer, Credit, Nutzer, Traffic
+from flask import current_app
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
@@ -317,6 +319,25 @@ class UserDB(BaseUserDB):
     def __init__(self, user):
         super().__init__(user)
 
+        mask = current_app.config.get('DB_HELIOS_IP_MASK')
+        self.test_ipmask_validity(mask)
+        self.ip_mask = mask
+
+    @staticmethod
+    def test_ipmask_validity(mask):
+        """Test whether a valid ip mask (at max one consecutive '%') was given
+
+        This is being done by replacing '%' with the maximum possible
+        value ('255').  Thus, everything surrounding the '%' except
+        for dots causes an invalid IPv4Address and thus a
+        `ValueError`.
+        """
+        try:
+            IPv4Address(mask.replace("%", "255"))
+        except AddressValueError:
+            raise ValueError("Mask {} is not a valid IP address or contains "
+                             "more than one consecutive '%' sign".format(mask))
+
     @property
     def has_db(self):
         try:
@@ -346,8 +367,8 @@ class UserDB(BaseUserDB):
         )
 
         sql_query(
-            "DROP USER %s@'10.1.7.%%'",
-            (self.user.uid,),
+            "DROP USER %s@%s",
+            (self.user.uid, self.ip_mask),
         )
 
     def change_password(self, password):
@@ -360,21 +381,21 @@ class UserDB(BaseUserDB):
 
         if not user:
             sql_query(
-                "CREATE USER %s@'10.1.7.%%' "
+                "CREATE USER %s@%s "
                 "IDENTIFIED BY %s",
-                (self.user.uid, password),
+                (self.user.uid, self.ip_mask, password,),
             )
         else:
             sql_query(
                 "SET PASSWORD "
-                "FOR %s@'10.1.7.%%' = PASSWORD(%s)",
-                (self.user.uid, password),
+                "FOR %s@%s = PASSWORD(%s)",
+                (self.user.uid, self.ip_mask, password,),
             )
 
         sql_query(
             "GRANT SELECT, INSERT, UPDATE, DELETE, "
             "ALTER, CREATE, DROP, INDEX, LOCK TABLES "
-            "ON `%s`.* "
-            "TO %%s@'10.1.7.%%%%'" % self.user.uid,
-            (self.user.uid,),
+            "ON `{}`.* "
+            "TO %s@%s".format(self.user.uid),
+            (self.user.uid, self.ip_mask),
         )
