@@ -61,6 +61,7 @@ DB_HELIOS_PORT = int(
     getenv("SIPA_DB_HELIOS_PORT", '3307'))  # alternative port for 2nd db
 DB_HELIOS_USER = getenv("SIPA_DB_HELIOS_USER", "")
 DB_HELIOS_PASSWORD = getenv("SIPA_DB_HELIOS_PASSWORD", "")
+DB_HELIOS_IP_MASK = getenv("SIPA_DB_HELIOS_IP_MASK", "")
 
 SQL_TIMEOUT = int(getenv("SIPA_SQL_TIMEOUT", '2'))
 
