@@ -113,7 +113,7 @@ def user_from_ip(ip):
 def query_gauge_data():
     credit = {'data': None, 'error': False, 'foreign_user': False}
     try:
-        if current_user.is_authenticated:
+        if current_user.is_authenticated and current_user.has_connection:
             user = current_user
         else:
             user = user_from_ip(request.remote_addr)

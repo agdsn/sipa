@@ -53,10 +53,12 @@ def usersuite():
         return redirect(url_for('generic.index'))
 
     datasource = datasource_from_name(current_user.datasource)
+    show_traffic_data = current_user.has_connection
 
     return render_template("usersuite/index.html",
                            rows=rows,
                            webmailer_url=datasource.webmailer_url,
+                           show_traffic_data=show_traffic_data,
                            traffic_user=current_user)
 
 

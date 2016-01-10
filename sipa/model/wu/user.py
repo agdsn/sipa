@@ -12,7 +12,7 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.default import BaseUser, BaseUserDB
-from sipa.model.property import active_prop
+from sipa.model.property import active_prop, connection_dependent
 from sipa.model.wu.database_utils import STATUS, sql_query
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
@@ -234,6 +234,7 @@ class User(BaseUser):
         return self.name
 
     @active_prop
+    @connection_dependent
     def mac(self):
         computer = self._nutzer.computer
         return {'value': ", ".join(c.c_etheraddr.upper() for c in computer),
@@ -242,7 +243,7 @@ class User(BaseUser):
     @mac.setter
     def mac(self, new_mac):
         # if this has been reached despite `tmp_readonly`, this is a bug.
-        assert len(self._nutzer.computer) == 1
+        assert len(self._nutzer.computer) == 1 or not self.has_connection
 
         computer = self._nutzer.computer[0]
         computer.c_etheraddr = new_mac.lower()
@@ -267,6 +268,7 @@ class User(BaseUser):
         return self._nutzer.address
 
     @active_prop
+    @connection_dependent
     def ips(self):
         return ", ".join(c.c_ip for c in self._nutzer.computer)
 
@@ -279,6 +281,15 @@ class User(BaseUser):
         return {'value': STATUS.get(self._nutzer.status, gettext("Unbekannt")),
                 'empty': True}
 
+    @property
+    def has_connection(self):
+        return self._nutzer.status in [
+            1,  # ok
+            2,  # not paid
+            7,  # abuse
+            12,  # traffic
+        ]
+
     @active_prop
     def id(self):
         return "{}-{}".format(
@@ -287,10 +298,12 @@ class User(BaseUser):
         )
 
     @active_prop
+    @connection_dependent
     def hostname(self):
         return ", ".join(c.c_hname for c in self._nutzer.computer)
 
     @active_prop
+    @connection_dependent
     def hostalias(self):
         return ", ".join(c.c_alias for c in self._nutzer.computer)
 

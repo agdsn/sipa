@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-14 08:07+0100\n"
-"PO-Revision-Date: 2015-12-14 08:08+0100\n"
+"POT-Creation-Date: 2016-01-10 21:42+0100\n"
+"PO-Revision-Date: 2016-01-10 21:43+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: en\n"
@@ -19,23 +19,23 @@ msgstr ""
 "Generated-By: Babel 2.1.1\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: sipa/forms.py:19
+#: sipa/forms.py:18
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
 
-#: sipa/forms.py:20
+#: sipa/forms.py:19
 msgid "Großbuchstaben (A-Z)"
 msgstr "upper case letters (A-Z)"
 
-#: sipa/forms.py:21
+#: sipa/forms.py:20
 msgid "Ziffern (0-9)"
 msgstr "digits (0-9)"
 
-#: sipa/forms.py:22
+#: sipa/forms.py:21
 msgid "andere Zeichen"
 msgstr "other characters"
 
-#: sipa/forms.py:23
+#: sipa/forms.py:22
 msgid ""
 "Dein Passwort muss mindestens {min_length} Zeichen lang sein und mindestens "
 "{min_classes} verschiedene Klassen von Zeichen enthalten. Zeichen von "
@@ -45,123 +45,123 @@ msgstr ""
 "least {min_classes} different characters classes. Character classes are: "
 "{classes}."
 
-#: sipa/forms.py:78 sipa/forms.py:98
+#: sipa/forms.py:77 sipa/forms.py:97
 msgid "Deine E-Mail-Adresse"
 msgstr "Your e-mail address"
 
-#: sipa/forms.py:79 sipa/forms.py:99 sipa/forms.py:133
+#: sipa/forms.py:78 sipa/forms.py:98 sipa/forms.py:132
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr "E-Mail is invalid!"
 
-#: sipa/forms.py:82
+#: sipa/forms.py:81
 msgid "Kategorie"
 msgstr "Category"
 
-#: sipa/forms.py:83
+#: sipa/forms.py:82
 msgid "Allgemeine Frage an die Administratoren"
 msgstr "General question for the administrators"
 
-#: sipa/forms.py:85
+#: sipa/forms.py:84
 msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
 msgstr "Disorders in the Wundtstraße/Zellescher Weg network"
 
-#: sipa/forms.py:86
+#: sipa/forms.py:85
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr "Financial concerns (contributions, fees)"
 
-#: sipa/forms.py:87
+#: sipa/forms.py:86
 msgid "Probleme mit privater Technik"
 msgstr "Problems with private technology"
 
-#: sipa/forms.py:89 sipa/forms.py:106
+#: sipa/forms.py:88 sipa/forms.py:105
 msgid "Betreff"
 msgstr "Subject"
 
-#: sipa/forms.py:90 sipa/forms.py:107
+#: sipa/forms.py:89 sipa/forms.py:106
 msgid "Betreff muss angegeben werden!"
 msgstr "Subject is missing!"
 
-#: sipa/forms.py:91 sipa/forms.py:108
+#: sipa/forms.py:90 sipa/forms.py:107
 msgid "Nachricht"
 msgstr "Message"
 
-#: sipa/forms.py:92 sipa/forms.py:109
+#: sipa/forms.py:91 sipa/forms.py:108
 msgid "Nachricht fehlt!"
 msgstr "Message is missing!"
 
-#: sipa/forms.py:102 sipa/forms.py:164
+#: sipa/forms.py:101 sipa/forms.py:163
 msgid "Wohnheim"
 msgstr "Dormitory"
 
-#: sipa/forms.py:114
+#: sipa/forms.py:113
 msgid "Altes Passwort"
 msgstr "Old password"
 
-#: sipa/forms.py:115
+#: sipa/forms.py:114
 msgid "Altes Passwort muss angegeben werden!"
 msgstr "Old password has to be submitted!"
 
-#: sipa/forms.py:116
+#: sipa/forms.py:115
 msgid "Neues Passwort"
 msgstr "New password"
 
-#: sipa/forms.py:117
+#: sipa/forms.py:116
 msgid "Neues Passwort fehlt!"
 msgstr "New password is missing!"
 
-#: sipa/forms.py:120 sipa/forms.py:190
+#: sipa/forms.py:119 sipa/forms.py:189
 msgid "Bestätigung"
 msgstr "Confirmation"
 
-#: sipa/forms.py:121 sipa/forms.py:191
+#: sipa/forms.py:120 sipa/forms.py:190
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: sipa/forms.py:123 sipa/forms.py:193
+#: sipa/forms.py:122 sipa/forms.py:192
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: sipa/forms.py:129 sipa/forms.py:153 sipa/forms.py:179 sipa/forms.py:186
+#: sipa/forms.py:128 sipa/forms.py:152 sipa/forms.py:178 sipa/forms.py:185
 msgid "Passwort"
 msgstr "Password"
 
-#: sipa/forms.py:130 sipa/forms.py:138 sipa/forms.py:154
+#: sipa/forms.py:129 sipa/forms.py:137 sipa/forms.py:153
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:132
+#: sipa/forms.py:131
 msgid "Neue Mail"
 msgstr "New mail"
 
-#: sipa/forms.py:148
+#: sipa/forms.py:147
 msgid "MAC muss unicast-Adresse sein!"
 msgstr "MAC has to be a unicast adress!"
 
-#: sipa/forms.py:156
+#: sipa/forms.py:155
 msgid "Neue MAC"
 msgstr "New mac"
 
-#: sipa/forms.py:168
+#: sipa/forms.py:167
 msgid "Kein gültiges Wohnheim!"
 msgstr "Not a valid dormitory!"
 
-#: sipa/forms.py:171
+#: sipa/forms.py:170
 msgid "Nutzername"
 msgstr "Username"
 
-#: sipa/forms.py:173
+#: sipa/forms.py:172
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: sipa/forms.py:174
+#: sipa/forms.py:173
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr "Username contains invalid characters!"
 
-#: sipa/forms.py:180 sipa/forms.py:187
+#: sipa/forms.py:179 sipa/forms.py:186
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:182
+#: sipa/forms.py:181
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
@@ -205,24 +205,28 @@ msgstr "Authentication successful!"
 msgid "Abmeldung erfolgreich!"
 msgstr "Logout successful!"
 
-#: sipa/blueprints/generic.py:203
+#: sipa/blueprints/generic.py:199
+msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
+msgstr "You can't see traffic data because of your account status."
+
+#: sipa/blueprints/generic.py:207
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:206
+#: sipa/blueprints/generic.py:210
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr "You will find here the traffic data for this connection."
 
-#: sipa/blueprints/generic.py:253 sipa/blueprints/usersuite.py:91
+#: sipa/blueprints/generic.py:257 sipa/blueprints/usersuite.py:93
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:255
+#: sipa/blueprints/generic.py:259
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
-#: sipa/blueprints/generic.py:261
+#: sipa/blueprints/generic.py:265
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
@@ -279,54 +283,54 @@ msgstr "MySQL database"
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: sipa/blueprints/usersuite.py:94
+#: sipa/blueprints/usersuite.py:96
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
 "eine E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
 
-#: sipa/blueprints/usersuite.py:151
+#: sipa/blueprints/usersuite.py:153
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: sipa/blueprints/usersuite.py:153
+#: sipa/blueprints/usersuite.py:155
 msgid "Passwort wurde geändert"
 msgstr "Password has been changed"
 
-#: sipa/blueprints/usersuite.py:179 sipa/blueprints/usersuite.py:211
+#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:213
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:213
-#: sipa/blueprints/usersuite.py:240
+#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:215
+#: sipa/blueprints/usersuite.py:242
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:215
+#: sipa/blueprints/usersuite.py:185 sipa/blueprints/usersuite.py:217
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: sipa/blueprints/usersuite.py:185
+#: sipa/blueprints/usersuite.py:187
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"
 
-#: sipa/blueprints/usersuite.py:217
+#: sipa/blueprints/usersuite.py:219
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr "Email address has been reset"
 
-#: sipa/blueprints/usersuite.py:247
+#: sipa/blueprints/usersuite.py:249
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-#: sipa/blueprints/usersuite.py:248
+#: sipa/blueprints/usersuite.py:250
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr "It can take up to 10 minutes until the changes apply."
 
-#: sipa/blueprints/usersuite.py:268
+#: sipa/blueprints/usersuite.py:270
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
-#: sipa/blueprints/usersuite.py:276
+#: sipa/blueprints/usersuite.py:278
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
@@ -338,39 +342,43 @@ msgstr "Not supported"
 msgid "Nicht angegeben"
 msgstr "Not submitted"
 
-#: sipa/model/wu/database_utils.py:55
+#: sipa/model/property.py:197
+msgid "Nicht verfÃ¼gbar"
+msgstr "Unavailable"
+
+#: sipa/model/wu/database_utils.py:68
 msgid "ok"
 msgstr "ok"
 
-#: sipa/model/wu/database_utils.py:56
+#: sipa/model/wu/database_utils.py:69
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr "Not payed, connection blocked"
 
-#: sipa/model/wu/database_utils.py:57
+#: sipa/model/wu/database_utils.py:70
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr "Violation of network usage agreement , connection blocked"
 
-#: sipa/model/wu/database_utils.py:59
+#: sipa/model/wu/database_utils.py:72
 msgid "Exaktiv"
 msgstr "Formerly active"
 
-#: sipa/model/wu/database_utils.py:60
+#: sipa/model/wu/database_utils.py:73
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr "Traffic limit reached, account blocked"
 
-#: sipa/model/wu/user.py:277
+#: sipa/model/wu/user.py:281
 msgid "Unbekannt"
 msgstr "Unknown"
 
-#: sipa/model/wu/user.py:300
+#: sipa/model/wu/user.py:315
 msgid "Datenbank nicht erreichbar"
 msgstr "Database cannot be reached"
 
-#: sipa/model/wu/user.py:304
+#: sipa/model/wu/user.py:319
 msgid "Aktiviert"
 msgstr "Activated"
 
-#: sipa/model/wu/user.py:306
+#: sipa/model/wu/user.py:321
 msgid "Nicht aktiviert"
 msgstr "Not activated"
 
