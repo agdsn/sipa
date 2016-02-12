@@ -70,14 +70,14 @@ def test(force_unittest):
 
     If Flask-Testing does not exist, a hint is displayed.
     """
-    try:
-        import flask.ext.testing  # noqa
-    except ImportError:
-
+    spec = importlib.util.find_spec("flask_testing")
+    if spec is None:
         large_message("It seems Flask-Testing is missing. "
                       "Are you sure you are in the "
                       "correct environment?")
-        raise
+        if not prompt_bool("Continue?", default=False):
+            print("Aborting.")
+            return
 
     if not force_unittest:
         run_tests_nose()
