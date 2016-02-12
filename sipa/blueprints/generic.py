@@ -181,6 +181,12 @@ def unit(number):
     return '{} {}'.format(round(number, 2), unit)
 
 
+@bp_generic.app_template_filter('gib')
+def to_gigabytes(number):
+    """Convert a number from KiB to GiB"""
+    return number / 1024**2
+
+
 @bp_generic.route("/usertraffic")
 def usertraffic():
     """Show a user's traffic on a static site just as in the usersuite.

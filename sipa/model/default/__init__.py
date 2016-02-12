@@ -95,7 +95,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def traffic_history(self):
         """Return the current credit and the traffic history as a dict.
 
-        The history should cover one week.
+        The history should cover one week. The assumed unit is KiB.
 
         The dict syntax is as follows:
 
@@ -109,7 +109,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @property
     @abstractmethod
     def credit(self):
-        """Return the current credit in MiB"""
+        """Return the current credit in KiB"""
         pass
 
     def generate_rows(self, description_dict):

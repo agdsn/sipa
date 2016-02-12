@@ -86,7 +86,7 @@ class User(BaseUser):
     @property
     def traffic_history(self):
         def rand():
-            return random() * 1024
+            return random() * 1024**2
         return [{
             'day': day,
             **(lambda i, o: {
@@ -94,12 +94,12 @@ class User(BaseUser):
                 'output': o,
                 'throughput': i + o,
             })(rand(), rand()*0.04),
-            'credit': random() * 1024 * 63,
+            'credit': random() * 1024**2 * 63,
         } for day in range(7)]
 
     @property
     def credit(self):
-        return random() * 1024 * 63
+        return random() * 1024**2 * 63
 
     @active_prop
     def realname(self):

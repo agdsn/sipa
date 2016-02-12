@@ -357,7 +357,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
         <script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
         {%- set gauge_max = 63 -%}
         {%- if credit.data -%}
-            {% set gauge_val = (credit.data/1024)|round(2) %}
+            {% set gauge_val = credit.data|gib|round(2) %}
             {% set gauge_label = "GiB" %}
         {%- else -%}
             {% set gauge_val = 0 %}

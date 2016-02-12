@@ -171,10 +171,10 @@ class User(BaseUser):
                 'day': (datetime.today() + timedelta(
                     days=credit_entry.timetag - timetag_today()
                 )).weekday(),
-                'input': sum(t.input for t in traffic_entries) / 1024,
-                'output': sum(t.output for t in traffic_entries) / 1024,
-                'throughput': sum(t.overall for t in traffic_entries) / 1024,
-                'credit': credit_entry.amount / 1024,
+                'input': sum(t.input for t in traffic_entries),
+                'output': sum(t.output for t in traffic_entries),
+                'throughput': sum(t.overall for t in traffic_entries),
+                'credit': credit_entry.amount,
             })
 
         return traffic_history
@@ -202,7 +202,7 @@ class User(BaseUser):
             .filter(Traffic.ip.in_(accountable_ips))
         )
 
-        return (credit - traffic_today) / 1024
+        return credit - traffic_today
 
     @contextmanager
     def tmp_authentication(self, password):
