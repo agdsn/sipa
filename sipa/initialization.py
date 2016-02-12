@@ -119,6 +119,8 @@ def init_env_and_config(app):
         uwsgi.register_signal(20, "", update_uwsgi)
         uwsgi.add_timer(20, 300)
 
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
     if not app.config['SECRET_KEY']:
         raise ValueError("SECRET_KEY must not be empty")
 
