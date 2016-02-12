@@ -15,9 +15,11 @@ $ python manage.py test
 
 """
 
+import importlib
 import os
+from subprocess import call
 
-from flask.ext.script import Manager
+from flask.ext.script import Manager, prompt_bool
 
 from sipa import create_app
 
@@ -36,8 +38,34 @@ def large_message(message, title="INFO", width=80, fill='='):
             ))
 
 
-@manager.command
-def test():
+def run_tests_unittest():
+    import unittest
+    tests = unittest.TestLoader().discover(os.path.join(basedir, 'tests'))
+    unittest.TextTestRunner().run(tests)
+
+
+def run_tests_nose():
+    """Check if nosetests is installed and call it.
+
+    If the `nose` package is not available, prompt the user if he
+    wants to fall back to the unittest module.
+    """
+    if importlib.util.find_spec("nose") is None:
+        large_message("It You don't have nosetests installed.")
+        if not prompt_bool("Shall I fall back to unittest?", default=True):
+            print("Aborting.")
+        else:
+            run_tests_unittest()
+
+        return
+
+    call(["nosetests", "--with-coverage", "--cover-erase", "--cover-branches",
+          "--cover-package=sipa"])
+
+
+@manager.option('-u', '--force-unittest', dest='force_unittest',
+                required=False, default=False, action="store_true")
+def test(force_unittest):
     """Try to run the tests.
 
     If Flask-Testing does not exist, a hint is displayed.
@@ -51,9 +79,10 @@ def test():
                       "correct environment?")
         raise
 
-    import unittest
-    tests = unittest.TestLoader().discover(os.path.join(basedir, 'tests'))
-    unittest.TextTestRunner().run(tests)
+    if not force_unittest:
+        run_tests_nose()
+    else:
+        run_tests_unittest()
 
 
 if __name__ == '__main__':
