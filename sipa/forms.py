@@ -95,7 +95,12 @@ class ContactForm(Form):
 class AnonymousContactForm(Form):
     email = StrippedStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
-        validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))],
+        validators=[Email(lazy_gettext("E-Mail ist nicht "
+                                       "in gültigem Format!"))],
+    )
+    name = StringField(
+        label=lazy_gettext("Dein Name"),
+        validators=[DataRequired(lazy_gettext("Bitte gib einen Namen an!"))],
     )
     dormitory = SelectField(
         label=lazy_gettext("Wohnheim"),
