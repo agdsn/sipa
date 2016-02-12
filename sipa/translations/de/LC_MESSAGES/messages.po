@@ -1,13 +1,13 @@
 # German translations for PROJECT.
-# Copyright (C) 2014 ORGANIZATION
+# Copyright (C) 2016 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-10 21:42+0100\n"
+"POT-Creation-Date: 2016-02-12 18:00+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.1.1\n"
+"Generated-By: Babel 2.2.0\n"
 
 #: sipa/forms.py:18
 msgid "Kleinbuchstaben (a-z)"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Deine E-Mail-Adresse"
 msgstr ""
 
-#: sipa/forms.py:78 sipa/forms.py:98 sipa/forms.py:132
+#: sipa/forms.py:78 sipa/forms.py:98 sipa/forms.py:137
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
@@ -69,95 +69,103 @@ msgstr ""
 msgid "Probleme mit privater Technik"
 msgstr ""
 
-#: sipa/forms.py:88 sipa/forms.py:105
+#: sipa/forms.py:88 sipa/forms.py:110
 msgid "Betreff"
 msgstr ""
 
-#: sipa/forms.py:89 sipa/forms.py:106
+#: sipa/forms.py:89 sipa/forms.py:111
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:90 sipa/forms.py:107
+#: sipa/forms.py:90 sipa/forms.py:112
 msgid "Nachricht"
 msgstr ""
 
-#: sipa/forms.py:91 sipa/forms.py:108
+#: sipa/forms.py:91 sipa/forms.py:113
 msgid "Nachricht fehlt!"
 msgstr ""
 
-#: sipa/forms.py:101 sipa/forms.py:163
+#: sipa/forms.py:102
+msgid "Dein Name"
+msgstr ""
+
+#: sipa/forms.py:103
+msgid "Bitte gib einen Namen an!"
+msgstr ""
+
+#: sipa/forms.py:106 sipa/forms.py:168
 msgid "Wohnheim"
 msgstr ""
 
-#: sipa/forms.py:113
+#: sipa/forms.py:118
 msgid "Altes Passwort"
 msgstr ""
 
-#: sipa/forms.py:114
+#: sipa/forms.py:119
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:115
+#: sipa/forms.py:120
 msgid "Neues Passwort"
 msgstr ""
 
-#: sipa/forms.py:116
+#: sipa/forms.py:121
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:119 sipa/forms.py:189
+#: sipa/forms.py:124 sipa/forms.py:194
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:120 sipa/forms.py:190
+#: sipa/forms.py:125 sipa/forms.py:195
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:122 sipa/forms.py:192
+#: sipa/forms.py:127 sipa/forms.py:197
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:128 sipa/forms.py:152 sipa/forms.py:178 sipa/forms.py:185
+#: sipa/forms.py:133 sipa/forms.py:157 sipa/forms.py:183 sipa/forms.py:190
 msgid "Passwort"
 msgstr ""
 
-#: sipa/forms.py:129 sipa/forms.py:137 sipa/forms.py:153
+#: sipa/forms.py:134 sipa/forms.py:142 sipa/forms.py:158
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sipa/forms.py:131
+#: sipa/forms.py:136
 msgid "Neue Mail"
 msgstr ""
 
-#: sipa/forms.py:147
+#: sipa/forms.py:152
 msgid "MAC muss unicast-Adresse sein!"
 msgstr ""
 
-#: sipa/forms.py:155
+#: sipa/forms.py:160
 msgid "Neue MAC"
 msgstr ""
 
-#: sipa/forms.py:167
+#: sipa/forms.py:172
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
-#: sipa/forms.py:170
+#: sipa/forms.py:175
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:172
+#: sipa/forms.py:177
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:173
+#: sipa/forms.py:178
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr ""
 
-#: sipa/forms.py:179 sipa/forms.py:186
+#: sipa/forms.py:184 sipa/forms.py:191
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:181
+#: sipa/forms.py:186
 msgid "Anmeldung merken"
 msgstr ""
 
@@ -199,29 +207,29 @@ msgstr ""
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:199
+#: sipa/blueprints/generic.py:204
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:207
+#: sipa/blueprints/generic.py:213
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:210
+#: sipa/blueprints/generic.py:216
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:257 sipa/blueprints/usersuite.py:93
+#: sipa/blueprints/generic.py:263 sipa/blueprints/usersuite.py:93
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:259
+#: sipa/blueprints/generic.py:265
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:265
+#: sipa/blueprints/generic.py:271
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -335,7 +343,7 @@ msgstr ""
 msgid "Nicht angegeben"
 msgstr ""
 
-#: sipa/model/property.py:197
+#: sipa/model/property.py:200
 msgid "Nicht verfÃ¼gbar"
 msgstr ""
 
