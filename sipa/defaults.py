@@ -23,7 +23,9 @@ DEFAULT_CONFIG = {
             'formatter': 'verbose',
         },
         'sentry': {
-            'class': 'raven.handlers.logging.SentryHandler',
+            # None will be replaced by the locally defined callable.
+            # (see sipa.initialization.init_logging)
+            '()': None,
             'level': 'NOTSET',
             'formatter': 'medium',
         },
