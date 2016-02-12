@@ -11,6 +11,7 @@ from raven.handlers.logging import SentryHandler
 from sipa.babel import babel, possible_locales
 from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
+from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import cf_pages
 from sipa.model import (current_datasource, init_context,
                         init_datasources_dormitories)
@@ -126,15 +127,25 @@ def init_env_and_config(app):
 
 
 def init_logging(app):
+    # Default config dict
+    logging.config.dictConfig(DEFAULT_CONFIG)
+    logger.debug('Loaded default config dict', extra={'data': {
+        'DEFAULT_CONFIG': DEFAULT_CONFIG
+    }})
+
+    # Additional ini log config file
     location_log_config = app.config['LOGGING_CONFIG_LOCATION']
-    if os.path.isfile(location_log_config):
-        logging.config.fileConfig(location_log_config,
-                                  disable_existing_loggers=True)
-        logger.info('Loaded logging configuration file "%s"',
-                    location_log_config)
-    else:
-        logger.warning('Error loading configuration file "%s"',
-                       location_log_config)
+    if location_log_config is not None:
+        if os.path.isfile(location_log_config):
+            logging.config.fileConfig(location_log_config,
+                                      disable_existing_loggers=True)
+            logger.info('Extra log config loaded: "%s"',
+                        location_log_config)
+        else:
+            logger.warning('Error loading extra log config "%s"',
+                           location_log_config)
+
+    # Configure the SentryHandler
     if app.config['SENTRY_DSN']:
         # This could not be done in the default .ini because the
         # handler has to be passed to `raven.setup_logging`.
@@ -143,8 +154,9 @@ def init_logging(app):
         sentry = Sentry()
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
-        handler = SentryHandler(app.extensions['sentry'].client)
-        handler.level = logging.NOTSET
+        handler = [h for h in logging.getLogger('sipa').handlers
+                   if type(h) == SentryHandler][0]
+        handler.client = app.extensions['sentry'].client
         setup_logging(handler)
 
         logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
