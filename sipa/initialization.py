@@ -161,8 +161,8 @@ def init_logging(app):
         if os.path.isfile(location_log_config):
             logging.config.fileConfig(location_log_config,
                                       disable_existing_loggers=True)
-            logger.info('Extra log config loaded: "%s"',
-                        location_log_config)
+            logger.debug('Extra log config loaded: "%s"',
+                         location_log_config)
         else:
             logger.warning('Error loading extra log config "%s"',
                            location_log_config)
