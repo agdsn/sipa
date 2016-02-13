@@ -132,3 +132,10 @@ def replace_empty_handler_callables(config, func):
         for h_name, h_conf in ret['handlers'].items()
     }
     return ret
+
+
+def dict_diff(d1, d2):
+    """Return a list of keys that have changed."""
+    for key in set(d1.keys()) | set(d2.keys()):
+        if key not in d1 or key not in d2 or d1[key] != d2[key]:
+            yield key
