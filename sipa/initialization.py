@@ -158,8 +158,8 @@ def init_logging(app):
     config = replace_empty_handler_callables(DEFAULT_CONFIG,
                                              register_sentry_handler)
     logging.config.dictConfig(config)
-    logger.debug('Loaded default config dict', extra={'data': {
-        'DEFAULT_CONFIG': DEFAULT_CONFIG
+    logger.debug('Loaded default log config dict', extra={'data': {
+        'DEFAULT_CONFIG': DEFAULT_CONFIG,
     }})
 
     # Apply additional ini log config file
