@@ -128,6 +128,13 @@ def init_env_and_config(app):
 
 
 def init_logging(app):
+    """Initialize the app's logging mechanisms
+
+    - Configure the sentry client, if a DSN is given
+    - Apply the default config dict (`defaults.DEFAULT_CONFIG`)
+    - If given and existent, apply the additional config file
+    """
+
     # Configure Sentry client (raven)
     if app.config['SENTRY_DSN']:
         logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
@@ -147,7 +154,7 @@ def init_logging(app):
         def register_sentry_handler():
             pass
 
-    # Default config dict
+    # Apply default config dict
     config = replace_empty_handler_callables(DEFAULT_CONFIG,
                                              register_sentry_handler)
     logging.config.dictConfig(config)
@@ -155,7 +162,7 @@ def init_logging(app):
         'DEFAULT_CONFIG': DEFAULT_CONFIG
     }})
 
-    # Additional ini log config file
+    # Apply additional ini log config file
     location_log_config = app.config['LOGGING_CONFIG_LOCATION']
     if location_log_config is not None:
         if os.path.isfile(location_log_config):
