@@ -162,17 +162,13 @@ def init_logging(app):
         'DEFAULT_CONFIG': DEFAULT_CONFIG,
     }})
 
-    # Apply additional ini log config file
-    location_log_config = app.config['LOGGING_CONFIG_LOCATION']
-    if location_log_config is not None:
-        if os.path.isfile(location_log_config):
-            logging.config.fileConfig(location_log_config,
-                                      disable_existing_loggers=True)
-            logger.debug('Extra log config loaded: "%s"',
-                         location_log_config)
-        else:
-            logger.warning('Error loading extra log config "%s"',
-                           location_log_config)
+    if app.config.get('LOG_CONFIG') is not None:
+        config = replace_empty_handler_callables(app.config['LOG_CONFIG'],
+                                                 register_sentry_handler)
+        logging.config.dictConfig(config)
+        logger.debug('Loaded extra log config dict', extra={'data': {
+            'CONFIG': app.config['LOG_CONFIG'],
+        }})
 
 
 class ReverseProxied(object):
