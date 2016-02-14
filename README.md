@@ -51,6 +51,32 @@ docker run --name sipa -p 5000:5000 -d sipa python sipa.py --exposed
 If you want to use sipa for development, adding `--debug` after `sipa.py` and
 mounting your sipa folder using `-v <path>:/home/sipa/sipa` is recommended.
 
+## Configuration ##
+
+### Environment variables ###
+
+The default config (`sipa.default_config`) reads environment variables
+for the most cases.
+
+### Local Python config file ###
+
+If one prefers to write configuration into a file locally, sipa reads
+`/config.py`.  If the environment variable `SIPA_CONFIG_FILE` is set,
+its path is taken instead.
+
+### Logging ###
+
+In order to provide an additional logfile, set the app's `LOG_CONFIG`
+variable in your local configuration file.
+
+It has to be set to a dict usable by `dictConfig()`.  For further
+documentation, see [the python docs](https://docs.python.org/3/howto/logging-cookbook.html#an-example-dictionary-based-configuration).
+
+Also, you might want to look into `sipa.defaults.DEFAULT_CONFIG` for the current structure.
+
+Keep in mind you don't need to rewrite the whole default configuration
+every time, since you can include `'incremental': True` in said dict.
+
 
 Required format for the markdown files
 --------------------------------------
