@@ -11,9 +11,11 @@ from raven.handlers.logging import SentryHandler
 from sipa.babel import babel, possible_locales
 from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
+from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import cf_pages
 from sipa.model import (current_datasource, init_context,
                         init_datasources_dormitories)
+from sipa.utils import replace_empty_handler_callables
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.graph_utils import (generate_credit_chart,
@@ -126,30 +128,47 @@ def init_env_and_config(app):
 
 
 def init_logging(app):
-    location_log_config = app.config['LOGGING_CONFIG_LOCATION']
-    if os.path.isfile(location_log_config):
-        logging.config.fileConfig(location_log_config,
-                                  disable_existing_loggers=True)
-        logger.info('Loaded logging configuration file "%s"',
-                    location_log_config)
-    else:
-        logger.warning('Error loading configuration file "%s"',
-                       location_log_config)
-    if app.config['SENTRY_DSN']:
-        # This could not be done in the default .ini because the
-        # handler has to be passed to `raven.setup_logging`.
+    """Initialize the app's logging mechanisms
 
-        # the following adds itself to app.extensions['sentry']
+    - Configure the sentry client, if a DSN is given
+    - Apply the default config dict (`defaults.DEFAULT_CONFIG`)
+    - If given and existent, apply the additional config file
+    """
+
+    # Configure Sentry client (raven)
+    if app.config['SENTRY_DSN']:
+        logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
         sentry = Sentry()
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
-        handler = SentryHandler(app.extensions['sentry'].client)
-        handler.level = logging.NOTSET
-        setup_logging(handler)
+        def register_sentry_handler():
+            handler = SentryHandler()
 
-        logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
+            handler.client = app.extensions['sentry'].client
+            setup_logging(handler)
+
+            return handler
     else:
         logger.debug("No sentry DSN specified")
+
+        def register_sentry_handler():
+            pass
+
+    # Apply default config dict
+    config = replace_empty_handler_callables(DEFAULT_CONFIG,
+                                             register_sentry_handler)
+    logging.config.dictConfig(config)
+    logger.debug('Loaded default log config dict', extra={'data': {
+        'DEFAULT_CONFIG': DEFAULT_CONFIG,
+    }})
+
+    if app.config.get('LOG_CONFIG') is not None:
+        config = replace_empty_handler_callables(app.config['LOG_CONFIG'],
+                                                 register_sentry_handler)
+        logging.config.dictConfig(config)
+        logger.debug('Loaded extra log config dict', extra={'data': {
+            'CONFIG': app.config['LOG_CONFIG'],
+        }})
 
 
 class ReverseProxied(object):

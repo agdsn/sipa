@@ -34,8 +34,6 @@ else:
     ]
 FLATPAGES_MARKDOWN_EXTENSIONS = sipa_markdown_extensions
 
-LOGGING_CONFIG_LOCATION = getenv("SIPA_LOGGING_CONFIG_LOCATION",
-                                 "sipa/default_log_config")
 GENERIC_LOGGING = True
 
 # Mail configuration
