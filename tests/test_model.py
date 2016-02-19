@@ -1,6 +1,8 @@
 from base64 import urlsafe_b64encode
+from itertools import chain
 from os import urandom
 from unittest import TestCase
+from unittest.mock import MagicMock, patch
 
 import sipa.model.sample
 from flask import Flask
@@ -11,6 +13,7 @@ from sipa.model import (dormitory_from_ip, dormitory_from_name,
 from sipa.model.default import BaseUser
 from sipa.model.property import (ActiveProperty, Capabilities,
                                  UnsupportedProperty, no_capabilities)
+from sipa.model.gerok.user import do_api_call
 from tests.prepare import AppInitialized
 
 
@@ -224,3 +227,51 @@ class TestSampleUserCase(AppInitialized):
             assert 0 <= day['output']
             self.assertEqual(day['throughput'], day['input'] + day['output'])
             assert 0 <= day['credit'] <= 1024**2 * 63
+
+
+def mocked_gerok_api(status_code=200, return_value=""):
+    get = MagicMock()
+
+    def _json(): raise ValueError
+    get().status_code = status_code
+    get().text = return_value
+    get().json.side_effect = _json
+
+    return get
+
+
+class TestGerokApiCall(AppInitialized):
+    get = mocked_gerok_api()
+    url = "supersecret.onion"
+
+    def setUp(self):
+        self.app.extensions['gerok_api']['token'] = ""
+        self.app.extensions['gerok_api']['endpoint'] = self.url
+
+    @patch('requests.get', get)
+    def test_empty_request(self):
+        self.assertEqual(do_api_call(""), "")
+
+        assert self.get.called
+        self.get().json.assert_called_with()
+
+    @patch('requests.get', get)
+    def test_not_200_ValueError(self):
+        # loop over a lot of status codes except 200
+        for status in chain(range(0, 200, 20), range(201, 600, 20)):
+            self.get.reset_mock()
+            self.get().status_code = status
+
+            with self.assertRaises(ValueError):
+                do_api_call("")
+
+            assert self.get.called
+
+    @patch('requests.get', get)
+    def test_correct_url_called(self):
+        do_api_call("")
+
+        # assert that the call only got the positional args `(self.url,)`
+        self.assertEqual(self.get.call_args[0], (self.url,))
+
+
