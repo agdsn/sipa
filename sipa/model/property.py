@@ -1,4 +1,6 @@
 from collections import namedtuple
+from functools import wraps
+
 from flask.ext.babel import gettext
 from abc import ABCMeta, abstractmethod
 from sipa.utils import argstr
@@ -132,6 +134,7 @@ class active_prop(property):
         self.__raw_getter = fget
         self.__fake_setter = fake_setter  # only for the __repr__
 
+        @wraps(fget)
         def wrapped_getter(*args, **kwargs):
             result = fget(*args, **kwargs)
             try:
