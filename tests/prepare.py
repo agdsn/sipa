@@ -4,8 +4,7 @@ from sipa import create_app
 
 
 class AppInitialized(TestCase):
-    @classmethod
-    def create_app(cls):
+    def create_app(self):
         test_app = Flask(__name__)
         test_app.config['TESTING'] = True
         test_app.debug = True
