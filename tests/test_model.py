@@ -1,6 +1,8 @@
+import json
 from base64 import urlsafe_b64encode
 from itertools import chain
 from os import urandom
+from requests import Response
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
@@ -229,13 +231,12 @@ class TestSampleUserCase(AppInitialized):
             assert 0 <= day['credit'] <= 1024**2 * 63
 
 
-def mocked_gerok_api(status_code=200, return_value=""):
+def mocked_gerok_api(status_code=200, response=b""):
     get = MagicMock()
 
-    def _json(): raise ValueError
+    get.return_value = Response()
     get().status_code = status_code
-    get().text = return_value
-    get().json.side_effect = _json
+    get()._content = response
 
     return get
 
@@ -251,9 +252,7 @@ class TestGerokApiCall(AppInitialized):
     @patch('requests.get', get)
     def test_empty_request(self):
         self.assertEqual(do_api_call(""), "")
-
         assert self.get.called
-        self.get().json.assert_called_with()
 
     @patch('requests.get', get)
     def test_not_200_ValueError(self):
@@ -273,5 +272,16 @@ class TestGerokApiCall(AppInitialized):
 
         # assert that the call only got the positional args `(self.url,)`
         self.assertEqual(self.get.call_args[0], (self.url,))
+
+    @patch('requests.get', get)
+    def test_json_parsed(self):
+        sample_dicts = [
+            {},
+            {'foo': 'bar'},
+            {'foo': 'bar', 'dict': {'baz': 'shizzle'}, 'int': 2},
+        ]
+        for d in sample_dicts:
+            self.get()._content = json.dumps(d).encode()
+            self.assertEqual(do_api_call(""), d)
 
 
