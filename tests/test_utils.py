@@ -15,7 +15,7 @@ class TestDictDiff(TestCase):
     def test_diffs_same_dicts(self):
         dicts = [{}, {'foo': 'bar'}, {'foo': 'bar', 'baz': {'boom': 'sheesh'}}]
         for d in dicts:
-            self.assertEquals(list(dict_diff(d, d)), [])
+            self.assertEqual(list(dict_diff(d, d)), [])
 
     def test_diffs_one_different(self):
         # the dicts in `dicts` *MUST NOT* have two dicts with keys
@@ -26,7 +26,7 @@ class TestDictDiff(TestCase):
         for d1, d2 in permutations(dicts, 2):
             merged = d1.copy()
             merged.update(d2)
-            self.assertEquals(list(dict_diff(d1, merged)), list(d2.keys()))
+            self.assertEqual(list(dict_diff(d1, merged)), list(d2.keys()))
 
 
 class TestHandlerReplacer(TestCase):
@@ -35,7 +35,7 @@ class TestHandlerReplacer(TestCase):
         pass
 
     def assert_untouched(self, data):
-        self.assertEquals(
+        self.assertEqual(
             data,
             replace_empty_handler_callables(data, self.do_nothing)
         )
@@ -63,22 +63,22 @@ class TestHandlerReplacer(TestCase):
             'one': {'()': None, 'param': 'Something_else'}
         }}
         result = replace_empty_handler_callables(original, self.do_nothing)
-        self.assertEquals(
+        self.assertEqual(
             list(dict_diff(result, original)),
             ['handlers'],
         )
 
         original = original['handlers']
         result = result['handlers']
-        self.assertEquals(
+        self.assertEqual(
             list(dict_diff(result, original)),
             ['one'],
         )
 
         original = original['one']
         result = result['one']
-        self.assertEquals(
+        self.assertEqual(
             list(dict_diff(result, original)),
             ['()'],
         )
-        self.assertEquals(result['()'], self.do_nothing)
+        self.assertEqual(result['()'], self.do_nothing)
