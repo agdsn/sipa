@@ -243,11 +243,14 @@ def mocked_gerok_api(status_code=200, response=b""):
 
 class TestGerokApiCall(AppInitialized):
     get = mocked_gerok_api()
+    post = mocked_gerok_api()
     url = "supersecret.onion"
 
     def setUp(self):
         self.app.extensions['gerok_api']['token'] = ""
         self.app.extensions['gerok_api']['endpoint'] = self.url
+        self.get.reset_mock()
+        self.post.reset_mock()
 
     @patch('requests.get', get)
     def test_empty_request(self):
@@ -283,5 +286,12 @@ class TestGerokApiCall(AppInitialized):
         for d in sample_dicts:
             self.get()._content = json.dumps(d).encode()
             self.assertEqual(do_api_call(""), d)
+
+    @patch('requests.get', get)
+    @patch('requests.post', post)
+    def test_post_called(self):
+        do_api_call("", method='post', postdata=None)
+        self.get.assert_not_called()
+        self.assertEqual(self.post.called, True)
 
 
