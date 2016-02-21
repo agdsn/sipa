@@ -92,7 +92,7 @@ class TestGerokApiCall(AppInitialized):
         for token in tokens:
             self.set_token(token)
             expected_header = {'Authorization': "Token token={}".format(token)}
-            do_api_call("")
+            do_api_call("", method=method)
             if method == 'get':
                 self.assertEqual(self.get.call_args[1]['headers'],
                                  expected_header)
@@ -108,7 +108,7 @@ class TestGerokApiCall(AppInitialized):
                   "54TRNEDr:-)/nyUfeg n:s lvℕΓΦ∃Δ∂ℝ⇐⊂6"]
         self.assert_token_passed(tokens, method='get')
 
-    @patch('requests.get', post)
+    @patch('requests.post', post)
     def test_auth_string_passed_post(self):
         tokens = ["", "foobar123", "dtrndturiaehc",
                   "54TRNEDr:-)/nyUfeg n:s lvℕΓΦ∃Δ∂ℝ⇐⊂6"]
