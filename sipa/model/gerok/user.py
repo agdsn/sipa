@@ -214,12 +214,14 @@ def do_api_call(request, method='get', postdata=None):
     requestUri = endpoint + request
     authHeaderStr = 'Token token=' + token
 
-    if (method == 'get'):
+    if method == 'get':
         response = requests.get(requestUri, verify=False,
                                 headers={'Authorization': authHeaderStr})
-    else:
+    elif method == 'post':
         response = requests.post(requestUri, data=postdata, verify=False,
                                  headers={'Authorization': authHeaderStr})
+    else:
+        raise ValueError("`method` must be one of ['get', 'post']!")
 
     if response.status_code != 200:
         raise ValueError("Gerok API returned status != 200 OK")

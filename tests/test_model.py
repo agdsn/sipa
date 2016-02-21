@@ -294,4 +294,13 @@ class TestGerokApiCall(AppInitialized):
         self.get.assert_not_called()
         self.assertEqual(self.post.called, True)
 
+    @patch('requests.get', get)
+    @patch('requests.post', post)
+    def test_invalid_method(self):
+        for method in ['GET', 'POST', 'nothing_of_both', 'something_else']:
+            with self.assertRaises(ValueError):
+                do_api_call("", method=method, postdata=None)
+            self.get.assert_not_called()
+            self.post.assert_not_called()
+
 
