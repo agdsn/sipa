@@ -247,10 +247,13 @@ class TestGerokApiCall(AppInitialized):
     url = "supersecret.onion"
 
     def setUp(self):
-        self.app.extensions['gerok_api']['token'] = ""
+        self.set_token("")
         self.app.extensions['gerok_api']['endpoint'] = self.url
         self.get.reset_mock()
         self.post.reset_mock()
+
+    def set_token(self, token):
+        self.app.extensions['gerok_api']['token'] = token
 
     @patch('requests.get', get)
     def test_empty_request(self):
@@ -302,5 +305,37 @@ class TestGerokApiCall(AppInitialized):
                 do_api_call("", method=method, postdata=None)
             self.get.assert_not_called()
             self.post.assert_not_called()
+
+    @patch('requests.post', post)
+    def test_postdata_passed(self):
+        postdata = {'foo': "bar"}
+        do_api_call("", method='post', postdata=postdata)
+        self.assertEqual(self.post.call_args[1]['data'], postdata)
+
+    def assert_token_passed(self, tokens, method):
+        for token in tokens:
+            self.set_token(token)
+            expected_header = {'Authorization': "Token token={}".format(token)}
+            do_api_call("")
+            if method == 'get':
+                self.assertEqual(self.get.call_args[1]['headers'],
+                                 expected_header)
+            elif method == 'post':
+                self.assertEqual(self.post.call_args[1]['headers'],
+                                 expected_header)
+            else:
+                raise ValueError("`method` must be one of ['get', 'post']!")
+
+    @patch('requests.get', get)
+    def test_auth_string_passed_get(self):
+        tokens = ["", "foobar123", "dtrndturiaehc",
+                  "54TRNEDr:-)/nyUfeg n:s lvℕΓΦ∃Δ∂ℝ⇐⊂6"]
+        self.assert_token_passed(tokens, method='get')
+
+    @patch('requests.get', post)
+    def test_auth_string_passed_post(self):
+        tokens = ["", "foobar123", "dtrndturiaehc",
+                  "54TRNEDr:-)/nyUfeg n:s lvℕΓΦ∃Δ∂ℝ⇐⊂6"]
+        self.assert_token_passed(tokens, method='post')
 
 
