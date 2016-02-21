@@ -142,11 +142,6 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @active_prop
     @abstractmethod
-    def user_id(self):
-        pass
-
-    @active_prop
-    @abstractmethod
     def address(self):
         pass
 
