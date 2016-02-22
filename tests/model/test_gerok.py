@@ -120,7 +120,6 @@ class TestGerokApiCall(AppInitialized):
 
 def fake_api(users_dict, request, method='get', postdata=None):
     """A fake gerok api, replacing `do_api_call` for testing."""
-    print("request: {}".format(request))
     parsed = urlparse(request)
     action = parsed.path.rsplit('/')[-1]  # the bit after the last '/'
 
