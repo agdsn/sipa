@@ -1,9 +1,11 @@
 import json
 from itertools import chain
-from requests import Response
 from unittest.mock import MagicMock, patch
+from urllib.parse import parse_qs, urlparse
 
-from sipa.model.gerok.user import do_api_call, User
+from requests import Response
+
+from sipa.model.gerok.user import User, do_api_call
 from tests.prepare import AppInitialized
 
 
@@ -135,24 +137,43 @@ class TestGerokUser(AppInitialized):
     def setUp(self):
         def fake_api(request, method='get', postdata=None):
             """A fake gerok api, replacing `do_api_call` for testing."""
-            # TODO: read get-arguments.  Currently, only trivial request
-            # cases (request == user_id, return a dict with user data) are
-            # handled.
-            return {
-                'id': request,
-                **self.users.get(request)
-            }
+            print("request: {}".format(request))
+            parsed = urlparse(request)
+            action = parsed.path.rsplit('/')[-1]  # the bit after the last '/'
 
+            if action == "find":
+                query_args = parse_qs(parsed.query)
+                if 'ip' in query_args.keys():
+                    ip = query_args['ip'][0]
+                    for user_id, value in self.users.items():
+                        if ip in [h['ip'] for h in value['hosts']]:
+                            break
+                    else:
+                        raise ValueError("No user with ip {} in self.users"
+                                         .format(ip))
+            else:
+                user_id = action
+            try:
+                return {
+                    'id': user_id,
+                    **self.users[user_id]
+                }
+            except KeyError:
+                raise ValueError("no user with id {} exists in `self.users`. "
+                                 "Is the request string '{}' correct?"
+                                 .format(user_id, request))
+
+        self.api_mock.reset_mock()
         self.api_mock.side_effect = fake_api
 
-    def get_example_user(self, id):
+    def get_example_user(self, user_id):
         try:
             return {
-                'id': id,
-                **self.users.get(id)
+                'id': user_id,
+                **self.users.get(user_id)
             }
         except KeyError:
-            raise ValueError("Id {} not in `users` dict".format(id))
+            raise ValueError("Id {} not in `users` dict".format(user_id))
 
     def assert_userdata_passed(self, user, user_data):
         """Test if contents of `user_data` fully appear in the `user` object
@@ -173,10 +194,17 @@ class TestGerokUser(AppInitialized):
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_explicit_init(self):
-        id = '1245'
-        user_data = self.get_example_user(id)
-        user = User(user_data['login'], id)
+        user_id = '1245'
+        user_data = self.get_example_user(user_id)
+        user = User(user_data['login'], user_id)
 
         self.assertTrue(self.api_mock.called)
-        self.assertEqual(self.api_mock.call_args[0], (id,))
+        self.assertEqual(self.api_mock.call_args[0], (user_id,))
+        self.assert_userdata_passed(user=user, user_data=user_data)
+
+    @patch('sipa.model.gerok.user.do_api_call', api_mock)
+    def test_ip_constructor(self):
+        user_data = self.get_example_user('1245')
+        ip = user_data['hosts'][0]['ip']
+        user = User.from_ip(ip)
         self.assert_userdata_passed(user=user, user_data=user_data)
