@@ -1,4 +1,5 @@
 import json
+from functools import partial
 from itertools import chain
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
@@ -117,6 +118,35 @@ class TestGerokApiCall(AppInitialized):
         self.assert_token_passed(tokens, method='post')
 
 
+def fake_api(users_dict, request, method='get', postdata=None):
+    """A fake gerok api, replacing `do_api_call` for testing."""
+    print("request: {}".format(request))
+    parsed = urlparse(request)
+    action = parsed.path.rsplit('/')[-1]  # the bit after the last '/'
+
+    if action == "find":
+        query_args = parse_qs(parsed.query)
+        if 'ip' in query_args.keys():
+            ip = query_args['ip'][0]
+            for user_id, value in users_dict.items():
+                if ip in [h['ip'] for h in value['hosts']]:
+                    break
+            else:
+                raise ValueError("No user with ip {} in self.users"
+                                 .format(ip))
+    else:
+        user_id = action
+    try:
+        return {
+            'id': user_id,
+            **users_dict[user_id]
+        }
+    except KeyError:
+        raise ValueError("no user with id {} exists in `self.users`. "
+                         "Is the request string '{}' correct?"
+                         .format(user_id, request))
+
+
 class TestGerokUser(AppInitialized):
     users = {
         '1245': {
@@ -136,36 +166,8 @@ class TestGerokUser(AppInitialized):
     api_mock = MagicMock()
 
     def setUp(self):
-        def fake_api(request, method='get', postdata=None):
-            """A fake gerok api, replacing `do_api_call` for testing."""
-            print("request: {}".format(request))
-            parsed = urlparse(request)
-            action = parsed.path.rsplit('/')[-1]  # the bit after the last '/'
-
-            if action == "find":
-                query_args = parse_qs(parsed.query)
-                if 'ip' in query_args.keys():
-                    ip = query_args['ip'][0]
-                    for user_id, value in self.users.items():
-                        if ip in [h['ip'] for h in value['hosts']]:
-                            break
-                    else:
-                        raise ValueError("No user with ip {} in self.users"
-                                         .format(ip))
-            else:
-                user_id = action
-            try:
-                return {
-                    'id': user_id,
-                    **self.users[user_id]
-                }
-            except KeyError:
-                raise ValueError("no user with id {} exists in `self.users`. "
-                                 "Is the request string '{}' correct?"
-                                 .format(user_id, request))
-
         self.api_mock.reset_mock()
-        self.api_mock.side_effect = fake_api
+        self.api_mock.side_effect = partial(fake_api, self.users)
 
     def get_example_user(self, user_id):
         try:
