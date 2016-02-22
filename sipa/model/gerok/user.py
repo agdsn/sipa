@@ -79,7 +79,12 @@ class User(BaseUser):
         userData = do_api_call('find?ip=' + ip)
 
         if userData is not None:
-            return cls(userData['login'], userData['name'], 'passive')
+            return cls(
+                uid=userData['login'],
+                id=userData['id'],
+                name=userData['name'],
+                mail=userData['mail'],
+            )
         else:
             return AnonymousUserMixin()
 
@@ -91,6 +96,7 @@ class User(BaseUser):
         self._address = user_data['address']
         self._mail = user_data['mail']
         self._status = user_data['status']
+        self.name = user_data['name']
 
         hosts = user_data['hosts']
         self._ips = {h['ip'] for h in hosts} - {None}

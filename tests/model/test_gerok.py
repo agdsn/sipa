@@ -121,6 +121,7 @@ class TestGerokUser(AppInitialized):
     users = {
         '1245': {
             'login': "test",
+            'name': "Günther Schulz",
             'address': "Gerokstraße 38, 00-0",
             'mail': "test@test.de",
             'status': "OK",
@@ -184,6 +185,7 @@ class TestGerokUser(AppInitialized):
         self.assertEqual(user.address.value, user_data['address'])
         self.assertEqual(user.mail.value, user_data['mail'])
         self.assertEqual(user.status.value, user_data['status'])
+        self.assertEqual(user.realname.value, user_data['name'])
         for host in user_data['hosts']:
             # using `assertIn` allows agnosticism regarding the chosen
             # string concatenation method
