@@ -27,19 +27,14 @@ class User(BaseUser):
 
     datasource = 'gerok'
 
-    def __init__(self, uid, id, name=None, mail=None):
-        super().__init__(uid)
-        self._id = id
-        self.name = name
-        self._mail = mail
-        self.cache_information()
+    def __init__(self, user_data):
+        super().__init__(uid=user_data['login'])
+        self.cache_information(user_data)
+        self._user_data = user_data  # keep it for the repr
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            uid=self.uid,
-            id=self._id,
-            name=self.name,
-            mail=self._mail,
+            user_data=self._user_data,
         ))
 
     can_change_password = False
@@ -54,12 +49,7 @@ class User(BaseUser):
         if userData is None:
             raise UserNotFound
 
-        uid = userData['login'] or username
-        name = userData['name'] or username
-        # TODO: Somehow access the entry in the datasource constructor
-        mail = username + "@wh17.tu-dresden.de"
-
-        return cls(uid, userData['id'], name, mail)
+        return cls(user_data=userData)
 
     @classmethod
     def authenticate(cls, username, password):
@@ -78,18 +68,14 @@ class User(BaseUser):
     def from_ip(cls, ip):
         userData = do_api_call('find?ip=' + ip)
 
-        if userData is not None:
-            return cls(
-                uid=userData['login'],
-                id=userData['id'],
-                name=userData['name'],
-                mail=userData['mail'],
-            )
-        else:
+        if userData is None:
             return AnonymousUserMixin()
 
-    def cache_information(self):
-        user_data = do_api_call(str(self._id))
+        return cls(user_data=userData)
+
+    def cache_information(self, user_data=None):
+        if user_data is None:
+            user_data = do_api_call(str(self._id))
 
         self._id = user_data['id']
         self._login = user_data['login']

@@ -198,10 +198,7 @@ class TestGerokUser(AppInitialized):
     def test_explicit_init(self):
         user_id = '1245'
         user_data = self.get_example_user(user_id)
-        user = User(user_data['login'], user_id)
-
-        self.assertTrue(self.api_mock.called)
-        self.assertEqual(self.api_mock.call_args[0], (user_id,))
+        user = User(user_data)
         self.assert_userdata_passed(user=user, user_data=user_data)
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
