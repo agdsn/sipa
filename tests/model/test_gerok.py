@@ -335,31 +335,6 @@ class TestGerokUser(AppInitialized):
             self.assertIn(host['hostname'], user.hostname.value)
             self.assertIn(host['alias'], user.hostalias.value)
         self.assertEqual(user.credit, user_data.get('credit', 0) / 1024)
-        for entry in user.traffic_history:
-            try:
-                corresponding = self.get_corresponding_entry(
-                    user_data['traffic_entries'],
-                    entry,
-                )
-            except KeyError:
-                corresponding = None
-
-            if corresponding is not None:
-                self.assertAlmostEqual(
-                    corresponding['in'] + corresponding['out'],
-                    entry['throughput'],
-                    delta=5,
-                )
-                self.assertAlmostEqual(
-                    corresponding['credit'],
-                    entry['credit'],
-                    delta=5,
-                )
-            else:
-                self.assertEqual(entry['input'], 0)
-                self.assertEqual(entry['output'], 0)
-                self.assertEqual(entry['throughput'], 0)
-                self.assertEqual(entry['credit'], 0)
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_explicit_init(self):
@@ -407,3 +382,34 @@ class TestGerokUser(AppInitialized):
             password = password + "wrong"
             with self.assertRaises(PasswordInvalid):
                 User.authenticate(login, password)
+
+    @patch('sipa.model.gerok.user.do_api_call', api_mock)
+    def test_traffic_data_passed(self):
+        for user_id in self.users.keys():
+            user_data = self.get_example_user(user_id)
+            user = User(user_data)
+            for entry in user.traffic_history:
+                try:
+                    corresponding = self.get_corresponding_entry(
+                        user_data['traffic_entries'],
+                        entry,
+                    )
+                except KeyError:
+                    corresponding = None
+
+                if corresponding is not None:
+                    self.assertAlmostEqual(
+                        corresponding['in'] + corresponding['out'],
+                        entry['throughput'],
+                        delta=5,
+                    )
+                    self.assertAlmostEqual(
+                        corresponding['credit'],
+                        entry['credit'],
+                        delta=5,
+                    )
+                else:
+                    self.assertEqual(entry['input'], 0)
+                    self.assertEqual(entry['output'], 0)
+                    self.assertEqual(entry['throughput'], 0)
+                    self.assertEqual(entry['credit'], 0)
