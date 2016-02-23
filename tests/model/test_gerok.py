@@ -1,6 +1,6 @@
 import json
 from functools import partial
-from itertools import chain
+from itertools import chain, product
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 
@@ -195,68 +195,87 @@ def fake_api(users_dict, request, method='get', postdata=None):
                          .format(user_id, request))
 
 
-class TestGerokUser(AppInitialized):
-    users = {
-        '1': {
-            'login': "test",
-            'password': "123",
-            'name': "Günther Schulz",
-            'address': "Gerokstraße 38, 00-0",
-            'mail': "test@test.de",
-            'status': "OK",
-            'hosts': [
-                {'ip': "141.30.0.0", 'mac': "aa-bb-cc-dd-ee-ff",
-                 'hostname': "foobar", 'alias': "mein_laptop"},
-                {'ip': "141.30.0.1", 'mac': "aa-bb-cc-dd-ee-fe",
-                 'hostname': "baz", 'alias': "mein_neuer_laptop"},
-            ],
-            'credit': 2048,
-            'traffic_entries': [
-                {'relative_date': 0, 'credit': 2048,
-                 'in': 20202, 'out': 202020},
-                {'relative_date': -1, 'credit': 2048,
-                 'in': 20202, 'out': 202020},
-                {'relative_date': -2, 'credit': 2048,
-                 'in': 20202, 'out': 202020},
-                {'relative_date': -3, 'credit': 2048,
-                 'in': 20202, 'out': 202020},
-                {'relative_date': -4, 'credit': 2048,
-                 'in': 20202, 'out': 202020},
-                {'relative_date': -5, 'credit': 2048,
-                 'in': 20202, 'out': 202020},
-                {'relative_date': -6, 'credit': 2048,
-                 'in': 20202, 'out': 202020},
-            ]
-        },
-        '2': {  # empty mail address
-            'login': "test2",
-            'password': "1234",
-            'name': "Nicht Günther Schulz",
-            'address': "Gerokstraße 38, 00-1",
-            'mail': "",
-            'status': "OK",
-            'hosts': [
-                {'ip': "141.30.0.2", 'mac': "aa-bb-cc-dd-ee-fd",
-                 'hostname': "shizzle", 'alias': "mein_alter_dell"},
-            ],
-            'credit': 4096,
-        },
-        '3': {  # no credit
-            'login': "test3",
-            'password': "1234",
-            'name': "Nicht Günther Schulz",
-            'address': "Gerokstraße 38, 00-1",
-            'mail': "",
-            'status': "OK",
-            'hosts': [
-                {'ip': "141.30.0.3", 'mac': "aa-bb-cc-dd-ee-fd",
-                 'hostname': "shizzle", 'alias': "mein_alter_dell"},
-            ],
-        },
+def iter_traffic_entries(relative_dates, input, output, credit):
+    return [{'relative_date': date, 'credit': credit,
+             'in': input, 'out': output}
+            for date in relative_dates]
+
+
+def get_possible_traffic_entry_lists():
+    entry_lists = []
+    day_masks = [
+        [],
+        *(list(range(i, 1)) for i in range(-10, 1)),
+        *(list(range(-6, i)) for i in range(-5, 0)),
+    ]
+
+    for mask in day_masks:
+        entry_lists.append(
+            iter_traffic_entries(
+                relative_dates=mask,
+                input=20202,
+                output=202020,
+                credit=2048,
+            )
+        )
+
+    return entry_lists
+
+
+def generate_host(i):
+    string_rep = str(i)
+    if len(string_rep) > 4:
+        raise ValueError("`i` may not have more than 4 digits.")
+    string_rep = "{0:0>4}".format(string_rep)  # rfill string_rep with 0s
+    return {
+        'ip': ".".join(string_rep),
+        'mac': "00:{0:0>2x}:00:{1:0>2x}:00:00".format(i % 13, i % 3),
+        'hostname': "host{}".format(i),
+        'alias': "alias{}".format(i),
     }
+
+
+def get_possible_users():
+    traffic_entries_delegates = get_possible_traffic_entry_lists()
+    mail_delegates = ["foo@bar.baz", "", "foobar"]
+    credit_delegates = [2048, 0, 1024]
+
+    premature_users = [
+        {
+            'traffic_entries': x[0],
+            'mail': x[1],
+            'credit': x[2],
+        }
+        for x in product(
+                traffic_entries_delegates,
+                mail_delegates,
+                credit_delegates,
+        )
+    ]
+
+    users = {}
+    for i, user in enumerate(premature_users, start=1):
+        users[str(i)] = {
+            'login': "user{}".format(i),
+            'password': "".join(reversed(str(i))),
+            'name': "User {}".format(i),
+            'status': "OK",
+            'address': "Gerokstraße 38",
+            'hosts': [
+                generate_host(3*i + j)
+                for j in range(i % 3)
+            ],
+            **user,
+        }
+
+    return users
+
+
+class TestGerokUser(AppInitialized):
     api_mock = MagicMock()
 
     def setUp(self):
+        self.users = get_possible_users()
         self.api_mock.reset_mock()
         self.api_mock.side_effect = partial(fake_api, self.users)
 
