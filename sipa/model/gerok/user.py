@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-import datetime
+from datetime import date, timedelta
 
+import requests
 from flask.ext.login import AnonymousUserMixin
 from flask.globals import current_app
-import requests
 from werkzeug.local import LocalProxy
 
 from sipa.model.default import BaseUser
-from sipa.model.property import (active_prop, unsupported_prop,
-                                 connection_dependent)
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.property import active_prop, connection_dependent, \
+    unsupported_prop
 from sipa.utils import argstr
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 
 endpoint = LocalProxy(lambda: current_app.extensions['gerok_api']['endpoint'])
@@ -27,19 +27,14 @@ class User(BaseUser):
 
     datasource = 'gerok'
 
-    def __init__(self, uid, id, name=None, mail=None):
-        super().__init__(uid)
-        self._id = id
-        self.name = name
-        self._mail = mail
-        self.cache_information()
+    def __init__(self, user_data):
+        super().__init__(uid=user_data['login'])
+        self.cache_information(user_data)
+        self._user_data = user_data  # keep it for the repr
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            uid=self.uid,
-            id=self._id,
-            name=self.name,
-            mail=self._mail,
+            user_data=self._user_data,
         ))
 
     can_change_password = False
@@ -51,15 +46,10 @@ class User(BaseUser):
         """
         userData = do_api_call('find?login=' + str(username))
 
-        if userData is None:
+        if not userData:
             raise UserNotFound
 
-        uid = userData['login'] or username
-        name = userData['name'] or username
-        # TODO: Somehow access the entry in the datasource constructor
-        mail = username + "@wh17.tu-dresden.de"
-
-        return cls(uid, userData['id'], name, mail)
+        return cls(user_data=userData)
 
     @classmethod
     def authenticate(cls, username, password):
@@ -78,19 +68,21 @@ class User(BaseUser):
     def from_ip(cls, ip):
         userData = do_api_call('find?ip=' + ip)
 
-        if userData is not None:
-            return cls(userData['login'], userData['name'], 'passive')
-        else:
+        if not userData:
             return AnonymousUserMixin()
 
-    def cache_information(self):
-        user_data = do_api_call(str(self._id))
+        return cls(user_data=userData)
+
+    def cache_information(self, user_data=None):
+        if user_data is None:
+            user_data = do_api_call(str(self._id))
 
         self._id = user_data['id']
         self._login = user_data['login']
         self._address = user_data['address']
         self._mail = user_data['mail']
         self._status = user_data['status']
+        self.name = user_data['name']
 
         hosts = user_data['hosts']
         self._ips = {h['ip'] for h in hosts} - {None}
@@ -111,7 +103,7 @@ class User(BaseUser):
 
             # loop through expected days ([-6..0])
             for d in range(-6, 1):
-                date = datetime.date.today() + datetime.timedelta(d)
+                date = date_from_delta(d)
                 day = date.weekday()
                 # pick the to `date` corresponding data
                 host = next((
@@ -153,7 +145,7 @@ class User(BaseUser):
     @property
     def credit(self):
         creditData = do_api_call(str(self._id) + '/credit')
-        return creditData[0]['credit'] / 1024if creditData else 0
+        return creditData[0]['credit'] / 1024 if creditData else 0
 
     @active_prop
     def id(self):
@@ -189,7 +181,10 @@ class User(BaseUser):
 
     @active_prop
     def mail(self):
-        return self._mail
+        if self._mail:
+            return self._mail
+        # TODO: Get mail suffix from `DataSource`
+        return "{}@wh17.tu-dresden.de".format(self._login)
 
     @active_prop
     @connection_dependent
@@ -230,3 +225,13 @@ def do_api_call(request, method='get', postdata=None):
         return response.json()
     except ValueError:
         return response.text
+
+
+def date_from_delta(delta):
+    """Return a `datetime.date` which differs delta days from today"""
+    return date.today() + timedelta(delta)
+
+
+def date_str_from_delta(delta):
+    """Return a date-string which differs delta days from today"""
+    return date_from_delta(delta).strftime("%Y-%m-%d")
