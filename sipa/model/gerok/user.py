@@ -145,7 +145,7 @@ class User(BaseUser):
     @property
     def credit(self):
         creditData = do_api_call(str(self._id) + '/credit')
-        return creditData[0]['credit'] / 1024if creditData else 0
+        return creditData[0]['credit'] / 1024 if creditData else 0
 
     @active_prop
     def id(self):
