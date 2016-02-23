@@ -7,7 +7,8 @@ from urllib.parse import parse_qs, urlparse
 from flask.ext.login import AnonymousUserMixin
 from requests import Response
 
-from sipa.model.gerok.user import User, do_api_call
+from sipa.model.gerok.user import (User, do_api_call, date_from_delta,
+                                   date_str_from_delta)
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 from tests.prepare import AppInitialized
 
@@ -162,11 +163,23 @@ def fake_api(users_dict, request, method='get', postdata=None):
         user_id = action
         if len(path_components) == 2:
             action = path_components[1]
+            user = users_dict[user_id]
             if action == 'credit':
-                user = users_dict[user_id]
                 return ([{'credit': user['credit']}]
                         if 'credit' in user.keys()
                         else "")
+            elif action == 'traffic':
+                traffic_entries = [
+                    {
+                        'date': date_str_from_delta(entry['relative_date']),
+                        'in': entry['in'] * 1024,
+                        'out': entry['out'] * 1024,
+                        'credit': entry['credit'] * 1024,
+                    }
+                    for entry in user.get('traffic_entries', [])
+                ]
+
+                return [{'traffic': traffic_entries}]
             else:
                 raise NotImplementedError
 
@@ -198,6 +211,22 @@ class TestGerokUser(AppInitialized):
                  'hostname': "baz", 'alias': "mein_neuer_laptop"},
             ],
             'credit': 2048,
+            'traffic_entries': [
+                {'relative_date': 0, 'credit': 2048,
+                 'in': 20202, 'out': 202020},
+                {'relative_date': -1, 'credit': 2048,
+                 'in': 20202, 'out': 202020},
+                {'relative_date': -2, 'credit': 2048,
+                 'in': 20202, 'out': 202020},
+                {'relative_date': -3, 'credit': 2048,
+                 'in': 20202, 'out': 202020},
+                {'relative_date': -4, 'credit': 2048,
+                 'in': 20202, 'out': 202020},
+                {'relative_date': -5, 'credit': 2048,
+                 'in': 20202, 'out': 202020},
+                {'relative_date': -6, 'credit': 2048,
+                 'in': 20202, 'out': 202020},
+            ]
         },
         '2': {  # empty mail address
             'login': "test2",
@@ -249,6 +278,23 @@ class TestGerokUser(AppInitialized):
         for user_id, value in self.users.items():
             yield user_id, value['login'], value['password']
 
+    def get_corresponding_entry(self, static_entries, user_entry):
+        """Find the matching sample traffic entry of `self.users`
+
+        Return None if the entry is nonexistent or `user_data`
+        contains none at all
+        """
+        try:
+            for entry in static_entries:
+                if (date_from_delta(entry['relative_date']).weekday() ==
+                        user_entry['day']):
+                    return entry
+                    break
+            else:
+                return
+        except KeyError:
+            return
+
     def assert_userdata_passed(self, user, user_data):
         """Test if contents of `user_data` fully appear in the `user` object
         """
@@ -270,6 +316,31 @@ class TestGerokUser(AppInitialized):
             self.assertIn(host['hostname'], user.hostname.value)
             self.assertIn(host['alias'], user.hostalias.value)
         self.assertEqual(user.credit, user_data.get('credit', 0) / 1024)
+        for entry in user.traffic_history:
+            try:
+                corresponding = self.get_corresponding_entry(
+                    user_data['traffic_entries'],
+                    entry,
+                )
+            except KeyError:
+                corresponding = None
+
+            if corresponding is not None:
+                self.assertAlmostEqual(
+                    corresponding['in'] + corresponding['out'],
+                    entry['throughput'],
+                    delta=5,
+                )
+                self.assertAlmostEqual(
+                    corresponding['credit'],
+                    entry['credit'],
+                    delta=5,
+                )
+            else:
+                self.assertEqual(entry['input'], 0)
+                self.assertEqual(entry['output'], 0)
+                self.assertEqual(entry['throughput'], 0)
+                self.assertEqual(entry['credit'], 0)
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_explicit_init(self):

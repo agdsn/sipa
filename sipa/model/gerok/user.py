@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-import datetime
+from datetime import date, timedelta
 
+import requests
 from flask.ext.login import AnonymousUserMixin
 from flask.globals import current_app
-import requests
 from werkzeug.local import LocalProxy
 
 from sipa.model.default import BaseUser
-from sipa.model.property import (active_prop, unsupported_prop,
-                                 connection_dependent)
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.property import active_prop, connection_dependent, \
+    unsupported_prop
 from sipa.utils import argstr
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
 
 endpoint = LocalProxy(lambda: current_app.extensions['gerok_api']['endpoint'])
@@ -103,7 +103,7 @@ class User(BaseUser):
 
             # loop through expected days ([-6..0])
             for d in range(-6, 1):
-                date = datetime.date.today() + datetime.timedelta(d)
+                date = date_from_delta(d)
                 day = date.weekday()
                 # pick the to `date` corresponding data
                 host = next((
@@ -225,3 +225,13 @@ def do_api_call(request, method='get', postdata=None):
         return response.json()
     except ValueError:
         return response.text
+
+
+def date_from_delta(delta):
+    """Return a `datetime.date` which differs delta days from today"""
+    return date.today() + timedelta(delta)
+
+
+def date_str_from_delta(delta):
+    """Return a date-string which differs delta days from today"""
+    return date_from_delta(delta).strftime("%Y-%m-%d")
