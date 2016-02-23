@@ -4,6 +4,7 @@ from itertools import chain
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 
+from flask.ext.login import AnonymousUserMixin
 from requests import Response
 
 from sipa.model.gerok.user import User, do_api_call
@@ -125,15 +126,14 @@ def fake_api(users_dict, request, method='get', postdata=None):
     action = parsed.path.rsplit('/')[-1]  # the bit after the last '/'
 
     if action == "find":
-        query_args = parse_qs(parsed.query)
+        query_args = parse_qs(parsed.query, keep_blank_values=True)
         if 'ip' in query_args.keys():
             ip = query_args['ip'][0]
             for user_id, value in users_dict.items():
                 if ip in [h['ip'] for h in value['hosts']]:
                     break
             else:
-                raise ValueError("No user with ip {} in self.users"
-                                 .format(ip))
+                return
         elif 'login' in query_args.keys():
             login = query_args['login'][0]
             for user_id, value in users_dict.items():
@@ -252,6 +252,12 @@ class TestGerokUser(AppInitialized):
             user_data = self.get_example_user(user_id)
             user = User.from_ip(ip)
             self.assert_userdata_passed(user=user, user_data=user_data)
+
+    @patch('sipa.model.gerok.user.do_api_call', api_mock)
+    def test_ip_constructor_foreign_ip(self):
+        for ip in ["0.0.0.0", "foobarrc", ""]:
+            user = User.from_ip(ip)
+            self.assertIsInstance(user, AnonymousUserMixin)
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_get_constructor(self):

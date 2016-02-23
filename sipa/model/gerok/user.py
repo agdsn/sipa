@@ -46,7 +46,7 @@ class User(BaseUser):
         """
         userData = do_api_call('find?login=' + str(username))
 
-        if userData is None:
+        if not userData:
             raise UserNotFound
 
         return cls(user_data=userData)
@@ -68,7 +68,7 @@ class User(BaseUser):
     def from_ip(cls, ip):
         userData = do_api_call('find?ip=' + ip)
 
-        if userData is None:
+        if not userData:
             return AnonymousUserMixin()
 
         return cls(user_data=userData)
