@@ -168,6 +168,8 @@ class TestGerokUser(AppInitialized):
             'mail': "",
             'status': "OK",
             'hosts': [
+                {'ip': "141.30.0.2", 'mac': "aa-bb-cc-dd-ee-fd",
+                 'hostname': "shizzle", 'alias': "mein_alter_dell"},
             ],
         },
     }
@@ -185,6 +187,11 @@ class TestGerokUser(AppInitialized):
             }
         except KeyError:
             raise ValueError("Id {} not in `users` dict".format(user_id))
+
+    def iter_user_ip_pairs(self):
+        for user_id in self.users:
+            for host in self.users[user_id]['hosts']:
+                yield (user_id, host['ip'])
 
     def assert_userdata_passed(self, user, user_data):
         """Test if contents of `user_data` fully appear in the `user` object
@@ -216,7 +223,7 @@ class TestGerokUser(AppInitialized):
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_ip_constructor(self):
-        user_data = self.get_example_user('1')
-        ip = user_data['hosts'][0]['ip']
-        user = User.from_ip(ip)
-        self.assert_userdata_passed(user=user, user_data=user_data)
+        for user_id, ip in self.iter_user_ip_pairs():
+            user_data = self.get_example_user(user_id)
+            user = User.from_ip(ip)
+            self.assert_userdata_passed(user=user, user_data=user_data)
