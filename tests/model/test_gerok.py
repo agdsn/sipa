@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlparse
 from requests import Response
 
 from sipa.model.gerok.user import User, do_api_call
+from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 from tests.prepare import AppInitialized
 
 
@@ -140,8 +141,19 @@ def fake_api(users_dict, request, method='get', postdata=None):
                     break
         else:
             raise NotImplementedError
+    elif action == "auth":
+        for user_id, value in users_dict.items():
+            if value['login'] == postdata['login']:
+                break
+        else:
+            return "NoAccount"
+        if postdata['pass'] != users_dict[user_id].get('password'):
+            return
+        # else: password was correct, leave `user_id` as is
     else:
         user_id = action
+
+    # Everything else: return user_data for an initialized `user_id`
     try:
         return {
             'id': user_id,
@@ -157,6 +169,7 @@ class TestGerokUser(AppInitialized):
     users = {
         '1': {
             'login': "test",
+            'password': "123",
             'name': "Günther Schulz",
             'address': "Gerokstraße 38, 00-0",
             'mail': "test@test.de",
@@ -170,6 +183,7 @@ class TestGerokUser(AppInitialized):
         },
         '2': {  # empty mail address
             'login': "test2",
+            'password': "1234",
             'name': "Nicht Günther Schulz",
             'address': "Gerokstraße 38, 00-1",
             'mail': "",
@@ -196,9 +210,13 @@ class TestGerokUser(AppInitialized):
             raise ValueError("Id {} not in `users` dict".format(user_id))
 
     def iter_user_ip_pairs(self):
-        for user_id in self.users:
+        for user_id in self.users.keys():
             for host in self.users[user_id]['hosts']:
                 yield (user_id, host['ip'])
+
+    def iter_user_login_password(self):
+        for user_id, value in self.users.items():
+            yield user_id, value['login'], value['password']
 
     def assert_userdata_passed(self, user, user_data):
         """Test if contents of `user_data` fully appear in the `user` object
@@ -237,7 +255,27 @@ class TestGerokUser(AppInitialized):
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_get_constructor(self):
-        for user_id, login in [(k, v['login']) for k, v in self.users.items()]:
+        for user_id, login, _ in self.iter_user_login_password():
             user_data = self.get_example_user(user_id)
             user = User.get(login)
             self.assert_userdata_passed(user=user, user_data=user_data)
+
+    @patch('sipa.model.gerok.user.do_api_call', api_mock)
+    def test_authentication_correct(self):
+        for user_id, login, password in self.iter_user_login_password():
+            user_data = self.get_example_user(user_id)
+            user = User.authenticate(login, password)
+            self.assert_userdata_passed(user=user, user_data=user_data)
+
+    @patch('sipa.model.gerok.user.do_api_call', api_mock)
+    def test_authentication_user_inexistent(self):
+        for not_a_login in ["foo", "bar"]:
+            with self.assertRaises(UserNotFound):
+                User.authenticate(not_a_login, password="")
+
+    @patch('sipa.model.gerok.user.do_api_call', api_mock)
+    def test_authentication_wrong_password(self):
+        for user_id, login, password in self.iter_user_login_password():
+            password = password + "wrong"
+            with self.assertRaises(PasswordInvalid):
+                User.authenticate(login, password)
