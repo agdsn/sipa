@@ -121,9 +121,17 @@ class TestGerokApiCall(AppInitialized):
 
 
 def fake_api(users_dict, request, method='get', postdata=None):
-    """A fake gerok api, replacing `do_api_call` for testing."""
+    """A fake gerok api, replacing `do_api_call` for testing.
+
+    The API trusts on an empty api_url in the config, so that the
+    request string is effectively the desired API path.  This is not
+    beautiful, but sufficient for testing purposes.
+    """
     parsed = urlparse(request)
-    action = parsed.path.rsplit('/')[-1]  # the bit after the last '/'
+    path_components = parsed.path.split('/')
+    if path_components[0] == '':
+        path_components = path_components[1:]
+    action = path_components[0]
 
     if action == "find":
         query_args = parse_qs(parsed.query, keep_blank_values=True)
@@ -152,6 +160,15 @@ def fake_api(users_dict, request, method='get', postdata=None):
         # else: password was correct, leave `user_id` as is
     else:
         user_id = action
+        if len(path_components) == 2:
+            action = path_components[1]
+            if action == 'credit':
+                user = users_dict[user_id]
+                return ([{'credit': user['credit']}]
+                        if 'credit' in user.keys()
+                        else "")
+            else:
+                raise NotImplementedError
 
     # Everything else: return user_data for an initialized `user_id`
     try:
@@ -180,6 +197,7 @@ class TestGerokUser(AppInitialized):
                 {'ip': "141.30.0.1", 'mac': "aa-bb-cc-dd-ee-fe",
                  'hostname': "baz", 'alias': "mein_neuer_laptop"},
             ],
+            'credit': 2048,
         },
         '2': {  # empty mail address
             'login': "test2",
@@ -190,6 +208,19 @@ class TestGerokUser(AppInitialized):
             'status': "OK",
             'hosts': [
                 {'ip': "141.30.0.2", 'mac': "aa-bb-cc-dd-ee-fd",
+                 'hostname': "shizzle", 'alias': "mein_alter_dell"},
+            ],
+            'credit': 4096,
+        },
+        '3': {  # no credit
+            'login': "test3",
+            'password': "1234",
+            'name': "Nicht Günther Schulz",
+            'address': "Gerokstraße 38, 00-1",
+            'mail': "",
+            'status': "OK",
+            'hosts': [
+                {'ip': "141.30.0.3", 'mac': "aa-bb-cc-dd-ee-fd",
                  'hostname': "shizzle", 'alias': "mein_alter_dell"},
             ],
         },
@@ -238,6 +269,7 @@ class TestGerokUser(AppInitialized):
             self.assertIn(host['mac'], user.mac.value)
             self.assertIn(host['hostname'], user.hostname.value)
             self.assertIn(host['alias'], user.hostalias.value)
+        self.assertEqual(user.credit, user_data.get('credit', 0) / 1024)
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_explicit_init(self):
