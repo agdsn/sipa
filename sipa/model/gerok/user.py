@@ -181,7 +181,10 @@ class User(BaseUser):
 
     @active_prop
     def mail(self):
-        return self._mail
+        if self._mail:
+            return self._mail
+        # TODO: Get mail suffix from `DataSource`
+        return "{}@wh17.tu-dresden.de".format(self._login)
 
     @active_prop
     @connection_dependent

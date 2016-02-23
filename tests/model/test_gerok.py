@@ -148,7 +148,7 @@ def fake_api(users_dict, request, method='get', postdata=None):
 
 class TestGerokUser(AppInitialized):
     users = {
-        '1245': {
+        '1': {
             'login': "test",
             'name': "Günther Schulz",
             'address': "Gerokstraße 38, 00-0",
@@ -159,6 +159,15 @@ class TestGerokUser(AppInitialized):
                  'hostname': "foobar", 'alias': "mein_laptop"},
                 {'ip': "141.30.0.1", 'mac': "aa-bb-cc-dd-ee-fe",
                  'hostname': "baz", 'alias': "mein_neuer_laptop"},
+            ],
+        },
+        '2': {  # empty mail address
+            'login': "test2",
+            'name': "Nicht Günther Schulz",
+            'address': "Gerokstraße 38, 00-1",
+            'mail': "",
+            'status': "OK",
+            'hosts': [
             ],
         },
     }
@@ -184,7 +193,10 @@ class TestGerokUser(AppInitialized):
         self.assertEqual(user.id.value, user_data['id'])
         self.assertEqual(user.login.value, user_data['login'])
         self.assertEqual(user.address.value, user_data['address'])
-        self.assertEqual(user.mail.value, user_data['mail'])
+        if user_data['mail']:
+            self.assertEqual(user.mail.value, user_data['mail'])
+        else:
+            self.assertIn(user_data['login'], user.mail.value)
         self.assertEqual(user.status.value, user_data['status'])
         self.assertEqual(user.realname.value, user_data['name'])
         for host in user_data['hosts']:
@@ -197,14 +209,14 @@ class TestGerokUser(AppInitialized):
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_explicit_init(self):
-        user_id = '1245'
-        user_data = self.get_example_user(user_id)
-        user = User(user_data)
-        self.assert_userdata_passed(user=user, user_data=user_data)
+        for user_id in ['1', '2']:
+            user_data = self.get_example_user(user_id)
+            user = User(user_data)
+            self.assert_userdata_passed(user=user, user_data=user_data)
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)
     def test_ip_constructor(self):
-        user_data = self.get_example_user('1245')
+        user_data = self.get_example_user('1')
         ip = user_data['hosts'][0]['ip']
         user = User.from_ip(ip)
         self.assert_userdata_passed(user=user, user_data=user_data)
