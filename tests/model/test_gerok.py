@@ -133,6 +133,13 @@ def fake_api(users_dict, request, method='get', postdata=None):
             else:
                 raise ValueError("No user with ip {} in self.users"
                                  .format(ip))
+        elif 'login' in query_args.keys():
+            login = query_args['login'][0]
+            for user_id, value in users_dict.items():
+                if value['login'] == login:
+                    break
+        else:
+            raise NotImplementedError
     else:
         user_id = action
     try:
@@ -226,4 +233,11 @@ class TestGerokUser(AppInitialized):
         for user_id, ip in self.iter_user_ip_pairs():
             user_data = self.get_example_user(user_id)
             user = User.from_ip(ip)
+            self.assert_userdata_passed(user=user, user_data=user_data)
+
+    @patch('sipa.model.gerok.user.do_api_call', api_mock)
+    def test_get_constructor(self):
+        for user_id, login in [(k, v['login']) for k, v in self.users.items()]:
+            user_data = self.get_example_user(user_id)
+            user = User.get(login)
             self.assert_userdata_passed(user=user, user_data=user_data)
