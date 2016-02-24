@@ -161,17 +161,16 @@ def init_logging(app):
     config = replace_empty_handler_callables(DEFAULT_CONFIG,
                                              register_sentry_handler)
     logging.config.dictConfig(config)
-    logger.debug('Loaded default log config dict', extra={'data': {
-        'DEFAULT_CONFIG': DEFAULT_CONFIG,
-    }})
 
     if app.config.get('LOG_CONFIG') is not None:
         config = replace_empty_handler_callables(app.config['LOG_CONFIG'],
                                                  register_sentry_handler)
         logging.config.dictConfig(config)
-        logger.debug('Loaded extra log config dict', extra={'data': {
-            'CONFIG': app.config['LOG_CONFIG'],
-        }})
+
+    logger.debug('Initialized logging', extra={'data': {
+        'DEFAULT_CONFIG': DEFAULT_CONFIG,
+        'EXTRA_CONFIG': app.config.get('LOG_CONFIG')
+    }})
 
 
 class ReverseProxied(object):

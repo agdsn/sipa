@@ -42,3 +42,14 @@ DEFAULT_CONFIG = {
         },
     }
 }
+
+WARNINGS_ONLY_CONFIG = {
+    'version': 1,
+    'incremental': True,
+    'loggers': {
+        'sipa': {
+            'level': 'WARNING',
+        },
+
+    }
+}
