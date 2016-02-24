@@ -83,17 +83,17 @@ def init_app(app):
 def init_env_and_config(app):
     # default configuration
     app.config.from_pyfile(os.path.realpath("sipa/default_config.py"))
+
     # if local config file exists, load everything into local space.
-    if 'SIPA_CONFIG_FILE' not in os.environ:
-        os.environ['SIPA_CONFIG_FILE'] = os.path.realpath("config.py")
-    try:
-        app.config.from_envvar('SIPA_CONFIG_FILE', silent=True)
-    except IOError:
-        logger.warning("SIPA_CONFIG_FILE not readable: %s",
-                       os.environ['SIPA_CONFIG_FILE'])
-    else:
-        logger.info("Successfully read config file %s",
-                    os.environ['SIPA_CONFIG_FILE'])
+    if 'SIPA_CONFIG_FILE' in os.environ:
+        try:
+            app.config.from_envvar('SIPA_CONFIG_FILE', silent=True)
+        except IOError:
+            logger.warning("SIPA_CONFIG_FILE not readable: %s",
+                           os.environ['SIPA_CONFIG_FILE'])
+        else:
+            logger.info("Successfully read config file %s",
+                        os.environ['SIPA_CONFIG_FILE'])
 
     app.config.update({
         name[len("SIPA_"):]: value for name, value in os.environ.items()
