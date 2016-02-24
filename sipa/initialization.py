@@ -152,7 +152,7 @@ def init_logging(app):
         logger.debug("No sentry DSN specified")
 
         def register_sentry_handler():
-            pass
+            return logging.NullHandler()
 
     # Apply default config dict
     config = replace_empty_handler_callables(DEFAULT_CONFIG,
