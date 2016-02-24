@@ -4,8 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
 from flask.ext.babel import lazy_gettext
-from flask.globals import current_app
-from werkzeug.local import LocalProxy
 
 from .schema import db
 
@@ -76,8 +74,6 @@ def init_db(app):
     elif not app.debug:
         logger.info("DB_HELIOS_HOST not set. Skipping `init_userdb()`.")
 
-db_helios = LocalProxy(lambda: current_app.extensions['db_helios'])
-
 STATUS = {
     1: (lazy_gettext('ok'), 'success'),
     2: (lazy_gettext('Nicht bezahlt, Netzanschluss gesperrt'), 'warning'),
@@ -87,13 +83,3 @@ STATUS = {
     12: (lazy_gettext('Trafficlimit überschritten, Netzanschluss gesperrt'),
          'danger')
 }
-
-
-def sql_query(query, args=(), database=db_helios):
-    """Prepare and execute a raw sql query.
-    'args' is a tuple needed for string replacement.
-    """
-    conn = database.connect()
-    result = conn.execute(query, args)
-    conn.close()
-    return result
