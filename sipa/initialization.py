@@ -99,6 +99,7 @@ def init_env_and_config(app):
         name[len("SIPA_"):]: value for name, value in os.environ.items()
         if name.startswith("SIPA_")
     })
+
     if app.config['FLATPAGES_ROOT'] == "":
         app.config['FLATPAGES_ROOT'] = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -123,8 +124,10 @@ def init_env_and_config(app):
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    if not app.config['SECRET_KEY']:
-        raise ValueError("SECRET_KEY must not be empty")
+    if not app.config.get('SECRET_KEY'):
+        if not app.debug:
+            logger.warning('SECRET_KEY not set. Using default Key.')
+        app.config['SECRET_KEY'] = "yIhswxbuDCvK8a6EDGihW6xjNognxtyO85SI"
 
 
 def init_logging(app):
