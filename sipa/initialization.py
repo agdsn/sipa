@@ -82,7 +82,7 @@ def init_app(app):
 
 def init_env_and_config(app):
     # default configuration
-    app.config.from_pyfile(os.path.realpath("sipa/default_config.py"))
+    app.config.from_pyfile(os.path.realpath("sipa/config/default.py"))
 
     # if local config file exists, load everything into local space.
     if 'SIPA_CONFIG_FILE' in os.environ:
