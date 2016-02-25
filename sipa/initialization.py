@@ -100,7 +100,7 @@ def init_env_and_config(app):
         if name.startswith("SIPA_")
     })
 
-    if app.config['FLATPAGES_ROOT'] == "":
+    if not app.config['FLATPAGES_ROOT']:
         app.config['FLATPAGES_ROOT'] = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             '../content')
