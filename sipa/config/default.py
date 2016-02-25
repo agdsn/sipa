@@ -9,8 +9,6 @@ which is a file not tracked in git containing IPs, user names, passwords, etc.
 
 SENTRY_DSN = ''
 
-LOG_FILE = '/tmp/error.log'
-
 CONTENT_URL = ""
 
 FLATPAGES_ROOT = ""
@@ -23,8 +21,6 @@ FLATPAGES_MARKDOWN_EXTENSIONS = [
     'meta',
     'attr_list'
 ]
-
-GENERIC_LOGGING = True
 
 # Mail configuration
 MAILSERVER_HOST = "127.0.0.1"
