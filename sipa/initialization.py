@@ -95,11 +95,6 @@ def init_env_and_config(app):
             logger.info("Successfully read config file %s",
                         os.environ['SIPA_CONFIG_FILE'])
 
-    app.config.update({
-        name[len("SIPA_"):]: value for name, value in os.environ.items()
-        if name.startswith("SIPA_")
-    })
-
     if not app.config['FLATPAGES_ROOT']:
         app.config['FLATPAGES_ROOT'] = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
