@@ -82,7 +82,7 @@ def init_app(app):
 
 def init_env_and_config(app):
     # default configuration
-    app.config.from_pyfile(os.path.realpath("sipa/default_config.py"))
+    app.config.from_pyfile(os.path.realpath("sipa/config/default.py"))
 
     # if local config file exists, load everything into local space.
     if 'SIPA_CONFIG_FILE' in os.environ:
@@ -95,12 +95,7 @@ def init_env_and_config(app):
             logger.info("Successfully read config file %s",
                         os.environ['SIPA_CONFIG_FILE'])
 
-    app.config.update({
-        name[len("SIPA_"):]: value for name, value in os.environ.items()
-        if name.startswith("SIPA_")
-    })
-
-    if app.config['FLATPAGES_ROOT'] == "":
+    if not app.config['FLATPAGES_ROOT']:
         app.config['FLATPAGES_ROOT'] = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             '../content')
@@ -161,17 +156,16 @@ def init_logging(app):
     config = replace_empty_handler_callables(DEFAULT_CONFIG,
                                              register_sentry_handler)
     logging.config.dictConfig(config)
-    logger.debug('Loaded default log config dict', extra={'data': {
-        'DEFAULT_CONFIG': DEFAULT_CONFIG,
-    }})
 
     if app.config.get('LOG_CONFIG') is not None:
         config = replace_empty_handler_callables(app.config['LOG_CONFIG'],
                                                  register_sentry_handler)
         logging.config.dictConfig(config)
-        logger.debug('Loaded extra log config dict', extra={'data': {
-            'CONFIG': app.config['LOG_CONFIG'],
-        }})
+
+    logger.debug('Initialized logging', extra={'data': {
+        'DEFAULT_CONFIG': DEFAULT_CONFIG,
+        'EXTRA_CONFIG': app.config.get('LOG_CONFIG')
+    }})
 
 
 class ReverseProxied(object):

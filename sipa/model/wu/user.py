@@ -13,7 +13,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.default import BaseUser, BaseUserDB
 from sipa.model.property import active_prop, connection_dependent
-from sipa.model.wu.database_utils import STATUS, sql_query
+from sipa.model.wu.database_utils import STATUS
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
 from sipa.model.wu.schema import db
@@ -351,10 +351,21 @@ class UserDB(BaseUserDB):
             raise ValueError("Mask {} is not a valid IP address or contains "
                              "more than one consecutive '%' sign".format(mask))
 
+    @staticmethod
+    def sql_query(query, args=()):
+        """Prepare and execute a raw sql query.
+        'args' is a tuple needed for string replacement.
+        """
+        database = current_app.extensions['db_helios']
+        conn = database.connect()
+        result = conn.execute(query, args)
+        conn.close()
+        return result
+
     @property
     def has_db(self):
         try:
-            userdb = sql_query(
+            userdb = self.sql_query(
                 "SELECT SCHEMA_NAME "
                 "FROM INFORMATION_SCHEMA.SCHEMATA "
                 "WHERE SCHEMA_NAME = %s",
@@ -367,25 +378,25 @@ class UserDB(BaseUserDB):
             raise
 
     def create(self, password):
-        sql_query(
+        self.sql_query(
             "CREATE DATABASE "
             "IF NOT EXISTS `%s`" % self.user.uid,
         )
         self.change_password(password)
 
     def drop(self):
-        sql_query(
+        self.sql_query(
             "DROP DATABASE "
             "IF EXISTS `%s`" % self.user.uid,
         )
 
-        sql_query(
+        self.sql_query(
             "DROP USER %s@%s",
             (self.user.uid, self.ip_mask),
         )
 
     def change_password(self, password):
-        user = sql_query(
+        user = self.sql_query(
             "SELECT user "
             "FROM mysql.user "
             "WHERE user = %s",
@@ -393,19 +404,19 @@ class UserDB(BaseUserDB):
         ).fetchall()
 
         if not user:
-            sql_query(
+            self.sql_query(
                 "CREATE USER %s@%s "
                 "IDENTIFIED BY %s",
                 (self.user.uid, self.ip_mask, password,),
             )
         else:
-            sql_query(
+            self.sql_query(
                 "SET PASSWORD "
                 "FOR %s@%s = PASSWORD(%s)",
                 (self.user.uid, self.ip_mask, password,),
             )
 
-        sql_query(
+        self.sql_query(
             "GRANT SELECT, INSERT, UPDATE, DELETE, "
             "ALTER, CREATE, DROP, INDEX, LOCK TABLES "
             "ON `{}`.* "
