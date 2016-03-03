@@ -12,14 +12,14 @@ from .babel import babel, locale_preferences
 
 
 class Node:
-    def __init__(self, parent, id):
+    def __init__(self, parent, node_id):
         self.parent = parent
-        self.id = id
+        self.id = node_id
 
 
 class Article(Node):
-    def __init__(self, parent, id):
-        super().__init__(parent, id)
+    def __init__(self, parent, article_id):
+        super().__init__(parent, article_id)
         self.localized_pages = {}
         self.default_page = None
 
@@ -112,8 +112,8 @@ class Category(Node):
 
     - Containing articles → should be iterable!
     """
-    def __init__(self, parent, id):
-        super().__init__(parent, id)
+    def __init__(self, parent, category_id):
+        super().__init__(parent, category_id)
         self.categories = {}
         self._articles = {}
 
