@@ -3,16 +3,16 @@
 """
 Utils for sending emails via SMTP on localhost.
 """
-
-from email.utils import formatdate, make_msgid
-from email.mime.text import MIMEText
-from flask import current_app
-
+import logging
 import smtplib
 import textwrap
 
+from email.utils import formatdate, make_msgid
+from email.mime.text import MIMEText
 
-import logging
+from flask import current_app
+
+
 logger = logging.getLogger(__name__)
 
 

@@ -4,16 +4,15 @@
 General utilities
 """
 
+import http.client
+import json
+import socket
 import time
 from functools import wraps
 from itertools import chain
 
 from flask import flash, redirect, request, url_for
 from flask.ext.login import current_user
-
-import http.client
-import json
-import socket
 
 
 def timetag_today():

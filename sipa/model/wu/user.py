@@ -4,7 +4,6 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta
 from ipaddress import IPv4Address, AddressValueError
 
-from .schema import Computer, Credit, Nutzer, Traffic
 from flask import current_app
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
@@ -19,6 +18,7 @@ from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
 from sipa.model.wu.schema import db
 from sipa.utils import argstr, timetag_today
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from .schema import Computer, Credit, Nutzer, Traffic
 
 
 logger = logging.getLogger(__name__)

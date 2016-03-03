@@ -3,10 +3,9 @@
 import pygal
 from pygal.style import Style
 from pygal.colors import hsl_to_rgb
-from sipa.utils.babel_utils import get_weekday
 from flask.ext.babel import gettext
 
-from operator import add
+from sipa.utils.babel_utils import get_weekday
 
 
 def rgb_string(r, g, b):

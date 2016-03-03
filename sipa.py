@@ -10,7 +10,9 @@
 """
 
 import argparse
+
 from sipa import create_app
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sipa launcher")
