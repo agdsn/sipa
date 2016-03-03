@@ -3,8 +3,10 @@ python:
   - "3.5"
 install:
   - "pip install -r requirements.txt"
-  - "pip install Flask-Testing coverage"
+  - "pip install Flask-Testing coverage pep8"
   # nose is already installed by default.
 cache:
   - pip
-script: "python manage.py test"
+script:
+  - "python manage.py test"
+  - "pep8 ."
