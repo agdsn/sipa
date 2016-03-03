@@ -20,7 +20,8 @@ def absolute_path_replacer(match):
 
 
 class LinkPostprocessor(Postprocessor):
-    def run(self, text):
+    @staticmethod
+    def run(text):
         return re.sub(
             '(href|src)="(/[^"]*)"',
             absolute_path_replacer,
@@ -32,7 +33,8 @@ class LinkPostprocessor(Postprocessor):
 class AbsoluteLinkExtension(Extension):
     """ Add the absolute link patch to Markdown. """
 
-    def extendMarkdown(self, md, md_globals):
+    @staticmethod
+    def extendMarkdown(md, md_globals):
         """ Add an instance of TableProcessor to BlockParser. """
         md.postprocessors['link_patch'] = LinkPostprocessor(md)
 
