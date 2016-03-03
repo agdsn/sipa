@@ -261,7 +261,7 @@ class User(BaseUser):
 
     @mail.deleter
     def mail(self):
-        self.mail = ''
+        self._mail = ''
 
     @active_prop
     def address(self):
