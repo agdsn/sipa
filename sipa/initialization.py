@@ -111,7 +111,7 @@ def init_env_and_config(app):
         def update_uwsgi(signum):
             hasToReload = update_repo(app.config["FLATPAGES_ROOT"])
             if hasToReload:
-                uwsgi.reload
+                uwsgi.reload()
 
         logger.info("Registering repo update to uwsgi_signal")
         uwsgi.register_signal(20, "", update_uwsgi)
