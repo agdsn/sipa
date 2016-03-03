@@ -88,10 +88,9 @@ def exceptionhandler_ldap(ex):
     also needs a handler.
     """
     session.clear()
-    flash(gettext(
-        "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"),
-        "error"
-    )
+    flash(gettext("Verbindung zum LDAP-Server "
+                  "konnte nicht hergestellt werden!"),
+          'error')
     logger.critical(
         'Unable to connect to LDAP server',
         extra={'data': {'exception_args': ex.args}}
@@ -184,7 +183,7 @@ def unit(number):
 @bp_generic.app_template_filter('gib')
 def to_gigabytes(number):
     """Convert a number from KiB to GiB"""
-    return number / 1024**2
+    return number / 1024 ** 2
 
 
 @bp_generic.route("/usertraffic")
@@ -280,7 +279,8 @@ def contact():
 def version():
     """ Display version information from local repo """
     sipa_dir = '/home/sipa/sipa'
-    return render_template('version.html',
-                           active_branch=get_repo_active_branch(sipa_dir),
-                           commits=get_latest_commits(sipa_dir, 20)
-                           )
+    return render_template(
+        'version.html',
+        active_branch=get_repo_active_branch(sipa_dir),
+        commits=get_latest_commits(sipa_dir, 20),
+    )
