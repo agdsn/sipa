@@ -135,7 +135,7 @@ def init_logging(app):
 
     # Configure Sentry client (raven)
     if app.config['SENTRY_DSN']:
-        logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
+        logger.debug("Sentry DSN: %s", app.config['SENTRY_DSN'])
         sentry = Sentry()
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
