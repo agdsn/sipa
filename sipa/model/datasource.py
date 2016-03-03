@@ -58,7 +58,7 @@ class SubnetCollection:
     """
 
     def __init__(self, subnets):
-        if type(subnets) == list:
+        if isinstance(subnets, list):
             for subnet in subnets:
                 if not isinstance(subnet, IPv4Network):
                     raise TypeError("List of IPv4Network objects expected "
