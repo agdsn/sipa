@@ -98,7 +98,7 @@ class User(BaseUser):
                           .filter(Nutzer.status.in_([1, 2, 7, 12]))
                           .one())
         except NoResultFound:
-            return AnonymousUserMixin
+            return AnonymousUserMixin()
 
         username = sql_nutzer.unix_account
 
