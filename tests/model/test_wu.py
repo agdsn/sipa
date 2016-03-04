@@ -1,7 +1,36 @@
 from itertools import permutations
 from unittest import TestCase
+from unittest.mock import MagicMock, patch
 
-from sipa.model.wu.user import UserDB
+from sipa.model.wu.user import User, UserDB
+
+
+class UserTestCase(TestCase):
+    ldap_search_mock = MagicMock(return_value=False)
+    userdb_mock = MagicMock()
+
+    def setUp(self):
+        self.ldap_search_mock.reset_mock()
+        self.userdb_mock.reset_mock()
+
+    @patch('sipa.model.wu.user.search_in_group', ldap_search_mock)
+    @patch('sipa.model.wu.user.UserDB', userdb_mock)
+    def test_explicit_init(self):
+        sample_user = {
+            'uid': 'testnutzer',
+            'name': "Test Nutzer",
+            'mail': "test@nutzer.de",
+        }
+
+        user = User(
+            uid=sample_user['uid'],
+            name=sample_user['name'],
+            mail=sample_user['mail'],
+        )
+        self.assertEqual(user.name, sample_user['name'])
+        self.assertEqual(user.group, 'passive')
+        self.assertEqual(user.mail.value, sample_user['mail'])
+        assert self.userdb_mock.called
 
 
 class UserDBTestCase(TestCase):
