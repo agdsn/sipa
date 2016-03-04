@@ -32,6 +32,30 @@ class UserTestCase(TestCase):
         self.assertEqual(user.mail.value, sample_user['mail'])
         assert self.userdb_mock.called
 
+    @patch('sipa.model.wu.user.UserDB', userdb_mock)
+    def test_define_group(self):
+        sample_users = {
+            # <uid>: <resulting_group>
+            'uid1': 'passive',
+            'uid2': 'active',
+            'uid3': 'exactive',
+        }
+
+        def fake_search_in_group(uid, group_string):
+            if group_string == "Aktiv":
+                return sample_users[uid] == 'active'
+            elif group_string == "Exaktiv":
+                return sample_users[uid] == 'exactive'
+            else:
+                raise NotImplementedError
+
+        for uid, group in sample_users.items():
+            with patch('sipa.model.wu.user.search_in_group',
+                       fake_search_in_group):
+                user = User(uid=uid, name="", mail="")
+                self.assertEqual(user.define_group(), group)
+        return
+
 
 class UserDBTestCase(TestCase):
     def test_ipmask_validity_checker(self):
