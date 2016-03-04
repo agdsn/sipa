@@ -3,6 +3,7 @@ from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from flask.ext.login import AnonymousUserMixin
+from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
@@ -124,6 +125,13 @@ class UserTestCase(TestCase):
                 ldap_mock().__enter__.side_effect = raise_exception
                 with self.assertRaises(exception_class):
                     User.authenticate(username=None, password=None)
+
+    def test_from_ip_returns_anonymous(self):
+        def raise_noresult(*a, **kw): raise NoResultFound
+        with patch('sipa.model.wu.user.db') as db_mock:
+            db_mock.session.query.side_effect = raise_noresult
+            user = User.from_ip(ip=None)
+            self.assertIsInstance(user, AnonymousUserMixin)
 
 
 class UserDBTestCase(TestCase):
