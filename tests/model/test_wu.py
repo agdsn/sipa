@@ -87,6 +87,12 @@ class UserTestCase(TestCase):
             self.assertIsInstance(user, User)
             self.assert_userdata_passed(user, test_user)
 
+    def test_get_constructor_returns_anonymous(self):
+        with patch('sipa.model.wu.user.LdapConnector') as LdapConnectorMock:
+            LdapConnectorMock.fetch_user.return_value = None
+            user = User.authenticate("foo", "bar")
+        self.assertIsInstance(user, AnonymousUserMixin)
+
 
 class UserDBTestCase(TestCase):
     def test_ipmask_validity_checker(self):
