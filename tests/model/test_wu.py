@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 from flask.ext.login import AnonymousUserMixin
 
 from sipa.model.wu.user import User, UserDB
+from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
 
 
 class UserTestCase(TestCase):
@@ -92,6 +93,37 @@ class UserTestCase(TestCase):
             LdapConnectorMock.fetch_user.return_value = None
             user = User.authenticate("foo", "bar")
         self.assertIsInstance(user, AnonymousUserMixin)
+
+    def test_authentication_passing(self):
+        """Test correct instanciation behaviour of `User.authenticate`.
+
+        It is checked whether the ldap is called correctly and
+        instanciation is done using `User.get`.
+        """
+        sample_users = [
+            ("uid", "pass"),
+            ("foo", "bar"),
+            ("baz", None),
+        ]
+        for uid, password in sample_users:
+            with patch('sipa.model.wu.user.LdapConnector') as ldap_mock, \
+                 patch('sipa.model.wu.user.User.get') as get_mock:
+                User.authenticate(uid, password)
+
+                self.assertEqual(ldap_mock.call_args[0], (uid, password))
+                self.assertEqual(get_mock.call_args[0], (uid,))
+
+    def test_authentication_reraise_unknown_user(self):
+        """Test that certain exceptions are re-raised by `User.authenticate`.
+
+        Objects of interest are `UserNotFound`, `PasswordInvalid`.
+        """
+        for exception_class in [UserNotFound, PasswordInvalid]:
+            def raise_exception(): raise exception_class()
+            with patch('sipa.model.wu.user.LdapConnector') as ldap_mock:
+                ldap_mock().__enter__.side_effect = raise_exception
+                with self.assertRaises(exception_class):
+                    User.authenticate(username=None, password=None)
 
 
 class UserDBTestCase(TestCase):
