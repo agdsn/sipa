@@ -111,7 +111,7 @@ def init_env_and_config(app):
         def update_uwsgi(signum):
             hasToReload = update_repo(app.config["FLATPAGES_ROOT"])
             if hasToReload:
-                uwsgi.reload
+                uwsgi.reload()
 
         logger.info("Registering repo update to uwsgi_signal")
         uwsgi.register_signal(20, "", update_uwsgi)
@@ -135,7 +135,7 @@ def init_logging(app):
 
     # Configure Sentry client (raven)
     if app.config['SENTRY_DSN']:
-        logger.debug("Sentry DSN: {}".format(app.config['SENTRY_DSN']))
+        logger.debug("Sentry DSN: %s", app.config['SENTRY_DSN'])
         sentry = Sentry()
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 

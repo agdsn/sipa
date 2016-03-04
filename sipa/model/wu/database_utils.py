@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
+import logging
 
+from flask.ext.babel import lazy_gettext
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
-from flask.ext.babel import lazy_gettext
-
 from .schema import db
 
-
-import logging
 logger = logging.getLogger(__name__)
 
 

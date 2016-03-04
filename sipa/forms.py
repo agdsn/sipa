@@ -2,16 +2,17 @@
 import re
 from operator import itemgetter
 
-from flask import flash
 from flask.ext.babel import gettext, lazy_gettext
+from flask import flash
 from flask_wtf import Form
-from sipa.model import (list_all_dormitories, preferred_dormitory_name,
-                        registered_dormitories)
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
                      StringField, TextAreaField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
                                 MacAddress, Regexp, ValidationError)
+
+from sipa.model import (list_all_dormitories, preferred_dormitory_name,
+                        registered_dormitories)
 
 
 class PasswordComplexity(object):

@@ -75,6 +75,10 @@ class User(BaseUser):
 
     def cache_information(self, user_data=None):
         if user_data is None:
+            # If neither an _id nor user_data is provided, this is a
+            # bug.
+            assert hasattr(self, '_id')
+            # pylint: disable=access-member-before-definition
             user_data = do_api_call(str(self._id))
 
         self._id = user_data['id']

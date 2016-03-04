@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from flask.globals import current_app
 import ldap3
 from werkzeug.local import LocalProxy
@@ -6,7 +8,6 @@ from werkzeug.local import LocalProxy
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
     LDAPConnectionError
 
-import logging
 logger = logging.getLogger(__name__)
 
 

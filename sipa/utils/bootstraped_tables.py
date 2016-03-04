@@ -23,7 +23,8 @@ from markdown.util import etree
 class BootstrapedTableProcessor(BlockProcessor):
     """ Process Tables. """
 
-    def test(self, parent, block):
+    @staticmethod
+    def test(parent, block):
         rows = block.split('\n')
         return (len(rows) > 2 and '|' in rows[0] and
                 '|' in rows[1] and '-' in rows[1] and
@@ -76,7 +77,8 @@ class BootstrapedTableProcessor(BlockProcessor):
             if a:
                 c.set('align', a)
 
-    def _split_row(self, row, border):
+    @staticmethod
+    def _split_row(row, border):
         """ split a row of text into list of cells. """
         if border:
             if row.startswith('|'):
@@ -89,7 +91,8 @@ class BootstrapedTableProcessor(BlockProcessor):
 class BootstrapedTableExtension(Extension):
     """ Add tables to Markdown. """
 
-    def extendMarkdown(self, md, md_globals):
+    @staticmethod
+    def extendMarkdown(md, md_globals):
         """ Add an instance of TableProcessor to BlockParser. """
         md.parser.blockprocessors.add('bootstraped-tables',
                                       BootstrapedTableProcessor(md.parser),
