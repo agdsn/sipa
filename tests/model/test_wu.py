@@ -9,7 +9,7 @@ from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
 
 
-class UserTestCase(TestCase):
+class UserNoDBTestCase(TestCase):
     userdb_mock = MagicMock()
 
     def setUp(self):
@@ -132,6 +132,9 @@ class UserTestCase(TestCase):
             db_mock.session.query.side_effect = raise_noresult
             user = User.from_ip(ip=None)
             self.assertIsInstance(user, AnonymousUserMixin)
+
+    # TODO: Comprehensively test `from_ip` testing with sample database
+    # e.g. test that the correct status coder have been used in the filter
 
 
 class UserDBTestCase(TestCase):
