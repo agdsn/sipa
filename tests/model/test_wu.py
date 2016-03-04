@@ -56,6 +56,24 @@ class UserTestCase(TestCase):
                 self.assertEqual(user.define_group(), group)
         return
 
+    @patch('sipa.model.wu.user.search_in_group', ldap_search_mock)
+    @patch('sipa.model.wu.user.UserDB', userdb_mock)
+    def test_get_constructor(self):
+        test_users = [
+            {'uid': "uid", 'name': "Name Eins", 'mail': "test@foo.bar"},
+            {'uid': "uid", 'name': "Mareike Musterfrau", 'mail': "test@foo.baz"},
+            {'uid': "uid", 'name': "Transgender Foobar", 'mail': "shizzle@damn.onion"},
+        ]
+
+        for test_user in test_users:
+            with patch('sipa.model.wu.user.LdapConnector') as mock:
+                mock().fetch_user.return_value = test_user
+
+                user = User.get(test_user['uid'])
+                assert mock.called
+            self.assertIsInstance(user, User)
+            # TODO: replace by generic method
+
 
 class UserDBTestCase(TestCase):
     def test_ipmask_validity_checker(self):
