@@ -2,34 +2,46 @@ from itertools import permutations
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
+from flask.ext.login import AnonymousUserMixin
+
 from sipa.model.wu.user import User, UserDB
 
 
 class UserTestCase(TestCase):
-    ldap_search_mock = MagicMock(return_value=False)
     userdb_mock = MagicMock()
 
     def setUp(self):
-        self.ldap_search_mock.reset_mock()
         self.userdb_mock.reset_mock()
 
-    @patch('sipa.model.wu.user.search_in_group', ldap_search_mock)
+    def assert_userdata_passed(self, user, user_dict):
+        self.assertEqual(user.name, user_dict['name'])
+        self.assertEqual(user.group, user_dict.get('group', 'passive'))
+        self.assertEqual(user.mail.value, user_dict['mail'])
+
+    @staticmethod
+    def patch_user_group(user_dict):
+        return patch(
+            'sipa.model.wu.user.User.define_group',
+            MagicMock(return_value=user_dict.get('group', 'passive'))
+        )
+
     @patch('sipa.model.wu.user.UserDB', userdb_mock)
     def test_explicit_init(self):
         sample_user = {
             'uid': 'testnutzer',
             'name': "Test Nutzer",
             'mail': "test@nutzer.de",
+            'group': 'passive',
         }
 
-        user = User(
-            uid=sample_user['uid'],
-            name=sample_user['name'],
-            mail=sample_user['mail'],
-        )
-        self.assertEqual(user.name, sample_user['name'])
-        self.assertEqual(user.group, 'passive')
-        self.assertEqual(user.mail.value, sample_user['mail'])
+        with self.patch_user_group(sample_user):
+            user = User(
+                uid=sample_user['uid'],
+                name=sample_user['name'],
+                mail=sample_user['mail'],
+            )
+
+        self.assert_userdata_passed(user, sample_user)
         assert self.userdb_mock.called
 
     @patch('sipa.model.wu.user.UserDB', userdb_mock)
@@ -56,23 +68,24 @@ class UserTestCase(TestCase):
                 self.assertEqual(user.define_group(), group)
         return
 
-    @patch('sipa.model.wu.user.search_in_group', ldap_search_mock)
     @patch('sipa.model.wu.user.UserDB', userdb_mock)
     def test_get_constructor(self):
         test_users = [
-            {'uid': "uid", 'name': "Name Eins", 'mail': "test@foo.bar"},
-            {'uid': "uid", 'name': "Mareike Musterfrau", 'mail': "test@foo.baz"},
-            {'uid': "uid", 'name': "Transgender Foobar", 'mail': "shizzle@damn.onion"},
+            {'uid': "uid1", 'name': "Name Eins", 'mail': "test@foo.bar"},
+            {'uid': "uid2", 'name': "Mareike Musterfrau", 'mail': "test@foo.baz"},
+            {'uid': "uid3", 'name': "Deine Mutter", 'mail': "shizzle@damn.onion"},
         ]
 
         for test_user in test_users:
-            with patch('sipa.model.wu.user.LdapConnector') as mock:
-                mock().fetch_user.return_value = test_user
+            with self.patch_user_group(test_user), \
+                 patch('sipa.model.wu.user.LdapConnector') as LdapConnectorMock:
+                    LdapConnectorMock.fetch_user.return_value = test_user
 
-                user = User.get(test_user['uid'])
-                assert mock.called
+                    user = User.get(test_user['uid'])
+                    assert LdapConnectorMock.fetch_user.called
+
             self.assertIsInstance(user, User)
-            # TODO: replace by generic method
+            self.assert_userdata_passed(user, test_user)
 
 
 class UserDBTestCase(TestCase):
