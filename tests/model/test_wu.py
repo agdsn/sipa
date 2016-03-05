@@ -3,10 +3,13 @@ from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from flask.ext.login import AnonymousUserMixin
+from mixer.backend.sqlalchemy import Mixer
 from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
+from sipa.model.wu.schema import db, Computer, Nutzer
+from tests.prepare import AppInitialized
 
 
 class UserNoDBTestCase(TestCase):
@@ -135,6 +138,29 @@ class UserNoDBTestCase(TestCase):
 
     # TODO: Comprehensively test `from_ip` testing with sample database
     # e.g. test that the correct status coder have been used in the filter
+
+
+class UserWithDBTestCase(AppInitialized):
+    def create_app(self):
+        test_app = super().create_app(additional_config={
+            'WU_CONNECTION_STRING': "sqlite:///",
+        })
+        return test_app
+
+    def setUp(self):
+        db.create_all()
+        self.mixer = Mixer(session=db.session, commit=True)
+
+        nutzer_id = 1
+        ip = "141.30.228.65"
+
+        self.nutzer = self.mixer.blend(Nutzer, nutzer_id=nutzer_id)
+        self.computer = self.mixer.blend(Computer, nutzer=self.nutzer, c_ip=ip)
+
+    def test_self_nutzer_created(self):
+        fetched_nutzer = db.session.query(Nutzer).one()
+        self.assertEqual(self.nutzer, fetched_nutzer)
+        self.assertEqual([self.computer], fetched_nutzer.computer)
 
 
 class UserDBTestCase(TestCase):
