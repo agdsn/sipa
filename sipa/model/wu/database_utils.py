@@ -10,7 +10,15 @@ from .schema import db
 logger = logging.getLogger(__name__)
 
 
-def init_atlantis(app):
+def init_atlantis(app, static_connection_string=None):
+    if static_connection_string:
+        app.config['SQLALCHEMY_DATABASE_URI'] = static_connection_string
+        app.config['SQLALCHEMY_BINDS'] = {
+            'traffic': static_connection_string
+        }
+        db.init_app(app)
+        return
+
     url_base = (
         "mysql+pymysql://{user}:{pw}@{host}:3306/{{}}"
         "?connect_timeout={timeout}"
@@ -64,6 +72,8 @@ def init_db(app):
     """Register atlantis and userdb extensions onto the app object"""
     if app.config.get('DB_ATLANTIS_HOST'):
         init_atlantis(app)
+    elif app.config.get('WU_CONNECTION_STRING'):
+        init_atlantis(app, static_connection_string=app.config['WU_CONNECTION_STRING'])
     elif not app.debug:
         logger.info("DB_ATLANTIS_HOST not set. Skipping `init_atlantis()`.")
 
