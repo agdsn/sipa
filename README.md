@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/agdsn/sipa.svg?branch=develop)](https://travis-ci.org/agdsn/sipa)
+
 SIPA - Supreme Information Providing Application
 ================================================
 
