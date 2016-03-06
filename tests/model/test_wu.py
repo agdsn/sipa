@@ -178,6 +178,37 @@ class UserWithDBTestCase(WuAtlantisMixerInitialized):
             self.assertIn("LDAP", warning_mock.call_args[0][0])
 
 
+class TestUserInitializedCase(WuAtlantisMixerInitialized):
+    def setUp(self):
+        super().setUp()
+
+        nutzer_id = 1
+        ip = "141.30.228.65"
+
+        self.nutzer = self.mixer.blend(Nutzer, nutzer_id=nutzer_id, status=1)
+        self.computer = self.mixer.blend(Computer, nutzer=self.nutzer, c_ip=ip)
+
+        self.name = "Test Nutzer"
+        self.mail = "foo@bar.baz"
+
+        with patch('sipa.model.wu.user.search_in_group', MagicMock(return_value=False)):
+            self.user = User(
+                uid=self.nutzer.unix_account,
+                name=self.name,
+                mail=self.mail,
+            )
+
+    def test_mail_passed(self):
+        self.assertEqual(self.user.mail.value, self.mail)
+
+    def test_ips_passed(self):
+        for computer in self.nutzer.computer:
+            self.assertIn(computer.c_ip, self.user.ips.value)
+
+    def test_address_passed(self):
+        self.assertEqual(self.user.address, self.nutzer.address)
+
+
 class UserDBTestCase(TestCase):
     def test_ipmask_validity_checker(self):
         valid_elements = ['1', '125', '255', '%']
