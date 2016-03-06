@@ -12,7 +12,8 @@ class AppInitialized(TestCase):
         test_app.config['LOG_CONFIG'] = WARNINGS_ONLY_CONFIG
         test_app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
         test_app.debug = True
-        if additional_config:
-            test_app.config.update(additional_config)
-        test_app = create_app(app=test_app)
+        test_app = create_app(
+            app=test_app,
+            config=additional_config if additional_config else {},
+        )
         return test_app

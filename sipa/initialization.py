@@ -25,7 +25,7 @@ from sipa.utils.graph_utils import (generate_credit_chart,
 logger = logging.getLogger(__name__)
 
 
-def init_app(app):
+def init_app(app, **kwargs):
     """Initialize the Flask app located in the module sipa.
     This initializes the Flask app by:
     * calling the internal init_app() procedures of each module
@@ -34,7 +34,7 @@ def init_app(app):
     :return: None
     """
     app.wsgi_app = ReverseProxied(app.wsgi_app)
-    init_env_and_config(app)
+    init_env_and_config(app, config=kwargs.pop('config', None))
     init_logging(app)
     logger.debug('Initializing app')
     login_manager.init_app(app)
@@ -80,9 +80,12 @@ def init_app(app):
     init_context(app)
 
 
-def init_env_and_config(app):
+def init_env_and_config(app, config=None):
     # default configuration
     app.config.from_pyfile(os.path.realpath("sipa/config/default.py"))
+
+    if config:
+        app.config.update(config)
 
     # if local config file exists, load everything into local space.
     if 'SIPA_CONFIG_FILE' in os.environ:
