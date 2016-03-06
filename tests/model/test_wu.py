@@ -148,12 +148,33 @@ class UserWithDBTestCase(WuAtlantisMixerInitialized):
         nutzer_id = 1
         ip = "141.30.228.65"
 
-        self.nutzer = self.mixer.blend(Nutzer, nutzer_id=nutzer_id)
+        self.nutzer = self.mixer.blend(Nutzer, nutzer_id=nutzer_id, status=1)
         self.computer = self.mixer.blend(Computer, nutzer=self.nutzer, c_ip=ip)
+
+    @staticmethod
+    def get_sql_user_from_login(unix_account):
+        return db.session.query(Nutzer).filter_by(unix_account=unix_account).one()
 
     def test_from_ip_returns_anonymous(self):
         user = User.from_ip("141.30.228.66")
         self.assertIsInstance(user, AnonymousUserMixin)
+
+    def test_from_ip_user_returned(self):
+        with patch('sipa.model.wu.user.User.get') as user_get_mock:
+            user_get_mock.side_effect = self.get_sql_user_from_login
+
+            user = User.from_ip(self.computer.c_ip)
+            self.assertEqual(user_get_mock.call_args[0],
+                             (self.nutzer.unix_account,))
+            self.assertEqual(user, self.nutzer)
+
+    def test_from_ip_user_not_in_ldap(self):
+        with patch('sipa.model.wu.user.User.get', MagicMock(return_value=None)), \
+                patch('sipa.model.wu.user.logger.warning') as warning_mock:
+            user = User.from_ip(self.computer.c_ip)
+            self.assertIsInstance(user, AnonymousUserMixin)
+            self.assertIn(" could not ", warning_mock.call_args[0][0])
+            self.assertIn("LDAP", warning_mock.call_args[0][0])
 
 
 class UserDBTestCase(TestCase):
