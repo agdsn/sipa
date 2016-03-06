@@ -134,6 +134,7 @@ class WuAtlantisMixerInitialized(AppInitialized):
     def create_app(self):
         test_app = super().create_app(additional_config={
             'WU_CONNECTION_STRING': "sqlite:///",
+            'DB_HELIOS_IP_MASK': "10.10.7.%",
         })
         return test_app
 
