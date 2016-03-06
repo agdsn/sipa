@@ -129,16 +129,6 @@ class UserNoDBTestCase(TestCase):
                 with self.assertRaises(exception_class):
                     User.authenticate(username=None, password=None)
 
-    def test_from_ip_returns_anonymous(self):
-        def raise_noresult(*a, **kw): raise NoResultFound
-        with patch('sipa.model.wu.user.db') as db_mock:
-            db_mock.session.query.side_effect = raise_noresult
-            user = User.from_ip(ip=None)
-            self.assertIsInstance(user, AnonymousUserMixin)
-
-    # TODO: Comprehensively test `from_ip` testing with sample database
-    # e.g. test that the correct status coder have been used in the filter
-
 
 class UserWithDBTestCase(AppInitialized):
     def create_app(self):
@@ -157,10 +147,9 @@ class UserWithDBTestCase(AppInitialized):
         self.nutzer = self.mixer.blend(Nutzer, nutzer_id=nutzer_id)
         self.computer = self.mixer.blend(Computer, nutzer=self.nutzer, c_ip=ip)
 
-    def test_self_nutzer_created(self):
-        fetched_nutzer = db.session.query(Nutzer).one()
-        self.assertEqual(self.nutzer, fetched_nutzer)
-        self.assertEqual([self.computer], fetched_nutzer.computer)
+    def test_from_ip_returns_anonymous(self):
+        user = User.from_ip("141.30.228.66")
+        self.assertIsInstance(user, AnonymousUserMixin)
 
 
 class UserDBTestCase(TestCase):
