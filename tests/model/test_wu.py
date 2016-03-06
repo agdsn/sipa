@@ -130,7 +130,7 @@ class UserNoDBTestCase(TestCase):
                     User.authenticate(username=None, password=None)
 
 
-class UserWithDBTestCase(AppInitialized):
+class WuAtlantisMixerInitialized(AppInitialized):
     def create_app(self):
         test_app = super().create_app(additional_config={
             'WU_CONNECTION_STRING': "sqlite:///",
@@ -141,6 +141,10 @@ class UserWithDBTestCase(AppInitialized):
         db.create_all()
         self.mixer = Mixer(session=db.session, commit=True)
 
+
+class UserWithDBTestCase(WuAtlantisMixerInitialized):
+    def setUp(self):
+        super().setUp()
         nutzer_id = 1
         ip = "141.30.228.65"
 
