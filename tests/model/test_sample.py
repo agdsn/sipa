@@ -63,7 +63,7 @@ class TestSampleUserCase(AppInitialized):
             if class_attr.fset:
                 value = "given_value"
                 setattr(self.user, attr, value)
-                self.assertEqual(getattr(self.user, attr).value, value)
+                self.assertEqual(getattr(self.user, attr), value)
             elif not getattr(self.user, attr).capabilities.edit:
                 assert not class_attr.fset
 

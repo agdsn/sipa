@@ -21,7 +21,7 @@ class UserNoDBTestCase(TestCase):
     def assert_userdata_passed(self, user, user_dict):
         self.assertEqual(user.name, user_dict['name'])
         self.assertEqual(user.group, user_dict.get('group', 'passive'))
-        self.assertEqual(user.mail.value, user_dict['mail'])
+        self.assertEqual(user.mail, user_dict['mail'])
 
     @staticmethod
     def patch_user_group(user_dict):
@@ -199,11 +199,11 @@ class TestUserInitializedCase(WuAtlantisMixerInitialized):
             )
 
     def test_mail_passed(self):
-        self.assertEqual(self.user.mail.value, self.mail)
+        self.assertEqual(self.user.mail, self.mail)
 
     def test_ips_passed(self):
         for computer in self.nutzer.computer:
-            self.assertIn(computer.c_ip, self.user.ips.value)
+            self.assertIn(computer.c_ip, self.user.ips)
 
     def test_address_passed(self):
         self.assertEqual(self.user.address, self.nutzer.address)
