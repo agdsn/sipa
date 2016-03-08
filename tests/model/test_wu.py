@@ -3,7 +3,6 @@ from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from flask.ext.login import AnonymousUserMixin
-from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
