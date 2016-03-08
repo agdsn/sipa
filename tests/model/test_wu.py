@@ -3,12 +3,12 @@ from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from flask.ext.login import AnonymousUserMixin
-from mixer.backend.sqlalchemy import Mixer
 from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
-from sipa.model.wu.schema import db, Computer, Nutzer
+from sipa.model.wu.schema import db, Nutzer
+from sipa.model.wu.factories import NutzerFactory, ComputerFactory
 from tests.prepare import AppInitialized
 
 
@@ -130,7 +130,7 @@ class UserNoDBTestCase(TestCase):
                     User.authenticate(username=None, password=None)
 
 
-class WuAtlantisMixerInitialized(AppInitialized):
+class WuAtlantisFakeDBInitialized(AppInitialized):
     def create_app(self):
         test_app = super().create_app(additional_config={
             'WU_CONNECTION_STRING': "sqlite:///",
@@ -140,17 +140,15 @@ class WuAtlantisMixerInitialized(AppInitialized):
 
     def setUp(self):
         db.create_all()
-        self.mixer = Mixer(session=db.session, commit=True)
 
 
-class UserWithDBTestCase(WuAtlantisMixerInitialized):
+class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
         super().setUp()
-        nutzer_id = 1
         ip = "141.30.228.65"
 
-        self.nutzer = self.mixer.blend(Nutzer, nutzer_id=nutzer_id, status=1)
-        self.computer = self.mixer.blend(Computer, nutzer=self.nutzer, c_ip=ip)
+        self.nutzer = NutzerFactory.create(status=1)
+        self.computer = ComputerFactory.create(nutzer=self.nutzer, c_ip=ip)
 
     @staticmethod
     def get_sql_user_from_login(unix_account):
@@ -178,15 +176,14 @@ class UserWithDBTestCase(WuAtlantisMixerInitialized):
             self.assertIn("LDAP", warning_mock.call_args[0][0])
 
 
-class TestUserInitializedCase(WuAtlantisMixerInitialized):
+class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
         super().setUp()
 
-        nutzer_id = 1
         ip = "141.30.228.65"
 
-        self.nutzer = self.mixer.blend(Nutzer, nutzer_id=nutzer_id, status=1)
-        self.computer = self.mixer.blend(Computer, nutzer=self.nutzer, c_ip=ip)
+        self.nutzer = NutzerFactory.create(status=1)
+        self.computer = ComputerFactory.create(nutzer=self.nutzer, c_ip=ip)
 
         self.name = "Test Nutzer"
         self.mail = "foo@bar.baz"
