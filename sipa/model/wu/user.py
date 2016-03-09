@@ -12,7 +12,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.default import BaseUser, BaseUserDB
 from sipa.model.property import active_prop, connection_dependent
-from sipa.model.wu.database_utils import STATUS
+from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
 from sipa.model.wu.schema import db
@@ -95,7 +95,7 @@ class User(BaseUser):
             sql_nutzer = (db.session.query(Nutzer)
                           .join(Computer)
                           .filter_by(c_ip=ip)
-                          .filter(Nutzer.status.in_([1, 2, 7, 12]))
+                          .filter(Nutzer.status.in_(ACTIVE_STATUS))
                           .one())
         except NoResultFound:
             return AnonymousUserMixin()
@@ -283,12 +283,7 @@ class User(BaseUser):
 
     @property
     def has_connection(self):
-        return self._nutzer.status in [
-            1,  # ok
-            2,  # not paid
-            7,  # abuse
-            12,  # traffic
-        ]
+        return self._nutzer.status in ACTIVE_STATUS
 
     @active_prop
     def id(self):

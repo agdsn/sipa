@@ -91,3 +91,10 @@ STATUS = {
     12: (lazy_gettext('Trafficlimit überschritten, Netzanschluss gesperrt'),
          'danger')
 }
+
+ACTIVE_STATUS = [
+    1,  # ok
+    2,  # not paid
+    7,  # abuse
+    12,  # traffic
+]
