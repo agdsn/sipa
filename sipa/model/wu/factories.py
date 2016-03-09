@@ -1,7 +1,8 @@
 from random import randint
 
 from factory.alchemy import SQLAlchemyModelFactory as Factory
-from factory import LazyAttribute, Sequence, SubFactory
+from factory import Faker, LazyAttribute, Sequence, SubFactory
+from factory.fuzzy import FuzzyText
 
 from sipa.model.wu.schema import db, DORMITORY_MAPPINGS, Nutzer, Computer
 
@@ -30,7 +31,7 @@ class ComputerFactory(WuFactory):
     nutzer = SubFactory(NutzerFactory)
     nutzer_id = LazyAttribute(lambda self: self.nutzer.nutzer_id)
 
-    c_etheraddr = ""
-    c_ip = ""
-    c_hname = ""
-    c_alias = ""
+    c_etheraddr = Faker('mac_address')
+    c_ip = Faker('ipv4')
+    c_hname = FuzzyText()
+    c_alias = FuzzyText()

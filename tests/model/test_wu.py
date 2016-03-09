@@ -140,6 +140,12 @@ class WuAtlantisFakeDBInitialized(AppInitialized):
     def setUp(self):
         db.create_all()
 
+    def assert_computer_data_passed(self, computer, user):
+        self.assertIn(computer.c_ip, user.ips)
+        self.assertIn(computer.c_etheraddr.upper(), user.mac)
+        self.assertIn(computer.c_hname, user.hostname)
+        self.assertIn(computer.c_alias, user.hostalias)
+
 
 class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
@@ -179,10 +185,8 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
         super().setUp()
 
-        ip = "141.30.228.65"
-
         self.nutzer = NutzerFactory.create(status=1)
-        self.computer = ComputerFactory.create(nutzer=self.nutzer, c_ip=ip)
+        self.computers = ComputerFactory.create_batch(20, nutzer=self.nutzer)
 
         self.name = "Test Nutzer"
         self.mail = "foo@bar.baz"
@@ -197,9 +201,9 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
     def test_mail_passed(self):
         self.assertEqual(self.user.mail, self.mail)
 
-    def test_ips_passed(self):
-        for computer in self.nutzer.computer:
-            self.assertIn(computer.c_ip, self.user.ips)
+    def test_computer_data_passed(self):
+        for computer in self.computers:
+            self.assert_computer_data_passed(computer, self.user)
 
     def test_address_passed(self):
         self.assertEqual(self.user.address, self.nutzer.address)
