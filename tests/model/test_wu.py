@@ -218,6 +218,15 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
     def test_address_passed(self):
         self.assertEqual(self.user.address, self.nutzer.address)
 
+    def test_id_passed(self):
+        original_id = str(self.nutzer.nutzer_id)
+        fetched_id = self.user.id.value
+        self.assertTrue(
+            fetched_id.startswith(original_id),
+            msg="id '{}' doesn't start with '{}'".format(fetched_id,
+                                                         original_id)
+        )
+
 
 class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
     def setUp(self):
