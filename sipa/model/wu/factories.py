@@ -2,7 +2,7 @@ from factory.alchemy import SQLAlchemyModelFactory as Factory
 from factory import Faker, LazyAttribute, Sequence, SubFactory
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
-from sipa.model.wu.database_utils import ACTIVE_STATUS
+from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
 from sipa.model.wu.schema import db, DORMITORY_MAPPINGS, Nutzer, Computer
 
 
@@ -20,7 +20,7 @@ class NutzerFactory(WuFactory):
     etage = FuzzyInteger(1, 15)
     zimmernr = FuzzyInteger(11, 55)
     unix_account = Sequence(lambda n: "user{}".format(n))
-    status = FuzzyInteger(0, 20)
+    status = FuzzyChoice(STATUS.keys())
 
 
 class ActiveNutzerFactory(NutzerFactory):
@@ -28,7 +28,11 @@ class ActiveNutzerFactory(NutzerFactory):
 
 
 class InactiveNutzerFactory(NutzerFactory):
-    status = FuzzyChoice(set(range(20)) - set(ACTIVE_STATUS))
+    status = FuzzyChoice(set(STATUS.keys()) - set(ACTIVE_STATUS))
+
+
+class UnknownStatusNutzerFactory(NutzerFactory):
+    status = FuzzyChoice(set(range(20)) - set(STATUS.keys()))
 
 
 class ComputerFactory(WuFactory):

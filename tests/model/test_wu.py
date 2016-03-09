@@ -5,9 +5,11 @@ from unittest.mock import MagicMock, patch
 from flask.ext.login import AnonymousUserMixin
 
 from sipa.model.wu.user import User, UserDB
+from sipa.model.wu.database_utils import STATUS
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
 from sipa.model.wu.schema import db, Nutzer
 from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
+                                     UnknownStatusNutzerFactory,
                                      ComputerFactory, NutzerFactory)
 from tests.prepare import AppInitialized
 
@@ -228,11 +230,35 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
         )
 
 
+class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+        self.valid_status_nutzer_list = NutzerFactory.create_batch(20)
+        self.unknown_status_nutzer_list = UnknownStatusNutzerFactory.create_batch(20)
+
+    def test_unknown_status_empty(self):
+        for nutzer in self.unknown_status_nutzer_list:
+            user = self.create_user_ldap_patched(
+                uid=nutzer.unix_account,
+                name=None,
+                mail=None,
+            )
+            self.assertTrue(user.status.empty)
+
+    def test_known_status_passed(self):
+        for nutzer in self.valid_status_nutzer_list:
+            user = self.create_user_ldap_patched(
+                uid=nutzer.unix_account,
+                name=None,
+                mail=None,
+            )
+            self.assertEqual(STATUS[nutzer.status][0], user.status)
+
+
 class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
     def setUp(self):
         super().setUp()
         self.connection_nutzer_list = ActiveNutzerFactory.create_batch(20)
-        # TODO: use „inactive“ class
         self.no_connection_nutzer_list = InactiveNutzerFactory.create_batch(20)
 
     def test_correct_users_have_connection(self):
