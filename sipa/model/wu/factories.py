@@ -2,8 +2,9 @@ from random import randint
 
 from factory.alchemy import SQLAlchemyModelFactory as Factory
 from factory import Faker, LazyAttribute, Sequence, SubFactory
-from factory.fuzzy import FuzzyText
+from factory.fuzzy import FuzzyChoice, FuzzyText
 
+from sipa.model.wu.database_utils import ACTIVE_STATUS
 from sipa.model.wu.schema import db, DORMITORY_MAPPINGS, Nutzer, Computer
 
 
@@ -22,6 +23,14 @@ class NutzerFactory(WuFactory):
     zimmernr = LazyAttribute(lambda _: "{}{}".format(randint(1, 5), randint(1, 3)))
     unix_account = Sequence(lambda n: "user{}".format(n))
     status = 0
+
+
+class ActiveNutzerFactory(NutzerFactory):
+    status = FuzzyChoice(ACTIVE_STATUS)
+
+
+class InactiveNutzerFactory(NutzerFactory):
+    status = FuzzyChoice(set(range(20)) - set(ACTIVE_STATUS))
 
 
 class ComputerFactory(WuFactory):

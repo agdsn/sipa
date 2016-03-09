@@ -7,7 +7,8 @@ from flask.ext.login import AnonymousUserMixin
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
 from sipa.model.wu.schema import db, Nutzer
-from sipa.model.wu.factories import NutzerFactory, ComputerFactory
+from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
+                                     ComputerFactory, NutzerFactory)
 from tests.prepare import AppInitialized
 
 
@@ -146,6 +147,16 @@ class WuAtlantisFakeDBInitialized(AppInitialized):
         self.assertIn(computer.c_hname, user.hostname)
         self.assertIn(computer.c_alias, user.hostalias)
 
+    @staticmethod
+    def create_user_ldap_patched(uid, name, mail):
+        with patch('sipa.model.wu.user.search_in_group',
+                   MagicMock(return_value=False)):
+            return User(
+                uid=uid,
+                name=name,
+                mail=mail,
+            )
+
 
 class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
@@ -191,12 +202,11 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
         self.name = "Test Nutzer"
         self.mail = "foo@bar.baz"
 
-        with patch('sipa.model.wu.user.search_in_group', MagicMock(return_value=False)):
-            self.user = User(
-                uid=self.nutzer.unix_account,
-                name=self.name,
-                mail=self.mail,
-            )
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=self.name,
+            mail=self.mail,
+        )
 
     def test_mail_passed(self):
         self.assertEqual(self.user.mail, self.mail)
@@ -207,6 +217,32 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
 
     def test_address_passed(self):
         self.assertEqual(self.user.address, self.nutzer.address)
+
+
+class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+        self.connection_nutzer_list = ActiveNutzerFactory.create_batch(20)
+        # TODO: use „inactive“ class
+        self.no_connection_nutzer_list = InactiveNutzerFactory.create_batch(20)
+
+    def test_correct_users_have_connection(self):
+        for nutzer in self.connection_nutzer_list:
+            user = self.create_user_ldap_patched(
+                uid=nutzer.unix_account,
+                name=None,
+                mail=None
+            )
+            self.assertTrue(user.has_connection)
+
+    def test_incorrect_users_no_connection(self):
+        for nutzer in self.no_connection_nutzer_list:
+            user = self.create_user_ldap_patched(
+                uid=nutzer.unix_account,
+                name=None,
+                mail=None,
+            )
+            self.assertFalse(user.has_connection)
 
 
 class UserDBTestCase(TestCase):
