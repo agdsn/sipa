@@ -1,8 +1,6 @@
-from random import randint
-
 from factory.alchemy import SQLAlchemyModelFactory as Factory
 from factory import Faker, LazyAttribute, Sequence, SubFactory
-from factory.fuzzy import FuzzyChoice, FuzzyText
+from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
 from sipa.model.wu.database_utils import ACTIVE_STATUS
 from sipa.model.wu.schema import db, DORMITORY_MAPPINGS, Nutzer, Computer
@@ -18,11 +16,11 @@ class NutzerFactory(WuFactory):
         model = Nutzer
 
     nutzer_id = Sequence(lambda n: n)
-    wheim_id = LazyAttribute(lambda n: randint(0, len(DORMITORY_MAPPINGS)-1))
-    etage = LazyAttribute(lambda _: randint(1, 15))
-    zimmernr = LazyAttribute(lambda _: "{}{}".format(randint(1, 5), randint(1, 3)))
+    wheim_id = FuzzyInteger(0, len(DORMITORY_MAPPINGS) - 1)
+    etage = FuzzyInteger(1, 15)
+    zimmernr = FuzzyInteger(11, 55)
     unix_account = Sequence(lambda n: "user{}".format(n))
-    status = 0
+    status = FuzzyInteger(0, 20)
 
 
 class ActiveNutzerFactory(NutzerFactory):
