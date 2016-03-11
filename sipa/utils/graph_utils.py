@@ -18,7 +18,6 @@ def hsl(h, s, l):
 
 traffic_style = Style(
     background='transparent',
-    plot_background='transparent',
     opacity='.6',
     opacity_hover='.9',
     transition='200ms ease-in',
