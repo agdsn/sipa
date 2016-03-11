@@ -72,7 +72,8 @@ class UserNoDBTestCase(TestCase):
             with patch('sipa.model.wu.user.search_in_group',
                        fake_search_in_group):
                 user = User(uid=uid, name="", mail="")
-                self.assertEqual(user.define_group(), group)
+                with self.subTest(user=user):
+                    self.assertEqual(user.define_group(), group)
         return
 
     @patch('sipa.model.wu.user.UserDB', userdb_mock)
@@ -84,15 +85,17 @@ class UserNoDBTestCase(TestCase):
         ]
 
         for test_user in test_users:
-            with self.patch_user_group(test_user), \
-                 patch('sipa.model.wu.user.LdapConnector') as LdapConnectorMock:
-                    LdapConnectorMock.fetch_user.return_value = test_user
+            with self.subTest(user=test_user):
 
-                    user = User.get(test_user['uid'])
-                    assert LdapConnectorMock.fetch_user.called
+                with self.patch_user_group(test_user), \
+                     patch('sipa.model.wu.user.LdapConnector') as LdapConnectorMock:
+                        LdapConnectorMock.fetch_user.return_value = test_user
 
-            self.assertIsInstance(user, User)
-            self.assert_userdata_passed(user, test_user)
+                        user = User.get(test_user['uid'])
+                        assert LdapConnectorMock.fetch_user.called
+
+                self.assertIsInstance(user, User)
+                self.assert_userdata_passed(user, test_user)
 
     def test_get_constructor_returns_anonymous(self):
         with patch('sipa.model.wu.user.LdapConnector') as LdapConnectorMock:
@@ -113,7 +116,9 @@ class UserNoDBTestCase(TestCase):
         ]
         for uid, password in sample_users:
             with patch('sipa.model.wu.user.LdapConnector') as ldap_mock, \
-                 patch('sipa.model.wu.user.User.get') as get_mock:
+                 patch('sipa.model.wu.user.User.get') as get_mock, \
+                 self.subTest(uid=uid, password=password):
+
                 User.authenticate(uid, password)
 
                 self.assertEqual(ldap_mock.call_args[0], (uid, password))
@@ -126,7 +131,9 @@ class UserNoDBTestCase(TestCase):
         """
         for exception_class in [UserNotFound, PasswordInvalid]:
             def raise_exception(): raise exception_class()
-            with patch('sipa.model.wu.user.LdapConnector') as ldap_mock:
+            with patch('sipa.model.wu.user.LdapConnector') as ldap_mock, \
+                    self.subTest(exception_class=exception_class):
+
                 ldap_mock().__enter__.side_effect = raise_exception
                 with self.assertRaises(exception_class):
                     User.authenticate(username=None, password=None)
@@ -214,7 +221,8 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
 
     def test_computer_data_passed(self):
         for computer in self.computers:
-            self.assert_computer_data_passed(computer, self.user)
+            with self.subTest(computer=computer):
+                self.assert_computer_data_passed(computer, self.user)
 
     def test_address_passed(self):
         self.assertEqual(self.user.address, self.nutzer.address)
@@ -242,7 +250,8 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
                 name=None,
                 mail=None,
             )
-            self.assertFalse(user.status)
+            with self.subTest(user=user):
+                self.assertFalse(user.status)
 
     def test_known_status_passed(self):
         for nutzer in self.valid_status_nutzer_list:
@@ -251,7 +260,8 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
                 name=None,
                 mail=None,
             )
-            self.assertEqual(STATUS[nutzer.status][0], user.status)
+            with self.subTest(user=user):
+                self.assertEqual(STATUS[nutzer.status][0], user.status)
 
 
 class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
@@ -267,7 +277,8 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
                 name=None,
                 mail=None
             )
-            self.assertTrue(user.has_connection)
+            with self.subTest(user=user):
+                self.assertTrue(user.has_connection)
 
     def test_incorrect_users_no_connection(self):
         for nutzer in self.no_connection_nutzer_list:
@@ -276,7 +287,8 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
                 name=None,
                 mail=None,
             )
-            self.assertFalse(user.has_connection)
+            with self.subTest(user=user):
+                self.assertFalse(user.has_connection)
 
 
 class UserDBTestCase(TestCase):
