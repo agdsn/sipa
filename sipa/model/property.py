@@ -7,11 +7,11 @@ from sipa.utils import argstr
 
 
 Capabilities = namedtuple('capabilities', ['edit', 'delete'])
-no_capabilities = Capabilities(edit=False, delete=False)
+NO_CAPABILITIES = Capabilities(edit=False, delete=False)
 
 
 class PropertyBase(metaclass=ABCMeta):
-    def __init__(self, name, value, raw_value, capabilities=no_capabilities,
+    def __init__(self, name, value, raw_value, capabilities=NO_CAPABILITIES,
                  style=None, empty=False):
         self.name = name
         self.value = value
@@ -72,7 +72,7 @@ class UnsupportedProperty(PropertyBase):
 class ActiveProperty(PropertyBase):
     supported = True
 
-    def __init__(self, name, value=None, capabilities=no_capabilities,
+    def __init__(self, name, value=None, capabilities=NO_CAPABILITIES,
                  style=None, empty=False):
         # Enforce bootstrap css classes: getbootstrap.com/css/#helper-classes
         assert style in {None, 'muted', 'primary', 'success',
@@ -160,7 +160,7 @@ class active_prop(property):
                 capabilities=Capabilities(
                     edit=(fset is not None or fake_setter),
                     delete=(fdel is not None),
-                ) if not tmp_readonly else no_capabilities,
+                ) if not tmp_readonly else NO_CAPABILITIES,
                 style=style,
                 empty=empty,
             )

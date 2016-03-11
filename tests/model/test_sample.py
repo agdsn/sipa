@@ -1,22 +1,22 @@
 import sipa.model.sample
 from sipa.model.property import (ActiveProperty, Capabilities,
-                                 UnsupportedProperty, no_capabilities)
+                                 UnsupportedProperty, NO_CAPABILITIES)
 from tests.prepare import AppInitialized
 
 
 class TestSampleUserCase(AppInitialized):
     expected_result = {
         # 'attr_name': ('key_in_sample_dict', Capabilities())
-        'realname': ('name', no_capabilities),
-        'login': ('uid', no_capabilities),
+        'realname': ('name', NO_CAPABILITIES),
+        'login': ('uid', NO_CAPABILITIES),
         'mac': ('mac', Capabilities(edit=True, delete=False)),
         'mail': ('mail', Capabilities(edit=True, delete=True)),
-        'address': ('address', no_capabilities),
-        'ips': ('ip', no_capabilities),
-        'status': ('status', no_capabilities),
-        'id': ('id', no_capabilities),
-        'hostname': ('hostname', no_capabilities),
-        'hostalias': ('hostalias', no_capabilities),
+        'address': ('address', NO_CAPABILITIES),
+        'ips': ('ip', NO_CAPABILITIES),
+        'status': ('status', NO_CAPABILITIES),
+        'id': ('id', NO_CAPABILITIES),
+        'hostname': ('hostname', NO_CAPABILITIES),
+        'hostalias': ('hostalias', NO_CAPABILITIES),
     }
 
     rows = expected_result.keys()
