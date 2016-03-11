@@ -200,6 +200,23 @@ class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
             self.assertIn("LDAP", warning_mock.call_args[0][0])
 
 
+class UserNoComputersTestCase(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+        self.nutzer = NutzerFactory.create()
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        )
+
+    def test_user_has_no_computer_data(self):
+        self.assertFalse(self.user.mac)
+        self.assertFalse(self.user.ips)
+        self.assertFalse(self.user.hostname)
+        self.assertFalse(self.user.hostalias)
+
+
 class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
         super().setUp()
