@@ -165,7 +165,7 @@ class User(BaseUser):
             traffic_entries = (db.session.query(Traffic)
                                .filter_by(timetag=credit_entry.timetag)
                                .filter(Traffic.ip.in_(accountable_ips))
-                               .all())
+                               .all()) if accountable_ips else []
 
             traffic_history.append({
                 'day': (datetime.today() + timedelta(
@@ -200,7 +200,7 @@ class User(BaseUser):
             in db.session.query(Traffic)
             .filter_by(timetag=today)
             .filter(Traffic.ip.in_(accountable_ips))
-        )
+        ) if accountable_ips else 0
 
         return credit - traffic_today
 
