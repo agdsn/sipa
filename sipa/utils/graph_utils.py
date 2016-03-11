@@ -86,6 +86,7 @@ def generate_credit_chart(traffic_data, inline=True):
         gettext("Credit (GiB)"),
         inline,
     )
+    credit_chart.range = (0, 63000)
 
     credit_chart.x_labels = (get_weekday(day['day']) for day in traffic_data)
     credit_chart.add(gettext("Credit"),
