@@ -291,23 +291,33 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
                 self.assertFalse(user.has_connection)
 
 
-class UserDBTestCase(TestCase):
-    def test_ipmask_validity_checker(self):
+class IPMaskValidityChecker(TestCase):
+    """Tests concerning the validation of ip masks passed to the
+    `UserDB`
+    """
+
+    def setUp(self):
         valid_elements = ['1', '125', '255', '%']
-        valid = permutations(valid_elements, 4)
+        self.valid = permutations(valid_elements, 4)
 
         # probably not the most elegant choices, but that should do the trick
         invalid_elements = ['%%', '%%%', '1%1', '1%%1']
-        invalid = []
-        for p in valid:
+        self.invalid = []
+        for p in self.valid:
             p = list(p)
             for inv in invalid_elements:
-                invalid += [p[:i] + [inv] + p[i+1:] for i in range(4)]
+                self.invalid += [p[:i] + [inv] + p[i+1:] for i in range(4)]
 
-        for ip_tuple in invalid:
-            with self.assertRaises(ValueError):
-                UserDB.test_ipmask_validity(".".join(ip_tuple))
+    def test_invalid_ips_raise(self):
+        """Test that passing invalid ip masks raises a `ValueError`"""
+        for ip_tuple in self.invalid:
+            with self.subTest(ip_tuple=ip_tuple):
+                with self.assertRaises(ValueError):
+                    UserDB.test_ipmask_validity(".".join(ip_tuple))
 
-        for ip_tuple in valid:
-            with self.assertNotRaises(ValueError):
-                UserDB.test_ipmask_validity(".".join(ip_tuple))
+    def test_valid_ips_pass(self):
+        """Test that passing valid ip masks works"""
+        for ip_tuple in self.valid:
+            with self.subTest(ip_tuple=ip_tuple):
+                with self.assertNotRaises(ValueError):
+                    UserDB.test_ipmask_validity(".".join(ip_tuple))
