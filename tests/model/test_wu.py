@@ -10,7 +10,9 @@ from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
 from sipa.model.wu.schema import db, Nutzer
 from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
                                      UnknownStatusNutzerFactory,
-                                     ComputerFactory, NutzerFactory)
+                                     ComputerFactory, NutzerFactory,
+                                     CreditFactory, TrafficFactory)
+from sipa.utils import timetag_today
 from tests.prepare import AppInitialized
 
 
@@ -306,6 +308,70 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
             )
             with self.subTest(user=user):
                 self.assertFalse(user.has_connection)
+
+
+class OneUserWithCredit(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+        self.nutzer = NutzerFactory.create()
+        self.credit_entries = []
+        self.timetag_range = range(timetag_today()-21, timetag_today())
+        for timetag in self.timetag_range:
+            self.credit_entries.append(CreditFactory.create(nutzer=self.nutzer,
+                                                            timetag=timetag))
+
+
+class CreditTestCase(OneUserWithCredit):
+    def setUp(self):
+        super().setUp()
+
+    def test_credit_passed(self):
+        fetched_user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        )
+        expected_credit = self.credit_entries[-1].amount
+        self.assertEqual(fetched_user.credit, expected_credit)
+
+    def test_credit_appears_in_history(self):
+        fetched_history = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        ).traffic_history
+        # the history is ascending, but wee ned a zip ending at
+        # *today* (last element)
+        combined_history = zip(reversed(self.credit_entries), reversed(fetched_history))
+
+        for expected_credit, traffic_entry in combined_history:
+            with self.subTest(traffic_entry=traffic_entry):
+                self.assertEqual(traffic_entry['credit'], expected_credit.amount)
+
+
+class TrafficOneComputerTestCase(OneUserWithCredit):
+    def setUp(self):
+        super().setUp()
+        self.computer = ComputerFactory(nutzer=self.nutzer)
+        self.traffic_entries = []
+        for timetag in range(timetag_today()-21, timetag_today()):
+            traffic_entry = TrafficFactory.create(timetag=timetag, ip=self.computer.c_ip)
+            self.traffic_entries.append(traffic_entry)
+
+    def test_traffic_data_passed(self):
+        fetched_history = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        ).traffic_history
+        # the history is ascending, but wee ned a zip ending at
+        # *today* (last element)
+        combined_history = zip(reversed(self.traffic_entries), reversed(fetched_history))
+
+        for expected_traffic, traffic_entry in combined_history:
+            with self.subTest(traffic_entry=traffic_entry):
+                self.assertEqual(traffic_entry['input'], traffic_entry['input'])
+                self.assertEqual(traffic_entry['output'], traffic_entry['output'])
 
 
 class IPMaskValidityChecker(TestCase):
