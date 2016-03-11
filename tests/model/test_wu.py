@@ -163,10 +163,9 @@ class WuAtlantisFakeDBInitialized(AppInitialized):
 class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
         super().setUp()
-        ip = "141.30.228.65"
 
         self.nutzer = NutzerFactory.create(status=1)
-        self.computer = ComputerFactory.create(nutzer=self.nutzer, c_ip=ip)
+        self.computer = ComputerFactory.create(nutzer=self.nutzer)
 
     @staticmethod
     def get_sql_user_from_login(unix_account):
