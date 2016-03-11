@@ -14,7 +14,14 @@ def init_repo(repo_dir, repo_url):
         origin = repo.remote('origin')
     else:
         origin = repo.create_remote('origin', repo_url)
-    origin.fetch()
+    try:
+        origin.fetch()
+    except GitCommandError:
+        logger.error("Git fetch failed.", exc_info=True, extra={'data': {
+            'repo_dir': repo_dir
+        }})
+        return
+
     repo.git.reset('--hard', 'origin/master')
     logger.info("Initialized git repository %s in %s", repo_dir, repo_url)
 
@@ -50,6 +57,8 @@ def get_repo_active_branch(repo_dir):
     try:
         sipa_repo = git.Repo(repo_dir)
         return sipa_repo.active_branch.name
+    except GitCommandError:
+        return "Unknown"
     except TypeError:  # detatched HEAD
         return "@{}".format(sipa_repo.head.commit.hexsha[:8])
 
