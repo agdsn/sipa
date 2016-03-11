@@ -53,6 +53,10 @@ class PropertyBase(metaclass=ABCMeta):
     def __contains__(self, item):
         return self.raw_value.__contains__(item)
 
+    def __bool__(self):
+        """The boolean value represents whether the property is not empty"""
+        return not self.empty
+
 
 class UnsupportedProperty(PropertyBase):
     supported = False

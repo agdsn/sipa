@@ -242,7 +242,7 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
                 name=None,
                 mail=None,
             )
-            self.assertTrue(user.status.empty)
+            self.assertFalse(user.status)
 
     def test_known_status_passed(self):
         for nutzer in self.valid_status_nutzer_list:
