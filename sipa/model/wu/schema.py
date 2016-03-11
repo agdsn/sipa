@@ -43,6 +43,7 @@ class Nutzer(db.Model):
                     server_default=text("'1'"))
 
     computer = relationship("Computer", backref="nutzer")
+    credit_entries = relationship('Credit', backref="nutzer")
 
     @property
     def address(self):
@@ -73,7 +74,8 @@ class Computer(db.Model):
 class Credit(db.Model):
     __tablename__ = u'credit'
 
-    user_id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('nutzer.nutzer_id'),
+                     primary_key=True, nullable=False)
     amount = Column(Integer, nullable=False)
     timetag = Column(Integer, primary_key=True, nullable=False)
 

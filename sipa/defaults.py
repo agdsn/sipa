@@ -50,6 +50,8 @@ WARNINGS_ONLY_CONFIG = {
         'sipa': {
             'level': 'WARNING',
         },
-
+        'factory': {
+            'level': 'WARNING',
+        },
     }
 }

@@ -318,22 +318,22 @@ class TestGerokUser(AppInitialized):
         """Test if contents of `user_data` fully appear in the `user` object
         """
         self.assertEqual(user.uid, user_data['login'])
-        self.assertEqual(user.id.value, user_data['id'])
-        self.assertEqual(user.login.value, user_data['login'])
-        self.assertEqual(user.address.value, user_data['address'])
+        self.assertEqual(user.id, user_data['id'])
+        self.assertEqual(user.login, user_data['login'])
+        self.assertEqual(user.address, user_data['address'])
         if user_data['mail']:
-            self.assertEqual(user.mail.value, user_data['mail'])
+            self.assertEqual(user.mail, user_data['mail'])
         else:
-            self.assertIn(user_data['login'], user.mail.value)
-        self.assertEqual(user.status.value, user_data['status'])
-        self.assertEqual(user.realname.value, user_data['name'])
+            self.assertIn(user_data['login'], user.mail)
+        self.assertEqual(user.status, user_data['status'])
+        self.assertEqual(user.realname, user_data['name'])
         for host in user_data['hosts']:
             # using `assertIn` allows agnosticism regarding the chosen
             # string concatenation method
-            self.assertIn(host['ip'], user.ips.value)
-            self.assertIn(host['mac'], user.mac.value)
-            self.assertIn(host['hostname'], user.hostname.value)
-            self.assertIn(host['alias'], user.hostalias.value)
+            self.assertIn(host['ip'], user.ips)
+            self.assertIn(host['mac'], user.mac)
+            self.assertIn(host['hostname'], user.hostname)
+            self.assertIn(host['alias'], user.hostalias)
         self.assertEqual(user.credit, user_data.get('credit', 0) / 1024)
 
     @patch('sipa.model.gerok.user.do_api_call', api_mock)

@@ -36,6 +36,9 @@ class PropertyBase(metaclass=ABCMeta):
         pass
 
     def __eq__(self, other):
+        """Check other for equality in each important attribute. If this is
+        failing, compare against `self.raw_value`
+        """
         try:
             return all((
                 self.name == other.name,
@@ -45,7 +48,14 @@ class PropertyBase(metaclass=ABCMeta):
                 self.empty == other.empty,
             ))
         except AttributeError:
-            return False
+            return self.raw_value == other
+
+    def __contains__(self, item):
+        return self.raw_value.__contains__(item)
+
+    def __bool__(self):
+        """The boolean value represents whether the property is not empty"""
+        return not self.empty
 
 
 class UnsupportedProperty(PropertyBase):
