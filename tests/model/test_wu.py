@@ -381,7 +381,7 @@ class IPMaskValidityChecker(TestCase):
 
     def setUp(self):
         valid_elements = ['1', '125', '255', '%']
-        self.valid = permutations(valid_elements, 4)
+        self.valid = list(permutations(valid_elements, 4))
 
         # probably not the most elegant choices, but that should do the trick
         invalid_elements = ['%%', '%%%', '1%1', '1%%1']
@@ -402,5 +402,8 @@ class IPMaskValidityChecker(TestCase):
         """Test that passing valid ip masks works"""
         for ip_tuple in self.valid:
             with self.subTest(ip_tuple=ip_tuple):
-                with self.assertNotRaises(ValueError):
+                try:
                     UserDB.test_ipmask_validity(".".join(ip_tuple))
+                except ValueError:
+                    self.fail("`test_ipmask_validity` raised ValueError "
+                              "on correct ip '{}'".format(".".join(ip_tuple)))
