@@ -4,8 +4,8 @@ from flask.ext.babel import gettext
 from pygal.colors import hsl_to_rgb
 from pygal.style import Style
 
-from sipa.units import (UNIT_LIST, format_without_unit,
-                        reduce_unit, reduce_by_base)
+from sipa.units import (format_as_traffic, max_divisions,
+                        reduce_by_base)
 from sipa.utils.babel_utils import get_weekday
 
 
@@ -53,7 +53,7 @@ def generate_traffic_chart(traffic_data, inline=True):
     :return: The graph object
     """
     # choose unit according to maximum of `throughput`
-    divisions = reduce_unit(max(day['throughput'] for day in traffic_data))
+    divisions = max_divisions(max(day['throughput'] for day in traffic_data))
 
     traffic_data = [{key: (reduce_by_base(val, divisions=divisions)
                            if key in ['input', 'output', 'throughput']
@@ -66,7 +66,9 @@ def generate_traffic_chart(traffic_data, inline=True):
         pygal.Bar,
         gettext("Traffic (MiB)"),
         inline,
-        value_formatter=lambda value: format_without_unit(value, divisions),
+        # don't divide, since the raw values already have been prepared.
+        # `divide=False` effectively just appends the according unit.
+        value_formatter=lambda value: format_as_traffic(value, divisions, divide=False),
     )
 
     traffic_chart.x_labels = (get_weekday(day['day']) for day in traffic_data)
@@ -93,14 +95,14 @@ def generate_credit_chart(traffic_data, inline=True):
     :return: The graph object
     """
     raw_max = 63*1024*1024
-    divisions = reduce_unit(raw_max)
+    divisions = max_divisions(raw_max)
     max = reduce_by_base(raw_max, divisions)
 
     credit_chart = default_chart(
         pygal.Line,
         gettext("Credit (GiB)"),
         inline,
-        value_formatter=lambda value: format_without_unit(value, divisions),
+        value_formatter=lambda value: format_as_traffic(value, divisions, divide=False),
     )
     credit_chart.range = (0, max)
 
