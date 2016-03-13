@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
 import pygal
-from pygal.style import Style
-from pygal.colors import hsl_to_rgb
 from flask.ext.babel import gettext
+from pygal.colors import hsl_to_rgb
+from pygal.style import Style
 
+from sipa.units import (format_as_traffic, max_divisions,
+                        reduce_by_base)
 from sipa.utils.babel_utils import get_weekday
 
 
@@ -18,7 +19,6 @@ def hsl(h, s, l):
 
 traffic_style = Style(
     background='transparent',
-    plot_background='transparent',
     opacity='.6',
     opacity_hover='.9',
     transition='200ms ease-in',
@@ -27,7 +27,7 @@ traffic_style = Style(
 )
 
 
-def default_chart(chart_type, title, inline=True):
+def default_chart(chart_type, title, inline=True, **kwargs):
     return chart_type(
         fill=True,
         title=title,
@@ -39,6 +39,7 @@ def default_chart(chart_type, title, inline=True):
         style=traffic_style,
         disable_xml_declaration=inline,   # for direct html import
         js=[],  # prevent automatically fetching scripts from github
+        **kwargs,
     )
 
 
@@ -51,10 +52,23 @@ def generate_traffic_chart(traffic_data, inline=True):
     :param inline: Determines the option `disable_xml_declaration`
     :return: The graph object
     """
+    # choose unit according to maximum of `throughput`
+    divisions = max_divisions(max(day['throughput'] for day in traffic_data))
+
+    traffic_data = [{key: (reduce_by_base(val, divisions=divisions)
+                           if key in ['input', 'output', 'throughput']
+                           else val)
+                     for key, val in entry.items()
+                     }
+                    for entry in traffic_data]
+
     traffic_chart = default_chart(
         pygal.Bar,
         gettext("Traffic (MiB)"),
         inline,
+        # don't divide, since the raw values already have been prepared.
+        # `divide=False` effectively just appends the according unit.
+        value_formatter=lambda value: format_as_traffic(value, divisions, divide=False),
     )
 
     traffic_chart.x_labels = (get_weekday(day['day']) for day in traffic_data)
@@ -80,16 +94,27 @@ def generate_credit_chart(traffic_data, inline=True):
     :param inline: Determines the option `disable_xml_declaration`
     :return: The graph object
     """
+    raw_max = 63*1024*1024
+    divisions = max_divisions(raw_max)
+    max = reduce_by_base(raw_max, divisions)
 
     credit_chart = default_chart(
         pygal.Line,
         gettext("Credit (GiB)"),
         inline,
+        value_formatter=lambda value: format_as_traffic(value, divisions, divide=False),
     )
+    credit_chart.range = (0, max)
 
     credit_chart.x_labels = (get_weekday(day['day']) for day in traffic_data)
     credit_chart.add(gettext("Credit"),
-                     [day['credit'] / 1024 for day in traffic_data])
+                     [reduce_by_base(day['credit'], divisions=divisions)
+                      for day in traffic_data])
+    credit_chart.add(gettext("Maximum"),
+                     [max]*len(traffic_data),
+                     stroke_style={'dasharray': '7', 'width': '2'},
+                     fill=False,
+                     show_dots=False)
 
     return credit_chart
 

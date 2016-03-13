@@ -14,6 +14,7 @@ from ldap3 import LDAPCommunicationError
 
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
 from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
+from sipa.units import dynamic_unit
 from sipa.utils import get_user_name, redirect_url
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid
 from sipa.utils.mail_utils import send_mail
@@ -165,24 +166,16 @@ def logout():
     return redirect(url_for('.index'))
 
 
-@bp_generic.app_template_filter('unit')
-def unit(number):
-    """Display number in MiB or GiB depending on size.
-
-    If the argument (expected in MiB) is greater than 1024 MiB, it’ll be
-    displayed in GiB. The unit string is automatically appended and the number
-    is displayed with two decimal places.
-    """
-    unit = 'MiB'
-    if number > 1024:
-        unit = 'GiB'
-        number /= 1024
-    return '{} {}'.format(round(number, 2), unit)
+bp_generic.add_app_template_filter(dynamic_unit, name='unit')
 
 
 @bp_generic.app_template_filter('gib')
 def to_gigabytes(number):
-    """Convert a number from KiB to GiB"""
+    """Convert a number from KiB to GiB
+
+    This is used mainly for the gauge, everything else uses the dynamic
+    `unit` function.
+    """
     return number / 1024 ** 2
 
 
