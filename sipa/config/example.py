@@ -64,6 +64,10 @@
 # GEROK_ENDPOINT = "https://gerok.agdsn:3000/api"
 # GEROK_API_TOKEN = ""
 
+# The Token for the git update hook.
+# It is disabled if nothing provided
+# GIT_UPDATE_HOOK_TOKEN = ""
+
 # The languages babel provides.  It does not make much sense to chagne
 # anything here.
 

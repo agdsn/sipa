@@ -51,7 +51,8 @@ SQL_TIMEOUT = 2
 GEROK_ENDPOINT = ""
 GEROK_API_TOKEN = None
 
-#: Git update hook is disabled if nothing provided
+# The Token for the git update hook.
+# It is disabled if nothing provided
 GIT_UPDATE_HOOK_TOKEN = ""
 
 # Languages
