@@ -15,14 +15,14 @@ HTTP_METHODS = _HTTP_METHODS - {'OPTIONS'}
 class GitHookNoToken(AppInitialized):
     def test_git_hook_wrong_method(self):
         """Test that using wrong methods will cause a HTTP 405 return"""
-        for method in HTTP_METHODS - {'PUT'}:
+        for method in HTTP_METHODS - {'POST'}:
             with self.subTest(method=method):
                 response = self.client.open(GIT_HOOK_URL, method=method)
                 self.assertEqual(response.status_code, 405)
 
     def test_git_hook_not_existent(self):
         """Test that HTTP 404 is returned if no token is configured"""
-        response = self.client.put(GIT_HOOK_URL)
+        response = self.client.post(GIT_HOOK_URL)
         self.assertEqual(response.status_code, 404)
 
 
@@ -35,16 +35,16 @@ class GitHookExistent(AppInitialized):
 
     def test_no_token_auth_required(self):
         """Test that `PUT`ting the hook w/o giving a token returns HTTP 401"""
-        response = self.client.put(GIT_HOOK_URL)
+        response = self.client.post(GIT_HOOK_URL)
         self.assertEqual(response.status_code, 401)
 
     def test_empty_token_auth_required(self):
-        response = self.client.put("{}?token=".format(GIT_HOOK_URL))
+        response = self.client.post("{}?token=".format(GIT_HOOK_URL))
         self.assertEqual(response.status_code, 401)
 
     def test_wrong_token_permission_denied(self):
         """Test that using a wrong token gets you a HTTP 403"""
-        response = self.client.put("{}?token={}".format(
+        response = self.client.post("{}?token={}".format(
             GIT_HOOK_URL,
             self.token + "wrong",
         ))
@@ -57,7 +57,7 @@ class GitHookExistent(AppInitialized):
         # git-related in this TestCase
         mock = MagicMock()
         with patch('sipa.blueprints.hooks.update_repo', mock):
-            response = self.client.put("{}?token={}".format(
+            response = self.client.post("{}?token={}".format(
                 GIT_HOOK_URL,
                 self.token,
             ))
