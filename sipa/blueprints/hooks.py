@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 bp_hooks = Blueprint('hooks', __name__, url_prefix='/hooks')
 
 
-@bp_hooks.route('/update-content', methods=['PUT'])
+@bp_hooks.route('/update-content', methods=['POST'])
 def content_hook():
     auth_key = current_app.config.get('GIT_UPDATE_HOOK_TOKEN')
 
