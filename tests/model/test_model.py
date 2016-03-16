@@ -14,7 +14,7 @@ from tests.prepare import AppInitialized
 
 class TestUninitializedBackendCase(FlaskTestCase):
     def create_app(self):
-        test_app = Flask(__name__)
+        test_app = Flask('sipa')
         test_app.config['TESTING'] = True
         test_app.debug = True
         return test_app
@@ -31,7 +31,7 @@ class TestUninitializedBackendCase(FlaskTestCase):
 
 class TestNoDebugBackends(FlaskTestCase):
     def create_app(self):
-        test_app = Flask(__name__)
+        test_app = Flask('sipa')
         test_app.config['TESTING'] = True
         init_datasources_dormitories(test_app)
         return test_app
