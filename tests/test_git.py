@@ -87,3 +87,39 @@ class TestSampleGitRepository(SampleBareRepoInitializedBase):
         """Test the repo only has a `master` ref"""
         self.assertEqual(len(self.repo.refs), 1)
         self.assertEqual(self.repo.head.ref.name, 'master')
+
+
+class TestSampleClonedRepositoryBase(SampleBareRepoInitializedBase):
+    """A class that provides useful assertions for a cloned repository"""
+    def setUp(self):
+        super().setUp()
+        self.cloned_repo_path = os.path.join(self.workdir, 'cloned')
+
+    def assert_cloned_repo_not_bare(self):
+        self.assertFalse(self.cloned_repo.bare)
+
+    def assert_cloned_repo_one_branch(self):
+        """Test only a `master` exists to which the head points to."""
+        self.assertEqual(len(self.cloned_repo.branches), 1)
+        self.assertEqual(self.cloned_repo.branches[0].name, 'master')
+        self.assertEqual(self.cloned_repo.branches[0], self.cloned_repo.head.ref)
+
+    def assert_cloned_repo_correct_refs(self):
+        # Expected: master(current HEAD), origin/HEAD, origin/master
+        self.assertEqual(len(self.cloned_repo.refs), 3)
+
+    def assert_repo_correctly_cloned(self):
+        self.assert_cloned_repo_not_bare()
+        self.assert_cloned_repo_one_branch()
+        self.assert_cloned_repo_correct_refs()
+
+
+class TestSampleGitRepositoryCloned(TestSampleClonedRepositoryBase):
+    def setUp(self):
+        super().setUp()
+        init_cloned_git_repo(path=self.cloned_repo_path,
+                             path_to_bare=self.repo_path)
+        self.cloned_repo = Repo(self.cloned_repo_path)
+
+    def test_repo_correctly_cloned(self):
+        self.assert_repo_correctly_cloned()
