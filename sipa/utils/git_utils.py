@@ -23,7 +23,7 @@ def init_repo(repo_dir, repo_url):
         return
 
     repo.git.reset('--hard', 'origin/master')
-    logger.info("Initialized git repository %s in %s", repo_dir, repo_url)
+    logger.info("Initialized git repository %s in %s", repo_url, repo_dir)
 
 
 def update_repo(repo_dir):
