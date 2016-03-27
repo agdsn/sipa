@@ -8,6 +8,7 @@ from unittest import TestCase
 
 from git import Repo
 
+from sipa.utils.git_utils import init_repo
 
 SAMPLE_FILE_NAME = "sample_file"
 
@@ -119,6 +120,17 @@ class TestSampleGitRepositoryCloned(TestSampleClonedRepositoryBase):
         super().setUp()
         init_cloned_git_repo(path=self.cloned_repo_path,
                              path_to_bare=self.repo_path)
+        self.cloned_repo = Repo(self.cloned_repo_path)
+
+    def test_repo_correctly_cloned(self):
+        self.assert_repo_correctly_cloned()
+
+
+class TestInitRepo(TestSampleClonedRepositoryBase):
+    def setUp(self):
+        super().setUp()
+        os.mkdir(self.cloned_repo_path)
+        init_repo(repo_dir=self.cloned_repo_path, repo_url=self.repo_path)
         self.cloned_repo = Repo(self.cloned_repo_path)
 
     def test_repo_correctly_cloned(self):
