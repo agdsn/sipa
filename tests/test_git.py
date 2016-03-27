@@ -8,9 +8,10 @@ from unittest import TestCase
 
 from git import Repo
 
-from sipa.utils.git_utils import init_repo
+from sipa.utils.git_utils import init_repo, update_repo
 
 SAMPLE_FILE_NAME = "sample_file"
+OTHER_FILE_NAME = "other_sample_file"
 
 
 def init_sample_git_repo(path, name):
@@ -135,3 +136,33 @@ class TestInitRepo(TestSampleClonedRepositoryBase):
 
     def test_repo_correctly_cloned(self):
         self.assert_repo_correctly_cloned()
+
+
+class TestUpdateRepo(TestSampleClonedRepositoryBase):
+    def setUp(self):
+        super().setUp()
+        init_cloned_git_repo(path=self.cloned_repo_path,
+                             path_to_bare=self.repo_path)
+        self.cloned_repo = Repo(self.cloned_repo_path)
+
+        with TemporaryDirectory() as tmp_git_dir:
+            result = call(["git", "clone", "-q", self.repo_path, tmp_git_dir])
+            assert result == 0
+            tmp_clone = Repo(tmp_git_dir)
+            file_path = os.path.join(tmp_git_dir, OTHER_FILE_NAME)
+            with open(file_path, "w") as f:
+                f.write("This is a sample file, too.")
+
+            tmp_clone.git.add(file_path)
+            tmp_clone.git.commit("-m", "'Other commit'")
+            tmp_clone.remote('origin').push()
+
+    def update_repo(self):
+        update_repo(self.cloned_repo_path)
+
+    def test_commitsha_different_before_update(self):
+        self.assertNotEqual(self.repo.commit().hexsha, self.cloned_repo.commit().hexsha)
+
+    def test_same_commit_after_update(self):
+        self.update_repo()
+        self.assertEqual(self.repo.commit().hexsha, self.cloned_repo.commit().hexsha)
