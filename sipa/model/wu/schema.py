@@ -24,6 +24,7 @@ DORMITORY_MAPPINGS = [
     'Zellescher Weg 41C',
     'Zellescher Weg 41D',
     'Borsbergstraße 34',
+    'Zeunerstraße 1f',
 ]
 
 
