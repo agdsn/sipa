@@ -13,6 +13,19 @@ from sipa.utils.git_utils import init_repo, update_repo
 SAMPLE_FILE_NAME = "sample_file"
 OTHER_FILE_NAME = "other_sample_file"
 
+AUTHOR_NAME = "Test User"
+AUTHOR_MAIL = "test@user.nonexistent.onion"
+
+
+def set_author_config_locally(path=None):
+    custom_git_options = (["--git-dir={}".format(path)]
+                          if path is not None
+                          else [])
+    git_command_head = ["git", *custom_git_options, "config"]
+
+    call([*git_command_head, "user.name", AUTHOR_NAME])
+    call([*git_command_head, "user.email", AUTHOR_MAIL])
+
 
 def init_sample_git_repo(path, name):
     """Initialize a bare git repository with one commit.
@@ -28,6 +41,7 @@ def init_sample_git_repo(path, name):
     with TemporaryDirectory() as tmp_git_dir:
         os.chdir(tmp_git_dir)
         call(["git", "init", "-q"])
+        set_author_config_locally()
 
         with open(SAMPLE_FILE_NAME, "w") as f:
             f.write("This is a sample file.")
@@ -78,8 +92,11 @@ class TestSampleGitRepository(SampleBareRepoInitializedBase):
         cloned_git_path = os.path.join(self.workdir, "test_cloned_instance")
         init_cloned_git_repo(path=cloned_git_path, path_to_bare=self.repo_path)
 
-        self.assertEqual(set(os.listdir(cloned_git_path)),
-                         {".git", SAMPLE_FILE_NAME})
+        # `config` is deleted from the observed files, because it
+        # isn't a requirement for this test that it exists, whereas
+        # the check _cares_ about whether `.git` exists.
+        found_files = set(os.listdir(cloned_git_path)) - {"config"}
+        self.assertEqual(found_files, {".git", SAMPLE_FILE_NAME})
 
     def test_repo_is_bare(self):
         """Test the repo is bare"""
@@ -149,6 +166,8 @@ class TestUpdateRepo(TestSampleClonedRepositoryBase):
             result = call(["git", "clone", "-q", self.repo_path, tmp_git_dir])
             assert result == 0
             tmp_clone = Repo(tmp_git_dir)
+            set_author_config_locally(os.path.join(tmp_git_dir, '.git'))
+
             file_path = os.path.join(tmp_git_dir, OTHER_FILE_NAME)
             with open(file_path, "w") as f:
                 f.write("This is a sample file, too.")
