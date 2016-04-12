@@ -6,7 +6,7 @@ from flask import request, session, current_app
 from flask.ext.login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
-from . import sample, wu, gerok, hss, zeu
+from . import sample, wu, gerok, hss
 
 registered_datasources = [sample.datasource, wu.datasource, gerok.datasource]
 
@@ -14,7 +14,7 @@ registered_dormitories = (
     sample.dormitories + wu.dormitories + gerok.dormitories
 )
 
-premature_dormitories = hss.dormitories + zeu.dormitories
+premature_dormitories = hss.dormitories
 
 
 def init_datasources_dormitories(app):
