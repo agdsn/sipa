@@ -1,0 +1,11 @@
+version: '2'
+services:
+  sipa_testing:
+    build:
+      context: .
+      args:
+        additional_requirements: requirements_testing.txt
+    image: sipa_testing
+    command: python manage.py test
+    volumes:
+      - ./:/home/sipa/sipa
