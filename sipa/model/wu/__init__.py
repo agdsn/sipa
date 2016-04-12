@@ -40,8 +40,8 @@ dormitories = [
             IPv4Network('141.76.121.0/24'),  # Borsi34
         ]),
         ('zeu', "Zeunerstraße", [
-            IPv4Network('141.30.234.128/26'), # Zeu1f
-            IPv4Network('141.30.234.192/27'), # Zeu1f
+            IPv4Network('141.30.234.128/26'),  # Zeu1f
+            IPv4Network('141.30.234.192/27'),  # Zeu1f
         ]),
     ]
 ]
