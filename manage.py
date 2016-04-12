@@ -30,18 +30,19 @@ manager = Manager(create_app)
 
 
 def large_message(message, title="INFO", width=80, fill='='):
-            print("\n{0:{fill}^{width}}\n{1}\n".format(
-                title.upper(),
-                message,
-                fill=fill,
-                width=width,
-            ))
+    print("\n{0:{fill}^{width}}\n{1}\n".format(
+        title.upper(),
+        message,
+        fill=fill,
+        width=width,
+    ))
 
 
 def run_tests_unittest():
+    """Run the unittests with a TextTestRunner, return the exit code."""
     import unittest
     tests = unittest.TestLoader().discover(os.path.join(basedir, 'tests'))
-    unittest.TextTestRunner().run(tests)
+    return unittest.TextTestRunner().run(tests)
 
 
 def run_tests_nose():
@@ -54,13 +55,14 @@ def run_tests_nose():
         large_message("It You don't have nosetests installed.")
         if not prompt_bool("Shall I fall back to unittest?", default=True):
             print("Aborting.")
+            result = 255
         else:
-            run_tests_unittest()
+            result = run_tests_unittest()
 
-        return
+        return result
 
-    call(["nosetests", "--with-coverage", "--cover-erase", "--cover-branches",
-          "--cover-package=sipa"])
+    return call(["nosetests", "--with-coverage", "--cover-erase",
+                 "--cover-branches", "--cover-package=sipa"])
 
 
 @manager.option('-u', '--force-unittest', dest='force_unittest',
@@ -77,12 +79,14 @@ def test(force_unittest):
                       "correct environment?")
         if not prompt_bool("Continue?", default=False):
             print("Aborting.")
-            return
+            exit(255)
 
     if not force_unittest:
-        run_tests_nose()
+        result = run_tests_nose()
     else:
-        run_tests_unittest()
+        result = run_tests_unittest()
+
+    exit(result)
 
 
 if __name__ == '__main__':
