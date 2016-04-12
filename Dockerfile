@@ -27,8 +27,8 @@ ADD . /home/sipa/sipa
 WORKDIR /home/sipa/sipa
 RUN chown -R sipa:sipa /home/sipa/sipa
 
-RUN pip install -r requirements.txt
-
+ARG additional_requirements
+RUN ./install_requirements.py $additional_requirements
 
 EXPOSE 5000
 
