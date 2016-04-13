@@ -2,7 +2,8 @@ version: '2'
 services:
   sipa_testing:
     build:
-      context: .
+      context: ..
+      dockerfile: build/Dockerfile
       args:
         additional_requirements: requirements_testing.txt
     image: sipa_testing

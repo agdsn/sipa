@@ -1,12 +1,16 @@
 version: '2'
 services:
   sipa_debug:
-    build: .
+    build:
+      context: ..
+      dockerfile: build/Dockerfile
     command: python sipa.py --debug --exposed
     volumes:
       - ./:/home/sipa/sipa
   sipa:
-    build: .
+    build:
+      context: ..
+      dockerfile: build/Dockerfile
     environment:
       - SIPA_UWSGI_PREFIX=/sipa
     volumes:
