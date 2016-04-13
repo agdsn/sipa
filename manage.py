@@ -61,7 +61,7 @@ def run_tests_nose():
 
         return result
 
-    return call(["nosetests", "--with-coverage", "--cover-erase",
+    return call(["nosetests", "--rednose", "--with-coverage", "--cover-erase",
                  "--cover-branches", "--cover-package=sipa"])
 
 

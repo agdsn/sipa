@@ -1,0 +1,6 @@
+[run]
+# Don't store coverage in `.coverage` to avoid permission conflicts.
+# Although reading / writing may be alright, `coverage` tries to
+# delete `.coverage`, which doesn't work at all when the dir is
+# mounted.
+data_file=/tmp/sipa_coverage
