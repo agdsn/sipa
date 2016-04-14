@@ -65,6 +65,13 @@ def init_cloned_git_repo(path, path_to_bare):
 
 
 class SampleBareRepoInitializedBase(TestCase):
+    """Set up a bare repository in a tmpdir and provide a `Repo` object
+
+    This TestCase provides:
+    - The temporary “workdir” (`self.workdir`)
+    - The location of the bare repository (`self.repo_path`)
+    - The bare repo as a Repo object (`self.repo`)
+    """
     def setUp(self):
         self.workdir = mkdtemp()
         self.repo_name = "test"
@@ -108,59 +115,64 @@ class TestSampleGitRepository(SampleBareRepoInitializedBase):
         self.assertEqual(self.repo.head.ref.name, 'master')
 
 
-class TestSampleClonedRepositoryBase(SampleBareRepoInitializedBase):
-    """A class that provides useful assertions for a cloned repository"""
-    def setUp(self):
-        super().setUp()
-        self.cloned_repo_path = os.path.join(self.workdir, 'cloned')
+class CorrectlyClonedTesterMixin:
+    """A class that provides useful assertions for a cloned repository
 
-    def assert_cloned_repo_not_bare(self):
+    This class expects `self.cloned_repo` to be a Repo object of the
+    cloned repository.
+    """
+
+    def test_cloned_repo_not_bare(self):
         self.assertFalse(self.cloned_repo.bare)
 
-    def assert_cloned_repo_one_branch(self):
+    def test_cloned_repo_one_branch(self):
         """Test only a `master` exists to which the head points to."""
         self.assertEqual(len(self.cloned_repo.branches), 1)
         self.assertEqual(self.cloned_repo.branches[0].name, 'master')
         self.assertEqual(self.cloned_repo.branches[0], self.cloned_repo.head.ref)
 
-    def assert_cloned_repo_correct_refs(self):
+    def test_cloned_repo_correct_refs(self):
         # Expected: master(current HEAD), origin/HEAD, origin/master
         self.assertEqual(len(self.cloned_repo.refs), 3)
 
-    def assert_repo_correctly_cloned(self):
-        self.assert_cloned_repo_not_bare()
-        self.assert_cloned_repo_one_branch()
-        self.assert_cloned_repo_correct_refs()
 
-
-class TestSampleGitRepositoryCloned(TestSampleClonedRepositoryBase):
+class ExplicitlyClonedSampleRepoTestBase(SampleBareRepoInitializedBase):
+    """A testbase having cloned the sample git directory."""
     def setUp(self):
         super().setUp()
+        self.cloned_repo_path = os.path.join(self.workdir, 'cloned')
         init_cloned_git_repo(path=self.cloned_repo_path,
                              path_to_bare=self.repo_path)
+
         self.cloned_repo = Repo(self.cloned_repo_path)
 
-    def test_repo_correctly_cloned(self):
-        self.assert_repo_correctly_cloned()
 
-
-class TestInitRepo(TestSampleClonedRepositoryBase):
+class InitRepoTestBase(SampleBareRepoInitializedBase):
+    """A testbase having initialized a repository using `init_repo`"""
     def setUp(self):
         super().setUp()
+        self.cloned_repo_path = os.path.join(self.workdir, 'cloned')
         os.mkdir(self.cloned_repo_path)
         init_repo(repo_dir=self.cloned_repo_path, repo_url=self.repo_path)
+
         self.cloned_repo = Repo(self.cloned_repo_path)
 
-    def test_repo_correctly_cloned(self):
-        self.assert_repo_correctly_cloned()
+
+class TestSampleGitRepositoryCloned(CorrectlyClonedTesterMixin,
+                                    ExplicitlyClonedSampleRepoTestBase):
+    """Test that manually cloning the bare repository worked correctly"""
+    pass
 
 
-class TestUpdateRepo(TestSampleClonedRepositoryBase):
+class TestInitRepo(CorrectlyClonedTesterMixin,
+                   InitRepoTestBase):
+    """Test `init_repo` correctly cloned the bare repository"""
+    pass
+
+
+class TestUpdateRepo(ExplicitlyClonedSampleRepoTestBase):
     def setUp(self):
         super().setUp()
-        init_cloned_git_repo(path=self.cloned_repo_path,
-                             path_to_bare=self.repo_path)
-        self.cloned_repo = Repo(self.cloned_repo_path)
 
         with TemporaryDirectory() as tmp_git_dir:
             result = call(["git", "clone", "-q", self.repo_path, tmp_git_dir])
