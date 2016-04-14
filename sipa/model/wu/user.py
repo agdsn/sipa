@@ -300,7 +300,8 @@ class User(BaseUser):
     @active_prop
     @connection_dependent
     def hostalias(self):
-        return ", ".join(c.c_alias for c in self._nutzer.computer)
+        return ", ".join(c.c_alias for c in self._nutzer.computer
+                         if c.c_alias)
 
     @active_prop
     def userdb_status(self):

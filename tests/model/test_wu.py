@@ -281,13 +281,11 @@ class ComputerWithoutAliasTestCase(WuAtlantisFakeDBInitialized):
             self.fail("Accessing user.hostalias with one alias being None "
                       "threw a TypeError")
 
-    @expectedFailure
     def test_computer_no_alias_returns_empty_string(self):
         NoHostAliasComputerFactory.create(nutzer=self.nutzer)
         with self.fail_on_type_error():
             self.assertEqual(self.user.hostalias, "")
 
-    @expectedFailure
     def test_computer_no_alias_not_included(self):
         self.computers = ComputerFactory.create_batch(2, nutzer=self.nutzer)
         self.computers += NoHostAliasComputerFactory.create_batch(2, nutzer=self.nutzer)
