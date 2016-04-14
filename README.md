@@ -22,6 +22,23 @@ that there will be features you probably won't need, such as the traffic
 monitoring or splitting the login process into certain divisions.
 
 
+How can I run Sipa?
+-------------------
+
+As a general note, you should have `docker` and `docker-compose`
+installed.  Just using python and e.g. a virtualenv is possible, but
+discouraged.
+
+The simplest method is to run `docker-compose up -d`.
+
+This should automatically set up an nginx container on port 80
+providing `/sipa` and `/sipa_debug`, which are two containers of sipa,
+the first running on uwsgi, and the second directly using `sipa.py`.
+
+If this does not work for you see “Running on Docker” below for a
+manual (i.e. not docker-compose-based) container setup.
+
+
 How can I run the tests?
 ------------------------
 
