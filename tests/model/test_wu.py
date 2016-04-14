@@ -1,5 +1,6 @@
+from contextlib import contextmanager
 from itertools import permutations
-from unittest import TestCase
+from unittest import TestCase, expectedFailure
 from unittest.mock import MagicMock, patch
 
 from flask.ext.login import AnonymousUserMixin
@@ -11,6 +12,7 @@ from sipa.model.wu.schema import db, Nutzer
 from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
                                      UnknownStatusNutzerFactory,
                                      ComputerFactory, NutzerFactory,
+                                     NoHostAliasComputerFactory,
                                      CreditFactory, TrafficFactory)
 from sipa.utils import timetag_today
 from tests.prepare import AppInitialized
@@ -254,6 +256,48 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
             msg="id '{}' doesn't start with '{}'".format(fetched_id,
                                                          original_id)
         )
+
+
+class ComputerWithoutAliasTestCase(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+
+        self.nutzer = NutzerFactory.create(status=1)
+
+        self.name = "Test Nutzer"
+        self.mail = "foo@bar.baz"
+
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=self.name,
+            mail=self.mail,
+        )
+
+    @contextmanager
+    def fail_on_type_error(self):
+        try:
+            yield
+        except TypeError:
+            self.fail("Accessing user.hostalias with one alias being None "
+                      "threw a TypeError")
+
+    @expectedFailure
+    def test_computer_no_alias_returns_empty_string(self):
+        NoHostAliasComputerFactory.create(nutzer=self.nutzer)
+        with self.fail_on_type_error():
+            self.assertEqual(self.user.hostalias, "")
+
+    @expectedFailure
+    def test_computer_no_alias_not_included(self):
+        self.computers = ComputerFactory.create_batch(2, nutzer=self.nutzer)
+        self.computers += NoHostAliasComputerFactory.create_batch(2, nutzer=self.nutzer)
+        with self.fail_on_type_error():
+            for computer in self.computers:
+                if not computer.c_alias:
+                    continue
+
+                with self.subTest(computer=computer):
+                    self.assertIn(computer.c_alias, self.user.hostalias)
 
 
 class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):

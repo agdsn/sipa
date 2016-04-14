@@ -50,6 +50,10 @@ class ComputerFactory(WuFactory):
     c_alias = FuzzyText()
 
 
+class NoHostAliasComputerFactory(ComputerFactory):
+    c_alias = None
+
+
 class CreditFactory(WuFactory):
     class Meta:
         model = Credit
