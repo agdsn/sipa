@@ -21,6 +21,19 @@ Please note that SIPA has been built to fit our specific purposes.  This means
 that there will be features you probably won't need, such as the traffic
 monitoring or splitting the login process into certain divisions.
 
+
+How can I run the tests?
+------------------------
+
+Run `./run_tests.sh`.  If you run it for the first time, this should
+build the `sipa_testing` docker image, which may take a few minutes.
+
+Please note that, although the `sipa` folder is mounted into the
+container, you will have to recreate the docker image if the
+requirements changed.  You can just let the script do this by removing
+the image with `docker rmi sipa_testing`.
+
+
 Running on Docker
 -----------------
 
