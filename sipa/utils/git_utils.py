@@ -1,19 +1,29 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from flask.ext.babel import format_datetime
-from git.exc import GitCommandError, InvalidGitRepositoryError, CacheError
 from logging import getLogger
+from subprocess import call
+
 import git
+from flask.ext.babel import format_datetime
+from git.exc import (GitCommandError, InvalidGitRepositoryError,
+                     NoSuchPathError, CacheError)
 
 logger = getLogger(__name__)
 
 
 def init_repo(repo_dir, repo_url):
-    repo = git.Repo.init(repo_dir)
+    """Initialize a new git repository in `git_dir` from `repo_url`"""
+    try:
+        repo = git.Repo(repo_dir)
+    except (NoSuchPathError, InvalidGitRepositoryError):
+        call(["git", "clone", repo_url, repo_dir, "-q"])
+        repo = git.Repo(repo_dir)
+
     if repo.remotes:
         origin = repo.remote('origin')
     else:
         origin = repo.create_remote('origin', repo_url)
+
     try:
         origin.fetch()
     except GitCommandError:
@@ -21,6 +31,13 @@ def init_repo(repo_dir, repo_url):
             'repo_dir': repo_dir
         }})
         return
+
+    try:
+        master = repo.refs['master']
+    except IndexError:
+        raise OSError("Git directory {} doesn't have a master!".format(repo_dir))
+
+    repo.head.set_reference(master)
 
     repo.git.reset('--hard', 'origin/master')
     logger.info("Initialized git repository %s in %s", repo_url, repo_dir)
