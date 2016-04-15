@@ -1,1 +1,1 @@
-/home/lukas/code/sipa/build/Dockerfile
+./build/Dockerfile
