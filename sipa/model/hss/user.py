@@ -2,7 +2,7 @@ from ..default import BaseUser
 
 from flask.ext.login import AnonymousUserMixin
 
-from sipa.model.property import active_prop
+from sipa.model.property import active_prop, unsupported_prop
 from sipa.utils import argstr
 
 
@@ -128,19 +128,19 @@ class User(BaseUser):
     def status(self):
         pass
 
-    @active_prop
+    @unsupported_prop
     def id(self):
         pass
 
-    @active_prop
+    @unsupported_prop
     def hostname(self):
         pass
 
-    @active_prop
+    @unsupported_prop
     def hostalias(self):
         pass
 
-    @active_prop
+    @unsupported_prop
     def userdb_status(self):
         pass
 
