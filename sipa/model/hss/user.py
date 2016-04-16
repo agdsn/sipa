@@ -98,7 +98,7 @@ class User(BaseUser):
 
     @active_prop
     def ips(self):
-        return []
+        return "141.30.228.39"
 
     @property
     def name(self):
@@ -106,48 +106,47 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        pass
+        return "Foo bar"
 
     @active_prop
     def login(self):
-        pass
+        return self.name
 
     @active_prop
     def mac(self):
-        pass
+        return "AA:BB:CC:DD:EE:FF"
 
     @active_prop
     def mail(self):
-        pass
+        return "foo@bar.baz"
 
     @active_prop
     def address(self):
-        pass
+        return "Keller"
 
     @active_prop
     def status(self):
-        pass
+        return 2
 
     @unsupported_prop
     def id(self):
-        pass
+        raise NotImplementedError
 
     @unsupported_prop
     def hostname(self):
-        pass
+        raise NotImplementedError
 
     @unsupported_prop
     def hostalias(self):
-        pass
+        raise NotImplementedError
 
     @unsupported_prop
     def userdb_status(self):
-        pass
+        raise NotImplementedError
 
     @property
     def userdb(self):
-        """The actual `BaseUserDB` object"""
-        return
+        raise NotImplementedError
 
     @property
     def has_connection(self):
