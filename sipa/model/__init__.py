@@ -8,13 +8,18 @@ from sqlalchemy.exc import OperationalError
 
 from . import sample, wu, gerok, hss
 
-registered_datasources = [sample.datasource, wu.datasource, gerok.datasource]
+registered_datasources = [
+    sample.datasource,
+    wu.datasource,
+    gerok.datasource,
+    hss.datasource,
+]
 
 registered_dormitories = (
-    sample.dormitories + wu.dormitories + gerok.dormitories
+    sample.dormitories + wu.dormitories + gerok.dormitories + hss.dormitories
 )
 
-premature_dormitories = hss.dormitories
+premature_dormitories = []
 
 
 def init_datasources_dormitories(app):
