@@ -13,8 +13,7 @@ def init_context(self):
 datasource = DataSource(
     name='hss',
     user_class=user.User,
-    # website_url="https://wh12.tu-dresden.de",
-    mail_server="wh2.tu-dresden.de",
+    mail_server="wh12.tu-dresden.de",
     # to be included when it becomes a DataSource
     webmailer_url="https://wh12.tu-dresden.de/roundcube/",
     init_context=init_context,
