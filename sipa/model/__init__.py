@@ -70,6 +70,7 @@ def list_supported_dormitories():
 
 def init_context(app):
     """Call each datasources `init_context` method."""
+    app.config['SQLALCHEMY_BINDS'] = {}
     db.init_app(app)
     for datasource in app.extensions['datasources']:
         if datasource.init_context:

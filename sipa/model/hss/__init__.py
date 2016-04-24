@@ -1,13 +1,21 @@
 # -*- coding: utf-8 -*-
-
+import logging
 from ipaddress import IPv4Network
 
 from ..datasource import DataSource, Dormitory
 from . import user
 
+logger = logging.getLogger(__name__)
 
-def init_context(self):
-    pass
+
+def init_context(app):
+    if 'HSS_CONNECTION_STRING' not in app.config:
+        logger.debug('HSS_CONNECTION_STRING not set. Skipping.')
+        return
+
+    app.config['SQLALCHEMY_BINDS'].update({
+        'hss': app.config['HSS_CONNECTION_STRING']
+    })
 
 
 datasource = DataSource(
