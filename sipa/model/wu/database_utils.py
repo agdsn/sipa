@@ -16,7 +16,6 @@ def init_atlantis(app, static_connection_string=None):
         app.config['SQLALCHEMY_BINDS'] = {
             'traffic': static_connection_string
         }
-        db.init_app(app)
         return
 
     url_base = (
@@ -36,7 +35,6 @@ def init_atlantis(app, static_connection_string=None):
         'traffic': url_base.format('traffic')
     }
 
-    db.init_app(app)
     for bind in [None, 'traffic']:
         engine = db.get_engine(app, bind=bind)
         try:
