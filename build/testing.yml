@@ -9,4 +9,10 @@ services:
     image: sipa_testing
     command: python manage.py test
     volumes:
-      - ./:/home/sipa/sipa
+      # Note: ../ is relative to the path of the .yml
+      # Thus: be careful with symlinks!
+      - ../:/home/sipa/sipa
+    links:
+      - postgres
+  postgres:
+    image: postgres
