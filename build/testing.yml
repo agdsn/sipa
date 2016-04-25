@@ -14,8 +14,14 @@ services:
       - ../:/home/sipa/sipa
     links:
       - postgres
+      - ldap_hss
   postgres:
     image: postgres
     environment:
       - POSTGRES_USER=sipa
       - POSTGRES_PASSWORD=password
+  ldap_hss:
+    image: dinkel/openldap
+    environment:
+      - SLAPD_PASSWORD=password
+      - SLAPD_DOMAIN=wh12.tu-dresden.de
