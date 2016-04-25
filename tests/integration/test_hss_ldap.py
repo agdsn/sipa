@@ -56,7 +56,7 @@ class LdapSetupMixin:
 
             for uid, data in self.fixtures.items():
                 data = data.copy()
-                data.update()
+                self.create_user_from_fixture(uid)
 
     def delete_everything_below_base(self):
         """Delete the LDAP_USER_BASE dn and every entry below it."""
