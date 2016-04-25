@@ -46,11 +46,9 @@ class LdapSetupMixin:
                               user=self.LDAP_ADMIN_UID,
                               password=self.LDAP_ADMIN_PASSWORD,
                               authentication=ldap3.AUTH_SIMPLE) as conn:
-            conn.search(self.LDAP_USER_BASE, '(objectclass=*)')
-            for entry in conn.entries:
-                conn.delete(entry.entry_get_dn())
+            self.conn = conn
 
-            conn.delete(self.LDAP_USER_BASE)
+            self.delete_everything_below_base()
 
             result = conn.add(self.LDAP_USER_BASE, 'organizationalUnit')
             if not result:
@@ -59,19 +57,34 @@ class LdapSetupMixin:
             for uid, data in self.fixtures.items():
                 data = data.copy()
                 data.update()
-                user_dn = self.LDAP_USER_FORMAT_STRING.format(user=uid)
-                password = data.pop('userPassword')
-                result = conn.add(user_dn, ['account', 'posixAccount'],
-                                  data)
-                if not result:
-                    self.add_failed(user_dn, description=conn.result)
 
-                result = conn.modify(
-                    user_dn,
-                    {'userPassword': (ldap3.MODIFY_REPLACE, [password])},
-                )
-                if not result:
-                    self.add_failed(user_dn, description=conn.result['message'])
+    def delete_everything_below_base(self):
+        """Delete the LDAP_USER_BASE dn and every entry below it."""
+        self.conn.search(self.LDAP_USER_BASE, '(objectclass=*)')
+        for entry in self.conn.entries:
+            self.conn.delete(entry.entry_get_dn())
+
+        self.conn.delete(self.LDAP_USER_BASE)
+
+    def create_user_from_fixture(self, uid):
+        """Create a user with uid `uid` from the fixtures
+
+        This sets the password from 'userPassword' after the add.
+        """
+        user_dn = self.LDAP_USER_FORMAT_STRING.format(user=uid)
+        data = self.fixtures[uid].copy()
+
+        password = data.pop('userPassword')
+        result = self.conn.add(user_dn, ['account', 'posixAccount'], data)
+        if not result:
+            self.add_failed(user_dn, description=self.conn.result)
+
+        result = self.conn.modify(
+            user_dn,
+            {'userPassword': (ldap3.MODIFY_REPLACE, [password])},
+        )
+        if not result:
+            self.add_failed(user_dn, description=self.conn.result['message'])
 
     @staticmethod
     def add_failed(dn, description=None):
