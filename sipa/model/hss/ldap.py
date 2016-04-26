@@ -25,7 +25,8 @@ def get_ldap_connection(user, password, use_ssl=True):
 class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
     """This class is a wrapper for an ldap3 Connection."""
 
-    def __init__(self, username=None, password=None):
+    def __init__(self, username=None, password=None,
+                 server_args={}, connect_args={}):
         """Return an `ldap3.Connection` object.
 
         The bind uses what `{type}.`
@@ -46,9 +47,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         self.server = ldap3.Server(
             host=self.config['host'],
             port=self.config['port'],
-            # hss stuff:
-            use_ssl=True,  # should be passable via __init__
-            get_info=ldap3.GET_ALL_INFO,
+            **dict(self.DEFAULT_SERVER_ARGS, **server_args),
             # wu stuff:
             # get_info=ldap3.SCHEMA,
             # tls=None,  # accept any certificate
@@ -60,11 +59,8 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
                 server=self.server,
                 user=bind_user,
                 password=bind_password,
-                # hss stuff:
-                auto_bind=True,
-                client_strategy=ldap3.STRATEGY_SYNC,
-                authentication=ldap3.AUTH_SIMPLE,
-                # don't
+                **dict(self.DEFAULT_CONNECT_ARGS, **connect_args),
+                # wu stuff:
                 # check_names=True,
                 # raise_exceptions=True,
                 # auto_bind=ldap3.AUTO_BIND_TLS_BEFORE_BIND,
@@ -89,6 +85,9 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
     def get_anonymous_bind_credentials(self):
         raise NotImplementedError
 
+    DEFAULT_CONNECT_ARGS = {}
+    DEFAULT_SERVER_ARGS = {}
+
 
 class HssConfigProxy:
     def __get__(self, obj, objtype):
@@ -109,6 +108,16 @@ class HssConfigProxy:
 
 class HssLdapConnector(BaseLdapConnector):
     config = HssConfigProxy()
+
+    DEFAULT_SERVER_ARGS = {
+        'use_ssl': True,
+        'get_info': ldap3.GET_ALL_INFO,
+    }
+    DEFAULT_CONNECT_ARGS = {
+        'auto_bind': True,
+        'client_strategy': ldap3.STRATEGY_SYNC,
+        'authentication': ldap3.AUTH_SIMPLE,
+    }
 
     def get_anonymous_bind_credentials(self):
         raise ValueError("The Hss Connector doesn't support Anonymous Binding")
