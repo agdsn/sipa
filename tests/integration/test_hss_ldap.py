@@ -3,7 +3,7 @@ from functools import partial
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
-from sipa.model.hss.ldap import get_ldap_connection
+from sipa.model.hss.ldap import get_ldap_connection, HssLdapConnector
 from tests.prepare import AppInitialized
 
 
@@ -122,3 +122,17 @@ class SimpleLdapBindTestCase(SimpleLdapTestBase):
             self.ldap_connect(self.username, self.password)
         except LDAPBindError:
             self.fail("LDAPBindError thrown instead of successful bind!")
+
+
+class HssLdapConnectorTestCase(SimpleLdapTestBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.username = next(iter(self.fixtures.keys()))
+        self.password = self.fixtures[self.username]['userPassword']
+
+    def test_connector_abstract(self):
+        try:
+            HssLdapConnector(self.username, self.password)
+        except TypeError as e:
+            self.assertIn('with abstract methods', e.args[0])
+            self.fail(e.args[0])
