@@ -93,7 +93,11 @@ class LdapSetupMixin:
                                                  desc=description))
 
 
-class SimpleLdapBindTestCase(LdapSetupMixin, OneLdapUserFixture, HssLdapAppInitialized):
+class SimpleLdapTestBase(LdapSetupMixin, OneLdapUserFixture, HssLdapAppInitialized):
+    pass
+
+
+class SimpleLdapBindTestCase(SimpleLdapTestBase):
     ldap_connect = partial(get_ldap_connection, use_ssl=False)
 
     def __init__(self, *args, **kwargs):
