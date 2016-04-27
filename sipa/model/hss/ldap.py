@@ -4,6 +4,8 @@ import ldap3
 
 from flask import current_app
 
+from sipa.utils.exceptions import InvalidCredentials
+
 
 def get_ldap_connection(user, password, use_ssl=True):
     """Test method to establish an ldap connection"""
@@ -40,7 +42,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
             # Attempt an anonymous bind, don't use the username
             bind_user, bind_password = self.get_anonymous_bind_credentials()
         elif not password and username:
-            raise ValueError("Bind attempted with username without a password")
+            raise InvalidCredentials("Bind attempted with username without a password")
         else:
             bind_user, bind_password = self.get_bind_credentials(username, password)
 
@@ -59,14 +61,16 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
                 server=self.server,
                 user=bind_user,
                 password=bind_password,
+                raise_exceptions=True,
+                check_names=True,
                 **dict(self.DEFAULT_CONNECT_ARGS, **connect_args),
                 # wu stuff:
                 # check_names=True,
                 # raise_exceptions=True,
                 # auto_bind=ldap3.AUTO_BIND_TLS_BEFORE_BIND,
             )
-        except ldap3.LDAPBindError:
-            raise NotImplementedError
+        except ldap3.LDAPInvalidCredentialsResult:
+            raise InvalidCredentials()
 
     @staticmethod
     def fetch_user(self, username):
