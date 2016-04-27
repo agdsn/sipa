@@ -4,6 +4,7 @@ import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
 from sipa.model.hss.ldap import get_ldap_connection, HssLdapConnector
+from sipa.utils.exceptions import InvalidCredentials
 from tests.prepare import AppInitialized
 
 
@@ -125,15 +126,44 @@ class SimpleLdapBindTestCase(SimpleLdapTestBase):
             self.fail("LDAPBindError thrown instead of successful bind!")
 
 
+class TestingHssLdapConnector(HssLdapConnector):
+    def __init__(self, *a, **kw):
+        old_args = kw.pop('server_args', {})
+        server_args = {
+            'use_ssl': False,
+        }
+        server_args.update(**old_args)
+
+        super().__init__(*a, **kw, server_args=server_args)
+
+
 class HssLdapConnectorTestCase(SimpleLdapTestBase):
+    Connector = TestingHssLdapConnector
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.username = next(iter(self.fixtures.keys()))
         self.password = self.fixtures[self.username]['userPassword']
 
-    def test_connector_abstract(self):
-        try:
-            HssLdapConnector(self.username, self.password)
-        except TypeError as e:
-            self.assertIn('with abstract methods', e.args[0])
-            self.fail(e.args[0])
+    def test_connector_works(self):
+        with self.Connector(self.username, self.password):
+            pass
+
+    def test_wrong_password_raises(self):
+        with self.assertRaises(InvalidCredentials), \
+             self.Connector(self.username, self.password + 'wrong'):
+            pass
+
+    def test_wrong_username_raises(self):
+        with self.assertRaises(InvalidCredentials), \
+             self.Connector(self.username + 'wrong', self.password):
+            pass
+
+    def test_anonymous_bind_raises(self):
+        with self.assertRaises(ValueError), self.Connector():
+            pass
+
+    def test_empty_password_bind_raises(self):
+        with self.assertRaises(InvalidCredentials), \
+             self.Connector(self.username, ''):
+            pass
