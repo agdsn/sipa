@@ -61,8 +61,9 @@ class LdapSetupMixin:
     def delete_everything_below_base(self):
         """Delete the LDAP_USER_BASE dn and every entry below it."""
         self.conn.search(self.LDAP_USER_BASE, '(objectclass=*)')
-        for entry in self.conn.entries:
-            self.conn.delete(entry.entry_get_dn())
+        if self.conn.entries:
+            for entry in self.conn.entries:
+                self.conn.delete(entry.entry_get_dn())
 
         self.conn.delete(self.LDAP_USER_BASE)
 
