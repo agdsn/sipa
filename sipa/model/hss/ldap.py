@@ -102,10 +102,6 @@ class HssConfigProxy:
         return {
             'host': conf['HSS_LDAP_HOST'],
             'port': int(conf['HSS_LDAP_PORT']),
-            # 'user': conf['WU_LDAP_SEARCH_USER'],
-            'password': conf['WU_LDAP_SEARCH_PASSWORD'],
-            # 'search_user_base': conf['HSS_SEARCH_USER_BASE'],
-            # 'search_group_base': conf['WU_LDAP_SEARCH_GROUP_BASE'],
             'userdn_format': current_app.config['HSS_LDAP_USERDN_FORMAT'],
         }
 
