@@ -53,6 +53,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         self.server = ldap3.Server(
             host=self.config['host'],
             port=self.config['port'],
+            use_ssl=self.config.get('use_ssl', False),
             **dict(self.DEFAULT_SERVER_ARGS, **server_args),
             # wu stuff:
             # get_info=ldap3.SCHEMA,
@@ -145,7 +146,6 @@ class HssLdapConnector(BaseLdapConnector):
     config = HssConfigProxy()
 
     DEFAULT_SERVER_ARGS = {
-        'use_ssl': True,
         'get_info': ldap3.GET_ALL_INFO,
     }
     DEFAULT_CONNECT_ARGS = {

@@ -4,7 +4,8 @@ from unittest import TestCase
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
-from sipa.model.hss.ldap import get_ldap_connection, HssLdapConnector, might_be_ldap_dn
+from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connector,
+                                 might_be_ldap_dn)
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 from tests.prepare import AppInitialized
 
@@ -24,7 +25,8 @@ class HssLdapAppInitialized(AppInitialized):
             'HSS_LDAP_USERDN_FORMAT': self.LDAP_USER_FORMAT_STRING,
             'HSS_LDAP_SYSTEM_BIND': self.LDAP_ADMIN_UID,
             'HSS_LDAP_SYSTEM_PASSWORD': self.LDAP_ADMIN_PASSWORD,
-            'HSS_LDAP_SEARCH_BASE': self.LDAP_USER_BASE
+            'HSS_LDAP_SEARCH_BASE': self.LDAP_USER_BASE,
+            'HSS_LDAP_USE_SSL': True,
         })
 
 
@@ -134,66 +136,51 @@ class GetLdapConnectionTestCase(SimpleLdapTestBase):
             self.fail("LDAPBindError thrown instead of successful bind!")
 
 
-class TestingHssLdapConnector(HssLdapConnector):
-    def __init__(self, *a, **kw):
-        old_args = kw.pop('server_args', {})
-        server_args = {
-            'use_ssl': False,
-        }
-        server_args.update(**old_args)
-
-        super().__init__(*a, **kw, server_args=server_args)
-
-
 class HssLdapConnectorTestCase(SimpleLdapTestBase):
-    Connector = TestingHssLdapConnector
-
     def test_connector_works(self):
-        with self.Connector(self.username, self.password):
+        with Connector(self.username, self.password):
             pass
 
     def test_wrong_password_raises(self):
         with self.assertRaises(InvalidCredentials), \
-             self.Connector(self.username, self.password + 'wrong'):
+             Connector(self.username, self.password + 'wrong'):
             pass
 
     def test_wrong_username_raises(self):
         with self.assertRaises(InvalidCredentials), \
-             self.Connector(self.username + 'wrong', self.password):
+             Connector(self.username + 'wrong', self.password):
             pass
 
     def test_anonymous_bind_raises(self):
         """Test connecting without username and password raises a ValueError"""
-        with self.assertRaises(ValueError), self.Connector():
+        with self.assertRaises(ValueError), Connector():
             pass
 
     def test_system_bind_successful(self):
         try:
-            with self.Connector.system_bind():
+            with Connector.system_bind():
                 pass
         except LDAPBindError:
             self.fail("LDAPBindError thrown instead of successful bind!")
 
     def test_empty_password_bind_raises(self):
         with self.assertRaises(InvalidCredentials), \
-             self.Connector(self.username, ''):
+             Connector(self.username, ''):
             pass
 
 
 class HssFetchUserTestCase(SimpleLdapTestBase):
-    Connector = TestingHssLdapConnector
-
     def test_fetch_user(self):
         expected_user_dict = {
             'uid': self.username,
             'name': self.user_dict['gecos'],
         }
-        self.assertEqual(self.Connector.fetch_user(self.username),
+        self.assertEqual(Connector.fetch_user(self.username),
                          expected_user_dict)
 
     def test_fetch_invalid_user_raises(self):
         with self.assertRaises(UserNotFound):
-            self.Connector.fetch_user(self.username + 'wrong')
+            Connector.fetch_user(self.username + 'wrong')
 
 
 class MightBeLdapDNTestCase(TestCase):
