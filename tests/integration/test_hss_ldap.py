@@ -100,6 +100,10 @@ class SimpleLdapTestBase(LdapSetupMixin, OneLdapUserFixture, HssLdapAppInitializ
 
 
 class SimpleLdapBindTestCase(SimpleLdapTestBase):
+    """Tests for the `get_ldap_connecton` function.
+
+    May be deleted, just as said function.
+    """
     ldap_connect = partial(get_ldap_connection, use_ssl=False)
 
     def __init__(self, *args, **kwargs):
