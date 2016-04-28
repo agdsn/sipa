@@ -108,9 +108,9 @@ class HssConfigProxy:
         return {
             'host': conf['HSS_LDAP_HOST'],
             'port': int(conf['HSS_LDAP_PORT']),
-            'userdn_format': current_app.config['HSS_LDAP_USERDN_FORMAT'],
-            'system_bind': current_app.config['HSS_LDAP_SYSTEM_BIND'],
-            'system_password': current_app.config['HSS_LDAP_SYSTEM_PASSWORD'],
+            'userdn_format': conf['HSS_LDAP_USERDN_FORMAT'],
+            'system_bind': conf['HSS_LDAP_SYSTEM_BIND'],
+            'system_password': conf['HSS_LDAP_SYSTEM_PASSWORD'],
         }
 
 
