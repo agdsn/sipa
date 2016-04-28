@@ -111,6 +111,7 @@ class HssConfigProxy:
             'userdn_format': conf['HSS_LDAP_USERDN_FORMAT'],
             'system_bind': conf['HSS_LDAP_SYSTEM_BIND'],
             'system_password': conf['HSS_LDAP_SYSTEM_PASSWORD'],
+            'search_base': conf['HSS_LDAP_SEARCH_BASE'],
         }
 
 

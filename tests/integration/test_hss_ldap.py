@@ -24,6 +24,7 @@ class HssLdapAppInitialized(AppInitialized):
             'HSS_LDAP_USERDN_FORMAT': self.LDAP_USER_FORMAT_STRING,
             'HSS_LDAP_SYSTEM_BIND': self.LDAP_ADMIN_UID,
             'HSS_LDAP_SYSTEM_PASSWORD': self.LDAP_ADMIN_PASSWORD,
+            'HSS_LDAP_SEARCH_BASE': self.LDAP_USER_BASE
         })
 
 
