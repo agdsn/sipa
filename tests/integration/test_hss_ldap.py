@@ -222,3 +222,11 @@ class AuthenticateTestCase(SimpleLdapTestBase):
         self.assertEqual(user.realname, name)
         # We don't mind the rest of the data
         # …We only test the ldap here.
+
+    def test_invalid_password_anonymous(self):
+        user = User.authenticate(self.username, self.password + 'wrong')
+        self.assertIsInstance(user, AnonymousUserMixin)
+
+    def test_invalid_username_anonymous(self):
+        user = User.authenticate(self.username + 'wrong', self.password)
+        self.assertIsInstance(user, AnonymousUserMixin)
