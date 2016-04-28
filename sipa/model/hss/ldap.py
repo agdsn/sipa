@@ -88,20 +88,28 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         return cls(username, password)
 
     @classmethod
-    def fetch_user(cls, username):
+    def fetch_user(cls, username, connection=None):
         """Fetch `username` from LDAP, return a dict.
 
         :param: username the username to be used in cls.__init__()
         :returns: a dict {'uid': '', 'name': ''} containing the user data
         """
-        with cls.system_bind() as connection:
-            connection.search(
+        def _search(conn):
+            conn.search(
                 search_base=cls.config['search_base'],
                 search_filter='(uid={user})'.format(user=username),
                 attributes=['uid', 'gecos', 'mail'],
             )
 
-        response = connection.response
+        if connection is not None:
+            print("connection:", connection)
+            _search(connection)
+            response = connection.response
+        else:
+            with cls.system_bind() as conn:
+                _search(conn)
+                response = conn.response
+
         if response:
             user = response.pop()
             attrs = user['attributes']
