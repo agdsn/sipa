@@ -1,11 +1,12 @@
 from functools import partial
-from unittest import TestCase
+from unittest import TestCase, expectedFailure
 
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
 from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connector,
                                  might_be_ldap_dn)
+from sipa.model.hss.user import User
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 from tests.prepare import AppInitialized
 
@@ -198,3 +199,27 @@ class MightBeLdapDNTestCase(TestCase):
                     self.assertTrue(might_be_ldap_dn(sample))
                 else:
                     self.assertFalse(might_be_ldap_dn(sample))
+
+
+class AuthenticateTestCase(SimpleLdapTestBase):
+    def setUp(self):
+        super().setUp()
+        self.user = User.authenticate(self.username, self.password)
+
+    def test_authenticate_returns_userdata(self):
+        # TODO: decide: isn't there a better method to patch?
+        self.assertIsInstance(self.user, User)
+
+    @expectedFailure
+    def test_user_data_passed(self):
+        self.assert_user_data_passed(
+            user=self.user,
+            login=self.username,
+            name=self.user_dict['gecos'],
+        )
+
+    def assert_user_data_passed(self, user, login, name):
+        self.assertEqual(user.login, login)
+        self.assertEqual(user.realname, name)
+        # We don't mind the rest of the data
+        # …We only test the ldap here.

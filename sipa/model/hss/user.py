@@ -3,10 +3,12 @@ from ..default import BaseUser
 from flask.ext.login import AnonymousUserMixin
 
 from sipa.model.property import active_prop, unsupported_prop
+from sipa.model.hss.ldap import HssLdapConnector
 from sipa.utils import argstr
 
 
 class User(BaseUser):
+    LdapConnector = HssLdapConnector
 
     def __init__(self, uid):
         """Initialize the User object.
@@ -56,6 +58,7 @@ class User(BaseUser):
     @classmethod
     def authenticate(cls, username, password):
         """Return a User instance or raise PasswordInvalid"""
+        user_dict = cls.LdapConnector.fetch_user(username)
         # TODO: check password / user
         return cls(username)
 
