@@ -36,6 +36,10 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         The bind uses what `type(self).config` provides as data.
 
         Can be used as ContextManager as well.
+
+        :raises: ValueError if not password and not username
+        :raises: InvalidCredentials if not password
+        :raises: InvalidCredentials if bind sais so
         """
         self.username = username
         self.password = password
