@@ -1,10 +1,12 @@
+import logging
 from abc import ABCMeta, abstractmethod
 
 import ldap3
-
 from flask import current_app
 
-from sipa.utils.exceptions import InvalidCredentials
+from sipa.utils.exceptions import InvalidCredentials, UserNotFound
+
+logger = logging.getLogger(__name__)
 
 
 def get_ldap_connection(user, password, use_ssl=True):
@@ -79,6 +81,30 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         username, password = cls.get_system_bind_credentials()
 
         return cls(username, password)
+
+    @classmethod
+    def fetch_user(cls, username):
+        with cls.system_bind() as connection:
+            connection.search(
+                search_base=cls.config['search_base'],
+                search_filter='(uid={user})'.format(user=username),
+                attributes=['uid', 'gecos', 'mail'],
+            )
+
+        response = connection.response
+        if response:
+            user = response.pop()
+            attrs = user['attributes']
+            return {
+                'uid': attrs['uid'].pop(),
+                'name': attrs['gecos'],
+            }
+
+        if response:
+            logger.warning("Ldapsearch for uid=%s returned more than one result",
+                           username)
+        raise UserNotFound("User {uid} not found in ldap search"
+                           .format(uid=username))
 
     @property
     @abstractmethod

@@ -5,7 +5,7 @@ import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
 from sipa.model.hss.ldap import get_ldap_connection, HssLdapConnector, might_be_ldap_dn
-from sipa.utils.exceptions import InvalidCredentials
+from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 from tests.prepare import AppInitialized
 
 
@@ -32,7 +32,8 @@ class OneLdapUserFixture:
     fixtures = {
         'testlogin': {
             'userPassword': 'notafraidtokickyourballs',
-            'cn': 'Kleines Gnoemlein',
+            'cn': 'dontlookatthisattribute',
+            'gecos': 'Kleines Gnoemlein',
             'uidNumber': 1000,
             'gidNumber': 100,
             'homeDirectory': '/home/testlogin'
@@ -177,6 +178,22 @@ class HssLdapConnectorTestCase(SimpleLdapTestBase):
         with self.assertRaises(InvalidCredentials), \
              self.Connector(self.username, ''):
             pass
+
+
+class HssFetchUserTestCase(SimpleLdapTestBase):
+    Connector = TestingHssLdapConnector
+
+    def test_fetch_user(self):
+        expected_user_dict = {
+            'uid': self.username,
+            'name': self.user_dict['gecos'],
+        }
+        self.assertEqual(self.Connector.fetch_user(self.username),
+                         expected_user_dict)
+
+    def test_fetch_invalid_user_raises(self):
+        with self.assertRaises(UserNotFound):
+            self.Connector.fetch_user(self.username + 'wrong')
 
 
 class MightBeLdapDNTestCase(TestCase):
