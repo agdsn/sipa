@@ -31,10 +31,10 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
                  server_args={}, connect_args={}):
         """Return an `ldap3.Connection` object.
 
-        The bind uses what `{type}.`
+        The bind uses what `type(self).config` provides as data.
 
         Can be used as ContextManager as well.
-        """.format(type=type(self))
+        """
         self.username = username
         self.password = password
 
