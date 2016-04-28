@@ -21,6 +21,8 @@ class HssLdapAppInitialized(AppInitialized):
             'HSS_LDAP_HOST': self.LDAP_HOST,
             'HSS_LDAP_PORT': self.LDAP_PORT,
             'HSS_LDAP_USERDN_FORMAT': self.LDAP_USER_FORMAT_STRING,
+            'HSS_LDAP_SYSTEM_BIND': self.LDAP_ADMIN_UID,
+            'HSS_LDAP_SYSTEM_PASSWORD': self.LDAP_ADMIN_PASSWORD,
         })
 
 
@@ -158,8 +160,16 @@ class HssLdapConnectorTestCase(SimpleLdapTestBase):
             pass
 
     def test_anonymous_bind_raises(self):
+        """Test connecting without username and password raises a ValueError"""
         with self.assertRaises(ValueError), self.Connector():
             pass
+
+    def test_system_bind_successful(self):
+        try:
+            with self.Connector.system_bind():
+                pass
+        except LDAPBindError:
+            self.fail("LDAPBindError thrown instead of successful bind!")
 
     def test_empty_password_bind_raises(self):
         with self.assertRaises(InvalidCredentials), \

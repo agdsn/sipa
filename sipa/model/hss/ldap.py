@@ -39,8 +39,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         self.password = password
 
         if not password and not username:
-            # Attempt an anonymous bind, don't use the username
-            bind_user, bind_password = self.get_system_bind_credentials()
+            raise ValueError("Anonymous Bind not allowed!")
         elif not password and username:
             raise InvalidCredentials("Bind attempted with username without a password")
         else:
@@ -72,21 +71,25 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         except ldap3.LDAPInvalidCredentialsResult:
             raise InvalidCredentials()
 
-    @staticmethod
-    def fetch_user(self, username):
-        raise NotImplementedError
+    @classmethod
+    def system_bind(cls):
+        username, password = cls.get_system_bind_credentials()
+
+        return cls(username, password)
 
     @property
     @abstractmethod
     def config(self):
         raise NotImplementedError
 
+    @classmethod
     @abstractmethod
-    def get_bind_credentials(self):
+    def get_bind_credentials(cls):
         raise NotImplementedError
 
+    @classmethod
     @abstractmethod
-    def get_system_bind_credentials(self):
+    def get_system_bind_credentials(cls):
         raise NotImplementedError
 
     DEFAULT_CONNECT_ARGS = {}
@@ -103,6 +106,8 @@ class HssConfigProxy:
             'host': conf['HSS_LDAP_HOST'],
             'port': int(conf['HSS_LDAP_PORT']),
             'userdn_format': current_app.config['HSS_LDAP_USERDN_FORMAT'],
+            'system_bind': current_app.config['HSS_LDAP_SYSTEM_BIND'],
+            'system_password': current_app.config['HSS_LDAP_SYSTEM_PASSWORD'],
         }
 
 
@@ -119,12 +124,14 @@ class HssLdapConnector(BaseLdapConnector):
         'authentication': ldap3.AUTH_SIMPLE,
     }
 
-    def get_system_bind_credentials(self):
-        raise ValueError("The Hss Connector doesn't support Anonymous Binding")
+    @classmethod
+    def get_system_bind_credentials(cls):
+        return cls.config['system_bind'], cls.config['system_password']
 
-    def get_bind_credentials(self, username, password):
+    @classmethod
+    def get_bind_credentials(cls, username, password):
         """Return the according userdn of `username` and the given password"""
-        return self.config['userdn_format'].format(user=username), password
+        return cls.config['userdn_format'].format(user=username), password
 
 
 def search_in_group():
