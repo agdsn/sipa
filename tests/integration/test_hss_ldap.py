@@ -1,6 +1,7 @@
 from functools import partial
-from unittest import TestCase, expectedFailure
+from unittest import TestCase
 
+from flask.ext.login import AnonymousUserMixin
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
@@ -204,15 +205,11 @@ class MightBeLdapDNTestCase(TestCase):
 class AuthenticateTestCase(SimpleLdapTestBase):
     def setUp(self):
         super().setUp()
-        self.user = User.authenticate(self.username, self.password)
-
-    def test_authenticate_returns_userdata(self):
-        # TODO: decide: isn't there a better method to patch?
-        self.assertIsInstance(self.user, User)
 
     def test_user_data_passed(self):
+        user = User.authenticate(self.username, self.password)
         self.assert_user_data_passed(
-            user=self.user,
+            user=user,
             login=self.username,
             name=self.user_dict['gecos'],
         )

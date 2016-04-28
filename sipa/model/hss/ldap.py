@@ -102,7 +102,6 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
             )
 
         if connection is not None:
-            print("connection:", connection)
             _search(connection)
             response = connection.response
         else:

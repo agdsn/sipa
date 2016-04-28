@@ -5,7 +5,7 @@ from flask.ext.login import AnonymousUserMixin
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.hss.ldap import HssLdapConnector
 from sipa.utils import argstr
-from sipa.utils.exceptions import UserNotFound
+from sipa.utils.exceptions import InvalidCredentials
 
 
 class User(BaseUser):
@@ -63,8 +63,11 @@ class User(BaseUser):
     def authenticate(cls, username, password):
         """Return a User instance or raise PasswordInvalid"""
         try:
-            user_dict = cls.LdapConnector.fetch_user(username)
-        except UserNotFound:
+            with HssLdapConnector(username, password) as conn:
+                print("conn:", conn)
+                user_dict = HssLdapConnector.fetch_user(username,
+                                                        connection=conn)
+        except InvalidCredentials:  # Covers `UserNotFound`, `PasswordInvalid`
             return AnonymousUserMixin()
         else:
             return cls(uid=username, name=user_dict['name'])
