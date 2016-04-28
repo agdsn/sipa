@@ -40,7 +40,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
 
         if not password and not username:
             # Attempt an anonymous bind, don't use the username
-            bind_user, bind_password = self.get_anonymous_bind_credentials()
+            bind_user, bind_password = self.get_system_bind_credentials()
         elif not password and username:
             raise InvalidCredentials("Bind attempted with username without a password")
         else:
@@ -86,7 +86,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def get_anonymous_bind_credentials(self):
+    def get_system_bind_credentials(self):
         raise NotImplementedError
 
     DEFAULT_CONNECT_ARGS = {}
@@ -119,7 +119,7 @@ class HssLdapConnector(BaseLdapConnector):
         'authentication': ldap3.AUTH_SIMPLE,
     }
 
-    def get_anonymous_bind_credentials(self):
+    def get_system_bind_credentials(self):
         raise ValueError("The Hss Connector doesn't support Anonymous Binding")
 
     def get_bind_credentials(self, username, password):
