@@ -210,7 +210,6 @@ class AuthenticateTestCase(SimpleLdapTestBase):
         # TODO: decide: isn't there a better method to patch?
         self.assertIsInstance(self.user, User)
 
-    @expectedFailure
     def test_user_data_passed(self):
         self.assert_user_data_passed(
             user=self.user,

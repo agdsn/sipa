@@ -5,12 +5,13 @@ from flask.ext.login import AnonymousUserMixin
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.hss.ldap import HssLdapConnector
 from sipa.utils import argstr
+from sipa.utils.exceptions import UserNotFound
 
 
 class User(BaseUser):
     LdapConnector = HssLdapConnector
 
-    def __init__(self, uid):
+    def __init__(self, uid, name=None):
         """Initialize the User object.
 
         Note that init itself is not called directly, but mainly by the
@@ -21,9 +22,12 @@ class User(BaseUser):
         variables like `mail`, `group` or `name` can be initialized
         similiarly.
 
-        :param uid:A unique unicode identifier for the User
+        :param uid: A unique unicode identifier for the User
+        :param name: The real name gotten from the LDAP
         """
         self.uid = uid
+        if name is not None:
+            self._realname = name
 
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
@@ -58,9 +62,12 @@ class User(BaseUser):
     @classmethod
     def authenticate(cls, username, password):
         """Return a User instance or raise PasswordInvalid"""
-        user_dict = cls.LdapConnector.fetch_user(username)
-        # TODO: check password / user
-        return cls(username)
+        try:
+            user_dict = cls.LdapConnector.fetch_user(username)
+        except UserNotFound:
+            return AnonymousUserMixin()
+        else:
+            return cls(uid=username, name=user_dict['name'])
 
     @property
     def can_change_password(self):
@@ -109,7 +116,7 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return "Foo bar"
+        return self._realname
 
     @active_prop
     def login(self):
