@@ -96,7 +96,11 @@ class LdapSetupMixin:
 
 
 class SimpleLdapTestBase(LdapSetupMixin, OneLdapUserFixture, HssLdapAppInitialized):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.username = next(iter(self.fixtures.keys()))
+        self.password = self.fixtures[self.username]['userPassword']
+        self.user_dict = self.fixtures[self.username]
 
 
 class GetLdapConnectionTestCase(SimpleLdapTestBase):
@@ -105,11 +109,6 @@ class GetLdapConnectionTestCase(SimpleLdapTestBase):
     May be deleted, just as said function.
     """
     ldap_connect = partial(get_ldap_connection, use_ssl=False)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.username = next(iter(self.fixtures.keys()))
-        self.password = self.fixtures[self.username]['userPassword']
 
     def test_ldap_password_required(self):
         with self.assertRaises(LDAPPasswordIsMandatoryError):
@@ -143,11 +142,6 @@ class TestingHssLdapConnector(HssLdapConnector):
 
 class HssLdapConnectorTestCase(SimpleLdapTestBase):
     Connector = TestingHssLdapConnector
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.username = next(iter(self.fixtures.keys()))
-        self.password = self.fixtures[self.username]['userPassword']
 
     def test_connector_works(self):
         with self.Connector(self.username, self.password):
