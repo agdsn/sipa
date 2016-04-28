@@ -1,9 +1,10 @@
 from functools import partial
+from unittest import TestCase
 
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
-from sipa.model.hss.ldap import get_ldap_connection, HssLdapConnector
+from sipa.model.hss.ldap import get_ldap_connection, HssLdapConnector, might_be_ldap_dn
 from sipa.utils.exceptions import InvalidCredentials
 from tests.prepare import AppInitialized
 
@@ -175,3 +176,20 @@ class HssLdapConnectorTestCase(SimpleLdapTestBase):
         with self.assertRaises(InvalidCredentials), \
              self.Connector(self.username, ''):
             pass
+
+
+class MightBeLdapDNTestCase(TestCase):
+    def test_ldap_dn_checker_samples(self):
+        samples = [
+            ('cn=admin,dc=wh12,dc=tu-dresden,dc=de', True),
+            ('ou=users,dc=wh12,dc=tu-dresden,dc=de', True),
+            ("uid={user},ou=users,dc=wh12,dc=tu-dresden,dc=de", True),
+            ('password', False),
+            ('dn=foo,cn=', False),
+        ]
+        for sample, value in samples:
+            with self.subTest(sample=sample):
+                if value:
+                    self.assertTrue(might_be_ldap_dn(sample))
+                else:
+                    self.assertFalse(might_be_ldap_dn(sample))

@@ -42,8 +42,11 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
             raise ValueError("Anonymous Bind not allowed!")
         elif not password and username:
             raise InvalidCredentials("Bind attempted with username without a password")
-        else:
+        elif not might_be_ldap_dn(username):
+            # look username up only if `username` isn't remotely a dn
             bind_user, bind_password = self.get_bind_credentials(username, password)
+        else:
+            bind_user, bind_password = username, password
 
         self.server = ldap3.Server(
             host=self.config['host'],
@@ -153,3 +156,15 @@ def change_password():
     (with Conn(username, pw) as l:)
     """
     raise NotImplementedError
+
+
+def might_be_ldap_dn(string):
+    """Very rudimentary tester whether something looks like an LDAP dn.
+
+    Basically, this assumes that the string is of the form "a=b,c=d,…"
+    """
+    return all(
+        (len(node.split('=')) == 2 and
+         all(atom for atom in node.split('=')))
+        for node in string.split(',')
+    )
