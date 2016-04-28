@@ -99,7 +99,7 @@ class SimpleLdapTestBase(LdapSetupMixin, OneLdapUserFixture, HssLdapAppInitializ
     pass
 
 
-class SimpleLdapBindTestCase(SimpleLdapTestBase):
+class GetLdapConnectionTestCase(SimpleLdapTestBase):
     """Tests for the `get_ldap_connecton` function.
 
     May be deleted, just as said function.
