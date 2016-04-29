@@ -226,9 +226,6 @@ class MightBeLdapDNTestCase(TestCase):
 
 
 class AuthenticateTestCase(SimpleLdapTestBase):
-    def setUp(self):
-        super().setUp()
-
     def test_user_data_passed(self):
         user = User.authenticate(self.username, self.password)
         self.assert_user_data_passed(
