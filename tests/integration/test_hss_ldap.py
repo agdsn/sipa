@@ -1,5 +1,6 @@
 from functools import partial
 from unittest import TestCase
+from unittest.mock import patch
 
 from flask.ext.login import AnonymousUserMixin
 import ldap3
@@ -183,6 +184,28 @@ class HssFetchUserTestCase(SimpleLdapTestBase):
     def test_fetch_invalid_user_raises(self):
         with self.assertRaises(UserNotFound):
             Connector.fetch_user(self.username + 'wrong')
+
+    def test_fetch_user_already_bound(self):
+        class MockedConnector(Connector):
+            """A connector mock listing how often `system_bind` gets
+            """
+            _call_args = []
+
+            def search(self, *a, **kw):
+                self._call_args.append((a, kw))
+                return super().search(*a, **kw)
+
+        with patch('sipa.model.hss.ldap.HssLdapConnector') as class_mock, \
+                MockedConnector.system_bind() as conn:
+            previous_searches = len(MockedConnector._call_args)
+            Connector.fetch_user(self.username, connection=conn)
+            # We expect a search to have been performed exactly once
+            self.assertEqual(len(MockedConnector._call_args), previous_searches + 1)
+
+        # The original class (class_mock) shouldn't have been used
+        self.assertFalse(class_mock.fetch_user.called)
+        self.assertFalse(class_mock.search.called)
+        self.assertFalse(class_mock.system_bind.called)
 
 
 class MightBeLdapDNTestCase(TestCase):
