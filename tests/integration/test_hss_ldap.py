@@ -1,5 +1,5 @@
 from functools import partial
-from unittest import TestCase
+import unittest
 from unittest.mock import patch
 
 from flask.ext.login import AnonymousUserMixin
@@ -208,7 +208,7 @@ class HssFetchUserTestCase(SimpleLdapTestBase):
         self.assertFalse(class_mock.system_bind.called)
 
 
-class MightBeLdapDNTestCase(TestCase):
+class MightBeLdapDNTestCase(unittest.TestCase):
     def test_ldap_dn_checker_samples(self):
         samples = [
             ('cn=admin,dc=wh12,dc=tu-dresden,dc=de', True),
@@ -225,7 +225,15 @@ class MightBeLdapDNTestCase(TestCase):
                     self.assertFalse(might_be_ldap_dn(sample))
 
 
-class AuthenticateTestCase(SimpleLdapTestBase):
+class SimpleLdapUserTestBase(SimpleLdapTestBase):
+    def assert_user_data_passed(self, user, login, name):
+        self.assertEqual(user.login, login)
+        self.assertEqual(user.realname, name)
+        # We don't mind the rest of the data
+        # …We only test the ldap here.
+
+
+class AuthenticateTestCase(SimpleLdapUserTestBase):
     def test_user_data_passed(self):
         user = User.authenticate(self.username, self.password)
         self.assert_user_data_passed(
@@ -234,16 +242,25 @@ class AuthenticateTestCase(SimpleLdapTestBase):
             name=self.user_dict['gecos'],
         )
 
-    def assert_user_data_passed(self, user, login, name):
-        self.assertEqual(user.login, login)
-        self.assertEqual(user.realname, name)
-        # We don't mind the rest of the data
-        # …We only test the ldap here.
-
     def test_invalid_password_anonymous(self):
         user = User.authenticate(self.username, self.password + 'wrong')
         self.assertIsInstance(user, AnonymousUserMixin)
 
     def test_invalid_username_anonymous(self):
         user = User.authenticate(self.username + 'wrong', self.password)
+        self.assertIsInstance(user, AnonymousUserMixin)
+
+
+@unittest.expectedFailure
+class GetTestCase(SimpleLdapUserTestBase):
+    def test_correct_user_passed(self):
+        user = User.get(self.username)
+        self.assert_user_data_passed(
+            user=user,
+            login=self.username,
+            name=self.user_dict['gecos'],
+        )
+
+    def test_wrong_user_anonymous(self):
+        user = User.get(self.username + 'wrong')
         self.assertIsInstance(user, AnonymousUserMixin)
