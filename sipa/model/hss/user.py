@@ -1,14 +1,19 @@
-from ..default import BaseUser
+import logging
 
 from flask.ext.login import AnonymousUserMixin
 
+from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
+from sipa.model.hss.ldap import HssLdapConnector
 from sipa.utils import argstr
+from sipa.utils.exceptions import InvalidCredentials, UserNotFound
+logger = logging.getLogger(__name__)
 
 
 class User(BaseUser):
+    LdapConnector = HssLdapConnector
 
-    def __init__(self, uid):
+    def __init__(self, uid, name=None):
         """Initialize the User object.
 
         Note that init itself is not called directly, but mainly by the
@@ -19,9 +24,11 @@ class User(BaseUser):
         variables like `mail`, `group` or `name` can be initialized
         similiarly.
 
-        :param uid:A unique unicode identifier for the User
+        :param uid: A unique unicode identifier for the User
+        :param name: The real name gotten from the LDAP
         """
         self.uid = uid
+        self._realname = name
 
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
@@ -38,8 +45,12 @@ class User(BaseUser):
     @classmethod
     def get(cls, username):
         """Used by user_loader. Return a User instance."""
-        # TODO: fetch user from ldap
-        return cls(username)
+        try:
+            user = HssLdapConnector.fetch_user(username)
+        except UserNotFound:
+            logger.warning("User %s not in LDAP! (unauthenticated search)", username)
+            return AnonymousUserMixin()
+        return cls(uid=username, name=user['name'])
 
     @classmethod
     def from_ip(cls, ip):
@@ -56,8 +67,15 @@ class User(BaseUser):
     @classmethod
     def authenticate(cls, username, password):
         """Return a User instance or raise PasswordInvalid"""
-        # TODO: check password / user
-        return cls(username)
+        try:
+            with HssLdapConnector(username, password) as conn:
+                print("conn:", conn)
+                user_dict = HssLdapConnector.fetch_user(username,
+                                                        connection=conn)
+        except InvalidCredentials:  # Covers `UserNotFound`, `PasswordInvalid`
+            return AnonymousUserMixin()
+        else:
+            return cls(uid=username, name=user_dict['name'])
 
     @property
     def can_change_password(self):
@@ -106,7 +124,9 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return "Foo bar"
+        if self._realname is None:
+            return
+        return self._realname
 
     @active_prop
     def login(self):

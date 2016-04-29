@@ -7,7 +7,9 @@ services:
       args:
         additional_requirements: requirements_testing.txt
     image: sipa_testing
-    command: python manage.py test
+    # Run `test` (doing nothing) because the tests should be triggered manually
+    # Running them on startup won't work because the LDAP won't be ready yet
+    command: test
     volumes:
       # Note: ../ is relative to the path of the .yml
       # Thus: be careful with symlinks!
