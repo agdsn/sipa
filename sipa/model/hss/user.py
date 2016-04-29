@@ -1,11 +1,13 @@
-from ..default import BaseUser
+import logging
 
 from flask.ext.login import AnonymousUserMixin
 
+from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.hss.ldap import HssLdapConnector
 from sipa.utils import argstr
-from sipa.utils.exceptions import InvalidCredentials
+from sipa.utils.exceptions import InvalidCredentials, UserNotFound
+logger = logging.getLogger(__name__)
 
 
 class User(BaseUser):
@@ -43,8 +45,12 @@ class User(BaseUser):
     @classmethod
     def get(cls, username):
         """Used by user_loader. Return a User instance."""
-        # TODO: fetch user from ldap
-        return cls(username)
+        try:
+            user = HssLdapConnector.fetch_user(username)
+        except UserNotFound:
+            logger.warning("User %s not in LDAP! (unauthenticated search)", username)
+            return AnonymousUserMixin()
+        return cls(uid=username, name=user['name'])
 
     @classmethod
     def from_ip(cls, ip):

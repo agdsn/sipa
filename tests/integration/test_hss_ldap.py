@@ -251,7 +251,6 @@ class AuthenticateTestCase(SimpleLdapUserTestBase):
         self.assertIsInstance(user, AnonymousUserMixin)
 
 
-@unittest.expectedFailure
 class GetTestCase(SimpleLdapUserTestBase):
     def test_correct_user_passed(self):
         user = User.get(self.username)
