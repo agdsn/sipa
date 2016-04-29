@@ -26,8 +26,7 @@ class User(BaseUser):
         :param name: The real name gotten from the LDAP
         """
         self.uid = uid
-        if name is not None:
-            self._realname = name
+        self._realname = name
 
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
@@ -119,6 +118,8 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
+        if self._realname is None:
+            return
         return self._realname
 
     @active_prop
