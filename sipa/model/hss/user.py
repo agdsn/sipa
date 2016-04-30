@@ -4,7 +4,9 @@ from flask.ext.login import AnonymousUserMixin
 
 from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
+from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector
+from sipa.model.hss.schema import Account
 from sipa.utils import argstr
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 logger = logging.getLogger(__name__)
@@ -28,7 +30,6 @@ class User(BaseUser):
         :param name: The real name gotten from the LDAP
         """
         self.uid = uid
-        self._realname = name
 
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
@@ -39,7 +40,6 @@ class User(BaseUser):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             uid=self.uid,
             name=self.name,
-            # mail=self._mail,
         ))
 
     @classmethod
@@ -78,6 +78,13 @@ class User(BaseUser):
             return cls(uid=username, name=user_dict['name'])
 
     @property
+    def _pg_account(self):
+        """Return the corresponding ORM Account"""
+        return db.session.query(Account).filter_by(
+            account=self.uid
+        ).one()
+
+    @property
     def can_change_password(self):
         return False
 
@@ -111,8 +118,7 @@ class User(BaseUser):
     @property
     def credit(self):
         """Return the current credit in KiB"""
-        # TODO: return useful data
-        return 42
+        return self._pg_account.traffic_balance / 1024
 
     @active_prop
     def ips(self):
@@ -124,13 +130,11 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        if self._realname is None:
-            return
-        return self._realname
+        return self._pg_account.name
 
     @active_prop
     def login(self):
-        return self.name
+        return self._pg_account.account
 
     @active_prop
     def mac(self):
@@ -142,7 +146,13 @@ class User(BaseUser):
 
     @active_prop
     def address(self):
-        return "Keller"
+        acc = self._pg_account.access
+        return "{building} {floor}-{flat}{room}".format(
+            floor=acc.floor,
+            flat=acc.flat,
+            room=acc.room,
+            building=acc.building,
+        )
 
     @active_prop
     def status(self):

@@ -227,10 +227,11 @@ class MightBeLdapDNTestCase(unittest.TestCase):
 
 class SimpleLdapUserTestBase(SimpleLdapTestBase):
     def assert_user_data_passed(self, user, login, name):
-        self.assertEqual(user.login, login)
-        self.assertEqual(user.realname, name)
-        # We don't mind the rest of the data
-        # …We only test the ldap here.
+        # Everything in here is irrelevant, since handled by sql.
+        # This method stays in here though to maintain the class
+        # structure, since it is planned to use this for the wu LDAP
+        # as well.
+        pass
 
 
 class AuthenticateTestCase(SimpleLdapUserTestBase):
