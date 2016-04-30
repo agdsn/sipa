@@ -39,7 +39,7 @@ class User(BaseUser):
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             uid=self.uid,
-            name=self.name,
+            name=self.realname,
         ))
 
     @classmethod
