@@ -7,6 +7,23 @@ services:
       args:
         additional_requirements: requirements_testing.txt
     image: sipa_testing
-    command: python manage.py test
+    # Run `test` (doing nothing) because the tests should be triggered manually
+    # Running them on startup won't work because the LDAP won't be ready yet
+    command: test
     volumes:
-      - ./:/home/sipa/sipa
+      # Note: ../ is relative to the path of the .yml
+      # Thus: be careful with symlinks!
+      - ../:/home/sipa/sipa
+    links:
+      - postgres
+      - ldap_hss
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=sipa
+      - POSTGRES_PASSWORD=password
+  ldap_hss:
+    image: dinkel/openldap
+    environment:
+      - SLAPD_PASSWORD=password
+      - SLAPD_DOMAIN=wh12.tu-dresden.de

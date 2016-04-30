@@ -193,7 +193,7 @@ def usertraffic():
         if not current_user.has_connection and not ip_user.is_authenticated:
             flash(gettext("Aufgrund deines Nutzerstatus kannst Du "
                           "keine Trafficdaten einsehen."), "info")
-            return redirect(url_for('usersuite.index'))
+            return redirect(url_for('generic.index'))
 
     if ip_user.is_authenticated:
         chosen_user = ip_user

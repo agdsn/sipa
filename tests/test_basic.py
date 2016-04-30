@@ -1,5 +1,5 @@
 from flask import url_for
-from prepare import AppInitialized
+from .prepare import AppInitialized
 
 
 class TestSipaFrontendCase(AppInitialized):

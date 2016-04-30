@@ -1,14 +1,12 @@
 # -*- coding: utf-8; -*-
-from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import (Column, Index, Integer, String,
                         text, ForeignKey, DECIMAL, BigInteger)
 from sqlalchemy.orm import relationship, column_property
 
+from sipa.model.sqlalchemy import db
+
 import logging
 logger = logging.getLogger(__name__)
-
-
-db = SQLAlchemy()
 
 
 DORMITORY_MAPPINGS = [
