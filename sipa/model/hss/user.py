@@ -122,6 +122,7 @@ class User(BaseUser):
 
     @active_prop
     def ips(self):
+        # TODO: implement
         return "141.30.228.39"
 
     @property
@@ -138,10 +139,12 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
+        # TODO: implement
         return "AA:BB:CC:DD:EE:FF"
 
     @active_prop
     def mail(self):
+        # TODO: implement
         return "foo@bar.baz"
 
     @active_prop
