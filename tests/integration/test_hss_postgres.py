@@ -152,3 +152,9 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
                 print("accounts:", [a.account for a in self.fixtures[Account]])
                 user = User.get(mac.account)
                 self.assertIn(mac.mac.lower(), user.mac)
+
+    def test_mail_correct(self):
+        acc = self.fixtures[Account][0]
+        user = User.get(acc.account)
+        expected_mail = "{}@wh12.tu-dresden.de".format(acc.account)
+        self.assertEqual(user.mail, expected_mail)

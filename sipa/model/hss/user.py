@@ -140,8 +140,7 @@ class User(BaseUser):
 
     @active_prop
     def mail(self):
-        # TODO: implement
-        return "foo@bar.baz"
+        return "{}@wh12.tu-dresden.de".format(self.login.value)
 
     @active_prop
     def address(self):
