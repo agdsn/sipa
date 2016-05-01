@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class User(BaseUser):
     LdapConnector = HssLdapConnector
 
-    def __init__(self, uid, name=None):
+    def __init__(self, uid):
         """Initialize the User object.
 
         Note that init itself is not called directly, but mainly by the
