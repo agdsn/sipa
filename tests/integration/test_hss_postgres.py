@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+from flask.ext.login import AnonymousUserMixin
+
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.schema import Account, Access
+from sipa.model.hss.schema import Account, Access, IP
 from sipa.model.hss.user import User
 
 
@@ -59,7 +61,11 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
                     flat="1",
                     room="b",
                 )
-            ]
+            ],
+            IP: [
+                IP(ip="141.30.234.15", account="sipatinator"),
+                IP(ip="141.30.234.16"),
+            ],
         }
 
 
@@ -103,3 +109,18 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
         for part in [access.building, access.floor, access.flat, access.room]:
             with self.subTest(part=part):
                 self.assertIn(part, self.user.address)
+
+    def test_from_ip_correct_user(self):
+        for ip in self.fixtures[IP]:
+            if not ip.account:
+                continue
+            with self.subTest(ip=ip.ip):
+                self.assertEqual(User.get(ip.account), User.from_ip(ip.ip))
+
+    def test_from_ip_without_account_anonymous(self):
+        for ip in self.fixtures[IP]:
+            if ip.account:
+                continue
+
+            with self.subTest(ip=ip.ip):
+                self.assertIsInstance(User.from_ip(ip.ip), AnonymousUserMixin)

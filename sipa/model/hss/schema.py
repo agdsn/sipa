@@ -1,5 +1,6 @@
 from sqlalchemy import Column, ForeignKey, String, Integer, BigInteger
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import INET
 
 from sipa.model.sqlalchemy import db
 
@@ -17,6 +18,8 @@ class Account(db.Model):
     traffic_balance = Column(BigInteger, nullable=False, default=10000000000)
     access_id = Column('access', Integer, ForeignKey('access.id'))
 
+    ips = relationship('IP')
+
 
 class Access(db.Model):
     __tablename__ = 'access'
@@ -29,3 +32,11 @@ class Access(db.Model):
     room = Column(String(8))  # e.g. "b"
 
     users = relationship('Account', backref='access')
+
+
+class IP(db.Model):
+    __tablename__ = 'ip'
+    __bind_key__ = 'hss'
+
+    ip = Column(INET, primary_key=True)
+    account = Column(String(16), ForeignKey('account.account'))

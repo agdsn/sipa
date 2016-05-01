@@ -6,9 +6,9 @@ from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector
-from sipa.model.hss.schema import Account
+from sipa.model.hss.schema import Account, IP
 from sipa.utils import argstr
-from sipa.utils.exceptions import InvalidCredentials, UserNotFound
+from sipa.utils.exceptions import InvalidCredentials
 logger = logging.getLogger(__name__)
 
 
@@ -53,8 +53,11 @@ class User(BaseUser):
 
         If there is no user associated with this ip, return AnonymousUserMixin.
         """
-        # TODO: return correct user from IP
-        return AnonymousUserMixin()
+        account_name = db.session.query(IP).filter_by(ip=ip).one().account
+        if not account_name:
+            return AnonymousUserMixin()
+
+        return cls.get(account_name)
 
     def re_authenticate(self, password):
         self.authenticate(self.uid, password)
