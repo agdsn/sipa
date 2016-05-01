@@ -136,8 +136,7 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
-        # TODO: implement
-        return "AA:BB:CC:DD:EE:FF"
+        return ", ".join(mac.mac.lower() for mac in self._pg_account.macs)
 
     @active_prop
     def mail(self):

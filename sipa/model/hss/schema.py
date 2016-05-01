@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, String, Integer, BigInteger
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import INET
+from sqlalchemy.dialects.postgresql import INET, MACADDR
 
 from sipa.model.sqlalchemy import db
 
@@ -19,6 +19,7 @@ class Account(db.Model):
     access_id = Column('access', Integer, ForeignKey('access.id'))
 
     ips = relationship('IP')
+    macs = relationship('Mac')
 
 
 class Access(db.Model):
@@ -39,4 +40,13 @@ class IP(db.Model):
     __bind_key__ = 'hss'
 
     ip = Column(INET, primary_key=True)
+    account = Column(String(16), ForeignKey('account.account'))
+
+
+class Mac(db.Model):
+    __tablename__ = 'mac'
+    __bind_key__ = 'hss'
+
+    id = Column(Integer, primary_key=True)
+    mac = Column(MACADDR, nullable=False)
     account = Column(String(16), ForeignKey('account.account'))

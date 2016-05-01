@@ -5,7 +5,7 @@ from flask.ext.login import AnonymousUserMixin
 
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.schema import Account, Access, IP
+from sipa.model.hss.schema import Account, Access, IP, Mac
 from sipa.model.hss.user import User
 
 
@@ -68,6 +68,11 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
                 IP(ip="141.30.234.15", account="sipatinator"),
                 IP(ip="141.30.234.16"),
                 IP(ip="141.30.234.18", account="sipatinator"),
+            ]),
+            (Mac, [
+                Mac(id=1, mac="aa:bb:cc:ff:ee:dd"),
+                Mac(id=2, mac="aa:bb:cc:ff:ee:de", account='sipatinator'),
+                Mac(id=3, mac="aa:bb:cc:ff:ee:df", account='sipatinator'),
             ]),
         ])
 
@@ -136,3 +141,14 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
                 for ip in expected_ips:
                     with self.subTest(ip=ip):
                         self.assertIn(ip.ip, user.ips)
+
+    def test_macs_passed(self):
+        for mac in self.fixtures.get(Mac, []):
+            if mac.account is None:
+                continue
+
+            with self.subTest(mac=mac.mac):
+                print("mac.account:", mac.account)
+                print("accounts:", [a.account for a in self.fixtures[Account]])
+                user = User.get(mac.account)
+                self.assertIn(mac.mac.lower(), user.mac)
