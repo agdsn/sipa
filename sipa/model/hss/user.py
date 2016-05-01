@@ -66,14 +66,12 @@ class User(BaseUser):
     def authenticate(cls, username, password):
         """Return a User instance or raise PasswordInvalid"""
         try:
-            with HssLdapConnector(username, password) as conn:
-                print("conn:", conn)
-                user_dict = HssLdapConnector.fetch_user(username,
-                                                        connection=conn)
+            with HssLdapConnector(username, password):
+                pass
         except InvalidCredentials:  # Covers `UserNotFound`, `PasswordInvalid`
             return AnonymousUserMixin()
         else:
-            return cls(uid=username, name=user_dict['name'])
+            return cls.get(username)
 
     @property
     def _pg_account(self):
