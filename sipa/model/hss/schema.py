@@ -1,6 +1,9 @@
-from sqlalchemy import Column, ForeignKey, String, Integer, BigInteger
+from datetime import datetime
+
+from sqlalchemy import Column, ForeignKey, String, Integer, BigInteger, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import INET, MACADDR
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from sipa.model.sqlalchemy import db
 
@@ -20,6 +23,7 @@ class Account(db.Model):
 
     ips = relationship('IP')
     macs = relationship('Mac')
+    traffic_log = relationship('TrafficLog')
 
 
 class Access(db.Model):
@@ -50,3 +54,21 @@ class Mac(db.Model):
     id = Column(Integer, primary_key=True)
     mac = Column(MACADDR, nullable=False)
     account = Column(String(16), ForeignKey('account.account'))
+
+
+class TrafficLog(db.Model):
+    __tablename__ = 'traffic_log'
+    __bind_key__ = 'hss'
+
+    id = Column(Integer, primary_key=True)
+    account = Column(String(16), ForeignKey('account.account'))
+
+    date = Column(Date, nullable=False)
+    bytes_in = Column(BigInteger, nullable=False, default=0)
+    bytes_out = Column(BigInteger, nullable=False, default=0)
+
+    def __repr__(self):
+        return "<{type} account='{obj.account}' date='{obj.date}'>".format(
+            type=type(self),
+            obj=self,
+        )

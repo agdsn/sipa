@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 from collections import OrderedDict
+from datetime import date, datetime, timedelta
+from operator import attrgetter
 
 from flask.ext.login import AnonymousUserMixin
 
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.schema import Account, Access, IP, Mac
+from sipa.model.hss.schema import Account, Access, IP, Mac, TrafficLog
 from sipa.model.hss.user import User
 
 
@@ -73,6 +75,44 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
                 Mac(id=1, mac="aa:bb:cc:ff:ee:dd"),
                 Mac(id=2, mac="aa:bb:cc:ff:ee:de", account='sipatinator'),
                 Mac(id=3, mac="aa:bb:cc:ff:ee:df", account='sipatinator'),
+            ]),
+        ])
+
+
+class HSSOneTrafficAccountFixture(HSSOneAccountFixture):
+    @property
+    def fixtures(self):
+        return OrderedDict([
+            *super().fixtures.items(),
+            (TrafficLog, [
+                TrafficLog(id=1, account='sipatinator', date=date(2016, 4, 24),
+                           bytes_in=3657658, bytes_out=20646),
+                TrafficLog(id=2, account='sipatinator', date=date(2016, 4, 25),
+                           bytes_in=3354878, bytes_out=11146),
+                TrafficLog(id=3, account='sipatinator', date=date(2016, 4, 26),
+                           bytes_in=3653478, bytes_out=65746),
+                TrafficLog(id=4, account='sipatinator', date=date(2016, 4, 27),
+                           bytes_in=1118758, bytes_out=11546),
+                TrafficLog(id=5, account='sipatinator', date=date(2016, 4, 28),
+                           bytes_in=1957368, bytes_out=32246),
+                TrafficLog(id=6, account='sipatinator', date=date(2016, 4, 29),
+                           bytes_in=9455668, bytes_out=31686),
+                TrafficLog(id=7, account='sipatinator', date=date(2016, 4, 30),
+                           bytes_in=9851368, bytes_out=42146),
+                TrafficLog(id=8, account='sipatinator', date=date(2016, 5, 1),
+                           bytes_in=7318688, bytes_out=31556),
+            ]),
+        ])
+
+
+class HSSOneTrafficAccountDaysMissingFixture(HSSOneTrafficAccountFixture):
+    @property
+    def fixtures(self):
+        old_traffic_logs = super().fixtures.pop(TrafficLog)
+        return OrderedDict([
+            *super().fixtures.items(),
+            (TrafficLog, [
+                *old_traffic_logs[:5],
             ]),
         ])
 
@@ -166,3 +206,65 @@ class UserMacsTestCase(OneAccountTestBase):
                 print("accounts:", [a.account for a in self.fixtures[Account]])
                 user = User.get(mac.account)
                 self.assertIn(mac.mac.lower(), user.mac)
+
+
+# Dependency injection of new fixture
+class UserTrafficLogTestCaseMixin:
+    def setUp(self):
+        super().setUp()
+        self.user = User.get(self.account.account)
+        history = self.user.traffic_history
+        self.credit = history.get('credit', float('NaN'))
+        self.history = history.get('history', [])
+
+    def test_traffic_log_correct_length(self):
+        self.assertEqual(len(self.history), 7)
+
+    def test_credit_correct(self):
+        self.assertEqual(self.user.credit, self.credit)
+
+    def test_traffic_data_passed(self):
+        # Pick the latest 7 entries
+        expected_logs = sorted(self.fixtures[TrafficLog], key=attrgetter('date'))[-7:]
+        expected_entries = []
+
+        for date_delta in range(-6, 1):
+            expected_date = datetime.today() + timedelta(date_delta)
+            possible_logs = [log for log in expected_logs
+                             if (log.date == expected_date and
+                                 log.account == self.account)]
+            try:
+                expected_entries.append(possible_logs.pop())
+            except IndexError:
+                expected_entries.append(None)
+
+        for entry, expected_log in zip(self.history, expected_entries):
+            with self.subTest(entry=entry, expected_log=expected_log):
+                day, input, output, credit = entry
+                print("entry:", entry)
+                print("expected_log:", expected_log)
+
+                if expected_log is None:
+                    self.assertFalse(input)
+                    self.assertFalse(output)
+                else:
+                    self.assertEqual(day, expected_log.date.weekday())
+                    self.assertEqual(input, expected_log.bytes_in / 1024)
+                    self.assertEqual(output, expected_log.bytes_out / 1024)
+                self.assertEqual(credit, 0)
+
+
+class UserTrafficLogTestCase(
+        HSSOneTrafficAccountFixture,
+        UserTrafficLogTestCaseMixin,
+        OneAccountTestBase,
+):
+    pass
+
+
+class UserMissingTrafficLogTestCase(
+        HSSOneTrafficAccountDaysMissingFixture,
+        UserTrafficLogTestCaseMixin,
+        OneAccountTestBase,
+):
+    pass
