@@ -227,10 +227,11 @@ class MightBeLdapDNTestCase(unittest.TestCase):
 
 class SimpleLdapUserTestBase(SimpleLdapTestBase):
     def assert_user_data_passed(self, user, login, name):
-        self.assertEqual(user.login, login)
-        self.assertEqual(user.realname, name)
-        # We don't mind the rest of the data
-        # …We only test the ldap here.
+        # Everything in here is irrelevant, since handled by sql.
+        # This method stays in here though to maintain the class
+        # structure, since it is planned to use this for the wu LDAP
+        # as well.
+        pass
 
 
 class AuthenticateTestCase(SimpleLdapUserTestBase):
@@ -252,6 +253,13 @@ class AuthenticateTestCase(SimpleLdapUserTestBase):
 
 
 class GetTestCase(SimpleLdapUserTestBase):
+    """DEPRECATED test cases for `get`
+
+    These don't make much sense anymore, since `get` doesn't have to
+    fetch anything from the LDAP anymore.
+
+    the used `assert_user_data_passed` method doesn't even test anything.
+    """
     def test_correct_user_passed(self):
         user = User.get(self.username)
         self.assert_user_data_passed(
@@ -259,7 +267,3 @@ class GetTestCase(SimpleLdapUserTestBase):
             login=self.username,
             name=self.user_dict['gecos'],
         )
-
-    def test_wrong_user_anonymous(self):
-        user = User.get(self.username + 'wrong')
-        self.assertIsInstance(user, AnonymousUserMixin)
