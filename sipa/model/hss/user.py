@@ -120,8 +120,7 @@ class User(BaseUser):
 
     @active_prop
     def ips(self):
-        # TODO: implement
-        return "141.30.228.39"
+        return ", ".join(ip.ip for ip in self._pg_account.ips)
 
     @property
     def name(self):

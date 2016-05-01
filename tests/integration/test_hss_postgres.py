@@ -65,6 +65,7 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
             IP: [
                 IP(ip="141.30.234.15", account="sipatinator"),
                 IP(ip="141.30.234.16"),
+                IP(ip="141.30.234.18", account="sipatinator"),
             ],
         }
 
@@ -124,3 +125,12 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
 
             with self.subTest(ip=ip.ip):
                 self.assertIsInstance(User.from_ip(ip.ip), AnonymousUserMixin)
+
+    def test_ips_passed(self):
+        for account in self.fixtures[Account]:
+            with self.subTest(account=account):
+                user = User.get(account.account)
+                expected_ips = self.session.query(Account).get(account.account).ips
+                for ip in expected_ips:
+                    with self.subTest(ip=ip):
+                        self.assertIn(ip.ip, user.ips)
