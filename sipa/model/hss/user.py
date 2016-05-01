@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta
 
 from flask.ext.login import AnonymousUserMixin
 
@@ -107,9 +108,33 @@ class User(BaseUser):
                             for day in range(7)]}
 
         """
-        # TODO: return useful data
-        return {'credit': 0,
-                'history': []}
+        log = self._pg_account.traffic_log
+        history = []
+
+        for date_delta in range(-6, 1):
+            expected_date = datetime.today() + timedelta(date_delta)
+            expected_log = [l for l in self._pg_account.traffic_log[:7]
+                            if l.date == expected_date]
+            try:
+                log = expected_log.pop()
+            except IndexError:
+                history.append((
+                    expected_date.weekday(),
+                    0,
+                    0,
+                    0
+                ))
+            else:
+                history.append((
+                    expected_date.weekday(),
+                    log.bytes_in / 1024,
+                    log.bytes_out / 1024,
+                    0,
+                ))
+                # get the history from the expected_date
+
+        return {'credit': self.credit,
+                'history': history}
 
     @property
     def credit(self):
