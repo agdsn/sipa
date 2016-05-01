@@ -92,7 +92,7 @@ class HSSPgOneAccountTestCase(HSSOneAccountFixture, HssPgTestBase):
                          self.received_account.account)
 
 
-class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
+class OneAccountTestBase(HSSOneAccountFixture, HssPgTestBase):
     def setUp(self):
         super().setUp()
         account = self.fixtures[Account][0].account
@@ -100,6 +100,8 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
         self.account = db.session.query(Account).filter_by(account=account).one()
         self.user = User(uid=self.account.account)
 
+
+class PgUserDataTestCase(OneAccountTestBase):
     def test_realname_passed(self):
         self.assertEqual(self.user.realname, self.account.name)
 
@@ -118,6 +120,14 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
             with self.subTest(part=part):
                 self.assertIn(part, self.user.address)
 
+    def test_mail_correct(self):
+        acc = self.fixtures[Account][0]
+        user = User.get(acc.account)
+        expected_mail = "{}@wh12.tu-dresden.de".format(acc.account)
+        self.assertEqual(user.mail, expected_mail)
+
+
+class UserFromIpTestCase(OneAccountTestBase):
     def test_from_ip_correct_user(self):
         for ip in self.fixtures[IP]:
             if not ip.account:
@@ -133,6 +143,8 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
             with self.subTest(ip=ip.ip):
                 self.assertIsInstance(User.from_ip(ip.ip), AnonymousUserMixin)
 
+
+class UserIpsTestCase(OneAccountTestBase):
     def test_ips_passed(self):
         for account in self.fixtures[Account]:
             with self.subTest(account=account):
@@ -142,6 +154,8 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
                     with self.subTest(ip=ip):
                         self.assertIn(ip.ip, user.ips)
 
+
+class UserMacsTestCase(OneAccountTestBase):
     def test_macs_passed(self):
         for mac in self.fixtures.get(Mac, []):
             if mac.account is None:
@@ -152,9 +166,3 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
                 print("accounts:", [a.account for a in self.fixtures[Account]])
                 user = User.get(mac.account)
                 self.assertIn(mac.mac.lower(), user.mac)
-
-    def test_mail_correct(self):
-        acc = self.fixtures[Account][0]
-        user = User.get(acc.account)
-        expected_mail = "{}@wh12.tu-dresden.de".format(acc.account)
-        self.assertEqual(user.mail, expected_mail)
