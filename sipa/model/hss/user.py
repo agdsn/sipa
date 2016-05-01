@@ -45,12 +45,7 @@ class User(BaseUser):
     @classmethod
     def get(cls, username):
         """Used by user_loader. Return a User instance."""
-        try:
-            user = HssLdapConnector.fetch_user(username)
-        except UserNotFound:
-            logger.warning("User %s not in LDAP! (unauthenticated search)", username)
-            return AnonymousUserMixin()
-        return cls(uid=username, name=user['name'])
+        return cls(uid=username)
 
     @classmethod
     def from_ip(cls, ip):
