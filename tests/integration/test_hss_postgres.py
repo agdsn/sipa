@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from collections import OrderedDict
+
 from flask.ext.login import AnonymousUserMixin
 
 from tests.prepare import AppInitialized
@@ -44,16 +46,16 @@ class FixtureLoaderMixin:
 class HSSOneAccountFixture(FixtureLoaderMixin):
     @property
     def fixtures(self):
-        return {
-            Account: [
+        return OrderedDict([
+            (Account, [
                 Account(
                     account='sipatinator',
                     name="Sipa Tinator",
                     traffic_balance=67206545441,
                     access_id=1,
                 ),
-            ],
-            Access: [
+            ]),
+            (Access, [
                 Access(
                     id=1,
                     building="HSS46",
@@ -61,13 +63,13 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
                     flat="1",
                     room="b",
                 )
-            ],
-            IP: [
+            ]),
+            (IP, [
                 IP(ip="141.30.234.15", account="sipatinator"),
                 IP(ip="141.30.234.16"),
                 IP(ip="141.30.234.18", account="sipatinator"),
-            ],
-        }
+            ]),
+        ])
 
 
 class HSSPgOneAccountTestCase(HSSOneAccountFixture, HssPgTestBase):
