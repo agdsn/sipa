@@ -260,7 +260,7 @@ def get_possible_users():
             'password': "".join(reversed(str(i))),
             'name': "User {}".format(i),
             'status': "OK",
-            'address': "Gerokstraße 38",
+            **({'address': "Gerokstraße 38"} if i % 2 else {}),
             'hosts': [
                 generate_host(3*i + j)
                 for j in range(i % 3)
@@ -320,7 +320,7 @@ class TestGerokUser(AppInitialized):
         self.assertEqual(user.uid, user_data['login'])
         self.assertEqual(user.id, user_data['id'])
         self.assertEqual(user.login, user_data['login'])
-        self.assertEqual(user.address, user_data['address'])
+        self.assertEqual(user.address, user_data.get('address', ''))
         if user_data['mail']:
             self.assertEqual(user.mail, user_data['mail'])
         else:

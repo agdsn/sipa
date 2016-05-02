@@ -83,7 +83,7 @@ class User(BaseUser):
 
         self._id = user_data['id']
         self._login = user_data['login']
-        self._address = user_data['address']
+        self._address = user_data.get('address', '')
         self._mail = user_data['mail']
         self._status = user_data['status']
         self.name = user_data['name']
