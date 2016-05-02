@@ -202,8 +202,6 @@ class UserMacsTestCase(OneAccountTestBase):
                 continue
 
             with self.subTest(mac=mac.mac):
-                print("mac.account:", mac.account)
-                print("accounts:", [a.account for a in self.fixtures[Account]])
                 user = User.get(mac.account)
                 self.assertIn(mac.mac.lower(), user.mac)
 
@@ -241,8 +239,6 @@ class UserTrafficLogTestCaseMixin:
         for entry, expected_log in zip(self.history, expected_entries):
             with self.subTest(entry=entry, expected_log=expected_log):
                 day, input, output, credit = entry
-                print("entry:", entry)
-                print("expected_log:", expected_log)
 
                 if expected_log is None:
                     self.assertFalse(input)
