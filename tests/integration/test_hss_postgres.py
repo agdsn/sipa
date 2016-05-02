@@ -227,10 +227,10 @@ class UserTrafficLogTestCaseMixin:
         expected_entries = []
 
         for date_delta in range(-6, 1):
-            expected_date = datetime.today() + timedelta(date_delta)
+            expected_date = (datetime.today() + timedelta(date_delta)).date()
             possible_logs = [log for log in expected_logs
                              if (log.date == expected_date and
-                                 log.account == self.account)]
+                                 log.account == self.account.account)]
             try:
                 expected_entries.append(possible_logs.pop())
             except IndexError:
