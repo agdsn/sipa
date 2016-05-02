@@ -118,19 +118,21 @@ class User(BaseUser):
             try:
                 log = expected_log.pop()
             except IndexError:
-                history.append((
-                    expected_date.weekday(),
-                    0,
-                    0,
-                    0
-                ))
+                history.append({
+                    'day': expected_date.weekday(),
+                    'input': 0,
+                    'output': 0,
+                    'throughput': 0,
+                    'credit': 0,
+                })
             else:
-                history.append((
-                    expected_date.weekday(),
-                    log.bytes_in / 1024,
-                    log.bytes_out / 1024,
-                    0,
-                ))
+                history.append({
+                    'day': expected_date.weekday(),
+                    'input': log.bytes_in / 1024,
+                    'output': log.bytes_out / 1024,
+                    'throughput': (log.bytes_in + log.bytes_out) / 1024,
+                    'credit': 0,
+                })
                 # get the history from the expected_date
 
         return {'credit': self.credit,

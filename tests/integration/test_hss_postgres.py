@@ -238,16 +238,14 @@ class UserTrafficLogTestCaseMixin:
 
         for entry, expected_log in zip(self.history, expected_entries):
             with self.subTest(entry=entry, expected_log=expected_log):
-                day, input, output, credit = entry
 
                 if expected_log is None:
-                    self.assertFalse(input)
-                    self.assertFalse(output)
+                    self.assertFalse(entry['input'])
+                    self.assertFalse(entry['output'])
                 else:
-                    self.assertEqual(day, expected_log.date.weekday())
-                    self.assertEqual(input, expected_log.bytes_in / 1024)
-                    self.assertEqual(output, expected_log.bytes_out / 1024)
-                self.assertEqual(credit, 0)
+                    self.assertEqual(entry['day'], expected_log.date.weekday())
+                    self.assertEqual(entry['input'], expected_log.bytes_in / 1024)
+                    self.assertEqual(entry['output'], expected_log.bytes_out / 1024)
 
 
 class UserTrafficLogTestCase(
