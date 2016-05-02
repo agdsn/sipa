@@ -108,12 +108,11 @@ class User(BaseUser):
                             for day in range(7)]}
 
         """
-        log = self._pg_account.traffic_log
         history = []
 
         for date_delta in range(-6, 1):
-            expected_date = datetime.today() + timedelta(date_delta)
-            expected_log = [l for l in self._pg_account.traffic_log[:7]
+            expected_date = (datetime.today() + timedelta(date_delta)).date()
+            expected_log = [l for l in self._pg_account.traffic_log
                             if l.date == expected_date]
             try:
                 log = expected_log.pop()
