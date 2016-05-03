@@ -243,13 +243,13 @@ class AuthenticateTestCase(SimpleLdapUserTestBase):
             name=self.user_dict['gecos'],
         )
 
-    def test_invalid_password_anonymous(self):
-        user = User.authenticate(self.username, self.password + 'wrong')
-        self.assertIsInstance(user, AnonymousUserMixin)
+    def test_invalid_password_raises(self):
+        with self.assertRaises(InvalidCredentials):
+            User.authenticate(self.username, self.password + 'wrong')
 
-    def test_invalid_username_anonymous(self):
-        user = User.authenticate(self.username + 'wrong', self.password)
-        self.assertIsInstance(user, AnonymousUserMixin)
+    def test_invalid_username_raises(self):
+        with self.assertRaises(InvalidCredentials):
+            User.authenticate(self.username + 'wrong', self.password)
 
 
 class GetTestCase(SimpleLdapUserTestBase):
