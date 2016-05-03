@@ -3,11 +3,12 @@ from collections import OrderedDict
 from datetime import date, datetime, timedelta
 from operator import attrgetter
 
+from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.schema import Account, Access, IP, Mac, TrafficLog
+from sipa.model.hss.schema import Account, AccountProperty, Access, IP, Mac, TrafficLog
 from sipa.model.hss.user import User
 
 
@@ -113,6 +114,35 @@ class HSSOneTrafficAccountDaysMissingFixture(HSSOneTrafficAccountFixture):
             *super().fixtures.items(),
             (TrafficLog, [
                 *old_traffic_logs[:5],
+            ]),
+        ])
+
+
+class HSSAccountsWithPropertiesFixture(FixtureLoaderMixin):
+    @property
+    def fixtures(self):
+        return OrderedDict([
+            (Account, [
+                Account(
+                    account='sipatinator',
+                    name="Sipa Tinator",
+                    traffic_balance=63*1024**3,
+                ),
+                Account(
+                    account='active_user',
+                    name="Active user",
+                    traffic_balance=63*1024**3,
+                ),
+            ]),
+            (AccountProperty, [
+                AccountProperty(
+                    account='sipatinator',
+                    active=False,
+                ),
+                AccountProperty(
+                    account='active_user',
+                    active=True,
+                )
             ]),
         ])
 
@@ -267,3 +297,37 @@ class UserMissingTrafficLogTestCase(
         OneAccountTestBase,
 ):
     pass
+
+
+class UsersActiveTestCase(
+        HSSAccountsWithPropertiesFixture,
+        HssPgTestBase,
+):
+
+    def setUp(self):
+        super().setUp()
+        self.accounts = self.session.query(Account).all()
+
+    def test_user_is_active_or_not(self):
+        for account in self.accounts:
+            with self.subTest(account=account):
+                user = User.get(account.account)
+                self.assertEqual(user.has_connection, account.properties.active)
+
+    def test_active_user_status_correct(self):
+        for account in self.accounts:
+            if not account.properties.active:
+                continue
+
+            with self.subTest(account=account):
+                user = User.get(account.account)
+                self.assertEqual(user.status, gettext("Aktiv"))
+
+    def test_passive_user_status_correct(self):
+        for account in self.accounts:
+            if account.properties.active:
+                continue
+
+            with self.subTest(account=account):
+                user = User.get(account.account)
+                self.assertEqual(user.status, gettext("Passiv"))

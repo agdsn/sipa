@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import Column, ForeignKey, String, Integer, BigInteger, Date
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.types import String, Integer, BigInteger, Date, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import INET, MACADDR
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -24,6 +25,17 @@ class Account(db.Model):
     ips = relationship('IP')
     macs = relationship('Mac')
     traffic_log = relationship('TrafficLog')
+
+    properties = relationship('AccountProperty', uselist=False)
+
+
+class AccountProperty(db.Model):
+    __tablename__ = 'account_property'
+    __bind_key__ = 'hss'
+
+    account = Column(String(16), ForeignKey('account.account'),
+                     primary_key=True, nullable=False)
+    active = Column(Boolean, nullable=False)
 
 
 class Access(db.Model):
