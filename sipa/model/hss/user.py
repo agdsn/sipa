@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 
+from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
 
 from ..default import BaseUser
@@ -201,7 +202,9 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        return 2
+        if self.has_connection:
+            return gettext("Aktiv")
+        return gettext("Passiv")
 
     @unsupported_prop
     def id(self):
@@ -225,4 +228,4 @@ class User(BaseUser):
 
     @property
     def has_connection(self):
-        return False
+        return self._pg_account.properties.active
