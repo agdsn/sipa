@@ -53,7 +53,7 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
                 Account(
                     account='sipatinator',
                     name="Sipa Tinator",
-                    traffic_balance=67206545441,
+                    traffic_balance=63*1024**3,
                     access_id=1,
                 ),
             ]),
@@ -241,6 +241,16 @@ class UserTrafficLogTestCaseMixin:
                     self.assertEqual(entry['day'], expected_log.date.weekday())
                     self.assertEqual(entry['input'], expected_log.bytes_in / 1024)
                     self.assertEqual(entry['output'], expected_log.bytes_out / 1024)
+
+    def test_correct_credit_difference(self):
+        for i, entry in enumerate(self.history):
+            with self.subTest(i=i, entry=entry):
+                try:
+                    credit_difference = self.history[i+1]['credit'] - entry['credit']
+                except IndexError:
+                    pass
+                else:
+                    self.assertEqual(credit_difference, 3 * 1024**2 - entry['throughput'])
 
 
 class UserTrafficLogTestCase(

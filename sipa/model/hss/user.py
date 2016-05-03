@@ -134,6 +134,30 @@ class User(BaseUser):
                 })
                 # get the history from the expected_date
 
+        return self.reconstruct_credit(history, self.credit)
+
+    @staticmethod
+    def reconstruct_credit(old_history, last_credit):
+        history = old_history.copy()
+        history[-1]['credit'] = last_credit
+
+        for i, entry in enumerate(reversed(history)):
+            try:
+                # previous means *chronologically* previous (we
+                # iterate over `reversed`) ⇒ use [i+1]
+                previous_entry = list(reversed(history))[i+1]
+            except IndexError:
+                pass
+            else:
+                # Throughput: gets *subtracted* after the day → `+` for before
+                # Credit: gets *added* after the day → `-` for before
+                previous_entry['credit'] = (
+                    entry['credit'] + previous_entry['throughput'] - 3 * 1024**2
+                    # 3 → 3 KiB
+                    # 3 * 1024 → 3 MiB
+                    # 3 * 1024**2 → 3 GiB
+                )
+
         return history
 
     @property
