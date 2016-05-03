@@ -70,7 +70,7 @@ class User(BaseUser):
             with HssLdapConnector(username, password):
                 pass
         except InvalidCredentials:  # Covers `UserNotFound`, `PasswordInvalid`
-            return AnonymousUserMixin()
+            raise
         else:
             return cls.get(username)
 
