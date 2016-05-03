@@ -7,11 +7,15 @@ OperationalError for MySQL and SERVER_DOWN for LDAP are global app handlers!
 """
 
 
-class UserNotFound(Exception):
+class InvalidCredentials(Exception):
     pass
 
 
-class PasswordInvalid(Exception):
+class UserNotFound(InvalidCredentials):
+    pass
+
+
+class PasswordInvalid(InvalidCredentials):
     pass
 
 

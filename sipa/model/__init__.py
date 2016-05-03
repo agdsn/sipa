@@ -7,17 +7,35 @@ from flask.ext.login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
 from . import sample, wu, gerok, hss
+from .sqlalchemy import db
 
-registered_datasources = [sample.datasource, wu.datasource, gerok.datasource]
+registered_datasources = [
+    sample.datasource,
+    wu.datasource,
+    gerok.datasource,
+    hss.datasource,
+]
 
 registered_dormitories = (
-    sample.dormitories + wu.dormitories + gerok.dormitories
+    sample.dormitories + wu.dormitories + gerok.dormitories + hss.dormitories
 )
 
-premature_dormitories = hss.dormitories
+premature_dormitories = []
 
 
 def init_datasources_dormitories(app):
+    """Register the the datasources/dormitories in `app.extensions`.
+
+    Registered extensions:
+
+    - 'datasources': All the `DataSource` objects
+    - 'dormitories': All the `Dormitory` objects
+    - 'all_dormitories': 'dormitories' + the dormitories of
+      `PrematureDatasource`s
+
+    Note that the datasources and dormitories with `debug_only` are
+    only added if `app.debug` is True.
+    """
     app.extensions['datasources'] = [
         source for source in registered_datasources
         if not source.debug_only or app.debug
@@ -51,6 +69,9 @@ def list_supported_dormitories():
 
 
 def init_context(app):
+    """Call each datasources `init_context` method."""
+    app.config['SQLALCHEMY_BINDS'] = {}
+    db.init_app(app)
     for datasource in app.extensions['datasources']:
         if datasource.init_context:
             datasource.init_context(app)

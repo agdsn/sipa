@@ -101,13 +101,12 @@ class ActiveProperty(PropertyBase):
         )
 
     def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+        return "<{cls} {name}='{value}' [{empty}]>".format(
+            cls=type(self).__name__,
             name=self.name,
             value=self.value,
-            capabilities=self.capabilities,
-            style=self.style,
-            empty=self.empty,
-        ))
+            empty=('empty' if self.empty else 'nonempty'),
+        )
 
 
 def unsupported_prop(func):

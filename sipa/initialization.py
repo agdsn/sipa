@@ -91,7 +91,7 @@ def init_env_and_config(app, config=None):
     # if local config file exists, load everything into local space.
     if 'SIPA_CONFIG_FILE' in os.environ:
         try:
-            app.config.from_envvar('SIPA_CONFIG_FILE', silent=True)
+            app.config.from_envvar('SIPA_CONFIG_FILE')
         except IOError:
             logger.warning("SIPA_CONFIG_FILE not readable: %s",
                            os.environ['SIPA_CONFIG_FILE'])

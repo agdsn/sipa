@@ -14,7 +14,7 @@ from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
 from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
 from sipa.units import dynamic_unit
 from sipa.utils import get_user_name, redirect_url
-from sipa.utils.exceptions import UserNotFound, PasswordInvalid
+from sipa.utils.exceptions import UserNotFound, InvalidCredentials
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
 
@@ -131,7 +131,7 @@ def login():
 
         try:
             user = User.authenticate(username, password)
-        except (UserNotFound, PasswordInvalid) as e:
+        except InvalidCredentials as e:
             cause = "username" if isinstance(e, UserNotFound) else "password"
             logger.info("Authentication failed: Wrong %s", cause, extra={
                 'tags': {'user': username, 'rate_critical': True}
@@ -193,7 +193,7 @@ def usertraffic():
         if not current_user.has_connection and not ip_user.is_authenticated:
             flash(gettext("Aufgrund deines Nutzerstatus kannst Du "
                           "keine Trafficdaten einsehen."), "info")
-            return redirect(url_for('usersuite.index'))
+            return redirect(url_for('generic.index'))
 
     if ip_user.is_authenticated:
         chosen_user = ip_user
