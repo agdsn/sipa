@@ -211,15 +211,10 @@ class UserTrafficLogTestCaseMixin:
     def setUp(self):
         super().setUp()
         self.user = User.get(self.account.account)
-        history = self.user.traffic_history
-        self.credit = history.get('credit', float('NaN'))
-        self.history = history.get('history', [])
+        self.history = self.user.traffic_history
 
     def test_traffic_log_correct_length(self):
         self.assertEqual(len(self.history), 7)
-
-    def test_credit_correct(self):
-        self.assertEqual(self.user.credit, self.credit)
 
     def test_traffic_data_passed(self):
         # Pick the latest 7 entries

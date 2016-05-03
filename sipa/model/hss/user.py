@@ -134,8 +134,7 @@ class User(BaseUser):
                 })
                 # get the history from the expected_date
 
-        return {'credit': self.credit,
-                'history': history}
+        return history
 
     @property
     def credit(self):
