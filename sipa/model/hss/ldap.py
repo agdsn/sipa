@@ -155,7 +155,7 @@ class HssConfigProxy:
             'system_bind': conf['HSS_LDAP_SYSTEM_BIND'],
             'system_password': conf['HSS_LDAP_SYSTEM_PASSWORD'],
             'search_base': conf['HSS_LDAP_SEARCH_BASE'],
-            'use_ssl': True,
+            'use_ssl': conf.get('HSS_LDAP_USE_SSL', True),
         }
 
 
