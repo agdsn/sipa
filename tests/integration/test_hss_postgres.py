@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 from collections import OrderedDict
+from datetime import date, datetime, timedelta
+from operator import attrgetter
 
 from flask.ext.login import AnonymousUserMixin
 
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.schema import Account, Access, IP, Mac
+from sipa.model.hss.schema import Account, Access, IP, Mac, TrafficLog
 from sipa.model.hss.user import User
 
 
@@ -51,7 +53,7 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
                 Account(
                     account='sipatinator',
                     name="Sipa Tinator",
-                    traffic_balance=67206545441,
+                    traffic_balance=63*1024**3,
                     access_id=1,
                 ),
             ]),
@@ -77,6 +79,44 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
         ])
 
 
+class HSSOneTrafficAccountFixture(HSSOneAccountFixture):
+    @property
+    def fixtures(self):
+        return OrderedDict([
+            *super().fixtures.items(),
+            (TrafficLog, [
+                TrafficLog(id=1, account='sipatinator', date=date(2016, 4, 24),
+                           bytes_in=3657658, bytes_out=20646),
+                TrafficLog(id=2, account='sipatinator', date=date(2016, 4, 25),
+                           bytes_in=3354878, bytes_out=11146),
+                TrafficLog(id=3, account='sipatinator', date=date(2016, 4, 26),
+                           bytes_in=3653478, bytes_out=65746),
+                TrafficLog(id=4, account='sipatinator', date=date(2016, 4, 27),
+                           bytes_in=1118758, bytes_out=11546),
+                TrafficLog(id=5, account='sipatinator', date=date(2016, 4, 28),
+                           bytes_in=1957368, bytes_out=32246),
+                TrafficLog(id=6, account='sipatinator', date=date(2016, 4, 29),
+                           bytes_in=9455668, bytes_out=31686),
+                TrafficLog(id=7, account='sipatinator', date=date(2016, 4, 30),
+                           bytes_in=9851368, bytes_out=42146),
+                TrafficLog(id=8, account='sipatinator', date=date(2016, 5, 1),
+                           bytes_in=7318688, bytes_out=31556),
+            ]),
+        ])
+
+
+class HSSOneTrafficAccountDaysMissingFixture(HSSOneTrafficAccountFixture):
+    @property
+    def fixtures(self):
+        old_traffic_logs = super().fixtures.pop(TrafficLog)
+        return OrderedDict([
+            *super().fixtures.items(),
+            (TrafficLog, [
+                *old_traffic_logs[:5],
+            ]),
+        ])
+
+
 class HSSPgOneAccountTestCase(HSSOneAccountFixture, HssPgTestBase):
     def setUp(self):
         super().setUp()
@@ -92,7 +132,7 @@ class HSSPgOneAccountTestCase(HSSOneAccountFixture, HssPgTestBase):
                          self.received_account.account)
 
 
-class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
+class OneAccountTestBase(HSSOneAccountFixture, HssPgTestBase):
     def setUp(self):
         super().setUp()
         account = self.fixtures[Account][0].account
@@ -100,6 +140,8 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
         self.account = db.session.query(Account).filter_by(account=account).one()
         self.user = User(uid=self.account.account)
 
+
+class PgUserDataTestCase(OneAccountTestBase):
     def test_realname_passed(self):
         self.assertEqual(self.user.realname, self.account.name)
 
@@ -118,6 +160,14 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
             with self.subTest(part=part):
                 self.assertIn(part, self.user.address)
 
+    def test_mail_correct(self):
+        acc = self.fixtures[Account][0]
+        user = User.get(acc.account)
+        expected_mail = "{}@wh12.tu-dresden.de".format(acc.account)
+        self.assertEqual(user.mail, expected_mail)
+
+
+class UserFromIpTestCase(OneAccountTestBase):
     def test_from_ip_correct_user(self):
         for ip in self.fixtures[IP]:
             if not ip.account:
@@ -133,6 +183,8 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
             with self.subTest(ip=ip.ip):
                 self.assertIsInstance(User.from_ip(ip.ip), AnonymousUserMixin)
 
+
+class UserIpsTestCase(OneAccountTestBase):
     def test_ips_passed(self):
         for account in self.fixtures[Account]:
             with self.subTest(account=account):
@@ -142,19 +194,76 @@ class TestUserFromPgCase(HSSOneAccountFixture, HssPgTestBase):
                     with self.subTest(ip=ip):
                         self.assertIn(ip.ip, user.ips)
 
+
+class UserMacsTestCase(OneAccountTestBase):
     def test_macs_passed(self):
         for mac in self.fixtures.get(Mac, []):
             if mac.account is None:
                 continue
 
             with self.subTest(mac=mac.mac):
-                print("mac.account:", mac.account)
-                print("accounts:", [a.account for a in self.fixtures[Account]])
                 user = User.get(mac.account)
                 self.assertIn(mac.mac.lower(), user.mac)
 
-    def test_mail_correct(self):
-        acc = self.fixtures[Account][0]
-        user = User.get(acc.account)
-        expected_mail = "{}@wh12.tu-dresden.de".format(acc.account)
-        self.assertEqual(user.mail, expected_mail)
+
+# Dependency injection of new fixture
+class UserTrafficLogTestCaseMixin:
+    def setUp(self):
+        super().setUp()
+        self.user = User.get(self.account.account)
+        self.history = self.user.traffic_history
+
+    def test_traffic_log_correct_length(self):
+        self.assertEqual(len(self.history), 7)
+
+    def test_traffic_data_passed(self):
+        # Pick the latest 7 entries
+        expected_logs = sorted(self.fixtures[TrafficLog], key=attrgetter('date'))[-7:]
+        expected_entries = []
+
+        for date_delta in range(-6, 1):
+            expected_date = (datetime.today() + timedelta(date_delta)).date()
+            possible_logs = [log for log in expected_logs
+                             if (log.date == expected_date and
+                                 log.account == self.account.account)]
+            try:
+                expected_entries.append(possible_logs.pop())
+            except IndexError:
+                expected_entries.append(None)
+
+        for entry, expected_log in zip(self.history, expected_entries):
+            with self.subTest(entry=entry, expected_log=expected_log):
+
+                if expected_log is None:
+                    self.assertFalse(entry['input'])
+                    self.assertFalse(entry['output'])
+                else:
+                    self.assertEqual(entry['day'], expected_log.date.weekday())
+                    self.assertEqual(entry['input'], expected_log.bytes_in / 1024)
+                    self.assertEqual(entry['output'], expected_log.bytes_out / 1024)
+
+    def test_correct_credit_difference(self):
+        for i, entry in enumerate(self.history):
+            with self.subTest(i=i, entry=entry):
+                try:
+                    credit_difference = self.history[i+1]['credit'] - entry['credit']
+                except IndexError:
+                    pass
+                else:
+                    self.assertEqual(credit_difference, 3 * 1024**2 - entry['throughput'])
+
+
+class UserTrafficLogTestCase(
+        HSSOneTrafficAccountFixture,
+        UserTrafficLogTestCaseMixin,
+        OneAccountTestBase,
+):
+    pass
+
+
+class UserMissingTrafficLogTestCase(
+        HSSOneTrafficAccountDaysMissingFixture,
+        UserTrafficLogTestCaseMixin,
+        OneAccountTestBase,
+):
+    pass

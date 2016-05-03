@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta
 
 from flask.ext.login import AnonymousUserMixin
 
@@ -107,9 +108,57 @@ class User(BaseUser):
                             for day in range(7)]}
 
         """
-        # TODO: return useful data
-        return {'credit': 0,
-                'history': []}
+        history = []
+
+        for date_delta in range(-6, 1):
+            expected_date = (datetime.today() + timedelta(date_delta)).date()
+            expected_log = [l for l in self._pg_account.traffic_log
+                            if l.date == expected_date]
+            try:
+                log = expected_log.pop()
+            except IndexError:
+                history.append({
+                    'day': expected_date.weekday(),
+                    'input': 0,
+                    'output': 0,
+                    'throughput': 0,
+                    'credit': 0,
+                })
+            else:
+                history.append({
+                    'day': expected_date.weekday(),
+                    'input': log.bytes_in / 1024,
+                    'output': log.bytes_out / 1024,
+                    'throughput': (log.bytes_in + log.bytes_out) / 1024,
+                    'credit': 0,
+                })
+                # get the history from the expected_date
+
+        return self.reconstruct_credit(history, self.credit)
+
+    @staticmethod
+    def reconstruct_credit(old_history, last_credit):
+        history = old_history.copy()
+        history[-1]['credit'] = last_credit
+
+        for i, entry in enumerate(reversed(history)):
+            try:
+                # previous means *chronologically* previous (we
+                # iterate over `reversed`) ⇒ use [i+1]
+                previous_entry = list(reversed(history))[i+1]
+            except IndexError:
+                pass
+            else:
+                # Throughput: gets *subtracted* after the day → `+` for before
+                # Credit: gets *added* after the day → `-` for before
+                previous_entry['credit'] = (
+                    entry['credit'] + previous_entry['throughput'] - 3 * 1024**2
+                    # 3 → 3 KiB
+                    # 3 * 1024 → 3 MiB
+                    # 3 * 1024**2 → 3 GiB
+                )
+
+        return history
 
     @property
     def credit(self):
