@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-12 18:00+0100\n"
+"POT-Creation-Date: 2016-05-03 22:43+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -16,220 +16,220 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.2.0\n"
+"Generated-By: Babel 2.3.3\n"
 
-#: sipa/forms.py:18
+#: sipa/forms.py:19
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
 
-#: sipa/forms.py:19
+#: sipa/forms.py:20
 msgid "Großbuchstaben (A-Z)"
 msgstr ""
 
-#: sipa/forms.py:20
+#: sipa/forms.py:21
 msgid "Ziffern (0-9)"
 msgstr ""
 
-#: sipa/forms.py:21
+#: sipa/forms.py:22
 msgid "andere Zeichen"
 msgstr ""
 
-#: sipa/forms.py:22
+#: sipa/forms.py:23
 msgid ""
 "Dein Passwort muss mindestens {min_length} Zeichen lang sein und "
 "mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. "
 "Zeichen von Klassen sind: {classes}."
 msgstr ""
 
-#: sipa/forms.py:77 sipa/forms.py:97
+#: sipa/forms.py:78 sipa/forms.py:98
 msgid "Deine E-Mail-Adresse"
 msgstr ""
 
-#: sipa/forms.py:78 sipa/forms.py:98 sipa/forms.py:137
+#: sipa/forms.py:79 sipa/forms.py:99 sipa/forms.py:138
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
-#: sipa/forms.py:81
+#: sipa/forms.py:82
 msgid "Kategorie"
 msgstr ""
 
-#: sipa/forms.py:82
+#: sipa/forms.py:83
 msgid "Allgemeine Frage an die Administratoren"
 msgstr ""
 
-#: sipa/forms.py:84
+#: sipa/forms.py:85
 msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
 msgstr ""
 
-#: sipa/forms.py:85
+#: sipa/forms.py:86
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr ""
 
-#: sipa/forms.py:86
+#: sipa/forms.py:87
 msgid "Probleme mit privater Technik"
 msgstr ""
 
-#: sipa/forms.py:88 sipa/forms.py:110
+#: sipa/forms.py:89 sipa/forms.py:111
 msgid "Betreff"
 msgstr ""
 
-#: sipa/forms.py:89 sipa/forms.py:111
+#: sipa/forms.py:90 sipa/forms.py:112
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:90 sipa/forms.py:112
+#: sipa/forms.py:91 sipa/forms.py:113
 msgid "Nachricht"
 msgstr ""
 
-#: sipa/forms.py:91 sipa/forms.py:113
+#: sipa/forms.py:92 sipa/forms.py:114
 msgid "Nachricht fehlt!"
 msgstr ""
 
-#: sipa/forms.py:102
+#: sipa/forms.py:103
 msgid "Dein Name"
 msgstr ""
 
-#: sipa/forms.py:103
+#: sipa/forms.py:104
 msgid "Bitte gib einen Namen an!"
 msgstr ""
 
-#: sipa/forms.py:106 sipa/forms.py:168
+#: sipa/forms.py:107 sipa/forms.py:169
 msgid "Wohnheim"
 msgstr ""
 
-#: sipa/forms.py:118
+#: sipa/forms.py:119
 msgid "Altes Passwort"
 msgstr ""
 
-#: sipa/forms.py:119
+#: sipa/forms.py:120
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:120
+#: sipa/forms.py:121
 msgid "Neues Passwort"
 msgstr ""
 
-#: sipa/forms.py:121
+#: sipa/forms.py:122
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:124 sipa/forms.py:194
+#: sipa/forms.py:125 sipa/forms.py:195
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:125 sipa/forms.py:195
+#: sipa/forms.py:126 sipa/forms.py:196
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:127 sipa/forms.py:197
+#: sipa/forms.py:128 sipa/forms.py:198
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:133 sipa/forms.py:157 sipa/forms.py:183 sipa/forms.py:190
+#: sipa/forms.py:134 sipa/forms.py:158 sipa/forms.py:184 sipa/forms.py:191
 msgid "Passwort"
 msgstr ""
 
-#: sipa/forms.py:134 sipa/forms.py:142 sipa/forms.py:158
+#: sipa/forms.py:135 sipa/forms.py:143 sipa/forms.py:159
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sipa/forms.py:136
+#: sipa/forms.py:137
 msgid "Neue Mail"
 msgstr ""
 
-#: sipa/forms.py:152
+#: sipa/forms.py:153
 msgid "MAC muss unicast-Adresse sein!"
 msgstr ""
 
-#: sipa/forms.py:160
+#: sipa/forms.py:161
 msgid "Neue MAC"
 msgstr ""
 
-#: sipa/forms.py:172
+#: sipa/forms.py:173
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
-#: sipa/forms.py:175
+#: sipa/forms.py:176
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:177
+#: sipa/forms.py:178
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:178
+#: sipa/forms.py:179
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr ""
 
-#: sipa/forms.py:184 sipa/forms.py:191
+#: sipa/forms.py:185 sipa/forms.py:192
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:186
+#: sipa/forms.py:187
 msgid "Anmeldung merken"
 msgstr ""
 
-#: sipa/blueprints/generic.py:51
+#: sipa/blueprints/generic.py:50
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:53
+#: sipa/blueprints/generic.py:52
 msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:56
+#: sipa/blueprints/generic.py:55
 msgid "Das von Dir angeforderte Dokument gibt es nicht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:58
+#: sipa/blueprints/generic.py:57
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:72
+#: sipa/blueprints/generic.py:71
 msgid ""
 "Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein "
 "paar Minuten noch mal."
 msgstr ""
 
-#: sipa/blueprints/generic.py:91
+#: sipa/blueprints/generic.py:90
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:141
+#: sipa/blueprints/generic.py:139
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:148
+#: sipa/blueprints/generic.py:146
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:165
+#: sipa/blueprints/generic.py:163
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:204
+#: sipa/blueprints/generic.py:194
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:213
+#: sipa/blueprints/generic.py:203
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:216
+#: sipa/blueprints/generic.py:206
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:263 sipa/blueprints/usersuite.py:93
+#: sipa/blueprints/generic.py:253 sipa/blueprints/usersuite.py:93
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:265
+#: sipa/blueprints/generic.py:255
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:271
+#: sipa/blueprints/generic.py:261
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -335,55 +335,63 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sipa/model/property.py:55
+#: sipa/model/property.py:67
 msgid "Nicht unterstÃ¼tzt"
 msgstr ""
 
-#: sipa/model/property.py:82
+#: sipa/model/property.py:94
 msgid "Nicht angegeben"
 msgstr ""
 
-#: sipa/model/property.py:200
+#: sipa/model/property.py:212
 msgid "Nicht verfÃ¼gbar"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:68
+#: sipa/model/hss/user.py:206 tests/integration/test_hss_postgres.py:324
+msgid "Aktiv"
+msgstr ""
+
+#: sipa/model/hss/user.py:207 tests/integration/test_hss_postgres.py:333
+msgid "Passiv"
+msgstr ""
+
+#: sipa/model/wu/database_utils.py:84
 msgid "ok"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:69
+#: sipa/model/wu/database_utils.py:85
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:70
+#: sipa/model/wu/database_utils.py:86
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:72
+#: sipa/model/wu/database_utils.py:88
 msgid "Exaktiv"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:73
+#: sipa/model/wu/database_utils.py:89
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/user.py:281
+#: sipa/model/wu/user.py:282
 msgid "Unbekannt"
 msgstr ""
 
-#: sipa/model/wu/user.py:315
+#: sipa/model/wu/user.py:312
 msgid "Datenbank nicht erreichbar"
 msgstr ""
 
-#: sipa/model/wu/user.py:319
+#: sipa/model/wu/user.py:316
 msgid "Aktiviert"
 msgstr ""
 
-#: sipa/model/wu/user.py:321
+#: sipa/model/wu/user.py:318
 msgid "Nicht aktiviert"
 msgstr ""
 
-#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:254
+#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:257
 msgid "Kontakt"
 msgstr ""
 
@@ -419,60 +427,60 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: sipa/templates/base.html:81
+#: sipa/templates/base.html:84
 msgid "News"
 msgstr ""
 
-#: sipa/templates/base.html:87
+#: sipa/templates/base.html:90
 msgid "Neueste"
 msgstr ""
 
-#: sipa/templates/base.html:93
+#: sipa/templates/base.html:96
 msgid "Älteste"
 msgstr ""
 
-#: sipa/templates/base.html:99
+#: sipa/templates/base.html:102
 msgid "Alle"
 msgstr ""
 
-#: sipa/templates/base.html:142
+#: sipa/templates/base.html:145
 msgid "Anmeldung"
 msgstr ""
 
-#: sipa/templates/base.html:146
+#: sipa/templates/base.html:149
 msgid "Sprache"
 msgstr ""
 
-#: sipa/templates/base.html:232
+#: sipa/templates/base.html:235
 msgid "Verbleibender Traffic"
 msgstr ""
 
-#: sipa/templates/base.html:239
+#: sipa/templates/base.html:242
 msgid "Für Details klicken"
 msgstr ""
 
-#: sipa/templates/base.html:245
+#: sipa/templates/base.html:248
 msgid "Fehler bei der Abfrage der Daten"
 msgstr ""
 
-#: sipa/templates/base.html:276 sipa/templates/base.html:281
+#: sipa/templates/base.html:279 sipa/templates/base.html:284
 #: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr ""
 
-#: sipa/templates/base.html:297
+#: sipa/templates/base.html:300
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:309
+#: sipa/templates/base.html:312
 msgid "Keller"
 msgstr ""
 
-#: sipa/templates/base.html:321
+#: sipa/templates/base.html:324
 msgid "7. Etage"
 msgstr ""
 
-#: sipa/templates/base.html:345
+#: sipa/templates/base.html:372
 msgid "Informationen zur Version"
 msgstr ""
 
@@ -708,28 +716,32 @@ msgstr ""
 msgid "Usersuite von "
 msgstr ""
 
-#: sipa/utils/graph_utils.py:57
+#: sipa/utils/graph_utils.py:67
 msgid "Traffic (MiB)"
 msgstr ""
 
-#: sipa/utils/graph_utils.py:62
+#: sipa/utils/graph_utils.py:75
 msgid "Eingehend"
 msgstr ""
 
-#: sipa/utils/graph_utils.py:65
+#: sipa/utils/graph_utils.py:78
 msgid "Ausgehend"
 msgstr ""
 
-#: sipa/utils/graph_utils.py:68
+#: sipa/utils/graph_utils.py:81
 msgid "Gesamt"
 msgstr ""
 
-#: sipa/utils/graph_utils.py:87
+#: sipa/utils/graph_utils.py:103
 msgid "Credit (GiB)"
 msgstr ""
 
-#: sipa/utils/graph_utils.py:92
+#: sipa/utils/graph_utils.py:110
 msgid "Credit"
+msgstr ""
+
+#: sipa/utils/graph_utils.py:113
+msgid "Maximum"
 msgstr ""
 
 #~ msgid "Bezahlt, verbunden"
