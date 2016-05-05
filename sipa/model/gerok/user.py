@@ -81,14 +81,14 @@ class User(BaseUser):
             # pylint: disable=access-member-before-definition
             user_data = do_api_call(str(self._id))
 
-        self._id = user_data['id']
-        self._login = user_data['login']
+        self._id = user_data.get('id', '')
+        self._login = user_data.get('login', '')
         self._address = user_data.get('address', '')
-        self._mail = user_data['mail']
-        self._status = user_data['status']
-        self.name = user_data['name']
+        self._mail = user_data.get('mail', '')
+        self._status = user_data.get('status', '')
+        self.name = user_data.get('name', '')
 
-        hosts = user_data['hosts']
+        hosts = user_data.get('hosts', [])
         self._ips = {h['ip'] for h in hosts} - {None}
         self._macs = {h['mac'] for h in hosts} - {None}
         self._hostnames = {h['hostname'] for h in hosts} - {None}
