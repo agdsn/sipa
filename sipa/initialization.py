@@ -34,8 +34,9 @@ def init_app(app, **kwargs):
     :return: None
     """
     app.wsgi_app = ReverseProxied(app.wsgi_app)
-    init_env_and_config(app, config=kwargs.pop('config', None))
+    load_config_file(app, config=kwargs.pop('config', None))
     init_logging(app)
+    init_env_and_config(app)
     logger.debug('Initializing app')
     login_manager.init_app(app)
     babel.init_app(app)
@@ -81,7 +82,8 @@ def init_app(app, **kwargs):
     init_context(app)
 
 
-def init_env_and_config(app, config=None):
+def load_config_file(app, config=None):
+    """Just load the config file, do nothing else"""
     # default configuration
     app.config.from_pyfile(os.path.realpath("sipa/config/default.py"))
 
@@ -99,6 +101,8 @@ def init_env_and_config(app, config=None):
             logger.info("Successfully read config file %s",
                         os.environ['SIPA_CONFIG_FILE'])
 
+
+def init_env_and_config(app):
     if not app.config['FLATPAGES_ROOT']:
         app.config['FLATPAGES_ROOT'] = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
