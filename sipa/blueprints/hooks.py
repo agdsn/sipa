@@ -21,11 +21,17 @@ def content_hook():
 
     key = request.args.get('token')
     if not key:
+        logger.debug("`update-content` called without Token",
+                     extra={'data': {'request_args': request.args}})
         abort(401)
 
     if key != auth_key:
+        logger.warning("`update-content` called with wrong Token",
+                       extra={'data': {'request_args': request.args,
+                                       'auth_key': auth_key}})
         abort(403)
 
+    logger.info("Update hook triggered. Fetching content.")
     reload_necessary = update_repo(current_app.config['FLATPAGES_ROOT'])
     if reload_necessary:
         try:
@@ -34,8 +40,8 @@ def content_hook():
             logger.debug("UWSGI not present, skipping reload")
             pass
         else:
+            logger.debug("Reloading UWSGI…")
             uwsgi.reload()
-            logger.debug("UWSGI Reloaded")
 
     # 204: No content
     # https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#204
