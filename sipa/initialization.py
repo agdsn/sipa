@@ -113,15 +113,20 @@ def init_env_and_config(app):
         if not os.path.isdir(app.config['FLATPAGES_ROOT']):
             os.mkdir(app.config['FLATPAGES_ROOT'])
 
-    if os.getenv("SIPA_UWSGI", "False") == 'True':
+    try:
         import uwsgi
-
+    except ImportError:
+        logger.info("uwsgi package not found, uwsgi_timer hasn't been set")
+    else:
         def update_uwsgi(signum):
-            hasToReload = update_repo(app.config["FLATPAGES_ROOT"])
+            flatpages_root = app.config["FLATPAGES_ROOT"]
+            logger.debug("Udpating git repository at %s", flatpages_root)
+            hasToReload = update_repo(flatpages_root)
             if hasToReload:
+                logger.debug("Reloading flatpages…")
                 uwsgi.reload()
 
-        logger.info("Registering repo update to uwsgi_signal")
+        logger.debug("Registering repo update to uwsgi signal")
         uwsgi.register_signal(20, "", update_uwsgi)
         uwsgi.add_timer(20, 300)
 
