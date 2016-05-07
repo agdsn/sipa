@@ -40,7 +40,7 @@ def content_hook():
             logger.debug("UWSGI not present, skipping reload")
             pass
         else:
-            logger.debug("Reloading UWSGI…")
+            logger.debug("Reloading UWSGI...")
             uwsgi.reload()
 
     # 204: No content
