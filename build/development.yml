@@ -6,7 +6,7 @@ services:
       dockerfile: build/Dockerfile
     command: python sipa.py --debug --exposed
     volumes:
-      - ./:/home/sipa/sipa
+      - ../:/home/sipa/sipa
   sipa:
     build:
       context: ..
@@ -14,11 +14,11 @@ services:
     environment:
       - SIPA_UWSGI_PREFIX=/sipa
     volumes:
-      - ./:/home/sipa/sipa
+      - ../:/home/sipa/sipa
   nginx:
     image: nginx
     volumes:
-      - ./example/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../example/nginx.conf:/etc/nginx/nginx.conf:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
     ports:
       - "80:80"
