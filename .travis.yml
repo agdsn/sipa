@@ -31,4 +31,4 @@ cache:
 script:
   - "docker-compose -f build/testing.yml build"
   - "docker-compose -f build/testing.yml run --rm sipa_testing_no_volumes python manage.py test"
-  - "pep8 ."
+  - "docker-compose -f build/testing.yml run --rm sipa_testing_no_volumes pep8 ."
