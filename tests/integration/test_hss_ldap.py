@@ -2,7 +2,7 @@ from functools import partial
 import unittest
 from unittest.mock import patch
 
-from flask.ext.login import AnonymousUserMixin
+from flask import url_for
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
@@ -11,6 +11,7 @@ from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connec
 from sipa.model.hss.user import User
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 from tests.prepare import AppInitialized
+from .test_hss_postgres import HSSOneAccountFixture, HssPgTestBase
 
 
 class HssLdapAppInitialized(AppInitialized):
@@ -21,8 +22,9 @@ class HssLdapAppInitialized(AppInitialized):
     LDAP_ADMIN_PASSWORD = 'password'
     LDAP_USER_FORMAT_STRING = "uid={user},ou=users,dc=wh12,dc=tu-dresden,dc=de"
 
-    def create_app(self):
-        return super().create_app(additional_config={
+    def create_app(self, *a, **kw):
+        conf = {
+            **kw.pop('additional_config', {}),
             'HSS_LDAP_HOST': self.LDAP_HOST,
             'HSS_LDAP_PORT': self.LDAP_PORT,
             'HSS_LDAP_USERDN_FORMAT': self.LDAP_USER_FORMAT_STRING,
@@ -30,7 +32,8 @@ class HssLdapAppInitialized(AppInitialized):
             'HSS_LDAP_SYSTEM_PASSWORD': self.LDAP_ADMIN_PASSWORD,
             'HSS_LDAP_SEARCH_BASE': self.LDAP_USER_BASE,
             'HSS_LDAP_USE_SSL': False,
-        })
+        }
+        return super().create_app(*a, additional_config=conf, **kw)
 
 
 class OneLdapUserFixture:
@@ -267,3 +270,72 @@ class GetTestCase(SimpleLdapUserTestBase):
             login=self.username,
             name=self.user_dict['gecos'],
         )
+
+
+class HssPgConfigMixin:
+    def create_app(self, *a, **kw):
+        conf = {
+            **kw.pop('additional_config', {}),
+            'HSS_CONNECTION_STRING': "postgresql://sipa:password@postgres:5432/",
+        }
+        return super().create_app(*a, additional_config=conf, **kw)
+
+
+class SimpleHssPgTestBase(HSSOneAccountFixture, HssPgTestBase):
+    pass
+
+
+class HssAuthenticatedTestBase(HssPgConfigMixin, SimpleLdapTestBase):
+    def __init__(self, *a, **kw):
+        super().__init__(*a, **kw)
+        self.uid = list(self.fixtures.keys()).pop()
+        self.pw = self.fixtures[self.uid]['userPassword']
+
+    def login(self):
+        return self.client.post(
+            url_for('generic.login'),
+            data={'dormitory': 'hss',
+                  'username': self.uid,
+                  'password': self.pw}
+        )
+
+    def logout(self):
+        return self.client.get(
+            url_for('generic.logout')
+        )
+
+
+class HssAuthenticationTestCase(HssAuthenticatedTestBase):
+    def test_login_successful(self):
+        rv = self.login()
+        self.assertRedirects(rv, url_for('usersuite.usersuite'))
+
+    def test_logout_successful(self):
+        self.login()
+        rv = self.logout()
+        if rv.status_code == 401:
+            self.fail('Logout not permitted, probably because login failed')
+        self.assert_redirects(rv, url_for('generic.index'))
+
+
+class HssFrontendTestBase(HssAuthenticatedTestBase):
+    def setUp(self):
+        super().setUp()
+        self.login()
+
+    def tearDown(self):
+        self.logout()
+        super().tearDown()
+
+
+class HssPasswordChangeTestCase(HssFrontendTestBase):
+    def setUp(self):
+        super().setUp()
+        self.rv = self.client.post(
+            url_for('usersuite.usersuite_change_password'),
+            data={'username': self.uid, 'password': self.pw}
+        )
+        self.text = "Diese Funktion ist nicht verfügbar.".encode('utf-8')
+
+    def test_password_change_not_disallowed(self):
+        self.assertIn(self.text, self.rv.data)
