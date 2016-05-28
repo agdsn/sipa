@@ -61,8 +61,8 @@ def run_tests_nose():
 
         return result
 
-    return call(["nosetests", "--rednose", "--with-coverage", "--cover-erase",
-                 "--cover-branches", "--cover-package=sipa"])
+    return call(["nosetests", "--verbose", "--rednose", "--with-coverage",
+                 "--cover-erase", "--cover-branches", "--cover-package=sipa"])
 
 
 @manager.option('-u', '--force-unittest', dest='force_unittest',

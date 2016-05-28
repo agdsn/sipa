@@ -1,6 +1,6 @@
 version: '2'
 services:
-  sipa_testing:
+  sipa_testing_base:
     build:
       context: ..
       dockerfile: build/Dockerfile
@@ -10,6 +10,15 @@ services:
     # Run `test` (doing nothing) because the tests should be triggered manually
     # Running them on startup won't work because the LDAP won't be ready yet
     command: test
+
+  sipa_testing_no_volumes:
+    extends: sipa_testing_base
+    links:
+      - postgres
+      - ldap_hss
+
+  sipa_testing:
+    extends: sipa_testing_base
     volumes:
       # Note: ../ is relative to the path of the .yml
       # Thus: be careful with symlinks!
@@ -17,6 +26,7 @@ services:
     links:
       - postgres
       - ldap_hss
+
   postgres:
     image: postgres
     environment:
