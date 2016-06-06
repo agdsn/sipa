@@ -37,14 +37,15 @@ body {
 
 #logo {
 	margin-top: -5px;
-	background-image: url(../img/logo.png);
+	background-image: url(../img/logo_hover.png);
+	opacity: 0.5;
 	background-size: 32px;
 	width: 32px;
 	height: 32px;
 }
 
 #logo:hover {
-	background-image: url(../img/logo_hover.png);
+	opacity: 1;
 }
 
 @media (max-height: 480px) {
