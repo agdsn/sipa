@@ -101,6 +101,16 @@ class User(BaseUser):
     def credit(self):
         return random() * 1024**2 * 63
 
+    @property
+    def max_credit(self):
+        """Return the current credit in KiB"""
+        return 63 * 1024 *1024
+
+    @property
+    def daily_credit(self):
+        """Return the current credit in KiB"""
+        return 3 * 1024 * 1024
+        
     @active_prop
     def realname(self):
         return self._realname
