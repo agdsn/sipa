@@ -129,3 +129,12 @@ class FeeInfo(db.Model):
     amount = Column(Numeric(5, 2), nullable=False)
     description = Column(String(255), nullable=False)
     timestamp = Column(TIMESTAMP, nullable=False)
+
+class TrafficQuota(db.Model):
+    __tablename__ = 'traffic_quota'
+    __bind_key__ = 'hss'
+
+    id = Column(Integer, primary_key=True)
+    daily_credit = Column(BigInteger, nullable=False, default=0)
+    max_credit = Column(BigInteger, nullable=False, default=0)
+    description = Column(String(255), nullable=False)

@@ -10,7 +10,7 @@ from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
-from sipa.model.hss.schema import Account, IP, AccountStatementLog
+from sipa.model.hss.schema import Account, IP, AccountStatementLog, TrafficQuota
 from sipa.units import money
 from sipa.utils import argstr
 from sipa.utils.exceptions import InvalidCredentials
@@ -100,6 +100,13 @@ class User(BaseUser):
 
     can_change_password = True
 
+    @property
+    def _pg_trafficquota(self):
+        """Return the corresponding ORM TrafficQuota for an Account"""
+        return db.session.query(TrafficQuota).filter_by(
+            id=self._pg_account.traffic_quota
+        ).one()
+
     def change_password(self, old, new):
         """Change the user's password from old to new.
 
@@ -118,12 +125,15 @@ class User(BaseUser):
         The dict syntax is as follows:
 
         return {'credit': 0,
+                'max_credit': 0,
+                'daily_credit': 0,
                 'history': [(day, <in>, <out>, <credit>)
                             for day in range(7)]}
 
         """
         history = []
-
+        history['max_credit'] = self.max_credit
+        history['daily_credit'] = self.daily_credit
         for date_delta in range(-6, 1):
             expected_date = (datetime.today() + timedelta(date_delta)).date()
             expected_log = [l for l in self._pg_account.traffic_log
@@ -171,13 +181,23 @@ class User(BaseUser):
                     # 3 * 1024 → 3 MiB
                     # 3 * 1024**2 → 3 GiB
                 )
-
+        dump(history)
         return history
 
     @property
     def credit(self):
         """Return the current credit in KiB"""
         return self._pg_account.traffic_balance / 1024
+
+    @property
+    def max_credit(self):
+        """Return the current credit in KiB"""
+        return self._pg_trafficquota.max_credit / 1024
+
+    @property
+    def daily_credit(self):
+        """Return the current credit in KiB"""
+        return self._pg_trafficquota.daily_credit / 1024
 
     @active_prop
     def ips(self):
