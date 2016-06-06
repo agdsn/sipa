@@ -94,7 +94,7 @@ def generate_credit_chart(traffic_data, inline=True):
     :param inline: Determines the option `disable_xml_declaration`
     :return: The graph object
     """
-    raw_max = 63*1024*1024
+    raw_max = traffic_data['max_credit']
     divisions = max_divisions(raw_max)
     max = reduce_by_base(raw_max, divisions)
 
