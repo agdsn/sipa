@@ -1,3 +1,5 @@
+import unittest
+
 from flask import url_for
 
 from .test_hss_ldap import SimpleLdapTestBase
@@ -86,5 +88,6 @@ class HssPasswordChangeTestCase(HssFrontendTestBase):
         )
         self.text = "Diese Funktion ist nicht verfügbar.".encode('utf-8')
 
-    def test_password_change_not_disallowed(self):
-        self.assertIn(self.text, self.rv.data)
+    @unittest.expectedFailure
+    def test_password_change_disallowed(self):
+        self.assertNotIn(self.text, self.rv.data)
