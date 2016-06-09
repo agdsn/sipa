@@ -13,12 +13,14 @@ from sipa.model.hss.user import User
 
 
 class HssPgTestBase(AppInitialized):
-    def create_app(self):
-        test_app = super().create_app(additional_config={
+    def create_app(self, *a, **kw):
+        conf = {
+            **kw.pop('additional_config', {}),
             'WU_CONNECTION_STRING': "sqlite:///",
             'HSS_CONNECTION_STRING': "postgresql://sipa:password@postgres:5432/",
             'DB_HELIOS_IP_MASK': "10.10.7.%",
-        })
+        }
+        test_app = super().create_app(*a, additional_config=conf, **kw)
         return test_app
 
     def setUp(self):
