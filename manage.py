@@ -81,6 +81,12 @@ def test(force_unittest):
             print("Aborting.")
             exit(255)
 
+    timeout = os.getenv('CONNETION_TIMEOUT')
+    if os.getenv('CONNETION_TIMEOUT'):
+        connections = [('postgres', 5432), ('ldap_hss', 389)]
+        if not wait_until_ready(connections):
+            exit(254)
+
     if not force_unittest:
         result = run_tests_nose()
     else:
@@ -88,6 +94,41 @@ def test(force_unittest):
 
     exit(result)
 
+
+def wait_until_ready(connections_to_test, timeout=5):
+    """Wait until each connection can be established or the timeout is reached.
+
+    :param connections_to_test: A list of `(host, port)` tuples
+    :param timeout: Timeout in seconds
+    :return: False if the timeout is reached, True else
+    """
+    import socket
+    import time
+
+    print("Starting connectivity test...")
+
+    print("Given TCP endpoints:",
+          " ".join("{}:{}".format(*host_port) for host_port in connections_to_test))
+
+    for conn_tuple in connections_to_test:
+        print("Trying to connect to {}:{}...".format(*conn_tuple), end='')
+        old_time = time.time()
+        while time.time() - old_time < timeout:
+            try:
+                socket.setdefaulttimeout(timeout)
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(conn_tuple)
+            except ConnectionRefusedError:
+                pass
+            else:
+                print(" SUCCESS")
+                break
+        else:
+            print(" FAIL")
+            break
+    else:
+        return True
+
+    return False
 
 if __name__ == '__main__':
     manager.run()
