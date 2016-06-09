@@ -23,7 +23,8 @@ class HssPgTestBase(AppInitialized):
         test_app = super().create_app(*a, additional_config=conf, **kw)
         return test_app
 
-    def setUp(self):
+    def setUp(self, *a, **kw):
+        super().setUp(*a, **kw)
         db.drop_all(bind='hss')
         db.create_all(bind='hss')
         self.session = db.session
