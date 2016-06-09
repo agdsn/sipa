@@ -195,11 +195,15 @@ def change_email():
     raise NotImplementedError
 
 
-def change_password():
+def change_password(username, old, new):
     """
     (with Conn(username, pw) as l:)
     """
     raise NotImplementedError
+    with LdapConnector(username, old) as l:
+        l.extend.standard.modify_password(user=l.get_dn(),
+                                          old_password=old,
+                                          new_password=new)
 
 
 def might_be_ldap_dn(string):

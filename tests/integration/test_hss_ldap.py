@@ -6,7 +6,7 @@ import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
 from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connector,
-                                 might_be_ldap_dn)
+                                 might_be_ldap_dn, change_password)
 from sipa.model.hss.user import User
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 from tests.prepare import AppInitialized
@@ -249,3 +249,15 @@ class AuthenticateTestCase(SimpleLdapUserTestBase):
 
 class SimpleHssPgTestBase(HSSOneAccountFixture, HssPgTestBase):
     pass
+
+
+class HssLdapPasswordTestCase(SimpleLdapUserTestBase):
+    def setUp(self):
+        super().setUp()
+
+    @unittest.expectedFailure
+    def test_password_changeable(self):
+        try:
+            change_password(self.username, self.password, 'test')
+        except NotImplementedError:
+            self.fail("Not Implemented!")
