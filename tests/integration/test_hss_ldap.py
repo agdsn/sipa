@@ -108,6 +108,7 @@ class LdapSetupMixin:
 
 
 class SimpleLdapTestBase(LdapSetupMixin, OneLdapUserFixture, HssLdapAppInitialized):
+    """A TestBase providing an initialized LDAP and an initialized App."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.username = next(iter(self.fixtures.keys()))

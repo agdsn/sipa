@@ -75,6 +75,7 @@ class HssUsersuiteTestCase(HssFrontendTestBase):
         rv_usersuite = self.client.get(url_for('usersuite.usersuite'))
         self.assert200(rv_usersuite)
 
+
 class HssPasswordChangeTestCase(HssFrontendTestBase):
     def setUp(self):
         super().setUp()
