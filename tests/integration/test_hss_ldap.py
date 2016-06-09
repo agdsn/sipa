@@ -37,13 +37,13 @@ class HssLdapAppInitialized(AppInitialized):
 
 class OneLdapUserFixture:
     fixtures = {
-        'testlogin': {
+        'sipatinator': {
             'userPassword': 'notafraidtokickyourballs',
             'cn': 'dontlookatthisattribute',
             'gecos': 'Kleines Gnoemlein',
             'uidNumber': 1000,
             'gidNumber': 100,
-            'homeDirectory': '/home/testlogin'
+            'homeDirectory': '/home/sipatinator'
         },
     }
 
