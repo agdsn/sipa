@@ -237,14 +237,6 @@ class SimpleLdapUserTestBase(SimpleLdapTestBase):
 
 
 class AuthenticateTestCase(SimpleLdapUserTestBase):
-    def test_user_data_passed(self):
-        user = User.authenticate(self.username, self.password)
-        self.assert_user_data_passed(
-            user=user,
-            login=self.username,
-            name=self.user_dict['gecos'],
-        )
-
     def test_invalid_password_raises(self):
         with self.assertRaises(InvalidCredentials):
             User.authenticate(self.username, self.password + 'wrong')
@@ -252,23 +244,6 @@ class AuthenticateTestCase(SimpleLdapUserTestBase):
     def test_invalid_username_raises(self):
         with self.assertRaises(InvalidCredentials):
             User.authenticate(self.username + 'wrong', self.password)
-
-
-class GetTestCase(SimpleLdapUserTestBase):
-    """DEPRECATED test cases for `get`
-
-    These don't make much sense anymore, since `get` doesn't have to
-    fetch anything from the LDAP anymore.
-
-    the used `assert_user_data_passed` method doesn't even test anything.
-    """
-    def test_correct_user_passed(self):
-        user = User.get(self.username)
-        self.assert_user_data_passed(
-            user=user,
-            login=self.username,
-            name=self.user_dict['gecos'],
-        )
 
 
 class SimpleHssPgTestBase(HSSOneAccountFixture, HssPgTestBase):

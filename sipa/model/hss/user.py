@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from flask.ext.babel import gettext
 from flask.ext.login import AnonymousUserMixin
+from sqlalchemy.orm.exc import NoResultFound
 
 from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
@@ -46,8 +47,14 @@ class User(BaseUser):
 
     @classmethod
     def get(cls, username):
-        """Used by user_loader. Return a User instance."""
-        return cls(uid=username)
+        """Used by user_loader. Return a User Instance.
+
+        Returns a valid User instance if a psql user with the given
+        username exists, else AnonymousUserMixin().
+        """
+        bare_user = cls(uid=username)
+
+        return bare_user if bare_user._pg_account else AnonymousUserMixin()
 
     @classmethod
     def from_ip(cls, ip):
@@ -78,9 +85,16 @@ class User(BaseUser):
     @property
     def _pg_account(self):
         """Return the corresponding ORM Account"""
-        return db.session.query(Account).filter_by(
-            account=self.uid
-        ).one()
+        try:
+            return db.session.query(Account).filter_by(
+                account=self.uid
+            ).one()
+        except NoResultFound:
+            return
+        except RuntimeError:
+            logger.warning("RuntimeError caught when accessing _pg_account",
+                           extra={'data': {'user': self}})
+            return
 
     @property
     def can_change_password(self):
