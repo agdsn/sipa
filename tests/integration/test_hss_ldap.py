@@ -2,7 +2,6 @@ from functools import partial
 import unittest
 from unittest.mock import patch
 
-from flask.ext.login import AnonymousUserMixin
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
@@ -11,6 +10,7 @@ from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connec
 from sipa.model.hss.user import User
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 from tests.prepare import AppInitialized
+from .test_hss_postgres import HSSOneAccountFixture, HssPgTestBase
 
 
 class HssLdapAppInitialized(AppInitialized):
@@ -21,8 +21,9 @@ class HssLdapAppInitialized(AppInitialized):
     LDAP_ADMIN_PASSWORD = 'password'
     LDAP_USER_FORMAT_STRING = "uid={user},ou=users,dc=wh12,dc=tu-dresden,dc=de"
 
-    def create_app(self):
-        return super().create_app(additional_config={
+    def create_app(self, *a, **kw):
+        conf = {
+            **kw.pop('additional_config', {}),
             'HSS_LDAP_HOST': self.LDAP_HOST,
             'HSS_LDAP_PORT': self.LDAP_PORT,
             'HSS_LDAP_USERDN_FORMAT': self.LDAP_USER_FORMAT_STRING,
@@ -30,18 +31,19 @@ class HssLdapAppInitialized(AppInitialized):
             'HSS_LDAP_SYSTEM_PASSWORD': self.LDAP_ADMIN_PASSWORD,
             'HSS_LDAP_SEARCH_BASE': self.LDAP_USER_BASE,
             'HSS_LDAP_USE_SSL': False,
-        })
+        }
+        return super().create_app(*a, additional_config=conf, **kw)
 
 
 class OneLdapUserFixture:
     fixtures = {
-        'testlogin': {
+        'sipatinator': {
             'userPassword': 'notafraidtokickyourballs',
             'cn': 'dontlookatthisattribute',
             'gecos': 'Kleines Gnoemlein',
             'uidNumber': 1000,
             'gidNumber': 100,
-            'homeDirectory': '/home/testlogin'
+            'homeDirectory': '/home/sipatinator'
         },
     }
 
@@ -106,6 +108,7 @@ class LdapSetupMixin:
 
 
 class SimpleLdapTestBase(LdapSetupMixin, OneLdapUserFixture, HssLdapAppInitialized):
+    """A TestBase providing an initialized LDAP and an initialized App."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.username = next(iter(self.fixtures.keys()))
@@ -235,14 +238,6 @@ class SimpleLdapUserTestBase(SimpleLdapTestBase):
 
 
 class AuthenticateTestCase(SimpleLdapUserTestBase):
-    def test_user_data_passed(self):
-        user = User.authenticate(self.username, self.password)
-        self.assert_user_data_passed(
-            user=user,
-            login=self.username,
-            name=self.user_dict['gecos'],
-        )
-
     def test_invalid_password_raises(self):
         with self.assertRaises(InvalidCredentials):
             User.authenticate(self.username, self.password + 'wrong')
@@ -252,18 +247,5 @@ class AuthenticateTestCase(SimpleLdapUserTestBase):
             User.authenticate(self.username + 'wrong', self.password)
 
 
-class GetTestCase(SimpleLdapUserTestBase):
-    """DEPRECATED test cases for `get`
-
-    These don't make much sense anymore, since `get` doesn't have to
-    fetch anything from the LDAP anymore.
-
-    the used `assert_user_data_passed` method doesn't even test anything.
-    """
-    def test_correct_user_passed(self):
-        user = User.get(self.username)
-        self.assert_user_data_passed(
-            user=user,
-            login=self.username,
-            name=self.user_dict['gecos'],
-        )
+class SimpleHssPgTestBase(HSSOneAccountFixture, HssPgTestBase):
+    pass
