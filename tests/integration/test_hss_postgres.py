@@ -61,6 +61,12 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
                     access_id=1,
                 ),
             ]),
+            (AccountProperty, [
+                AccountProperty(
+                    account='sipatinator',
+                    active=False,
+                ),
+            ]),
             (Access, [
                 Access(
                     id=1,
