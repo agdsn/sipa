@@ -1,10 +1,11 @@
 from flask import url_for
 
 from .test_hss_ldap import SimpleLdapTestBase
-from .test_hss_postgres import HSSOneAccountFixture, HssPgTestBase
+from .test_hss_postgres import FrontendFixture, HssPgTestBase
 
 
-class HssAuthenticatedTestBase(HSSOneAccountFixture, HssPgTestBase, SimpleLdapTestBase):
+class HssAuthenticatedTestBase(FrontendFixture, HssPgTestBase, SimpleLdapTestBase):
+    """The hss test base providing an app and methods for authentication."""
     def __init__(self, *a, **kw):
         super().__init__(*a, **kw)
         self.uid = list(self.fixtures.keys()).pop()

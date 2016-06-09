@@ -156,6 +156,13 @@ class HSSAccountsWithPropertiesFixture(FixtureLoaderMixin):
         ])
 
 
+class FrontendFixture(HSSOneTrafficAccountFixture):
+    """Fixture aiming to provide anything necessary for hss frontend tests
+    to work.
+    """
+    pass
+
+
 class HSSPgOneAccountTestCase(HSSOneAccountFixture, HssPgTestBase):
     def setUp(self):
         super().setUp()
