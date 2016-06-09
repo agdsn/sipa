@@ -33,14 +33,14 @@ class HSSPgEmptyTestCase(HssPgTestBase):
 
 
 class FixtureLoaderMixin:
-    """A Mixin that creates `self.fixtures` on setUp.
+    """A Mixin that creates `self.fixtures_pg` on setUp.
 
-    It expects the class to have the attributes `fixtures` and
+    It expects the class to have the attributes `fixtures_pg` and
     `session`.
     """
     def setUp(self):
         super().setUp()
-        for objs in self.fixtures.values():
+        for objs in self.fixtures_pg.values():
             for obj in objs:
                 self.session.add(obj)
         self.session.commit()
@@ -48,7 +48,7 @@ class FixtureLoaderMixin:
 
 class HSSOneAccountFixture(FixtureLoaderMixin):
     @property
-    def fixtures(self):
+    def fixtures_pg(self):
         return OrderedDict([
             (Account, [
                 Account(
@@ -82,9 +82,9 @@ class HSSOneAccountFixture(FixtureLoaderMixin):
 
 class HSSOneTrafficAccountFixture(HSSOneAccountFixture):
     @property
-    def fixtures(self):
+    def fixtures_pg(self):
         return OrderedDict([
-            *super().fixtures.items(),
+            *super().fixtures_pg.items(),
             (TrafficLog, [
                 TrafficLog(id=1, account='sipatinator', date=date(2016, 4, 24),
                            bytes_in=3657658, bytes_out=20646),
@@ -108,10 +108,10 @@ class HSSOneTrafficAccountFixture(HSSOneAccountFixture):
 
 class HSSOneTrafficAccountDaysMissingFixture(HSSOneTrafficAccountFixture):
     @property
-    def fixtures(self):
-        old_traffic_logs = super().fixtures.pop(TrafficLog)
+    def fixtures_pg(self):
+        old_traffic_logs = super().fixtures_pg.pop(TrafficLog)
         return OrderedDict([
-            *super().fixtures.items(),
+            *super().fixtures_pg.items(),
             (TrafficLog, [
                 *old_traffic_logs[:5],
             ]),
@@ -120,7 +120,7 @@ class HSSOneTrafficAccountDaysMissingFixture(HSSOneTrafficAccountFixture):
 
 class HSSAccountsWithPropertiesFixture(FixtureLoaderMixin):
     @property
-    def fixtures(self):
+    def fixtures_pg(self):
         return OrderedDict([
             (Account, [
                 Account(
@@ -155,17 +155,17 @@ class HSSPgOneAccountTestCase(HSSOneAccountFixture, HssPgTestBase):
 
     def test_number_of_accounts(self):
         self.assertEqual(len(self.received_accounts),
-                         len(self.fixtures[Account]))
+                         len(self.fixtures_pg[Account]))
 
     def test_accountname(self):
-        self.assertEqual(self.fixtures[Account][0].account,
+        self.assertEqual(self.fixtures_pg[Account][0].account,
                          self.received_account.account)
 
 
 class OneAccountTestBase(HSSOneAccountFixture, HssPgTestBase):
     def setUp(self):
         super().setUp()
-        account = self.fixtures[Account][0].account
+        account = self.fixtures_pg[Account][0].account
         # re-receive the account in order to get the relationship
         self.account = db.session.query(Account).filter_by(account=account).one()
         self.user = User(uid=self.account.account)
@@ -191,7 +191,7 @@ class PgUserDataTestCase(OneAccountTestBase):
                 self.assertIn(part, self.user.address)
 
     def test_mail_correct(self):
-        acc = self.fixtures[Account][0]
+        acc = self.fixtures_pg[Account][0]
         user = User.get(acc.account)
         expected_mail = "{}@wh12.tu-dresden.de".format(acc.account)
         self.assertEqual(user.mail, expected_mail)
@@ -199,14 +199,14 @@ class PgUserDataTestCase(OneAccountTestBase):
 
 class UserFromIpTestCase(OneAccountTestBase):
     def test_from_ip_correct_user(self):
-        for ip in self.fixtures[IP]:
+        for ip in self.fixtures_pg[IP]:
             if not ip.account:
                 continue
             with self.subTest(ip=ip.ip):
                 self.assertEqual(User.get(ip.account), User.from_ip(ip.ip))
 
     def test_from_ip_without_account_anonymous(self):
-        for ip in self.fixtures[IP]:
+        for ip in self.fixtures_pg[IP]:
             if ip.account:
                 continue
 
@@ -216,7 +216,7 @@ class UserFromIpTestCase(OneAccountTestBase):
 
 class UserIpsTestCase(OneAccountTestBase):
     def test_ips_passed(self):
-        for account in self.fixtures[Account]:
+        for account in self.fixtures_pg[Account]:
             with self.subTest(account=account):
                 user = User.get(account.account)
                 expected_ips = self.session.query(Account).get(account.account).ips
@@ -227,7 +227,7 @@ class UserIpsTestCase(OneAccountTestBase):
 
 class UserMacsTestCase(OneAccountTestBase):
     def test_macs_passed(self):
-        for mac in self.fixtures.get(Mac, []):
+        for mac in self.fixtures_pg.get(Mac, []):
             if mac.account is None:
                 continue
 
@@ -248,7 +248,7 @@ class UserTrafficLogTestCaseMixin:
 
     def test_traffic_data_passed(self):
         # Pick the latest 7 entries
-        expected_logs = sorted(self.fixtures[TrafficLog], key=attrgetter('date'))[-7:]
+        expected_logs = sorted(self.fixtures_pg[TrafficLog], key=attrgetter('date'))[-7:]
         expected_entries = []
 
         for date_delta in range(-6, 1):
