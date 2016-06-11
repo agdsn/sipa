@@ -81,13 +81,16 @@ class HssUsersuiteTestCase(HssFrontendTestBase):
 class HssPasswordChangeTestCase(HssFrontendTestBase):
     def setUp(self):
         super().setUp()
+        self.new_pass = self.pw + 'something:new!hav1ng-somanyn1ceChaRacters!'
         self.rv = self.client.post(
             url_for('usersuite.usersuite_change_password'),
-            data={'username': self.uid, 'password': self.pw},
+            data={'old': self.pw, 'new': self.new_pass, 'confirm': self.new_pass},
             follow_redirects=True,
         )
-        self.text = "Diese Funktion ist nicht verfügbar.".encode('utf-8')
 
-    @unittest.expectedFailure
-    def test_password_change_disallowed(self):
-        self.assertNotIn(self.text, self.rv.data)
+    def test_password_change_not_disallowed(self):
+        self.assertNotIn("Diese Funktion ist nicht verfügbar.".encode('utf-8'),
+                         self.rv.data)
+
+    def test_password_change_response_redirects(self):
+        self.assertRedirects(self.rv, url_for('usersuite.usersuite'))

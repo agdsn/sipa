@@ -96,9 +96,7 @@ class User(BaseUser):
                            extra={'data': {'user': self}})
             return
 
-    @property
-    def can_change_password(self):
-        return False
+    can_change_password = True
 
     def change_password(self, old, new):
         """Change the user's password from old to new.
