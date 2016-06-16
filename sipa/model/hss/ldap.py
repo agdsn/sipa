@@ -124,6 +124,14 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
                            .format(uid=username))
 
     @property
+    def dn(self):
+        """who_am_i returns a string of the form 'dn:<full dn>',
+        but we are only interested in the <full dn> part.
+        """
+        return self.extend.standard.who_am_i().split(':', maxsplit=1)[1]
+
+
+    @property
     @abstractmethod
     def config(self):
         raise NotImplementedError
@@ -195,13 +203,9 @@ def change_email():
     raise NotImplementedError
 
 
-def change_password(username, old, new):
-    """
-    (with Conn(username, pw) as l:)
-    """
-    raise NotImplementedError
-    with LdapConnector(username, old) as l:
-        l.extend.standard.modify_password(user=l.get_dn(),
+def change_password(username, old, new, Connector=HssLdapConnector):
+    with Connector(username, old) as l:
+        l.extend.standard.modify_password(user=l.dn,
                                           old_password=old,
                                           new_password=new)
 

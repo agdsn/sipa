@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.ldap import HssLdapConnector
+from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP
 from sipa.utils import argstr
 from sipa.utils.exceptions import InvalidCredentials
@@ -105,8 +105,7 @@ class User(BaseUser):
         re_authenticate(), some data sources like those which have to
         perform an LDAP bind need it anyways.
         """
-        # TODO: implement password change
-        raise NotImplementedError
+        change_password(self.uid, old, new)
 
     @property
     def traffic_history(self):
