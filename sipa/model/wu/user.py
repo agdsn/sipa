@@ -33,9 +33,9 @@ class User(BaseUser):
 
     datasource = 'wu'
 
-    def __init__(self, uid, name, mail):
+    def __init__(self, uid, realname, mail):
         super().__init__(uid)
-        self.name = name
+        self._realname = realname
         self.group = self.define_group()
         self._mail = mail
         self._userdb = UserDB(self)
@@ -43,12 +43,12 @@ class User(BaseUser):
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             uid=self.uid,
-            name=self.name,
+            realname=self._realname,
             mail=self._mail,
         ))
 
     def __str__(self):
-        return "User {} ({}), {}".format(self.name, self.uid, self.group)
+        return "User {} ({}), {}".format(self._realname, self.uid, self.group)
 
     can_change_password = True
 
@@ -231,7 +231,7 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return self.name
+        return self._realname
 
     @active_prop
     @connection_dependent

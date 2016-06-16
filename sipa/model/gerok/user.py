@@ -86,7 +86,7 @@ class User(BaseUser):
         self._address = user_data.get('address', '')
         self._mail = user_data.get('mail', '')
         self._status = user_data.get('status', '')
-        self.name = user_data.get('name', '')
+        self._realname = user_data.get('name', '')
 
         hosts = user_data.get('hosts', [])
         self._ips = {h['ip'] for h in hosts} - {None}
@@ -157,7 +157,7 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return self.name
+        return self._realname
 
     @active_prop
     def login(self):

@@ -38,14 +38,14 @@ class User(BaseUser):
     def __init__(self, uid):
         super().__init__(uid)
         self.config = config
-        self.name = config[uid]['name']
+        self._realname = config[uid]['name']
         self.old_mail = config[uid]['mail']
         self._ip = "127.0.0.1"
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             uid=self.uid,
-            name=self.name,
+            realname=self._realname,
             mail=self.mail,
             ip=self._ip,
         ))
@@ -103,7 +103,7 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return self.name
+        return self._realname
 
     @active_prop
     def login(self):
