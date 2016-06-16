@@ -1,3 +1,4 @@
+import re
 import unittest
 
 from flask import url_for
@@ -85,12 +86,25 @@ class HssPasswordChangeTestCase(HssFrontendTestBase):
         self.rv = self.client.post(
             url_for('usersuite.usersuite_change_password'),
             data={'old': self.pw, 'new': self.new_pass, 'confirm': self.new_pass},
-            follow_redirects=True,
         )
-
-    def test_password_change_not_disallowed(self):
-        self.assertNotIn("Diese Funktion ist nicht verfügbar.".encode('utf-8'),
-                         self.rv.data)
+        self.rv_redirected = self.client.get(self.rv.location)
 
     def test_password_change_response_redirects(self):
         self.assertRedirects(self.rv, url_for('usersuite.usersuite'))
+
+    def test_password_change_not_disallowed(self):
+        self.assertNotIn("Diese Funktion ist nicht verfügbar.".encode('utf-8'),
+                         self.rv_redirected.data)
+
+    def test_success_message_flashed(self):
+        self.assertIn("class=\"alert alert-success\"".encode('utf-8'),
+                      self.rv_redirected.data)
+
+    def test_login_with_old_password_fails(self):
+        self.logout()
+        response_login_data = self.login().data.decode('utf-8')
+
+        self.assertRegex(response_login_data, 'class="[^"]*alert-danger[^"]*"')
+
+        flash_message_re = re.compile('authentication data.*incorrect', flags=re.IGNORECASE
+        self.assertRegex(response_login_data, flash_message_re)
