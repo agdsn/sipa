@@ -130,7 +130,6 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
         """
         return self.extend.standard.who_am_i().split(':', maxsplit=1)[1]
 
-
     @property
     @abstractmethod
     def config(self):
