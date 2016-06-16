@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from ipaddress import IPv4Address, AddressValueError
 
 from flask import current_app
-from flask.ext.babel import gettext
-from flask.ext.login import AnonymousUserMixin
+from flask_babel import gettext
+from flask_login import AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm.exc import NoResultFound
 

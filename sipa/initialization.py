@@ -4,7 +4,7 @@ import logging.config
 import os
 import os.path
 
-from flask.ext.babel import get_locale
+from flask_babel import get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler

@@ -2,7 +2,7 @@
 from babel.core import Locale, UnknownLocaleError
 
 from flask import request
-from flask.ext.babel import Babel, get_locale
+from flask_babel import Babel, get_locale
 
 babel = Babel()
 

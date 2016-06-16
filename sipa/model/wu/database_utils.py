@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from flask.ext.babel import lazy_gettext
+from flask_babel import lazy_gettext
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 

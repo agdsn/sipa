@@ -3,7 +3,7 @@ from ipaddress import IPv4Address, AddressValueError
 import operator
 
 from flask import request, session, current_app
-from flask.ext.login import current_user, AnonymousUserMixin
+from flask_login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 
 from . import sample, wu, gerok, hss

@@ -2,7 +2,7 @@
 from datetime import date, timedelta
 
 import requests
-from flask.ext.login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin
 from flask.globals import current_app
 from werkzeug.local import LocalProxy
 

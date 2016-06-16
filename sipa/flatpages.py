@@ -6,7 +6,7 @@ from babel.core import Locale, UnknownLocaleError
 from yaml.scanner import ScannerError
 
 from flask import abort, request
-from flask.ext.flatpages import FlatPages
+from flask_flatpages import FlatPages
 
 from .babel import babel, locale_preferences
 

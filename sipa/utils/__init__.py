@@ -12,7 +12,7 @@ from functools import wraps
 from itertools import chain
 
 from flask import flash, redirect, request, url_for
-from flask.ext.login import current_user
+from flask_login import current_user
 
 
 def timetag_today():

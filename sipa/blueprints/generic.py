@@ -4,8 +4,8 @@ import logging
 from flask import render_template, request, redirect, \
     url_for, flash, session, abort, current_app, jsonify
 from flask.blueprints import Blueprint
-from flask.ext.babel import gettext
-from flask.ext.login import current_user, login_user, logout_user, \
+from flask_babel import gettext
+from flask_login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import DatabaseError
 from ldap3 import LDAPCommunicationError

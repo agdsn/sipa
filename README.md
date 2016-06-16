@@ -29,7 +29,8 @@ As a general note, you should have `docker` and `docker-compose`
 installed.  Just using python and e.g. a virtualenv is possible, but
 discouraged.
 
-The simplest method is to run `docker-compose up -d`.
+The simplest method is to run `docker-compose -f build/development.yml
+up -d`.
 
 This should automatically set up an nginx container on port 80
 providing `/sipa` and `/sipa_debug`, which are two containers of sipa,
@@ -42,14 +43,16 @@ manual (i.e. not docker-compose-based) container setup.
 How can I run the tests?
 ------------------------
 
-Run `./run_tests.sh`.  If you run it for the first time, this should
-build the `sipa_testing` docker image, which may take a few minutes.
+For testing, there exists the docker-compose file `build/testing.yml`:
 
-Please note that, although the `sipa` folder is mounted into the
-container, you will have to recreate the docker image if the
-requirements changed.  You can just let the script do this by removing
-the image with `docker rmi sipa_testing`.
+```shell
+docker-compose -f build/testing.yml up -d
+docker-compose -f build/testing.yml run --rm sipa_testing python manage.py test
+```
 
+…ore choose any other testing command you wish.  For example, you can
+execute a single test case using `nosetests -v
+tests.integration.test_hss_ldap:HssLdapPasswordTestCase`
 
 Running on Docker
 -----------------

@@ -1,14 +1,14 @@
 import logging
 from datetime import datetime, timedelta
 
-from flask.ext.babel import gettext
-from flask.ext.login import AnonymousUserMixin
+from flask_babel import gettext
+from flask_login import AnonymousUserMixin
 from sqlalchemy.orm.exc import NoResultFound
 
 from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.ldap import HssLdapConnector
+from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP
 from sipa.utils import argstr
 from sipa.utils.exceptions import InvalidCredentials
@@ -96,9 +96,7 @@ class User(BaseUser):
                            extra={'data': {'user': self}})
             return
 
-    @property
-    def can_change_password(self):
-        return False
+    can_change_password = True
 
     def change_password(self, old, new):
         """Change the user's password from old to new.
@@ -107,8 +105,7 @@ class User(BaseUser):
         re_authenticate(), some data sources like those which have to
         perform an LDAP bind need it anyways.
         """
-        # TODO: implement password change
-        raise NotImplementedError
+        change_password(self.uid, old, new)
 
     @property
     def traffic_history(self):

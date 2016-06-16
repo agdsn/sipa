@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from babel import Locale
 from flask import request, session
-from flask.ext.login import AnonymousUserMixin, LoginManager
+from flask_login import AnonymousUserMixin, LoginManager
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from sipa.babel import possible_locales

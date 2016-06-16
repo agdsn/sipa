@@ -4,7 +4,7 @@ from itertools import chain, product
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 
-from flask.ext.login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin
 from requests import Response
 
 from sipa.model.gerok.user import (User, do_api_call, date_from_delta,

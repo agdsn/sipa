@@ -1,12 +1,12 @@
 from functools import partial
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import ldap3
 from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 
 from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connector,
-                                 might_be_ldap_dn)
+                                 might_be_ldap_dn, change_password)
 from sipa.model.hss.user import User
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
 from tests.prepare import AppInitialized
@@ -249,3 +249,32 @@ class AuthenticateTestCase(SimpleLdapUserTestBase):
 
 class SimpleHssPgTestBase(HSSOneAccountFixture, HssPgTestBase):
     pass
+
+
+class HssLdapPasswordChangeableTestCase(SimpleLdapUserTestBase):
+    def setUp(self):
+        super().setUp()
+
+    def test_password_changeable(self):
+        try:
+            change_password(self.username, self.password, 'test')
+        except NotImplementedError:
+            self.fail("Not Implemented!")
+
+
+@patch.object(User, 'get', new=MagicMock())
+class HssLdapPasswordChangeTestCase(SimpleLdapUserTestBase):
+    def setUp(self):
+        super().setUp()
+        self.new_password = self.password + 'new'
+        change_password(self.username, self.password, self.new_password)
+
+    def test_auth_fail_with_old_password(self):
+        with self.assertRaises(InvalidCredentials):
+            User.authenticate(self.username, self.password)
+
+    def test_auth_succeeds_with_new_password(self):
+        try:
+            User.authenticate(self.username, self.new_password)
+        except InvalidCredentials:
+            self.fail("Authentication failed with new password")

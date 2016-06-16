@@ -2,7 +2,7 @@
 import re
 from operator import itemgetter
 
-from flask.ext.babel import gettext, lazy_gettext
+from flask_babel import gettext, lazy_gettext
 from flask import flash
 from flask_wtf import Form
 from werkzeug.local import LocalProxy

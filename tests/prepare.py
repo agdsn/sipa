@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask
-from flask.ext.testing import TestCase
+from flask_testing import TestCase
 
 from sipa import create_app
 from sipa.defaults import WARNINGS_ONLY_CONFIG
