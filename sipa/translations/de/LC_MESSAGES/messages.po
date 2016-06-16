@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-03 22:43+0200\n"
+"POT-Creation-Date: 2016-06-17 00:37+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.3\n"
+"Generated-By: Babel 2.3.4\n"
 
 #: sipa/forms.py:19
 msgid "Kleinbuchstaben (a-z)"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Deine E-Mail-Adresse"
 msgstr ""
 
-#: sipa/forms.py:79 sipa/forms.py:99 sipa/forms.py:138
+#: sipa/forms.py:79 sipa/forms.py:99 sipa/forms.py:121 sipa/forms.py:160
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
@@ -69,19 +69,19 @@ msgstr ""
 msgid "Probleme mit privater Technik"
 msgstr ""
 
-#: sipa/forms.py:89 sipa/forms.py:111
+#: sipa/forms.py:89 sipa/forms.py:111 sipa/forms.py:133
 msgid "Betreff"
 msgstr ""
 
-#: sipa/forms.py:90 sipa/forms.py:112
+#: sipa/forms.py:90 sipa/forms.py:112 sipa/forms.py:134
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:91 sipa/forms.py:113
+#: sipa/forms.py:91 sipa/forms.py:113 sipa/forms.py:135
 msgid "Nachricht"
 msgstr ""
 
-#: sipa/forms.py:92 sipa/forms.py:114
+#: sipa/forms.py:92 sipa/forms.py:114 sipa/forms.py:136
 msgid "Nachricht fehlt!"
 msgstr ""
 
@@ -89,83 +89,91 @@ msgstr ""
 msgid "Dein Name"
 msgstr ""
 
-#: sipa/forms.py:104
+#: sipa/forms.py:104 sipa/forms.py:126
 msgid "Bitte gib einen Namen an!"
 msgstr ""
 
-#: sipa/forms.py:107 sipa/forms.py:169
+#: sipa/forms.py:107 sipa/forms.py:191
 msgid "Wohnheim"
 msgstr ""
 
-#: sipa/forms.py:119
+#: sipa/forms.py:120
+msgid "E-Mail-Adresse"
+msgstr ""
+
+#: sipa/forms.py:125
+msgid "Name / Organisation"
+msgstr ""
+
+#: sipa/forms.py:141
 msgid "Altes Passwort"
 msgstr ""
 
-#: sipa/forms.py:120
+#: sipa/forms.py:142
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:121
+#: sipa/forms.py:143
 msgid "Neues Passwort"
 msgstr ""
 
-#: sipa/forms.py:122
+#: sipa/forms.py:144
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:125 sipa/forms.py:195
+#: sipa/forms.py:147 sipa/forms.py:217
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:126 sipa/forms.py:196
+#: sipa/forms.py:148 sipa/forms.py:218
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:128 sipa/forms.py:198
+#: sipa/forms.py:150 sipa/forms.py:220
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:134 sipa/forms.py:158 sipa/forms.py:184 sipa/forms.py:191
+#: sipa/forms.py:156 sipa/forms.py:180 sipa/forms.py:206 sipa/forms.py:213
 msgid "Passwort"
 msgstr ""
 
-#: sipa/forms.py:135 sipa/forms.py:143 sipa/forms.py:159
+#: sipa/forms.py:157 sipa/forms.py:165 sipa/forms.py:181
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sipa/forms.py:137
+#: sipa/forms.py:159
 msgid "Neue Mail"
 msgstr ""
 
-#: sipa/forms.py:153
+#: sipa/forms.py:175
 msgid "MAC muss unicast-Adresse sein!"
 msgstr ""
 
-#: sipa/forms.py:161
+#: sipa/forms.py:183
 msgid "Neue MAC"
 msgstr ""
 
-#: sipa/forms.py:173
+#: sipa/forms.py:195
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
-#: sipa/forms.py:176
+#: sipa/forms.py:198
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:178
+#: sipa/forms.py:200
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:179
+#: sipa/forms.py:201
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr ""
 
-#: sipa/forms.py:185 sipa/forms.py:192
+#: sipa/forms.py:207 sipa/forms.py:214
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:187
+#: sipa/forms.py:209
 msgid "Anmeldung merken"
 msgstr ""
 
@@ -347,11 +355,11 @@ msgstr ""
 msgid "Nicht verfÃ¼gbar"
 msgstr ""
 
-#: sipa/model/hss/user.py:206 tests/integration/test_hss_postgres.py:324
+#: sipa/model/hss/user.py:217 tests/integration/test_hss_postgres.py:340
 msgid "Aktiv"
 msgstr ""
 
-#: sipa/model/hss/user.py:207 tests/integration/test_hss_postgres.py:333
+#: sipa/model/hss/user.py:218 tests/integration/test_hss_postgres.py:349
 msgid "Passiv"
 msgstr ""
 
@@ -392,30 +400,43 @@ msgid "Nicht aktiviert"
 msgstr ""
 
 #: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:257
+#: sipa/templates/official_contact.html:3
 msgid "Kontakt"
 msgstr ""
 
+#: sipa/templates/anonymous_contact.html:7
+msgid "Partner"
+msgstr ""
+
 #: sipa/templates/anonymous_contact.html:8
-msgid "Hinweis:"
+msgid "der AG DSN wenden sich bitte bitte an"
 msgstr ""
 
 #: sipa/templates/anonymous_contact.html:9
+msgid "dieses Kontaktformular"
+msgstr ""
+
+#: sipa/templates/anonymous_contact.html:13
+msgid "Hinweis:"
+msgstr ""
+
+#: sipa/templates/anonymous_contact.html:14
 msgid ""
 "Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
 "identifizieren und Deine Anfrage schneller bearbeiten!"
 msgstr ""
 
-#: sipa/templates/anonymous_contact.html:11
+#: sipa/templates/anonymous_contact.html:16
 msgid ""
 "Außerdem kannst Du in Deinen Einstellungen bereits einige Daten wie z.B. "
 "die MAC-Adresse selbstständig ändern."
 msgstr ""
 
-#: sipa/templates/anonymous_contact.html:17
+#: sipa/templates/anonymous_contact.html:22
 msgid "Zum Kontaktformular für angemeldete Nutzer"
 msgstr ""
 
-#: sipa/templates/anonymous_contact.html:20
+#: sipa/templates/anonymous_contact.html:25
 msgid "Zum Login"
 msgstr ""
 
@@ -542,6 +563,18 @@ msgstr ""
 
 #: sipa/templates/login.html:8
 msgid "Dieses Wohnheim erreichst du hier:"
+msgstr ""
+
+#: sipa/templates/official_contact.html:8
+msgid "Achtung:"
+msgstr ""
+
+#: sipa/templates/official_contact.html:8
+msgid ""
+"Hier wird dir\n"
+"            nicht mit deinem Anschluss geholfen!  Dieses Formular ist\n"
+"            nur für die Kommunikation mit unseren Partnern gedacht.  Bei\n"
+"            Missbrauch kann dein Account gesperrt werden."
 msgstr ""
 
 #: sipa/templates/template.html:38

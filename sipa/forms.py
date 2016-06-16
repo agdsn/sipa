@@ -115,6 +115,23 @@ class AnonymousContactForm(Form):
     ])
 
 
+class OfficialContactForm(Form):
+    email = StrippedStringField(
+        label=lazy_gettext("E-Mail-Adresse"),
+        validators=[Email(lazy_gettext("E-Mail ist nicht "
+                                       "in gültigem Format!"))],
+    )
+    name = StringField(
+        label=lazy_gettext("Name / Organisation"),
+        validators=[DataRequired(lazy_gettext("Bitte gib einen Namen an!"))],
+    )
+    subject = StrippedStringField(label=lazy_gettext("Betreff"), validators=[
+        DataRequired(lazy_gettext("Betreff muss angegeben werden!"))])
+    message = TextAreaField(label=lazy_gettext("Nachricht"), validators=[
+        DataRequired(lazy_gettext("Nachricht fehlt!"))
+    ])
+
+
 class ChangePasswordForm(Form):
     old = PasswordField(label=lazy_gettext("Altes Passwort"), validators=[
         DataRequired(lazy_gettext("Altes Passwort muss angegeben werden!"))])

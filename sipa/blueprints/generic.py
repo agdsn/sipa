@@ -10,7 +10,8 @@ from flask_login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import DatabaseError
 from ldap3 import LDAPCommunicationError
 
-from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm
+from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
+    OfficialContactForm
 from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
 from sipa.units import dynamic_unit
 from sipa.utils import get_user_name, redirect_url
@@ -264,6 +265,31 @@ def contact():
                       "kontaktieren willst."), 'info')
 
     return render_template('anonymous_contact.html', form=form)
+
+
+@bp_generic.route('/contact_official', methods=['GET', 'POST'])
+def contact_official():
+    form = OfficialContactForm()
+
+    if form.validate_on_submit():
+        from_mail = form.email.data
+        subject = "[Contact] {}".format(form.subject.data)
+        message = "Name: {0}\n\n{1}".format(form.name.data, form.message.data)
+        recipient_mail = 'vorstand@lists.agdsn.de'
+
+        if send_mail(from_mail, recipient_mail, subject, message):
+            flash(gettext("Nachricht wurde versandt."), "success")
+        else:
+            flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."),
+                  'error')
+        return redirect(url_for(".index"))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template(
+        'official_contact.html',
+        form=form
+    )
 
 
 @bp_generic.route('/version')
