@@ -25,7 +25,7 @@ class UserNoDBTestCase(TestCase):
         self.userdb_mock.reset_mock()
 
     def assert_userdata_passed(self, user, user_dict):
-        self.assertEqual(user.name, user_dict['name'])
+        self.assertEqual(user.realname, user_dict['name'])
         self.assertEqual(user.group, user_dict.get('group', 'passive'))
         self.assertEqual(user.mail, user_dict['mail'])
 
@@ -48,7 +48,7 @@ class UserNoDBTestCase(TestCase):
         with self.patch_user_group(sample_user):
             user = User(
                 uid=sample_user['uid'],
-                name=sample_user['name'],
+                realname=sample_user['name'],
                 mail=sample_user['mail'],
             )
 
@@ -75,7 +75,7 @@ class UserNoDBTestCase(TestCase):
         for uid, group in sample_users.items():
             with patch('sipa.model.wu.user.search_in_group',
                        fake_search_in_group):
-                user = User(uid=uid, name="", mail="")
+                user = User(uid=uid, realname="", mail="")
                 with self.subTest(user=user):
                     self.assertEqual(user.define_group(), group)
         return
@@ -166,7 +166,7 @@ class WuAtlantisFakeDBInitialized(AppInitialized):
                    MagicMock(return_value=False)):
             return User(
                 uid=uid,
-                name=name,
+                realname=name,
                 mail=mail,
             )
 
