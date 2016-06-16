@@ -3,8 +3,8 @@ from collections import OrderedDict
 from datetime import date, datetime, timedelta
 from operator import attrgetter
 
-from flask.ext.babel import gettext
-from flask.ext.login import AnonymousUserMixin
+from flask_babel import gettext
+from flask_login import AnonymousUserMixin
 
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygal
-from flask.ext.babel import gettext
+from flask_babel import gettext
 from pygal.colors import hsl_to_rgb
 from pygal.style import Style
 

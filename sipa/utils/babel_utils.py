@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask.ext.babel import get_locale
+from flask_babel import get_locale
 
 
 def lang():

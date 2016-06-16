@@ -1,7 +1,7 @@
 from collections import namedtuple
 from functools import wraps
 
-from flask.ext.babel import gettext
+from flask_babel import gettext
 from abc import ABCMeta, abstractmethod
 from sipa.utils import argstr
 

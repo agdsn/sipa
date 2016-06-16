@@ -1,8 +1,8 @@
 import logging
 from datetime import datetime, timedelta
 
-from flask.ext.babel import gettext
-from flask.ext.login import AnonymousUserMixin
+from flask_babel import gettext
+from flask_login import AnonymousUserMixin
 from sqlalchemy.orm.exc import NoResultFound
 
 from ..default import BaseUser

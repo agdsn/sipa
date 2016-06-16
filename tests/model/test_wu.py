@@ -3,7 +3,7 @@ from itertools import permutations
 from unittest import TestCase, expectedFailure
 from unittest.mock import MagicMock, patch
 
-from flask.ext.login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin
 
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.database_utils import STATUS

@@ -19,7 +19,7 @@ import importlib
 import os
 from subprocess import call
 
-from flask.ext.script import Manager, prompt_bool
+from flask_script import Manager, prompt_bool
 
 from sipa import create_app
 

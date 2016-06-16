@@ -2,7 +2,7 @@
 from random import random
 
 from flask import current_app
-from flask.ext.login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin
 from werkzeug import LocalProxy
 
 from sipa.model.default import BaseUser

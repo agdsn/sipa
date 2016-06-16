@@ -7,8 +7,8 @@ from collections import OrderedDict
 import logging
 
 from flask import Blueprint, render_template, url_for, redirect, flash, abort
-from flask.ext.babel import gettext
-from flask.ext.login import current_user, login_required
+from flask_babel import gettext
+from flask_login import current_user, login_required
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm

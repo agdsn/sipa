@@ -4,7 +4,7 @@ from logging import getLogger
 from subprocess import call
 
 import git
-from flask.ext.babel import format_datetime
+from flask_babel import format_datetime
 from git.exc import (GitCommandError, InvalidGitRepositoryError,
                      NoSuchPathError, CacheError)
 

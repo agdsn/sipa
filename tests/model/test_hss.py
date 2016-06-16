@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from flask.ext.login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin
 
 from sipa.model.hss.user import User
 

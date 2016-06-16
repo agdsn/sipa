@@ -3,7 +3,7 @@ from os import urandom
 from unittest import TestCase
 
 from flask import Flask
-from flask.ext.testing import TestCase as FlaskTestCase
+from flask_testing import TestCase as FlaskTestCase
 
 from sipa.model import (dormitory_from_ip, dormitory_from_name,
                         init_datasources_dormitories, list_all_dormitories,
