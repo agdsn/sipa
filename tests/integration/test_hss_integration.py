@@ -106,5 +106,6 @@ class HssPasswordChangeTestCase(HssFrontendTestBase):
 
         self.assertRegex(response_login_data, 'class="[^"]*alert-danger[^"]*"')
 
-        flash_message_re = re.compile('authentication data.*incorrect', flags=re.IGNORECASE
+        flash_message_re = re.compile('authentication data.*incorrect',
+                                      flags=re.IGNORECASE)
         self.assertRegex(response_login_data, flash_message_re)
