@@ -222,8 +222,9 @@ def do_api_call(request, method='get', postdata=None):
     else:
         raise ValueError("`method` must be one of ['get', 'post']!")
 
-    if response.status_code != 200:
-        raise ValueError("Gerok API returned status != 200 OK")
+    if response.status_code not in [200, 400, 403, 404]:
+        logger.warning("Gerok API returned HTTP status %s", response.status_code,
+                       extra={'data': {'status_code': response.status_code}})
 
     try:
         return response.json()
