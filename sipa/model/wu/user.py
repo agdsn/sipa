@@ -205,16 +205,9 @@ class User(BaseUser):
         ) if accountable_ips else 0
 
         return credit - traffic_today
-        
-    @property
-    def max_credit(self):
-        """Return the current credit in KiB"""
-        return 63 * 1024 *1024
 
-    @property
-    def daily_credit(self):
-        """Return the current credit in KiB"""
-        return 3 * 1024 * 1024
+    max_credit = 63 * 1024 * 1024
+    daily_credit = 3 * 1024 * 1024
 
     @contextmanager
     def tmp_authentication(self, password):

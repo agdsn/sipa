@@ -132,8 +132,6 @@ class User(BaseUser):
 
         """
         history = []
-        history['max_credit'] = self.max_credit
-        history['daily_credit'] = self.daily_credit
         for date_delta in range(-6, 1):
             expected_date = (datetime.today() + timedelta(date_delta)).date()
             expected_log = [l for l in self._pg_account.traffic_log
@@ -181,7 +179,6 @@ class User(BaseUser):
                     # 3 * 1024 → 3 MiB
                     # 3 * 1024**2 → 3 GiB
                 )
-        dump(history)
         return history
 
     @property

@@ -6,7 +6,7 @@
         {{ traffic_chart(traffic_user.traffic_history)|safe }}
     </figure>
     <figure id="creditchart">
-        {{ credit_chart(traffic_user.traffic_history)|safe }}
+        {{ credit_chart(traffic_user.traffic_history, max_credit=traffic_user.max_credit)|safe }}
     </figure>
     </div>
 </div>
