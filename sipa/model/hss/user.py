@@ -125,13 +125,12 @@ class User(BaseUser):
         The dict syntax is as follows:
 
         return {'credit': 0,
-                'max_credit': 0,
-                'daily_credit': 0,
                 'history': [(day, <in>, <out>, <credit>)
                             for day in range(7)]}
 
         """
         history = []
+
         for date_delta in range(-6, 1):
             expected_date = (datetime.today() + timedelta(date_delta)).date()
             expected_log = [l for l in self._pg_account.traffic_log
@@ -179,6 +178,7 @@ class User(BaseUser):
                     # 3 * 1024 → 3 MiB
                     # 3 * 1024**2 → 3 GiB
                 )
+        
         return history
 
     @property
