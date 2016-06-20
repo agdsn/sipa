@@ -85,6 +85,7 @@ class TrafficLog(db.Model):
             obj=self,
         )
 
+
 class TrafficQuota(db.Model):
     __tablename__ = 'traffic_quota'
     __bind_key__ = 'hss'
