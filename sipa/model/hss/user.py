@@ -178,7 +178,7 @@ class User(BaseUser):
                     # 3 * 1024 → 3 MiB
                     # 3 * 1024**2 → 3 GiB
                 )
-        
+
         return history
 
     @property

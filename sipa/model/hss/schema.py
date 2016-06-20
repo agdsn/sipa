@@ -130,6 +130,7 @@ class FeeInfo(db.Model):
     description = Column(String(255), nullable=False)
     timestamp = Column(TIMESTAMP, nullable=False)
 
+
 class TrafficQuota(db.Model):
     __tablename__ = 'traffic_quota'
     __bind_key__ = 'hss'
