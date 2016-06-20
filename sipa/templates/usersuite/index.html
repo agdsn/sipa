@@ -1,5 +1,5 @@
 {% extends "base.html" %}#
-{% set page_title = _('Usersuite von ') + current_user.name %}
+{% set page_title = _('Usersuite von ') + current_user.realname.value %}
 
 {% block content %}
     <div class="row"><div class="col-md-8">
