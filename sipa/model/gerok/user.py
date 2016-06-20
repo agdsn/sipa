@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from datetime import date, timedelta
 
 import requests
@@ -11,6 +12,8 @@ from sipa.model.property import active_prop, connection_dependent, \
     unsupported_prop
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+
+logger = logging.getLogger(__name__)
 
 
 endpoint = LocalProxy(lambda: current_app.extensions['gerok_api']['endpoint'])

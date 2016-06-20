@@ -1,4 +1,5 @@
 import json
+import logging
 from functools import partial
 from itertools import chain, product
 from unittest.mock import MagicMock, patch
@@ -42,17 +43,23 @@ class TestGerokApiCall(AppInitialized):
         self.assertEqual(do_api_call(""), "")
         assert self.get.called
 
+    KNOWN_STATUS_CODES = {200, 400, 403, 404}
+
     @patch('requests.get', get)
-    def test_not_200_ValueError(self):
-        # loop over a lot of status codes except 200
-        for status in chain(range(0, 200, 20), range(201, 600, 20)):
+    def test_unknown_status_code_logs(self):
+        unknown_codes = set(range(200, 500, 10)) - self.KNOWN_STATUS_CODES
+        logger = logging.getLogger('sipa.model.gerok.user')
+
+        for status in unknown_codes:
             self.get.reset_mock()
             self.get().status_code = status
 
-            with self.assertRaises(ValueError):
+            with self.subTest(status=status), \
+                 self.assertLogs(logger, level='WARNING') as cm:
                 do_api_call("")
 
-            assert self.get.called
+            self.assertEqual(len(cm.output), 1)
+            self.assertIn('HTTP status', cm.output.pop())
 
     @patch('requests.get', get)
     def test_correct_url_called(self):
