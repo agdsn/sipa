@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from datetime import date, timedelta
 
 import requests
@@ -11,6 +12,8 @@ from sipa.model.property import active_prop, connection_dependent, \
     unsupported_prop
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+
+logger = logging.getLogger(__name__)
 
 
 endpoint = LocalProxy(lambda: current_app.extensions['gerok_api']['endpoint'])
@@ -222,8 +225,9 @@ def do_api_call(request, method='get', postdata=None):
     else:
         raise ValueError("`method` must be one of ['get', 'post']!")
 
-    if response.status_code != 200:
-        raise ValueError("Gerok API returned status != 200 OK")
+    if response.status_code not in [200, 400, 403, 404]:
+        logger.warning("Gerok API returned HTTP status %s", response.status_code,
+                       extra={'data': {'status_code': response.status_code}})
 
     try:
         return response.json()
