@@ -55,7 +55,7 @@ class TestGerokApiCall(AppInitialized):
             self.get().status_code = status
 
             with self.subTest(status=status), \
-                 self.assertLogs(logger, level='WARNING') as cm:
+                    self.assertLogs(logger, level='WARNING') as cm:
                 do_api_call("")
 
             self.assertEqual(len(cm.output), 1)
@@ -254,9 +254,9 @@ def get_possible_users():
             'credit': x[2],
         }
         for x in product(
-                traffic_entries_delegates,
-                mail_delegates,
-                credit_delegates,
+            traffic_entries_delegates,
+            mail_delegates,
+            credit_delegates,
         )
     ]
 
