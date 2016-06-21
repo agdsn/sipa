@@ -209,6 +209,10 @@ class User(BaseUser):
 
     userdb = None
 
+    @unsupported_prop
+    def finance_balance(self):
+        raise NotImplementedError
+
 
 def do_api_call(request, method='get', postdata=None):
     """Request the NVTool-Api for informations

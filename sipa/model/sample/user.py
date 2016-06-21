@@ -160,3 +160,7 @@ class User(BaseUser):
         pass
 
     userdb = None
+
+    @unsupported_prop
+    def finance_balance(self):
+        raise NotImplementedError

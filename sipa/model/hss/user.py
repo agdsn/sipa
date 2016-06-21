@@ -240,3 +240,7 @@ class User(BaseUser):
     @property
     def has_connection(self):
         return self._pg_account.properties.active
+
+    @unsupported_prop
+    def finance_balance(self):
+        raise NotImplementedError

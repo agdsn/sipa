@@ -324,6 +324,11 @@ class User(BaseUser):
     def userdb(self):
         return self._userdb
 
+    @active_prop
+    def finance_balance(self):
+        # transactions = self._nutzer.transactions
+        raise NotImplementedError
+
 
 class UserDB(BaseUserDB):
     def __init__(self, user):

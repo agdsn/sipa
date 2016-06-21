@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-17 00:37+0200\n"
+"POT-Creation-Date: 2016-06-21 22:53+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Deine E-Mail-Adresse"
 msgstr ""
 
-#: sipa/forms.py:79 sipa/forms.py:99 sipa/forms.py:121 sipa/forms.py:160
+#: sipa/forms.py:79 sipa/forms.py:99 sipa/forms.py:121 sipa/forms.py:155
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr ""
 
@@ -69,19 +69,19 @@ msgstr ""
 msgid "Probleme mit privater Technik"
 msgstr ""
 
-#: sipa/forms.py:89 sipa/forms.py:111 sipa/forms.py:133
+#: sipa/forms.py:89 sipa/forms.py:111 sipa/forms.py:128
 msgid "Betreff"
 msgstr ""
 
-#: sipa/forms.py:90 sipa/forms.py:112 sipa/forms.py:134
+#: sipa/forms.py:90 sipa/forms.py:112 sipa/forms.py:129
 msgid "Betreff muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:91 sipa/forms.py:113 sipa/forms.py:135
+#: sipa/forms.py:91 sipa/forms.py:113 sipa/forms.py:130
 msgid "Nachricht"
 msgstr ""
 
-#: sipa/forms.py:92 sipa/forms.py:114 sipa/forms.py:136
+#: sipa/forms.py:92 sipa/forms.py:114 sipa/forms.py:131
 msgid "Nachricht fehlt!"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgstr ""
 msgid "Bitte gib einen Namen an!"
 msgstr ""
 
-#: sipa/forms.py:107 sipa/forms.py:191
+#: sipa/forms.py:107 sipa/forms.py:186
 msgid "Wohnheim"
 msgstr ""
 
@@ -105,139 +105,140 @@ msgstr ""
 msgid "Name / Organisation"
 msgstr ""
 
-#: sipa/forms.py:141
+#: sipa/forms.py:136
 msgid "Altes Passwort"
 msgstr ""
 
-#: sipa/forms.py:142
+#: sipa/forms.py:137
 msgid "Altes Passwort muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:143
+#: sipa/forms.py:138
 msgid "Neues Passwort"
 msgstr ""
 
-#: sipa/forms.py:144
+#: sipa/forms.py:139
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:147 sipa/forms.py:217
+#: sipa/forms.py:142 sipa/forms.py:212
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:148 sipa/forms.py:218
+#: sipa/forms.py:143 sipa/forms.py:213
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:150 sipa/forms.py:220
+#: sipa/forms.py:145 sipa/forms.py:215
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:156 sipa/forms.py:180 sipa/forms.py:206 sipa/forms.py:213
+#: sipa/forms.py:151 sipa/forms.py:175 sipa/forms.py:201 sipa/forms.py:208
 msgid "Passwort"
 msgstr ""
 
-#: sipa/forms.py:157 sipa/forms.py:165 sipa/forms.py:181
+#: sipa/forms.py:152 sipa/forms.py:160 sipa/forms.py:176
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
-#: sipa/forms.py:159
+#: sipa/forms.py:154
 msgid "Neue Mail"
 msgstr ""
 
-#: sipa/forms.py:175
+#: sipa/forms.py:170
 msgid "MAC muss unicast-Adresse sein!"
 msgstr ""
 
-#: sipa/forms.py:183
+#: sipa/forms.py:178
 msgid "Neue MAC"
 msgstr ""
 
-#: sipa/forms.py:195
+#: sipa/forms.py:190
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
-#: sipa/forms.py:198
+#: sipa/forms.py:193
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:200
+#: sipa/forms.py:195
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:201
+#: sipa/forms.py:196
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr ""
 
-#: sipa/forms.py:207 sipa/forms.py:214
+#: sipa/forms.py:202 sipa/forms.py:209
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:209
+#: sipa/forms.py:204
 msgid "Anmeldung merken"
 msgstr ""
 
-#: sipa/blueprints/generic.py:50
+#: sipa/blueprints/generic.py:51
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:52
+#: sipa/blueprints/generic.py:53
 msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:55
+#: sipa/blueprints/generic.py:56
 msgid "Das von Dir angeforderte Dokument gibt es nicht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:57
+#: sipa/blueprints/generic.py:58
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:71
+#: sipa/blueprints/generic.py:72
 msgid ""
 "Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein "
 "paar Minuten noch mal."
 msgstr ""
 
-#: sipa/blueprints/generic.py:90
+#: sipa/blueprints/generic.py:91
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:139
+#: sipa/blueprints/generic.py:140
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:146
+#: sipa/blueprints/generic.py:147
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:163
+#: sipa/blueprints/generic.py:164
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:194
+#: sipa/blueprints/generic.py:195
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:203
+#: sipa/blueprints/generic.py:204
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:206
+#: sipa/blueprints/generic.py:207
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:253 sipa/blueprints/usersuite.py:93
+#: sipa/blueprints/generic.py:254 sipa/blueprints/generic.py:281
+#: sipa/blueprints/usersuite.py:94
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:255
+#: sipa/blueprints/generic.py:256 sipa/blueprints/generic.py:283
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:261
+#: sipa/blueprints/generic.py:262
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -288,58 +289,62 @@ msgstr ""
 msgid "MySQL Datenbank"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:51
+#: sipa/blueprints/usersuite.py:44
+msgid "Kontostand"
+msgstr ""
+
+#: sipa/blueprints/usersuite.py:52
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:96
+#: sipa/blueprints/usersuite.py:97
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an {}"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:153
+#: sipa/blueprints/usersuite.py:154
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:155
+#: sipa/blueprints/usersuite.py:156
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:213
+#: sipa/blueprints/usersuite.py:182 sipa/blueprints/usersuite.py:214
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:215
-#: sipa/blueprints/usersuite.py:242
+#: sipa/blueprints/usersuite.py:184 sipa/blueprints/usersuite.py:216
+#: sipa/blueprints/usersuite.py:243
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:185 sipa/blueprints/usersuite.py:217
+#: sipa/blueprints/usersuite.py:186 sipa/blueprints/usersuite.py:218
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:187
+#: sipa/blueprints/usersuite.py:188
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:219
+#: sipa/blueprints/usersuite.py:220
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:249
+#: sipa/blueprints/usersuite.py:250
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:250
+#: sipa/blueprints/usersuite.py:251
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:270
+#: sipa/blueprints/usersuite.py:271
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:278
+#: sipa/blueprints/usersuite.py:279
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
@@ -355,11 +360,11 @@ msgstr ""
 msgid "Nicht verfÃ¼gbar"
 msgstr ""
 
-#: sipa/model/hss/user.py:217 tests/integration/test_hss_postgres.py:340
+#: sipa/model/hss/user.py:217 tests/integration/test_hss_postgres.py:220
 msgid "Aktiv"
 msgstr ""
 
-#: sipa/model/hss/user.py:218 tests/integration/test_hss_postgres.py:349
+#: sipa/model/hss/user.py:218 tests/integration/test_hss_postgres.py:229
 msgid "Passiv"
 msgstr ""
 

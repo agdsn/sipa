@@ -41,6 +41,7 @@ def usersuite():
         ('hostname', gettext("Hostname")),
         ('hostalias', gettext("Hostalias")),
         ('userdb_status', gettext("MySQL Datenbank")),
+        ('finance_balance', gettext("Kontostand")),
     ])
 
     try:

@@ -181,6 +181,11 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def has_connection(self):
         pass
 
+    @property
+    @abstractmethod
+    def finance_balance(self):
+        pass
+
 
 class BaseUserDB(metaclass=ABCMeta):
     def __init__(self, user):
