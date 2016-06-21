@@ -2,7 +2,7 @@ from functools import partial
 from unittest import TestCase
 
 from sipa.units import TRAFFIC_FORMAT_STRING, UNIT_LIST, dynamic_unit, \
-    format_as_traffic, max_divisions, reduce_by_base
+    format_as_traffic, max_divisions, reduce_by_base, money
 
 
 class TrafficFormatStringTestCase(TestCase):
@@ -59,3 +59,41 @@ class ThingsWithBasesTestCase(TestCase):
                 # method.  Therefore, it is only tested that the
                 # correct unit is appended.
                 self.assertIn(UNIT_LIST[divisions], formatted)
+
+
+class MoneyDecoratorTestCase(TestCase):
+    STYLE_POS = 'success'
+    STYLE_NEG = 'danger'
+
+    @money
+    def dummy_func(self, value):
+        return value
+
+    def prepare_dict(self, d):
+        value = d.pop('value')
+        style = d.pop('style')
+        self.assertEqual(d, {})
+        return value, style
+
+    def test_positive_float(self):
+        value, style = self.prepare_dict(self.dummy_func(3.5))
+
+        self.assertTrue(value.startswith('+3.50'))
+        self.assertTrue(value.endswith("€"))
+
+        self.assertEqual(style, self.STYLE_POS)
+
+    def test_negative_float(self):
+        value, style = self.prepare_dict(self.dummy_func(-3.5))
+        self.assertTrue(value.startswith('-3.50'))
+        self.assertTrue(value.endswith("€"))
+
+        self.assertEqual(style, self.STYLE_NEG)
+
+    def test_zero_is_positive(self):
+        value, style = self.prepare_dict(self.dummy_func(0))
+        self.assertTrue(value.startswith('+0.00'))
+        self.assertTrue(style, self.STYLE_POS)
+
+    def test_whole_number_has_cent_digits(self):
+        self.assertIn("3.00", self.dummy_func(3)['value'])

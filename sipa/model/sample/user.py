@@ -7,6 +7,7 @@ from werkzeug import LocalProxy
 
 from sipa.model.default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
+from sipa.units import money
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
@@ -161,6 +162,7 @@ class User(BaseUser):
 
     userdb = None
 
-    @unsupported_prop
+    @active_prop
+    @money
     def finance_balance(self):
-        raise NotImplementedError
+        return random() * 10 - 5
