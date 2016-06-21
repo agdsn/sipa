@@ -29,6 +29,12 @@ def usersuite():
     """Usersuite landing page with user account information
     and traffic overview.
     """
+    last_update = current_user.last_finance_update
+    finance_update_string = (
+        " " + gettext("(Stand: {})").format(last_update.strftime("%Y-%m-%d"))
+        if last_update
+        else ""
+    )
     descriptions = OrderedDict([
         ('id', gettext("Nutzer-ID")),
         ('realname', gettext("Voller Name")),
@@ -41,7 +47,7 @@ def usersuite():
         ('hostname', gettext("Hostname")),
         ('hostalias', gettext("Hostalias")),
         ('userdb_status', gettext("MySQL Datenbank")),
-        ('finance_balance', gettext("Kontostand")),
+        ('finance_balance', gettext("Kontostand") + finance_update_string),
     ])
 
     try:

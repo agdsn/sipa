@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-21 22:53+0200\n"
-"PO-Revision-Date: 2016-06-21 22:54+0200\n"
+"POT-Creation-Date: 2016-06-22 00:12+0200\n"
+"PO-Revision-Date: 2016-06-22 00:13+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: en\n"
@@ -235,7 +235,7 @@ msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr "You will find here the traffic data for this connection."
 
 #: sipa/blueprints/generic.py:254 sipa/blueprints/generic.py:281
-#: sipa/blueprints/usersuite.py:94
+#: sipa/blueprints/usersuite.py:100
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
@@ -252,106 +252,110 @@ msgstr ""
 "Are you sure you want to use the anonymous contact form? This is necessary "
 "only if you wish to contact administrators of a different dormitory."
 
-#: sipa/blueprints/usersuite.py:33 sipa/templates/usertraffic.html:7
+#: sipa/blueprints/usersuite.py:34
+msgid "(Stand: {})"
+msgstr "(last update: {})"
+
+#: sipa/blueprints/usersuite.py:39 sipa/templates/usertraffic.html:7
 msgid "Nutzer-ID"
 msgstr "User ID"
 
-#: sipa/blueprints/usersuite.py:34
+#: sipa/blueprints/usersuite.py:40
 msgid "Voller Name"
 msgstr "Full name"
 
-#: sipa/blueprints/usersuite.py:35
+#: sipa/blueprints/usersuite.py:41
 msgid "Accountname"
 msgstr "Account name"
 
-#: sipa/blueprints/usersuite.py:36
+#: sipa/blueprints/usersuite.py:42
 msgid "Accountstatus"
 msgstr "Account status"
 
-#: sipa/blueprints/usersuite.py:37
+#: sipa/blueprints/usersuite.py:43
 msgid "Aktuelles Zimmer"
 msgstr "Current room"
 
-#: sipa/blueprints/usersuite.py:38
+#: sipa/blueprints/usersuite.py:44
 msgid "Aktuelle IP-Adresse"
 msgstr "Current IP address"
 
-#: sipa/blueprints/usersuite.py:39
+#: sipa/blueprints/usersuite.py:45
 msgid "Aktuelle MAC-Adresse"
 msgstr "Current MAC address"
 
-#: sipa/blueprints/usersuite.py:40
+#: sipa/blueprints/usersuite.py:46
 msgid "E-Mail-Weiterleitung"
 msgstr "E-Mail forwarding address"
 
-#: sipa/blueprints/usersuite.py:41
+#: sipa/blueprints/usersuite.py:47
 msgid "Hostname"
 msgstr "Hostname"
 
-#: sipa/blueprints/usersuite.py:42
+#: sipa/blueprints/usersuite.py:48
 msgid "Hostalias"
 msgstr "Host alias"
 
-#: sipa/blueprints/usersuite.py:43 sipa/templates/usersuite/hosting.html:3
+#: sipa/blueprints/usersuite.py:49 sipa/templates/usersuite/hosting.html:3
 msgid "MySQL Datenbank"
 msgstr "MySQL database"
 
-#: sipa/blueprints/usersuite.py:44
+#: sipa/blueprints/usersuite.py:50
 msgid "Kontostand"
 msgstr "Finance balance"
 
-#: sipa/blueprints/usersuite.py:52
+#: sipa/blueprints/usersuite.py:58
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: sipa/blueprints/usersuite.py:97
+#: sipa/blueprints/usersuite.py:103
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
 "eine E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
 
-#: sipa/blueprints/usersuite.py:154
+#: sipa/blueprints/usersuite.py:160
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: sipa/blueprints/usersuite.py:156
+#: sipa/blueprints/usersuite.py:162
 msgid "Passwort wurde geändert"
 msgstr "Password has been changed"
 
-#: sipa/blueprints/usersuite.py:182 sipa/blueprints/usersuite.py:214
+#: sipa/blueprints/usersuite.py:188 sipa/blueprints/usersuite.py:220
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/blueprints/usersuite.py:184 sipa/blueprints/usersuite.py:216
-#: sipa/blueprints/usersuite.py:243
+#: sipa/blueprints/usersuite.py:190 sipa/blueprints/usersuite.py:222
+#: sipa/blueprints/usersuite.py:249
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/blueprints/usersuite.py:186 sipa/blueprints/usersuite.py:218
+#: sipa/blueprints/usersuite.py:192 sipa/blueprints/usersuite.py:224
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: sipa/blueprints/usersuite.py:188
+#: sipa/blueprints/usersuite.py:194
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"
 
-#: sipa/blueprints/usersuite.py:220
+#: sipa/blueprints/usersuite.py:226
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr "Email address has been reset"
 
-#: sipa/blueprints/usersuite.py:250
+#: sipa/blueprints/usersuite.py:256
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-#: sipa/blueprints/usersuite.py:251
+#: sipa/blueprints/usersuite.py:257
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr "It can take up to 10 minutes until the changes apply."
 
-#: sipa/blueprints/usersuite.py:271
+#: sipa/blueprints/usersuite.py:277
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
-#: sipa/blueprints/usersuite.py:279
+#: sipa/blueprints/usersuite.py:285
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 

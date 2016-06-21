@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-21 22:53+0200\n"
+"POT-Creation-Date: 2016-06-22 00:12+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -230,7 +230,7 @@ msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
 #: sipa/blueprints/generic.py:254 sipa/blueprints/generic.py:281
-#: sipa/blueprints/usersuite.py:94
+#: sipa/blueprints/usersuite.py:100
 msgid "Nachricht wurde versandt."
 msgstr ""
 
@@ -245,106 +245,110 @@ msgid ""
 "kontaktieren willst."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:33 sipa/templates/usertraffic.html:7
+#: sipa/blueprints/usersuite.py:34
+msgid "(Stand: {})"
+msgstr ""
+
+#: sipa/blueprints/usersuite.py:39 sipa/templates/usertraffic.html:7
 msgid "Nutzer-ID"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:34
+#: sipa/blueprints/usersuite.py:40
 msgid "Voller Name"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:35
+#: sipa/blueprints/usersuite.py:41
 msgid "Accountname"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:36
+#: sipa/blueprints/usersuite.py:42
 msgid "Accountstatus"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:37
+#: sipa/blueprints/usersuite.py:43
 msgid "Aktuelles Zimmer"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:38
+#: sipa/blueprints/usersuite.py:44
 msgid "Aktuelle IP-Adresse"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:39
+#: sipa/blueprints/usersuite.py:45
 msgid "Aktuelle MAC-Adresse"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:40
+#: sipa/blueprints/usersuite.py:46
 msgid "E-Mail-Weiterleitung"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:41
+#: sipa/blueprints/usersuite.py:47
 msgid "Hostname"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:42
+#: sipa/blueprints/usersuite.py:48
 msgid "Hostalias"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:43 sipa/templates/usersuite/hosting.html:3
+#: sipa/blueprints/usersuite.py:49 sipa/templates/usersuite/hosting.html:3
 msgid "MySQL Datenbank"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:44
+#: sipa/blueprints/usersuite.py:50
 msgid "Kontostand"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:52
+#: sipa/blueprints/usersuite.py:58
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:97
+#: sipa/blueprints/usersuite.py:103
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an {}"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:154
+#: sipa/blueprints/usersuite.py:160
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:156
+#: sipa/blueprints/usersuite.py:162
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:182 sipa/blueprints/usersuite.py:214
+#: sipa/blueprints/usersuite.py:188 sipa/blueprints/usersuite.py:220
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:184 sipa/blueprints/usersuite.py:216
-#: sipa/blueprints/usersuite.py:243
+#: sipa/blueprints/usersuite.py:190 sipa/blueprints/usersuite.py:222
+#: sipa/blueprints/usersuite.py:249
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:186 sipa/blueprints/usersuite.py:218
+#: sipa/blueprints/usersuite.py:192 sipa/blueprints/usersuite.py:224
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:188
+#: sipa/blueprints/usersuite.py:194
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:220
+#: sipa/blueprints/usersuite.py:226
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:250
+#: sipa/blueprints/usersuite.py:256
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:251
+#: sipa/blueprints/usersuite.py:257
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:271
+#: sipa/blueprints/usersuite.py:277
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:279
+#: sipa/blueprints/usersuite.py:285
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 

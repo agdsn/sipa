@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from random import random
 
 from flask import current_app
@@ -166,3 +167,7 @@ class User(BaseUser):
     @money
     def finance_balance(self):
         return random() * 10 - 5
+
+    @property
+    def last_finance_update(self):
+        return datetime.now()
