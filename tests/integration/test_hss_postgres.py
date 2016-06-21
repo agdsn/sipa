@@ -35,7 +35,7 @@ class HSSPgEmptyTestCase(HssPgTestBase):
         self.assertFalse(self.session.query(Account).all())
 
 
-class FixtureLoaderMixin:
+class FixtureLoaderBase:
     """A Mixin that creates `self.fixtures_pg` on setUp.
 
     It expects the class to have the attributes `fixtures_pg` and
@@ -49,7 +49,7 @@ class FixtureLoaderMixin:
         self.session.commit()
 
 
-class HSSOneAccountFixture(FixtureLoaderMixin):
+class HSSOneAccountFixture(FixtureLoaderBase):
     @property
     def fixtures_pg(self):
         return OrderedDict([
@@ -127,7 +127,7 @@ class HSSOneTrafficAccountDaysMissingFixture(HSSOneTrafficAccountFixture):
         ])
 
 
-class HSSAccountsWithPropertiesFixture(FixtureLoaderMixin):
+class HSSAccountsWithPropertiesFixture(FixtureLoaderBase):
     @property
     def fixtures_pg(self):
         return OrderedDict([
