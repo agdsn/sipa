@@ -1,6 +1,6 @@
 # -*- coding: utf-8; -*-
 from sqlalchemy import (Column, Index, Integer, String,
-                        text, ForeignKey, DECIMAL, BigInteger)
+                        text, Text, ForeignKey, DECIMAL, BigInteger, Date)
 from sqlalchemy.orm import relationship, column_property
 
 from sipa.model.sqlalchemy import db
@@ -57,6 +57,14 @@ class Nutzer(db.Model):
                            self.wheim_id)
             return ""
 
+    transactions = relationship(
+        'Buchung',
+        primaryjoin=("or_("
+                     "Nutzer.nutzer_id==Buchung.haben_uid,"
+                     "Nutzer.nutzer_id==Buchung.soll_uid"
+                     ")")
+    )
+
 
 class Computer(db.Model):
     __tablename__ = 'computer'
@@ -88,3 +96,35 @@ class Traffic(db.Model):
     input = Column(DECIMAL(20, 0))
     output = Column(DECIMAL(20, 0))
     overall = column_property(input + output)
+
+
+class Buchung(db.Model):
+    __tablename__ = 'buchungen'
+    __bind_key__ = 'userman'
+
+    oid = Column(Integer, nullable=False, primary_key=True)
+    bkid = Column(Integer)
+    fbid = Column(Integer)
+
+    datum = Column(Date, nullable=False, default='')
+    wert = Column(Integer, nullable=False, default=0)
+    bes = Column(Text)
+
+    soll = Column(Integer)
+    soll_uid = Column(Integer, ForeignKey('nutzer.nutzer_id'))
+    haben = Column(Integer)
+    haben_uid = Column(Integer, ForeignKey('nutzer.nutzer_id'))
+
+    def __repr__(self):
+        return (
+            "<{cls} {wert:.2f}€ #{s} (user {s_uid}) → #{h} (User {h_uid}) '{bes}'>"
+            .format(
+                cls=type(self).__name__,
+                wert=self.wert/100,
+                s=self.soll,
+                s_uid=self.soll_uid,
+                h=self.haben,
+                h_uid=self.haben_uid,
+                bes=self.bes,
+            )
+        )
