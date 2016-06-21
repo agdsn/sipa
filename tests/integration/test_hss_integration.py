@@ -3,7 +3,8 @@ import re
 from flask import url_for
 
 from .test_hss_ldap import SimpleLdapTestBase
-from .test_hss_postgres import FrontendFixture, HssPgTestBase
+from .test_hss_postgres import HssPgTestBase
+from .hss_fixtures import FrontendFixture
 
 
 class HssAuthenticatedTestBase(FrontendFixture, HssPgTestBase, SimpleLdapTestBase):
