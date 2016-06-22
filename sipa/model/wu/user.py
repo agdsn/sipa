@@ -329,7 +329,7 @@ class User(BaseUser):
     @active_prop
     @money
     def finance_balance(self):
-        return sum(t.wert for t in self._nutzer.transactions) / 100
+        return sum(t.effective_value for t in self._nutzer.transactions)
 
     @property
     def last_finance_update(self):

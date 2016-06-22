@@ -64,6 +64,7 @@ class Nutzer(db.Model):
                      "Nutzer.nutzer_id==Buchung.soll_uid"
                      ")"),
         foreign_keys="[Buchung.soll_uid, Buchung.haben_uid]",
+        backref='nutzer',
     )
 
 
@@ -125,3 +126,30 @@ class Buchung(db.Model):
                 bes=self.bes,
             )
         )
+
+    @property
+    def effective_value(self):
+        """Return the sign-corrected value in Euros.
+
+        Switch the sign if `self.nutzer.uid` is the haben_uid, not the
+        soll_uid.
+
+        This uses the `nutzer` backref imposed by
+        `Nutzer.transactions`, and raises a ValueError if the backref
+        is invalid.
+        """
+
+        # Using the explicit (x=a and x!=b) form here to let the (x=a
+        # and x=b) case lead to a ValueError
+        if (self.soll_uid == self.nutzer.nutzer_id and
+                self.haben_uid != self.nutzer.nutzer_id):
+            return self.wert / 100
+        elif self.haben_uid == self.nutzer.nutzer_id:
+            return - self.wert / 100
+        else:
+            # this shouldn't happen, since `Buchung`en are only used
+            # via the relationship in `Nutzer`.  The used join forbids
+            # (uid != soll_uid AND uid != haben_uid).2
+            raise ValueError("Uid of backref `nutzer` (%s) "
+                             "is neither soll_uid (%s) nor haben_uid (%s)",
+                             self.nutzer.nutzer_id, self.soll_uid, self.haben_uid)
