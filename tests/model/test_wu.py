@@ -144,12 +144,14 @@ class UserNoDBTestCase(TestCase):
 
 
 class WuAtlantisFakeDBInitialized(AppInitialized):
-    def create_app(self):
-        test_app = super().create_app(additional_config={
+    def create_app(self, *a, **kw):
+        config = {
+            **kw.pop('additional_config', {}),
             'WU_CONNECTION_STRING': "sqlite:///",
+            'DB_USERMAN_CONNECTION_STRING': "postgresql://sipa:password@postgres:5432/userman",  # noqa
             'DB_HELIOS_IP_MASK': "10.10.7.%",
-        })
-        return test_app
+        }
+        return super().create_app(*a, **kw, additional_config=config)
 
     def setUp(self):
         db.create_all()

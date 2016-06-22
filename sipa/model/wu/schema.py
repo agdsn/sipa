@@ -62,7 +62,8 @@ class Nutzer(db.Model):
         primaryjoin=("or_("
                      "Nutzer.nutzer_id==Buchung.haben_uid,"
                      "Nutzer.nutzer_id==Buchung.soll_uid"
-                     ")")
+                     ")"),
+        foreign_keys="[Buchung.soll_uid, Buchung.haben_uid]",
     )
 
 
@@ -111,9 +112,9 @@ class Buchung(db.Model):
     bes = Column(Text)
 
     soll = Column(Integer)
-    soll_uid = Column(Integer, ForeignKey('nutzer.nutzer_id'))
+    soll_uid = Column(Integer)
     haben = Column(Integer)
-    haben_uid = Column(Integer, ForeignKey('nutzer.nutzer_id'))
+    haben_uid = Column(Integer)
 
     def __repr__(self):
         return (
