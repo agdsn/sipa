@@ -10,6 +10,7 @@ from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP
+from sipa.units import money
 from sipa.utils import argstr
 from sipa.utils.exceptions import InvalidCredentials
 logger = logging.getLogger(__name__)
@@ -241,6 +242,7 @@ class User(BaseUser):
     def has_connection(self):
         return self._pg_account.properties.active
 
-    @unsupported_prop
+    @active_prop
+    @money
     def finance_balance(self):
-        raise NotImplementedError
+        return self._pg_account.finance_balance

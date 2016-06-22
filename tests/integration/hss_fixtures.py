@@ -83,6 +83,14 @@ class HSSOneTrafficAccountDaysMissingFixture(HSSOneTrafficAccountFixture):
         ])
 
 
+class HSSOneFinanceAccountFixture(HSSOneAccountFixture):
+    @property
+    def fixtures_pg(self):
+        super_fixtures = super().fixtures_pg
+        super_fixtures[Account][0].finance_balance = 3.50
+        return super_fixtures
+
+
 class HSSAccountsWithPropertiesFixture:
     @property
     def fixtures_pg(self):

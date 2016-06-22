@@ -6,7 +6,8 @@ from flask_babel import gettext
 from flask_login import AnonymousUserMixin
 
 from .hss_fixtures import HSSOneAccountFixture, HSSOneTrafficAccountFixture, \
-    HSSOneTrafficAccountDaysMissingFixture, HSSAccountsWithPropertiesFixture
+    HSSOneTrafficAccountDaysMissingFixture, HSSAccountsWithPropertiesFixture, \
+    HSSOneFinanceAccountFixture
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.schema import Account, IP, Mac, TrafficLog
@@ -227,3 +228,14 @@ class UsersActiveTestCase(
             with self.subTest(account=account):
                 user = User.get(account.account)
                 self.assertEqual(user.status, gettext("Passiv"))
+
+
+class UserFinanceTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
+    def test_finance_balance_correct(self):
+        self.assertEqual(self.user.finance_balance, "+3.50 €")
+
+
+class UserNoFinanceTestCase(OneAccountTestBase):
+    def test_finance_balance_zero(self):
+        """Test that an account with nothing set has a zero finance balance"""
+        self.assertEqual(self.user.finance_balance, "+0.00 €")
