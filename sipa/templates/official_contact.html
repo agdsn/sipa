@@ -1,0 +1,14 @@
+{% extends "base.html" %}#
+{% import "macros/forms.html" as forms %}
+{% set page_title = _("Kontakt") %}
+
+{% block content %}
+    {% call forms.render(form=form, form_id='anonymous_contact_form', reset_button=False, cancel_to=url_for('generic.index')) %}
+        <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-warning">
+            <strong>{{ _("Achtung:") }}</strong> {{ _("Hier wird dir
+            nicht mit deinem Anschluss geholfen!  Dieses Formular ist
+            nur für die Kommunikation mit unseren Partnern gedacht.  Bei
+            Missbrauch kann dein Account gesperrt werden.")  }}
+        </div>
+    {% endcall %}
+{% endblock %}
