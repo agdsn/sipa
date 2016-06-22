@@ -48,3 +48,12 @@ class SampleFrontendTestBase(SampleAuthenticatedTestBase):
 class UsersuiteReachableTestCase(SampleFrontendTestBase):
     def test_usersuite_200(self):
         self.assert200(self.client.get(url_for('usersuite.usersuite')))
+
+    def test_contact_200(self):
+        self.assert200(self.client.get(url_for('usersuite.usersuite_contact')))
+
+    def test_mac_edit_200(self):
+        self.assert200(self.client.get(url_for('usersuite.change_mac')))
+
+    def test_mail_edit_200(self):
+        self.assert200(self.client.get(url_for('usersuite.change_mail')))

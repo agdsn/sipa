@@ -1,6 +1,6 @@
 from functools import partial
 
-from flask import abort
+from flask import abort, url_for
 from tests.prepare import AppInitialized
 
 
@@ -28,7 +28,27 @@ class TestErrorhandlersCase(AppInitialized):
             self.assertTemplateUsed('error.html')
 
 
-class TestCorrectRedirectCase(AppInitialized):
+class GenericEndpointsReachableTestCase(AppInitialized):
     def test_root_directory_redirect(self):
         response = self.client.get('/')
         self.assertRedirects(response, '/news/')
+
+    def test_login_reachable(self):
+        self.assert200(self.client.get(url_for('generic.login')))
+        self.assertTemplateUsed('login.html')
+
+    def test_usertraffic_denied(self):
+        # throws 401 because we don't have an ip matching a user
+        self.assertStatus(self.client.get(url_for('generic.usertraffic')), 401)
+
+    def test_api_reachable(self):
+        rv = self.client.get(url_for('generic.traffic_api'))
+        self.assert200(rv)
+
+    def test_official_contact_reachable(self):
+        self.assert200(self.client.get(url_for('generic.contact_official')))
+        self.assertTemplateUsed('official_contact.html')
+
+    def test_version_reachable(self):
+        self.assert200(self.client.get(url_for('generic.version')))
+        self.assertTemplateUsed('version.html')
