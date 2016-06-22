@@ -101,6 +101,9 @@ class User(BaseUser):
     def credit(self):
         return random() * 1024**2 * 63
 
+    max_credit = 63 * 1024 * 1024
+    daily_credit = 3 * 1024 * 1024
+
     @active_prop
     def realname(self):
         return self._realname

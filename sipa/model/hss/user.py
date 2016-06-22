@@ -9,7 +9,7 @@ from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
-from sipa.model.hss.schema import Account, IP
+from sipa.model.hss.schema import Account, IP, TrafficQuota
 from sipa.utils import argstr
 from sipa.utils.exceptions import InvalidCredentials
 logger = logging.getLogger(__name__)
@@ -98,6 +98,13 @@ class User(BaseUser):
 
     can_change_password = True
 
+    @property
+    def _pg_trafficquota(self):
+        """Return the corresponding ORM TrafficQuota for an Account"""
+        return db.session.query(TrafficQuota).filter_by(
+            id=self._pg_account.traffic_quota
+        ).one()
+
     def change_password(self, old, new):
         """Change the user's password from old to new.
 
@@ -176,6 +183,16 @@ class User(BaseUser):
     def credit(self):
         """Return the current credit in KiB"""
         return self._pg_account.traffic_balance / 1024
+
+    @property
+    def max_credit(self):
+        """Return the current credit in KiB"""
+        return self._pg_trafficquota.max_credit / 1024
+
+    @property
+    def daily_credit(self):
+        """Return the current credit in KiB"""
+        return self._pg_trafficquota.daily_credit / 1024
 
     @active_prop
     def ips(self):
