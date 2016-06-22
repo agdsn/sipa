@@ -8,7 +8,7 @@ from flask_login import AnonymousUserMixin
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.database_utils import STATUS
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
-from sipa.model.wu.schema import db, Nutzer
+from sipa.model.wu.schema import db, Nutzer, Buchung
 from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
                                      UnknownStatusNutzerFactory,
                                      ComputerFactory, NutzerFactory,
@@ -451,3 +451,11 @@ class IPMaskValidityChecker(TestCase):
                 except ValueError:
                     self.fail("`test_ipmask_validity` raised ValueError "
                               "on correct ip '{}'".format(".".join(ip_tuple)))
+
+
+class UsermanInitializedTestCase(WuAtlantisFakeDBInitialized):
+    def test_userman_in_binds(self):
+        self.assertIn('userman', self.app.config['SQLALCHEMY_BINDS'].keys())
+
+    def test_userman_correctly_initialized(self):
+        self.assertFalse(db.session.query(Buchung).all())
