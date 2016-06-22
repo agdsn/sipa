@@ -1,8 +1,9 @@
 from collections import OrderedDict
-from datetime import date
+from datetime import date, datetime
 
 
-from sipa.model.hss.schema import Account, AccountProperty, Access, IP, Mac, TrafficLog
+from sipa.model.hss.schema import Account, AccountProperty, Access, IP, Mac, TrafficLog, \
+    AccountStatementLog
 
 
 class HSSOneAccountFixture:
@@ -88,7 +89,13 @@ class HSSOneFinanceAccountFixture(HSSOneAccountFixture):
     def fixtures_pg(self):
         super_fixtures = super().fixtures_pg
         super_fixtures[Account][0].finance_balance = 3.50
-        return super_fixtures
+        return OrderedDict([
+            *super_fixtures.items(),
+            (AccountStatementLog, [
+                AccountStatementLog(id=1, timestamp=datetime(2016, 5, 30)),
+                AccountStatementLog(id=2, timestamp=datetime(2016, 4, 30)),
+            ]),
+        ])
 
 
 class HSSAccountsWithPropertiesFixture:

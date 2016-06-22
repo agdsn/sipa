@@ -10,7 +10,7 @@ from .hss_fixtures import HSSOneAccountFixture, HSSOneTrafficAccountFixture, \
     HSSOneFinanceAccountFixture
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.schema import Account, IP, Mac, TrafficLog
+from sipa.model.hss.schema import Account, IP, Mac, TrafficLog, AccountStatementLog
 from sipa.model.hss.user import User
 
 
@@ -233,6 +233,10 @@ class UsersActiveTestCase(
 class UserFinanceTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
     def test_finance_balance_correct(self):
         self.assertEqual(self.user.finance_balance, "+3.50 €")
+
+    def test_last_update_date_exists(self):
+        expected_date = max(l.timestamp for l in self.fixtures_pg[AccountStatementLog])
+        self.assertEqual(self.user.last_finance_update, expected_date)
 
 
 class UserNoFinanceTestCase(OneAccountTestBase):

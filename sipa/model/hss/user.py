@@ -3,13 +3,14 @@ from datetime import datetime, timedelta
 
 from flask_babel import gettext
 from flask_login import AnonymousUserMixin
+from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 
 from ..default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
-from sipa.model.hss.schema import Account, IP
+from sipa.model.hss.schema import Account, IP, AccountStatementLog
 from sipa.units import money
 from sipa.utils import argstr
 from sipa.utils.exceptions import InvalidCredentials
@@ -246,3 +247,7 @@ class User(BaseUser):
     @money
     def finance_balance(self):
         return self._pg_account.finance_balance
+
+    @property
+    def last_finance_update(self):
+        return db.session.query(func.max(AccountStatementLog.timestamp)).one()[0]
