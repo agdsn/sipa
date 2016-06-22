@@ -111,20 +111,16 @@ class Buchung(db.Model):
     wert = Column(Integer, nullable=False, default=0)
     bes = Column(Text)
 
-    soll = Column(Integer)
     soll_uid = Column(Integer)
-    haben = Column(Integer)
     haben_uid = Column(Integer)
 
     def __repr__(self):
         return (
-            "<{cls} {wert:.2f}€ #{s} (user {s_uid}) → #{h} (User {h_uid}) '{bes}'>"
+            "<{cls} {wert:.2f}€ Soll: {s_uid} → Haben: {h_uid} '{bes}'>"
             .format(
                 cls=type(self).__name__,
                 wert=self.wert/100,
-                s=self.soll,
                 s_uid=self.soll_uid,
-                h=self.haben,
                 h_uid=self.haben_uid,
                 bes=self.bes,
             )
