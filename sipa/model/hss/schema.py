@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import String, Integer, BigInteger, Date, Boolean
+from sqlalchemy.types import String, Integer, BigInteger, Date, Boolean, Numeric, \
+    TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import INET, MACADDR
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -16,8 +17,7 @@ class Account(db.Model):
     account = Column(String(16), primary_key=True, nullable=False)
     name = Column(String(255), nullable=False)
 
-    # Not needed now, staying in the code for https://git.io/vw1bH though.
-    # finance_balance = Column(Numeric(5, 2), nullable=False, default=0)
+    finance_balance = Column(Numeric(5, 2), nullable=False, default=0)
 
     traffic_balance = Column(BigInteger, nullable=False, default=10000000000)
     access_id = Column('access', Integer, ForeignKey('access.id'))
@@ -84,3 +84,14 @@ class TrafficLog(db.Model):
             type=type(self),
             obj=self,
         )
+
+
+class AccountStatementLog(db.Model):
+    __tablename__ = 'account_statement_log'
+    __bind_key__ = 'hss'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    timestamp = Column(TIMESTAMP, nullable=False)
+    # amount = Column(Numeric(5, 2), nullable=False)
+    # purpose = Column(String(255), nullable=False)
+    # account = Column(String(16))

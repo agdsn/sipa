@@ -1,4 +1,6 @@
 # -*- coding: utf-8; -*-
+from functools import wraps
+
 
 #: 0 divisions mean the unit stays being `KiB`
 #: usage: unit = UNIT_LIST[divisions]
@@ -37,3 +39,23 @@ def dynamic_unit(number, precision=2):
     """
     divisions = max_divisions(number)
     return format_as_traffic(number, divisions=divisions, divide=True)
+
+
+def money(func):
+    """A decorator turning a float number into a stylized money string.
+
+    The given float is returned as `±98792.09€`, the style is a
+    bootstrap-style context class without the prefix (e.g. `success`).
+
+    :return: Value as string and style
+    :rtype: A dict in the form of {'value': <string>, 'style': <string>}
+    """
+    @wraps(func)
+    def _wrapped_func(*args, **kwargs):
+        amount = func(*args, **kwargs)
+        style = 'success' if amount >= 0 else 'danger'
+
+        return {'value': "{:+.2f} €".format(amount),
+                'style': style}
+
+    return _wrapped_func

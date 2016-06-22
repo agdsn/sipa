@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from random import random
 
 from flask import current_app
@@ -7,6 +8,7 @@ from werkzeug import LocalProxy
 
 from sipa.model.default import BaseUser
 from sipa.model.property import active_prop, unsupported_prop
+from sipa.units import money
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
 
@@ -160,3 +162,12 @@ class User(BaseUser):
         pass
 
     userdb = None
+
+    @active_prop
+    @money
+    def finance_balance(self):
+        return random() * 10 - 5
+
+    @property
+    def last_finance_update(self):
+        return datetime.now()

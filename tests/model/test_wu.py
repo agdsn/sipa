@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from datetime import datetime
 from itertools import permutations
 from unittest import TestCase, expectedFailure
 from unittest.mock import MagicMock, patch
@@ -8,7 +9,7 @@ from flask_login import AnonymousUserMixin
 from sipa.model.wu.user import User, UserDB
 from sipa.model.wu.database_utils import STATUS
 from sipa.model.wu.ldap_utils import UserNotFound, PasswordInvalid
-from sipa.model.wu.schema import db, Nutzer
+from sipa.model.wu.schema import db, Nutzer, Buchung
 from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
                                      UnknownStatusNutzerFactory,
                                      ComputerFactory, NutzerFactory,
@@ -144,14 +145,17 @@ class UserNoDBTestCase(TestCase):
 
 
 class WuAtlantisFakeDBInitialized(AppInitialized):
-    def create_app(self):
-        test_app = super().create_app(additional_config={
+    def create_app(self, *a, **kw):
+        config = {
+            **kw.pop('additional_config', {}),
             'WU_CONNECTION_STRING': "sqlite:///",
+            'DB_USERMAN_CONNECTION_STRING': "postgresql://sipa:password@postgres:5432/userman",  # noqa
             'DB_HELIOS_IP_MASK': "10.10.7.%",
-        })
-        return test_app
+        }
+        return super().create_app(*a, **kw, additional_config=config)
 
     def setUp(self):
+        db.drop_all()
         db.create_all()
 
     def assert_computer_data_passed(self, computer, user):
@@ -449,3 +453,69 @@ class IPMaskValidityChecker(TestCase):
                 except ValueError:
                     self.fail("`test_ipmask_validity` raised ValueError "
                               "on correct ip '{}'".format(".".join(ip_tuple)))
+
+
+class UsermanInitializedTestCase(WuAtlantisFakeDBInitialized):
+    def test_userman_in_binds(self):
+        self.assertIn('userman', self.app.config['SQLALCHEMY_BINDS'].keys())
+
+    def test_userman_correctly_initialized(self):
+        self.assertFalse(db.session.query(Buchung).all())
+
+
+class FinanceBalanceTestCase(OneUserWithCredit):
+    def setUp(self):
+        super().setUp()
+        self.transactions = [
+            Buchung(wert=-350, soll_uid=self.nutzer.nutzer_id, haben_uid=None,
+                    bes="Freischalten!!!", datum=datetime(2016, 6, 1)),
+            Buchung(wert=350, soll_uid=self.nutzer.nutzer_id, haben_uid=None,
+                    bes="Semesterbeitrag 04/16", datum=datetime(2016, 4, 30)),
+            Buchung(wert=350, soll_uid=self.nutzer.nutzer_id, haben_uid=None,
+                    bes="Semesterbeitrag 05/16", datum=datetime(2016, 5, 30)),
+        ]
+        for t in self.transactions:
+            db.session.add(t)
+        db.session.commit()
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        )
+
+    def test_correct_number_of_transactions(self):
+        recvd_transactions = db.session.query(Nutzer).one().transactions
+        self.assertEqual(set(self.transactions), set(recvd_transactions))
+
+    def test_user_has_correct_balance(self):
+        expected_balance = "+3.50 €"
+        self.assertEqual(self.user.finance_balance, expected_balance)
+
+    def test_finance_date_max_in_database(self):
+        expected_date = max(t.datum for t in self.transactions)
+        self.assertEqual(self.user.last_finance_update, expected_date)
+
+
+class HabenSollSwitchedTestCase(OneUserWithCredit):
+    def setUp(self):
+        super().setUp()
+        self.transactions = [
+            Buchung(wert=-350, soll_uid=self.nutzer.nutzer_id, haben_uid=None,
+                    bes="Freischalten!!!", datum=datetime(2016, 6, 1)),
+            Buchung(wert=350, soll_uid=self.nutzer.nutzer_id, haben_uid=None,
+                    bes="Semesterbeitrag 04/16", datum=datetime(2016, 4, 30)),
+            Buchung(wert=-350, haben_uid=self.nutzer.nutzer_id, soll_uid=None,
+                    bes="Semesterbeitrag 05/16", datum=datetime(2016, 5, 30)),
+        ]
+        for t in self.transactions:
+            db.session.add(t)
+        db.session.commit()
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        )
+
+    def test_user_has_correct_balance(self):
+        expected_balance = "+3.50 €"
+        self.assertEqual(self.user.finance_balance, expected_balance)

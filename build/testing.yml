@@ -30,7 +30,8 @@ services:
       - ldap_hss
 
   postgres:
-    image: postgres
+    build:
+      context: postgres
     environment:
       - POSTGRES_USER=sipa
       - POSTGRES_PASSWORD=password

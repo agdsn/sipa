@@ -181,6 +181,16 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def has_connection(self):
         pass
 
+    @property
+    @abstractmethod
+    def finance_balance(self):
+        pass
+
+    @property
+    def last_finance_update(self):
+        """Return the date of the last update of the finance data."""
+        pass
+
 
 class BaseUserDB(metaclass=ABCMeta):
     def __init__(self, user):

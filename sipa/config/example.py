@@ -49,6 +49,11 @@
 # DB_ATLANTIS_USER = None
 # DB_ATLANTIS_PASSWORD = None
 
+# Userman configuration
+# Form: "postgresql://user:pw@host:port/db"
+# DB_USERMAN_CONNECTION_STRING = None  # Must be set
+
+
 # MySQL Helios configuration
 # DB_HELIOS_HOST = "helios.agdsn"  # Must be set
 # DB_HELIOS_PORT = 3306

@@ -7,6 +7,7 @@ from ipaddress import IPv4Address, AddressValueError
 from flask import current_app
 from flask_babel import gettext
 from flask_login import AnonymousUserMixin
+from sqlalchemy import func
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -16,9 +17,10 @@ from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
 from sipa.model.wu.schema import db
+from sipa.units import money
 from sipa.utils import argstr, timetag_today
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
-from .schema import Computer, Credit, Nutzer, Traffic
+from .schema import Computer, Credit, Nutzer, Traffic, Buchung
 
 
 logger = logging.getLogger(__name__)
@@ -323,6 +325,21 @@ class User(BaseUser):
     @property
     def userdb(self):
         return self._userdb
+
+    @active_prop
+    @money
+    def finance_balance(self):
+        return sum(t.effective_value for t in self._nutzer.transactions)
+
+    @property
+    def last_finance_update(self):
+        """Return an educated guess for the last finance update.
+
+        It is based on the highest date in the database.  The only
+        possible case this date is wrong is if on the day of the
+        import, nothing has actually been transacted.
+        """
+        return db.session.query(func.max(Buchung.datum)).one()[0]
 
 
 class UserDB(BaseUserDB):
