@@ -487,10 +487,35 @@ class FinanceBalanceTestCase(OneUserWithCredit):
         recvd_transactions = db.session.query(Nutzer).one().transactions
         self.assertEqual(set(self.transactions), set(recvd_transactions))
 
-    def test_user_correct_transactions(self):
+    def test_user_has_correct_balance(self):
         expected_balance = "+3.50 €"
         self.assertEqual(self.user.finance_balance, expected_balance)
 
     def test_finance_date_max_in_database(self):
         expected_date = max(t.datum for t in self.transactions)
         self.assertEqual(self.user.last_finance_update, expected_date)
+
+
+class HabenSollSwitchedTestCase(OneUserWithCredit):
+    def setUp(self):
+        super().setUp()
+        self.transactions = [
+            Buchung(wert=-350, soll_uid=self.nutzer.nutzer_id, haben_uid=None,
+                    bes="Freischalten!!!", datum=datetime(2016, 6, 1)),
+            Buchung(wert=350, soll_uid=self.nutzer.nutzer_id, haben_uid=None,
+                    bes="Semesterbeitrag 04/16", datum=datetime(2016, 4, 30)),
+            Buchung(wert=-350, haben_uid=self.nutzer.nutzer_id, soll_uid=None,
+                    bes="Semesterbeitrag 05/16", datum=datetime(2016, 5, 30)),
+        ]
+        for t in self.transactions:
+            db.session.add(t)
+        db.session.commit()
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        )
+
+    def test_user_has_correct_balance(self):
+        expected_balance = "+3.50 €"
+        self.assertEqual(self.user.finance_balance, expected_balance)
