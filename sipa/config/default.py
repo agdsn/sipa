@@ -39,8 +39,11 @@ DB_ATLANTIS_HOST = ""
 DB_ATLANTIS_USER = None
 DB_ATLANTIS_PASSWORD = None
 
+# Userman configuration
+# DB_USERMAN_CONNECTION_STRING: not set
+
 # MySQL Helios configuration
-DB_HELIOS_HOST = ""
+# DB_HELIOS_HOST: not set
 DB_HELIOS_PORT = 3306
 DB_HELIOS_USER = None
 DB_HELIOS_PASSWORD = None
