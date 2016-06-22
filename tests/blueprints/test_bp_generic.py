@@ -29,9 +29,12 @@ class TestErrorhandlersCase(AppInitialized):
 
 
 class GenericEndpointsReachableTestCase(AppInitialized):
-    def test_root_directory_redirect(self):
+    def test_index_redirects_correctly(self):
         response = self.client.get('/')
         self.assertRedirects(response, '/news/')
+
+    def test_index_reachable(self):
+        self.assert200(self.client.get('/', follow_redirects=True))
 
     def test_login_reachable(self):
         self.assert200(self.client.get(url_for('generic.login')))
@@ -44,6 +47,10 @@ class GenericEndpointsReachableTestCase(AppInitialized):
     def test_api_reachable(self):
         rv = self.client.get(url_for('generic.traffic_api'))
         self.assert200(rv)
+
+    def test_contact_reachable(self):
+        self.assert200(self.client.get(url_for('generic.contact')))
+        self.assertTemplateUsed('anonymous_contact.html')
 
     def test_official_contact_reachable(self):
         self.assert200(self.client.get(url_for('generic.contact_official')))
