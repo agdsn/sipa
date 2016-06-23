@@ -506,7 +506,7 @@ class FinanceBalanceTestCase(OneUserWithCredit):
         last_log = None
         for log in logs:
             if last_log is not None:
-                self.assertTrue(last_log[0] < log[0])
+                self.assertLessEqual(last_log[0], log[0])
             last_log = log
 
 
