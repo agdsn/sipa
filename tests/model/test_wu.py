@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from datetime import datetime
 from itertools import permutations
+from operator import attrgetter
 from unittest import TestCase, expectedFailure
 from unittest.mock import MagicMock, patch
 
@@ -494,6 +495,19 @@ class FinanceBalanceTestCase(OneUserWithCredit):
     def test_finance_date_max_in_database(self):
         expected_date = max(t.datum for t in self.transactions)
         self.assertEqual(self.user.last_finance_update, expected_date)
+
+    def test_user_has_correct_logs(self):
+        expected_logs = [(t.datum, t.effective_value) for t
+                         in sorted(self.transactions, key=attrgetter('datum'))]
+        self.assertEqual(self.user.finance_logs, expected_logs)
+
+    def test_finance_logs_sorted_by_date(self):
+        logs = self.user.finance_logs
+        last_log = None
+        for log in logs:
+            if last_log is not None:
+                self.assertTrue(last_log[0] < log[0])
+            last_log = log
 
 
 class HabenSollSwitchedTestCase(OneUserWithCredit):

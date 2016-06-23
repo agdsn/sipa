@@ -341,6 +341,10 @@ class User(BaseUser):
         """
         return db.session.query(func.max(Buchung.datum)).one()[0]
 
+    @property
+    def finance_logs(self):
+        return [(t.datum, t.effective_value) for t in self._nutzer.transactions]
+
 
 class UserDB(BaseUserDB):
     def __init__(self, user):

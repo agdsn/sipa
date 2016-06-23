@@ -64,6 +64,7 @@ class Nutzer(db.Model):
                      "Nutzer.nutzer_id==Buchung.soll_uid"
                      ")"),
         foreign_keys="[Buchung.soll_uid, Buchung.haben_uid]",
+        order_by="asc(Buchung.datum)",
         backref='nutzer',
     )
 
