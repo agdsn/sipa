@@ -82,3 +82,16 @@ class UsersuiteReachableTestCase(SampleFrontendTestBase):
             with self.subTest(url=url):
                 self.assertRegex(usersuite_response.data.decode('utf-8'),
                                  'href="[^"]*{}[^"]*"'.format(url))
+
+
+class FinanceLogsTestCase(SampleFrontendTestBase):
+    def setUp(self):
+        super().setUp()
+        with patch('sipa.blueprints.usersuite.current_user'):
+            self.rv = self.client.get(url_for(get_attribute_endpoint('finance_balance')))
+
+    def test_finance_logs_available(self):
+        self.assertTemplateUsed('usersuite/finance_logs.html')
+
+    def test_hello_contained(self):
+        self.assertIn("Hello, World!", self.rv.data.decode('utf-8'))

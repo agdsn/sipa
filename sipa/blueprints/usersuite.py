@@ -301,4 +301,6 @@ def hosting(action=None):
 @bp_usersuite.route("/finance-logs")
 @login_required
 def finance_logs():
-    raise NotImplementedError
+    assert hasattr(current_user, 'finance_balance')
+
+    return render_template('usersuite/finance_logs.html')
