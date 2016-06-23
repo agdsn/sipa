@@ -168,6 +168,8 @@ class User(BaseUser):
     def finance_balance(self):
         return random() * 10 - 5
 
+    finance_balance = finance_balance.fake_setter()
+
     @property
     def last_finance_update(self):
         return datetime.now()

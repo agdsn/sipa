@@ -1,6 +1,9 @@
+from unittest.mock import patch
+
 from flask import url_for
 
 from tests.prepare import AppInitialized
+from sipa.blueprints.usersuite import get_attribute_endpoint
 
 
 class SampleAuthenticatedTestBase(AppInitialized):
@@ -57,3 +60,25 @@ class UsersuiteReachableTestCase(SampleFrontendTestBase):
 
     def test_mail_edit_200(self):
         self.assert200(self.client.get(url_for('usersuite.change_mail')))
+
+    def test_usersuite_contains_urls(self):
+        """Test the usersuite contains the urls of `sample`s capabilities."""
+        usersuite_response = self.client.get(url_for('usersuite.usersuite'))
+
+        # We have to patch `current_user` since it is not defined due
+        # to the wrong app context, but the code runs some asserts
+        # against it checking capabilities.
+        with patch('sipa.blueprints.usersuite.current_user'):
+            urls = [
+                *(url_for(get_attribute_endpoint(attr))
+                  for attr in ['mail', 'mac', 'finance_balance']),
+                *(url_for(get_attribute_endpoint(attr, capability='delete'))
+                  for attr in ['mail']),
+                url_for('usersuite.usersuite_change_password'),
+                url_for('generic.contact'),
+            ]
+
+        for url in urls:
+            with self.subTest(url=url):
+                self.assertRegex(usersuite_response.data.decode('utf-8'),
+                                 'href="[^"]*{}[^"]*"'.format(url))

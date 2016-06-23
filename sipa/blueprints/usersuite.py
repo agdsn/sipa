@@ -122,6 +122,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mac': 'change_mac',
             'userdb_status': 'hosting',
             'mail': 'change_mail',
+            'finance_balance': 'finance_logs',
         }
 
         assert attribute in attribute_mappings.keys(), \
@@ -295,3 +296,9 @@ def hosting(action=None):
 
     return render_template('usersuite/hosting.html',
                            form=form, user_has_db=user_has_db, action=action)
+
+
+@bp_usersuite.route("/finance-logs")
+@login_required
+def finance_logs():
+    raise NotImplementedError
