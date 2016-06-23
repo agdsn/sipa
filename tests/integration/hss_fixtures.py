@@ -3,7 +3,7 @@ from datetime import date, datetime
 
 
 from sipa.model.hss.schema import Account, AccountProperty, Access, IP, Mac, TrafficLog, \
-    AccountStatementLog
+    AccountStatementLog, FeeInfo, AccountFeeRelation
 
 
 class HSSOneAccountFixture:
@@ -92,8 +92,19 @@ class HSSOneFinanceAccountFixture(HSSOneAccountFixture):
         return OrderedDict([
             *super_fixtures.items(),
             (AccountStatementLog, [
-                AccountStatementLog(id=1, timestamp=datetime(2016, 5, 30)),
-                AccountStatementLog(id=2, timestamp=datetime(2016, 4, 30)),
+                AccountStatementLog(id=1, amount=21.00,
+                                    purpose='sipatinator will netz',
+                                    timestamp=datetime(2016, 4, 2)),
+            ]),
+            (FeeInfo, [
+                FeeInfo(id=1, amount=3.50, description='Fee 2016-04',
+                        timestamp=datetime(2016, 4, 30)),
+                FeeInfo(id=2, amount=3.50, description='Fee 2016-04',
+                        timestamp=datetime(2016, 4, 30)),
+            ]),
+            (AccountFeeRelation, [
+                AccountFeeRelation(account='sipatinator', fee=1),
+                AccountFeeRelation(account='sipatinator', fee=2),
             ]),
         ])
 
