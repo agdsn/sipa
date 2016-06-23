@@ -331,6 +331,8 @@ class User(BaseUser):
     def finance_balance(self):
         return sum(t.effective_value for t in self._nutzer.transactions)
 
+    finance_balance = finance_balance.fake_setter()
+
     @property
     def last_finance_update(self):
         """Return an educated guess for the last finance update.
