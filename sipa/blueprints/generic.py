@@ -4,7 +4,7 @@ import logging
 from flask import render_template, request, redirect, \
     url_for, flash, session, abort, current_app, jsonify
 from flask.blueprints import Blueprint
-from flask_babel import gettext
+from flask_babel import gettext, format_date
 from flask_login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import DatabaseError
@@ -177,6 +177,10 @@ def to_gigabytes(number):
     """
     return number / 1024 ** 2
 
+
+@bp_generic.app_template_filter('date')
+def jinja_format_date(date):
+    return format_date(date)
 
 bp_generic.add_app_template_filter(format_money, name='money')
 
