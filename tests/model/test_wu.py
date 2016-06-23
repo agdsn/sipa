@@ -488,7 +488,7 @@ class FinanceBalanceTestCase(OneUserWithCredit):
         self.assertEqual(set(self.transactions), set(recvd_transactions))
 
     def test_user_has_correct_balance(self):
-        expected_balance = "+3.50 €"
+        expected_balance = 3.5
         self.assertEqual(self.user.finance_balance, expected_balance)
 
     def test_finance_date_max_in_database(self):
@@ -517,5 +517,5 @@ class HabenSollSwitchedTestCase(OneUserWithCredit):
         )
 
     def test_user_has_correct_balance(self):
-        expected_balance = "+3.50 €"
+        expected_balance = 3.5
         self.assertEqual(self.user.finance_balance, expected_balance)

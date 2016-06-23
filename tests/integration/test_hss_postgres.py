@@ -232,7 +232,7 @@ class UsersActiveTestCase(
 
 class UserFinanceTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
     def test_finance_balance_correct(self):
-        self.assertEqual(self.user.finance_balance, "+3.50 €")
+        self.assertEqual(self.user.finance_balance, 3.5)
 
     def test_last_update_date_exists(self):
         expected_date = max(l.timestamp for l in self.fixtures_pg[AccountStatementLog])
@@ -242,4 +242,4 @@ class UserFinanceTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
 class UserNoFinanceTestCase(OneAccountTestBase):
     def test_finance_balance_zero(self):
         """Test that an account with nothing set has a zero finance balance"""
-        self.assertEqual(self.user.finance_balance, "+0.00 €")
+        self.assertEqual(self.user.finance_balance, 0)
