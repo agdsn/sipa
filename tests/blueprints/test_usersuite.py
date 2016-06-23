@@ -88,14 +88,11 @@ class FinanceLogsTestCase(SampleFrontendTestBase):
     def setUp(self):
         super().setUp()
         with patch('sipa.blueprints.usersuite.current_user'):
-            self.rv = self.client.get(url_for(get_attribute_endpoint('finance_balance')))
+            url = url_for(get_attribute_endpoint('finance_balance'))
+        self.rv = self.client.get(url)
 
     def test_finance_logs_reachable(self):
         self.assert200(self.rv)
 
     def test_finance_logs_available(self):
         self.assertTemplateUsed('usersuite/finance_logs.html')
-
-    def test_random_values_contained(self):
-        self.assertIn("21", self.rv.data.decode('utf-8'))
-        self.assertIn("-3.5", self.rv.data.decode('utf-8'))

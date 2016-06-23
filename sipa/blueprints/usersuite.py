@@ -301,6 +301,9 @@ def hosting(action=None):
 @bp_usersuite.route("/finance-logs")
 @login_required
 def finance_logs():
-    assert hasattr(current_user, 'finance_balance')
+    assert hasattr(current_user, 'finance_logs')
 
-    return render_template('usersuite/finance_logs.html')
+    return render_template('usersuite/finance_logs.html',
+                           last_update=current_user.last_finance_update,
+                           balance=current_user.finance_balance.raw_value,
+                           logs=current_user.finance_logs)

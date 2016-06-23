@@ -10,7 +10,7 @@
 {%- endmacro %}
 
 {% block content %}
-    <h2>{{ _("Deine Transaktionen") }}</h2>
+    <h2>{{ _("Deine Transaktionen") }} <small>{{ _("Stand") }}: {{ last_update | date }}</small></h2>
 
     <table class="table table-bordered table-hover">
         <thead>
@@ -20,12 +20,18 @@
         </thead>
 
         <tbody>
-            {% for date, value in [("date1", 21), ("date2", -3.50)] %}
+            {% for date, value in logs %}
                 <tr class="{{ value_context(value) }}">
-                    <td>{{ date }}</td>
-                    <td>{{ value }}</td>
+                    <td>{{ date | date }}</td>
+                    <td>{{ value | money }}</td>
                 </tr>
             {% endfor %}
         </tbody>
+        <tfooter>
+            <tr style="font-weight: bold">
+                <td>{{ _("Summe") }}:</td>
+                <td class="text-{{ value_context(balance) }}">{{ balance | money }}</td>
+            </tr>
+        </tfooter>
     </table>
 {% endblock %}
