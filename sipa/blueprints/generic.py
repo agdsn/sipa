@@ -169,9 +169,9 @@ bp_generic.add_app_template_filter(dynamic_unit, name='unit')
 
 
 @bp_generic.app_template_filter('traffic_color')
-def traffic_color(amount):
-    return ("" if amount < current_user.daily_credit
-            else "bg-warning" if amount < 2 * current_user.daily_credit
+def traffic_color(amount, daily_credit):
+    return ("" if amount < daily_credit
+            else "bg-warning" if amount < 2 * daily_credit
             else "bg-danger")
 
 

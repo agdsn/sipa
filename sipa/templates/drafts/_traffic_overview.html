@@ -12,7 +12,9 @@
             <td>{{ get_weekday(day['day']) }}</td>
             <td>{{ day['input'] | unit }}</td>
             <td>{{ day['output'] | unit }}</td>
-            <td class="{{ day['throughput'] | traffic_color }}">{{ day['throughput'] | unit }}</td>
+            <td class="{{ day['throughput'] | traffic_color(traffic_user.daily_credit) }}">
+                {{ day['throughput'] | unit }}
+            </td>
             <td>{{ day['credit'] | unit }}</td>
         </tr>
     {% endfor %}
