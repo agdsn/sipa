@@ -329,7 +329,7 @@ class User(BaseUser):
     @active_prop
     @money
     def finance_balance(self):
-        return sum(t.effective_value for t in self._nutzer.transactions)
+        return sum(t.value for t in self._nutzer.transactions)
 
     finance_balance = finance_balance.fake_setter()
 
@@ -345,7 +345,7 @@ class User(BaseUser):
 
     @property
     def finance_logs(self):
-        return [(t.datum, t.effective_value) for t in self._nutzer.transactions]
+        return self._nutzer.transactions
 
 
 class UserDB(BaseUserDB):

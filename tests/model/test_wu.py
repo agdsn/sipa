@@ -486,7 +486,7 @@ class FinanceBalanceTestCase(OneUserWithCredit):
 
     def test_correct_number_of_transactions(self):
         recvd_transactions = db.session.query(Nutzer).one().transactions
-        self.assertEqual(set(self.transactions), set(recvd_transactions))
+        self.assertEqual(len(self.transactions), len(recvd_transactions))
 
     def test_user_has_correct_balance(self):
         expected_balance = 3.5
@@ -497,8 +497,8 @@ class FinanceBalanceTestCase(OneUserWithCredit):
         self.assertEqual(self.user.last_finance_update, expected_date)
 
     def test_user_has_correct_logs(self):
-        expected_logs = [(t.datum, t.effective_value) for t
-                         in sorted(self.transactions, key=attrgetter('datum'))]
+        expected_logs = sorted([t.unsafe_as_tuple() for t in self.transactions],
+                               key=attrgetter('datum'))
         self.assertEqual(self.user.finance_logs, expected_logs)
 
     def test_finance_logs_sorted_by_date(self):
