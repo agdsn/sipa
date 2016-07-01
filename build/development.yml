@@ -11,8 +11,7 @@ services:
     build:
       context: ..
       dockerfile: build/Dockerfile
-    environment:
-      - SIPA_UWSGI_PREFIX=/sipa
+    command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa
     volumes:
       - ../:/home/sipa/sipa
   nginx:

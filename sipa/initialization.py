@@ -123,7 +123,11 @@ def init_env_and_config(app):
             logger.debug("Udpating git repository at %s", flatpages_root)
             hasToReload = update_repo(flatpages_root)
             if hasToReload:
-                logger.debug("Reloading flatpages…")
+                logger.debug("Reloading flatpages and uwsgi", extra={'data': {
+                    'uwsgi.numproc': uwsgi.numproc,
+                    'uwsgi.opt': uwsgi.opt,
+                    'uwsgi.applications': uwsgi.applications,
+                }})
                 uwsgi.reload()
 
         logger.debug("Registering repo update to uwsgi signal")

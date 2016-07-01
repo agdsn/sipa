@@ -86,6 +86,15 @@ docker run --name sipa -p 5000:5000 -d sipa python sipa.py --exposed
 If you want to use sipa for development, adding `--debug` after `sipa.py` and
 mounting your sipa folder using `-v <path>:/home/sipa/sipa` is recommended.
 
+
+## Running with a prefix
+
+If you run sipa under something else than `/`, *make sure you specify this* during `docker run`!
+
+Instead of the default `uwsgi --ini uwsgi.ini`, you will have to use
+`uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/mountpoint`
+
+
 ## Configuration ##
 
 ### Environment variables ###
@@ -245,6 +254,7 @@ in `mappings` will not appear in the `select` field on the web page,
 so be careful to keep the list complete.
 
 The value of a `mappings` field has to correspond to a dataset in `values`.
+
 
 
 [1] https://en.wikipedia.org/wiki/Sipa
