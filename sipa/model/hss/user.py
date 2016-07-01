@@ -162,8 +162,7 @@ class User(BaseUser):
 
         return self.reconstruct_credit(history, self.credit)
 
-    @staticmethod
-    def reconstruct_credit(old_history, last_credit):
+    def reconstruct_credit(self, old_history, last_credit):
         history = old_history.copy()
         history[-1]['credit'] = last_credit
 
