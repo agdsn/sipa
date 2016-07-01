@@ -88,7 +88,7 @@ class User(BaseUser):
     @property
     def traffic_history(self):
         def rand():
-            return random() * 1024**2
+            return random() * 7 * 1024**2
         return [{
             'day': day,
             **(lambda i, o: {
