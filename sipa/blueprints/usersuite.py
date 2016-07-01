@@ -31,7 +31,7 @@ def usersuite():
     """
     last_update = current_user.last_finance_update
     finance_update_string = (
-        " " + gettext("(Stand: {})").format(last_update.strftime("%Y-%m-%d"))
+        " ({}: {})".format(gettext("Stand"), last_update.strftime("%Y-%m-%d"))
         if last_update
         else ""
     )
