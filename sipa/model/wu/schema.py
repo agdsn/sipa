@@ -28,7 +28,7 @@ DORMITORY_MAPPINGS = [
 ]
 
 
-TransactionTuple = namedtuple('Transaction', ['datum', 'value', 'description'])
+TransactionTuple = namedtuple('Transaction', ['datum', 'value'])
 
 
 class Nutzer(db.Model):
@@ -80,7 +80,6 @@ class Nutzer(db.Model):
                 Buchung.datum,
                 case([(Buchung.haben_uid.is_(None), Buchung.wert)],
                      else_=(-Buchung.wert)) / 100.0,
-                Buchung.bes,
             ).filter(
                 or_(Buchung.haben_uid == self.nutzer_id,
                     Buchung.soll_uid == self.nutzer_id)
@@ -154,4 +153,4 @@ class Buchung(db.Model):
         about the effective value as corrected in the sql
         case-statement of `Nutzer`, so DO NOT USE IT except for tests!
         """
-        return TransactionTuple(self.datum, self.wert / 100.0, self.bes)
+        return TransactionTuple(self.datum, self.wert / 100.0)

@@ -496,6 +496,11 @@ class FinanceBalanceTestCase(OneUserWithCredit):
         expected_date = max(t.datum for t in self.transactions)
         self.assertEqual(self.user.last_finance_update, expected_date)
 
+    def test_finance_logs_is_duple(self):
+        for log in self.user.finance_logs:
+            with self.subTest(log=log):
+                self.assertEqual(len(log), 2)
+
     def test_user_has_correct_logs(self):
         expected_logs = sorted([t.unsafe_as_tuple() for t in self.transactions],
                                key=attrgetter('datum'))
