@@ -31,7 +31,7 @@ def usersuite():
     """
     last_update = current_user.last_finance_update
     finance_update_string = (
-        " " + gettext("(Stand: {})").format(last_update.strftime("%Y-%m-%d"))
+        " ({}: {})".format(gettext("Stand"), last_update.strftime("%Y-%m-%d"))
         if last_update
         else ""
     )
@@ -122,6 +122,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mac': 'change_mac',
             'userdb_status': 'hosting',
             'mail': 'change_mail',
+            'finance_balance': 'finance_logs',
         }
 
         assert attribute in attribute_mappings.keys(), \
@@ -295,3 +296,14 @@ def hosting(action=None):
 
     return render_template('usersuite/hosting.html',
                            form=form, user_has_db=user_has_db, action=action)
+
+
+@bp_usersuite.route("/finance-logs")
+@login_required
+def finance_logs():
+    assert hasattr(current_user, 'finance_logs')
+
+    return render_template('usersuite/finance_logs.html',
+                           last_update=current_user.last_finance_update,
+                           balance=current_user.finance_balance.raw_value,
+                           logs=current_user.finance_logs)

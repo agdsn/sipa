@@ -1,4 +1,5 @@
 from datetime import datetime
+from operator import itemgetter
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import String, Integer, BigInteger, Date, Boolean, Numeric, \
@@ -27,6 +28,18 @@ class Account(db.Model):
     traffic_log = relationship('TrafficLog')
 
     properties = relationship('AccountProperty', uselist=False)
+
+    fees = relationship('AccountFeeRelation')
+    transactions = relationship('AccountStatementLog')
+
+    @property
+    def combined_transactions(self):
+        return sorted([
+            *((-f.fee_object.amount, f.fee_object.description, f.fee_object.timestamp)
+              for f in self.fees),
+            *((t.amount, t.purpose, t.timestamp)
+              for t in self.transactions),
+        ], key=itemgetter(2))
 
 
 class AccountProperty(db.Model):
@@ -92,6 +105,27 @@ class AccountStatementLog(db.Model):
 
     id = Column(Integer, primary_key=True, nullable=False)
     timestamp = Column(TIMESTAMP, nullable=False)
-    # amount = Column(Numeric(5, 2), nullable=False)
-    # purpose = Column(String(255), nullable=False)
-    # account = Column(String(16))
+    amount = Column(Numeric(5, 2), nullable=False)
+    purpose = Column(String(255), nullable=False)
+    account = Column(String(16), ForeignKey('account.account'))
+
+
+class AccountFeeRelation(db.Model):
+    __tablename__ = 'account_fee_relation'
+    __bind_key__ = 'hss'
+
+    account = Column(String(16), ForeignKey('account.account'), nullable=False)
+    fee = Column(Integer, ForeignKey('fee_info.id'), nullable=False)
+    fee_object = relationship('FeeInfo', uselist=False)
+
+    __mapper_args__ = {'primary_key': (account, fee)}
+
+
+class FeeInfo(db.Model):
+    __tablename__ = 'fee_info'
+    __bind_key__ = 'hss'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    amount = Column(Numeric(5, 2), nullable=False)
+    description = Column(String(255), nullable=False)
+    timestamp = Column(TIMESTAMP, nullable=False)

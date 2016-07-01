@@ -168,6 +168,16 @@ class User(BaseUser):
     def finance_balance(self):
         return random() * 10 - 5
 
+    finance_balance = finance_balance.fake_setter()
+
     @property
     def last_finance_update(self):
-        return datetime.now()
+        return max(l[0] for l in self.finance_logs)
+
+    @property
+    def finance_logs(self, ):
+        return [
+            (datetime(2016, 4, 1), 21),
+            (datetime(2016, 4, 30), -3.5),
+            (datetime(2016, 5, 30), -3.5),
+        ]

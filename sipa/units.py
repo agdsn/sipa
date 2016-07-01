@@ -55,7 +55,12 @@ def money(func):
         amount = func(*args, **kwargs)
         style = 'success' if amount >= 0 else 'danger'
 
-        return {'value': "{:+.2f} €".format(amount),
+        return {'value': format_money(amount),
+                'raw_value': amount,
                 'style': style}
 
     return _wrapped_func
+
+
+def format_money(amount):
+    return "{:+.2f} €".format(amount)

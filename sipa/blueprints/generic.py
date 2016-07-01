@@ -4,7 +4,7 @@ import logging
 from flask import render_template, request, redirect, \
     url_for, flash, session, abort, current_app, jsonify
 from flask.blueprints import Blueprint
-from flask_babel import gettext
+from flask_babel import gettext, format_date
 from flask_login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import DatabaseError
@@ -13,7 +13,7 @@ from ldap3 import LDAPCommunicationError
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
     OfficialContactForm
 from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
-from sipa.units import dynamic_unit
+from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
 from sipa.utils.exceptions import UserNotFound, InvalidCredentials
 from sipa.utils.mail_utils import send_mail
@@ -176,6 +176,13 @@ def to_gigabytes(number):
     `unit` function.
     """
     return number / 1024 ** 2
+
+
+@bp_generic.app_template_filter('date')
+def jinja_format_date(date):
+    return format_date(date)
+
+bp_generic.add_app_template_filter(format_money, name='money')
 
 
 @bp_generic.route("/usertraffic")

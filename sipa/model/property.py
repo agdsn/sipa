@@ -85,7 +85,7 @@ class UnsupportedProperty(PropertyBase):
 class ActiveProperty(PropertyBase):
     supported = True
 
-    def __init__(self, name, value=None, capabilities=NO_CAPABILITIES,
+    def __init__(self, name, value=None, raw_value=None, capabilities=NO_CAPABILITIES,
                  style=None, empty=False):
         # Enforce bootstrap css classes: getbootstrap.com/css/#helper-classes
         assert style in {None, 'muted', 'primary', 'success',
@@ -95,7 +95,7 @@ class ActiveProperty(PropertyBase):
         super().__init__(
             name=name,
             value=(value if value else gettext("Nicht angegeben")),
-            raw_value=value,
+            raw_value=raw_value if raw_value is not None else value,
             capabilities=capabilities,
             style=(style if style  # customly given style is most important
                    else 'muted' if empty or not value
@@ -157,11 +157,13 @@ class active_prop(property):
                 # which would make no sense and likely is a mistake.
                 name = fget.__name__
                 value = result
+                raw_value = value
                 style = None
                 empty = None
                 tmp_readonly = False
             else:
                 name = result.get('name', fget.__name__)
+                raw_value = result.get('raw_value', value)
                 style = result.get('style', None)
                 empty = result.get('empty', None)
                 tmp_readonly = result.get('tmp_readonly', False)
@@ -169,6 +171,7 @@ class active_prop(property):
             return ActiveProperty(
                 name=name,
                 value=value,
+                raw_value=raw_value,
                 capabilities=Capabilities(
                     edit=(fset is not None or fake_setter),
                     delete=(fdel is not None),

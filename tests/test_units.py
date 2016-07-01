@@ -2,7 +2,7 @@ from functools import partial
 from unittest import TestCase
 
 from sipa.units import TRAFFIC_FORMAT_STRING, UNIT_LIST, dynamic_unit, \
-    format_as_traffic, max_divisions, reduce_by_base, money
+    format_as_traffic, max_divisions, reduce_by_base, money, format_money
 
 
 class TrafficFormatStringTestCase(TestCase):
@@ -72,28 +72,51 @@ class MoneyDecoratorTestCase(TestCase):
     def prepare_dict(self, d):
         value = d.pop('value')
         style = d.pop('style')
+        raw_value = d.pop('raw_value')
         self.assertEqual(d, {})
-        return value, style
+        return value, style, raw_value
 
     def test_positive_float(self):
-        value, style = self.prepare_dict(self.dummy_func(3.5))
+        value, style, raw_value = self.prepare_dict(self.dummy_func(3.5))
 
+        self.assertEqual(raw_value, +3.5)
         self.assertTrue(value.startswith('+3.50'))
         self.assertTrue(value.endswith("€"))
 
         self.assertEqual(style, self.STYLE_POS)
 
     def test_negative_float(self):
-        value, style = self.prepare_dict(self.dummy_func(-3.5))
+        value, style, raw_value = self.prepare_dict(self.dummy_func(-3.5))
+
+        self.assertEqual(raw_value, -3.5)
         self.assertTrue(value.startswith('-3.50'))
         self.assertTrue(value.endswith("€"))
 
         self.assertEqual(style, self.STYLE_NEG)
 
     def test_zero_is_positive(self):
-        value, style = self.prepare_dict(self.dummy_func(0))
+        value, style, raw_value = self.prepare_dict(self.dummy_func(0))
+
+        self.assertEqual(raw_value, 0)
         self.assertTrue(value.startswith('+0.00'))
         self.assertTrue(style, self.STYLE_POS)
 
     def test_whole_number_has_cent_digits(self):
         self.assertIn("3.00", self.dummy_func(3)['value'])
+
+
+class MoneyTestCase(TestCase):
+    def test_positive_float(self):
+        value = format_money(+3.5)
+
+        self.assertTrue(value.startswith('+3.50'))
+        self.assertTrue(value.endswith("€"))
+
+    def test_negative_float(self):
+        value = format_money(-3.5)
+        self.assertTrue(value.startswith('-3.50'))
+        self.assertTrue(value.endswith("€"))
+
+    def test_zero_is_positive(self):
+        value = format_money(0)
+        self.assertTrue(value.startswith('+0.00'))

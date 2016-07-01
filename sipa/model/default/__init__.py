@@ -181,7 +181,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def has_connection(self):
         pass
 
-    @property
+    @active_prop
     @abstractmethod
     def finance_balance(self):
         pass

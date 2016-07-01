@@ -329,7 +329,9 @@ class User(BaseUser):
     @active_prop
     @money
     def finance_balance(self):
-        return sum(t.effective_value for t in self._nutzer.transactions)
+        return sum(t.value for t in self._nutzer.transactions)
+
+    finance_balance = finance_balance.fake_setter()
 
     @property
     def last_finance_update(self):
@@ -340,6 +342,10 @@ class User(BaseUser):
         import, nothing has actually been transacted.
         """
         return db.session.query(func.max(Buchung.datum)).one()[0]
+
+    @property
+    def finance_logs(self):
+        return self._nutzer.transactions
 
 
 class UserDB(BaseUserDB):

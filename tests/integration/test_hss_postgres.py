@@ -232,7 +232,7 @@ class UsersActiveTestCase(
 
 class UserFinanceTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
     def test_finance_balance_correct(self):
-        self.assertEqual(self.user.finance_balance, "+3.50 €")
+        self.assertEqual(self.user.finance_balance, 3.5)
 
     def test_last_update_date_exists(self):
         expected_date = max(l.timestamp for l in self.fixtures_pg[AccountStatementLog])
@@ -242,4 +242,24 @@ class UserFinanceTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
 class UserNoFinanceTestCase(OneAccountTestBase):
     def test_finance_balance_zero(self):
         """Test that an account with nothing set has a zero finance balance"""
-        self.assertEqual(self.user.finance_balance, "+0.00 €")
+        self.assertEqual(self.user.finance_balance, 0)
+
+
+class UserFinanceLogTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
+    def setUp(self):
+        super().setUp()
+        self.transactions = self.account.combined_transactions
+        self.expected_length = len(self.account.transactions) + len(self.account.fees)
+
+    def test_user_transaction_length_correct(self):
+        self.assertEqual(len(self.transactions), self.expected_length)
+
+    def test_user_transaction_sorted(self):
+        last_log = None
+        for log in self.transactions:
+            if last_log is not None:
+                self.assertLessEqual(last_log[2], log[2])
+            last_log = log
+
+    def test_user_logs_correct_length(self):
+        self.assertEqual(len(self.user.finance_logs), self.expected_length)

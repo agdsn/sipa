@@ -1,7 +1,9 @@
 # -*- coding: utf-8; -*-
+from collections import namedtuple
+
 from sqlalchemy import (Column, Index, Integer, String,
-                        text, Text, ForeignKey, DECIMAL, BigInteger, Date)
-from sqlalchemy.orm import relationship, column_property
+                        text, Text, ForeignKey, DECIMAL, BigInteger, Date, case, or_)
+from sqlalchemy.orm import relationship, column_property, object_session
 
 from sipa.model.sqlalchemy import db
 
@@ -24,6 +26,9 @@ DORMITORY_MAPPINGS = [
     'Borsbergstraße 34',
     'Zeunerstraße 1f',
 ]
+
+
+TransactionTuple = namedtuple('Transaction', ['datum', 'value', 'description'])
 
 
 class Nutzer(db.Model):
@@ -57,15 +62,30 @@ class Nutzer(db.Model):
                            self.wheim_id)
             return ""
 
-    transactions = relationship(
-        'Buchung',
-        primaryjoin=("or_("
-                     "Nutzer.nutzer_id==Buchung.haben_uid,"
-                     "Nutzer.nutzer_id==Buchung.soll_uid"
-                     ")"),
-        foreign_keys="[Buchung.soll_uid, Buchung.haben_uid]",
-        backref='nutzer',
-    )
+    @property
+    def transactions(self):
+        """The transactions of the Nutzer.
+
+        This performs a query against `Buchung`, correcting the value
+        by negation depending on where in `haben_uid` or `soll_uid`
+        the `nutzer_id` appears.
+
+        :return: The triple `(date, value, description)` with the
+        value being euros.
+        """
+        session = object_session(self)
+        return [
+            TransactionTuple(*result) for result in
+            session.query(
+                Buchung.datum,
+                case([(Buchung.haben_uid.is_(None), Buchung.wert)],
+                     else_=(-Buchung.wert)) / 100.0,
+                Buchung.bes,
+            ).filter(
+                or_(Buchung.haben_uid == self.nutzer_id,
+                    Buchung.soll_uid == self.nutzer_id)
+            ).order_by(Buchung.datum.asc()).all()
+        ]
 
 
 class Computer(db.Model):
@@ -127,29 +147,11 @@ class Buchung(db.Model):
             )
         )
 
-    @property
-    def effective_value(self):
-        """Return the sign-corrected value in Euros.
+    def unsafe_as_tuple(self):
+        """Return self as a TransactionTuple
 
-        Switch the sign if `self.nutzer.uid` is the haben_uid, not the
-        soll_uid.
-
-        This uses the `nutzer` backref imposed by
-        `Nutzer.transactions`, and raises a ValueError if the backref
-        is invalid.
+        This might be useful for comparisons.  This code doesn't care
+        about the effective value as corrected in the sql
+        case-statement of `Nutzer`, so DO NOT USE IT except for tests!
         """
-
-        # Using the explicit (x=a and x!=b) form here to let the (x=a
-        # and x=b) case lead to a ValueError
-        if (self.soll_uid == self.nutzer.nutzer_id and
-                self.haben_uid != self.nutzer.nutzer_id):
-            return self.wert / 100
-        elif self.haben_uid == self.nutzer.nutzer_id:
-            return - self.wert / 100
-        else:
-            # this shouldn't happen, since `Buchung`en are only used
-            # via the relationship in `Nutzer`.  The used join forbids
-            # (uid != soll_uid AND uid != haben_uid).2
-            raise ValueError("Uid of backref `nutzer` (%s) "
-                             "is neither soll_uid (%s) nor haben_uid (%s)",
-                             self.nutzer.nutzer_id, self.soll_uid, self.haben_uid)
+        return TransactionTuple(self.datum, self.wert / 100.0, self.bes)
