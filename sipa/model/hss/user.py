@@ -276,6 +276,8 @@ class User(BaseUser):
     def finance_balance(self):
         return self._pg_account.finance_balance
 
+    finance_balance = finance_balance.fake_setter()
+
     @property
     def last_finance_update(self):
         return db.session.query(func.max(AccountStatementLog.timestamp)).one()[0]
