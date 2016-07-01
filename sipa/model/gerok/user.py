@@ -154,6 +154,9 @@ class User(BaseUser):
         creditData = do_api_call(str(self._id) + '/credit')
         return creditData[0]['credit'] / 1024 if creditData else 0
 
+    max_credit = 63 * 1024 * 1024
+    daily_credit = 3 * 1024 * 1024
+
     @active_prop
     def id(self):
         return self._id

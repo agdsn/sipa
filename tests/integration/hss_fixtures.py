@@ -3,7 +3,7 @@ from datetime import date, datetime
 
 
 from sipa.model.hss.schema import Account, AccountProperty, Access, IP, Mac, TrafficLog, \
-    AccountStatementLog, FeeInfo, AccountFeeRelation
+    AccountStatementLog, FeeInfo, AccountFeeRelation, TrafficQuota
 
 
 class HSSOneAccountFixture:
@@ -44,6 +44,20 @@ class HSSOneAccountFixture:
                 Mac(id=3, mac="aa:bb:cc:ff:ee:df", account='sipatinator'),
             ]),
         ])
+
+
+class OneCreditAccountFixture(HSSOneAccountFixture):
+    @property
+    def fixtures_pg(self):
+        fixtures = OrderedDict([
+            *super().fixtures_pg.items(),
+            (TrafficQuota, [
+                TrafficQuota(id=1, daily_credit=2*1024**3, max_credit=21*1024**3,
+                             description="Testquota differing from the default one")
+            ]),
+        ])
+        fixtures[Account][0].traffic_quota_id = 1
+        return fixtures
 
 
 class HSSOneTrafficAccountFixture(HSSOneAccountFixture):

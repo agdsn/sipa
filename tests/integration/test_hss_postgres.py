@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import logging
 from datetime import datetime, timedelta
 from operator import attrgetter
 
@@ -7,10 +8,11 @@ from flask_login import AnonymousUserMixin
 
 from .hss_fixtures import HSSOneAccountFixture, HSSOneTrafficAccountFixture, \
     HSSOneTrafficAccountDaysMissingFixture, HSSAccountsWithPropertiesFixture, \
-    HSSOneFinanceAccountFixture
+    HSSOneFinanceAccountFixture, OneCreditAccountFixture
 from tests.prepare import AppInitialized
 from sipa.model.sqlalchemy import db
-from sipa.model.hss.schema import Account, IP, Mac, TrafficLog, AccountStatementLog
+from sipa.model.hss.schema import Account, IP, Mac, TrafficLog, AccountStatementLog, \
+    TrafficQuota
 from sipa.model.hss.user import User
 
 
@@ -92,6 +94,27 @@ class PgUserDataTestCase(OneAccountTestBase):
         user = User.get(acc.account)
         expected_mail = "{}@wh12.tu-dresden.de".format(acc.account)
         self.assertEqual(user.mail, expected_mail)
+
+    def test_uninitialized_max_credit_throws_warning(self):
+        logger = logging.getLogger('sipa.model.hss.user')
+        with self.assertLogs(logger, level='WARNING') as cm:
+            self.assertEqual(self.user.max_credit, 63 * 1024**2)
+            self.assertEqual(self.user.daily_credit, 3 * 1024**2)
+
+            self.assertEqual(len(cm.output), 2)
+            last_log = cm.output.pop()
+            self.assertEqual(cm.output.pop(), last_log)
+            self.assertIn("No traffic quota object found", last_log)
+
+
+class CreditMaximumTestCase(OneCreditAccountFixture, OneAccountTestBase):
+    def test_correct_max_credit_passed(self):
+        self.assertEqual(self.user.max_credit * 1024,
+                         self.fixtures_pg[TrafficQuota][0].max_credit)
+
+    def test_correct_daily_credit_passed(self):
+        self.assertEqual(self.user.daily_credit * 1024,
+                         self.fixtures_pg[TrafficQuota][0].daily_credit)
 
 
 class UserFromIpTestCase(OneAccountTestBase):
