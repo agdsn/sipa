@@ -5,7 +5,7 @@ MAINTAINER Lukas Juhrich der Große <lukasjuhrich@wh2.tu-dresden.de>
 ENV DEBIAN_FRONTEND=noninteractive \
 	LC_ALL=C
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
 	libldap2-dev \
 	libsasl2-dev \
 	libmysqlclient-dev \
