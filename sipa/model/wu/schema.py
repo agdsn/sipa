@@ -1,11 +1,10 @@
 # -*- coding: utf-8; -*-
-from collections import namedtuple
-
 from sqlalchemy import (Column, Index, Integer, String,
                         text, Text, ForeignKey, DECIMAL, BigInteger, Date, case, or_)
 from sqlalchemy.orm import relationship, column_property, object_session
 
 from sipa.model.sqlalchemy import db
+from sipa.model.misc import TransactionTuple
 
 import logging
 logger = logging.getLogger(__name__)
@@ -26,9 +25,6 @@ DORMITORY_MAPPINGS = [
     'Borsbergstraße 34',
     'Zeunerstraße 1f',
 ]
-
-
-TransactionTuple = namedtuple('Transaction', ['datum', 'value'])
 
 
 class Nutzer(db.Model):

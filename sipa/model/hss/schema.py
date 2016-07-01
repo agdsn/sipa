@@ -9,6 +9,7 @@ from sqlalchemy.dialects.postgresql import INET, MACADDR
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from sipa.model.sqlalchemy import db
+from sipa.model.misc import TransactionTuple
 
 
 class Account(db.Model):
@@ -37,9 +38,9 @@ class Account(db.Model):
     @property
     def combined_transactions(self):
         return sorted([
-            *((-f.fee_object.amount, f.fee_object.timestamp)
+            *(TransactionTuple(value=-f.fee_object.amount, datum=f.fee_object.timestamp)
               for f in self.fees),
-            *((t.amount, t.timestamp)
+            *(TransactionTuple(value=t.amount, datum=t.timestamp)
               for t in self.transactions),
         ], key=itemgetter(1))
 
