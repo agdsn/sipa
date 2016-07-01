@@ -103,9 +103,14 @@ class User(BaseUser):
     @property
     def _pg_trafficquota(self):
         """Return the corresponding ORM TrafficQuota for an Account"""
-        return db.session.query(TrafficQuota).filter_by(
-            id=self._pg_account.traffic_quota
-        ).one()
+        try:
+            return db.session.query(TrafficQuota).filter_by(
+                id=self._pg_account.traffic_quota_id
+            ).one()
+        except NoResultFound:
+            logger.warning("No traffic quota object found for account %s",
+                           self._pg_account.account)
+            raise
 
     def change_password(self, old, new):
         """Change the user's password from old to new.
@@ -189,12 +194,18 @@ class User(BaseUser):
     @property
     def max_credit(self):
         """Return the current credit in KiB"""
-        return self._pg_trafficquota.max_credit / 1024
+        try:
+            return self._pg_trafficquota.max_credit / 1024
+        except NoResultFound:
+            return 63 * 1024 ** 2
 
     @property
     def daily_credit(self):
         """Return the current credit in KiB"""
-        return self._pg_trafficquota.daily_credit / 1024
+        try:
+            return self._pg_trafficquota.daily_credit / 1024
+        except NoResultFound:
+            return 3 * 1024 ** 2
 
     @active_prop
     def ips(self):

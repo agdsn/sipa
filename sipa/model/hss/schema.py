@@ -26,6 +26,8 @@ class Account(db.Model):
     ips = relationship('IP')
     macs = relationship('Mac')
     traffic_log = relationship('TrafficLog')
+    traffic_quota_id = Column('traffic_quota', Integer, ForeignKey('traffic_quota.id'))
+    # traffic_quota is available using a backref
 
     properties = relationship('AccountProperty', uselist=False)
 
@@ -93,8 +95,8 @@ class TrafficLog(db.Model):
     bytes_out = Column(BigInteger, nullable=False, default=0)
 
     def __repr__(self):
-        return "<{type} account='{obj.account}' date='{obj.date}'>".format(
-            type=type(self),
+        return "<{cls} account='{obj.account}' date='{obj.date}'>".format(
+            cls=type(self).__name__,
             obj=self,
         )
 
@@ -139,3 +141,11 @@ class TrafficQuota(db.Model):
     daily_credit = Column(BigInteger, nullable=False, default=0)
     max_credit = Column(BigInteger, nullable=False, default=0)
     description = Column(String(255), nullable=False)
+    accounts = relationship('Account', backref='traffic_quota')
+
+    def __repr__(self):
+        return ("<{cls} #{obj.id} daily={obj.daily_credit} max={obj.max_credit} "
+                "'{obj.description}'>".format(
+                    cls=type(self).__name__,
+                    obj=self,
+                ))
