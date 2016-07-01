@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-07-01 03:03+0200\n"
+"POT-Creation-Date: 2016-07-01 11:16+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -215,30 +215,30 @@ msgstr ""
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:202
+#: sipa/blueprints/generic.py:209
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:211
+#: sipa/blueprints/generic.py:218
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:214
+#: sipa/blueprints/generic.py:221
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:261 sipa/blueprints/generic.py:288
+#: sipa/blueprints/generic.py:268 sipa/blueprints/generic.py:295
 #: sipa/blueprints/usersuite.py:100
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:263 sipa/blueprints/generic.py:290
+#: sipa/blueprints/generic.py:270 sipa/blueprints/generic.py:297
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:269
+#: sipa/blueprints/generic.py:276
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -263,7 +263,7 @@ msgid "Accountname"
 msgstr ""
 
 #: sipa/blueprints/usersuite.py:42
-msgid "Accountstatus"
+msgid "Mitgliedsschaftsstatus"
 msgstr ""
 
 #: sipa/blueprints/usersuite.py:43
@@ -365,11 +365,11 @@ msgstr ""
 msgid "Nicht verfÃ¼gbar"
 msgstr ""
 
-#: sipa/model/hss/user.py:219 tests/integration/test_hss_postgres.py:221
+#: sipa/model/hss/user.py:247 tests/integration/test_hss_postgres.py:244
 msgid "Aktiv"
 msgstr ""
 
-#: sipa/model/hss/user.py:220 tests/integration/test_hss_postgres.py:230
+#: sipa/model/hss/user.py:248 tests/integration/test_hss_postgres.py:253
 msgid "Passiv"
 msgstr ""
 
@@ -393,19 +393,19 @@ msgstr ""
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/user.py:284
+#: sipa/model/wu/user.py:287
 msgid "Unbekannt"
 msgstr ""
 
-#: sipa/model/wu/user.py:314
+#: sipa/model/wu/user.py:317
 msgid "Datenbank nicht erreichbar"
 msgstr ""
 
-#: sipa/model/wu/user.py:318
+#: sipa/model/wu/user.py:321
 msgid "Aktiviert"
 msgstr ""
 
-#: sipa/model/wu/user.py:320
+#: sipa/model/wu/user.py:323
 msgid "Nicht aktiviert"
 msgstr ""
 
@@ -499,19 +499,23 @@ msgstr ""
 msgid "Kontaktformular"
 msgstr ""
 
-#: sipa/templates/base.html:300
+#: sipa/templates/base.html:296
+msgid "Kontaktformular für Geschäftspartner"
+msgstr ""
+
+#: sipa/templates/base.html:309
 msgid "Klingel"
 msgstr ""
 
-#: sipa/templates/base.html:312
+#: sipa/templates/base.html:321
 msgid "Keller"
 msgstr ""
 
-#: sipa/templates/base.html:324
+#: sipa/templates/base.html:333
 msgid "7. Etage"
 msgstr ""
 
-#: sipa/templates/base.html:372
+#: sipa/templates/base.html:381
 msgid "Informationen zur Version"
 msgstr ""
 
@@ -1444,5 +1448,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Wundtstraße & Zellescher Weg"
+#~ msgstr ""
+
+#~ msgid "Accountstatus"
 #~ msgstr ""
 

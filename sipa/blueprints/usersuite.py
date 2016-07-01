@@ -39,7 +39,7 @@ def usersuite():
         ('id', gettext("Nutzer-ID")),
         ('realname', gettext("Voller Name")),
         ('login', gettext("Accountname")),
-        ('status', gettext("Accountstatus")),
+        ('status', gettext("Mitgliedsschaftsstatus")),
         ('address', gettext("Aktuelles Zimmer")),
         ('ips', gettext("Aktuelle IP-Adresse")),
         ('mac', gettext("Aktuelle MAC-Adresse")),

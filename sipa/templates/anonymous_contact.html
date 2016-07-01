@@ -3,11 +3,6 @@
 {% set page_title = _("Kontakt") %}
 
 {% block content %}
-        <div class="alert alert-info">
-            <strong>{{ _("Partner") }}</strong>
-            {{ _("der AG DSN wenden sich bitte bitte an") }}
-            <a href="{{ url_for('generic.contact_official') }}">{{ _("dieses Kontaktformular") }}</a>!
-        </div>
     {% call forms.render(form=form, form_id='anonymous_contact_form', reset_button=False, cancel_to=url_for('generic.index')) %}
         <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
             <strong>{{ _("Hinweis:") }}</strong>
