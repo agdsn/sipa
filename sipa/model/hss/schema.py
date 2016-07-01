@@ -37,11 +37,11 @@ class Account(db.Model):
     @property
     def combined_transactions(self):
         return sorted([
-            *((-f.fee_object.amount, f.fee_object.description, f.fee_object.timestamp)
+            *((-f.fee_object.amount, f.fee_object.timestamp)
               for f in self.fees),
-            *((t.amount, t.purpose, t.timestamp)
+            *((t.amount, t.timestamp)
               for t in self.transactions),
-        ], key=itemgetter(2))
+        ], key=itemgetter(1))
 
 
 class AccountProperty(db.Model):

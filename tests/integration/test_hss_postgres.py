@@ -281,8 +281,13 @@ class UserFinanceLogTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
         last_log = None
         for log in self.transactions:
             if last_log is not None:
-                self.assertLessEqual(last_log[2], log[2])
+                self.assertLessEqual(last_log[1], log[1])
             last_log = log
 
     def test_user_logs_correct_length(self):
         self.assertEqual(len(self.user.finance_logs), self.expected_length)
+
+    def test_user_logs_two_items(self):
+        for log in self.user.finance_logs:
+            with self.subTest(log=log):
+                self.assertEqual(len(log), 2)
