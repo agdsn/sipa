@@ -1,5 +1,5 @@
 from datetime import datetime
-from operator import itemgetter
+from operator import attrgetter
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import String, Integer, BigInteger, Date, Boolean, Numeric, \
@@ -42,7 +42,7 @@ class Account(db.Model):
               for f in self.fees),
             *(TransactionTuple(value=t.amount, datum=t.timestamp)
               for t in self.transactions),
-        ], key=itemgetter(1))
+        ], key=attrgetter('datum'))
 
 
 class AccountProperty(db.Model):
