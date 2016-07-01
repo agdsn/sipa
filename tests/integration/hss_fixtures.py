@@ -94,7 +94,8 @@ class HSSOneFinanceAccountFixture(HSSOneAccountFixture):
             (AccountStatementLog, [
                 AccountStatementLog(id=1, amount=21.00,
                                     purpose='sipatinator will netz',
-                                    timestamp=datetime(2016, 4, 2)),
+                                    timestamp=datetime(2016, 4, 2),
+                                    account='sipatinator'),
             ]),
             (FeeInfo, [
                 FeeInfo(id=1, amount=3.50, description='Fee 2016-04',

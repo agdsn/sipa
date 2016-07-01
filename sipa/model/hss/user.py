@@ -251,3 +251,7 @@ class User(BaseUser):
     @property
     def last_finance_update(self):
         return db.session.query(func.max(AccountStatementLog.timestamp)).one()[0]
+
+    @property
+    def finance_logs(self):
+        return self._pg_account.combined_transactions

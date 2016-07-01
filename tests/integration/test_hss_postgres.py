@@ -249,10 +249,10 @@ class UserFinanceLogTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
     def setUp(self):
         super().setUp()
         self.transactions = self.account.combined_transactions
+        self.expected_length = len(self.account.transactions) + len(self.account.fees)
 
     def test_user_transaction_length_correct(self):
-        expected_length = len(self.account.transactions) + len(self.account.fees)
-        self.assertEqual(len(self.transactions), expected_length)
+        self.assertEqual(len(self.transactions), self.expected_length)
 
     def test_user_transaction_sorted(self):
         last_log = None
@@ -260,3 +260,6 @@ class UserFinanceLogTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
             if last_log is not None:
                 self.assertLessEqual(last_log[2], log[2])
             last_log = log
+
+    def test_user_logs_correct_length(self):
+        self.assertEqual(len(self.user.finance_logs), self.expected_length)
