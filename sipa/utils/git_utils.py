@@ -27,9 +27,7 @@ def init_repo(repo_dir, repo_url):
     try:
         origin.fetch()
     except GitCommandError:
-        logger.error("Git fetch failed.", exc_info=True, extra={'data': {
-            'repo_dir': repo_dir
-        }})
+        logger.error("Git fetch failed", extra={'data': {'repo_dir': repo_dir}})
         return
 
     try:
@@ -55,9 +53,7 @@ def update_repo(repo_dir):
         else:
             return False
     except GitCommandError:
-        logger.error("Git fetch failed.", exc_info=True, extra={'data': {
-            'repo_dir': repo_dir
-        }})
+        logger.error("Git fetch failed", extra={'data': {'repo_dir': repo_dir}})
     else:
         logger.info("Fetched git repository", extra={'data': {
             'repo_dir': repo_dir
