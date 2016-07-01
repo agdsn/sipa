@@ -178,7 +178,7 @@ class User(BaseUser):
                 # Throughput: gets *subtracted* after the day → `+` for before
                 # Credit: gets *added* after the day → `-` for before
                 previous_entry['credit'] = (
-                    entry['credit'] + previous_entry['throughput'] - 3 * 1024**2
+                    entry['credit'] + previous_entry['throughput'] - self.daily_credit
                     # 3 → 3 KiB
                     # 3 * 1024 → 3 MiB
                     # 3 * 1024**2 → 3 GiB
