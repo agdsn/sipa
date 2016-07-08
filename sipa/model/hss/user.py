@@ -164,7 +164,7 @@ class User(BaseUser):
 
     def reconstruct_credit(self, old_history, last_credit):
         history = old_history.copy()
-        history[-1]['credit'] = last_credit
+        history[-1]['credit'] = last_credit - history[-1]['throughput']
 
         for i, entry in enumerate(reversed(history)):
             try:
