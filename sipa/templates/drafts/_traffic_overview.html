@@ -2,10 +2,10 @@
 <table class="table table-striped table-bordered col-md-8">
     <thead><tr>
         <th>{{ _('Wochentag') }}</th>
-        <th>Download</th>
-        <th>Upload</th>
-        <th>Gesamt</th>
-        <th>Credit</th>
+        <th>{{ _("Download") }}</th>
+        <th>{{ _("Upload") }}</th>
+        <th>{{ _("Gesamt") }}</th>
+        <th>{{ _("Credit") }}</th>
     </tr></thead>
     {% for day in traffic_user.traffic_history %}
         <tr>
