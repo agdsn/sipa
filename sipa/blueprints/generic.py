@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from flask import render_template, request, redirect, \
+from flask import current_app, render_template, request, redirect, \
     url_for, flash, session, abort, current_app, jsonify
 from flask.blueprints import Blueprint
 from flask_babel import gettext, format_date
@@ -18,6 +18,8 @@ from sipa.utils import get_user_name, redirect_url
 from sipa.utils.exceptions import UserNotFound, InvalidCredentials
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
+
+from flask_login import COOKIE_NAME
 
 logger = logging.getLogger(__name__)
 
@@ -100,10 +102,11 @@ def exceptionhandler_ldap(ex):
 
 @bp_generic.route("/language/<string:lang>")
 def set_language(lang='de'):
-    """Set the session language via URL
+    """Set the language cookie via URL
     """
-    session['locale'] = lang
-    return redirect(redirect_url())
+    resp = redirect(redirect_url())
+    resp.set_cookie("lang", lang)
+    return resp
 
 
 @bp_generic.route('/index.php')
@@ -162,7 +165,18 @@ def logout():
                 extra={'tags': {'user': current_user.uid}})
     logout_user()
     flash(gettext("Abmeldung erfolgreich!"), 'success')
-    return redirect(url_for('.index'))
+
+    resp = redirect(url_for('.index'))
+
+    cookie_name = current_app.config.get('REMEMBER_COOKIE_NAME', COOKIE_NAME)
+    if cookie_name in request.cookies:
+        resp.set_cookie(cookie_name, "", 0)
+
+    current_app.login_manager._clear_cookie(resp)
+    resp.set_cookie("session", "")
+    session.clear()
+
+    return resp
 
 
 bp_generic.add_app_template_filter(dynamic_unit, name='unit')

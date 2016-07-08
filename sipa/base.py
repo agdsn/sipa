@@ -41,11 +41,11 @@ def babel_selector():
 
     if 'locale' in request.args and Locale(
             request.args['locale']) in possible_locales():
-        session['locale'] = request.args['locale']
-    elif not session.get('locale'):
+        return request.args['locale']
+    elif not request.cookies.get("lang", "en"):
         langs = []
         for lang in possible_locales():
             langs.append(lang.language)
-        session['locale'] = request.accept_languages.best_match(langs)
+            return request.accept_languages.best_match(langs)
 
-    return session.get('locale')
+    return request.cookies.get("lang", "en")

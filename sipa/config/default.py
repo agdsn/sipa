@@ -70,3 +70,5 @@ BUSSTOPS = [
     "Strehlener Platz",
     "Weberplatz"
 ]
+
+SESSION_REFRESH_EACH_REQUEST = False
