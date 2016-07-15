@@ -43,10 +43,9 @@ def babel_selector():
             request.args['locale']) in possible_locales():
         return request.args['locale']
     elif request.cookies.get("lang") is None:
-        langs = []
-        for lang in possible_locales():
-            langs.append(lang.language)
-            return request.accept_languages.best_match(langs)
+        return request.accept_languages.best_match(
+            locale.language for locale in possible_locales()
+        )
 
     if Locale(request.cookies.get("lang")) in possible_locales():
         return request.cookies.get("lang")
