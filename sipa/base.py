@@ -48,4 +48,7 @@ def babel_selector():
             langs.append(lang.language)
             return request.accept_languages.best_match(langs)
 
-    return request.cookies.get("lang")
+    if Locale(request.cookies.get("lang")) in possible_locales():
+        return request.cookies.get("lang")
+    else:
+        return None
