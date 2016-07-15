@@ -48,4 +48,4 @@ def babel_selector():
             langs.append(lang.language)
             return request.accept_languages.best_match(langs)
 
-    return request.cookies.get("lang", "en")
+    return request.cookies.get("lang")
