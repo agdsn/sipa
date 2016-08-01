@@ -6,9 +6,11 @@ from ipaddress import IPv4Address, AddressValueError
 from flask import request, session, current_app
 from flask_login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
+from werkzeug.local import LocalProxy
 
 from . import sample, wu, gerok, hss
 from .sqlalchemy import db
+
 
 registered_datasources = [
     sample.datasource,
@@ -24,52 +26,127 @@ registered_dormitories = (
 premature_dormitories = []
 
 
-def init_datasources_dormitories(app):
-    """Register the the datasources/dormitories in `app.extensions`.
+class Backends:
+    def init_app(self, app):
+        """Register self to app and initialize datasources
 
-    Registered extensions:
+        The datasource initialization is done via their `init_context`
+        method.
+        """
+        app.extensions['backends'] = self
 
-    - 'datasources': All the `DataSource` objects
-    - 'dormitories': All the `Dormitory` objects
-    - 'all_dormitories': 'dormitories' + the dormitories of
-      `PrematureDatasource`s
-    """
-    app.extensions['datasources'] = registered_datasources
-    app.extensions['dormitories'] = registered_dormitories
+        app.config['SQLALCHEMY_BINDS'] = {}
+        db.init_app(app)
 
-    app.extensions['all_dormitories'] = (
-        app.extensions['dormitories'] + premature_dormitories
+        for datasource in self.datasources:
+            if datasource.init_context:
+                datasource.init_context(app)
+
+    _datasources = [
+        sample.datasource,
+        wu.datasource,
+        gerok.datasource,
+        hss.datasource,
+    ]
+
+    _dormitories = (
+        sample.dormitories + wu.dormitories + gerok.dormitories + hss.dormitories
     )
+
+    _premature_dormitories = []
+
+    @property
+    def datasources(self):
+        return self._datasources
+
+    @property
+    def dormitories(self):
+        return self._dormitories
+
+    @property
+    def all_dormitories(self):
+        return self._dormitories + self._premature_dormitories
+
+    # Here begin the higher-level lookup functions
+
+    @property
+    def dormitories_short(self):
+        return sorted([
+            _dorm_summary(name=dormitory.name,
+                          display_name=dormitory.display_name)
+            for dormitory in self._dormitories + self._premature_dormitories
+        ])
+
+    @property
+    def supported_dormitories(self):
+        return self.supported_dormitories
+
+    @property
+    def supported_dormitories_short(self):
+        return sorted([
+            _dorm_summary(name=dormitory.name,
+                          display_name=dormitory.display_name)
+            for dormitory in self._dormitories
+        ], key=operator.itemgetter(1))
+
+    def get_dormitory(self, name):
+        for dormitory in self.all_dormitories:
+            if dormitory.name == name:
+                return dormitory
+
+    def get_datasource(self, name):
+        for datasource in self.datasource:
+            if datasource.name == name:
+                return datasource
+
+    def dormitory_from_ip(self, ip):
+        """Return the dormitory whose subnets contain `ip`"""
+        try:
+            address = IPv4Address(str(ip))
+        except AddressValueError:
+            pass
+        else:
+            for dormitory in self.dormitories:
+                if address in dormitory.subnets:
+                    return dormitory
+
+    def preferred_dormitory_name(self):
+        """Return the name of the request's ip's dormitory"""
+        dormitory = self.dormitory_from_ip(request.remote_addr)
+        if dormitory:
+            return dormitory.name
+
+    def user_from_ip(self, ip):
+        """Return the User that corresponds to `ip` according to the datasource.
+
+        :return: The corresponding User in the sense of the datasource.
+        :rtype: The corresponding datasources `user_class`.
+        """
+        dormitory = self.dormitory_from_ip(ip)
+        if not dormitory:
+            return AnonymousUserMixin()
+
+        datasource = dormitory.datasource
+        if datasource is None:
+            return AnonymousUserMixin()
+
+        return datasource.user_class.from_ip(ip)
+
+    def current_dormitory(self):
+        """Read the current dormitory from the session"""
+        return self.dormitory_from_name(session['dormitory'])
+
+    def current_datasource(self):
+        """Read the current datasource from the session"""
+        dormitory = self.current_dormitory()
+        if dormitory:
+            return dormitory.datasource
+
+
+backends = LocalProxy(lambda: current_app.extensions['backends'])
 
 
 _dorm_summary = namedtuple('_dorm_summary', ['name', 'display_name'])
-
-
-def list_all_dormitories():
-    """Generate a list of all available dormitories (active & external).
-    The list is alphabetically sorted by the second item of the tuple.
-
-    :return: a (named)tuple of the form (name, display_name)
-    :rtype: _dorm_summary
-    """
-    return sorted([
-        _dorm_summary(name=dormitory.name,
-                      display_name=dormitory.display_name)
-        for dormitory in current_app.extensions['all_dormitories']
-    ], key=operator.itemgetter(1))
-
-
-def list_supported_dormitories():
-    """List the supported (not premature) dormitories of current_app.
-
-    :return: a (named)tuple of the form (name, display_name)
-    :rtype: _dorm_summary
-    """
-    return sorted([
-        _dorm_summary(name=dormitory.name,
-                      display_name=dormitory.display_name)
-        for dormitory in current_app.extensions['dormitories']
-    ])
 
 
 def init_context(app):
@@ -81,69 +158,13 @@ def init_context(app):
             datasource.init_context(app)
 
 
-def dormitory_from_name(name):
-    """Look up the dormitory object given its name"""
-    for dormitory in current_app.extensions['all_dormitories']:
-        if dormitory.name == name:
-            return dormitory
-    return None
-
-
-def datasource_from_name(name):
-    """Look up the datasource object given its name"""
-    for datasource in current_app.extensions['datasources']:
-        if datasource.name == name:
-            return datasource
-    return
-
-
-def preferred_dormitory_name():
-    dormitory = dormitory_from_ip(request.remote_addr)
-    return dormitory.name if dormitory else None
-
-
-def current_datasource():
-    if current_dormitory():
-        return current_dormitory().datasource
-    else:
-        return None
-
-
-def current_dormitory():
-    return dormitory_from_name(session['dormitory'])
-
-
-def dormitory_from_ip(ip):
-    try:
-        address = IPv4Address(str(ip))
-    except AddressValueError:
-        pass
-    else:
-        for dormitory in current_app.extensions['dormitories']:
-            if address in dormitory.subnets:
-                return dormitory
-    return None
-
-
-def user_from_ip(ip):
-    dormitory = dormitory_from_ip(ip)
-    if not dormitory:
-        return AnonymousUserMixin()
-
-    datasource = dormitory.datasource
-    if datasource is None:
-        return AnonymousUserMixin()
-
-    return datasource.user_class.from_ip(ip)
-
-
 def query_gauge_data():
     credit = {'data': None, 'error': False, 'foreign_user': False}
     try:
         if current_user.is_authenticated and current_user.has_connection:
             user = current_user
         else:
-            user = user_from_ip(request.remote_addr)
+            user = backends.user_from_ip(request.remote_addr)
         credit['data'] = user.credit
     except OperationalError:
         credit['error'] = True

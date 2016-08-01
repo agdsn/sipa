@@ -79,7 +79,6 @@ def init_app(app, **kwargs):
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
 
     init_datasources_dormitories(app)
-    init_context(app)
 
 
 def load_config_file(app, config=None):
