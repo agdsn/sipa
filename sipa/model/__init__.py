@@ -34,13 +34,15 @@ class Backends:
         method.
         """
         app.extensions['backends'] = self
+        self.app = app
 
-        app.config['SQLALCHEMY_BINDS'] = {}
-        db.init_app(app)
+    def init_backends(self):
+        self.app.config['SQLALCHEMY_BINDS'] = {}
+        db.init_app(self.app)
 
         for datasource in self.datasources:
             if datasource.init_context:
-                datasource.init_context(app)
+                datasource.init_context(self.app)
 
     _datasources = [
         sample.datasource,
@@ -147,7 +149,7 @@ class Backends:
             return dormitory.datasource
 
 
-backends = LocalProxy(lambda: current_app.extensions['backends'])
+backends = Backends()
 
 
 _dorm_summary = namedtuple('_dorm_summary', ['name', 'display_name'])

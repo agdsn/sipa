@@ -41,6 +41,7 @@ def init_app(app, **kwargs):
     babel.init_app(app)
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
+    backends.init_app(app)
 
     app.url_map.converters['int'] = IntegerConverter
 
@@ -77,8 +78,7 @@ def init_app(app, **kwargs):
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
 
-    backends = Backends()
-    backends.init_app(app)
+    backends.init_backends()
 
 
 def load_config_file(app, config=None):
