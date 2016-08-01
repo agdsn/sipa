@@ -9,8 +9,7 @@ class DataSource:
     def __init__(self, name, user_class, mail_server,
                  webmailer_url=None,
                  support_mail=None,
-                 init_context=None,
-                 debug_only=False):
+                 init_context=None):
         super().__init__()
         self.name = name
         self.user_class = user_class
@@ -19,7 +18,6 @@ class DataSource:
         self.support_mail = (support_mail if support_mail
                              else "support@{}".format(mail_server))
         self._init_context = init_context
-        self.debug_only = debug_only
 
     def __eq__(self, other):
         return self.name == other.name
@@ -32,7 +30,6 @@ class DataSource:
             webmailer_url=self.webmailer_url,
             support_mail=self.support_mail,
             init_context=self._init_context,
-            debug_only=self.debug_only,
         ))
 
     def __hash__(self):
@@ -40,8 +37,7 @@ class DataSource:
             hash(self.name) ^
             hash(self.user_class) ^
             hash(self.support_mail) ^
-            hash(self.mail_server) ^
-            hash(self.debug_only)
+            hash(self.mail_server)
         )
 
     def init_context(self, app):

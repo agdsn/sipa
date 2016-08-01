@@ -29,23 +29,6 @@ class TestUninitializedBackendCase(FlaskTestCase):
         assert 'all_dormitories' not in self.app.extensions
 
 
-class TestNoDebugBackends(FlaskTestCase):
-    def create_app(self):
-        test_app = Flask('sipa')
-        test_app.config['TESTING'] = True
-        init_datasources_dormitories(test_app)
-        return test_app
-
-    def test_no_debug_backends(self):
-        assert not any(
-            dsrc.debug_only for dsrc in self.app.extensions['datasources']
-        )
-        assert not any(
-            dorm.datasource.debug_only
-            for dorm in self.app.extensions['dormitories']
-        )
-
-
 class TestBackendInitializationCase(AppInitialized):
     def test_extensions_registrated(self):
         assert 'datasources' in self.app.extensions

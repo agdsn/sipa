@@ -33,19 +33,9 @@ def init_datasources_dormitories(app):
     - 'dormitories': All the `Dormitory` objects
     - 'all_dormitories': 'dormitories' + the dormitories of
       `PrematureDatasource`s
-
-    Note that the datasources and dormitories with `debug_only` are
-    only added if `app.debug` is True.
     """
-    app.extensions['datasources'] = [
-        source for source in registered_datasources
-        if not source.debug_only or app.debug
-    ]
-
-    app.extensions['dormitories'] = [
-        dorm for dorm in registered_dormitories
-        if not dorm.datasource.debug_only or app.debug
-    ]
+    app.extensions['datasources'] = registered_datasources
+    app.extensions['dormitories'] = registered_dormitories
 
     app.extensions['all_dormitories'] = (
         app.extensions['dormitories'] + premature_dormitories

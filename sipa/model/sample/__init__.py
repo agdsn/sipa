@@ -10,7 +10,6 @@ datasource = DataSource(
     user_class=user.User,
     mail_server="test.agdsn.de",
     init_context=user.init_context,
-    debug_only=True
 )
 
 dormitories = [
