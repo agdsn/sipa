@@ -2,31 +2,11 @@ from base64 import urlsafe_b64encode
 from os import urandom
 from unittest import TestCase
 
-from flask import Flask
-from flask_testing import TestCase as FlaskTestCase
-
 from sipa.model import (dormitory_from_ip, dormitory_from_name,
                         init_datasources_dormitories, list_all_dormitories,
                         list_supported_dormitories)
 from sipa.model.default import BaseUser
 from tests.prepare import AppInitialized
-
-
-class TestUninitializedBackendCase(FlaskTestCase):
-    def create_app(self):
-        test_app = Flask('sipa')
-        test_app.config['TESTING'] = True
-        test_app.debug = True
-        return test_app
-
-    def test_datasources_not_registered(self):
-        assert 'datasources' not in self.app.extensions
-
-    def test_dormitories_not_registered(self):
-        assert 'dormitories' not in self.app.extensions
-
-    def test_all_dormitories_not_registered(self):
-        assert 'all_dormitories' not in self.app.extensions
 
 
 class TestBackendInitializationCase(AppInitialized):
