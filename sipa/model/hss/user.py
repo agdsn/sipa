@@ -7,7 +7,7 @@ from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 
 from ..default import BaseUser
-from sipa.model.property import active_prop, unsupported_prop
+from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP, AccountStatementLog, TrafficQuota

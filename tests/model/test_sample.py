@@ -1,6 +1,6 @@
 import sipa.model.sample
-from sipa.model.property import (ActiveProperty, Capabilities,
-                                 UnsupportedProperty, NO_CAPABILITIES)
+from sipa.model.fancy_property import (ActiveProperty, Capabilities,
+                                       UnsupportedProperty, NO_CAPABILITIES)
 from tests.prepare import AppInitialized
 
 

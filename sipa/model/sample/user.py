@@ -7,7 +7,7 @@ from flask_login import AnonymousUserMixin
 from werkzeug import LocalProxy
 
 from sipa.model.default import BaseUser
-from sipa.model.property import active_prop, unsupported_prop
+from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.units import money
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound

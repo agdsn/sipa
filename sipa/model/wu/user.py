@@ -12,7 +12,7 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.default import BaseUser, BaseUserDB
-from sipa.model.property import active_prop, connection_dependent
+from sipa.model.fancy_property import active_prop, connection_dependent
 from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
