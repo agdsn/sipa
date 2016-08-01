@@ -5,7 +5,7 @@ from flask_login import AnonymousUserMixin, LoginManager
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from sipa.babel import possible_locales
-from sipa.model import dormitory_from_name
+from sipa.model import backends
 
 login_manager = LoginManager()
 
@@ -25,7 +25,7 @@ def load_user(username):
     if request.blueprint == "documents" or request.endpoint == "static":
         return AnonymousUserMixin()
 
-    dormitory = dormitory_from_name(session.get('dormitory', None))
+    dormitory = backends.get_dormitory(session.get('dormitory', None))
     if dormitory:
         return dormitory.datasource.user_class.get(username)
     else:

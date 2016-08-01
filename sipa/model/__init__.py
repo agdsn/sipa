@@ -64,6 +64,10 @@ class Backends:
         return self._dormitories
 
     @property
+    def premature_dormitories(self):
+        return self._premature_dormitories
+
+    @property
     def all_dormitories(self):
         return self._dormitories + self._premature_dormitories
 
@@ -95,7 +99,7 @@ class Backends:
                 return dormitory
 
     def get_datasource(self, name):
-        for datasource in self.datasource:
+        for datasource in self.datasources:
             if datasource.name == name:
                 return datasource
 
@@ -134,7 +138,7 @@ class Backends:
 
     def current_dormitory(self):
         """Read the current dormitory from the session"""
-        return self.dormitory_from_name(session['dormitory'])
+        return self.get_dormitory(session['dormitory'])
 
     def current_datasource(self):
         """Read the current datasource from the session"""

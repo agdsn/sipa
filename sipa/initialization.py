@@ -13,7 +13,7 @@ from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import cf_pages
-from sipa.model import Backends, current_datasource
+from sipa.model import backends
 from sipa.utils import replace_empty_handler_callables
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
@@ -69,7 +69,7 @@ def init_app(app, **kwargs):
         get_attribute_endpoint=get_attribute_endpoint,
         traffic_chart=provide_render_function(generate_traffic_chart),
         credit_chart=provide_render_function(generate_credit_chart),
-        current_datasource=current_datasource,
+        current_datasource=backends.current_datasource,
         form_label_width_class="col-sm-{}".format(form_label_width),
         form_input_width_class="col-sm-{}".format(form_input_width),
         form_input_offset_class="col-sm-offset-{}".format(form_label_width)

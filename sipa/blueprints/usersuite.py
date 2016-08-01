@@ -12,7 +12,7 @@ from flask_login import current_user, login_required
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from sipa.model import current_datasource, datasource_from_name
+from sipa.model import backends
 from sipa.utils import password_changeable
 from sipa.utils.mail_utils import send_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
@@ -59,7 +59,7 @@ def usersuite():
               "error")
         return redirect(url_for('generic.index'))
 
-    datasource = datasource_from_name(current_user.datasource)
+    datasource = backends.get_datasource(current_user.datasource)
     show_traffic_data = current_user.has_connection
 
     return render_template("usersuite/index.html",
@@ -78,9 +78,9 @@ def usersuite_contact():
     """
     form = ContactForm()
 
-    support_mail = current_datasource().support_mail
+    support_mail = backends.current_datasource().support_mail
     from_mail = "{}@{}".format(current_user.uid,
-                               current_datasource().mail_server)
+                               backends.current_datasource().mail_server)
 
     if form.validate_on_submit():
         types = {

@@ -11,8 +11,7 @@ from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
                                 MacAddress, Regexp, ValidationError)
 
-from sipa.model import (list_all_dormitories, preferred_dormitory_name,
-                        registered_dormitories)
+from sipa.model import backends
 
 
 class PasswordComplexity(object):
@@ -105,8 +104,8 @@ class AnonymousContactForm(Form):
     )
     dormitory = SelectField(
         label=lazy_gettext("Wohnheim"),
-        choices=LocalProxy(list_all_dormitories),
-        default=LocalProxy(lambda: preferred_dormitory_name()),
+        choices=LocalProxy(lambda: backends.dormitories_short),
+        default=LocalProxy(lambda: backends.preferred_dormitory_name()),
     )
     subject = StrippedStringField(label=lazy_gettext("Betreff"), validators=[
         DataRequired(lazy_gettext("Betreff muss angegeben werden!"))])
@@ -184,9 +183,9 @@ class ChangeMACForm(Form):
 class LoginForm(Form):
     dormitory = SelectField(
         lazy_gettext("Wohnheim"),
-        choices=LocalProxy(list_all_dormitories),
-        default=LocalProxy(lambda: preferred_dormitory_name()),
-        validators=[AnyOf([dorm.name for dorm in registered_dormitories],
+        choices=LocalProxy(lambda: backends.dormitories_short),
+        default=LocalProxy(lambda: backends.preferred_dormitory_name()),
+        validators=[AnyOf([dorm.name for dorm in backends.dormitories],
                           message=lazy_gettext("Kein gültiges Wohnheim!"))]
     )
     username = StrippedStringField(
