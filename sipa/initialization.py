@@ -13,8 +13,7 @@ from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import cf_pages
-from sipa.model import (current_datasource, init_context,
-                        init_datasources_dormitories)
+from sipa.model import Backends, current_datasource
 from sipa.utils import replace_empty_handler_callables
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
@@ -78,7 +77,8 @@ def init_app(app, **kwargs):
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
 
-    init_datasources_dormitories(app)
+    backends = Backends()
+    backends.init_app(app)
 
 
 def load_config_file(app, config=None):
