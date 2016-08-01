@@ -22,7 +22,8 @@ datasource = DataSource(
     init_context=init_context
 )
 
-dormitories = [
-    Dormitory(name='gerok', display_name="Gerokstraße",
-              datasource=datasource, subnets=[IPv4Network('141.76.124.0/24')])
-]
+Dormitory(name='gerok', display_name="Gerokstraße",
+          datasource=datasource, subnets=[IPv4Network('141.76.124.0/24')])
+
+
+__all__ = [datasource]

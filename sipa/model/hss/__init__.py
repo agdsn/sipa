@@ -28,7 +28,7 @@ datasource = DataSource(
     # support_mail="support@wh12.tu-dresden.de",
 )
 
-dormitories = [Dormitory(
+[Dormitory(
     name='hss',
     display_name="Hochschulstraße",
     datasource=datasource,
@@ -41,3 +41,5 @@ dormitories = [Dormitory(
         IPv4Network('141.30.234.224/27'),
     ]
 )]
+
+__all__ = [datasource]
