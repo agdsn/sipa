@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 import operator
 from collections import namedtuple
 from ipaddress import IPv4Address, AddressValueError
@@ -11,29 +12,99 @@ from . import sample, wu, gerok, hss
 from .sqlalchemy import db
 
 
-registered_datasources = [
+logger = logging.getLogger(__name__)
+
+
+AVAILABLE_DATASOURCES = [
     sample.datasource,
     wu.datasource,
     gerok.datasource,
     hss.datasource,
 ]
 
-registered_dormitories = (
-    sample.dormitories + wu.dormitories + gerok.dormitories + hss.dormitories
-)
 
-premature_dormitories = []
+def evaluates_uniquely(objects, func):
+    """Return true if the return value of `func` is unique among `objects`.
+
+    This can be used to check whether some attribute `obj.attr` is
+    unique among a set of such objects, and can thus be used as a key.
+
+    :param objects: the object on which to apply func to
+    :param func: the function to be evaluated, given each object as a
+        parameter.  Must return something hashable.
+    :return: whether the uniqueness holds
+    :rtype: bool
+    """
+    values = [func(obj) for obj in objects]
+    return len(values) == len(set(values))
 
 
 class Backends:
     def init_app(self, app):
         """Register self to app and initialize datasources
 
-        The datasource initialization is done via their `init_context`
-        method.
+        The datasources will be registered according to the app's
+        config.
         """
         app.extensions['backends'] = self
         self.app = app
+
+        backends = app.config.get('BACKENDS')
+        if not backends:
+            logger.warning('No backends configured')
+            return
+
+        for backend_name in backends:
+            self._register_backend(backend_name)
+
+    def _register_backend(self, name):
+        """Register a datasource by name.
+
+        First, find the name in the available datasources' names, warn
+        on inconsistencies.  If found, add the `name: datasource` pair
+        to the private dict.
+
+        :param datasource: the datasource to register
+        :raises: `ValueError` if a backend with this name is already
+            registered
+        """
+        if name in self.datasources:
+            raise ValueError('Datasource {} already registered'.format(name))
+
+        if not evaluates_uniquely(AVAILABLE_DATASOURCES,
+                                  func=operator.attrgetter('name')):
+            raise ValueError("Implememented datasources have non-unique names")
+
+        for dsrc in AVAILABLE_DATASOURCES:
+            if dsrc.name == name:
+                new_datasource = dsrc
+        else:
+            raise ValueError("{} is not an available datasource"
+                             .format(name))
+
+        self._datasources[name] = new_datasource
+
+        # check for name collisions in the updated dormitories
+        new_dormitories = new_datasource.dormitories
+        if any(dorm.name in self._dormitories.keys()
+               for dorm in new_dormitories):
+            raise ValueError("Some dormitories of datasource Dormitory "
+                             "have a name already registered")
+        for dormitory in new_datasource.dormitories:
+            self._register_dormitory(dormitory)
+
+    def _register_dormitory(self, dormitory):
+        """Register a dormitory by putting it to the dict
+
+        :param dormitory: The dormitory to register
+        :raises: `ValueError` if a dormitory with this name is already
+            registered.
+        """
+        name = dormitory.name
+        if name in self._dormitories:
+            raise ValueError("Dormitory with name {} already exists"
+                             .format(name))
+        self._dormitories[name] = dormitory
 
     def init_backends(self):
         self.app.config['SQLALCHEMY_BINDS'] = {}
@@ -43,17 +114,8 @@ class Backends:
             if datasource.init_context:
                 datasource.init_context(self.app)
 
-    _datasources = [
-        sample.datasource,
-        wu.datasource,
-        gerok.datasource,
-        hss.datasource,
-    ]
-
-    _dormitories = (
-        sample.dormitories + wu.dormitories + gerok.dormitories + hss.dormitories
-    )
-
+    _datasources = {}
+    _dormitories = {}
     _premature_dormitories = []
 
     @property
