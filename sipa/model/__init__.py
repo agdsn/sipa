@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from ipaddress import IPv4Address, AddressValueError
 import operator
+from collections import namedtuple
+from ipaddress import IPv4Address, AddressValueError
 
 from flask import request, session, current_app
 from flask_login import current_user, AnonymousUserMixin
@@ -51,19 +52,32 @@ def init_datasources_dormitories(app):
     )
 
 
+_dorm_summary = namedtuple('_dorm_summary', ['name', 'display_name'])
+
+
 def list_all_dormitories():
     """Generate a list of all available dormitories (active & external).
     The list is alphabetically sorted by the second item of the tuple.
+
+    :return: a (named)tuple of the form (name, display_name)
+    :rtype: _dorm_summary
     """
     return sorted([
-        (dormitory.name, dormitory.display_name)
+        _dorm_summary(name=dormitory.name,
+                      display_name=dormitory.display_name)
         for dormitory in current_app.extensions['all_dormitories']
     ], key=operator.itemgetter(1))
 
 
 def list_supported_dormitories():
+    """List the supported (not premature) dormitories of current_app.
+
+    :return: a (named)tuple of the form (name, display_name)
+    :rtype: _dorm_summary
+    """
     return sorted([
-        (dormitory.name, dormitory.display_name)
+        _dorm_summary(name=dormitory.name,
+                      display_name=dormitory.display_name)
         for dormitory in current_app.extensions['dormitories']
     ])
 
@@ -78,6 +92,7 @@ def init_context(app):
 
 
 def dormitory_from_name(name):
+    """Look up the dormitory object given its name"""
     for dormitory in current_app.extensions['all_dormitories']:
         if dormitory.name == name:
             return dormitory
@@ -85,6 +100,7 @@ def dormitory_from_name(name):
 
 
 def datasource_from_name(name):
+    """Look up the datasource object given its name"""
     for datasource in current_app.extensions['datasources']:
         if datasource.name == name:
             return datasource
