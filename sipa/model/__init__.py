@@ -162,10 +162,6 @@ class Backends:
         ])
 
     @property
-    def supported_dormitories(self):
-        return self.supported_dormitories
-
-    @property
     def supported_dormitories_short(self):
         return sorted([
             _dorm_summary(name=dormitory.name,
