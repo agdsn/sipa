@@ -11,6 +11,7 @@ from werkzeug.local import LocalProxy
 
 from . import sample, wu, gerok, hss
 from .sqlalchemy import db
+from sipa.utils.exceptions import InvalidConfiguration
 
 
 logger = logging.getLogger(__name__)
@@ -80,7 +81,8 @@ class Backends:
             registered
         """
         if name in self._datasources:
-            raise ValueError('Datasource {} already registered'.format(name))
+            raise InvalidConfiguration('Datasource {} already registered'
+                                       .format(name))
 
         if not evaluates_uniquely(AVAILABLE_DATASOURCES,
                                   func=operator.attrgetter('name')):
@@ -91,7 +93,7 @@ class Backends:
                 new_datasource = dsrc
                 break
         else:
-            raise ValueError("{} is not an available datasource"
+            raise InvalidConfiguration("{} is not an available datasource"
                              .format(name))
 
         self._datasources[name] = new_datasource

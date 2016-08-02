@@ -21,7 +21,7 @@ class DatasourceTestBase(TestCase):
         """
         return self.assertRaises(InvalidConfiguration)
 
-    def assert_incomplete_config_keys_raise(self, needed_keys, callable):
+    def assert_incomplete_config_keys_raise(self, needed_keys):
         self.invalid_combinations = []
         for l in range(len(needed_keys)):
             self.invalid_combinations += combinations(needed_keys, l)
