@@ -4,13 +4,17 @@ from ipaddress import IPv4Network
 
 from ..datasource import DataSource, Dormitory
 from . import user
+from sipa.utils.exceptions import InvalidConfiguration
 
 
 def init_context(app):
-    app.extensions['gerok_api'] = {
-        'endpoint': app.config['GEROK_ENDPOINT'],
-        'token': app.config['GEROK_API_TOKEN']
-    }
+    try:
+        app.extensions['gerok_api'] = {
+            'endpoint': app.config['GEROK_ENDPOINT'],
+            'token': app.config['GEROK_API_TOKEN']
+        }
+    except KeyError as exception:
+        raise InvalidConfiguration(exception.args[0])
 
 
 datasource = DataSource(
