@@ -185,8 +185,10 @@ class LoginForm(Form):
         lazy_gettext("Wohnheim"),
         choices=LocalProxy(lambda: backends.dormitories_short),
         default=LocalProxy(lambda: backends.preferred_dormitory_name()),
-        validators=[AnyOf([dorm.name for dorm in backends.dormitories],
-                          message=lazy_gettext("Kein gültiges Wohnheim!"))]
+        validators=[LocalProxy(
+            lambda: AnyOf([dorm.name for dorm in backends.dormitories],
+                          message=lazy_gettext("Kein gültiges Wohnheim!"))
+        )]
     )
     username = StrippedStringField(
         label=lazy_gettext("Nutzername"),

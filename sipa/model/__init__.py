@@ -4,9 +4,10 @@ import operator
 from collections import namedtuple
 from ipaddress import IPv4Address, AddressValueError
 
-from flask import request, session
+from flask import request, session, current_app
 from flask_login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
+from werkzeug.local import LocalProxy
 
 from . import sample, wu, gerok, hss
 from .sqlalchemy import db
@@ -210,7 +211,7 @@ class Backends:
             return dormitory.datasource
 
 
-backends = Backends()
+backends = LocalProxy(lambda: current_app.extensions['backends'])
 
 
 _dorm_summary = namedtuple('_dorm_summary', ['name', 'display_name'])
