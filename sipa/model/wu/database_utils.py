@@ -79,17 +79,17 @@ def init_userdb(app):
 
 
 def init_db(app):
-    """Register atlantis and userdb extensions onto the app object"""
-    try:
-        init_atlantis(
-            app,
-            # No condition necessary: if not set, it will be None and ignored.
-            static_connection_string=app.config.get('WU_CONNECTION_STRING'),
-        )
-    except InvalidConfiguration as exception:
-        logger.info("Incomplete Configuration for atlantis (%s)."
-                    " Skipping `init_atlantis()`.",
-                    exception.args[0])
+    """Register atlantis and userdb extensions onto the app object
+
+    For testing reasons, the initialization of userdb will be skipped
+    on invalid configuration.  Configuring atlantis however is
+    obligatiory.  See `init_atlantis`.
+    """
+    init_atlantis(
+        app,
+        # No condition necessary: if not set, it will be None and ignored.
+        static_connection_string=app.config.get('WU_CONNECTION_STRING'),
+    )
 
     try:
         init_userdb(app)
