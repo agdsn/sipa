@@ -4,6 +4,7 @@ from ipaddress import IPv4Network
 
 from ..datasource import DataSource, Dormitory
 from . import user
+from sipa.utils.exceptions import InvalidConfiguration
 
 logger = logging.getLogger(__name__)
 
@@ -13,9 +14,12 @@ def init_context(app):
         logger.debug('HSS_CONNECTION_STRING not set. Skipping.')
         return
 
-    app.config['SQLALCHEMY_BINDS'].update({
-        'hss': app.config['HSS_CONNECTION_STRING']
-    })
+    try:
+        app.config['SQLALCHEMY_BINDS'].update({
+            'hss': app.config['HSS_CONNECTION_STRING']
+        })
+    except KeyError as exception:
+        raise InvalidConfiguration(exception.args[0])
 
 
 datasource = DataSource(
