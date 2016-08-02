@@ -6,20 +6,23 @@ import ldap3
 from werkzeug.local import LocalProxy
 
 from sipa.utils.exceptions import UserNotFound, PasswordInvalid, \
-    LDAPConnectionError
+    LDAPConnectionError, InvalidConfiguration
 
 logger = logging.getLogger(__name__)
 
 
 def init_ldap(app):
-    app.extensions['ldap'] = {
-        'host': app.config['WU_LDAP_HOST'],
-        'port': int(app.config['WU_LDAP_PORT']),
-        'user': app.config['WU_LDAP_SEARCH_USER'],
-        'password': app.config['WU_LDAP_SEARCH_PASSWORD'],
-        'search_user_base': app.config['WU_LDAP_SEARCH_USER_BASE'],
-        'search_group_base': app.config['WU_LDAP_SEARCH_GROUP_BASE']
-    }
+    try:
+        app.extensions['ldap'] = {
+            'host': app.config['WU_LDAP_HOST'],
+            'port': int(app.config['WU_LDAP_PORT']),
+            'user': app.config['WU_LDAP_SEARCH_USER'],
+            'password': app.config['WU_LDAP_SEARCH_PASSWORD'],
+            'search_user_base': app.config['WU_LDAP_SEARCH_USER_BASE'],
+            'search_group_base': app.config['WU_LDAP_SEARCH_GROUP_BASE']
+        }
+    except KeyError as exception:
+        raise InvalidConfiguration(exception.args[0])
 
 
 CONF = LocalProxy(lambda: current_app.extensions['ldap'])
