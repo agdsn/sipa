@@ -35,8 +35,6 @@ config = LocalProxy(lambda: current_app.extensions['sample_users'])
 
 # noinspection PyMethodMayBeStatic
 class User(BaseUser):
-    datasource = 'sample'
-
     def __init__(self, uid):
         super().__init__(uid)
         self.config = config

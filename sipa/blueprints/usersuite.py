@@ -59,7 +59,7 @@ def usersuite():
               "error")
         return redirect(url_for('generic.index'))
 
-    datasource = backends.get_datasource(current_user.datasource)
+    datasource = current_user.datasource
     show_traffic_data = current_user.has_connection
 
     return render_template("usersuite/index.html",

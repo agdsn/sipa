@@ -12,7 +12,11 @@ class DataSource:
                  init_context=None):
         super().__init__()
         self.name = name
-        self.user_class = user_class
+
+        class _user_class(user_class):
+            datasource = self
+        self.user_class = _user_class
+
         self.mail_server = mail_server
         self.webmailer_url = webmailer_url
         self.support_mail = (support_mail if support_mail

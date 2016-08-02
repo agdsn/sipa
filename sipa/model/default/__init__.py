@@ -42,10 +42,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
 
-    @property
-    @abstractmethod
-    def datasource(self):
-        pass
+    datasource = None
 
     def get_id(self):
         """Required by flask-login"""

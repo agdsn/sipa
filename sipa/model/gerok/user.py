@@ -28,8 +28,6 @@ class User(BaseUser):
     the terms 'uid' and 'username' refer to the same thing.
     """
 
-    datasource = 'gerok'
-
     def __init__(self, user_data):
         super().__init__(uid=user_data['login'])
         self.cache_information(user_data)

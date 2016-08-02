@@ -39,8 +39,6 @@ class User(BaseUser):
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
 
-    datasource = 'hss'
-
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             uid=self.uid,
