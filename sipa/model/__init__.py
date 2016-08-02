@@ -41,6 +41,12 @@ def evaluates_uniquely(objects, func):
 
 
 class Backends:
+    def __init__(self):
+        """Initialize private lookup dicts"""
+        self._datasources = {}
+        self._dormitories = {}
+        self._premature_dormitories = {}
+
     def init_app(self, app):
         """Register self to app and initialize datasources
 
@@ -69,7 +75,7 @@ class Backends:
         :raises: `ValueError` if a backend with this name is already
             registered
         """
-        if name in self.datasources:
+        if name in self._datasources:
             raise ValueError('Datasource {} already registered'.format(name))
 
         if not evaluates_uniquely(AVAILABLE_DATASOURCES,
@@ -79,6 +85,7 @@ class Backends:
         for dsrc in AVAILABLE_DATASOURCES:
             if dsrc.name == name:
                 new_datasource = dsrc
+                break
         else:
             raise ValueError("{} is not an available datasource"
                              .format(name))
@@ -115,25 +122,28 @@ class Backends:
             if datasource.init_context:
                 datasource.init_context(self.app)
 
-    _datasources = {}
-    _dormitories = {}
-    _premature_dormitories = []
-
     @property
     def datasources(self):
-        return self._datasources
+        """A list of the currently registered datasources"""
+        return list(self._datasources.values())
 
     @property
     def dormitories(self):
-        return self._dormitories
+        """A list of the currently registered dormitories"""
+        return list(self._dormitories.values())
 
     @property
     def premature_dormitories(self):
-        return self._premature_dormitories
+        """A list of the currently registered premature dormitories"""
+        return list(self._premature_dormitories.values())
 
     @property
     def all_dormitories(self):
-        return self._dormitories + self._premature_dormitories
+        """A list of the currently registered dormitories
+
+        This version includes premature dormitories.
+        """
+        return self.dormitories + list(self._premature_dormitories.values())
 
     # Here begin the higher-level lookup functions
 
@@ -142,7 +152,7 @@ class Backends:
         return sorted([
             _dorm_summary(name=dormitory.name,
                           display_name=dormitory.display_name)
-            for dormitory in self._dormitories + self._premature_dormitories
+            for dormitory in self.dormitories + self.premature_dormitories
         ])
 
     @property
@@ -154,7 +164,7 @@ class Backends:
         return sorted([
             _dorm_summary(name=dormitory.name,
                           display_name=dormitory.display_name)
-            for dormitory in self._dormitories
+            for dormitory in self.dormitories
         ], key=operator.itemgetter(1))
 
     def get_dormitory(self, name):

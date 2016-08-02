@@ -18,7 +18,7 @@ class DataSource:
         self.support_mail = (support_mail if support_mail
                              else "support@{}".format(mail_server))
         self._init_context = init_context
-        self.dormitories = {}
+        self._dormitories = {}
 
     def __eq__(self, other):
         return self.name == other.name
@@ -43,9 +43,13 @@ class DataSource:
 
     def register_dormitory(self, dormitory):
         name = dormitory.name
-        if name in self.dormitories:
+        if name in self._dormitories:
             raise ValueError("Dormitory {} already registered", name)
-        self.dormitories[name] = dormitory
+        self._dormitories[name] = dormitory
+
+    @property
+    def dormitories(self):
+        return list(self._dormitories.values())
 
     def init_context(self, app):
         if self._init_context:
