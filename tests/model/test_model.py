@@ -2,15 +2,34 @@ from base64 import urlsafe_b64encode
 from os import urandom
 from unittest import TestCase
 
-from sipa.model import backends
+from ipaddress import IPv4Network
+from flask import Flask
+
+from sipa.model import Backends
+from sipa.model.datasource import DataSource, Dormitory
 from sipa.model.default import BaseUser
-from tests.prepare import AppInitialized
 
 
-class TestBackendInitializationCase(AppInitialized):
+class TestBackendInitializationCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.backends = backends
+        self.app = Flask('sipa')
+        self.app.config['BACKENDS'] = ['foo']
+        datasource = DataSource(
+            name='foo',
+            user_class=object,
+            mail_server="",
+            webmailer_url="",
+            support_mail="",
+            init_context=lambda app: None
+        )
+
+        Dormitory(name='test', display_name="",
+                  datasource=datasource, subnets=[IPv4Network('127.0.0.0/8')])
+
+        self.backends = Backends(available_datasources=[datasource])
+        self.backends.init_app(self.app)
+        self.backends.init_backends()
 
     def test_extension_registrated(self):
         assert 'backends' in self.app.extensions
