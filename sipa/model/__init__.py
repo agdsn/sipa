@@ -41,8 +41,12 @@ def evaluates_uniquely(objects, func):
 
 
 class Backends:
-    def __init__(self):
+    def __init__(self, available_datasources=None):
         """Initialize private lookup dicts"""
+        if available_datasources is None:
+            available_datasources = AVAILABLE_DATASOURCES
+        self.available_datasources = available_datasources
+
         self._datasources = {}
         self._dormitories = {}
         self._premature_dormitories = {}
@@ -82,7 +86,7 @@ class Backends:
                                   func=operator.attrgetter('name')):
             raise ValueError("Implememented datasources have non-unique names")
 
-        for dsrc in AVAILABLE_DATASOURCES:
+        for dsrc in self.available_datasources:
             if dsrc.name == name:
                 new_datasource = dsrc
                 break
