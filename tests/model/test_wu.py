@@ -17,7 +17,7 @@ from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
                                      NoHostAliasComputerFactory,
                                      CreditFactory, TrafficFactory)
 from sipa.utils import timetag_today
-from tests.prepare import AppInitialized
+from tests.base import WuFrontendTestBase
 
 
 class UserNoDBTestCase(TestCase):
@@ -145,7 +145,7 @@ class UserNoDBTestCase(TestCase):
                     User.authenticate(username=None, password=None)
 
 
-class WuAtlantisFakeDBInitialized(AppInitialized):
+class WuAtlantisFakeDBInitialized(WuFrontendTestBase):
     def create_app(self, *a, **kw):
         config = {
             **kw.pop('additional_config', {}),

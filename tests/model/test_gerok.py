@@ -11,7 +11,7 @@ from requests import Response
 from sipa.model.gerok.user import (User, do_api_call, date_from_delta,
                                    date_str_from_delta)
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
-from tests.prepare import AppInitialized
+from tests.base import GerokFrontendTestBase
 
 
 def mocked_gerok_api(status_code=200, response=b""):
@@ -24,7 +24,7 @@ def mocked_gerok_api(status_code=200, response=b""):
     return get
 
 
-class TestGerokApiCall(AppInitialized):
+class TestGerokApiCall(GerokFrontendTestBase):
     get = mocked_gerok_api()
     post = mocked_gerok_api()
     url = "supersecret.onion"
@@ -278,7 +278,7 @@ def get_possible_users():
     return users
 
 
-class TestGerokUser(AppInitialized):
+class TestGerokUser(GerokFrontendTestBase):
     api_mock = MagicMock()
 
     def setUp(self):
