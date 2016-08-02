@@ -42,8 +42,51 @@ def evaluates_uniquely(objects, func):
 
 
 class Backends:
+    """The `Backends` flask extension
+
+    This extension lets you initialize some of the available
+    datasources and provides some central methods to look things up,
+    like for example the user object from some ip.
+
+    `Backends` builds upon the following concept:
+
+    A user is enabled to log in using different backends, called
+    *datasources*.  A :py:class:`DataSource` provides information such
+    as its name, the email suffix, the user class, the initialization
+    method, and so on.
+
+    Originating from the needs of the [AG DSN](github.com/agdsn), the
+    user should not select the backend, but the location where he
+    lives.  Thus, he selects a :py:class:`Dormitory`, which has not
+    only a name, but also a `display_name` and ip subnets.  The latter
+    are needed to semi-authenticate a user based on his ip.
+
+    Usage:
+
+    >>> app = Flask('appname')
+    >>> backends = Backends()
+    >>> backends.init_app(app)
+    >>> app.config['BACKENDS'] = ['name1', 'name2']
+    >>> # further initialization…
+    >>> backends.init_backends()  # call each backend's init method
+    >>> app.run()
+
+    This class provides methods concerning:
+    * *initialization* of the extension and backends
+    * *lists* of the currently (un)supported dormitories and
+       datasources
+    * *lookup properties* to access the datasources/dormitories/users
+      given certain information (ip, name, …)
+    * *proxy methods* to access the current datasource/dormitory
+      (similiar to current_user)
+
+    """
     def __init__(self, available_datasources=None):
-        """Initialize private lookup dicts"""
+        """Initialize private lookup dicts.
+
+        :param available_datasources: a list of implemented
+            datasources to consider activatable.
+        """
         if available_datasources is None:
             available_datasources = AVAILABLE_DATASOURCES
         self.available_datasources = available_datasources
@@ -94,7 +137,7 @@ class Backends:
                 break
         else:
             raise InvalidConfiguration("{} is not an available datasource"
-                             .format(name))
+                                       .format(name))
 
         self._datasources[name] = new_datasource
 
@@ -128,6 +171,8 @@ class Backends:
             if datasource.init_context:
                 datasource.init_context(self.app)
 
+    # CENTRAL PROPERTIES
+
     @property
     def datasources(self):
         """A list of the currently registered datasources"""
@@ -151,7 +196,7 @@ class Backends:
         """
         return self.dormitories + list(self._premature_dormitories.values())
 
-    # Here begin the higher-level lookup functions
+    # CONVENIENCE PROPERTIES
 
     @property
     def dormitories_short(self):
@@ -168,6 +213,8 @@ class Backends:
                           display_name=dormitory.display_name)
             for dormitory in self.dormitories
         ], key=operator.itemgetter(1))
+
+    # LOOKUP METHODS
 
     def get_dormitory(self, name):
         for dormitory in self.all_dormitories:
@@ -211,6 +258,8 @@ class Backends:
             return AnonymousUserMixin()
 
         return datasource.user_class.from_ip(ip)
+
+    # PROXIES
 
     def current_dormitory(self):
         """Read the current dormitory from the session"""
