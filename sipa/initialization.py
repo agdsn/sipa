@@ -115,9 +115,11 @@ def init_env_and_config(app):
 
     try:
         import uwsgi
+        from uwsgidecorators import timer
     except ImportError:
         logger.info("uwsgi package not found, uwsgi_timer hasn't been set")
     else:
+        @timer(300)
         def update_uwsgi(signum):
             flatpages_root = app.config["FLATPAGES_ROOT"]
             logger.debug("Udpating git repository at %s", flatpages_root)
@@ -130,9 +132,7 @@ def init_env_and_config(app):
                 }})
                 uwsgi.reload()
 
-        logger.debug("Registering repo update to uwsgi signal")
-        uwsgi.register_signal(20, "", update_uwsgi)
-        uwsgi.add_timer(20, 300)
+        logger.debug("Registered repo update to uwsgi signal")
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
