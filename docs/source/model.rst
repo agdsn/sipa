@@ -51,3 +51,11 @@ User
    :member-order: groupwise
    :members:
    :undoc-members:
+
+
+Property
+--------
+
+.. automodule:: sipa.model.fancy_property
+   :members:
+   :undoc-members:
