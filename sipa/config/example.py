@@ -66,6 +66,8 @@
 # DB_HELIOS_PASSWORD = None
 # DB_HELIOS_IP_MASK = None
 
+# HSS_CONNECTION_STRING = "postgresql://user:pass@host:port/db"  # must be set
+
 # The SQL_TIMEOUT in seconds.
 # SQL_TIMEOUT = 2
 
