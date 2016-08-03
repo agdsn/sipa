@@ -42,3 +42,12 @@ Sipa distinguishes between two concepts:
    :member-order: bysource
    :members:
    :undoc-members:
+
+
+User
+----
+
+.. automodule:: sipa.model.user
+   :member-order: groupwise
+   :members:
+   :undoc-members:
