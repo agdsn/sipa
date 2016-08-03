@@ -42,14 +42,10 @@ class DataSource:
         return self.name == other.name
 
     def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
+        return "<{cls} {name!r}>".format(
+            cls=type(self).__name__,
             name=self.name,
-            user_class=self.user_class,
-            mail_server=self.mail_server,
-            webmailer_url=self.webmailer_url,
-            support_mail=self.support_mail,
-            init_context=self._init_context,
-        ))
+        )
 
     def __hash__(self):
         return xor_hashes(self.name, self.user_class, self.support_mail, self.mail_server)
