@@ -10,10 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 def init_context(app):
-    if 'HSS_CONNECTION_STRING' not in app.config:
-        logger.debug('HSS_CONNECTION_STRING not set. Skipping.')
-        return
-
     try:
         app.config['SQLALCHEMY_BINDS'].update({
             'hss': app.config['HSS_CONNECTION_STRING']
