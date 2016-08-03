@@ -146,10 +146,6 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
             yield Row(description=val, property=self.__getattribute__(key))
 
     @active_prop
-    def ips(self):
-        pass
-
-    @active_prop
     @abstractmethod
     def realname(self):
         """**[Abstract]** The real-life name
