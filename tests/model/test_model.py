@@ -7,7 +7,7 @@ from flask import Flask
 
 from sipa.model import Backends
 from sipa.model.datasource import DataSource, Dormitory
-from sipa.model.default import BaseUser
+from sipa.model.user import BaseUser
 
 
 class TestBackendInitializationCase(TestCase):

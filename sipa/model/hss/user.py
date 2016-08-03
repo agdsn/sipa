@@ -6,7 +6,7 @@ from flask_login import AnonymousUserMixin
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 
-from ..default import BaseUser
+from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password

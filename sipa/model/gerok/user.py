@@ -7,7 +7,7 @@ from flask_login import AnonymousUserMixin
 from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
-from sipa.model.default import BaseUser
+from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop
 from sipa.utils import argstr

@@ -6,7 +6,7 @@ from flask import current_app
 from flask_login import AnonymousUserMixin
 from werkzeug import LocalProxy
 
-from sipa.model.default import BaseUser
+from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.units import money
 from sipa.utils import argstr
