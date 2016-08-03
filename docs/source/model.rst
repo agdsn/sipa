@@ -14,8 +14,11 @@ Backends
 This is automatically generated documentation from  the `sipa.model` package.
 
 .. automodule:: sipa.model
-   :member-order: bysource
-   :members: _dorm_summary, evaluates_uniquely, Backends
+   :members:
+   :exclude-members: Backends
+
+.. autoclass:: Backends
+   :members:
    :undoc-members:
 
 .. data:: backends
@@ -37,9 +40,5 @@ Sipa distinguishes between two concepts:
 
 .. automodule:: sipa.model.datasource
    :member-order: bysource
-   :members: DataSource, Dormitory
+   :members:
    :undoc-members:
-
-   ..
-      .. autoclass:: DataSource
-         :members:
