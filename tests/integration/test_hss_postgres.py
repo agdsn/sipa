@@ -9,14 +9,14 @@ from flask_login import AnonymousUserMixin
 from .hss_fixtures import HSSOneAccountFixture, HSSOneTrafficAccountFixture, \
     HSSOneTrafficAccountDaysMissingFixture, HSSAccountsWithPropertiesFixture, \
     HSSOneFinanceAccountFixture, OneCreditAccountFixture
-from tests.prepare import AppInitialized
+from tests.base import HssFrontendTestBase
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.schema import Account, IP, Mac, TrafficLog, AccountStatementLog, \
     TrafficQuota
 from sipa.model.hss.user import User
 
 
-class HssPgTestBase(AppInitialized):
+class HssPgTestBase(HssFrontendTestBase):
     def create_app(self, *a, **kw):
         conf = {
             **kw.pop('additional_config', {}),

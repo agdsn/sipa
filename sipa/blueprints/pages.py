@@ -11,7 +11,7 @@ import json
 from flask import Blueprint, render_template, current_app
 
 from sipa.flatpages import cf_pages
-from sipa.model import registered_dormitories, preferred_dormitory_name
+from sipa.model import backends
 
 logger = getLogger(__name__)
 
@@ -40,7 +40,7 @@ def show(category_id, article_id):
                                dynamic=False)
 
     return render_template('template.html', article=article,
-                           default_dormitory=preferred_dormitory_name(),
+                           default_dormitory=backends.preferred_dormitory_name(),
                            dynamic=True, **dynamic_data)
 
 
@@ -71,11 +71,11 @@ def load_dynamic_json(filename):
 
     values = {
         dorm.name: values[mappings[dorm.name]]
-        for dorm in registered_dormitories
+        for dorm in backends.dormitories
         if dorm.name in mappings
     }
     dormitories = [(dorm.name, dorm.display_name)
-                   for dorm in registered_dormitories
+                   for dorm in backends.dormitories
                    if dorm.name in mappings]
 
     return {'title': title,

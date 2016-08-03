@@ -7,8 +7,8 @@ from flask_login import AnonymousUserMixin
 from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
-from sipa.model.default import BaseUser
-from sipa.model.property import active_prop, connection_dependent, \
+from sipa.model.user import BaseUser
+from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
@@ -27,8 +27,6 @@ class User(BaseUser):
 
     the terms 'uid' and 'username' refer to the same thing.
     """
-
-    datasource = 'gerok'
 
     def __init__(self, user_data):
         super().__init__(uid=user_data['login'])

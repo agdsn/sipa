@@ -6,8 +6,8 @@ from flask import current_app
 from flask_login import AnonymousUserMixin
 from werkzeug import LocalProxy
 
-from sipa.model.default import BaseUser
-from sipa.model.property import active_prop, unsupported_prop
+from sipa.model.user import BaseUser
+from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.units import money
 from sipa.utils import argstr
 from sipa.utils.exceptions import PasswordInvalid, UserNotFound
@@ -35,8 +35,6 @@ config = LocalProxy(lambda: current_app.extensions['sample_users'])
 
 # noinspection PyMethodMayBeStatic
 class User(BaseUser):
-    datasource = 'sample'
-
     def __init__(self, uid):
         super().__init__(uid)
         self.config = config

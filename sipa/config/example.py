@@ -11,6 +11,11 @@
 # The Secret key. It should ALWAYS be set and kept secret!
 # SECRET_KEY = "{random_string}"
 
+# The datasources to use.  Must be a list of strings being the name of
+# an implemented datasource.  The list of available datasources is
+# defined at the top of `model.__init__`.
+# BACKENDS = ['wu', 'hss', 'gerok', 'sample', 'pycroft', …]
+
 # The Sentry DSN.
 # SENTRY_DSN = "http://{public}:{secret}@{host}:{port}/{int}"
 

@@ -2,11 +2,11 @@ from unittest.mock import patch
 
 from flask import url_for
 
-from tests.prepare import AppInitialized
+from tests.base import SampleFrontendTestBase
 from sipa.blueprints.usersuite import get_attribute_endpoint
 
 
-class SampleAuthenticatedTestBase(AppInitialized):
+class SampleAuthenticatedTestBase(SampleFrontendTestBase):
     def login(self):
         return self.client.post(
             url_for('generic.login'),

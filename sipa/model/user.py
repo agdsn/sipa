@@ -4,7 +4,7 @@
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
-from sipa.model.property import active_prop
+from sipa.model.fancy_property import active_prop
 
 
 # noinspection PyMethodMayBeStatic
@@ -42,10 +42,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
 
-    @property
-    @abstractmethod
-    def datasource(self):
-        pass
+    datasource = None
 
     def get_id(self):
         """Required by flask-login"""

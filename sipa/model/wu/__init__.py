@@ -21,7 +21,7 @@ datasource = DataSource(
     init_context=init_context
 )
 
-dormitories = [
+[
     Dormitory(name=dorm[0], display_name=dorm[1], datasource=datasource,
               subnets=dorm[2])
     for dorm in [
@@ -45,3 +45,5 @@ dormitories = [
         ]),
     ]
 ]
+
+__all__ = [datasource]

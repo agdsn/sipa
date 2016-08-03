@@ -12,7 +12,7 @@ from ldap3 import LDAPCommunicationError
 
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
     OfficialContactForm
-from sipa.model import dormitory_from_name, user_from_ip, premature_dormitories
+from sipa.model import backends
 from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
 from sipa.utils.exceptions import UserNotFound, InvalidCredentials
@@ -29,7 +29,7 @@ def log_request():
     if 'sentry' in current_app.extensions:
         current_app.extensions['sentry'].client.extra_context({
             'current_user': get_user_name(current_user),
-            'ip_user': get_user_name(user_from_ip(request.remote_addr))
+            'ip_user': get_user_name(backends.user_from_ip(request.remote_addr))
         })
 
     logging.getLogger(__name__ + '.http').debug(
@@ -119,7 +119,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        dormitory = dormitory_from_name(form.dormitory.data)
+        dormitory = backends.get_dormitory(form.dormitory.data)
         username = form.username.data
         password = form.password.data
         remember = form.remember.data
@@ -152,7 +152,7 @@ def login():
         return redirect(url_for('usersuite.usersuite'))
 
     return render_template('login.html', form=form,
-                           unsupported=premature_dormitories)
+                           unsupported=backends.premature_dormitories)
 
 
 @bp_generic.route("/logout")
@@ -199,7 +199,7 @@ def usertraffic():
     If a user is logged but the ip corresponds to another user, a hint
     is flashed and the traffic of the `ip_user` is displayed.
     """
-    ip_user = user_from_ip(request.remote_addr)
+    ip_user = backends.user_from_ip(request.remote_addr)
 
     chosen_user = None
 
@@ -233,7 +233,7 @@ def usertraffic():
 @bp_generic.route('/usertraffic/json')
 def traffic_api():
     user = (current_user if current_user.is_authenticated
-            else user_from_ip(request.remote_addr))
+            else backends.user_from_ip(request.remote_addr))
 
     if not user.is_authenticated:
         return jsonify(version=0)
@@ -261,7 +261,7 @@ def contact():
         from_mail = form.email.data
         subject = "[Kontakt] {}".format(form.subject.data)
         message = "Name: {0}\n\n{1}".format(form.name.data, form.message.data)
-        dormitory = dormitory_from_name(form.dormitory.data)
+        dormitory = get_dormitory(form.dormitory.data)
         support_mail = dormitory.datasource.support_mail
 
         if send_mail(from_mail, support_mail, subject, message):

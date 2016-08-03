@@ -1,10 +1,10 @@
 from functools import partial
 
 from flask import abort, url_for
-from tests.prepare import AppInitialized
+from tests.base import SampleFrontendTestBase
 
 
-class TestErrorhandlersCase(AppInitialized):
+class TestErrorhandlersCase(SampleFrontendTestBase):
     used_codes = [401, 403, 404]
 
     def create_app(self):
@@ -28,7 +28,7 @@ class TestErrorhandlersCase(AppInitialized):
             self.assertTemplateUsed('error.html')
 
 
-class GenericEndpointsReachableTestCase(AppInitialized):
+class GenericEndpointsReachableTestCase(SampleFrontendTestBase):
     def test_index_redirects_correctly(self):
         response = self.client.get('/')
         self.assertRedirects(response, '/news/')

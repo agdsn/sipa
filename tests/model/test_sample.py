@@ -1,10 +1,11 @@
 import sipa.model.sample
-from sipa.model.property import (ActiveProperty, Capabilities,
-                                 UnsupportedProperty, NO_CAPABILITIES)
-from tests.prepare import AppInitialized
+from sipa.model.fancy_property import (ActiveProperty, Capabilities,
+                                       UnsupportedProperty, NO_CAPABILITIES)
+
+from tests.base import SampleFrontendTestBase
 
 
-class TestSampleUserCase(AppInitialized):
+class TestSampleUserCase(SampleFrontendTestBase):
     expected_result = {
         # 'attr_name': ('key_in_sample_dict', Capabilities())
         'realname': ('name', NO_CAPABILITIES),

@@ -2,71 +2,53 @@ from base64 import urlsafe_b64encode
 from os import urandom
 from unittest import TestCase
 
+from ipaddress import IPv4Network
 from flask import Flask
-from flask_testing import TestCase as FlaskTestCase
 
-from sipa.model import (dormitory_from_ip, dormitory_from_name,
-                        init_datasources_dormitories, list_all_dormitories,
-                        list_supported_dormitories)
-from sipa.model.default import BaseUser
-from tests.prepare import AppInitialized
+from sipa.model import Backends
+from sipa.model.datasource import DataSource, Dormitory
+from sipa.model.user import BaseUser
 
 
-class TestUninitializedBackendCase(FlaskTestCase):
-    def create_app(self):
-        test_app = Flask('sipa')
-        test_app.config['TESTING'] = True
-        test_app.debug = True
-        return test_app
-
-    def test_datasources_not_registered(self):
-        assert 'datasources' not in self.app.extensions
-
-    def test_dormitories_not_registered(self):
-        assert 'dormitories' not in self.app.extensions
-
-    def test_all_dormitories_not_registered(self):
-        assert 'all_dormitories' not in self.app.extensions
-
-
-class TestNoDebugBackends(FlaskTestCase):
-    def create_app(self):
-        test_app = Flask('sipa')
-        test_app.config['TESTING'] = True
-        init_datasources_dormitories(test_app)
-        return test_app
-
-    def test_no_debug_backends(self):
-        assert not any(
-            dsrc.debug_only for dsrc in self.app.extensions['datasources']
-        )
-        assert not any(
-            dorm.datasource.debug_only
-            for dorm in self.app.extensions['dormitories']
+class TestBackendInitializationCase(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.app = Flask('sipa')
+        self.app.config['BACKENDS'] = ['foo']
+        datasource = DataSource(
+            name='foo',
+            user_class=object,
+            mail_server="",
+            webmailer_url="",
+            support_mail="",
+            init_context=lambda app: None
         )
 
+        Dormitory(name='test', display_name="",
+                  datasource=datasource, subnets=[IPv4Network('127.0.0.0/8')])
 
-class TestBackendInitializationCase(AppInitialized):
-    def test_extensions_registrated(self):
-        assert 'datasources' in self.app.extensions
-        assert 'dormitories' in self.app.extensions
-        assert 'all_dormitories' in self.app.extensions
+        self.backends = Backends(available_datasources=[datasource])
+        self.backends.init_app(self.app)
+        self.backends.init_backends()
+
+    def test_extension_registrated(self):
+        assert 'backends' in self.app.extensions
 
     def test_datasource_names_unique(self):
-        names = [dsrc.name for dsrc in self.app.extensions['datasources']]
+        names = [dsrc.name for dsrc in self.backends.datasources]
         self.assertEqual(len(names), len(set(names)))
 
     def test_dormitory_names_unique(self):
-        names = [dorm.name for dorm in self.app.extensions['dormitories']]
+        names = [dorm.name for dorm in self.backends.dormitories]
         self.assertEqual(len(names), len(set(names)))
 
     def test_all_dormitories_names_unique(self):
-        names = [dorm.name for dorm in self.app.extensions['all_dormitories']]
+        names = [dorm.name for dorm in self.backends.all_dormitories]
         self.assertEqual(len(names), len(set(names)))
 
     def test_all_dormitories_greater(self):
-        assert (set(self.app.extensions['all_dormitories']) >=
-                set(self.app.extensions['dormitories']))
+        assert (set(self.backends.all_dormitories) >=
+                set(self.backends.dormitories))
 
     def assert_dormitories_namelist(self, list, base):
         """Asserts whether the list consists of (str, str) tuples
@@ -80,23 +62,23 @@ class TestBackendInitializationCase(AppInitialized):
 
     def test_all_dormitories_list(self):
         self.assert_dormitories_namelist(
-            list_all_dormitories(),
-            self.app.extensions['all_dormitories'],
+            self.backends.dormitories_short,
+            self.backends.all_dormitories,
         )
 
     def test_supported_dormitories_list(self):
         self.assert_dormitories_namelist(
-            list_supported_dormitories(),
-            self.app.extensions['dormitories'],
+            self.backends.supported_dormitories_short,
+            self.backends.dormitories,
         )
 
-    def test_dormitory_from_name(self):
-        for dormitory in self.app.extensions['dormitories']:
-            self.assertEqual(dormitory_from_name(dormitory.name),
+    def test_get_dormitory(self):
+        for dormitory in self.backends.dormitories:
+            self.assertEqual(self.backends.get_dormitory(dormitory.name),
                              dormitory)
 
         possible_names = [
-            dorm.name for dorm in self.app.extensions['dormitories']
+            dorm.name for dorm in self.backends.dormitories
         ]
 
         for str_length in range(10):
@@ -104,13 +86,13 @@ class TestBackendInitializationCase(AppInitialized):
             while random_string in possible_names:
                 random_string = urlsafe_b64encode(urandom(str_length))
 
-            assert dormitory_from_name(random_string) is None
+            assert self.backends.get_dormitory(random_string) is None
 
     def test_dormitory_from_ip(self):
-        for dorm in self.app.extensions['dormitories']:
+        for dorm in self.backends.dormitories:
             first_ip = next(dorm.subnets.subnets[0].hosts())
 
-            self.assertEqual(dormitory_from_ip(first_ip), dorm)
+            self.assertEqual(self.backends.dormitory_from_ip(first_ip), dorm)
 
         # TODO: Find an ip not in any dormitory
 
