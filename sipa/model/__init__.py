@@ -17,6 +17,7 @@ from sipa.utils.exceptions import InvalidConfiguration
 logger = logging.getLogger(__name__)
 
 
+#: The implemented datasources available by default
 AVAILABLE_DATASOURCES = [
     sample.datasource,
     wu.datasource,
@@ -26,14 +27,28 @@ AVAILABLE_DATASOURCES = [
 
 
 def evaluates_uniquely(objects, func):
-    """Return true if the return value of `func` is unique among `objects`.
+    """Return true if the return value of ``func`` is unique among
+    ``objects``.
 
     This can be used to check whether some attribute `obj.attr` is
     unique among a set of such objects, and can thus be used as a key.
 
+    **Usage:**
+
+    >>> from operator import itemgetter
+    >>> objs = [{'name': "foo"}, {'name': "bar"}]
+    >>> evaluates_uniquely(objs, func=itemgetter('name'))
+    True
+
+    >>> from operator import itemgetter
+    >>> objs = [{'name': "foo"}, {'name': "foo"}]
+    >>> evaluates_uniquely(objs, func=itemgetter('name'))
+    False
+
     :param objects: the object on which to apply func to
     :param func: the function to be evaluated, given each object as a
         parameter.  Must return something hashable.
+
     :return: whether the uniqueness holds
     :rtype: bool
     """
@@ -61,7 +76,7 @@ class Backends:
     only a name, but also a `display_name` and ip subnets.  The latter
     are needed to semi-authenticate a user based on his ip.
 
-    Usage:
+    **Usage:**
 
     >>> app = Flask('appname')
     >>> backends = Backends()
@@ -72,6 +87,7 @@ class Backends:
     >>> app.run()
 
     This class provides methods concerning:
+
     * *initialization* of the extension and backends
     * *lists* of the currently (un)supported dormitories and
        datasources
@@ -82,17 +98,18 @@ class Backends:
 
     """
     def __init__(self, available_datasources=None):
-        """Initialize private lookup dicts.
-
-        :param available_datasources: a list of implemented
-            datasources to consider activatable.
-        """
         if available_datasources is None:
             available_datasources = AVAILABLE_DATASOURCES
+
+        #: A list of datasources that can be activated. Defaults to
+        #: :py:data:`AVAILABLE_DATASOURCES`
         self.available_datasources = available_datasources
 
+        #: The datasources dict
         self._datasources = {}
+        #: The dormitory dict
         self._dormitories = {}
+        #: The premature_dormitories dict
         self._premature_dormitories = {}
 
     def init_app(self, app):
@@ -100,6 +117,8 @@ class Backends:
 
         The datasources will be registered according to the app's
         config.
+
+        :param app: The flask app object to register against
         """
         app.extensions['backends'] = self
         self.app = app
@@ -169,13 +188,13 @@ class Backends:
         db.init_app(app)
 
     def init_backends(self):
-        """Initialize each backend to ``app``
+        """Initialize the activated backends
 
-        For this method, initialization of the instance is required in
-        order to access :py:def:`self.app`.
+        This is the method that does the actual initialization.  It
+        calls each :py:class:`DataSource`s `init_context` function.
 
-        Execute :py:meth:`backends_preinit`, and call
-        :py:meth:`init_context` on each datasource.
+        In there, things like setting up a pg session or registering
+        an ldap object to the app might be done.
         """
         self.backends_preinit(self.app)
 
@@ -202,9 +221,8 @@ class Backends:
 
     @property
     def all_dormitories(self):
-        """A list of the currently registered dormitories
-
-        This version includes premature dormitories.
+        """A list of the currently registered dormitories including
+        premature dormitories.
         """
         return self.dormitories + list(self._premature_dormitories.values())
 
@@ -212,6 +230,11 @@ class Backends:
 
     @property
     def dormitories_short(self):
+        """Return a list of dormitories as tuples instead of objects
+
+        :return: a list of ``(name, display_name)`` tuples
+        :rtype: list of :py:data:`_dorm_summary` namedtuples
+        """
         return sorted([
             _dorm_summary(name=dormitory.name,
                           display_name=dormitory.display_name)
@@ -220,6 +243,12 @@ class Backends:
 
     @property
     def supported_dormitories_short(self):
+        """Return a list of supported dormitories as tuples instead of
+        objects
+
+        :return: a list of ``(name, display_name)`` tuples
+        :rtype: list of :py:data:`_dorm_summary` namedtuples
+        """
         return sorted([
             _dorm_summary(name=dormitory.name,
                           display_name=dormitory.display_name)
@@ -229,17 +258,37 @@ class Backends:
     # LOOKUP METHODS
 
     def get_dormitory(self, name):
+        """Lookup the dormitory with name ``name``.
+
+        :param str name: The dormitory's ``name``
+
+        :return: The dormitory object
+        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
+        """
         for dormitory in self.all_dormitories:
             if dormitory.name == name:
                 return dormitory
 
     def get_datasource(self, name):
+        """Lookup the datasource with name ``name``.
+
+        :param str name: The datasource's ``name``
+
+        :return: The datasource object
+        :rtype: :py:class:`~sipa.model.datasource.Datasource`
+        """
         for datasource in self.datasources:
             if datasource.name == name:
                 return datasource
 
     def dormitory_from_ip(self, ip):
-        """Return the dormitory whose subnets contain `ip`"""
+        """Return the dormitory whose subnets contain ``ip``
+
+        :param str ip: The ip
+
+        :return: The dormitory containing ``ip``
+        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
+        """
         try:
             address = IPv4Address(str(ip))
         except AddressValueError:
@@ -250,16 +299,25 @@ class Backends:
                     return dormitory
 
     def preferred_dormitory_name(self):
-        """Return the name of the request's ip's dormitory"""
+        """Return the name of the preferred dormitory based on the
+        request's ip
+
+        :return: name of the dormitory
+        :rtype: str
+        """
         dormitory = self.dormitory_from_ip(request.remote_addr)
         if dormitory:
             return dormitory.name
 
     def user_from_ip(self, ip):
-        """Return the User that corresponds to `ip` according to the datasource.
+        """Return the User that corresponds to ``ip`` according to the
+        datasource.
 
-        :return: The corresponding User in the sense of the datasource.
-        :rtype: The corresponding datasources `user_class`.
+        :param str ip: The ip
+
+        :return: The corresponding User in the sense of the
+                 datasource.
+        :rtype: The corresponding datasources ``user_class``.
         """
         dormitory = self.dormitory_from_ip(ip)
         if not dormitory:
@@ -274,11 +332,17 @@ class Backends:
     # PROXIES
 
     def current_dormitory(self):
-        """Read the current dormitory from the session"""
+        """Read the current dormitory from the session
+
+        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
+        """
         return self.get_dormitory(session['dormitory'])
 
     def current_datasource(self):
-        """Read the current datasource from the session"""
+        """Read the current datasource from the session
+
+        :rtype: :py:class:`~sipa.model.datasource.Datasource`
+        """
         dormitory = self.current_dormitory()
         if dormitory:
             return dormitory.datasource
@@ -287,6 +351,7 @@ class Backends:
 backends = LocalProxy(lambda: current_app.extensions['backends'])
 
 
+#: A namedtuple to improve readability of some return values
 _dorm_summary = namedtuple('_dorm_summary', ['name', 'display_name'])
 
 

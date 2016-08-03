@@ -8,20 +8,29 @@ logger = logging.getLogger(__name__)
 
 
 class DataSource:
-    """DataSource object Providing its name and the User object.
+    """A class providing a certain Backend.
 
+    This class provides information about the backend you defined, for
+    instance the user class.
     """
     def __init__(self, name, user_class, mail_server,
                  webmailer_url=None,
                  support_mail=None,
                  init_context=None):
         super().__init__()
+
+        #: Holds the name of this datasource.  Must be unique among
+        #: what you register onto your `Backends` object.
         self.name = name
 
         class _user_class(user_class):
             datasource = self
+        #: the user_class used in the sense of ``flask_login``.  See
+        #: :py:class:`~.user.BaseUser`
         self.user_class = _user_class
 
+        #: The mail server to be appended to a user's login in order
+        #: to construct the mail address.
         self.mail_server = mail_server
         self.webmailer_url = webmailer_url
         self.support_mail = (support_mail if support_mail
