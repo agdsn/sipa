@@ -290,15 +290,6 @@ backends = LocalProxy(lambda: current_app.extensions['backends'])
 _dorm_summary = namedtuple('_dorm_summary', ['name', 'display_name'])
 
 
-def init_context(app):
-    """Call each datasources `init_context` method."""
-    app.config['SQLALCHEMY_BINDS'] = {}
-    db.init_app(app)
-    for datasource in app.extensions['datasources']:
-        if datasource.init_context:
-            datasource.init_context(app)
-
-
 def query_gauge_data():
     credit = {'data': None, 'error': False, 'foreign_user': False}
     try:
