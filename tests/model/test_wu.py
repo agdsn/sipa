@@ -149,8 +149,9 @@ class WuAtlantisFakeDBInitialized(WuFrontendTestBase):
     def create_app(self, *a, **kw):
         config = {
             **kw.pop('additional_config', {}),
-            'WU_CONNECTION_STRING': "sqlite:///",
-            'DB_USERMAN_CONNECTION_STRING': "postgresql://sipa:password@postgres:5432/userman",  # noqa
+            'DB_NETUSERS_URI': "sqlite:///",
+            'DB_TRAFFIC_URI': "sqlite:///",
+            'DB_USERMAN_URI': "postgresql://sipa:password@postgres:5432/userman",  # noqa
             'DB_HELIOS_IP_MASK': "10.10.7.%",
         }
         return super().create_app(*a, **kw, additional_config=config)

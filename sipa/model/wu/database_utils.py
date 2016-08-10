@@ -30,6 +30,11 @@ def init_atlantis(app):
 
     for bind in ['netusers', 'traffic']:
         engine = db.get_engine(app, bind=bind)
+
+        # sqlite doesn't support setting a lock_wait_timeout
+        if 'sqlite' in engine.driver:
+            continue
+
         try:
             conn = engine.connect()
         except OperationalError:
