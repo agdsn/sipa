@@ -29,6 +29,7 @@ DORMITORY_MAPPINGS = [
 
 class Nutzer(db.Model):
     __tablename__ = 'nutzer'
+    __bind_key__ = 'netusers'
     __table_args__ = (
         Index(u'zimmer', u'etage', u'zimmernr'),
     )
@@ -85,6 +86,7 @@ class Nutzer(db.Model):
 
 class Computer(db.Model):
     __tablename__ = 'computer'
+    __bind_key__ = 'netusers'
 
     nutzer_id = Column(Integer, ForeignKey('nutzer.nutzer_id'), nullable=False)
 
@@ -97,6 +99,7 @@ class Computer(db.Model):
 
 class Credit(db.Model):
     __tablename__ = u'credit'
+    __bind_key__ = 'netusers'
 
     user_id = Column(Integer, ForeignKey('nutzer.nutzer_id'),
                      primary_key=True, nullable=False)

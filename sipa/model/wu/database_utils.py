@@ -20,8 +20,8 @@ def init_atlantis(app, static_connection_string=None):
     app.config['SQLALCHEMY_BINDS'] = {'userman': url_userman}
 
     if static_connection_string:
-        app.config['SQLALCHEMY_DATABASE_URI'] = static_connection_string
-        app.config['SQLALCHEMY_BINDS'].update(traffic=static_connection_string)
+        app.config['SQLALCHEMY_BINDS'].update(traffic=static_connection_string,
+                                              netusers=static_connection_string)
 
         return
 
@@ -40,11 +40,10 @@ def init_atlantis(app, static_connection_string=None):
     except KeyError as exc:
         raise InvalidConfiguration(*exc.args)
 
-    # set netusers as default binding
-    app.config['SQLALCHEMY_DATABASE_URI'] = url_base.format('netusers')
-    app.config['SQLALCHEMY_BINDS'].update(traffic=url_base.format('traffic'))
+    app.config['SQLALCHEMY_BINDS'].update(traffic=url_base.format('traffic'),
+                                          netusers=url_base.format('netusers'))
 
-    for bind in [None, 'traffic']:
+    for bind in ['netusers', 'traffic']:
         engine = db.get_engine(app, bind=bind)
         try:
             conn = engine.connect()
