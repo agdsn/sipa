@@ -19,7 +19,7 @@ def init_atlantis(app):
     except KeyError as exc:
         raise InvalidConfiguration(*exc.args)
 
-    if not app.config['SQLALCHEMY_BINDS']:
+    if not app.config.get('SQLALCHEMY_BINDS'):
         app.config['SQLALCHEMY_BINDS'] = {}
 
     app.config['SQLALCHEMY_BINDS'].update(
@@ -84,7 +84,7 @@ def init_db(app):
     except InvalidConfiguration as exception:
         logger.info("Incomplete Configuration for userdb (%s)."
                     " Skipping `init_userdb()`.",
-                    exception.args[0])
+                    *exception.args)
 
 STATUS = {
     1: (lazy_gettext('ok'), 'success'),
