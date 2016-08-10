@@ -72,15 +72,18 @@ def init_db(app):
 
     For testing reasons, the initialization of userdb will be skipped
     on invalid configuration.  Configuring atlantis however is
-    obligatiory.  See `init_atlantis`.
+    obligatiory.  See :meth:`~init_atlantis` and :meth:`~init_userdb`.
+
+    :param app: The Flask app object
     """
+
     init_atlantis(app)
 
     try:
         init_userdb(app)
     except InvalidConfiguration as exception:
         logger.info("Incomplete Configuration for userdb (%s)."
-                    " Skipping `init_init_userdb()`.",
+                    " Skipping `init_userdb()`.",
                     exception.args[0])
 
 STATUS = {
