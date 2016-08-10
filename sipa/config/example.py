@@ -55,9 +55,12 @@
 # DB_ATLANTIS_PASSWORD = None
 
 # Userman configuration
-# Form: "postgresql://user:pw@host:port/db"
-# DB_USERMAN_CONNECTION_STRING = None  # Must be set
-
+# Form: "[{driver}+]{dialect}://{user}:{pw}@{host}:{port}/{db}?connect_timeout={timeout}"
+# Example: "mysql+pymysql://root:root@localhost:3306/testdb?connect_timeout=5"
+# A timeout or similiar must be set manually.
+# DB_USERMAN_URI = None  # Must be set
+# DB_NETUSERS_URI = None  # Must be set
+# DB_TRAFFIC_URI = None  # Must be set
 
 # MySQL Helios configuration
 # DB_HELIOS_HOST = "helios.agdsn"  # Must be set

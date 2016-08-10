@@ -34,13 +34,10 @@ WU_LDAP_SEARCH_GROUP_BASE = None
 WU_LDAP_SEARCH_USER = None
 WU_LDAP_SEARCH_PASSWORD = None
 
-# MySQL configuration
-DB_ATLANTIS_HOST = ""
-DB_ATLANTIS_USER = None
-DB_ATLANTIS_PASSWORD = None
-
 # Userman configuration
-# DB_USERMAN_CONNECTION_STRING: not set
+# DB_USERMAN_URI: not set
+# DB_NETUSERS_URI: not set
+# DB_TRAFFIC_URI: not set
 
 # MySQL Helios configuration
 # DB_HELIOS_HOST: not set

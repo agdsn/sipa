@@ -11,37 +11,22 @@ from sipa.utils.exceptions import InvalidConfiguration
 logger = logging.getLogger(__name__)
 
 
-def init_atlantis(app, static_connection_string=None):
+def init_atlantis(app):
     try:
-        url_userman = app.config['DB_USERMAN_CONNECTION_STRING']
+        uri_userman = app.config['DB_USERMAN_URI']
+        uri_netusers = app.config['DB_NETUSERS_URI']
+        uri_traffic = app.config['DB_TRAFFIC_URI']
     except KeyError as exc:
         raise InvalidConfiguration(*exc.args)
 
-    app.config['SQLALCHEMY_BINDS'] = {'userman': url_userman}
+    if not app.config['SQLALCHEMY_BINDS']:
+        app.config['SQLALCHEMY_BINDS'] = {}
 
-    if static_connection_string:
-        app.config['SQLALCHEMY_BINDS'].update(traffic=static_connection_string,
-                                              netusers=static_connection_string)
-
-        return
-
-    try:
-        url_base = (
-            "mysql+pymysql://{user}:{pw}@{host}:3306/{{}}"
-            "?connect_timeout={timeout}"
-            .format(
-                user=app.config['DB_ATLANTIS_USER'],
-                pw=app.config['DB_ATLANTIS_PASSWORD'],
-                host=app.config['DB_ATLANTIS_HOST'],
-                timeout=app.config['SQL_TIMEOUT'],
-            )
-        )
-
-    except KeyError as exc:
-        raise InvalidConfiguration(*exc.args)
-
-    app.config['SQLALCHEMY_BINDS'].update(traffic=url_base.format('traffic'),
-                                          netusers=url_base.format('netusers'))
+    app.config['SQLALCHEMY_BINDS'].update(
+        netusers=uri_netusers,
+        traffic=uri_traffic,
+        userman=uri_userman,
+    )
 
     for bind in ['netusers', 'traffic']:
         engine = db.get_engine(app, bind=bind)
@@ -84,11 +69,7 @@ def init_db(app):
     on invalid configuration.  Configuring atlantis however is
     obligatiory.  See `init_atlantis`.
     """
-    init_atlantis(
-        app,
-        # No condition necessary: if not set, it will be None and ignored.
-        static_connection_string=app.config.get('WU_CONNECTION_STRING'),
-    )
+    init_atlantis(app)
 
     try:
         init_userdb(app)
