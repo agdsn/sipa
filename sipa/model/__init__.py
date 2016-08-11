@@ -168,7 +168,6 @@ class Backends:
         app.config['SQLALCHEMY_BINDS'] = {}
         db.init_app(app)
 
-
     def init_backends(self):
         self.backends_preinit(self.app)
 
