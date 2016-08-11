@@ -113,6 +113,19 @@ def init_env_and_config(app):
         if not os.path.isdir(app.config['FLATPAGES_ROOT']):
             os.mkdir(app.config['FLATPAGES_ROOT'])
 
+    if app.config['UWSGI_TIMER_ENABLED']:
+        try_register_uwsgi_timer(app=app)
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    if not app.config.get('SECRET_KEY'):
+        if not app.debug:
+            logger.warning('SECRET_KEY not set. Using default Key.')
+        app.config['SECRET_KEY'] = "yIhswxbuDCvK8a6EDGihW6xjNognxtyO85SI"
+
+
+def try_register_uwsgi_timer(app):
+    """Register the uwsgi timer if uwsgi isavailable"""
     try:
         import uwsgi
         from uwsgidecorators import timer
@@ -133,13 +146,6 @@ def init_env_and_config(app):
                 uwsgi.reload()
 
         logger.debug("Registered repo update to uwsgi signal")
-
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    if not app.config.get('SECRET_KEY'):
-        if not app.debug:
-            logger.warning('SECRET_KEY not set. Using default Key.')
-        app.config['SECRET_KEY'] = "yIhswxbuDCvK8a6EDGihW6xjNognxtyO85SI"
 
 
 def init_logging(app):
