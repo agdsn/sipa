@@ -51,6 +51,9 @@ SQL_TIMEOUT = 2
 GEROK_ENDPOINT = ""
 GEROK_API_TOKEN = None
 
+# Whether to use the timer
+UWSGI_TIMER_ENABLED = False
+
 # The Token for the git update hook.
 # It is disabled if nothing provided
 GIT_UPDATE_HOOK_TOKEN = ""

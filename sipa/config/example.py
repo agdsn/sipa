@@ -83,6 +83,9 @@
 # It is disabled if nothing provided
 # GIT_UPDATE_HOOK_TOKEN = ""
 
+# Whether to use the timer
+# UWSGI_TIMER_ENABLED = False
+
 # The languages babel provides.  It does not make much sense to chagne
 # anything here.
 
