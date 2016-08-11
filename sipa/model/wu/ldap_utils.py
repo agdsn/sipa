@@ -22,7 +22,7 @@ def init_ldap(app):
             'search_group_base': app.config['WU_LDAP_SEARCH_GROUP_BASE']
         }
     except KeyError as exception:
-        raise InvalidConfiguration(exception.args[0])
+        raise InvalidConfiguration(*exception.args)
 
 
 CONF = LocalProxy(lambda: current_app.extensions['ldap'])

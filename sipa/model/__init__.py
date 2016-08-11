@@ -163,9 +163,13 @@ class Backends:
                              .format(name))
         self._dormitories[name] = dormitory
 
+    @staticmethod
+    def backends_preinit(app):
+        app.config['SQLALCHEMY_BINDS'] = {}
+        db.init_app(app)
+
     def init_backends(self):
-        self.app.config['SQLALCHEMY_BINDS'] = {}
-        db.init_app(self.app)
+        self.backends_preinit(self.app)
 
         for datasource in self.datasources:
             if datasource.init_context:

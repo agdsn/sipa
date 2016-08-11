@@ -15,7 +15,7 @@ def init_context(app):
             'hss': app.config['HSS_CONNECTION_STRING']
         })
     except KeyError as exception:
-        raise InvalidConfiguration(exception.args[0])
+        raise InvalidConfiguration(*exception.args)
 
 
 datasource = DataSource(

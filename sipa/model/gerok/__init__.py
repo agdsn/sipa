@@ -14,7 +14,7 @@ def init_context(app):
             'token': app.config['GEROK_API_TOKEN']
         }
     except KeyError as exception:
-        raise InvalidConfiguration(exception.args[0])
+        raise InvalidConfiguration(*exception.args)
 
 
 datasource = DataSource(

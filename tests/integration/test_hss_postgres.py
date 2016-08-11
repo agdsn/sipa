@@ -20,7 +20,6 @@ class HssPgTestBase(HssFrontendTestBase):
     def create_app(self, *a, **kw):
         conf = {
             **kw.pop('additional_config', {}),
-            'WU_CONNECTION_STRING': "sqlite:///",
             'HSS_CONNECTION_STRING': "postgresql://sipa:password@postgres:5432/",
             'DB_HELIOS_IP_MASK': "10.10.7.%",
         }

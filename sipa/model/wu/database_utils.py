@@ -11,41 +11,30 @@ from sipa.utils.exceptions import InvalidConfiguration
 logger = logging.getLogger(__name__)
 
 
-def init_atlantis(app, static_connection_string=None):
+def init_atlantis(app):
     try:
-        url_userman = app.config['DB_USERMAN_CONNECTION_STRING']
+        uri_userman = app.config['DB_USERMAN_URI']
+        uri_netusers = app.config['DB_NETUSERS_URI']
+        uri_traffic = app.config['DB_TRAFFIC_URI']
     except KeyError as exc:
         raise InvalidConfiguration(*exc.args)
 
-    app.config['SQLALCHEMY_BINDS'] = {'userman': url_userman}
+    if not app.config.get('SQLALCHEMY_BINDS'):
+        app.config['SQLALCHEMY_BINDS'] = {}
 
-    if static_connection_string:
-        app.config['SQLALCHEMY_DATABASE_URI'] = static_connection_string
-        app.config['SQLALCHEMY_BINDS'].update(traffic=static_connection_string)
+    app.config['SQLALCHEMY_BINDS'].update(
+        netusers=uri_netusers,
+        traffic=uri_traffic,
+        userman=uri_userman,
+    )
 
-        return
-
-    try:
-        url_base = (
-            "mysql+pymysql://{user}:{pw}@{host}:3306/{{}}"
-            "?connect_timeout={timeout}"
-            .format(
-                user=app.config['DB_ATLANTIS_USER'],
-                pw=app.config['DB_ATLANTIS_PASSWORD'],
-                host=app.config['DB_ATLANTIS_HOST'],
-                timeout=app.config['SQL_TIMEOUT'],
-            )
-        )
-
-    except KeyError as exc:
-        raise InvalidConfiguration(*exc.args)
-
-    # set netusers as default binding
-    app.config['SQLALCHEMY_DATABASE_URI'] = url_base.format('netusers')
-    app.config['SQLALCHEMY_BINDS'].update(traffic=url_base.format('traffic'))
-
-    for bind in [None, 'traffic']:
+    for bind in ['netusers', 'traffic']:
         engine = db.get_engine(app, bind=bind)
+
+        # sqlite doesn't support setting a lock_wait_timeout
+        if 'sqlite' in engine.driver:
+            continue
+
         try:
             conn = engine.connect()
         except OperationalError:
@@ -83,20 +72,19 @@ def init_db(app):
 
     For testing reasons, the initialization of userdb will be skipped
     on invalid configuration.  Configuring atlantis however is
-    obligatiory.  See `init_atlantis`.
+    obligatiory.  See :meth:`~init_atlantis` and :meth:`~init_userdb`.
+
+    :param app: The Flask app object
     """
-    init_atlantis(
-        app,
-        # No condition necessary: if not set, it will be None and ignored.
-        static_connection_string=app.config.get('WU_CONNECTION_STRING'),
-    )
+
+    init_atlantis(app)
 
     try:
         init_userdb(app)
     except InvalidConfiguration as exception:
         logger.info("Incomplete Configuration for userdb (%s)."
-                    " Skipping `init_init_userdb()`.",
-                    exception.args[0])
+                    " Skipping `init_userdb()`.",
+                    *exception.args)
 
 STATUS = {
     1: (lazy_gettext('ok'), 'success'),
