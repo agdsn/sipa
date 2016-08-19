@@ -97,15 +97,14 @@ class HssPasswordChangeTestCase(HssFrontendTestBase):
                          self.rv_redirected.data)
 
     def test_success_message_flashed(self):
-        self.assertIn("class=\"sipa_flash alert alert-success\"".encode('utf-8'),
-                      self.rv_redirected.data)
+        self.assert_something_flashed(self.rv_redirected.data, level='success')
 
     def test_login_with_old_password_fails(self):
         self.logout()
-        response_login_data = self.login().data.decode('utf-8')
+        response_login_data = self.login().data
 
-        self.assertRegex(response_login_data, 'class="[^"]*alert-danger[^"]*"')
+        self.assert_something_flashed(response_login_data, level="danger")
 
         flash_message_re = re.compile('authentication data.*incorrect',
                                       flags=re.IGNORECASE)
-        self.assertRegex(response_login_data, flash_message_re)
+        self.assertRegex(response_login_data.decode('utf-8'), flash_message_re)

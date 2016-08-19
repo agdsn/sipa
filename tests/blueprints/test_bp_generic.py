@@ -1,7 +1,7 @@
 from functools import partial
 
 from flask import abort, url_for
-from tests.base import SampleFrontendTestBase
+from tests.base import SampleFrontendTestBase, FormTemplateTestMixin
 
 from sipa.model import backends
 
@@ -61,56 +61,6 @@ class GenericEndpointsReachableTestCase(SampleFrontendTestBase):
     def test_version_reachable(self):
         self.assert200(self.client.get(url_for('generic.version')))
         self.assertTemplateUsed('version.html')
-
-
-class FormTemplateTestMixin:
-    """A Mixin for conveniently testing forms.
-
-    Must be mixed with a subclass of :py:cls:`TestCase` in order to
-    access the assert methods.
-
-    Requires the following attributes:
-
-        - client: The flask test client
-
-        - url: The url of the endpoint to test
-
-        - template: The location of the template file, relative to the
-          template root
-    """
-    def assert_something_flashed(self, data, level='danger'):
-        """Assert that something flashed inside the body.
-
-        :param binary data: binary content of the response
-        :param str level: the flash level, i.e. one of ['info',
-            'success', 'warning', 'danger']
-        """
-        string_to_find = "sipa_flash alert alert-{}".format(level)
-        self.assertIn(string_to_find.encode('utf-8'), data)
-
-    def assert_nothing_flashed(self, data):
-        string_not_to_find = "sipa_flash alert"
-        self.assertNotIn(string_not_to_find.encode('utf-8'), data)
-
-    def test_endpoint_reachable(self):
-        self.assert200(self.client.get(self.url))
-        self.assertTemplateUsed(self.template)
-
-    def test_empty_request_flashes(self):
-        resp = self.client.post(self.url)
-        self.assert_something_flashed(resp.data)
-
-    def test_invalid_data_flashes(self):
-        for data in self.invalid_data:
-            with self.subTest(data=data):
-                resp = self.client.post(self.url, data=data)
-                self.assert_something_flashed(resp.data)
-
-    def test_valid_data_passes(self):
-        for data in self.valid_data:
-            with self.subTest(data=data):
-                resp = self.client.post(self.url, data=data)
-                self.assert_nothing_flashed(resp.data)
 
 
 class AnonymousContactTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
