@@ -97,7 +97,7 @@ class HssPasswordChangeTestCase(HssFrontendTestBase):
                          self.rv_redirected.data)
 
     def test_success_message_flashed(self):
-        self.assertIn("class=\"alert alert-success\"".encode('utf-8'),
+        self.assertIn("class=\"sipa_flash alert alert-success\"".encode('utf-8'),
                       self.rv_redirected.data)
 
     def test_login_with_old_password_fails(self):
