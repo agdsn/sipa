@@ -1,7 +1,7 @@
 # -*- coding: utf-8; -*-
 from unittest.mock import MagicMock, patch
 
-from tests.prepare import AppInitialized
+from tests.base import AppInitialized
 
 
 GIT_HOOK_URL = '/hooks/update-content'

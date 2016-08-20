@@ -9,7 +9,7 @@ from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connec
                                  might_be_ldap_dn, change_password)
 from sipa.model.hss.user import User
 from sipa.utils.exceptions import InvalidCredentials, UserNotFound
-from tests.prepare import AppInitialized
+from ..base import AppInitialized
 from .test_hss_postgres import HSSOneAccountFixture, HssPgTestBase
 
 

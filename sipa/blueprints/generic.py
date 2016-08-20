@@ -261,7 +261,7 @@ def contact():
         from_mail = form.email.data
         subject = "[Kontakt] {}".format(form.subject.data)
         message = "Name: {0}\n\n{1}".format(form.name.data, form.message.data)
-        dormitory = get_dormitory(form.dormitory.data)
+        dormitory = backends.get_dormitory(form.dormitory.data)
         support_mail = dormitory.datasource.support_mail
 
         if send_mail(from_mail, support_mail, subject, message):

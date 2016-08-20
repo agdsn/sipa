@@ -1,7 +1,9 @@
 from functools import partial
 
 from flask import abort, url_for
-from tests.base import SampleFrontendTestBase
+from tests.base import SampleFrontendTestBase, FormTemplateTestMixin
+
+from sipa.model import backends
 
 
 class TestErrorhandlersCase(SampleFrontendTestBase):
@@ -36,10 +38,6 @@ class GenericEndpointsReachableTestCase(SampleFrontendTestBase):
     def test_index_reachable(self):
         self.assert200(self.client.get('/', follow_redirects=True))
 
-    def test_login_reachable(self):
-        self.assert200(self.client.get(url_for('generic.login')))
-        self.assertTemplateUsed('login.html')
-
     def test_usertraffic_denied(self):
         # throws 401 because we don't have an ip matching a user
         self.assertStatus(self.client.get(url_for('generic.usertraffic')), 401)
@@ -48,14 +46,72 @@ class GenericEndpointsReachableTestCase(SampleFrontendTestBase):
         rv = self.client.get(url_for('generic.traffic_api'))
         self.assert200(rv)
 
-    def test_contact_reachable(self):
-        self.assert200(self.client.get(url_for('generic.contact')))
-        self.assertTemplateUsed('anonymous_contact.html')
-
-    def test_official_contact_reachable(self):
-        self.assert200(self.client.get(url_for('generic.contact_official')))
-        self.assertTemplateUsed('official_contact.html')
-
     def test_version_reachable(self):
         self.assert200(self.client.get(url_for('generic.version')))
         self.assertTemplateUsed('version.html')
+
+
+class LoginTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
+    def setUp(self):
+        super().setUp()
+        self.url = url_for('generic.login')
+        self.dormitory = 'localhost'
+        self.template = 'login.html'
+
+        self.valid_data = [{
+            'dormitory': self.dormitory,
+            'username': "test",
+            'password': "test",
+            'remember': "1",
+        }]
+        self.invalid_data = [
+            {**self.valid_data[0], 'dormitory': ''},
+            {**self.valid_data[0], 'dormitory': 'not_'+self.dormitory},
+            {**self.valid_data[0], 'username': ''},
+            {**self.valid_data[0], 'username': 'not_test'},
+        ]
+
+
+class AnonymousContactTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
+    def setUp(self):
+        super().setUp()
+        self.url = url_for('generic.contact')
+        self.dormitory = 'localhost'
+        self.template = 'anonymous_contact.html'
+
+        self.valid_data = [{
+            'email': "foo@bar.baz",
+            'name': "Darc net",
+            'dormitory': self.dormitory,
+            'subject': "Test",
+            'message': "Test message!",
+        }]
+        self.invalid_data = [
+            {**self.valid_data[0], 'email': ''},
+            {**self.valid_data[0], 'email': 'foo@bar'},
+            {**self.valid_data[0], 'name': ''},
+            {**self.valid_data[0], 'dormitory': 'not_'+self.dormitory},
+            {**self.valid_data[0], 'subject': ''},
+            {**self.valid_data[0], 'message': ''},
+        ]
+
+
+class OfficialContactTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
+    def setUp(self):
+        super().setUp()
+        self.url = url_for('generic.contact_official')
+        self.template = 'official_contact.html'
+
+        self.valid_data = [{
+            'email': "foo@bar.baz",
+            'name': "Darc net",
+            'subject': "Test",
+            'message': "Test message!",
+        }]
+        self.invalid_data = [
+            {**self.valid_data[0], 'email': ''},
+            {**self.valid_data[0], 'email': 'foo@bar'},
+            {**self.valid_data[0], 'name': ''},
+            {**self.valid_data[0], 'subject': ''},
+            {**self.valid_data[0], 'message': ''},
+        ]
