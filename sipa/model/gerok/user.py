@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 from datetime import date, timedelta
+from functools import partial
 
 import requests
 from flask_login import AnonymousUserMixin
@@ -67,7 +68,10 @@ class User(BaseUser):
 
     @classmethod
     def from_ip(cls, ip):
-        userData = do_api_call('find?ip=' + ip)
+        try:
+            userData = do_api_call('find?ip=' + ip)
+        except ConnectionError:
+            return AnonymousUserMixin()
 
         if not userData:
             return AnonymousUserMixin()
@@ -218,17 +222,24 @@ class User(BaseUser):
 def do_api_call(request, method='get', postdata=None):
     """Request the NVTool-Api for informations
     """
-    requestUri = endpoint + request
-    authHeaderStr = 'Token token=' + token
 
     if method == 'get':
-        response = requests.get(requestUri, verify=False,
-                                headers={'Authorization': authHeaderStr})
+        request_function = requests.get
     elif method == 'post':
-        response = requests.post(requestUri, data=postdata, verify=False,
-                                 headers={'Authorization': authHeaderStr})
+        request_function = partial(requests.post, data=postdata)
     else:
         raise ValueError("`method` must be one of ['get', 'post']!")
+
+    try:
+        response = request_function(
+            endpoint + request,
+            verify=False,
+            headers={'Authorization': 'Token token={}'.format(token)},
+        )
+    except ConnectionError as e:
+        logger.error("Caught a ConnectionError when accessing Gerok API",
+                     extra={'data': {'endpoint': endpoint + request}})
+        raise ConnectionError("Gerok API unreachable") from e
 
     if response.status_code not in [200, 400, 403, 404]:
         logger.warning("Gerok API returned HTTP status %s", response.status_code,

@@ -80,12 +80,13 @@ def exceptionhandler_sql(ex):
 @bp_generic.app_errorhandler(LDAPCommunicationError)
 def exceptionhandler_ldap(ex):
     """Handles global LDAPCommunicationError exceptions.
-    The session must be reset, because if the user is logged in and the server
-    fails during his session, it would cause a redirect loop.
-    This also resets the language choice, btw.
 
-    The alternative would be a try-except catch block in load_user, but login
-    also needs a handler.
+    The session must be reset, because if the user is logged in and
+    the server fails during his session, it would cause a redirect
+    loop.  This also resets the language choice, btw.
+
+    The alternative would be a try-except catch block in load_user,
+    but login also needs a handler.
     """
     session.clear()
     flash(gettext("Verbindung zum LDAP-Server "
@@ -95,6 +96,18 @@ def exceptionhandler_ldap(ex):
         'Unable to connect to LDAP server',
         extra={'data': {'exception_args': ex.args}}
     )
+    return redirect(url_for('generic.index'))
+
+
+@bp_generic.app_errorhandler(ConnectionError)
+def exceptionhandler_gerok(ex):
+    """Handles ConnectionErrors
+
+    Session is cleared to avoid redirect loops, as above.
+    """
+    flash(gettext("Es gab einen internen Fehler. "
+                  "Bitte probiere es in ein paar Minuten noch mal."))
+    session.clear()
     return redirect(url_for('generic.index'))
 
 
