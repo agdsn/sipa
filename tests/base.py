@@ -1,4 +1,5 @@
 import os
+from contextlib import contextmanager
 
 from flask import Flask
 from flask_testing import TestCase
@@ -53,6 +54,27 @@ class AppInitialized(TestCase):
         )
         return test_app
 
+    @contextmanager
+    def temp_set_attribute(self, attr_name, value):
+        """Temporarily set an attribute to a certain value.
+
+        Usage:
+
+        >>> with self.temp_set_attribute('longMessage', False):
+        ...     assert self.longMessage = True
+        ...
+
+        :param str attr_name: The name of the attribute to change
+        :param value: The temporary value
+        """
+        old_value = getattr(self, attr_name)
+        setattr(self, attr_name, value)
+        yield
+        setattr(self, attr_name, old_value)
+
+    def temp_short_log(self):
+        return self.temp_set_attribute('longMessage', False)
+
     def assert_something_flashed(self, data, level='danger'):
         """Assert that something flashed inside the body.
 
@@ -61,11 +83,17 @@ class AppInitialized(TestCase):
             'success', 'warning', 'danger']
         """
         string_to_find = "sipa_flash alert alert-{}".format(level)
-        self.assertIn(string_to_find.encode('utf-8'), data)
+
+        with self.temp_short_log():
+            self.assertIn(string_to_find.encode('utf-8'), data,
+                          msg="Unexpectedly found no flash message"
+                          "with level {}!".format(level))
 
     def assert_nothing_flashed(self, data):
         string_not_to_find = "sipa_flash alert"
-        self.assertNotIn(string_not_to_find.encode('utf-8'), data)
+        with self.temp_short_log():
+            self.assertNotIn(string_not_to_find.encode('utf-8'), data,
+                             msg="Flash message found unexpectedly")
 
 
 def dynamic_frontend_base(backend):

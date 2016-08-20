@@ -92,7 +92,6 @@ class OfficialContactTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
         super().setUp()
         self.url = url_for('generic.contact_official')
         self.template = 'official_contact.html'
-        self.dormitory = 'localhost'
 
         self.valid_data = [{
             'email': "foo@bar.baz",
