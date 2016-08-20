@@ -68,7 +68,10 @@ class User(BaseUser):
 
     @classmethod
     def from_ip(cls, ip):
-        userData = do_api_call('find?ip=' + ip)
+        try:
+            userData = do_api_call('find?ip=' + ip)
+        except ConnectionError:
+            return AnonymousUserMixin()
 
         if not userData:
             return AnonymousUserMixin()

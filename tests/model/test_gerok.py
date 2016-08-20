@@ -140,7 +140,6 @@ class GerokAPIConnectionErrorTestCase(GerokFrontendTestBase):
 
         return app
 
-    @unittest.expectedFailure
     def test_endpoint_connectionerror_caught(self):
         def raise_on_api_call(*a, **kw):
             raise ConnectionError('Test!')
