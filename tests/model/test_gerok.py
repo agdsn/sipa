@@ -2,6 +2,7 @@ import json
 import logging
 from functools import partial
 from itertools import chain, product
+import unittest
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 
@@ -126,6 +127,29 @@ class TestGerokApiCall(GerokFrontendTestBase):
         tokens = ["", "foobar123", "dtrndturiaehc",
                   "54TRNEDr:-)/nyUfeg n:s lvℕΓΦ∃Δ∂ℝ⇐⊂6"]
         self.assert_token_passed(tokens, method='post')
+
+
+class GerokAPIConnectionErrorTestCase(GerokFrontendTestBase):
+    def create_app(self, *a, **kw):
+        app = super().create_app(*a, **kw)
+        self.endpoint_url = '/test/{}'.format(type(self).__name__)
+
+        @app.route(self.endpoint_url)
+        def call_gerok_api():
+            do_api_call('do_something')
+
+        return app
+
+    @unittest.expectedFailure
+    def test_endpoint_connectionerror_caught(self):
+        def raise_on_api_call(*a, **kw):
+            raise ConnectionError('Test!')
+
+        with patch('{}.do_api_call'.format(__name__), raise_on_api_call):
+            try:
+                self.client.get(self.endpoint_url)
+            except ConnectionError:
+                self.fail("ConnectionError not caught")
 
 
 def fake_api(users_dict, request, method='get', postdata=None):
