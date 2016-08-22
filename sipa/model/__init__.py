@@ -169,6 +169,14 @@ class Backends:
         db.init_app(app)
 
     def init_backends(self):
+        """Initialize each backend to ``app``
+
+        For this method, initialization of the instance is required in
+        order to access :py:def:`self.app`.
+
+        Execute :py:meth:`backends_preinit`, and call
+        :py:meth:`init_context` on each datasource.
+        """
         self.backends_preinit(self.app)
 
         for datasource in self.datasources:
