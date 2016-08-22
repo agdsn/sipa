@@ -139,12 +139,12 @@ class SubnetCollection:
 class Dormitory:
     """A dormitory as selectable on the login page."""
 
-    def __init__(self, name, display_name, datasource, subnets=[]):
+    def __init__(self, name, display_name, datasource, subnets=None):
         self.name = name
         self.display_name = display_name
         self.datasource = datasource
         datasource.register_dormitory(self)
-        self.subnets = SubnetCollection(subnets)
+        self.subnets = SubnetCollection(subnets if subnets else [])
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
