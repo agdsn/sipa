@@ -1,5 +1,9 @@
+import logging
 from ipaddress import IPv4Network
+
 from sipa.utils import argstr
+
+logger = logging.getLogger(__name__)
 
 
 class DataSource:
@@ -53,13 +57,44 @@ class DataSource:
 
     @property
     def dormitories(self):
+        """A list of all registered dormitories.
+
+        :rtype: list of ``Dormitory`` instances
+        :returns: the registered dormitories
+        """
         return list(self._dormitories.values())
 
     def init_context(self, app):
+        """Initialize this backend
+
+            - Apply the custom configuration of
+              :py:def:`app.config['BACKENDS_CONFIG'][self.name]`
+
+            - Call :py:meth:`_init_context(app)` as given in the
+              config
+
+        The custom config supports the following keys:
+
+            - ``support_mail``: Set ``self.support_mail``
+
+        If an unknown key is given, a warning will be logged.
+
+        :param Flask app: the app to initialize against
+        """
+        # copy the dict so we can freely ``pop`` things
+        config = app.config.get('BACKENDS_CONFIG', {}).get(self.name, {}).copy()
+
+        try:
+            self.support_mail = config.pop('support_mail')
+        except KeyError:
+            pass
+
+        for key in config.keys():
+            logger.warning("Ignoring unknown key '%s'", key,
+                           extra={'data': {'config': config}})
+
         if self._init_context:
             return self._init_context(app)
-
-        return
 
 
 class SubnetCollection:
