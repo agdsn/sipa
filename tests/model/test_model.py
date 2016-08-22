@@ -1,6 +1,8 @@
+import re
 from base64 import urlsafe_b64encode
 from os import urandom
 from unittest import TestCase
+from unittest.mock import MagicMock
 
 from ipaddress import IPv4Network
 from flask import Flask
@@ -108,3 +110,54 @@ class TestBaseUserCase(TestCase):
         assert not BaseUser.is_anonymous
 
     # more can't be done here, we need some instances.
+
+
+class DatasourceTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.default_args = {
+            'name': 'test',
+            'user_class': object,
+            'mail_server': "",
+        }
+        self.app = MagicMock()
+        self.app.config = {}
+
+    def test_init_context_gets_called_correctly(self):
+        init_mock = MagicMock()
+        datasource = DataSource(
+            **self.default_args,
+            init_context=init_mock,
+        )
+
+        datasource.init_context(self.app)
+
+        self.assertEqual(init_mock.call_args[0], (self.app,))
+
+    def test_init_context_reads_mail(self):
+        datasource = DataSource(**self.default_args)
+        config = {
+            'support_mail': 'bazingle.foo@shizzle.xxx'
+        }
+        self.app.config['BACKENDS_CONFIG'] = {datasource.name: config}
+
+        datasource.init_context(self.app)
+
+        self.assertEqual(datasource.support_mail, config['support_mail'])
+
+    def test_init_context_warns_on_unknown_keys(self):
+        bad_keys = ['unknown', 'foo', 'bar', 'mail']
+
+        datasource = DataSource(**self.default_args)
+        bad_config = {key: None for key in bad_keys}
+        self.app.config['BACKENDS_CONFIG'] = {datasource.name: bad_config}
+
+        with self.assertLogs('sipa.model.datasource', level='WARNING') as context:
+            datasource.init_context(self.app)
+
+        for log in context.output:
+            self.assertRegex(log, re.compile("ignoring.*unknown",
+                                             flags=re.IGNORECASE))
+            self.assertTrue(any(key in log for key in bad_keys),
+                            msg="Log warning raised not containing any "
+                            "of the given invalid keys")
