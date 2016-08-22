@@ -25,7 +25,6 @@ datasource = DataSource(
     # to be included when it becomes a DataSource
     webmailer_url="https://wh12.tu-dresden.de/roundcube/",
     init_context=init_context,
-    # support_mail="support@wh12.tu-dresden.de",
 )
 
 [Dormitory(
