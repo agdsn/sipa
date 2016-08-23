@@ -16,6 +16,13 @@
 # defined at the top of `model.__init__`.
 # BACKENDS = ['wu', 'hss', 'gerok', 'sample', 'pycroft', …]
 
+# Datasource-specific config
+# For each backend, you can set a config dict.
+# Currently, only the backends `support_mail` can be customized.
+# _conf = {'support_mail': 'foo@bar.baz'}
+# BACKEND_CONFIG = {'wu': _conf, 'hss': _conf}
+
+
 # The Sentry DSN.
 # SENTRY_DSN = "http://{public}:{secret}@{host}:{port}/{int}"
 
