@@ -135,6 +135,9 @@ class FormTemplateTestMixin:
         - template: The location of the template file, relative to the
           template root
     """
+    def submit_form(self, data):
+        return self.client.post(self.url, data=data)
+
     def test_endpoint_reachable(self):
         self.assert200(self.client.get(self.url))
         self.assertTemplateUsed(self.template)
@@ -146,11 +149,11 @@ class FormTemplateTestMixin:
     def test_invalid_data_flashes(self):
         for data in self.invalid_data:
             with self.subTest(data=data):
-                resp = self.client.post(self.url, data=data)
+                resp = self.submit_form(data=data)
                 self.assert_something_flashed(resp.data)
 
     def test_valid_data_passes(self):
         for data in self.valid_data:
             with self.subTest(data=data):
-                resp = self.client.post(self.url, data=data)
+                resp = self.submit_form(data=data)
                 self.assert_nothing_flashed(resp.data)
