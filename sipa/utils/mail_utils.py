@@ -12,6 +12,8 @@ from email.mime.text import MIMEText
 
 from flask import current_app
 
+from sipa.model import backends
+
 
 logger = logging.getLogger(__name__)
 
@@ -71,3 +73,31 @@ def send_mail(sender, receipient, subject, message):
             'data': {'subject': subject, 'message': message}
         })
         return True
+
+
+def send_contact_mail(sender, subject, name, message, dormitory_name):
+    """Compose a mail for anonymous contacting.
+
+    Additionally to sending the mail, it does:
+
+        - Prepend the subject with [Kontakt]
+
+        - Prepend the dormitory and name of the sender to the mail body
+
+    :param str sender:
+    :param str subject:
+    :param str name: The sender's real-life name
+    :param str message:
+    :param str dormitory_name:
+    """
+    dormitory = backends.get_dormitory(dormitory_name)
+
+    subject = "[Kontakt] {}".format(subject)
+    message = "Name: {name}\nDormitory: {dorm}\n{body}".format(
+        name=name,
+        dorm=dormitory.display_name,
+        body=message,
+    )
+    recipient = dormitory.datasource.support_mail
+
+    return send_mail(sender, recipient, subject, message)
