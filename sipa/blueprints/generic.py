@@ -16,7 +16,7 @@ from sipa.model import backends
 from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
 from sipa.utils.exceptions import UserNotFound, InvalidCredentials
-from sipa.utils.mail_utils import send_mail, send_contact_mail
+from sipa.utils.mail_utils import send_official_contact_mail, send_contact_mail
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
 
 logger = logging.getLogger(__name__)
@@ -301,12 +301,14 @@ def contact_official():
     form = OfficialContactForm()
 
     if form.validate_on_submit():
-        from_mail = form.email.data
-        subject = "[Contact] {}".format(form.subject.data)
-        message = "Name: {0}\n\n{1}".format(form.name.data, form.message.data)
-        recipient_mail = 'vorstand@lists.agdsn.de'
+        success = send_official_contact_mail(
+            sender=form.email.data,
+            subject=form.subject.data,
+            name=form.name.data,
+            message=form.message.data,
+        )
 
-        if send_mail(from_mail, recipient_mail, subject, message):
+        if success:
             flash(gettext("Nachricht wurde versandt."), "success")
         else:
             flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."),

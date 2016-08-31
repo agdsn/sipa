@@ -14,7 +14,7 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from sipa.model import backends
 from sipa.utils import password_changeable
-from sipa.utils.mail_utils import send_mail
+from sipa.utils.mail_utils import send_usersuite_contact_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
@@ -78,10 +78,6 @@ def usersuite_contact():
     """
     form = ContactForm()
 
-    support_mail = backends.current_datasource().support_mail
-    from_mail = "{}@{}".format(current_user.uid,
-                               backends.current_datasource().mail_server)
-
     if form.validate_on_submit():
         types = {
             'stoerung': "Störung",
@@ -89,25 +85,27 @@ def usersuite_contact():
             'eigene-technik': "Eigene Technik"
         }
 
-        cat = types.get(form.type.data, "Allgemein")
+        success = send_usersuite_contact_mail(
+            category=types.get(form.type.data, "Allgemein"),
+            subject=form.subject.data,
+            message=form.message.data
+        )
 
-        subject = "[Usersuite] {0}: {1}".format(cat, form.subject.data)
-
-        message_text = "Nutzerlogin: {0}\n\n{1}".format(current_user.uid,
-                                                        form.message.data)
-
-        if send_mail(from_mail, support_mail, subject, message_text):
+        if success:
             flash(gettext("Nachricht wurde versandt."), "success")
         else:
             flash(gettext("Es gab einen Fehler beim Versenden der Nachricht. "
-                          "Bitte schicke uns direkt eine E-Mail an {}".format(
-                              support_mail)),
+                          "Bitte schicke uns direkt eine E-Mail an {}"
+                          .format(current_user.datasource.support_mail)),
                   'error')
         return redirect(url_for(".usersuite"))
     elif form.is_submitted():
         flash_formerrors(form)
 
-    form.email.default = from_mail
+    form.email.default = "{uid}@{server}".format(
+        uid=current_user.uid,
+        server=current_user.datasource.mail_server
+    )
 
     return render_template("usersuite/contact.html", form=form)
 
