@@ -93,12 +93,9 @@ def send_contact_mail(sender, subject, name, message, dormitory_name):
     """
     dormitory = backends.get_dormitory(dormitory_name)
 
-    message = "Name: {name}\nDormitory: {dorm}\n{body}".format(
-        name=name,
-        dorm=dormitory.display_name,
-        body=message,
-    )
     subject = compose_subject(subject, tag="Kontakt")
+    message = compose_body(message, header={'Name': name,
+                                            'Dormitory': dormitory.display_name})
     recipient = dormitory.datasource.support_mail
 
     return send_mail(sender, recipient, subject, message)
@@ -117,10 +114,7 @@ def send_official_contact_mail(sender, subject, name, message):
     :param str message:
     """
     subject = compose_subject(subject, tag="Kontakt")
-    message = "Name: {name}\n\n{body}".format(
-        name=name,
-        body=message,
-    )
+    message = compose_body(message, header={'Name': name})
     recipient = "vorstand@lists.agdsn.de"
 
     return send_mail(sender, recipient, subject, message)
@@ -145,10 +139,7 @@ def send_usersuite_contact_mail(category, subject, message, user=current_user):
     recipient = user.datasource.support_mail
 
     subject = compose_subject(subject, tag="Usersuite", category=category)
-    message = "Login: {uid}\n\n{body}".format(
-        uid=user.login,
-        body=message,
-    )
+    message = compose_body(message, header={'Login': user.uid})
 
     return send_mail(sender, recipient, subject, message)
 
@@ -177,3 +168,23 @@ def compose_subject(raw_subject, tag="", category=""):
     subject += raw_subject
 
     return subject
+
+
+def compose_body(message, header=None):
+    """Prepend additional information to a message.
+
+    :param str message:
+    :param dict header: Dict of the additional "key: value"
+        entries to be prepended to the mail.
+
+    :returns: The composed body
+
+    :rtype: str
+    """
+    if not header:
+        return message
+
+    header = "\n".join("{key}: {value}".format(key=key, value=value)
+                       for key, value in header.items())
+
+    return "{header}\n\n{body}".format(header=header, body=message)

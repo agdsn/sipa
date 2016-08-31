@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from sipa.utils.mail_utils import send_contact_mail, compose_subject
+from sipa.utils.mail_utils import send_contact_mail, compose_subject, compose_body
 
 
 class ContactMailTestCase(TestCase):
@@ -59,3 +59,21 @@ class ComposeSubjectTestCase(TestCase):
     def test_both_missing(self):
         composed = compose_subject("subject")
         self.assertEqual(composed, "subject")
+
+
+class ComposeBodyTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.message = "Lorem ipsum Dolor sit amet.\ngaudeamus igitur!"
+
+    def test_without_dict_is_identity(self):
+        self.assertEqual(compose_body(self.message), self.message)
+
+    def test_correct_header_with_full_dict(self):
+        info = {'Name': "Foo Bar", 'Social status': "Knows Python"}
+        composed = compose_body(self.message, header=info)
+
+        for key, val in info.items():
+            self.assertIn("{}: {}".format(key, val), composed)
+
+        self.assertIn(self.message, composed)
