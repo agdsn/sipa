@@ -23,9 +23,8 @@ class ContactMailTestCase(TestCase):
         self.send_mail_mock = MagicMock(return_value=True)
 
         with patch('sipa.utils.mail_utils.send_mail', self.send_mail_mock), \
-             patch('sipa.utils.mail_utils.backends', self.backends_mock):
+                patch('sipa.utils.mail_utils.backends', self.backends_mock):
             self.success = send_contact_mail(**self.args)
-
 
     def test_success_passed(self):
         self.assertTrue(self.success)
