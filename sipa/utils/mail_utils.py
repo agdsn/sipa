@@ -32,7 +32,7 @@ def wrap_message(message, chars_in_line=80):
     return '\n'.join(return_text)
 
 
-def send_mail(sender, receipient, subject, message):
+def send_mail(sender, recipient, subject, message):
     """Send a MIME text mail from sender to receipient with subject and message.
     The message will be wrapped to 80 characters and encoded to UTF8.
 
@@ -44,7 +44,7 @@ def send_mail(sender, receipient, subject, message):
 
     mail['Message-Id'] = make_msgid()
     mail['From'] = sender
-    mail['To'] = receipient
+    mail['To'] = recipient
     mail['Subject'] = subject
     mail['Date'] = formatdate(localtime=True)
 
@@ -55,7 +55,7 @@ def send_mail(sender, receipient, subject, message):
         smtp = smtplib.SMTP()
         smtp.connect(host=mailserver_host,
                      port=mailserver_port)
-        smtp.sendmail(sender, receipient, mail.as_string(0))
+        smtp.sendmail(sender, recipient, mail.as_string(0))
         smtp.close()
     except IOError as e:
         # smtp.connect failed to connect
@@ -68,7 +68,7 @@ def send_mail(sender, receipient, subject, message):
         return False
     else:
         logger.info('Successfully sent mail from usersuite', extra={
-            'tags': {'from': sender, 'to': receipient,
+            'tags': {'from': sender, 'to': recipient,
                      'mailserver': '{}:{}'.format(mailserver_host,
                                                   mailserver_port)},
             'data': {'subject': subject, 'message': message}
