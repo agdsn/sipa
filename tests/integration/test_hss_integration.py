@@ -32,7 +32,7 @@ class HssAuthenticationTestCase(HssAuthenticatedTestBase):
     def test_login_successful(self):
         """Test that a login redirects to the usersuite"""
         rv = self.login()
-        self.assertRedirects(rv, url_for('usersuite.usersuite'))
+        self.assertRedirects(rv, url_for('usersuite.index'))
 
     def test_logout_successful(self):
         self.login()
@@ -75,7 +75,7 @@ class HssFrontendTestBase(HssAuthenticatedTestBase):
 
 class HssUsersuiteTestCase(HssFrontendTestBase):
     def test_usersuite_accessible_after_login(self):
-        rv_usersuite = self.client.get(url_for('usersuite.usersuite'))
+        rv_usersuite = self.client.get(url_for('usersuite.index'))
         self.assert200(rv_usersuite)
 
 
@@ -84,13 +84,13 @@ class HssPasswordChangeTestCase(HssFrontendTestBase):
         super().setUp()
         self.new_pass = self.pw + 'something:new!hav1ng-somanyn1ceChaRacters!'
         self.rv = self.client.post(
-            url_for('usersuite.usersuite_change_password'),
+            url_for('usersuite.change_password'),
             data={'old': self.pw, 'new': self.new_pass, 'confirm': self.new_pass},
         )
         self.rv_redirected = self.client.get(self.rv.location)
 
     def test_password_change_response_redirects(self):
-        self.assertRedirects(self.rv, url_for('usersuite.usersuite'))
+        self.assertRedirects(self.rv, url_for('usersuite.index'))
 
     def test_password_change_not_disallowed(self):
         self.assertNotIn("Diese Funktion ist nicht verfügbar.".encode('utf-8'),

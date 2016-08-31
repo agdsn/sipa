@@ -162,7 +162,7 @@ def login():
         flash_formerrors(form)
 
     if current_user.is_authenticated:
-        return redirect(url_for('usersuite.usersuite'))
+        return redirect(url_for('usersuite.index'))
 
     return render_template('login.html', form=form,
                            unsupported=backends.premature_dormitories)
@@ -284,7 +284,7 @@ def contact():
         else:
             flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."),
                   'error')
-        return redirect(url_for(".index"))
+        return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
     elif current_user.is_authenticated:
@@ -313,7 +313,7 @@ def contact_official():
         else:
             flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."),
                   'error')
-        return redirect(url_for(".index"))
+        return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
 

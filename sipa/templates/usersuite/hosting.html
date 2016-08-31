@@ -25,7 +25,7 @@
             <div class="panel-body">
                 <div id="create-mysql-form">
                     {% call forms.render(form=form, form_id="hosting-form",
-                        cancel_to=url_for('.usersuite')) %}
+                        cancel_to=url_for('.index')) %}
                         {{ form.action(value="create") }}
                     {% endcall %}
                 </div>
@@ -58,7 +58,7 @@
             <div class="panel-body">
                 <div id="change-mysql-form">
                     {% call forms.render(form=form, form_id="hosting-form",
-                        cancel_to=url_for('.usersuite')) %}
+                        cancel_to=url_for('.index')) %}
                     {% endcall %}
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <h2>{{ _("Statusinformationen") }}</h2>
 <p>
     {% if current_user.can_change_password %}
-    <a href="{{ url_for(".usersuite_change_password") }}" class="btn btn-primary">
+    <a href="{{ url_for('.change_password') }}" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
         {{ _("Passwort ändern") }}
     </a>
@@ -11,7 +11,7 @@
         {{ _("Passwort ändern") }}
     </a>
     {% endif %}
-    <a href="{{ url_for(".usersuite_contact") }}" class="btn btn-default">
+    <a href="{{ url_for('.contact') }}" class="btn btn-default">
         <span class="glyphicon glyphicon-question-sign"></span>
         {{ _("Kontaktformular") }}
     </a>

@@ -24,7 +24,7 @@ bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
 @bp_usersuite.route("/")
 @login_required
-def usersuite():
+def index():
     """Usersuite landing page with user account information
     and traffic overview.
     """
@@ -70,7 +70,7 @@ def usersuite():
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])
 @login_required
-def usersuite_contact():
+def contact():
     """Contact form for logged in users.
     Currently sends an e-mail to the support mailing list as
     '[Usersuite] Category: Subject' with userid and message.
@@ -97,7 +97,7 @@ def usersuite_contact():
                           "Bitte schicke uns direkt eine E-Mail an {}"
                           .format(current_user.datasource.support_mail)),
                   'error')
-        return redirect(url_for(".usersuite"))
+        return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -143,7 +143,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])
 @login_required
 @password_changeable(current_user)
-def usersuite_change_password():
+def change_password():
     """Frontend page to change the user's password"""
     form = ChangePasswordForm()
 
@@ -158,7 +158,7 @@ def usersuite_change_password():
             flash(gettext("Altes Passwort war inkorrekt!"), "error")
         else:
             flash(gettext("Passwort wurde geändert"), "success")
-            return redirect(url_for(".usersuite"))
+            return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -190,7 +190,7 @@ def change_mail():
             flash(gettext("Nicht genügend LDAP-Rechte!"), "error")
         else:
             flash(gettext("E-Mail-Adresse wurde geändert"), "success")
-            return redirect(url_for('.usersuite'))
+            return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -222,7 +222,7 @@ def delete_mail():
             flash(gettext("Nicht genügend LDAP-Rechte!"), "error")
         else:
             flash(gettext("E-Mail-Adresse wurde zurückgesetzt"), "success")
-            return redirect(url_for('.usersuite'))
+            return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -255,7 +255,7 @@ def change_mac():
             flash(gettext("Es kann bis zu 10 Minuten dauern, "
                           "bis die Änderung wirksam ist."), 'info')
 
-            return redirect(url_for('.usersuite'))
+            return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
 

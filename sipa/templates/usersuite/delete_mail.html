@@ -3,5 +3,5 @@
 {% set page_title = _("E-Mail ändern") %}
 
 {% block content %}
-    {{ forms.render_simple(form=form, form_id="delete-mail-form", cancel_to=url_for('.usersuite')) }}
+    {{ forms.render_simple(form=form, form_id="delete-mail-form", cancel_to=url_for('.index')) }}
 {% endblock %}
