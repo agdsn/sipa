@@ -12,7 +12,6 @@ from flask_login import current_user, login_required
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
-from sipa.model import backends
 from sipa.utils import password_changeable
 from sipa.utils.mail_utils import send_usersuite_contact_mail
 from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
