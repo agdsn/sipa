@@ -93,12 +93,12 @@ def send_contact_mail(sender, subject, name, message, dormitory_name):
     """
     dormitory = backends.get_dormitory(dormitory_name)
 
-    subject = "[Kontakt] {}".format(subject)
     message = "Name: {name}\nDormitory: {dorm}\n{body}".format(
         name=name,
         dorm=dormitory.display_name,
         body=message,
     )
+    subject = compose_subject(subject, tag="Kontakt")
     recipient = dormitory.datasource.support_mail
 
     return send_mail(sender, recipient, subject, message)
@@ -116,7 +116,7 @@ def send_official_contact_mail(sender, subject, name, message):
     :param str name: The sender's real-life name
     :param str message:
     """
-    subject = "[Kontakt] {}".format(subject)
+    subject = compose_subject(subject, tag="Kontakt")
     message = "Name: {name}\n\n{body}".format(
         name=name,
         body=message,
@@ -144,10 +144,36 @@ def send_usersuite_contact_mail(category, subject, message, user=current_user):
     )
     recipient = user.datasource.support_mail
 
-    subject = "[Usersuite] {0}: {1}".format(category, subject)
+    subject = compose_subject(subject, tag="Usersuite", category=category)
     message = "Login: {uid}\n\n{body}".format(
         uid=user.login,
         body=message,
     )
 
     return send_mail(sender, recipient, subject, message)
+
+
+def compose_subject(raw_subject, tag="", category=""):
+    """Compose a subject containing a tag and a category.
+
+    If any of tag or category is missing, don't print the
+    corresponding part (without whitespace issues).
+
+    :param str raw_subject: The original subject
+    :param str tag:
+    :param str category:
+
+    :returns: The subject.  Form: "[{tag}] {category}: {raw_subject}"
+
+    :rtype: str
+    """
+    subject = ""
+    if tag:
+        subject += "[{}] ".format(tag)
+
+    if category:
+        subject += "{}: ".format(category)
+
+    subject += raw_subject
+
+    return subject

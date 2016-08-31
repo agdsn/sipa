@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from sipa.utils.mail_utils import send_contact_mail
+from sipa.utils.mail_utils import send_contact_mail, compose_subject
 
 
 class ContactMailTestCase(TestCase):
@@ -41,3 +41,21 @@ class ContactMailTestCase(TestCase):
         subject = self.send_mail_mock.call_args[0][2]
         self.assertIn(self.args['subject'], subject)
         self.assertRegex(subject, r"^\[.*?\]")
+
+
+class ComposeSubjectTestCase(TestCase):
+    def test_tag_and_category(self):
+        composed = compose_subject("Subject!", tag="foo", category="bar")
+        self.assertEqual(composed, "[foo] bar: Subject!")
+
+    def test_tag_missing(self):
+        composed = compose_subject("Subject!", category="bar")
+        self.assertEqual(composed, "bar: Subject!")
+
+    def test_category_missing(self):
+        composed = compose_subject("Subject!", tag="foo")
+        self.assertEqual(composed, "[foo] Subject!")
+
+    def test_both_missing(self):
+        composed = compose_subject("subject")
+        self.assertEqual(composed, "subject")
