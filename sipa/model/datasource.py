@@ -2,6 +2,7 @@ import logging
 from ipaddress import IPv4Network
 
 from sipa.utils import argstr
+from .misc import xor_hashes, compare_all_attributes
 
 logger = logging.getLogger(__name__)
 
@@ -42,12 +43,7 @@ class DataSource:
         ))
 
     def __hash__(self):
-        return (
-            hash(self.name) ^
-            hash(self.user_class) ^
-            hash(self.support_mail) ^
-            hash(self.mail_server)
-        )
+        return xor_hashes(self.name, self.user_class, self.support_mail, self.mail_server)
 
     def register_dormitory(self, dormitory):
         name = dormitory.name
@@ -129,11 +125,7 @@ class SubnetCollection:
         return self.subnets == other.subnets
 
     def __hash__(self):
-        _hash = 0
-        for subnet in self.subnets:
-            _hash ^= hash(subnet)
-
-        return _hash
+        return xor_hashes(*self.subnets)
 
 
 class Dormitory:
@@ -155,15 +147,10 @@ class Dormitory:
         ))
 
     def __eq__(self, other):
-        return self.name == other.name and self.datasource == other.datasource
+        return compare_all_attributes(self, other, ['name', 'datasource'])
 
     def __hash__(self):
-        return (
-            hash(self.name) ^
-            hash(self.display_name) ^
-            hash(self.datasource) ^
-            hash(self.subnets)
-        )
+        return xor_hashes(self.name, self.display_name, self.datasource, self.subnets)
 
 
 class PrematureDataSource:
