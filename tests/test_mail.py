@@ -3,10 +3,22 @@ from unittest.mock import MagicMock, patch
 
 from sipa.mail import send_contact_mail, send_complex_mail, \
     send_official_contact_mail, send_usersuite_contact_mail, \
-    compose_subject, compose_body
+    compose_subject, compose_body, send_mail
 
 
 class MailSendingTestBase(TestCase):
+    """Test Base for functions using `send_mail`
+
+    This test base provides a mock for :py:meth:`~sipa.mail.send_mail`
+    so any tunction that builds up on it can be tested by watching
+    what ``self.send_mail_mock`` got called with.
+
+    This class provides its own setup routine, which either takes
+    ``self.args`` and passes it as keyword arguments to
+    ``self.mail_function`` (be careful to define it as a
+    staticmethod).  If that is not enough (because something needs to
+    be patched or similar), override ``self._call_mail_function``.
+    """
     def setUp(self):
         super().setUp()
         self.send_mail_mock = MagicMock(return_value=True)
@@ -68,6 +80,97 @@ class ComposeBodyTestCase(TestCase):
             self.assertIn("{}: {}".format(key, val), composed)
 
         self.assertIn(self.message, composed)
+
+
+class SendMailTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.smtp_mock = MagicMock()
+        self.app_mock = MagicMock()
+
+        def dont_wrap_message(msg):
+            return msg
+        self.wrap_mock = MagicMock(side_effect=dont_wrap_message)
+
+        self.args = {
+            'sender': "foo@bar.baz",
+            'recipient': "support@agd.sn",
+            'subject': "Internet broken",
+            'message': "Fix it!!!",
+        }
+
+        with patch('sipa.mail.smtplib.SMTP', self.smtp_mock), \
+                patch('sipa.mail.current_app', self.app_mock), \
+                patch('sipa.mail.wrap_message', self.wrap_mock), \
+                self.assertLogs('sipa.mail', level='INFO') as log:
+            self.success = send_mail(**self.args)
+
+        self.log = log
+
+        self.call_args = self.smtp_mock().sendmail.call_args[0]
+
+    def test_wrap_message_called(self):
+        self.assertEqual(self.wrap_mock.call_count, 1)
+        self.assertEqual(self.wrap_mock.call_args[0], (self.args['message'],))
+
+    def test_smtp_connect_called(self):
+        self.assertTrue(self.smtp_mock().connect.called)
+
+    def test_smtp_close_called(self):
+        self.assertTrue(self.smtp_mock().close.called)
+
+    def test_sendmail_sender_passed(self):
+        sender = self.call_args[0]
+        self.assertEqual(sender, self.args['sender'])
+        message = self.call_args[2]
+        self.assertIn("From: {}".format(sender), message)
+
+    def test_sendmail_recipient_passed(self):
+        recipient = self.call_args[1]
+        self.assertEqual(recipient, self.args['recipient'])
+        message = self.call_args[2]
+        self.assertIn("To: {}".format(recipient), message)
+
+    def test_sendmail_subject_passed(self):
+        message = self.call_args[2]
+        self.assertIn("Subject: {}".format(self.args['subject']), message)
+
+    def test_returned_true(self):
+        self.assertEqual(self.success, True)
+
+    def test_info_logged(self):
+        log_message = self.log.output.pop()
+        self.assertIn("Successfully sent mail", log_message)
+        # nothing else there
+        self.assertFalse(self.log.output)
+
+
+class SendMailFailingTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.smtp_mock = MagicMock()
+
+        def bad_sendmail(*_, **__):
+            raise IOError()
+        self.smtp_mock().sendmail.side_effect = bad_sendmail
+
+        with patch('sipa.mail.smtplib.SMTP', self.smtp_mock), \
+                patch('sipa.mail.current_app', MagicMock()), \
+                self.assertLogs('sipa.mail', level='ERROR') as log:
+            self.success = send_mail('', '', '', '')
+
+        self.log = log
+
+    def test_send_mail_logs_on_success(self):
+
+        log_message = self.log.output.pop()
+        self.assertIn("Unable to connect", log_message)
+        # nothing else there
+        self.assertFalse(self.log.output)
+
+    def test_failing_returns_false(self):
+        self.assertFalse(self.success)
 
 
 class ComplexMailContentTestCase(MailSendingTestBase):
