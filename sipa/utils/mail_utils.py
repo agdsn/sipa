@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Utils for sending emails via SMTP on localhost.
+Functions concerned with mail composition and transmission
+
+This module ultimately provides functions to be used by a blueprint in
+order to compose and send a mail, for instance
+:py:func:`send_contact_mail`.
+
+On the layer below, some intermediate functions are introduced which
+are needed to compose and send the mails.  The core is
+:py:func:`send_complex_mail`, which calls :py:func:`send_mail`
+prepending optional information to the title and body
 """
+
 import logging
 import smtplib
 import textwrap
@@ -20,7 +30,14 @@ logger = logging.getLogger(__name__)
 
 
 def wrap_message(message, chars_in_line=80):
-    """Wraps an unformatted block of text to 80 characters
+    """Wrap a block of text to a certain amount of characters
+
+    :param str message: The message
+    :param int chars_in_line: The width to wrap against
+
+    :returns: the wrapped message
+
+    :rtype: str
     """
     return_text = []
     for paragraph in message.split('\n'):
@@ -33,11 +50,23 @@ def wrap_message(message, chars_in_line=80):
 
 
 def send_mail(sender, recipient, subject, message):
-    """Send a MIME text mail from sender to receipient with subject and message.
-    The message will be wrapped to 80 characters and encoded to UTF8.
+    """Send a MIME text mail
 
-    Returns False, if sending from localhost:25 fails.
-    Else returns True.
+    Send a mail from ``sender`` to ``receipient`` with ``subject`` and
+    ``message``.  The message will be wrapped to 80 characters and
+    encoded to UTF8.
+
+    Returns False, if sending from localhost:25 fails.  Else returns
+    True.
+
+    :param str sender: The mail address of the sender
+    :param str recipient: The mail address of the recipient
+    :param str subject:
+    :param str message:
+
+    :returns: Whether the transmission succeeded
+
+    :rtype: bool
     """
     message = wrap_message(message)
     mail = MIMEText(message, _charset='utf-8')
@@ -76,20 +105,20 @@ def send_mail(sender, recipient, subject, message):
         return True
 
 
-def send_contact_mail(sender, subject, name, message, dormitory_name):
+def send_contact_mail(sender, subject, message, name, dormitory_name):
     """Compose a mail for anonymous contacting.
 
-    Additionally to sending the mail, it does:
+    Call :py:func:`send_complex_mail` setting a tag plus name and
+    dormitory in the header.
 
-        - Prepend the subject with [Kontakt]
-
-        - Prepend the dormitory and name of the sender to the mail body
-
-    :param str sender:
+    :param str sender: The e-mail of the sender
     :param str subject:
-    :param str name: The sender's real-life name
     :param str message:
-    :param str dormitory_name:
+    :param str name: The sender's real-life name
+    :param str dormitory_name: The string identifier of the chosen
+        dormitory
+
+    :returns: see :py:func:`send_complex_mail`
     """
     dormitory = backends.get_dormitory(dormitory_name)
 
@@ -103,17 +132,17 @@ def send_contact_mail(sender, subject, name, message, dormitory_name):
     )
 
 
-def send_official_contact_mail(sender, subject, name, message):
+def send_official_contact_mail(sender, subject, message, name):
     """Compose a mail for official contacting.
 
-    Additionally to sending the mail, it does:
+    Call :py:func:`send_complex_mail` setting a tag.
 
-        - Prepend the subject with [Kontakt]
-
-    :param str sender:
+    :param str sender: The e-mail address of the sender
     :param str subject:
-    :param str name: The sender's real-life name
     :param str message:
+    :param str name: The sender's real-life name
+
+    :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
         sender=sender,
@@ -125,17 +154,21 @@ def send_official_contact_mail(sender, subject, name, message):
     )
 
 
-def send_usersuite_contact_mail(category, subject, message, user=current_user):
+def send_usersuite_contact_mail(subject, message, category, user=current_user):
     """Compose a mail for contacting from the usersuite
 
-        - Prepend the subject with a tag and the category
+    Call :py:func:`send_complex_mail` setting a tag and the category
+    plus the user's login in the header.
 
-        - Prepend the user's login to the body
+    The sender is chosen to be the user's mailaccount on the
+    datasource's mail server.
 
-    :param str category: The Category as to be included in the title
     :param str subject:
     :param str message:
+    :param str category: The Category as to be included in the title
     :param BaseUser user: The user object
+
+    :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
         sender="{uid}@{server}".format(
@@ -162,6 +195,8 @@ def send_complex_mail(subject, message, tag="", category="", header=None, **kwar
     :param str tag: See :py:func:`compose_subject`
     :param str category: See :py:func:`compose_subject`
     :param dict header: See :py:func:`compose_body`
+
+    :returns: see :py:func:`send_mail`
     """
     return send_mail(
         **kwargs,
