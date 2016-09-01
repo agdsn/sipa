@@ -33,3 +33,14 @@ Babel
    :members:
    :undoc-members:
    :exclude-members: request
+
+
+Flatpages
+---------
+
+.. automodule:: sipa.flatpages
+   :members:
+   :undoc-members:
+   :private-members:
+   :special-members: __getattr__
+   :exclude-members: request

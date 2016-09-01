@@ -12,22 +12,52 @@ from .babel import babel, locale_preferences
 
 
 class Node:
+    """An abstract object with a parent and an id"""
+
     def __init__(self, parent, node_id):
+        #: The parent object
         self.parent = parent
+        #: This object's id
         self.id = node_id
 
 
 class Article(Node):
+    """The Article class
+
+    An article provides the possibility to access multiple versions of
+    a Page.  In this case, :py:attr:`localized_pages` is a dict where
+    a locale string points to a :py:obj:`Page`.  The latter represents
+    the actual markdown file located in the repository.
+
+    After the initialization, which consists of adding pages with
+    :py:meth:`add_page`, internal methods access only the page with
+    the correct locale, which is proxied by :py:attr:`localized_page`.
+
+    Besides that, :py:meth:`__getattr__` comfortably passes queries to
+    the :py:obj:`localized_page.meta` dict.
+    """
     def __init__(self, parent, article_id):
         super().__init__(parent, article_id)
+        #: The dict containing the localized pages of this article
         self.localized_pages = {}
+        #: The default page
         self.default_page = None
 
     def add_page(self, page, locale):
         """Add a page to the pages list.
 
-        If no `default_page` is set or the locale equals
-        `babel.default_locale`, set `default_page` to the given page.
+        If the name is not ``index`` and the validation via
+        :py:meth:`validate_page_meta` fails, skip this.
+
+        If no :py:attr:`default_page` is set or the locale equals
+        :py:obj:`babel.default_locale`, set :py:attr:`default_page` to
+        the given page.
+
+        Update the :py:attr:`localized_pages` dict at the
+        ``str(locale)`` key to ``page``.
+
+        :param Page page: The page to add
+        :param Locale locale: The locale of this page
         """
         if not (self.id == 'index' or self.validate_page_meta(page)):
             return
@@ -38,15 +68,17 @@ class Article(Node):
 
     @staticmethod
     def validate_page_meta(page):
-        """Validate that the given page fits the constraints.
+        """Validate that the pages meta-section.
 
-        Currently, the only constraints are having a title, and not
-        failing to parse the metadata.  The latter is achieved by just
-        accessing `page.meta` in any way, since it is cached and will
-        start parsing on even the lightest, first touch.
+        This function is necessary because a page with incorrect
+        metadata will raise some Errors when trying to access them.
+        Note that this is done rather early as pages are cached.
 
-        :return: True if the constraints are met, else False.
+        :param page: The page to validate
 
+        :returns: Whether the page is valid
+
+        :rtype: bool
         """
         try:
             return 'title' in page.meta
@@ -55,6 +87,15 @@ class Article(Node):
 
     @property
     def rank(self):
+        """The rank of the :py:attr:`localized_page`
+
+        This is what is given in the page's ``rank`` meta-attribute if
+        available else ``100``.
+
+        :returns: The :py:attr:`localized_page` s rank
+
+        :rtype: int
+        """
         try:
             return self.localized_page.meta['rank']
         except KeyError:
@@ -62,14 +103,28 @@ class Article(Node):
 
     @property
     def html(self):
+        """The :py:attr:`localized_page` as html
+
+        :returns: The :py:attr:`localized_page` converted to html
+        :rtype: str
+        """
         return self.localized_page.html
 
     @property
     def link(self):
+        """A valid link to this article
+
+        :returns: The URL or ``None`` if the link starts with ``"/"``
+
+        :rtype: str
+
+        :raises: :py:obj:`AttributeError` if :py:attr:`localized_page`
+                 doesn't have a link in the meta section.
+        """
         try:
             raw_link = self.localized_page.meta['link']
         except KeyError:
-            raise AttributeError
+            raise AttributeError()
         else:
             if raw_link and raw_link[0] == "/":
                 return dirname(request.url_root) + raw_link
@@ -77,7 +132,17 @@ class Article(Node):
         return
 
     def __getattr__(self, attr):
-        """Return the meta attribute of the localized page"""
+        """Return the meta attribute of the localized page
+
+        :param str attr: The meta attribute to access
+
+        :returns: The meta attribute of :py:attr:`localized_page`
+
+        :rtype: str
+
+        :raises: :py:obj:`AttributeError` if :py:obj:`attr` doesn't
+                 exist in the page's meta
+        """
         try:
             return self.localized_page.meta[attr]
         except KeyError:
@@ -85,7 +150,15 @@ class Article(Node):
 
     @property
     def localized_page(self):
-        """Return a flatpage of the current locale or the default page"""
+        """The current localized page
+
+        This is the flatpage of the first available locale from
+        :py:func:`~sipa.babel.locale_preferences`, or
+        :py:attr:`default_page`.
+
+        :returns: The localized page
+        :rtype: Whatever has been added, hopefully :py:class:`Page`
+        """
         available_locales = list(self.localized_pages.keys())
         for locale in locale_preferences():
             # Locale is unfortunately not hashable
@@ -98,9 +171,13 @@ class Article(Node):
 
     @property
     def file_basename(self):
-        """Return the basename of the file without extension.
+        """The basename of the localized page without extension.
 
         Example: `categ/article.en.md` → `article.en`
+
+        :returns: The basename of the :py:attr:`localized_page`
+
+        :rtype: str
         """
         return splitext(basename(self.localized_page.path))[0]
 
