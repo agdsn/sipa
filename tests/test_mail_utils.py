@@ -1,7 +1,8 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from sipa.utils.mail_utils import send_contact_mail, compose_subject, compose_body
+from sipa.utils.mail_utils import send_contact_mail, send_complex_mail, \
+    compose_subject, compose_body
 
 
 class ContactMailTestCase(TestCase):
@@ -30,17 +31,68 @@ class ContactMailTestCase(TestCase):
         self.assertTrue(self.success)
 
     def test_dormitory_name_in_mail_body(self):
-        message = self.send_mail_mock.call_args[0][3]
+        message = self.send_mail_mock.call_args[1]['message']
         self.assertIn(self.dorm_display_name, message)
 
     def test_sender_name_in_mail_body(self):
-        message = self.send_mail_mock.call_args[0][3]
+        message = self.send_mail_mock.call_args[1]['message']
         self.assertIn(self.args['name'], message)
 
     def test_subject_ends_with_subject(self):
-        subject = self.send_mail_mock.call_args[0][2]
+        subject = self.send_mail_mock.call_args[1]['subject']
         self.assertIn(self.args['subject'], subject)
         self.assertRegex(subject, r"^\[.*?\]")
+
+
+class ComplexMailContentTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.args = {
+            'sender': "foo@bar.baz",
+            'subject': "test",
+            'message': "Dies ist eine Testnachricht.",
+            'tag': "Testtag",
+            'category': 'Kategorie mit einer nichtleeren Menge an Morphismen',
+            'header': {'foo': "Bar", 'alkohol': "Na Klar!"},
+        }
+        self.send_mail_mock = MagicMock(return_value=True)
+
+        with patch('sipa.utils.mail_utils.send_mail', self.send_mail_mock):
+            self.success = send_complex_mail(**self.args)
+
+    def test_success_pased(self):
+        self.assertTrue(self.success)
+
+    def test_keyword_args_used(self):
+        self.assertFalse(self.send_mail_mock.call_args[0])
+
+    def test_subject_complete_passed(self):
+        subject_passed = self.send_mail_mock.call_args[1]['subject']
+
+        self.assertIn(self.args['subject'], subject_passed)
+        self.assertIn(self.args['tag'], subject_passed)
+        self.assertIn(self.args['category'], subject_passed)
+
+    def test_message_complete_passed(self):
+        message_passed = self.send_mail_mock.call_args[1]['message']
+
+        self.assertIn(self.args['message'], message_passed)
+
+        for key, value in self.args['header'].items():
+            self.assertIn(key, message_passed)
+            self.assertIn(value, message_passed)
+
+
+class ComplexMailArgumentsTestCase(TestCase):
+    def test_fails_on_missing_argument(self):
+        """Test send_complex_mail needs all of the required arguments"""
+        required_args = ['sender', 'recipient', 'subject', 'message']
+
+        for blacklist_arg in required_args:
+            kwargs = {arg: MagicMock() for arg in required_args
+                      if arg != blacklist_arg}
+            with self.assertRaises(TypeError):
+                send_complex_mail(**kwargs)
 
 
 class ComposeSubjectTestCase(TestCase):

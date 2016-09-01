@@ -93,12 +93,14 @@ def send_contact_mail(sender, subject, name, message, dormitory_name):
     """
     dormitory = backends.get_dormitory(dormitory_name)
 
-    subject = compose_subject(subject, tag="Kontakt")
-    message = compose_body(message, header={'Name': name,
-                                            'Dormitory': dormitory.display_name})
-    recipient = dormitory.datasource.support_mail
-
-    return send_mail(sender, recipient, subject, message)
+    return send_complex_mail(
+        sender=sender,
+        recipient=dormitory.datasource.support_mail,
+        subject=subject,
+        message=message,
+        tag="Kontakt",
+        header={'Name': name, 'Dormitory': dormitory.display_name},
+    )
 
 
 def send_official_contact_mail(sender, subject, name, message):
@@ -113,11 +115,14 @@ def send_official_contact_mail(sender, subject, name, message):
     :param str name: The sender's real-life name
     :param str message:
     """
-    subject = compose_subject(subject, tag="Kontakt")
-    message = compose_body(message, header={'Name': name})
-    recipient = "vorstand@lists.agdsn.de"
-
-    return send_mail(sender, recipient, subject, message)
+    return send_complex_mail(
+        sender=sender,
+        recipient="vorstand@lists.agdsn.de",
+        subject=subject,
+        message=message,
+        tag="Kontakt",
+        header={'Name': name},
+    )
 
 
 def send_usersuite_contact_mail(category, subject, message, user=current_user):
@@ -132,16 +137,37 @@ def send_usersuite_contact_mail(category, subject, message, user=current_user):
     :param str message:
     :param BaseUser user: The user object
     """
-    sender = "{uid}@{server}".format(
-        uid=user.uid,
-        server=user.datasource.mail_server
+    return send_complex_mail(
+        sender="{uid}@{server}".format(
+            uid=user.uid,
+            server=user.datasource.mail_server
+        ),
+        recipient=user.datasource.support_mail,
+        subject=subject,
+        message=message,
+        tag="Usersuite",
+        category=category,
+        header={'Login': user.uid},
     )
-    recipient = user.datasource.support_mail
 
-    subject = compose_subject(subject, tag="Usersuite", category=category)
-    message = compose_body(message, header={'Login': user.uid})
 
-    return send_mail(sender, recipient, subject, message)
+def send_complex_mail(subject, message, tag="", category="", header=None, **kwargs):
+    """Send a mail with context information in subject and body.
+
+    This function is just a modified call of :py:func:`send_mail`, to
+    which all the other arguments are passed.
+
+    :param str subject:
+    :param str message:
+    :param str tag: See :py:func:`compose_subject`
+    :param str category: See :py:func:`compose_subject`
+    :param dict header: See :py:func:`compose_body`
+    """
+    return send_mail(
+        **kwargs,
+        subject=compose_subject(subject, tag=tag, category=category),
+        message=compose_body(message, header=header),
+    )
 
 
 def compose_subject(raw_subject, tag="", category=""):
