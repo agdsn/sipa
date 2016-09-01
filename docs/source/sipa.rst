@@ -17,3 +17,19 @@ Units
 .. automodule:: sipa.units
    :members:
    :undoc-members:
+
+
+Base
+----
+
+.. automodule:: sipa.base
+   :members:
+
+
+Babel
+-----
+
+.. automodule:: sipa.babel
+   :members:
+   :undoc-members:
+   :exclude-members: request

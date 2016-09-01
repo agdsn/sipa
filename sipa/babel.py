@@ -8,6 +8,12 @@ babel = Babel()
 
 
 def locale_preferences():
+    """Return a list of locales the user accepts
+
+    :returns: A list of locales
+
+    :rtype: List of :py:obj:`Locale` s
+    """
     main_locale = get_locale()
     locales = [main_locale]
 
@@ -22,4 +28,10 @@ def locale_preferences():
 
 
 def possible_locales():
+    """Return the locales usable for sipa.
+
+    :returns: Said Locales
+
+    :rtype: List of :py:obj:`Locale` s
+    """
     return [Locale('de'), Locale('en')]
