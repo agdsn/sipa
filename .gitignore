@@ -11,3 +11,7 @@ documents
 messages.pot
 
 config.py
+
+# documentation builds shall be checked into gh-pages or children of
+# that
+/docs/build
