@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from sipa.utils.mail_utils import send_contact_mail, send_complex_mail, \
+from sipa.mail import send_contact_mail, send_complex_mail, \
     compose_subject, compose_body
 
 
@@ -23,8 +23,8 @@ class ContactMailTestCase(TestCase):
 
         self.send_mail_mock = MagicMock(return_value=True)
 
-        with patch('sipa.utils.mail_utils.send_mail', self.send_mail_mock), \
-                patch('sipa.utils.mail_utils.backends', self.backends_mock):
+        with patch('sipa.mail.send_mail', self.send_mail_mock), \
+                patch('sipa.mail.backends', self.backends_mock):
             self.success = send_contact_mail(**self.args)
 
     def test_success_passed(self):
@@ -57,7 +57,7 @@ class ComplexMailContentTestCase(TestCase):
         }
         self.send_mail_mock = MagicMock(return_value=True)
 
-        with patch('sipa.utils.mail_utils.send_mail', self.send_mail_mock):
+        with patch('sipa.mail.send_mail', self.send_mail_mock):
             self.success = send_complex_mail(**self.args)
 
     def test_success_pased(self):
