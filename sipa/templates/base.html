@@ -9,7 +9,7 @@
         </li>
     {%- else -%}
         <li>
-            <a href="{{ url_for('usersuite.usersuite') }}">
+            <a href="{{ url_for('usersuite.index') }}">
                 <span class="glyphicon glyphicon-user"></span>
                 {{ current_user.realname.value }}
             </a>
@@ -275,7 +275,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                         </div>
                                         <div class="col-xs-10">
 
-                                            <a href="{{ url_for('usersuite.usersuite_contact') }}">
+                                            <a href="{{ url_for('usersuite.contact') }}">
                                                 {{ _("Kontaktformular") }}
                                             </a>
 

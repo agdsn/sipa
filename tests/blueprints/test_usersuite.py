@@ -28,7 +28,7 @@ class SampleAuthenticationTestCase(SampleAuthenticatedTestBase):
         print("rv:", rv)
         from pprint import pprint
         pprint(rv.data.decode('utf-8'))
-        self.assertRedirects(rv, url_for('usersuite.usersuite'))
+        self.assertRedirects(rv, url_for('usersuite.index'))
 
     def test_logout_successful(self):
         self.login()
@@ -50,10 +50,10 @@ class SampleFrontendTestBase(SampleAuthenticatedTestBase):
 
 class UsersuiteReachableTestCase(SampleFrontendTestBase):
     def test_usersuite_200(self):
-        self.assert200(self.client.get(url_for('usersuite.usersuite')))
+        self.assert200(self.client.get(url_for('usersuite.index')))
 
     def test_contact_200(self):
-        self.assert200(self.client.get(url_for('usersuite.usersuite_contact')))
+        self.assert200(self.client.get(url_for('usersuite.contact')))
 
     def test_mac_edit_200(self):
         self.assert200(self.client.get(url_for('usersuite.change_mac')))
@@ -63,7 +63,7 @@ class UsersuiteReachableTestCase(SampleFrontendTestBase):
 
     def test_usersuite_contains_urls(self):
         """Test the usersuite contains the urls of `sample`s capabilities."""
-        usersuite_response = self.client.get(url_for('usersuite.usersuite'))
+        usersuite_response = self.client.get(url_for('usersuite.index'))
 
         # We have to patch `current_user` since it is not defined due
         # to the wrong app context, but the code runs some asserts
@@ -74,7 +74,7 @@ class UsersuiteReachableTestCase(SampleFrontendTestBase):
                   for attr in ['mail', 'mac', 'finance_balance']),
                 *(url_for(get_attribute_endpoint(attr, capability='delete'))
                   for attr in ['mail']),
-                url_for('usersuite.usersuite_change_password'),
+                url_for('usersuite.change_password'),
                 url_for('generic.contact'),
             ]
 

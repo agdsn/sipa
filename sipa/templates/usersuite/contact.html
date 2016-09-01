@@ -4,7 +4,7 @@
 
 {% block content %}
 {% call forms.render(form=form, form_id="contact-form",
-                     reset_button=True, cancel_to=url_for('.usersuite')) -%}
+                     reset_button=True, cancel_to=url_for('.index')) -%}
     <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
         <strong>{{ _("Hinweise:")}}</strong>
         <ul>
