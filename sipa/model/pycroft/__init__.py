@@ -4,6 +4,7 @@ from ..datasource import DataSource
 def _do_nothing(*app):
     pass
 
+
 datasource = DataSource(
     name='pycroft',
     user_class=object,

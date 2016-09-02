@@ -9,7 +9,7 @@ from flask_login import current_user, AnonymousUserMixin
 from sqlalchemy.exc import OperationalError
 from werkzeug.local import LocalProxy
 
-from . import sample, wu, gerok, hss
+from . import sample, wu, gerok, hss, pycroft
 from .sqlalchemy import db
 from sipa.utils.exceptions import InvalidConfiguration
 
@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 #: The implemented datasources available by default
 AVAILABLE_DATASOURCES = [
+    pycroft.datasource,  # on top, because PYCROFT stands above it all™
     sample.datasource,
     wu.datasource,
     gerok.datasource,
@@ -80,8 +81,8 @@ class Backends:
 
     >>> app = Flask('appname')
     >>> backends = Backends()
-    >>> backends.init_app(app)
     >>> app.config['BACKENDS'] = ['name1', 'name2']
+    >>> backends.init_app(app)
     >>> # further initialization…
     >>> backends.init_backends()  # call each backend's init method
     >>> app.run()
