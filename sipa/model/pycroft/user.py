@@ -3,6 +3,7 @@ from flask_login import AnonymousUserMixin
 from sipa.model.fancy_property import unsupported_prop, active_prop
 from ..user import BaseUser
 
+
 class User(BaseUser):
     @classmethod
     def get(cls, username):
@@ -29,33 +30,49 @@ class User(BaseUser):
     def credit(self):
         return 0
 
-    @unsupported_prop
+    @active_prop
     def realname(self):
         return "Pycroft"
 
-    @unsupported_prop
+    @active_prop
     def login(self):
         return "root"
 
-    @unsupported_prop
+    @active_prop
     def mac(self):
         return "00:bb:ee:ff:cc:dd"
 
-    @unsupported_prop
-    def mail(self):
-        return "pycroft@agd.sn"
-
-    @unsupported_prop
+    @active_prop
     def address(self):
         return "Wundtstraße"
 
-    @unsupported_prop
+    @active_prop
     def status(self):
         return "Zukunftsfähig"
 
+    @property
+    def userdb_status(self):
+        raise NotImplementedError
+
+    @property
+    def userdb(self):
+        raise NotImplementedError
+
+    @property
+    def has_connection(self):
+        raise NotImplementedError
+
+    @property
+    def last_finance_update(self):
+        raise NotImplementedError
+
+    @unsupported_prop
+    def mail(self):
+        raise NotImplementedError
+
     @unsupported_prop
     def id(self):
-        return 0
+        raise NotImplementedError
 
     @unsupported_prop
     def hostname(self):
@@ -66,21 +83,5 @@ class User(BaseUser):
         return
 
     @unsupported_prop
-    def userdb_status(self):
-        return
-
-    @unsupported_prop
-    def userdb(self):
-        return
-
-    @unsupported_prop
-    def has_connection(self):
-        return
-
-    @unsupported_prop
     def finance_balance(self):
-        return 0
-
-    @unsupported_prop
-    def last_finance_update(self):
-        return
+        raise NotImplementedError
