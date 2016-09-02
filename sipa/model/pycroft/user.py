@@ -1,7 +1,7 @@
 from flask_login import AnonymousUserMixin
 
+from sipa.model.fancy_property import unsupported_prop, active_prop
 from ..user import BaseUser
-
 
 class User(BaseUser):
     @classmethod
@@ -29,58 +29,58 @@ class User(BaseUser):
     def credit(self):
         return 0
 
-    @property
+    @unsupported_prop
     def realname(self):
         return "Pycroft"
 
-    @property
+    @unsupported_prop
     def login(self):
         return "root"
 
-    @property
+    @unsupported_prop
     def mac(self):
         return "00:bb:ee:ff:cc:dd"
 
-    @property
+    @unsupported_prop
     def mail(self):
         return "pycroft@agd.sn"
 
-    @property
+    @unsupported_prop
     def address(self):
         return "Wundtstraße"
 
-    @property
+    @unsupported_prop
     def status(self):
         return "Zukunftsfähig"
 
-    @property
+    @unsupported_prop
     def id(self):
         return 0
 
-    @property
+    @unsupported_prop
     def hostname(self):
         return
 
-    @property
+    @unsupported_prop
     def hostalias(self):
         return
 
-    @property
+    @unsupported_prop
     def userdb_status(self):
         return
 
-    @property
+    @unsupported_prop
     def userdb(self):
         return
 
-    @property
+    @unsupported_prop
     def has_connection(self):
         return
 
-    @property
+    @unsupported_prop
     def finance_balance(self):
         return 0
 
-    @property
+    @unsupported_prop
     def last_finance_update(self):
         return
