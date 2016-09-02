@@ -1,4 +1,5 @@
 from ..datasource import DataSource
+from .user import User
 
 
 def _do_nothing(*app):
@@ -7,7 +8,7 @@ def _do_nothing(*app):
 
 datasource = DataSource(
     name='pycroft',
-    user_class=object,
+    user_class=User,
     mail_server="",
     webmailer_url="",
     init_context=_do_nothing,
