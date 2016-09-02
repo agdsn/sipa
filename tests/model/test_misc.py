@@ -37,6 +37,13 @@ class CompareAllAttributesTestCase(TestCase):
         for args in arglist:
             self.assertFalse(compare_all_attributes(*args))
 
+    def test_attributes_missing_false(self):
+        """Comparing to an object without these attrs should be `False`"""
+        try:
+            self.assertFalse(compare_all_attributes(self.A, "", ['a']))
+        except AttributeError:
+            self.fail("AttributeError raised instead of returning `False`")
+
 
 class XorHashesTestCase(TestCase):
     def test_xor_hashes_correct(self):
