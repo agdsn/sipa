@@ -157,3 +157,40 @@ class FormTemplateTestMixin:
             with self.subTest(data=data):
                 resp = self.submit_form(data=data)
                 self.assert_nothing_flashed(resp.data)
+
+
+class TestWhenSubclassedMeta(type):
+    """Metaclass that sets `__test__` back to `True` when subclassed.
+
+    Usage:
+
+        >>> class GenericTestCase(TestCase, metaclass=TestWhenSubclassed):
+        ...     __test__ = False
+        ...
+        ...     def test_something(self):
+        ...         self.fail("This test is executed in a subclass, only.")
+        ...
+        ...
+        >>> class SpecificTestCase(GenericTestCase):
+        ...     pass
+
+    """
+
+    def __new__(mcs, name, bases, attrs):
+        ATTR_NAME = '__test__'
+        VALUE_TO_RESET = False
+        RESET_VALUE = True
+
+        values = [getattr(base, ATTR_NAME) for base in bases
+                  if hasattr(base, ATTR_NAME)]
+
+        # only reset if the first attribute is `VALUE_TO_RESET`
+        try:
+            first_value = values[0]
+        except IndexError:
+            pass
+        else:
+            if first_value == VALUE_TO_RESET and ATTR_NAME not in attrs:
+                attrs[ATTR_NAME] = RESET_VALUE
+
+        return super().__new__(mcs, name, bases, attrs)
