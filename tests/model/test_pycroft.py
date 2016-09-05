@@ -6,6 +6,7 @@ from sipa.model import Backends
 from sipa.model.fancy_property import PropertyBase
 from sipa.model.pycroft import datasource
 from sipa.model.user import BaseUser
+from ..base import TestWhenSubclassedMeta
 
 
 class PycroftBackendTestCase(TestCase):
@@ -67,21 +68,29 @@ class PropertyTestMixin(TestCase):
             self.fail("Property {!r} unexpectedly supported".format(prop))
 
 
-class PycroftUserClassTestCase(PropertyTestMixin, TestCase):
-    def setUp(self):
-        super().setUp()
-        self.user = self.create_user()
-        self.all_properties = ['id', 'status', 'login', 'mac', 'mail', 'address',
-                               'hostname', 'hostalias', 'finance_balance', 'realname']
-        self.supported = ['status', 'login', 'mac', 'address', 'realname']
-        self.unsupported = ['id', 'mail', 'finance_balance', 'hostname', 'hostalias']
+# pylint: disable=no-member
+class PropertyAvailableTestCase(PropertyTestMixin, metaclass=TestWhenSubclassedMeta):
+    """Generic Tests concerning fancy_property implementations
 
-    @staticmethod
-    def create_user():
-        return datasource.user_class(uid=0)
+    The subclass must provide:
+
+        - ``self._user``: The ``BaseUser`` object
+
+        - ``self.supported``, ``self.unsupported``: A list of
+          attribute names to be supported / unsupported
+          fancy_properties.
+    """
+    __test__ = False
+
+    @property
+    def user(self):
+        try:
+            return self._user
+        except AttributeError as e:
+            raise AttributeError("`_user` not provided by subclass") from e
 
     def test_things_are_fancy_properties(self):
-        for prop in self.all_properties:
+        for prop in self.supported + self.unsupported:
             with self.subTest(prop=prop):
                 self.assert_is_fancy_property(getattr(self.user, prop))
 
@@ -94,6 +103,18 @@ class PycroftUserClassTestCase(PropertyTestMixin, TestCase):
         for prop in self.unsupported:
             with self.subTest(prop=prop):
                 self.assert_property_unsupported(getattr(self.user, prop))
+
+
+class PycroftUserClassTestCase(PropertyAvailableTestCase, TestCase):
+    def setUp(self):
+        super().setUp()
+        self._user = self.create_user()
+        self.supported = ['status', 'login', 'mac', 'address', 'realname']
+        self.unsupported = ['id', 'mail', 'finance_balance', 'hostname', 'hostalias']
+
+    @staticmethod
+    def create_user():
+        return datasource.user_class(uid=0)
 
     def test_user_cannot_change_password(self):
         self.assertFalse(self.user.can_change_password)
