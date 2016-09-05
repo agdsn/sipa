@@ -1,10 +1,13 @@
-from unittest import TestCase
+from unittest import TestCase, expectedFailure
 
 from flask import Flask
+from flask_testing import TestCase as FlaskTestCase
 
 from sipa.model import Backends
 from sipa.model.fancy_property import PropertyBase
 from sipa.model.pycroft import datasource
+from sipa.model.pycroft.schema import User
+from sipa.model.sqlalchemy import db
 from sipa.model.user import BaseUser
 from ..base import TestWhenSubclassedMeta
 
@@ -123,3 +126,58 @@ class PycroftUserClassTestCase(PropertyAvailableTestCase, TestCase):
         with self.assertRaises(NotImplementedError):
             self.user.change_password(None, None)
 
+
+class PycroftPgTestBase(FlaskTestCase):
+    def create_app(self):
+        app = Flask('sipa')
+        backends = Backends()
+        app.config['BACKENDS'] = ['pycroft']
+
+        backends.init_app(app)
+        backends.init_backends()
+
+        self.backends = backends
+
+        return app
+
+    def setUp(self):
+        super().setUp()
+
+        self.User = self.backends.get_datasource('pycroft').user_class
+
+        self.db = db
+        self.session = self.db.session
+        self.db.create_all()
+        self.fill_db()
+
+    def fill_db(self):
+        for cls, datasets in self.pycroft_fixtures.items():
+            for data_dict in datasets:
+                obj = cls(**data_dict)
+                self.session.add(obj)
+
+        self.session.commit()
+
+
+class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
+    @property
+    def pycroft_fixtures(self):
+        return {User: [{
+            'login': 'sipa',
+            'name': "March mellow",
+        }]}
+
+    def setUp(self):
+        super().setUp()
+        self.user_data = self.pycroft_fixtures[User].pop()
+        self.user = self.User.get(self.user_data['login'])
+
+    def test_user_get_returns_user(self):
+        self.assertIsInstance(self.user, self.User)
+
+    def test_user_got_correct_uid(self):
+        self.assertEqual(self.user.uid, self.user_data['login'])
+
+    @expectedFailure
+    def test_user_got_correct_login(self):
+        self.assertEqual(self.user.login, self.user_data['login'])
