@@ -49,16 +49,17 @@ class ThingsWithBasesTestCase(TestCase):
     def test_unit_in_formatted_string(self):
         num, divisions = 1024, 1
 
-        for func in [partial(format_as_traffic, divide=False), dynamic_unit]:
-            with self.subTest(func=func):
-                formatted = func(num, divisions)
-                # Checking num was passed isn't really testable, since
-                # it could've been formatted ANY possible way.
-                # Calling the format string itself is a stupid test,
-                # on the other hand, basically reprogramming the
-                # method.  Therefore, it is only tested that the
-                # correct unit is appended.
-                self.assertIn(UNIT_LIST[divisions], formatted)
+        formatted = format_as_traffic(num, divisions, divide=False)
+        # Checking num was passed isn't really testable, since
+        # it could've been formatted ANY possible way.
+        # Calling the format string itself is a stupid test,
+        # on the other hand, basically reprogramming the
+        # method.  Therefore, it is only tested that the
+        # correct unit is appended.
+        self.assertIn(UNIT_LIST[divisions], formatted)
+
+    def test_dynamic_unit_contains_unit(self):
+        self.assertIn(UNIT_LIST[1], dynamic_unit(1024))
 
 
 class MoneyDecoratorTestCase(TestCase):
