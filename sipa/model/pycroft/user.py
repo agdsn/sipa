@@ -1,13 +1,58 @@
+import logging
+
 from flask_login import AnonymousUserMixin
+from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.fancy_property import unsupported_prop, active_prop
+from ..sqlalchemy import db
 from ..user import BaseUser
+from .schema import User as PGUser
+
+logger = logging.getLogger(__name__)
 
 
 class User(BaseUser):
     @classmethod
     def get(cls, username):
         return cls(uid=username)
+
+    def _receive_pg_object(self):
+        """Load the corresponding ORM object from the database
+
+        :raises RuntimeError: when the user does not exist in the
+            database.
+
+        :returns: The ORM object
+
+        :rtype: :py:obj:``~.schema.User``
+        """
+        try:
+            pg_object = (db.session.query(PGUser)
+                         .filter_by(login=self.uid).one())
+        except NoResultFound:
+            raise RuntimeError("User not available")
+        except RuntimeError as e:
+            logger.warning("RuntimeError caught when accessing pg_object",
+                           extra={'data': {'user': self}})
+            raise RuntimeError from e
+        else:
+            return pg_object
+
+    @property
+    def pg_object(self):
+        """Cached wrapper for :py:meth:`_receive_pg_object`
+
+        :returns: See :meth:`_receive_pg_object`
+
+        :rtype: See :meth:`_receive_pg_object`
+        """
+        print("pg_object called")
+        try:
+            return self._pg_object
+        except AttributeError:
+            pg_object = self._receive_pg_object()
+            self._pg_object = pg_object
+            return pg_object
 
     @classmethod
     def from_ip(cls, ip):
