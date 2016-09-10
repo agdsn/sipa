@@ -113,25 +113,6 @@ class PropertyAvailableTestCase(PropertyTestMixin, metaclass=TestWhenSubclassedM
                 self.assert_property_unsupported(getattr(self.user, prop))
 
 
-class PycroftUserClassTestCase(PropertyAvailableTestCase, TestCase):
-    def setUp(self):
-        super().setUp()
-        self._user = self.create_user()
-        self.supported = ['status', 'login', 'mac', 'address', 'realname']
-        self.unsupported = ['id', 'mail', 'finance_balance', 'hostname', 'hostalias']
-
-    @staticmethod
-    def create_user():
-        return datasource.user_class(uid=0)
-
-    def test_user_cannot_change_password(self):
-        self.assertFalse(self.user.can_change_password)
-
-    def test_user_password_change_raises(self):
-        with self.assertRaises(NotImplementedError):
-            self.user.change_password(None, None)
-
-
 class PycroftPgTestBase(FlaskTestCase):
     """A TestBase providing the pycroft backend with postgres
 
@@ -199,6 +180,38 @@ class PycroftNoFixturesTestBase(PycroftPgTestBase):
     @property
     def pycroft_fixtures(self):
         return {}
+
+
+class PycroftUserClassTestCase(PropertyAvailableTestCase,
+                               PycroftPgTestBase, TestCase):
+    @property
+    def pycroft_fixtures(self):
+        return {User: [{
+            'login': 'sipa',
+            'name': "March mellow",
+            'email': "foo@bar.baz",
+        }]}
+
+    def setUp(self):
+        super().setUp()
+        self._user = self.create_user()
+        self.supported = ['status', 'login', 'mac', 'address', 'realname']
+        self.unsupported = ['id', 'mail', 'finance_balance', 'hostname', 'hostalias']
+
+    def create_user(self):
+        return self.User.get('sipa')
+
+    def test_user_cannot_change_password(self):
+        self.assertFalse(self.user.can_change_password)
+
+    def test_user_password_change_raises(self):
+        with self.assertRaises(NotImplementedError):
+            self.user.change_password(None, None)
+
+    # TODO: test construction methods (from_ip, …)
+    # TODO: test things which are not properties
+    # TODO: set up testing infrastructure (psql)
+    # TODO: test ``getting`` a user works
 
 
 class PycroftUserFetchFailedTestCase(PycroftNoFixturesTestBase, TestCase):
