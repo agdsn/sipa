@@ -216,7 +216,6 @@ class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
     def test_user_got_correct_uid(self):
         self.assertEqual(self.user.uid, self.user_data['login'])
 
-    @expectedFailure
     def test_user_got_correct_login(self):
         self.assertEqual(self.user.login, self.user_data['login'])
 

@@ -81,7 +81,7 @@ class User(BaseUser):
 
     @active_prop
     def login(self):
-        return "root"
+        return self.pg_object.login
 
     @active_prop
     def mac(self):
