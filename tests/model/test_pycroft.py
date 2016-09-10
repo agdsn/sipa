@@ -197,29 +197,6 @@ class PycroftNoFixturesTestBase(PycroftPgTestBase):
         return {}
 
 
-class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
-    @property
-    def pycroft_fixtures(self):
-        return {User: [{
-            'login': 'sipa',
-            'name': "March mellow",
-        }]}
-
-    def setUp(self):
-        super().setUp()
-        self.user_data = self.pycroft_fixtures[User].pop()
-        self.user = self.User.get(self.user_data['login'])
-
-    def test_user_get_returns_user(self):
-        self.assertIsInstance(self.user, self.User)
-
-    def test_user_got_correct_uid(self):
-        self.assertEqual(self.user.uid, self.user_data['login'])
-
-    def test_user_got_correct_login(self):
-        self.assertEqual(self.user.login, self.user_data['login'])
-
-
 class PycroftUserFetchFailedTestCase(PycroftNoFixturesTestBase, TestCase):
     def setUp(self):
         super().setUp()
@@ -275,3 +252,26 @@ class PycroftUserORMFetchTestCase(PycroftNoFixturesTestBase, TestCase):
         except (RuntimeError, OperationalError) as e:
             self.fail("`{}` raised instead of loading cached object"
                       .format(type(e).__name__))
+
+
+class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
+    @property
+    def pycroft_fixtures(self):
+        return {User: [{
+            'login': 'sipa',
+            'name': "March mellow",
+        }]}
+
+    def setUp(self):
+        super().setUp()
+        self.user_data = self.pycroft_fixtures[User].pop()
+        self.user = self.User.get(self.user_data['login'])
+
+    def test_user_get_returns_user(self):
+        self.assertIsInstance(self.user, self.User)
+
+    def test_user_got_correct_uid(self):
+        self.assertEqual(self.user.uid, self.user_data['login'])
+
+    def test_user_got_correct_login(self):
+        self.assertEqual(self.user.login, self.user_data['login'])
