@@ -4,6 +4,7 @@ from unittest import TestCase, expectedFailure
 from unittest.mock import patch, MagicMock
 
 from flask import Flask
+from flask_babel import Babel
 from flask_testing import TestCase as FlaskTestCase
 from sqlalchemy.exc import OperationalError
 
@@ -144,6 +145,8 @@ class PycroftPgTestBase(FlaskTestCase):
 
         backends.init_app(app)
         backends.init_backends()
+
+        Babel(app)
 
         #: The :py:obj:`backends` registered to the app.
         self.backends = backends
