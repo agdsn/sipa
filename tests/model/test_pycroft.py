@@ -1,5 +1,5 @@
 import logging
-from operator import attrgetter
+from operator import itemgetter
 from unittest import TestCase, expectedFailure
 from unittest.mock import patch, MagicMock
 
@@ -277,5 +277,20 @@ class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
     def test_user_got_correct_uid(self):
         self.assertEqual(self.user.uid, self.user_data['login'])
 
-    def test_user_got_correct_login(self):
-        self.assertEqual(self.user.login, self.user_data['login'])
+
+class PycroftPropertiesPassedTestCase(PycroftPgTestBase, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = self.User.get('sipa')
+
+    @property
+    def pycroft_fixtures(self):
+        return {User: [{
+            'login': 'sipa',
+            'name': "March mellow",
+            'email': "foo@bar.baz",
+        }]}
+
+    @subtests_over('pycroft_fixtures', getter=itemgetter(User))
+    def test_user_got_correct_login(self, user_dict):
+        self.assertEqual(self.user.login, user_dict['login'])
