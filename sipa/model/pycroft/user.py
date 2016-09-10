@@ -77,7 +77,7 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return "Pycroft"
+        return self.pg_object.name
 
     @active_prop
     def login(self):
@@ -95,6 +95,10 @@ class User(BaseUser):
     def status(self):
         return "Zukunftsfähig"
 
+    @active_prop
+    def mail(self):
+        return self.pg_object.email
+
     @property
     def userdb_status(self):
         raise NotImplementedError
@@ -109,10 +113,6 @@ class User(BaseUser):
 
     @property
     def last_finance_update(self):
-        raise NotImplementedError
-
-    @unsupported_prop
-    def mail(self):
         raise NotImplementedError
 
     @unsupported_prop

@@ -195,8 +195,8 @@ class PycroftUserClassTestCase(PropertyAvailableTestCase,
     def setUp(self):
         super().setUp()
         self._user = self.create_user()
-        self.supported = ['status', 'login', 'mac', 'address', 'realname']
-        self.unsupported = ['id', 'mail', 'finance_balance', 'hostname', 'hostalias']
+        self.supported = ['status', 'login', 'mac', 'mail', 'address', 'realname']
+        self.unsupported = ['id', 'finance_balance', 'hostname', 'hostalias']
 
     def create_user(self):
         return self.User.get('sipa')
@@ -277,6 +277,7 @@ class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
         return {User: [{
             'login': 'sipa',
             'name': "March mellow",
+            'email': "foo@bar.baz",
         }]}
 
     def setUp(self):
@@ -307,3 +308,11 @@ class PycroftPropertiesPassedTestCase(PycroftPgTestBase, TestCase):
     @subtests_over('pycroft_fixtures', getter=itemgetter(User))
     def test_user_got_correct_login(self, user_dict):
         self.assertEqual(self.user.login, user_dict['login'])
+
+    @subtests_over('pycroft_fixtures', getter=itemgetter(User))
+    def test_user_got_correct_realname(self, user_dict):
+        self.assertEqual(self.user.realname, user_dict['name'])
+
+    @subtests_over('pycroft_fixtures', getter=itemgetter(User))
+    def test_user_got_correct_mail(self, user_dict):
+        self.assertEqual(self.user.mail, user_dict['email'])
