@@ -1,6 +1,6 @@
 import logging
 from unittest import TestCase, expectedFailure
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from flask import Flask
 from flask_testing import TestCase as FlaskTestCase
@@ -131,6 +131,11 @@ class PycroftUserClassTestCase(PropertyAvailableTestCase, TestCase):
 
 
 class PycroftPgTestBase(FlaskTestCase):
+    """A TestBase providing the pycroft backend with postgres
+
+    This TestCase sets up the database and fills it by calling
+    :py:meth:`fill_db`.
+    """
     def create_app(self):
         app = Flask('sipa')
         backends = Backends()
@@ -139,6 +144,7 @@ class PycroftPgTestBase(FlaskTestCase):
         backends.init_app(app)
         backends.init_backends()
 
+        #: The :py:obj:`backends` registered to the app.
         self.backends = backends
 
         return app
@@ -146,14 +152,32 @@ class PycroftPgTestBase(FlaskTestCase):
     def setUp(self):
         super().setUp()
 
+        #: The :py:obj:`User` class of the ``'pycroft'`` datasource.
         self.User = self.backends.get_datasource('pycroft').user_class
 
+        #: The :py:obj:`FlaskSQLAlchemy` db object
         self.db = db
+        #: The session of :attr:`db`
         self.session = self.db.session
+
         self.db.create_all()
         self.fill_db()
 
+    @property
+    def pycroft_fixtures(self):
+        """Dict providing the initial sqlalchemy fixtures
+
+        The keys are classes ``cls`` of the model and values being a
+        list of dicts to be passed as keyword arguments to
+        ``cls.__init__``.  Naturally, you can pass any callable
+        instead of ``cls`` as long as it returns a sqlalchemy object.
+        """
+        raise NotImplementedError("`pycroft_fixtures` not defined")
+
     def fill_db(self, orm_objects=None):
+        """Fill the database with elements of
+        :py:attr:`pycroft_fixtures`.
+        """
         for cls, datasets in self.pycroft_fixtures.items():
             for data_dict in datasets:
                 obj = cls(**data_dict)
@@ -164,6 +188,13 @@ class PycroftPgTestBase(FlaskTestCase):
                 self.session.add(obj)
 
         self.session.commit()
+
+
+class PycroftNoFixturesTestBase(PycroftPgTestBase):
+    """Subclass of `PycroftPgTestBase` without fixtures."""
+    @property
+    def pycroft_fixtures(self):
+        return {}
 
 
 class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
@@ -190,57 +221,58 @@ class PycroftUserGetTestCase(PycroftPgTestBase, TestCase):
         self.assertEqual(self.user.login, self.user_data['login'])
 
 
-class PycroftUserORMFetchTestCase(PycroftPgTestBase, TestCase):
-    @property
-    def pycroft_fixtures(self):
-        return {}
-
+class PycroftUserFetchFailedTestCase(PycroftNoFixturesTestBase, TestCase):
     def setUp(self):
         super().setUp()
-        self.prepared_pg_user = User(login="sipa", name="test")
 
-    def test_empty_db_has_no_user(self):
-        user = self.User.get('sipa')
-        with self.assertRaises(RuntimeError):
+        def _raise_runtimeerror(*_):
+            """Function to mock the db object"""
+            raise RuntimeError()
+
+        self.db_mock = MagicMock()
+        self.db_mock.session.query.side_effect = _raise_runtimeerror
+
+    def test_runtimeerror_passed_and_logged(self):
+        with patch('sipa.model.pycroft.user.db', self.db_mock), \
+                self.assertRaises(RuntimeError), \
+                self.assertLogs(logging.getLogger('sipa.model.pycroft.user'),
+                                level="WARNING") as cm:
+            user = self.User.get('sipa')
             # pylint: disable=pointless-statement
             user.pg_object
 
+        self.assertTrue(self.db_mock.session.query.called)
+
+        self.assertEqual(len(cm.output), 1)
+        last_log = cm.output.pop()
+        self.assertIn("RuntimeError caught", last_log)
+
+
+class PycroftUserORMFetchTestCase(PycroftNoFixturesTestBase, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.prepared_pg_user = User(login="sipa", name="test")
+        #: The user obtained by ``User.get``
+        self.user_gotten = self.User.get('sipa')
+
+    def test_empty_db_has_no_user(self):
+        with self.assertRaises(RuntimeError):
+            # pylint: disable=pointless-statement
+            self.user_gotten.pg_object
+
     def test_db_returns_correct_user(self):
         self.fill_db(orm_objects=[self.prepared_pg_user])
-        user = self.User.get('sipa')
-
-        self.assertEqual(user.pg_object, self.prepared_pg_user)
-
-    def test_runtimeerror_passed_and_logged(self):
-        def _raise_runtimeerror(*_):
-            raise RuntimeError()
-
-        with patch('sipa.model.pycroft.user.db') as db_mock:
-            db_mock.session.query.side_effect = _raise_runtimeerror
-
-            with self.assertRaises(RuntimeError), \
-                    self.assertLogs(logging.getLogger('sipa.model.pycroft.user'),
-                                    level="WARNING") as cm:
-                user = self.User.get('sipa')
-                # pylint: disable=pointless-statement
-                user.pg_object
-
-            self.assertTrue(db_mock.session.query.called)
-
-            self.assertEqual(len(cm.output), 1)
-            last_log = cm.output.pop()
-            self.assertIn("RuntimeError caught", last_log)
+        self.assertEqual(self.user_gotten.pg_object, self.prepared_pg_user)
 
     def test_does_not_access_db_a_second_time(self):
         self.fill_db(orm_objects=[self.prepared_pg_user])
-        user = self.User.get('sipa')
         # initial call to init caching
         # pylint: disable=pointless-statement
-        user.pg_object
+        self.user_gotten.pg_object
         db.drop_all()
 
         try:
-            self.assertTrue(user.pg_object)
+            self.assertTrue(self.user_gotten.pg_object)
         except (RuntimeError, OperationalError) as e:
             self.fail("`{}` raised instead of loading cached object"
                       .format(type(e).__name__))
