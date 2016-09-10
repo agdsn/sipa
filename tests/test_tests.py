@@ -1,6 +1,8 @@
+from operator import itemgetter
 from unittest import TestCase
+from unittest.mock import MagicMock
 
-from .base import TestWhenSubclassedMeta
+from .base import TestWhenSubclassedMeta, subtests_over
 
 
 class SubclassesTestCase(TestCase):
@@ -33,3 +35,32 @@ class SubclassesTestCase(TestCase):
 
         with self.assertRaises(AttributeError):
             getattr(C, '__test__')
+
+
+class SubTestForAllTestCase(TestCase):
+    subtest_mock = MagicMock()
+
+    class Foo:
+        subTest = MagicMock()
+
+        def __init__(self):
+            self.result = []
+
+        @property
+        def params(self, ):
+            return {'key': ['foo', 'bar', 'baz']}
+
+        @subtests_over('params', getter=itemgetter('key'))
+        def to_be_repeated(self, param):
+            self.result = [param] + self.result
+
+    def test_subtests_called(self):
+        mock = self.Foo.subTest
+
+        obj = self.Foo()
+        # pylint: disable=no-value-for-parameter
+        obj.to_be_repeated()
+
+        self.assertTrue(mock.called)
+        self.assertEqual(len(mock.call_args_list), len(obj.params['key']))
+        self.assertEqual(obj.result, list(reversed(obj.params['key'])))

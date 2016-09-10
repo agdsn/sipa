@@ -1,5 +1,6 @@
 import os
 from contextlib import contextmanager
+from functools import wraps
 
 from flask import Flask
 from flask_testing import TestCase
@@ -194,3 +195,23 @@ class TestWhenSubclassedMeta(type):
                 attrs[ATTR_NAME] = RESET_VALUE
 
         return super().__new__(mcs, name, bases, attrs)
+
+
+class subtests_over:
+    def __init__(self, attr_name, getter=None):
+        #: The function taking ``inst.attr`` and extracting the
+        #: iterable of params iterable
+        self.getter = getter
+        self.attr_name = attr_name
+
+    def __call__(self, func):
+        @wraps(func)
+        def _func(inst):
+            params = (self.getter(getattr(inst, self.attr_name)) if self.getter
+                      else getattr(inst, self.attr_name))
+
+            for param in params:
+                with inst.subTest(param=param):
+                    func(inst, param)
+
+        return _func

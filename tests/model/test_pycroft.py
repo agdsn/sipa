@@ -1,4 +1,5 @@
 import logging
+from operator import attrgetter
 from unittest import TestCase, expectedFailure
 from unittest.mock import patch, MagicMock
 
@@ -12,7 +13,7 @@ from sipa.model.pycroft import datasource
 from sipa.model.pycroft.schema import User
 from sipa.model.sqlalchemy import db
 from sipa.model.user import BaseUser
-from ..base import TestWhenSubclassedMeta
+from ..base import TestWhenSubclassedMeta, subtests_over
 
 
 class PycroftBackendTestCase(TestCase):
