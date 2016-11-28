@@ -9,6 +9,7 @@ from logging import getLogger
 import json
 
 from flask import Blueprint, render_template, current_app
+from flask_login import current_user
 
 from sipa.flatpages import cf_pages
 from sipa.model import backends
@@ -27,6 +28,13 @@ def show(category_id, article_id):
     dormitory and see _specific_ information like financial data.
     """
     article = cf_pages.get_or_404(category_id, article_id)
+
+    try:
+        restricted = article.restricted
+    except AttributeError:
+        restricted = False
+    if restricted and not current_user.is_authenticated:
+        return current_app.login_manager.unauthorized()
 
     box_filename = os.path.join(
         os.path.abspath(current_app.config['FLATPAGES_ROOT']),
