@@ -11,6 +11,8 @@ SENTRY_DSN = None
 
 CONTENT_URL = None
 
+BACKENDS = ['sample']
+
 FLATPAGES_ROOT = None
 FLATPAGES_EXTENSION = '.md'
 

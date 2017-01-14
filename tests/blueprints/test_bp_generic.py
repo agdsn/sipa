@@ -38,9 +38,9 @@ class GenericEndpointsReachableTestCase(SampleFrontendTestBase):
     def test_index_reachable(self):
         self.assert200(self.client.get('/', follow_redirects=True))
 
-    def test_usertraffic_denied(self):
-        # throws 401 because we don't have an ip matching a user
-        self.assertStatus(self.client.get(url_for('generic.usertraffic')), 401)
+    def test_usertraffic_permitted(self):
+        # only reachable because `from_ip` always returns test user
+        self.assert200(self.client.get(url_for('generic.usertraffic')))
 
     def test_api_reachable(self):
         rv = self.client.get(url_for('generic.traffic_api'))
