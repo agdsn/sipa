@@ -19,4 +19,4 @@ Dormitory(name='localhost', display_name="Lokalgastgeber",
               IPv4Network('172.0.0.0/8'),  # used by docker
           ])
 
-__all__ = [datasource]
+__all__ = ['datasource']

@@ -27,7 +27,7 @@ datasource = DataSource(
     init_context=init_context,
 )
 
-[Dormitory(
+[Dormitory(  # pylint: disable=expression-not-assigned
     name='hss',
     display_name="Hochschulstraße",
     datasource=datasource,
@@ -41,4 +41,4 @@ datasource = DataSource(
     ]
 )]
 
-__all__ = [datasource]
+__all__ = ['datasource']

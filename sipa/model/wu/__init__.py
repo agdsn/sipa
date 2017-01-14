@@ -21,7 +21,7 @@ datasource = DataSource(
     init_context=init_context
 )
 
-[
+[  # pylint: disable=expression-not-assigned
     Dormitory(name=dorm[0], display_name=dorm[1], datasource=datasource,
               subnets=dorm[2])
     for dorm in [
@@ -46,4 +46,4 @@ datasource = DataSource(
     ]
 ]
 
-__all__ = [datasource]
+__all__ = ['datasource']
