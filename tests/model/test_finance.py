@@ -39,7 +39,6 @@ class StaticBalanceTestCase(TestCase):
         super().setUp()
         self.balance = self.StaticFinanceInformation().balance
 
-
     def test_has_correct_balance(self):
         self.assertFalse(self.balance.empty)
         self.assertIn('30', self.balance.value)
