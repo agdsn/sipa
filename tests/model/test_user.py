@@ -7,12 +7,12 @@ from sipa.model.finance import BaseFinanceInformation
 class TestBaseUserCase(TestCase):
     def test_BaseUser_is_abstract(self):
         with self.assertRaises(TypeError):
-            BaseUser('')
+            BaseUser('')  # pylint: disable=abstract-class-instantiated
 
     def test_BaseUser_has_flask_login_properties(self):
-        assert BaseUser.is_authenticated
-        assert BaseUser.is_active
-        assert not BaseUser.is_anonymous
+        self.assertTrue(BaseUser.is_authenticated)
+        self.assertTrue(BaseUser.is_active)
+        self.assertFalse(BaseUser.is_anonymous)
 
     # more can't be done here, we need some instances.
 
@@ -41,14 +41,25 @@ class DegenerateUser(BaseUser):
 
 
 class DegenerateUserTestCase(TestCase):
-    User = DegenerateUser
+    def setUp(self):
+        self.User = DegenerateUser
+        self.uid = 'someone'
+        self.user = self.User(uid=self.uid)
 
-    def test_instantiable(self):
-        self.User(uid='')
+    def test_uid_passed(self):
+        self.assertEqual(self.user.uid, self.uid)
+
+    def test_get_id_implemented(self):
+        self.assertEqual(self.user.get_id(), self.uid)
+
+    def test_equality_when_same_uid(self):
+        self.assertEqual(self.user, self.User(uid=self.uid))
+
+    def test_inequality_when_other_uid(self):
+        self.assertNotEqual(self.user, self.User(uid=self.uid + 'invalid'))
 
     def test_finance_balance_unsupported(self):
-        bal = self.User(uid='').finance_balance
-        self.assertFalse(bal.supported)
+        self.assertFalse(self.user.finance_balance.supported)
 
 
 class DegenerateFinanceInformation(BaseFinanceInformation):
