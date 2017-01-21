@@ -137,6 +137,15 @@ Keep in mind you don't need to rewrite the whole default configuration
 every time, since you can include `'incremental': True` in said dict.
 
 
+## Translations
+
+Sipa uses [flask-babel](https://pythonhosted.org/Flask-Babel/) for
+translations.  To update translations, You should have pybabel and
+poedit installed (via pip or any other way), and run `make translate`.
+Since unfortunately, the build proocess is not automated (or done at
+the start), you need to check in the changes to the compiled files
+yourself.
+
 Required format for the markdown files
 --------------------------------------
 
