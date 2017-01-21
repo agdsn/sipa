@@ -95,22 +95,29 @@ def money(func):
     @wraps(func)
     def _wrapped_func(*args, **kwargs):
         amount = func(*args, **kwargs)
-        style = 'success' if amount >= 0 else 'danger'
 
         return {'value': format_money(amount),
                 'raw_value': amount,
-                'style': style}
+                'style': money_style(amount)}
 
     return _wrapped_func
 
 
-def format_money(amount):
+def money_style(amount: float) -> str:
+    """Return a corresponding bootstrap style to an amount of money
+
+    :param float amount: The amount of money
+
+    :returns: The bootstrap style
+    """
+    return 'success' if amount >= 0 else 'danger'
+
+
+def format_money(amount: float) -> str:
     """Nicely format a monetary value
 
     :param float amount: The amount of euros
 
     :returns: The formatted value
-
-    :rtype: str
     """
     return MONEY_FORMAT_STRING.format(amount)
