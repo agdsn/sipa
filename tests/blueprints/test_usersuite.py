@@ -6,22 +6,7 @@ from tests.base import SampleFrontendTestBase
 from sipa.blueprints.usersuite import get_attribute_endpoint
 
 
-class SampleAuthenticatedTestBase(SampleFrontendTestBase):
-    def login(self):
-        return self.client.post(
-            url_for('generic.login'),
-            data={'dormitory': 'localhost',
-                  'username': 'test',
-                  'password': 'test'},
-        )
-
-    def logout(self):
-        return self.client.get(
-            url_for('generic.logout')
-        )
-
-
-class SampleAuthenticationTestCase(SampleAuthenticatedTestBase):
+class SampleAuthenticationTestCase(SampleFrontendTestBase):
     def test_login_successful(self):
         """Test that a login redirects to the usersuite"""
         rv = self.login()
@@ -38,7 +23,7 @@ class SampleAuthenticationTestCase(SampleAuthenticatedTestBase):
         self.assert_redirects(rv, url_for('generic.index'))
 
 
-class SampleFrontendTestBase(SampleAuthenticatedTestBase):
+class SampleAuthenticatedTestBase(SampleFrontendTestBase):
     def setUp(self):
         super().setUp()
         self.login()
@@ -48,7 +33,7 @@ class SampleFrontendTestBase(SampleAuthenticatedTestBase):
         super().tearDown()
 
 
-class UsersuiteReachableTestCase(SampleFrontendTestBase):
+class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
     def test_usersuite_200(self):
         self.assert200(self.client.get(url_for('usersuite.index')))
 
@@ -84,7 +69,7 @@ class UsersuiteReachableTestCase(SampleFrontendTestBase):
                                  'href="[^"]*{}[^"]*"'.format(url))
 
 
-class FinanceLogsTestCase(SampleFrontendTestBase):
+class FinanceLogsTestCase(SampleAuthenticatedTestBase):
     def setUp(self):
         super().setUp()
         with patch('sipa.blueprints.usersuite.current_user'):

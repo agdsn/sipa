@@ -40,8 +40,9 @@ class GenericEndpointsReachableTestCase(SampleFrontendTestBase):
         self.assert200(self.client.get('/', follow_redirects=True))
 
     def test_usertraffic_permitted(self):
-        # only reachable because `from_ip` always returns test user
+        self.login()
         self.assert200(self.client.get(url_for('generic.usertraffic')))
+        self.logout()
 
     def test_api_reachable(self):
         rv = self.client.get(url_for('generic.traffic_api'))

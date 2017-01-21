@@ -34,9 +34,7 @@ config = LocalProxy(lambda: current_app.extensions['sample_users'])
 
 
 class SampleFinanceInformation(BaseFinanceInformation):
-    @property
-    def has_to_pay(self):
-        return random() > 0.5
+    has_to_pay = True
 
     @property
     def _balance(self):

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import os
 
 from flask import render_template, request, redirect, \
     url_for, flash, session, abort, current_app, jsonify
@@ -326,7 +327,7 @@ def contact_official():
 @bp_generic.route('/version')
 def version():
     """ Display version information from local repo """
-    sipa_dir = '/home/sipa/sipa'
+    sipa_dir = os.getcwd()
     return render_template(
         'version.html',
         active_branch=get_repo_active_branch(sipa_dir),
