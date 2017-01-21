@@ -292,3 +292,6 @@ class UserFinanceLogTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
         for log in self.finance_info.history:
             with self.subTest(log=log):
                 self.assertEqual(len(log), 2)
+
+    def test_finance_information_passed_to_user(self):
+        self.assertEqual(self.user.finance_information, self.finance_info)

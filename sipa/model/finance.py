@@ -4,6 +4,7 @@ from flask_babel import gettext
 
 from sipa.model.fancy_property import ActiveProperty, Capabilities
 from sipa.units import format_money
+from sipa.model.misc import compare_all_attributes
 
 
 class BaseFinanceInformation(metaclass=ABCMeta):
@@ -66,3 +67,7 @@ class BaseFinanceInformation(metaclass=ABCMeta):
     def last_update(self):
         """**[Abstract]** The time of the last update."""
         pass
+
+    def __eq__(self, other):
+        return compare_all_attributes(self, other, ['_balance', 'has_to_pay',
+                                                    'history', 'last_update'])

@@ -18,12 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 #: The implemented datasources available by default
-AVAILABLE_DATASOURCES = [
+AVAILABLE_DATASOURCES = frozenset([
     sample.datasource,
     wu.datasource,
     gerok.datasource,
     hss.datasource,
-]
+])
 
 
 def evaluates_uniquely(objects, func):
