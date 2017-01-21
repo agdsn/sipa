@@ -484,6 +484,7 @@ class FinanceBalanceTestCase(OneUserWithCredit):
             name=None,
             mail=None,
         )
+        self.finance_info = self.user.finance_information
 
     def test_correct_number_of_transactions(self):
         recvd_transactions = db.session.query(Nutzer).one().transactions
@@ -491,24 +492,24 @@ class FinanceBalanceTestCase(OneUserWithCredit):
 
     def test_user_has_correct_balance(self):
         expected_balance = 3.5
-        self.assertEqual(self.user.finance_balance, expected_balance)
+        self.assertEqual(self.finance_info.balance, expected_balance)
 
     def test_finance_date_max_in_database(self):
         expected_date = max(t.datum for t in self.transactions)
-        self.assertEqual(self.user.last_finance_update, expected_date)
+        self.assertEqual(self.finance_info.last_update, expected_date)
 
     def test_finance_logs_is_duple(self):
-        for log in self.user.finance_logs:
+        for log in self.finance_info.history:
             with self.subTest(log=log):
                 self.assertEqual(len(log), 2)
 
     def test_user_has_correct_logs(self):
         expected_logs = sorted([t.unsafe_as_tuple() for t in self.transactions],
                                key=attrgetter('datum'))
-        self.assertEqual(self.user.finance_logs, expected_logs)
+        self.assertEqual(self.finance_info.history, expected_logs)
 
     def test_finance_logs_sorted_by_date(self):
-        logs = self.user.finance_logs
+        logs = self.finance_info.history
         last_log = None
         for log in logs:
             if last_log is not None:
@@ -538,4 +539,4 @@ class HabenSollSwitchedTestCase(OneUserWithCredit):
 
     def test_user_has_correct_balance(self):
         expected_balance = 3.5
-        self.assertEqual(self.user.finance_balance, expected_balance)
+        self.assertEqual(self.user.finance_information.balance, expected_balance)
