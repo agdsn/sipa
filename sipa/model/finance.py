@@ -29,9 +29,9 @@ class BaseFinanceInformation(metaclass=ABCMeta):
         this property editable.
         """
         if not self.has_to_pay:
-            return ActiveProperty('balance', value=gettext("Muss nicht bezahlen"),
+            return ActiveProperty('finance_balance', value=gettext("Muss nicht bezahlen"),
                                   raw_value=0, empty=True)
-        return ActiveProperty('balance', value=format_money(self._balance),
+        return ActiveProperty('finance_balance', value=format_money(self._balance),
                               raw_value=self._balance,
                               capabilities=Capabilities(edit=True, delete=False))
 

@@ -110,11 +110,8 @@ def contact():
 
 
 def get_attribute_endpoint(attribute, capability='edit'):
+    """Try to determine the flask endpoint for the according property."""
     if capability == 'edit':
-        assert getattr(current_user, attribute).capabilities.edit, \
-            ("`edit_endpoint` called for non-editable "
-             "attribute `{}`".format(attribute))
-
         attribute_mappings = {
             'mac': 'change_mac',
             'userdb_status': 'hosting',
@@ -126,9 +123,6 @@ def get_attribute_endpoint(attribute, capability='edit'):
             "No edit endpoint for attribute `{}`".format(attribute)
     else:
         assert capability == 'delete', "capability must be 'delete' or 'edit'"
-        assert getattr(current_user, attribute).capabilities.delete, \
-            ("`edit_endpoint` called for non-deletable attribute `{}`"
-             .format(attribute))
 
         attribute_mappings = {
             'mail': 'delete_mail',
