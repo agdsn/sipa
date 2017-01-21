@@ -213,10 +213,7 @@ class User(BaseUser):
         pass
 
     userdb = None
-
-    @unsupported_prop
-    def finance_balance(self):
-        raise NotImplementedError
+    finance_information = None
 
 
 def do_api_call(request, method='get', postdata=None):
