@@ -9,7 +9,6 @@ from flask import Flask
 
 from sipa.model import Backends
 from sipa.model.datasource import DataSource, Dormitory
-from sipa.model.user import BaseUser
 
 
 class TestBackendInitializationCase(TestCase):
@@ -98,19 +97,6 @@ class TestBackendInitializationCase(TestCase):
             self.assertEqual(self.backends.dormitory_from_ip(first_ip), dorm)
 
         # TODO: Find an ip not in any dormitory
-
-
-class TestBaseUserCase(TestCase):
-    def test_BaseUser_is_abstract(self):
-        with self.assertRaises(TypeError):
-            BaseUser('')
-
-    def test_BaseUser_has_flask_login_properties(self):
-        assert BaseUser.is_authenticated
-        assert BaseUser.is_active
-        assert not BaseUser.is_anonymous
-
-    # more can't be done here, we need some instances.
 
 
 class DatasourceTestCase(TestCase):

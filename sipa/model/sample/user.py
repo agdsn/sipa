@@ -186,15 +186,3 @@ class User(BaseUser):
     userdb = None
 
     finance_information = SampleFinanceInformation()
-
-    @property
-    def finance_balance(self):
-        return self.finance_information.balance
-
-    @property
-    def last_finance_update(self):
-        return self.finance_information.last_update
-
-    @property
-    def finance_logs(self):
-        return self.finance_information.history

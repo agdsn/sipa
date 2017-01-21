@@ -28,7 +28,8 @@ def index():
     """Usersuite landing page with user account information
     and traffic overview.
     """
-    last_update = current_user.last_finance_update
+    info = current_user.finance_information
+    last_update = info.last_update if info else None
     finance_update_string = (
         " ({}: {})".format(gettext("Stand"), last_update.strftime("%Y-%m-%d"))
         if last_update
@@ -292,9 +293,12 @@ def hosting(action=None):
 @bp_usersuite.route("/finance-logs")
 @login_required
 def finance_logs():
-    assert hasattr(current_user, 'finance_logs')
+    info = current_user.finance_information
+
+    if not info or not info.has_to_pay:
+        abort(404)
 
     return render_template('usersuite/finance_logs.html',
-                           last_update=current_user.last_finance_update,
-                           balance=current_user.finance_balance.raw_value,
-                           logs=current_user.finance_logs)
+                           last_update=info.last_update,
+                           balance=info.balance.raw_value,
+                           logs=info.history)
