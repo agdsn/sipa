@@ -1,7 +1,7 @@
 .PHONY: run translate docs show_docs
 
 run:
-	docker-compose -f development.yml up
+	docker-compose -f build/development.yml up -d
 translate:
 	pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot ./
 	pybabel update -i messages.pot -d sipa/translations/
