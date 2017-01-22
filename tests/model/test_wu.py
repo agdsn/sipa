@@ -95,10 +95,10 @@ class UserNoDBTestCase(TestCase):
 
                 with self.patch_user_group(test_user), \
                      patch('sipa.model.wu.user.LdapConnector') as LdapConnectorMock:
-                        LdapConnectorMock.fetch_user.return_value = test_user
+                    LdapConnectorMock.fetch_user.return_value = test_user
 
-                        user = User.get(test_user['uid'])
-                        assert LdapConnectorMock.fetch_user.called
+                    user = User.get(test_user['uid'])
+                    assert LdapConnectorMock.fetch_user.called
 
                 self.assertIsInstance(user, User)
                 self.assert_userdata_passed(user, test_user)
