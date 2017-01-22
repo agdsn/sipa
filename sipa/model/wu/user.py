@@ -330,7 +330,16 @@ class User(BaseUser):
 
     @property
     def finance_information(self):
+        if self._nutzer.internet_by_rental:
+            return NoNeedToPayInformation()
         return FinanceInformation(transactions=self._nutzer.transactions)
+
+
+class NoNeedToPayInformation(BaseFinanceInformation):
+    has_to_pay = False
+    _balance = None
+    last_update = None
+    history = None
 
 
 class FinanceInformation(BaseFinanceInformation):

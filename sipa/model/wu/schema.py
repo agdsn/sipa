@@ -1,5 +1,5 @@
 # -*- coding: utf-8; -*-
-from sqlalchemy import (Column, Index, Integer, String,
+from sqlalchemy import (Column, Index, Integer, String, Boolean,
                         text, Text, ForeignKey, DECIMAL, BigInteger, Date, case, or_)
 from sqlalchemy.orm import relationship, column_property, object_session
 
@@ -42,6 +42,7 @@ class Nutzer(db.Model):
     unix_account = Column(String(40), nullable=False, unique=True)
     status = Column(Integer, nullable=False, index=True,
                     server_default=text("'1'"))
+    internet_by_rental = Column(Boolean, nullable=False)
 
     computer = relationship("Computer", backref="nutzer")
     credit_entries = relationship('Credit', backref="nutzer")

@@ -540,3 +540,31 @@ class HabenSollSwitchedTestCase(OneUserWithCredit):
     def test_user_has_correct_balance(self):
         expected_balance = 3.5
         self.assertEqual(self.user.finance_information.balance, expected_balance)
+
+
+class NoInternetByRentalTestCase(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+        self.nutzer = NutzerFactory()
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        )
+
+    def test_user_must_pay_fees(self):
+        self.assertTrue(self.user.finance_information.has_to_pay)
+
+
+class InternetByRentalTestCase(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+        self.nutzer = NutzerFactory(internet_by_rental=True)
+        self.user = self.create_user_ldap_patched(
+            uid=self.nutzer.unix_account,
+            name=None,
+            mail=None,
+        )
+
+    def test_user_doesnt_have_to_pay_fees(self):
+        self.assertFalse(self.user.finance_information.has_to_pay)
