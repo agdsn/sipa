@@ -1,3 +1,4 @@
+import os
 from functools import partial
 import unittest
 from unittest.mock import patch, MagicMock
@@ -14,14 +15,20 @@ from .test_hss_postgres import HSSOneAccountFixture, HssPgTestBase
 
 
 class HssLdapAppInitialized(AppInitialized):
-    LDAP_HOST = 'ldap_hss'
+    # LDAP_HOST given by env
     LDAP_PORT = 389
     LDAP_ADMIN_UID = 'cn=admin,dc=wh12,dc=tu-dresden,dc=de'
     LDAP_USER_BASE = 'ou=users,dc=wh12,dc=tu-dresden,dc=de'
-    LDAP_ADMIN_PASSWORD = 'password'
+    # LDAP_ADMIN_PASSWORD given by env
     LDAP_USER_FORMAT_STRING = "uid={user},ou=users,dc=wh12,dc=tu-dresden,dc=de"
 
     def create_app(self, *a, **kw):
+        try:
+            self.LDAP_HOST = os.environ['SIPA_TEST_LDAP_HOST']
+            self.LDAP_ADMIN_PASSWORD = os.environ['SIPA_TEST_LDAP_ADMIN_PASSWORD']
+        except KeyError:
+            self.skipTest("SIPA_TEST_LDAP_HOST and "
+                          "SIPA_TEST_LDAP_ADMIN_PASSWORD must be set.")
         conf = {
             **kw.pop('additional_config', {}),
             'HSS_LDAP_HOST': self.LDAP_HOST,

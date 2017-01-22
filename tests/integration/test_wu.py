@@ -1,3 +1,4 @@
+import os
 from contextlib import contextmanager
 from datetime import datetime
 from operator import attrgetter
@@ -19,11 +20,15 @@ from tests.base import WuFrontendTestBase
 
 class WuAtlantisFakeDBInitialized(WuFrontendTestBase):
     def create_app(self, *a, **kw):
+        userman_uri = os.getenv('SIPA_TEST_DB_USERMAN_URI', None)
+        if not userman_uri:
+            self.skipTest("SIPA_TEST_DB_USERMAN_URI not set")
+
         config = {
             **kw.pop('additional_config', {}),
             'DB_NETUSERS_URI': "sqlite:///",
             'DB_TRAFFIC_URI': "sqlite:///",
-            'DB_USERMAN_URI': "postgresql://sipa:password@postgres:5432/userman",  # noqa
+            'DB_USERMAN_URI': userman_uri,
             'DB_HELIOS_IP_MASK': "10.10.7.%",
         }
         return super().create_app(*a, **kw, additional_config=config)
