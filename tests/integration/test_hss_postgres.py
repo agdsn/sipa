@@ -205,7 +205,7 @@ class UserTrafficLogTestCaseMixin:
 class UserTrafficLogTestCase(
         HSSOneTrafficAccountFixture,
         UserTrafficLogTestCaseMixin,
-        OneAccountTestBase,
+        OneCreditAccountFixture,
 ):
     pass
 
@@ -213,7 +213,7 @@ class UserTrafficLogTestCase(
 class UserMissingTrafficLogTestCase(
         HSSOneTrafficAccountDaysMissingFixture,
         UserTrafficLogTestCaseMixin,
-        OneAccountTestBase,
+        OneCreditAccountFixture,
 ):
     pass
 

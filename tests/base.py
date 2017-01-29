@@ -1,3 +1,4 @@
+import logging
 import os
 from contextlib import contextmanager
 
@@ -157,3 +158,10 @@ class FormTemplateTestMixin:
             with self.subTest(data=data):
                 resp = self.submit_form(data=data)
                 self.assert_nothing_flashed(resp.data)
+
+
+@contextmanager
+def disable_logs(loglevel):
+    logging.disable(loglevel)
+    yield
+    logging.disable(logging.NOTSET)

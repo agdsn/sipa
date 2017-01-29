@@ -1,7 +1,8 @@
 # -*- coding: utf-8; -*-
+import logging
 from unittest.mock import MagicMock, patch
 
-from tests.base import AppInitialized
+from tests.base import AppInitialized, disable_logs
 
 
 GIT_HOOK_URL = '/hooks/update-content'
@@ -50,7 +51,8 @@ class GitHookExistent(GitHookTestBase):
 
     def test_wrong_token_permission_denied(self):
         """Test that using a wrong token gets you a HTTP 403"""
-        self.assert_hook_status(403, token=self.token+"wrong")
+        with disable_logs(logging.WARNING):
+            self.assert_hook_status(403, token=self.token+"wrong")
 
     def test_correct_token_working(self):
         """Test that the hook returns HTTP 204 and calls `update_repo`"""
