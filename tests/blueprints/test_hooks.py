@@ -1,6 +1,6 @@
 # -*- coding: utf-8; -*-
 import logging
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from tests.base import AppInitialized, disable_logs
 

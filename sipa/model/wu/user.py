@@ -18,7 +18,6 @@ from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
 from sipa.model.wu.schema import db
-from sipa.units import money
 from sipa.utils import argstr, timetag_today
 from sipa.model.exceptions import PasswordInvalid, UserNotFound
 from .schema import Computer, Credit, Nutzer, Traffic, Buchung

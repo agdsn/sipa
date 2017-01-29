@@ -13,7 +13,6 @@ from sipa.model.misc import compare_all_attributes
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP, AccountStatementLog, TrafficQuota
-from sipa.units import money
 from sipa.utils import argstr
 from sipa.model.exceptions import InvalidCredentials
 logger = logging.getLogger(__name__)

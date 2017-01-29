@@ -1,8 +1,7 @@
 import json
 import logging
 from functools import partial
-from itertools import chain, product
-import unittest
+from itertools import product
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 

@@ -1,4 +1,3 @@
-from datetime import datetime
 from operator import attrgetter
 
 from sqlalchemy import Column, ForeignKey
@@ -6,7 +5,6 @@ from sqlalchemy.types import String, Integer, BigInteger, Date, Boolean, Numeric
     TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import INET, MACADDR
-from sqlalchemy.ext.hybrid import hybrid_property
 
 from sipa.model.sqlalchemy import db
 from sipa.model.misc import TransactionTuple

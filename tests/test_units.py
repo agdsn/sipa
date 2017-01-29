@@ -1,4 +1,3 @@
-from functools import partial
 from unittest import TestCase
 
 from sipa.units import TRAFFIC_FORMAT_STRING, UNIT_LIST, dynamic_unit, \
