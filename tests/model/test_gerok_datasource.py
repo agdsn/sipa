@@ -57,7 +57,8 @@ class GerokDatasourceTestBase(DatasourceTestBase):
         self.app.config.update({
             'GEROK_ENDPOINT': None,
             'GEROK_API_TOKEN': None,
-            'BACKENDS': ['gerok']
+            'BACKENDS': ['gerok'],
+            'SQLALCHEMY_TRACK_MODIFICATIONS': False,
         })
 
         # create app with corresponding backends?

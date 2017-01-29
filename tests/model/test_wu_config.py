@@ -12,6 +12,7 @@ class WuInitializationTestBase(TestCase):
     def setUp(self):
         super().setUp()
         self.app = Flask('sipa')
+        self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         Backends.backends_preinit(self.app)
 
 

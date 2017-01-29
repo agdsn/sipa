@@ -17,6 +17,7 @@ class TestBackendInitializationCase(TestCase):
         super().setUp()
         self.app = Flask('sipa')
         self.app.config['BACKENDS'] = ['foo']
+        self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         datasource = DataSource(
             name='foo',
             user_class=object,

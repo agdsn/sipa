@@ -1,3 +1,4 @@
+import logging
 from functools import partial
 
 from flask import abort, url_for
@@ -72,7 +73,23 @@ class LoginTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
         ]
 
 
-class AnonymousContactTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
+class ContactFormTestBase(SampleFrontendTestBase):
+    """This subclass additionally temporarily disables CRITICAL logs.
+
+    These get triggered because no SMTP server is reachable when
+    testing the contact form in this setup.
+    """
+    def setUp(self):
+        super().setUp()
+        logging.disable(logging.CRITICAL)
+
+    def tearDown(self):
+        logging.disable(logging.NOTSET)
+        super().tearDown()
+
+
+
+class AnonymousContactTestCase(FormTemplateTestMixin, ContactFormTestBase):
     def setUp(self):
         super().setUp()
         self.url = url_for('generic.contact')
@@ -96,7 +113,7 @@ class AnonymousContactTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
         ]
 
 
-class OfficialContactTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
+class OfficialContactTestCase(FormTemplateTestMixin, ContactFormTestBase):
     def setUp(self):
         super().setUp()
         self.url = url_for('generic.contact_official')
