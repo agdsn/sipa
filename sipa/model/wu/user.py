@@ -336,7 +336,7 @@ class User(BaseUser):
 
 class NoNeedToPayInformation(BaseFinanceInformation):
     has_to_pay = False
-    _balance = None
+    raw_balance = None
     last_update = None
     history = None
 
@@ -348,7 +348,7 @@ class FinanceInformation(BaseFinanceInformation):
         self._transactions = transactions
 
     @property
-    def _balance(self):
+    def raw_balance(self):
         return sum(t.value for t in self._transactions)
 
     @property

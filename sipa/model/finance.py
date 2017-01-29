@@ -33,13 +33,14 @@ class BaseFinanceInformation(metaclass=ABCMeta):
             return ActiveProperty('finance_balance',
                                   value=gettext("Beitrag in Miete inbegriffen"),
                                   raw_value=0, empty=True)
-        return ActiveProperty('finance_balance', value=format_money(self._balance),
-                              raw_value=self._balance,
+        return ActiveProperty('finance_balance',
+                              value=format_money(self.raw_balance),
+                              raw_value=self.raw_balance,
                               capabilities=Capabilities(edit=True, delete=False))
 
     @property
     @abstractmethod
-    def _balance(self) -> float:
+    def raw_balance(self) -> float:
         """**[Abstract]** The current balance
 
         If :py:meth:`has_to_pay` is False, this method will not be
@@ -70,5 +71,5 @@ class BaseFinanceInformation(metaclass=ABCMeta):
         pass
 
     def __eq__(self, other):
-        return compare_all_attributes(self, other, ['_balance', 'has_to_pay',
+        return compare_all_attributes(self, other, ['raw_balance', 'has_to_pay',
                                                     'history', 'last_update'])

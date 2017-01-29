@@ -37,7 +37,7 @@ class SampleFinanceInformation(BaseFinanceInformation):
     has_to_pay = True
 
     @property
-    def _balance(self):
+    def raw_balance(self):
         """Some random balance"""
         return random() * 10 - 5
 

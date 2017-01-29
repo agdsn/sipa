@@ -289,7 +289,7 @@ class FinanceInformation(BaseFinanceInformation):
         )
 
     @property
-    def _balance(self):
+    def raw_balance(self):
         return self._raw_balance
 
     @property

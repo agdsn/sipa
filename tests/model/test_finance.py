@@ -15,7 +15,7 @@ class EverythingMissingTestCase(TestCase):
 class NoNeedToPayTestCase(TestCase):
     class DisabledFinanceInformation(BaseFinanceInformation):
         has_to_pay = False
-        _balance = 0
+        raw_balance = 0
         history = []
         last_update = None
 
@@ -31,7 +31,7 @@ class NoNeedToPayTestCase(TestCase):
 class StaticBalanceTestCase(TestCase):
     class StaticFinanceInformation(BaseFinanceInformation):
         has_to_pay = True
-        _balance = 30
+        raw_balance = 30
         history = []
         last_update = None
 

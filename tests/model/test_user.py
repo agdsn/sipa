@@ -63,7 +63,7 @@ class DegenerateUserTestCase(TestCase):
 
 
 class DegenerateFinanceInformation(BaseFinanceInformation):
-    _balance = None
+    raw_balance = None
     has_to_pay = None
     history = None
     last_update = None
