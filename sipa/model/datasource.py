@@ -69,7 +69,7 @@ class DataSource:
         """Initialize this backend
 
             - Apply the custom configuration of
-              :py:def:`app.config['BACKENDS_CONFIG'][self.name]`
+              :py:obj:`app.config['BACKENDS_CONFIG'][self.name]`
 
             - Call :py:meth:`_init_context(app)` as given in the
               config
