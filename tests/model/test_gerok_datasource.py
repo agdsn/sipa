@@ -5,7 +5,7 @@ from flask import Flask
 
 from sipa.model import Backends
 from sipa.model.gerok import datasource
-from sipa.utils.exceptions import InvalidConfiguration
+from sipa.model.exceptions import InvalidConfiguration
 
 
 class DatasourceTestBase(TestCase):

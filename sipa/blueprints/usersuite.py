@@ -14,7 +14,7 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
-from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
+from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
 logger = logging.getLogger(__name__)

@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from flask import Flask
 
 from sipa.model.wu.database_utils import init_atlantis, init_userdb, init_db
-from sipa.utils.exceptions import InvalidConfiguration
+from sipa.model.exceptions import InvalidConfiguration
 from sipa.model import Backends
 
 

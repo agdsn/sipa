@@ -10,7 +10,7 @@ from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.model.finance import BaseFinanceInformation
 from sipa.utils import argstr
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 
 
 def init_context(app):

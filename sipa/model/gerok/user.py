@@ -12,7 +12,7 @@ from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop
 from sipa.utils import argstr
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 
 logger = logging.getLogger(__name__)
 

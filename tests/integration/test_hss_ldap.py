@@ -9,7 +9,7 @@ from ldap3.core.exceptions import LDAPPasswordIsMandatoryError, LDAPBindError
 from sipa.model.hss.ldap import (get_ldap_connection, HssLdapConnector as Connector,
                                  might_be_ldap_dn, change_password)
 from sipa.model.hss.user import User
-from sipa.utils.exceptions import InvalidCredentials, UserNotFound
+from sipa.model.exceptions import InvalidCredentials, UserNotFound
 from ..base import AppInitialized
 from .test_hss_postgres import HSSOneAccountFixture, HssPgTestBase
 

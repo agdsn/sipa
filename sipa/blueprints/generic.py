@@ -17,7 +17,7 @@ from sipa.mail import send_official_contact_mail, send_contact_mail
 from sipa.model import backends
 from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
-from sipa.utils.exceptions import UserNotFound, InvalidCredentials
+from sipa.model.exceptions import UserNotFound, InvalidCredentials
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
 
 logger = logging.getLogger(__name__)

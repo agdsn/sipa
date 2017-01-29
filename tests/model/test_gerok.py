@@ -11,7 +11,7 @@ from requests import Response
 
 from sipa.model.gerok.user import (User, do_api_call, date_from_delta,
                                    date_str_from_delta)
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 from tests.base import GerokFrontendTestBase
 
 

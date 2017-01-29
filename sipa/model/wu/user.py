@@ -20,7 +20,7 @@ from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
 from sipa.model.wu.schema import db
 from sipa.units import money
 from sipa.utils import argstr, timetag_today
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 from .schema import Computer, Credit, Nutzer, Traffic, Buchung
 
 
