@@ -1,8 +1,7 @@
 import json
 import logging
 from functools import partial
-from itertools import chain, product
-import unittest
+from itertools import product
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 
@@ -11,7 +10,7 @@ from requests import Response
 
 from sipa.model.gerok.user import (User, do_api_call, date_from_delta,
                                    date_str_from_delta)
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 from tests.base import GerokFrontendTestBase
 
 

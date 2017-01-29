@@ -52,10 +52,19 @@ User
    :members:
    :undoc-members:
 
+Finance
+-------
+
+.. automodule:: sipa.model.finance
+   :member-order: bysource
+   :members:
+   :private-members:
+   :undoc-members:
 
 Property
 --------
 
 .. automodule:: sipa.model.fancy_property
+   :member-order: bysource
    :members:
    :undoc-members:

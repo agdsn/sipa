@@ -117,12 +117,33 @@ def unsupported_prop(func):
 
 
 class active_prop(property):
-    """A property-like class wrapping the getter with class:`ActiveProperty`
+    """A property-like class wrapping the getter with
+    :py:class:`ActiveProperty`
 
-    class:`active_prop` automatically adds `edit` and `delete`
+    :py:class:`active_prop` automatically adds `edit` and `delete`
     capabilities to the ActiveProperty object if `setter`/`deleter` is
     invoked.
 
+    Example usage:
+
+    >>> class User:
+    ...     @active_prop
+    ...     def foo(self):
+    ...         return {'value': "Empty!!", 'empty': True, 'style': 'danger'}
+    ...
+    ...     @active_prop
+    ...     def bar(self):
+    ...         return 0
+    ...
+    ...     @bar.setter
+    ...     def bar(self):
+    ...         print("furiously setting things")
+    >>> User().foo
+    <ActiveProperty foo='Empty!!' [empty]>
+    >>> User().bar
+    <ActiveProperty bar='Nicht angegeben' [empty]>
+    >>> User().bar.capabilities
+    capabilities(edit=True, delete=False)
     """
 
     def __init__(self, fget, fset=None, fdel=None, doc=None,

@@ -13,13 +13,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.user import BaseUser, BaseUserDB
 from sipa.model.fancy_property import active_prop, connection_dependent
+from sipa.model.finance import BaseFinanceInformation
 from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
 from sipa.model.wu.schema import db
-from sipa.units import money
 from sipa.utils import argstr, timetag_today
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 from .schema import Computer, Credit, Nutzer, Traffic, Buchung
 
 
@@ -327,15 +327,32 @@ class User(BaseUser):
     def userdb(self):
         return self._userdb
 
-    @active_prop
-    @money
-    def finance_balance(self):
-        return sum(t.value for t in self._nutzer.transactions)
+    @property
+    def finance_information(self):
+        if self._nutzer.internet_by_rental:
+            return NoNeedToPayInformation()
+        return FinanceInformation(transactions=self._nutzer.transactions)
 
-    finance_balance = finance_balance.fake_setter()
+
+class NoNeedToPayInformation(BaseFinanceInformation):
+    has_to_pay = False
+    _balance = None
+    last_update = None
+    history = None
+
+
+class FinanceInformation(BaseFinanceInformation):
+    has_to_pay = True
+
+    def __init__(self, transactions):
+        self._transactions = transactions
 
     @property
-    def last_finance_update(self):
+    def _balance(self):
+        return sum(t.value for t in self._transactions)
+
+    @property
+    def last_update(self):
         """Return an educated guess for the last finance update.
 
         It is based on the highest date in the database.  The only
@@ -345,8 +362,8 @@ class User(BaseUser):
         return db.session.query(func.max(Buchung.datum)).one()[0]
 
     @property
-    def finance_logs(self):
-        return self._nutzer.transactions
+    def history(self):
+        return self._transactions
 
 
 class UserDB(BaseUserDB):

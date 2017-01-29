@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-20 14:38+0200\n"
+"POT-Creation-Date: 2017-01-29 01:57+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -177,74 +177,74 @@ msgstr ""
 msgid "Anmeldung merken"
 msgstr ""
 
-#: sipa/blueprints/generic.py:51
+#: sipa/blueprints/generic.py:52
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:53
+#: sipa/blueprints/generic.py:54
 msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:56
+#: sipa/blueprints/generic.py:57
 msgid "Das von Dir angeforderte Dokument gibt es nicht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:58
+#: sipa/blueprints/generic.py:59
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:72
+#: sipa/blueprints/generic.py:73
 msgid ""
 "Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein "
 "paar Minuten noch mal."
 msgstr ""
 
-#: sipa/blueprints/generic.py:92
+#: sipa/blueprints/generic.py:93
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:108
+#: sipa/blueprints/generic.py:109
 msgid ""
 "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch "
 "mal."
 msgstr ""
 
-#: sipa/blueprints/generic.py:153
+#: sipa/blueprints/generic.py:157
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:160
+#: sipa/blueprints/generic.py:164
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:177
+#: sipa/blueprints/generic.py:183
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:222
+#: sipa/blueprints/generic.py:234
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:231
+#: sipa/blueprints/generic.py:243
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:234
+#: sipa/blueprints/generic.py:246
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:281 sipa/blueprints/generic.py:308
-#: sipa/blueprints/usersuite.py:100
+#: sipa/blueprints/generic.py:300 sipa/blueprints/generic.py:330
+#: sipa/blueprints/usersuite.py:95
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:283 sipa/blueprints/generic.py:310
+#: sipa/blueprints/generic.py:302 sipa/blueprints/generic.py:332
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:289
+#: sipa/blueprints/generic.py:308
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -308,54 +308,54 @@ msgstr ""
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:103
+#: sipa/blueprints/usersuite.py:99
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an {}"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:161
+#: sipa/blueprints/usersuite.py:153
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:163
+#: sipa/blueprints/usersuite.py:155
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:189 sipa/blueprints/usersuite.py:221
+#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:213
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:191 sipa/blueprints/usersuite.py:223
-#: sipa/blueprints/usersuite.py:250
+#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:215
+#: sipa/blueprints/usersuite.py:242
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:193 sipa/blueprints/usersuite.py:225
+#: sipa/blueprints/usersuite.py:185 sipa/blueprints/usersuite.py:217
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:195
+#: sipa/blueprints/usersuite.py:187
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:227
+#: sipa/blueprints/usersuite.py:219
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:257
+#: sipa/blueprints/usersuite.py:249
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:258
+#: sipa/blueprints/usersuite.py:250
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:278
+#: sipa/blueprints/usersuite.py:270
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:286
+#: sipa/blueprints/usersuite.py:278
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
@@ -367,15 +367,19 @@ msgstr ""
 msgid "Nicht angegeben"
 msgstr ""
 
-#: sipa/model/fancy_property.py:218
+#: sipa/model/fancy_property.py:239
 msgid "Nicht verfÃ¼gbar"
 msgstr ""
 
-#: sipa/model/hss/user.py:244 tests/integration/test_hss_postgres.py:243
+#: sipa/model/finance.py:34
+msgid "Beitrag in Miete inbegriffen"
+msgstr ""
+
+#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:248
 msgid "Aktiv"
 msgstr ""
 
-#: sipa/model/hss/user.py:245 tests/integration/test_hss_postgres.py:252
+#: sipa/model/hss/user.py:247 tests/integration/test_hss_postgres.py:257
 msgid "Passiv"
 msgstr ""
 
@@ -399,19 +403,19 @@ msgstr ""
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/user.py:285
+#: sipa/model/wu/user.py:286
 msgid "Unbekannt"
 msgstr ""
 
-#: sipa/model/wu/user.py:315
+#: sipa/model/wu/user.py:316
 msgid "Datenbank nicht erreichbar"
 msgstr ""
 
-#: sipa/model/wu/user.py:319
+#: sipa/model/wu/user.py:320
 msgid "Aktiviert"
 msgstr ""
 
-#: sipa/model/wu/user.py:321
+#: sipa/model/wu/user.py:322
 msgid "Nicht aktiviert"
 msgstr ""
 
@@ -1462,5 +1466,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "dieses Kontaktformular"
+#~ msgstr ""
+
+#~ msgid "In Miete inbegriffen"
 #~ msgstr ""
 

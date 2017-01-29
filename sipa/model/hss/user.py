@@ -8,13 +8,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
+from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import compare_all_attributes
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP, AccountStatementLog, TrafficQuota
-from sipa.units import money
 from sipa.utils import argstr
-from sipa.utils.exceptions import InvalidCredentials
+from sipa.model.exceptions import InvalidCredentials
 logger = logging.getLogger(__name__)
 
 
@@ -269,17 +269,33 @@ class User(BaseUser):
     def has_connection(self):
         return self._pg_account.properties.active
 
-    @active_prop
-    @money
-    def finance_balance(self):
-        return self._pg_account.finance_balance
+    @property
+    def finance_information(self):
+        return FinanceInformation.from_pg_account(self._pg_account)
 
-    finance_balance = finance_balance.fake_setter()
+
+class FinanceInformation(BaseFinanceInformation):
+    has_to_pay = True
+
+    def __init__(self, balance, history):
+        self._raw_balance = balance
+        self._history = history
+
+    @classmethod
+    def from_pg_account(cls, pg_account):
+        return cls(
+            balance=pg_account.finance_balance,
+            history=pg_account.combined_transactions,
+        )
 
     @property
-    def last_finance_update(self):
+    def _balance(self):
+        return self._raw_balance
+
+    @property
+    def last_update(self):
         return db.session.query(func.max(AccountStatementLog.timestamp)).one()[0]
 
     @property
-    def finance_logs(self):
-        return self._pg_account.combined_transactions
+    def history(self):
+        return self._history

@@ -4,7 +4,7 @@
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
-from sipa.model.fancy_property import active_prop
+from sipa.model.fancy_property import active_prop, UnsupportedProperty
 
 
 # noinspection PyMethodMayBeStatic
@@ -268,24 +268,22 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def finance_balance(self):
-        """**[Abstract]** The current finance balance
+    def finance_information(self):
+        """**[Abstract]** Finance information about the User.
 
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
+        If not supported, set to None.
         """
         pass
 
     @property
-    def last_finance_update(self):
-        """The last update of the finance data.
-
-        Defaulting to None, may be overridden.
-
-        :rtype: date or None
-        """
-        return None
+    def finance_balance(self):
+        """The ``FancyProperty`` representing the finance balance"""
+        info = self.finance_information
+        if not info:
+            return UnsupportedProperty('finance_balance')
+        return info.balance
 
 
 class BaseUserDB(metaclass=ABCMeta):

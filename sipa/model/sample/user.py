@@ -8,9 +8,9 @@ from werkzeug import LocalProxy
 
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
-from sipa.units import money
+from sipa.model.finance import BaseFinanceInformation
 from sipa.utils import argstr
-from sipa.utils.exceptions import PasswordInvalid, UserNotFound
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 
 
 def init_context(app):
@@ -31,6 +31,27 @@ def init_context(app):
     }
 
 config = LocalProxy(lambda: current_app.extensions['sample_users'])
+
+
+class SampleFinanceInformation(BaseFinanceInformation):
+    has_to_pay = True
+
+    @property
+    def _balance(self):
+        """Some random balance"""
+        return random() * 10 - 5
+
+    @property
+    def history(self):
+        return [
+            (datetime(2016, 4, 1), 21),
+            (datetime(2016, 4, 30), -3.5),
+            (datetime(2016, 5, 30), -3.5),
+        ]
+
+    @property
+    def last_update(self):
+        return max(l[0] for l in self.history)
 
 
 # noinspection PyMethodMayBeStatic
@@ -164,21 +185,4 @@ class User(BaseUser):
 
     userdb = None
 
-    @active_prop
-    @money
-    def finance_balance(self):
-        return random() * 10 - 5
-
-    finance_balance = finance_balance.fake_setter()
-
-    @property
-    def last_finance_update(self):
-        return max(l[0] for l in self.finance_logs)
-
-    @property
-    def finance_logs(self, ):
-        return [
-            (datetime(2016, 4, 1), 21),
-            (datetime(2016, 4, 30), -3.5),
-            (datetime(2016, 5, 30), -3.5),
-        ]
+    finance_information = SampleFinanceInformation()

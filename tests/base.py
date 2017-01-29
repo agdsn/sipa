@@ -2,7 +2,7 @@ import logging
 import os
 from contextlib import contextmanager
 
-from flask import Flask
+from flask import Flask, url_for
 from flask_testing import TestCase
 
 from sipa import create_app
@@ -114,7 +114,21 @@ def dynamic_frontend_base(backend):
     return cls
 
 
-SampleFrontendTestBase = dynamic_frontend_base('sample')
+class SampleFrontendTestBase(dynamic_frontend_base('sample')):
+    def login(self):
+        # raise ValueError("login")
+        return self.client.post(
+            url_for('generic.login'),
+            data={'dormitory': 'localhost',
+                  'username': 'test',
+                  'password': 'test'},
+        )
+
+    def logout(self):
+        return self.client.get(
+            url_for('generic.logout')
+        )
+
 WuFrontendTestBase = dynamic_frontend_base('wu')
 HssFrontendTestBase = dynamic_frontend_base('hss')
 GerokFrontendTestBase = dynamic_frontend_base('gerok')

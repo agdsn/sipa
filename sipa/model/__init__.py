@@ -11,7 +11,7 @@ from werkzeug.local import LocalProxy
 
 from . import sample, wu, gerok, hss
 from .sqlalchemy import db
-from sipa.utils.exceptions import InvalidConfiguration
+from sipa.model.exceptions import InvalidConfiguration
 
 
 logger = logging.getLogger(__name__)

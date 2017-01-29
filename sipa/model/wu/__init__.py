@@ -43,6 +43,10 @@ datasource = DataSource(
             IPv4Network('141.30.234.128/26'),  # Zeu1f
             IPv4Network('141.30.234.192/27'),  # Zeu1f
         ]),
+        ('buda', "Budapester Straße", [
+            IPv4Network('141.30.204.0/24'),  # Bu22
+            IPv4Network('141.30.205.0/24'),  # Bu24
+        ]),
     ]
 ]
 

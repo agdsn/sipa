@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import logging
 from datetime import datetime, timedelta
 from operator import attrgetter
@@ -13,14 +14,18 @@ from tests.base import HssFrontendTestBase
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.schema import Account, IP, Mac, TrafficLog, AccountStatementLog, \
     TrafficQuota
-from sipa.model.hss.user import User
+from sipa.model.hss.user import User, FinanceInformation
 
 
 class HssPgTestBase(HssFrontendTestBase):
     def create_app(self, *a, **kw):
+        pg_uri = os.getenv('SIPA_TEST_HSS_CONNECTION_STRING', None)
+        if not pg_uri:
+            self.skipTest("SIPA_TEST_HSS_CONNECTION_STRING not set")
+
         conf = {
             **kw.pop('additional_config', {}),
-            'HSS_CONNECTION_STRING': "postgresql://sipa:password@postgres:5432/",
+            'HSS_CONNECTION_STRING': pg_uri,
             'DB_HELIOS_IP_MASK': "10.10.7.%",
         }
         test_app = super().create_app(*a, additional_config=conf, **kw)
@@ -258,7 +263,7 @@ class UserFinanceTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
 
     def test_last_update_date_exists(self):
         expected_date = max(l.timestamp for l in self.fixtures_pg[AccountStatementLog])
-        self.assertEqual(self.user.last_finance_update, expected_date)
+        self.assertEqual(self.user.finance_information.last_update, expected_date)
 
 
 class UserNoFinanceTestCase(OneAccountTestBase):
@@ -270,6 +275,7 @@ class UserNoFinanceTestCase(OneAccountTestBase):
 class UserFinanceLogTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
     def setUp(self):
         super().setUp()
+        self.finance_info = FinanceInformation.from_pg_account(self.account)
         self.transactions = self.account.combined_transactions
         self.expected_length = len(self.account.transactions) + len(self.account.fees)
 
@@ -284,9 +290,13 @@ class UserFinanceLogTestCase(HSSOneFinanceAccountFixture, OneAccountTestBase):
             last_log = log
 
     def test_user_logs_correct_length(self):
-        self.assertEqual(len(self.user.finance_logs), self.expected_length)
+        self.assertEqual(len(self.finance_info.history),
+                         self.expected_length)
 
     def test_user_logs_two_items(self):
-        for log in self.user.finance_logs:
+        for log in self.finance_info.history:
             with self.subTest(log=log):
                 self.assertEqual(len(log), 2)
+
+    def test_finance_information_passed_to_user(self):
+        self.assertEqual(self.user.finance_information, self.finance_info)

@@ -40,6 +40,21 @@ If this does not work for you see “Running on Docker” below for a
 manual (i.e. not docker-compose-based) container setup.
 
 
+## Is there any more documentation?
+
+Sipa provides documentation via sphinx (ergo, docstrings).  At the
+moment, there is no automatic pushing
+to [here](https://agdsn.github.io/sipa/), so you need to do it locally
+by running `make docs` and `make show_docs`, which opens an http
+server at `docs/build/html`.
+
+### Editing documentation
+
+The documentation is defined in rst files in `docs/src`.  The largest
+part consists of automatic inclusion of module documentation using
+`.. automodule::`.
+
+
 How can I run the tests?
 ------------------------
 
@@ -87,7 +102,7 @@ If you want to use sipa for development, adding `--debug` after `sipa.py` and
 mounting your sipa folder using `-v <path>:/home/sipa/sipa` is recommended.
 
 
-## Running with a prefix
+### Running with a prefix
 
 If you run sipa under something else than `/`, *make sure you specify this* during `docker run`!
 
@@ -121,6 +136,15 @@ Also, you might want to look into `sipa.defaults.DEFAULT_CONFIG` for the current
 Keep in mind you don't need to rewrite the whole default configuration
 every time, since you can include `'incremental': True` in said dict.
 
+
+## Translations
+
+Sipa uses [flask-babel](https://pythonhosted.org/Flask-Babel/) for
+translations.  To update translations, You should have pybabel and
+poedit installed (via pip or any other way), and run `make translate`.
+Since unfortunately, the build proocess is not automated (or done at
+the start), you need to check in the changes to the compiled files
+yourself.
 
 Required format for the markdown files
 --------------------------------------

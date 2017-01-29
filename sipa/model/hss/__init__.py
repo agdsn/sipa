@@ -4,7 +4,7 @@ from ipaddress import IPv4Network
 
 from ..datasource import DataSource, Dormitory
 from . import user
-from sipa.utils.exceptions import InvalidConfiguration
+from sipa.model.exceptions import InvalidConfiguration
 
 logger = logging.getLogger(__name__)
 

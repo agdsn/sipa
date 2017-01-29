@@ -1,8 +1,7 @@
-from functools import partial
 from unittest import TestCase
 
 from sipa.units import TRAFFIC_FORMAT_STRING, UNIT_LIST, dynamic_unit, \
-    format_as_traffic, max_divisions, reduce_by_base, money, format_money
+    format_as_traffic, max_divisions, reduce_by_base, money, format_money, money_style
 
 
 class TrafficFormatStringTestCase(TestCase):
@@ -62,10 +61,34 @@ class ThingsWithBasesTestCase(TestCase):
         self.assertIn(UNIT_LIST[1], dynamic_unit(1024))
 
 
-class MoneyDecoratorTestCase(TestCase):
+class MoneyStyleMixin:
     STYLE_POS = 'success'
     STYLE_NEG = 'danger'
 
+
+class MoneyStylePositiveTestCase(MoneyStyleMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.nums = [3, 5, 1.6, 7.4, 0]
+
+    def test_positive_style_returned(self):
+        for num in self.nums:
+            with self.subTest(num=num):
+                self.assertEqual(money_style(num), self.STYLE_POS)
+
+
+class MoneyStyleNegativeTestCase(MoneyStyleMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.nums = [-3, -5, -1.6, -7.4, -0.5]
+
+    def test_positive_style_returned(self):
+        for num in self.nums:
+            with self.subTest(num=num):
+                self.assertEqual(money_style(num), self.STYLE_NEG)
+
+
+class MoneyDecoratorTestCase(MoneyStyleMixin, TestCase):
     @money
     def dummy_func(self, value):
         return value

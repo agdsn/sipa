@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
 from .schema import db
-from sipa.utils.exceptions import InvalidConfiguration
+from sipa.model.exceptions import InvalidConfiguration
 
 logger = logging.getLogger(__name__)
 

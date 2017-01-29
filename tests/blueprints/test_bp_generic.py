@@ -4,8 +4,6 @@ from functools import partial
 from flask import abort, url_for
 from tests.base import SampleFrontendTestBase, FormTemplateTestMixin
 
-from sipa.model import backends
-
 
 class TestErrorhandlersCase(SampleFrontendTestBase):
     used_codes = [401, 403, 404]
@@ -40,8 +38,9 @@ class GenericEndpointsReachableTestCase(SampleFrontendTestBase):
         self.assert200(self.client.get('/', follow_redirects=True))
 
     def test_usertraffic_permitted(self):
-        # only reachable because `from_ip` always returns test user
+        self.login()
         self.assert200(self.client.get(url_for('generic.usertraffic')))
+        self.logout()
 
     def test_api_reachable(self):
         rv = self.client.get(url_for('generic.traffic_api'))
@@ -86,7 +85,6 @@ class ContactFormTestBase(SampleFrontendTestBase):
     def tearDown(self):
         logging.disable(logging.NOTSET)
         super().tearDown()
-
 
 
 class AnonymousContactTestCase(FormTemplateTestMixin, ContactFormTestBase):

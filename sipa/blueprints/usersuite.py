@@ -14,7 +14,7 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
-from sipa.utils.exceptions import DBQueryEmpty, LDAPConnectionError, \
+from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,8 @@ def index():
     """Usersuite landing page with user account information
     and traffic overview.
     """
-    last_update = current_user.last_finance_update
+    info = current_user.finance_information
+    last_update = info.last_update if info else None
     finance_update_string = (
         " ({}: {})".format(gettext("Stand"), last_update.strftime("%Y-%m-%d"))
         if last_update
@@ -110,11 +111,8 @@ def contact():
 
 
 def get_attribute_endpoint(attribute, capability='edit'):
+    """Try to determine the flask endpoint for the according property."""
     if capability == 'edit':
-        assert getattr(current_user, attribute).capabilities.edit, \
-            ("`edit_endpoint` called for non-editable "
-             "attribute `{}`".format(attribute))
-
         attribute_mappings = {
             'mac': 'change_mac',
             'userdb_status': 'hosting',
@@ -126,9 +124,6 @@ def get_attribute_endpoint(attribute, capability='edit'):
             "No edit endpoint for attribute `{}`".format(attribute)
     else:
         assert capability == 'delete', "capability must be 'delete' or 'edit'"
-        assert getattr(current_user, attribute).capabilities.delete, \
-            ("`edit_endpoint` called for non-deletable attribute `{}`"
-             .format(attribute))
 
         attribute_mappings = {
             'mail': 'delete_mail',
@@ -298,9 +293,12 @@ def hosting(action=None):
 @bp_usersuite.route("/finance-logs")
 @login_required
 def finance_logs():
-    assert hasattr(current_user, 'finance_logs')
+    info = current_user.finance_information
+
+    if not info or not info.has_to_pay:
+        abort(404)
 
     return render_template('usersuite/finance_logs.html',
-                           last_update=current_user.last_finance_update,
-                           balance=current_user.finance_balance.raw_value,
-                           logs=current_user.finance_logs)
+                           last_update=info.last_update,
+                           balance=info.balance.raw_value,
+                           logs=info.history)

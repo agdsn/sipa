@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 import ldap3
 from flask import current_app
 
-from sipa.utils.exceptions import InvalidCredentials, UserNotFound
+from sipa.model.exceptions import InvalidCredentials, UserNotFound
 
 logger = logging.getLogger(__name__)
 

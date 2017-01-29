@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-20 14:38+0200\n"
-"PO-Revision-Date: 2016-08-20 14:38+0200\n"
+"POT-Creation-Date: 2017-01-29 01:57+0100\n"
+"PO-Revision-Date: 2017-01-29 01:57+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: en\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: sipa/forms.py:18
 msgid "Kleinbuchstaben (a-z)"
@@ -181,23 +181,23 @@ msgstr "No password submitted!"
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
-#: sipa/blueprints/generic.py:51
+#: sipa/blueprints/generic.py:52
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr "Please log in to view this site."
 
-#: sipa/blueprints/generic.py:53
+#: sipa/blueprints/generic.py:54
 msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
 msgstr "Your dormitory does not support this action."
 
-#: sipa/blueprints/generic.py:56
+#: sipa/blueprints/generic.py:57
 msgid "Das von Dir angeforderte Dokument gibt es nicht."
 msgstr "The document you requested does not exist."
 
-#: sipa/blueprints/generic.py:58
+#: sipa/blueprints/generic.py:59
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: sipa/blueprints/generic.py:72
+#: sipa/blueprints/generic.py:73
 msgid ""
 "Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein paar "
 "Minuten noch mal."
@@ -205,50 +205,50 @@ msgstr ""
 "Something went wrong with the database connection. Please try again in a few "
 "minutes."
 
-#: sipa/blueprints/generic.py:92
+#: sipa/blueprints/generic.py:93
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr "Connection to LDAP server could not be established!"
 
-#: sipa/blueprints/generic.py:108
+#: sipa/blueprints/generic.py:109
 msgid ""
 "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch mal."
 msgstr "There has been an internal error. Please try again in a few minutes."
 
-#: sipa/blueprints/generic.py:153
+#: sipa/blueprints/generic.py:157
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
-#: sipa/blueprints/generic.py:160
+#: sipa/blueprints/generic.py:164
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/blueprints/generic.py:177
+#: sipa/blueprints/generic.py:183
 msgid "Abmeldung erfolgreich!"
 msgstr "Logout successful!"
 
-#: sipa/blueprints/generic.py:222
+#: sipa/blueprints/generic.py:234
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr "You can't see traffic data because of your account status."
 
-#: sipa/blueprints/generic.py:231
+#: sipa/blueprints/generic.py:243
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:234
+#: sipa/blueprints/generic.py:246
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr "You will find here the traffic data for this connection."
 
-#: sipa/blueprints/generic.py:281 sipa/blueprints/generic.py:308
-#: sipa/blueprints/usersuite.py:100
+#: sipa/blueprints/generic.py:300 sipa/blueprints/generic.py:330
+#: sipa/blueprints/usersuite.py:95
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:283 sipa/blueprints/generic.py:310
+#: sipa/blueprints/generic.py:302 sipa/blueprints/generic.py:332
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
-#: sipa/blueprints/generic.py:289
+#: sipa/blueprints/generic.py:308
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
@@ -314,54 +314,54 @@ msgstr "Finance balance"
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: sipa/blueprints/usersuite.py:103
+#: sipa/blueprints/usersuite.py:99
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
 "eine E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
 
-#: sipa/blueprints/usersuite.py:161
+#: sipa/blueprints/usersuite.py:153
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: sipa/blueprints/usersuite.py:163
+#: sipa/blueprints/usersuite.py:155
 msgid "Passwort wurde geändert"
 msgstr "Password has been changed"
 
-#: sipa/blueprints/usersuite.py:189 sipa/blueprints/usersuite.py:221
+#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:213
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/blueprints/usersuite.py:191 sipa/blueprints/usersuite.py:223
-#: sipa/blueprints/usersuite.py:250
+#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:215
+#: sipa/blueprints/usersuite.py:242
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/blueprints/usersuite.py:193 sipa/blueprints/usersuite.py:225
+#: sipa/blueprints/usersuite.py:185 sipa/blueprints/usersuite.py:217
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: sipa/blueprints/usersuite.py:195
+#: sipa/blueprints/usersuite.py:187
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"
 
-#: sipa/blueprints/usersuite.py:227
+#: sipa/blueprints/usersuite.py:219
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr "Email address has been reset"
 
-#: sipa/blueprints/usersuite.py:257
+#: sipa/blueprints/usersuite.py:249
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-#: sipa/blueprints/usersuite.py:258
+#: sipa/blueprints/usersuite.py:250
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr "It can take up to 10 minutes until the changes apply."
 
-#: sipa/blueprints/usersuite.py:278
+#: sipa/blueprints/usersuite.py:270
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
-#: sipa/blueprints/usersuite.py:286
+#: sipa/blueprints/usersuite.py:278
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
@@ -373,15 +373,19 @@ msgstr "Not supported"
 msgid "Nicht angegeben"
 msgstr "Not submitted"
 
-#: sipa/model/fancy_property.py:218
+#: sipa/model/fancy_property.py:239
 msgid "Nicht verfÃ¼gbar"
 msgstr "Unavailable"
 
-#: sipa/model/hss/user.py:244 tests/integration/test_hss_postgres.py:243
+#: sipa/model/finance.py:34
+msgid "Beitrag in Miete inbegriffen"
+msgstr "Payment included in rental agreement"
+
+#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:248
 msgid "Aktiv"
 msgstr "Active"
 
-#: sipa/model/hss/user.py:245 tests/integration/test_hss_postgres.py:252
+#: sipa/model/hss/user.py:247 tests/integration/test_hss_postgres.py:257
 msgid "Passiv"
 msgstr "Passive"
 
@@ -405,19 +409,19 @@ msgstr "Formerly active"
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr "Traffic limit reached, account blocked"
 
-#: sipa/model/wu/user.py:285
+#: sipa/model/wu/user.py:286
 msgid "Unbekannt"
 msgstr "Unknown"
 
-#: sipa/model/wu/user.py:315
+#: sipa/model/wu/user.py:316
 msgid "Datenbank nicht erreichbar"
 msgstr "Database cannot be reached"
 
-#: sipa/model/wu/user.py:319
+#: sipa/model/wu/user.py:320
 msgid "Aktiviert"
 msgstr "Activated"
 
-#: sipa/model/wu/user.py:321
+#: sipa/model/wu/user.py:322
 msgid "Nicht aktiviert"
 msgstr "Not activated"
 
@@ -857,3 +861,6 @@ msgstr "Maximum"
 
 #~ msgid "dieses Kontaktformular"
 #~ msgstr "this contact form"
+
+#~ msgid "In Miete inbegriffen"
+#~ msgstr "Included in rental agreement"

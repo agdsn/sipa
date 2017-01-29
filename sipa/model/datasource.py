@@ -39,7 +39,7 @@ class DataSource:
         self._dormitories = {}
 
     def __eq__(self, other):
-        return self.name == other.name
+        return compare_all_attributes(self, other, ['name'])
 
     def __repr__(self):
         return "<{cls} {name!r}>".format(
@@ -127,7 +127,7 @@ class SubnetCollection:
         return False
 
     def __eq__(self, other):
-        return self.subnets == other.subnets
+        return compare_all_attributes(self, other, ['subnets'])
 
     def __hash__(self):
         return xor_hashes(*self.subnets)
