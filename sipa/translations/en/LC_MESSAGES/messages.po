@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-22 01:39+0100\n"
-"PO-Revision-Date: 2017-01-22 01:39+0100\n"
+"POT-Creation-Date: 2017-01-29 01:57+0100\n"
+"PO-Revision-Date: 2017-01-29 01:57+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
+"Language: en\n"
 "Language-Team: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.0\n"
-"Language: en\n"
+"Generated-By: Babel 2.3.4\n"
 "X-Generator: Poedit 1.8.11\n"
 
 #: sipa/forms.py:18
@@ -214,41 +214,41 @@ msgid ""
 "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch mal."
 msgstr "There has been an internal error. Please try again in a few minutes."
 
-#: sipa/blueprints/generic.py:154
+#: sipa/blueprints/generic.py:157
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
-#: sipa/blueprints/generic.py:161
+#: sipa/blueprints/generic.py:164
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/blueprints/generic.py:178
+#: sipa/blueprints/generic.py:183
 msgid "Abmeldung erfolgreich!"
 msgstr "Logout successful!"
 
-#: sipa/blueprints/generic.py:223
+#: sipa/blueprints/generic.py:234
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr "You can't see traffic data because of your account status."
 
-#: sipa/blueprints/generic.py:232
+#: sipa/blueprints/generic.py:243
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:235
+#: sipa/blueprints/generic.py:246
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr "You will find here the traffic data for this connection."
 
-#: sipa/blueprints/generic.py:284 sipa/blueprints/generic.py:313
+#: sipa/blueprints/generic.py:300 sipa/blueprints/generic.py:330
 #: sipa/blueprints/usersuite.py:95
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:286 sipa/blueprints/generic.py:315
+#: sipa/blueprints/generic.py:302 sipa/blueprints/generic.py:332
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
-#: sipa/blueprints/generic.py:292
+#: sipa/blueprints/generic.py:308
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
@@ -377,15 +377,15 @@ msgstr "Not submitted"
 msgid "Nicht verfÃ¼gbar"
 msgstr "Unavailable"
 
-#: sipa/model/finance.py:33
-msgid "In Miete inbegriffen"
-msgstr "Included in rental agreement"
+#: sipa/model/finance.py:34
+msgid "Beitrag in Miete inbegriffen"
+msgstr "Payment included in rental agreement"
 
-#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:243
+#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:248
 msgid "Aktiv"
 msgstr "Active"
 
-#: sipa/model/hss/user.py:247 tests/integration/test_hss_postgres.py:252
+#: sipa/model/hss/user.py:247 tests/integration/test_hss_postgres.py:257
 msgid "Passiv"
 msgstr "Passive"
 
@@ -861,3 +861,6 @@ msgstr "Maximum"
 
 #~ msgid "dieses Kontaktformular"
 #~ msgstr "this contact form"
+
+#~ msgid "In Miete inbegriffen"
+#~ msgstr "Included in rental agreement"

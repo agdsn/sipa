@@ -25,7 +25,7 @@ class NoNeedToPayTestCase(TestCase):
     def test_has_correct_balance(self):
         balance = self.DisabledFinanceInformation().balance
         self.assertTrue(balance.empty)
-        self.assertIn("In Miete inbegriffen", balance.value)
+        self.assertIn("inbegriffen", balance.value.lower())
 
 
 class StaticBalanceTestCase(TestCase):
