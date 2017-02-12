@@ -274,7 +274,7 @@ def contact():
     if form.validate_on_submit():
         success = send_contact_mail(
             sender=form.email.data,
-            subject=form.email.data,
+            subject=form.subject.data,
             name=form.name.data,
             message=form.message.data,
             dormitory_name=form.dormitory.data,
