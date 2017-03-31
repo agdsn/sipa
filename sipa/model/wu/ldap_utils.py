@@ -62,12 +62,12 @@ class LdapConnector(ldap3.Connection):
                              check_names=True,
                              raise_exceptions=True,
                              auto_bind=ldap3.AUTO_BIND_TLS_BEFORE_BIND)
-        except ldap3.LDAPInvalidCredentialsResult:
+        except ldap3.core.exceptions.LDAPInvalidCredentialsResult:
             raise PasswordInvalid
-        except ldap3.LDAPUnwillingToPerformResult:
+        except ldap3.core.exceptions.LDAPUnwillingToPerformResult:
             # Empty password, treat as invalid
             raise PasswordInvalid
-        except ldap3.LDAPInsufficientAccessRightsResult:
+        except ldap3.core.exceptions.LDAPInsufficientAccessRightsResult:
             raise LDAPConnectionError
 
     @staticmethod
@@ -133,7 +133,7 @@ def change_email(username, password, email):
         with LdapConnector(username, password) as l:
             l.modify(dn=l.get_dn(),
                      changes={'mail': [(ldap3.MODIFY_REPLACE, [email])]})
-    except ldap3.LDAPNoSuchObjectResult as e:
+    except ldap3.core.exceptions.LDAPNoSuchObjectResult as e:
         logger.error('LDAP user not found when attempting '
                      'change of mail address',
                      extra={'data': {'exception_args': e.args},
@@ -143,7 +143,7 @@ def change_email(username, password, email):
         logger.info('Wrong password provided when attempting '
                     'change of mail address')
         raise
-    except ldap3.LDAPInsufficientAccessRightsResult:
+    except ldap3.core.exceptions.LDAPInsufficientAccessRightsResult:
         logger.error('Not sufficient rights to change the mail address')
         raise LDAPConnectionError
     else:

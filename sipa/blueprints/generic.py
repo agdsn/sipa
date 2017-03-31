@@ -9,7 +9,7 @@ from flask_babel import gettext, format_date
 from flask_login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import DatabaseError
-from ldap3 import LDAPCommunicationError
+from ldap3.core.exceptions import LDAPCommunicationError
 
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
     OfficialContactForm
