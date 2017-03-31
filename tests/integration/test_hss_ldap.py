@@ -48,8 +48,8 @@ class OneLdapUserFixture:
             'userPassword': 'notafraidtokickyourballs',
             'cn': 'dontlookatthisattribute',
             'gecos': 'Kleines Gnoemlein',
-            'uidNumber': 1000,
-            'gidNumber': 100,
+            'uidNumber': '1000',
+            'gidNumber': '100',
             'homeDirectory': '/home/sipatinator'
         },
     }
