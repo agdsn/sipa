@@ -95,8 +95,9 @@ class LdapConnector(ldap3.Connection):
             }
 
             # If the user has mail set, put it in the dict
-            if 'mail' in attributes:
-                userdict['mail'] = attributes['mail'].pop()
+            mail_received = attributes.get('mail')
+            if mail_received:  # else: None or []
+                userdict['mail'] = mail_received.pop()
 
             return userdict
         return None

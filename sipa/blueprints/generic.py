@@ -74,7 +74,8 @@ def exceptionhandler_sql(ex):
                   "Bitte probiere es in ein paar Minuten noch mal."),
           "error")
     logger.critical('DatabaseError caught',
-                    extra={'data': {'exception_args': ex.args}})
+                    extra={'data': {'exception_args': ex.args}},
+                    exc_info=True)
     return redirect(url_for('generic.index'))
 
 
@@ -95,7 +96,8 @@ def exceptionhandler_ldap(ex):
           'error')
     logger.critical(
         'Unable to connect to LDAP server',
-        extra={'data': {'exception_args': ex.args}}
+        extra={'data': {'exception_args': ex.args}},
+        exc_info=True,
     )
     return redirect(url_for('generic.index'))
 
