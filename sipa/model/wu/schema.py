@@ -27,6 +27,14 @@ DORMITORY_MAPPINGS = [
 ]
 
 
+class Wheim(db.Model):
+    __tablename__ = 'wheim'
+    __bind_key__ = 'netusers'
+    wheim_id = Column(Integer, primary_key=True, server_default=text('0'))
+    str = Column(String(30))
+    hausnr = Column(String(4))
+
+
 class Nutzer(db.Model):
     __tablename__ = 'nutzer'
     __bind_key__ = 'netusers'
@@ -35,8 +43,9 @@ class Nutzer(db.Model):
     )
 
     nutzer_id = Column(Integer, primary_key=True, server_default=text("'0'"))
-    wheim_id = Column(Integer, nullable=False, index=True,
+    wheim_id = Column(Integer, ForeignKey('wheim.wheim_id'), nullable=False, index=True,
                       server_default=text("'0'"))
+    wheim = relationship('Wheim')
     etage = Column(Integer, nullable=False, server_default=text("'0'"))
     zimmernr = Column(String(10), nullable=False, server_default=text("''"))
     unix_account = Column(String(40), nullable=False, unique=True)
@@ -50,10 +59,11 @@ class Nutzer(db.Model):
     @property
     def address(self):
         try:
-            return "{} / {} {}".format(
-                DORMITORY_MAPPINGS[self.wheim_id - 1],
-                self.etage,
-                self.zimmernr,
+            return "{street} {no} / {etage} {room}".format(
+                street=self.wheim.str,
+                no=self.wheim.hausnr,
+                etage=self.etage,
+                room=self.zimmernr,
             )
         except IndexError:
             logger.warning("No dormitory mapping given for `wheim_id`=%s",

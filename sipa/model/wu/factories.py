@@ -3,7 +3,7 @@ from factory import Faker, LazyAttribute, Sequence, SubFactory
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyDecimal, FuzzyText
 
 from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
-from sipa.model.wu.schema import (db, DORMITORY_MAPPINGS, Nutzer,
+from sipa.model.wu.schema import (db, DORMITORY_MAPPINGS, Nutzer, Wheim,
                                   Computer, Credit, Traffic)
 from sipa.utils import timetag_today
 
@@ -13,14 +13,22 @@ class WuFactory(Factory):
         sqlalchemy_session = db.session
 
 
+class WheimFactory(WuFactory):
+    class Meta:
+        model = Wheim
+    wheim_id = Sequence(lambda n: n)
+    str = FuzzyText(suffix='straße')
+    hausnr = FuzzyChoice(str(x) for x in range(1, 15))
+
+
 class NutzerFactory(WuFactory):
     class Meta:
         model = Nutzer
 
     nutzer_id = Sequence(lambda n: n)
-    wheim_id = FuzzyInteger(0, len(DORMITORY_MAPPINGS) - 1)
+    wheim = SubFactory(WheimFactory)
     etage = FuzzyInteger(1, 15)
-    zimmernr = FuzzyInteger(11, 55)
+    zimmernr = FuzzyChoice(str(x) for x in range(11, 56))
     unix_account = Sequence(lambda n: "user{}".format(n))
     status = FuzzyChoice(STATUS.keys())
     internet_by_rental = False

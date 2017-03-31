@@ -54,6 +54,26 @@ class WuAtlantisFakeDBInitialized(WuFrontendTestBase):
             )
 
 
+class UsersWithAddressesTestCase(WuAtlantisFakeDBInitialized):
+    def setUp(self):
+        super().setUp()
+
+        _nutzer = NutzerFactory.create_batch(15, status=1)
+        self.nutzer = db.session.query(Nutzer).all()
+
+    def test_addresses_correct(self):
+        for nutzer in self.nutzer:
+            with self.subTest(nutzer=nutzer):
+                wheim = nutzer.wheim
+                address = nutzer.address
+                self.assertTrue(address.startswith(wheim.str),
+                                msg='Address did not start with street')
+                self.assertIn(wheim.hausnr, address)
+                self.assertIn(str(nutzer.etage), address)
+                self.assertTrue(address.endswith(nutzer.zimmernr),
+                                msg='Address did not end with room number')
+
+
 class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
     def setUp(self):
         super().setUp()
