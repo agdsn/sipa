@@ -14,16 +14,16 @@ def get_ldap_connection(user, password, use_ssl=True):
     host = current_app.config['HSS_LDAP_HOST']
     port = current_app.config['HSS_LDAP_PORT']
     server = ldap3.Server(host, port, use_ssl=use_ssl,
-                          get_info=ldap3.GET_ALL_INFO)
+                          get_info=ldap3.ALL)
     userdn_format = current_app.config['HSS_LDAP_USERDN_FORMAT']
 
     user_dn = (user if "dc=wh12,dc=tu-dresden,dc=de" in user
                else userdn_format.format(user=user))
 
     return ldap3.Connection(server, auto_bind=True,
-                            client_strategy=ldap3.STRATEGY_SYNC,
+                            client_strategy=ldap3.SYNC,
                             user=user_dn, password=password,
-                            authentication=ldap3.AUTH_SIMPLE)
+                            authentication=ldap3.SIMPLE)
 
 
 class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
@@ -78,7 +78,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
                 # raise_exceptions=True,
                 # auto_bind=ldap3.AUTO_BIND_TLS_BEFORE_BIND,
             )
-        except ldap3.LDAPInvalidCredentialsResult:
+        except ldap3.core.exceptions.LDAPInvalidCredentialsResult:
             raise InvalidCredentials()
 
     @classmethod
@@ -170,12 +170,12 @@ class HssLdapConnector(BaseLdapConnector):
     config = HssConfigProxy()
 
     DEFAULT_SERVER_ARGS = {
-        'get_info': ldap3.GET_ALL_INFO,
+        'get_info': ldap3.ALL,
     }
     DEFAULT_CONNECT_ARGS = {
         'auto_bind': True,
-        'client_strategy': ldap3.STRATEGY_SYNC,
-        'authentication': ldap3.AUTH_SIMPLE,
+        'client_strategy': ldap3.SYNC,
+        'authentication': ldap3.SIMPLE,
     }
 
     @classmethod

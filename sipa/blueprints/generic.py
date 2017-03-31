@@ -9,7 +9,7 @@ from flask_babel import gettext, format_date
 from flask_login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import DatabaseError
-from ldap3 import LDAPCommunicationError
+from ldap3.core.exceptions import LDAPCommunicationError
 
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
     OfficialContactForm
@@ -74,7 +74,8 @@ def exceptionhandler_sql(ex):
                   "Bitte probiere es in ein paar Minuten noch mal."),
           "error")
     logger.critical('DatabaseError caught',
-                    extra={'data': {'exception_args': ex.args}})
+                    extra={'data': {'exception_args': ex.args}},
+                    exc_info=True)
     return redirect(url_for('generic.index'))
 
 
@@ -95,7 +96,8 @@ def exceptionhandler_ldap(ex):
           'error')
     logger.critical(
         'Unable to connect to LDAP server',
-        extra={'data': {'exception_args': ex.args}}
+        extra={'data': {'exception_args': ex.args}},
+        exc_info=True,
     )
     return redirect(url_for('generic.index'))
 

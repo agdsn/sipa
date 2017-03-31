@@ -48,8 +48,8 @@ class OneLdapUserFixture:
             'userPassword': 'notafraidtokickyourballs',
             'cn': 'dontlookatthisattribute',
             'gecos': 'Kleines Gnoemlein',
-            'uidNumber': 1000,
-            'gidNumber': 100,
+            'uidNumber': '1000',
+            'gidNumber': '100',
             'homeDirectory': '/home/sipatinator'
         },
     }
@@ -59,13 +59,13 @@ class LdapSetupMixin:
     def setUp(self):
         super().setUp()
         server = ldap3.Server(self.LDAP_HOST, self.LDAP_PORT, use_ssl=False,
-                              get_info=ldap3.GET_ALL_INFO)
+                              get_info=ldap3.ALL)
 
         with ldap3.Connection(server, auto_bind=True,
-                              client_strategy=ldap3.STRATEGY_SYNC,
+                              client_strategy=ldap3.SYNC,
                               user=self.LDAP_ADMIN_UID,
                               password=self.LDAP_ADMIN_PASSWORD,
-                              authentication=ldap3.AUTH_SIMPLE) as conn:
+                              authentication=ldap3.SIMPLE) as conn:
             self.conn = conn
 
             self.delete_everything_below_base()
@@ -83,7 +83,7 @@ class LdapSetupMixin:
         self.conn.search(self.LDAP_USER_BASE, '(objectclass=*)')
         if self.conn.entries:
             for entry in self.conn.entries:
-                self.conn.delete(entry.entry_get_dn())
+                self.conn.delete(entry.entry_dn)
 
         self.conn.delete(self.LDAP_USER_BASE)
 
