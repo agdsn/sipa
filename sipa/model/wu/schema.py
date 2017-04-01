@@ -10,23 +10,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-DORMITORY_MAPPINGS = [
-    'Wundstraße 5',
-    'Wundstraße 7',
-    'Wundstraße 9',
-    'Wundstraße 11',
-    'Wundstraße 1',
-    'Wundstraße 3',
-    'Zellescher Weg 41',
-    'Zellescher Weg 41A',
-    'Zellescher Weg 41B',
-    'Zellescher Weg 41C',
-    'Zellescher Weg 41D',
-    'Borsbergstraße 34',
-    'Zeunerstraße 1f',
-]
-
-
 class Wheim(db.Model):
     __tablename__ = 'wheim'
     __bind_key__ = 'netusers'

@@ -3,8 +3,7 @@ from factory import Faker, LazyAttribute, Sequence, SubFactory
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyDecimal, FuzzyText
 
 from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
-from sipa.model.wu.schema import (db, DORMITORY_MAPPINGS, Nutzer, Wheim,
-                                  Computer, Credit, Traffic)
+from sipa.model.wu.schema import (db, Nutzer, Wheim, Computer, Credit, Traffic)
 from sipa.utils import timetag_today
 
 
