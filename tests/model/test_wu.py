@@ -15,7 +15,6 @@ class UserNoDBTestCase(TestCase):
         self.userdb_mock.reset_mock()
 
     def assert_userdata_passed(self, user, user_dict):
-        self.assertEqual(user.realname, user_dict['name'])
         self.assertEqual(user.group, user_dict.get('group', 'passive'))
         self.assertEqual(user.mail, user_dict['mail'])
 
@@ -30,7 +29,6 @@ class UserNoDBTestCase(TestCase):
     def test_explicit_init(self):
         sample_user = {
             'uid': 'testnutzer',
-            'name': "Test Nutzer",
             'mail': "test@nutzer.de",
             'group': 'passive',
         }
@@ -38,7 +36,6 @@ class UserNoDBTestCase(TestCase):
         with self.patch_user_group(sample_user):
             user = User(
                 uid=sample_user['uid'],
-                realname=sample_user['name'],
                 mail=sample_user['mail'],
             )
 
@@ -65,7 +62,7 @@ class UserNoDBTestCase(TestCase):
         for uid, group in sample_users.items():
             with patch('sipa.model.wu.user.search_in_group',
                        fake_search_in_group):
-                user = User(uid=uid, realname="", mail="")
+                user = User(uid=uid, mail="")
                 with self.subTest(user=user):
                     self.assertEqual(user.define_group(), group)
         return
@@ -73,9 +70,9 @@ class UserNoDBTestCase(TestCase):
     @patch('sipa.model.wu.user.UserDB', userdb_mock)
     def test_get_constructor(self):
         test_users = [
-            {'uid': "uid1", 'name': "Name Eins", 'mail': "test@foo.bar"},
-            {'uid': "uid2", 'name': "Mareike Musterfrau", 'mail': "test@foo.baz"},
-            {'uid': "uid3", 'name': "Deine Mutter", 'mail': "shizzle@damn.onion"},
+            {'uid': "uid1", 'mail': "test@foo.bar"},
+            {'uid': "uid2", 'mail': "test@foo.baz"},
+            {'uid': "uid3", 'mail': "shizzle@damn.onion"},
         ]
 
         for test_user in test_users:

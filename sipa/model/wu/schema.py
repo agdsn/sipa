@@ -43,6 +43,8 @@ class Nutzer(db.Model):
     )
 
     nutzer_id = Column(Integer, primary_key=True, server_default=text("'0'"))
+    name = Column(String(40), nullable=False, server_default=text("''"))
+    vname = Column(String(40), nullable=False, server_default=text("''"))
     wheim_id = Column(Integer, ForeignKey('wheim.wheim_id'), nullable=False, index=True,
                       server_default=text("'0'"))
     wheim = relationship('Wheim')

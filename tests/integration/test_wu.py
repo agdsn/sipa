@@ -44,12 +44,11 @@ class WuAtlantisFakeDBInitialized(WuFrontendTestBase):
         self.assertIn(computer.c_alias, user.hostalias)
 
     @staticmethod
-    def create_user_ldap_patched(uid, name, mail):
+    def create_user_ldap_patched(uid, mail):
         with patch('sipa.model.wu.user.search_in_group',
                    MagicMock(return_value=False)):
             return User(
                 uid=uid,
-                realname=name,
                 mail=mail,
             )
 
@@ -113,7 +112,6 @@ class UserNoComputersTestCase(WuAtlantisFakeDBInitialized):
         self.nutzer = NutzerFactory.create()
         self.user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         )
 
@@ -131,12 +129,10 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
         self.nutzer = NutzerFactory.create(status=1)
         self.computers = ComputerFactory.create_batch(20, nutzer=self.nutzer)
 
-        self.name = "Test Nutzer"
         self.mail = "foo@bar.baz"
 
         self.user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=self.name,
             mail=self.mail,
         )
 
@@ -150,6 +146,10 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
 
     def test_address_passed(self):
         self.assertEqual(self.user.address, self.nutzer.address)
+
+    def test_realname_passed(self):
+        original_realname = self.nutzer.vname + " " + self.nutzer.name
+        self.assertEqual(self.user.realname, original_realname)
 
     def test_id_passed(self):
         original_id = str(self.nutzer.nutzer_id)
@@ -172,7 +172,6 @@ class ComputerWithoutAliasTestCase(WuAtlantisFakeDBInitialized):
 
         self.user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=self.name,
             mail=self.mail,
         )
 
@@ -211,7 +210,6 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
         for nutzer in self.unknown_status_nutzer_list:
             user = self.create_user_ldap_patched(
                 uid=nutzer.unix_account,
-                name=None,
                 mail=None,
             )
             with self.subTest(user=user):
@@ -221,7 +219,6 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
         for nutzer in self.valid_status_nutzer_list:
             user = self.create_user_ldap_patched(
                 uid=nutzer.unix_account,
-                name=None,
                 mail=None,
             )
             with self.subTest(user=user):
@@ -238,7 +235,6 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
         for nutzer in self.connection_nutzer_list:
             user = self.create_user_ldap_patched(
                 uid=nutzer.unix_account,
-                name=None,
                 mail=None
             )
             with self.subTest(user=user):
@@ -248,7 +244,6 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
         for nutzer in self.no_connection_nutzer_list:
             user = self.create_user_ldap_patched(
                 uid=nutzer.unix_account,
-                name=None,
                 mail=None,
             )
             with self.subTest(user=user):
@@ -273,7 +268,6 @@ class CreditTestCase(OneUserWithCredit):
     def test_credit_passed(self):
         fetched_user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         )
         expected_credit = self.credit_entries[-1].amount
@@ -282,7 +276,6 @@ class CreditTestCase(OneUserWithCredit):
     def test_credit_appears_in_history(self):
         fetched_history = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         ).traffic_history
         # the history is ascending, but wee ned a zip ending at
@@ -306,7 +299,6 @@ class TrafficOneComputerTestCase(OneUserWithCredit):
     def test_traffic_data_passed(self):
         fetched_history = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         ).traffic_history
         # the history is ascending, but wee ned a zip ending at
@@ -343,7 +335,6 @@ class FinanceBalanceTestCase(OneUserWithCredit):
         db.session.commit()
         self.user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         )
         self.finance_info = self.user.finance_information
@@ -395,7 +386,6 @@ class HabenSollSwitchedTestCase(OneUserWithCredit):
         db.session.commit()
         self.user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         )
 
@@ -410,7 +400,6 @@ class NoInternetByRentalTestCase(WuAtlantisFakeDBInitialized):
         self.nutzer = NutzerFactory()
         self.user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         )
 
@@ -424,7 +413,6 @@ class InternetByRentalTestCase(WuAtlantisFakeDBInitialized):
         self.nutzer = NutzerFactory(internet_by_rental=True)
         self.user = self.create_user_ldap_patched(
             uid=self.nutzer.unix_account,
-            name=None,
             mail=None,
         )
 

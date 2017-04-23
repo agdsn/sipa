@@ -33,9 +33,8 @@ class User(BaseUser):
     the terms 'uid' and 'username' refer to the same thing.
     """
 
-    def __init__(self, uid, realname, mail):
+    def __init__(self, uid, mail):
         super().__init__(uid)
-        self._realname = realname
         self.group = self.define_group()
         self._mail = mail
         self._userdb = UserDB(self)
@@ -43,12 +42,11 @@ class User(BaseUser):
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
             uid=self.uid,
-            realname=self._realname,
             mail=self._mail,
         ))
 
     def __str__(self):
-        return "User {} ({}), {}".format(self._realname, self.uid, self.group)
+        return "User {}, {}".format(self.uid, self.group)
 
     can_change_password = True
 
@@ -68,7 +66,7 @@ class User(BaseUser):
         """
         user = LdapConnector.fetch_user(username)
         if user:
-            return cls(user['uid'], user['name'], user['mail'], **kwargs)
+            return cls(user['uid'], user['mail'], **kwargs)
         return AnonymousUserMixin()
 
     @classmethod
@@ -234,7 +232,7 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return self._realname
+        return self._nutzer.vname + " " + self._nutzer.name
 
     @active_prop
     @connection_dependent
