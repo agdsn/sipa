@@ -1,39 +1,31 @@
+language: python
 sudo: required
 dist: trusty
 
+cache:
+  - pip
+
+python:
+  - "3.5"
+
 services:
   - docker
+
 env:
   global:
-    - DOCKER_COMPOSE_VERSION=1.7.1
+    - DOCKER_COMPOSE="docker-compose -f build/testing.yml"
 
 before_install:
-  # local stuff
-  - pip install -r ./build/requirements/requirements.txt
-  - pip install -r ./build/requirements/requirements_testing.txt
-
-  # list docker-engine versions
   - apt-cache madison docker-engine
-
-  # upgrade docker-engine to specific version
-  - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y
-
-  # upgrade docker-compose
-  - "echo 'previous docker-compose version:' && docker-compose version"
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
   - "docker version"
   - "docker-compose version"
 
-language: python
-python:
-  - "3.5"
-cache:
-  - pip
+install:
+  - pip install -r ./build/requirements/requirements.txt
+  - pip install -r ./build/requirements/requirements_testing.txt
+
 script:
-  - "python manage.py test"  # skips integration tests
+  - echo "Running local tests…" && python manage.py test  # skips integration tests
   - "pep8 ."
-  - "docker-compose -f build/testing.yml build"
-  - "docker-compose -f build/testing.yml run --rm sipa_testing_no_volumes python manage.py test"
+  - $DOCKER_COMPOSE build
+  - echo "Running complete test suite…" && $DOCKER_COMPOSE run --rm sipa_testing_no_volumes python manage.py test
