@@ -111,7 +111,16 @@ def init_env_and_config(app):
         init_repo(app.config["FLATPAGES_ROOT"], app.config['CONTENT_URL'])
     else:
         if not os.path.isdir(app.config['FLATPAGES_ROOT']):
-            os.mkdir(app.config['FLATPAGES_ROOT'])
+            try:
+                os.mkdir(app.config['FLATPAGES_ROOT'])
+            except PermissionError as e:
+                raise RuntimeError(
+                    "The FLATPAGES_ROOT does not exist and cannot be created."
+                    "\nIf you are runing from inside a container using mounts,"
+                    " please create the directory at the given location"
+                    "\n(default: `<project_root>/content`,"
+                    " else: see what has been passed as configuration)."
+                ) from e
 
     if app.config['UWSGI_TIMER_ENABLED']:
         try_register_uwsgi_timer(app=app)
