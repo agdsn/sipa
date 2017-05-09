@@ -11,6 +11,7 @@ services:
     build:
       context: ..
       dockerfile: build/Dockerfile
+    image: sipa  # tag of the built image
     command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa
     volumes:
       - ../:/home/sipa/sipa
