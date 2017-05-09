@@ -13,12 +13,15 @@ services:
 
 env:
   global:
+    - DOCKER_CACHE_FILE=/home/travis/docker/cache.tar.gz
     - DOCKER_COMPOSE="docker-compose -f build/testing.yml"
 
 before_install:
   - apt-cache madison docker-engine
   - "docker version"
   - "docker-compose version"
+  - ./helpers/docker_cache.sh load_cache || echo "Cache loading failed"
+  - "docker images -a"
 
 install:
   - pip install -r ./build/requirements/requirements.txt
@@ -29,3 +32,9 @@ script:
   - "pep8 ."
   - $DOCKER_COMPOSE build
   - echo "Running complete test suite…" && $DOCKER_COMPOSE run --rm sipa_testing_no_volumes python manage.py test
+
+after_success:
+  - sudo ./helpers/registry.sh all
+
+before_cache:
+  - ./helpers/docker_cache.sh save_cache || echo "Cache saving failed"
