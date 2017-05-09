@@ -26,6 +26,8 @@ class NutzerFactory(WuFactory):
         model = Nutzer
 
     nutzer_id = Sequence(lambda n: n)
+    name = FuzzyChoice({"Peterson", "Schmidt Wolf", "Huang"})
+    vname = FuzzyChoice({"Lee", "Lars", "Daniel Garcia"})
     wheim = SubFactory(WheimFactory)
     etage = FuzzyInteger(1, 15)
     zimmernr = FuzzyChoice(str(x) for x in range(11, 56))
