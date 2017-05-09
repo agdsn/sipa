@@ -35,6 +35,9 @@ script:
   - echo "Running complete test suite…" && $DOCKER_COMPOSE run --rm sipa_testing_no_volumes python manage.py test
 
 after_success:
+  # we don't want to deploy from the testing compose file
+  # due to the additional testing requirements in this image
+  - docker-compose -f build/development.yml build sipa
   - sudo ./helpers/registry.sh all
 
 before_cache:
