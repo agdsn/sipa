@@ -27,7 +27,8 @@ class ThingsWithBasesTestCase(TestCase):
         """Test `max_divisions()` for basic cases"""
         for base in self.BASES:
             with self.subTest(base=base):
-                example = [(1, 0), (base / 2, 0), (base, 1), (2 * base, 1), (base**2, 2)]
+                example = [(1, 0), (base / 2, 0), (base, 1), (2 * base, 1), (base**2, 2),
+                           (-base / 2, 0), (-base, 1), (-2 * base, 1), (-(base**2), 2)]
                 for num, expected_division in example:
                     with self.subTest(num=num):
                         self.assertEqual(max_divisions(num, base=base), expected_division)
@@ -37,7 +38,8 @@ class ThingsWithBasesTestCase(TestCase):
         for base in self.BASES:
             with self.subTest(base=base):
                 # Some trivial examples should be enough
-                examples = [(0, 0), (base, 1), (base**2, base)]
+                examples = [(0, 0), (base, 1), (base**2, base),
+                            (-base, -1), (-(base**2), -base)]
                 for num, result in examples:
                     with self.subTest(num=num):
                         self.assertEqual(

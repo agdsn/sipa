@@ -1,5 +1,6 @@
 # -*- coding: utf-8; -*-
 from functools import wraps
+from math import log, floor
 
 
 #: 0 divisions mean the unit stays being `KiB`.
@@ -31,11 +32,15 @@ def max_divisions(number, base=1024, unit_list=None):
     """
     if unit_list is None:
         unit_list = UNIT_LIST
-    divisions = 0
-    while number >= base and divisions < len(UNIT_LIST)-1:
-        number /= base
-        divisions += 1
-    return divisions
+
+    # Determine largest whole logarithm of absolute value
+    divisions = floor(log(abs(number), base))
+
+    # Make sure we have enough units available
+    if divisions < len(unit_list):
+        return divisions
+    else:
+        return len(unit_list) - 1
 
 
 def reduce_by_base(number, divisions, base=1024):
