@@ -36,15 +36,8 @@ def max_divisions(number, base=1024, unit_list=None):
     # Determine largest whole logarithm of absolute value
     if number == 0:
         return 0
-    divisions = floor(log(abs(number), base))
-    if divisions <= 0:
-        return 0
 
-    # Make sure we have enough units available
-    if divisions < len(unit_list):
-        return divisions
-    else:
-        return len(unit_list) - 1
+    return max(0, min(floor(log(abs(number), base)), len(unit_list) - 1))
 
 
 def reduce_by_base(number, divisions, base=1024):
