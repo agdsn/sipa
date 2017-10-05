@@ -28,6 +28,7 @@ class ThingsWithBasesTestCase(TestCase):
         for base in self.BASES:
             with self.subTest(base=base):
                 example = [(1, 0), (base / 2, 0), (base, 1), (2 * base, 1), (base**2, 2),
+                           (0, 0), (base**-2, 0), (-(base**-2), 0),
                            (-base / 2, 0), (-base, 1), (-2 * base, 1), (-(base**2), 2)]
                 for num, expected_division in example:
                     with self.subTest(num=num):
