@@ -38,6 +38,7 @@ class DegenerateUser(BaseUser):
     traffic_history = None
     userdb = None
     userdb_status = None
+    use_cache = None
 
 
 class DegenerateUserTestCase(TestCase):

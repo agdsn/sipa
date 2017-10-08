@@ -250,6 +250,10 @@ class User(BaseUser):
         raise NotImplementedError
 
     @unsupported_prop
+    def use_cache(self):
+        raise NotImplementedError
+
+    @unsupported_prop
     def hostname(self):
         raise NotImplementedError
 

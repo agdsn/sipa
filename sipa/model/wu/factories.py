@@ -33,6 +33,7 @@ class NutzerFactory(WuFactory):
     unix_account = Sequence(lambda n: "user{}".format(n))
     status = FuzzyChoice(STATUS.keys())
     internet_by_rental = False
+    use_cache = False
 
 
 class ActiveNutzerFactory(NutzerFactory):

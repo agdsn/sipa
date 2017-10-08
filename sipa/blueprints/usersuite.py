@@ -11,7 +11,8 @@ from flask_babel import gettext
 from flask_login import current_user, login_required
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
-    ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm
+    ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
+    ChangeUseCacheForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
@@ -44,6 +45,7 @@ def index():
         ('ips', gettext("Aktuelle IP-Adresse")),
         ('mac', gettext("Aktuelle MAC-Adresse")),
         ('mail', gettext("E-Mail-Weiterleitung")),
+        ('use_cache', gettext("Cache-Nutzung")),
         ('hostname', gettext("Hostname")),
         ('hostalias', gettext("Hostalias")),
         ('userdb_status', gettext("MySQL Datenbank")),
@@ -117,6 +119,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mac': 'change_mac',
             'userdb_status': 'hosting',
             'mail': 'change_mail',
+            'use_cache': 'change_use_cache',
             'finance_balance': 'finance_logs',
         }
 
@@ -257,6 +260,30 @@ def change_mac():
     form.mac.default = current_user.mac.value
 
     return render_template('usersuite/change_mac.html', form=form)
+
+
+@bp_usersuite.route("/change_use_cache", methods=['GET', 'POST'])
+@login_required
+def change_use_cache():
+    """As user, change your usage of the cache.
+    """
+    form = ChangeUseCacheForm()
+
+    if form.validate_on_submit():
+        use_cache = bool(form.use_cache.data)
+        current_user.use_cache = use_cache
+        if use_cache:
+            flash(gettext("Cache-Nutzung wurde aktiviert!"), 'success')
+        else:
+            flash(gettext("Cache-Nutzung wurde deaktiviert!"), 'success')
+        flash(gettext("Es kann bis zu 10 Minuten dauern, "
+                      "bis die Änderung wirksam ist."), 'info')
+
+        return redirect(url_for('.index'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template('usersuite/change_use_cache.html', form=form)
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])

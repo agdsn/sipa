@@ -212,6 +212,10 @@ class User(BaseUser):
     def userdb_status(self):
         pass
 
+    @unsupported_prop
+    def use_cache(self):
+        raise NotImplementedError
+
     userdb = None
     finance_information = None
 
