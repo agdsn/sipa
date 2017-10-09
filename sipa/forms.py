@@ -182,9 +182,11 @@ class ChangeMACForm(FlaskForm):
 
 class ChangeUseCacheForm(FlaskForm):
     use_cache = RadioField(
-        label="Cache-Nutzung",
+        label=lazy_gettext("Cache-Nutzung"),
         coerce=int,
-        choices=[(0, 'Deaktiviert'), (1, 'Aktiviert')]
+        choices=[(0, lazy_gettext('Deaktiviert')),
+                 (1, lazy_gettext('Aktiviert')),
+                 ]
     )
 
 

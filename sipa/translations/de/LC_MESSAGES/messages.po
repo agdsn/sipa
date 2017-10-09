@@ -10,7 +10,6 @@ msgstr ""
 "POT-Creation-Date: 2017-10-22 20:03+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
@@ -93,7 +92,7 @@ msgstr ""
 msgid "Bitte gib einen Namen an!"
 msgstr ""
 
-#: sipa/forms.py:106 sipa/forms.py:185
+#: sipa/forms.py:106 sipa/forms.py:193
 msgid "Wohnheim"
 msgstr ""
 
@@ -121,19 +120,19 @@ msgstr ""
 msgid "Neues Passwort fehlt!"
 msgstr ""
 
-#: sipa/forms.py:141 sipa/forms.py:213
+#: sipa/forms.py:141 sipa/forms.py:221
 msgid "Bestätigung"
 msgstr ""
 
-#: sipa/forms.py:142 sipa/forms.py:214
+#: sipa/forms.py:142 sipa/forms.py:222
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr ""
 
-#: sipa/forms.py:144 sipa/forms.py:216
+#: sipa/forms.py:144 sipa/forms.py:224
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-#: sipa/forms.py:150 sipa/forms.py:174 sipa/forms.py:202 sipa/forms.py:209
+#: sipa/forms.py:150 sipa/forms.py:174 sipa/forms.py:210 sipa/forms.py:217
 msgid "Passwort"
 msgstr ""
 
@@ -153,27 +152,27 @@ msgstr ""
 msgid "Neue MAC"
 msgstr ""
 
-#: sipa/forms.py:190
+#: sipa/forms.py:198
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
-#: sipa/forms.py:194
+#: sipa/forms.py:202
 msgid "Nutzername"
 msgstr ""
 
-#: sipa/forms.py:196
+#: sipa/forms.py:204
 msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
-#: sipa/forms.py:197
+#: sipa/forms.py:205
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr ""
 
-#: sipa/forms.py:203 sipa/forms.py:210
+#: sipa/forms.py:211 sipa/forms.py:218
 msgid "Kein Passwort eingegeben!"
 msgstr ""
 
-#: sipa/forms.py:205
+#: sipa/forms.py:213
 msgid "Anmeldung merken"
 msgstr ""
 
@@ -251,111 +250,123 @@ msgid ""
 "kontaktieren willst."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:34
+#: sipa/blueprints/usersuite.py:35
 #: sipa/templates/usersuite/finance_logs.html:13
 msgid "Stand"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:39 sipa/templates/usertraffic.html:7
+#: sipa/blueprints/usersuite.py:40 sipa/templates/usertraffic.html:7
 msgid "Nutzer-ID"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:40
+#: sipa/blueprints/usersuite.py:41
 msgid "Voller Name"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:41
+#: sipa/blueprints/usersuite.py:42
 msgid "Accountname"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:42
+#: sipa/blueprints/usersuite.py:43
 msgid "Mitgliedsschaftsstatus"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:43
+#: sipa/blueprints/usersuite.py:44
 msgid "Aktuelles Zimmer"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:44
+#: sipa/blueprints/usersuite.py:45
 msgid "Aktuelle IP-Adresse"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:45
+#: sipa/blueprints/usersuite.py:46
 msgid "Aktuelle MAC-Adresse"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:46
+#: sipa/blueprints/usersuite.py:47
 msgid "E-Mail-Weiterleitung"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:47
+#: sipa/blueprints/usersuite.py:48
+msgid "Cache-Nutzung"
+msgstr ""
+
+#: sipa/blueprints/usersuite.py:49
 msgid "Hostname"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:48
+#: sipa/blueprints/usersuite.py:50
 msgid "Hostalias"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:49 sipa/templates/usersuite/hosting.html:3
+#: sipa/blueprints/usersuite.py:51 sipa/templates/usersuite/hosting.html:3
 msgid "MySQL Datenbank"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:50
+#: sipa/blueprints/usersuite.py:52
 msgid "Kontostand"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:58
+#: sipa/blueprints/usersuite.py:60
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:99
+#: sipa/blueprints/usersuite.py:101
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an {}"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:153
+#: sipa/blueprints/usersuite.py:156
 msgid "Altes Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:155
+#: sipa/blueprints/usersuite.py:158
 msgid "Passwort wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:181 sipa/blueprints/usersuite.py:213
+#: sipa/blueprints/usersuite.py:184 sipa/blueprints/usersuite.py:216
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:183 sipa/blueprints/usersuite.py:215
-#: sipa/blueprints/usersuite.py:242
+#: sipa/blueprints/usersuite.py:186 sipa/blueprints/usersuite.py:218
+#: sipa/blueprints/usersuite.py:245
 msgid "Passwort war inkorrekt!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:185 sipa/blueprints/usersuite.py:217
+#: sipa/blueprints/usersuite.py:188 sipa/blueprints/usersuite.py:220
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:187
+#: sipa/blueprints/usersuite.py:190
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:219
+#: sipa/blueprints/usersuite.py:222
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:249
+#: sipa/blueprints/usersuite.py:252
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:250
+#: sipa/blueprints/usersuite.py:253 sipa/blueprints/usersuite.py:279
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
-#: sipa/blueprints/usersuite.py:270
-msgid "Deine Datenbank wurde gelöscht."
+#: sipa/blueprints/usersuite.py:276
+msgid "Cache-Nutzung wurde aktiviert!"
 msgstr ""
 
 #: sipa/blueprints/usersuite.py:278
+msgid "Cache-Nutzung wurde deaktiviert!"
+msgstr ""
+
+#: sipa/blueprints/usersuite.py:297
+msgid "Deine Datenbank wurde gelöscht."
+msgstr ""
+
+#: sipa/blueprints/usersuite.py:305
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
@@ -408,15 +419,19 @@ msgstr ""
 msgid "Unbekannt"
 msgstr ""
 
-#: sipa/model/wu/user.py:313
-msgid "Datenbank nicht erreichbar"
-msgstr ""
-
-#: sipa/model/wu/user.py:317
+#: sipa/model/wu/user.py:300 sipa/model/wu/user.py:336
 msgid "Aktiviert"
 msgstr ""
 
-#: sipa/model/wu/user.py:319
+#: sipa/model/wu/user.py:304
+msgid "Deaktiviert"
+msgstr ""
+
+#: sipa/model/wu/user.py:332
+msgid "Datenbank nicht erreichbar"
+msgstr ""
+
+#: sipa/model/wu/user.py:338
 msgid "Nicht aktiviert"
 msgstr ""
 
@@ -654,15 +669,15 @@ msgstr ""
 msgid "Verbleibender Credit"
 msgstr ""
 
-#: sipa/templates/macros/forms.html:37
+#: sipa/templates/macros/forms.html:44
 msgid "Abschicken"
 msgstr ""
 
-#: sipa/templates/macros/forms.html:39
+#: sipa/templates/macros/forms.html:46
 msgid "Zurücksetzen"
 msgstr ""
 
-#: sipa/templates/macros/forms.html:42
+#: sipa/templates/macros/forms.html:49
 msgid "Abbrechen"
 msgstr ""
 
@@ -706,6 +721,17 @@ msgstr ""
 #: sipa/templates/usersuite/change_mail.html:3
 #: sipa/templates/usersuite/delete_mail.html:3
 msgid "E-Mail ändern"
+msgstr ""
+
+#: sipa/templates/usersuite/change_use_cache.html:3
+msgid "Cache-Nutzung ändern"
+msgstr ""
+
+#: sipa/templates/usersuite/change_use_cache.html:8
+msgid ""
+"Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen "
+"kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird"
+" dir nicht helfen können."
 msgstr ""
 
 #: sipa/templates/usersuite/contact.html:3
@@ -1467,4 +1493,3 @@ msgstr ""
 
 #~ msgid "In Miete inbegriffen"
 #~ msgstr ""
-
