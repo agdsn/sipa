@@ -8,7 +8,7 @@ from flask_babel import get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
-from sipa.babel import babel, possible_locales
+from sipa.babel import babel, possible_locales, matched_locale
 from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
@@ -68,6 +68,7 @@ def init_app(app, **kwargs):
         get_locale=get_locale,
         get_weekday=get_weekday,
         possible_locales=possible_locales,
+        matched_locale=matched_locale,
         get_attribute_endpoint=get_attribute_endpoint,
         traffic_chart=provide_render_function(generate_traffic_chart),
         credit_chart=provide_render_function(generate_credit_chart),
