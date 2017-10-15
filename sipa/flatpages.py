@@ -2,13 +2,11 @@
 from operator import attrgetter
 from os.path import basename, dirname, splitext
 
-from babel.core import Locale, UnknownLocaleError
+from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from yaml.scanner import ScannerError
 
 from flask import abort, current_app, request
 from flask_flatpages import FlatPages
-
-from .babel import locale_preferences
 
 
 class Node:
@@ -155,13 +153,13 @@ class Article(Node):
         :rtype: Whatever has been added, hopefully :py:class:`Page`
         """
         available_locales = list(self.localized_pages.keys())
-        for locale in locale_preferences():
-            # Locale is unfortunately not hashable
-            # so locale in self.localized_pages does not work
-            for available_locale in available_locales:
-                if available_locale == locale.language:
-                    localized_page = self.localized_pages.get(available_locale)
-                    return localized_page
+        negotiated_locale = negotiate_locale(
+                request.accept_languages.values(),
+                available_locales,
+                sep='-'
+        )
+        if negotiated_locale is not None:
+            return self.localized_pages[negotiated_locale]
         return self.default_page
 
     @property
