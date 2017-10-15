@@ -118,13 +118,9 @@ class Article(Node):
         :raises: :py:obj:`AttributeError` if :py:attr:`localized_page`
                  doesn't have a link in the meta section.
         """
-        try:
-            raw_link = self.localized_page.meta['link']
-        except KeyError:
-            raise AttributeError()
-        else:
-            if raw_link and raw_link[0] == "/":
-                return dirname(request.url_root) + raw_link
+        raw_link = self.__getattr__('link')
+        if raw_link and raw_link[0] == "/":
+            return dirname(request.url_root) + raw_link
 
         return
 
@@ -142,8 +138,10 @@ class Article(Node):
         """
         try:
             return self.localized_page.meta[attr]
-        except KeyError:
-            raise AttributeError()
+        except KeyError as e:
+            raise AttributeError(
+                "{!r} object has no attribute {!r}"
+                .format(type(self).__name__, attr)) from e
 
     @property
     def localized_page(self):
@@ -206,8 +204,10 @@ class Category(Node):
         """
         try:
             index = self._articles['index']
-        except KeyError:
-            raise AttributeError()
+        except KeyError as e:
+            raise AttributeError(
+                "{!r} object has no attribute {!r}"
+                .format(type(self).__name__, attr)) from e
         return getattr(index, attr)
 
     def add_child_category(self, id):
