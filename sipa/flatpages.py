@@ -305,13 +305,11 @@ class CategorizedFlatPages:
 
         - ONLY used for fetching news
         """
-        articles = []
         category = self.get_category(category_id)
-        if category:
-            for a in category._articles.values():
-                if a.id != 'index':
-                    articles.append(a)
-        return articles
+        if category is None:
+            return []
+        return [article for article in category._articles.values()
+                if article.id != 'index']
 
     def get_or_404(self, category_id, article_id):
         """Fetch a static page"""
