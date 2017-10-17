@@ -35,3 +35,28 @@ def possible_locales():
     :rtype: List of :py:obj:`Locale` s
     """
     return [Locale('de'), Locale('en')]
+
+def matched_locale():
+    """Return the best-match locale usable for sipa.
+
+    :returns: Said Locale, defaults to 'de'
+
+    :rtype: :py:obj:`Locale`
+    """ 
+
+    def to_locale(language):
+        try:
+            return Locale(language)
+        except UnknownLocaleError:
+            return None
+
+    preferences = [
+        pref for pref in \
+            map(to_locale, iter(request.accept_languages.values())) \
+            if pref is not None \
+        ]
+    for locale in preferences:
+        for possible in possible_locales():
+            if locale.language == possible.language:
+                return locale
+    return Locale('de')
