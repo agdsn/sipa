@@ -360,7 +360,8 @@ msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
 #: sipa/model/fancy_property.py:67
-msgid "Nicht unterstÃ¼tzt"
+#: sipa/templates/usersuite/_index_status.html:9
+msgid "Nicht unterstützt"
 msgstr ""
 
 #: sipa/model/fancy_property.py:97
@@ -368,7 +369,7 @@ msgid "Nicht angegeben"
 msgstr ""
 
 #: sipa/model/fancy_property.py:239
-msgid "Nicht verfÃ¼gbar"
+msgid "Nicht verfügbar"
 msgstr ""
 
 #: sipa/model/finance.py:34
@@ -673,10 +674,6 @@ msgstr ""
 #: sipa/templates/usersuite/_index_status.html:11
 #: sipa/templates/usersuite/change_password.html:3
 msgid "Passwort ändern"
-msgstr ""
-
-#: sipa/templates/usersuite/_index_status.html:9
-msgid "Nicht unterstützt"
 msgstr ""
 
 #: sipa/templates/usersuite/_index_status.html:21
