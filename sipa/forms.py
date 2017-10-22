@@ -4,7 +4,7 @@ from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
 from flask import flash
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
                      StringField, TextAreaField)
@@ -72,7 +72,7 @@ class ReadonlyStringField(StrippedStringField):
             *args, readonly=True, **kwargs)
 
 
-class ContactForm(Form):
+class ContactForm(FlaskForm):
     email = ReadonlyStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
         validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem "
@@ -92,7 +92,7 @@ class ContactForm(Form):
     ])
 
 
-class AnonymousContactForm(Form):
+class AnonymousContactForm(FlaskForm):
     email = StrippedStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
         validators=[Email(lazy_gettext("E-Mail ist nicht "
@@ -114,7 +114,7 @@ class AnonymousContactForm(Form):
     ])
 
 
-class OfficialContactForm(Form):
+class OfficialContactForm(FlaskForm):
     email = StrippedStringField(
         label=lazy_gettext("E-Mail-Adresse"),
         validators=[Email(lazy_gettext("E-Mail ist nicht "
@@ -131,7 +131,7 @@ class OfficialContactForm(Form):
     ])
 
 
-class ChangePasswordForm(Form):
+class ChangePasswordForm(FlaskForm):
     old = PasswordField(label=lazy_gettext("Altes Passwort"), validators=[
         DataRequired(lazy_gettext("Altes Passwort muss angegeben werden!"))])
     new = PasswordField(label=lazy_gettext("Neues Passwort"), validators=[
@@ -145,7 +145,7 @@ class ChangePasswordForm(Form):
     ])
 
 
-class ChangeMailForm(Form):
+class ChangeMailForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
@@ -154,7 +154,7 @@ class ChangeMailForm(Form):
         validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))])
 
 
-class DeleteMailForm(Form):
+class DeleteMailForm(FlaskForm):
     password = PasswordField(
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
 
@@ -169,7 +169,7 @@ def require_unicast_mac(form, field):
         raise ValidationError(gettext("MAC muss unicast-Adresse sein!"))
 
 
-class ChangeMACForm(Form):
+class ChangeMACForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
@@ -180,7 +180,7 @@ class ChangeMACForm(Form):
                     require_unicast_mac])
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     dormitory = SelectField(
         lazy_gettext("Wohnheim"),
         choices=LocalProxy(lambda: backends.dormitories_short),
@@ -205,7 +205,7 @@ class LoginForm(Form):
     remember = BooleanField(default=lazy_gettext("Anmeldung merken"))
 
 
-class HostingForm(Form):
+class HostingForm(FlaskForm):
     password = PasswordField(lazy_gettext("Passwort"), validators=[
         DataRequired(lazy_gettext("Kein Passwort eingegeben!")),
         PasswordComplexity(),
