@@ -4,8 +4,6 @@ from babel.core import Locale, UnknownLocaleError
 from flask import request
 from flask_babel import Babel, get_locale
 
-babel = Babel()
-
 
 def locale_preferences():
     """Return a list of locales the user accepts

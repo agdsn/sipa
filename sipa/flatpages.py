@@ -5,10 +5,10 @@ from os.path import basename, dirname, splitext
 from babel.core import Locale, UnknownLocaleError
 from yaml.scanner import ScannerError
 
-from flask import abort, request
+from flask import abort, current_app, request
 from flask_flatpages import FlatPages
 
-from .babel import babel, locale_preferences
+from .babel import locale_preferences
 
 
 class Node:
@@ -235,11 +235,11 @@ class Category(Node):
         `<article_id>.<locale>`, e.g. `news.en`.
 
         If either there is no dot or the locale is unknown,
-        `babel.default_locale` is returned.
+        the `default_locale` of babel is used.
 
         :return: The tuple `(article_id, locale)`.
         """
-        default_locale = babel.default_locale
+        default_locale = current_app.babel_instance.default_locale
         components = basename.split('.')
 
         if len(components) == 1:
