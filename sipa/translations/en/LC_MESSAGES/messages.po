@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-29 01:57+0100\n"
-"PO-Revision-Date: 2017-01-29 01:57+0100\n"
+"POT-Creation-Date: 2017-10-22 20:03+0200\n"
+"PO-Revision-Date: 2017-10-22 20:05+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
-"X-Generator: Poedit 1.8.11\n"
+"Generated-By: Babel 2.5.1\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: sipa/forms.py:18
 msgid "Kleinbuchstaben (a-z)"
@@ -205,50 +205,50 @@ msgstr ""
 "Something went wrong with the database connection. Please try again in a few "
 "minutes."
 
-#: sipa/blueprints/generic.py:93
+#: sipa/blueprints/generic.py:94
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr "Connection to LDAP server could not be established!"
 
-#: sipa/blueprints/generic.py:109
+#: sipa/blueprints/generic.py:111
 msgid ""
 "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch mal."
 msgstr "There has been an internal error. Please try again in a few minutes."
 
-#: sipa/blueprints/generic.py:157
+#: sipa/blueprints/generic.py:156
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
-#: sipa/blueprints/generic.py:164
+#: sipa/blueprints/generic.py:163
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/blueprints/generic.py:183
+#: sipa/blueprints/generic.py:180
 msgid "Abmeldung erfolgreich!"
 msgstr "Logout successful!"
 
-#: sipa/blueprints/generic.py:234
+#: sipa/blueprints/generic.py:225
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr "You can't see traffic data because of your account status."
 
-#: sipa/blueprints/generic.py:243
+#: sipa/blueprints/generic.py:234
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:246
+#: sipa/blueprints/generic.py:237
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr "You will find here the traffic data for this connection."
 
-#: sipa/blueprints/generic.py:300 sipa/blueprints/generic.py:330
+#: sipa/blueprints/generic.py:286 sipa/blueprints/generic.py:315
 #: sipa/blueprints/usersuite.py:95
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:302 sipa/blueprints/generic.py:332
+#: sipa/blueprints/generic.py:288 sipa/blueprints/generic.py:317
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
-#: sipa/blueprints/generic.py:308
+#: sipa/blueprints/generic.py:294
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
@@ -365,16 +365,16 @@ msgstr "Your database has been deleted."
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
-#: sipa/model/fancy_property.py:67
+#: sipa/model/fancy_property.py:68
 #: sipa/templates/usersuite/_index_status.html:9
 msgid "Nicht unterstützt"
 msgstr "Not supported"
 
-#: sipa/model/fancy_property.py:97
+#: sipa/model/fancy_property.py:98
 msgid "Nicht angegeben"
 msgstr "Not submitted"
 
-#: sipa/model/fancy_property.py:239
+#: sipa/model/fancy_property.py:240
 msgid "Nicht verfügbar"
 msgstr "Unavailable"
 
@@ -382,47 +382,47 @@ msgstr "Unavailable"
 msgid "Beitrag in Miete inbegriffen"
 msgstr "Payment included in rental agreement"
 
-#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:248
+#: sipa/model/hss/user.py:245 tests/integration/test_hss_postgres.py:248
 msgid "Aktiv"
 msgstr "Active"
 
-#: sipa/model/hss/user.py:247 tests/integration/test_hss_postgres.py:257
+#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:257
 msgid "Passiv"
 msgstr "Passive"
 
-#: sipa/model/wu/database_utils.py:90
+#: sipa/model/wu/database_utils.py:81
 msgid "ok"
 msgstr "ok"
 
-#: sipa/model/wu/database_utils.py:91
+#: sipa/model/wu/database_utils.py:82
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr "Not payed, connection blocked"
 
-#: sipa/model/wu/database_utils.py:92
+#: sipa/model/wu/database_utils.py:83
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr "Violation of network usage agreement , connection blocked"
 
-#: sipa/model/wu/database_utils.py:94
+#: sipa/model/wu/database_utils.py:85
 msgid "Exaktiv"
 msgstr "Formerly active"
 
-#: sipa/model/wu/database_utils.py:95
+#: sipa/model/wu/database_utils.py:86
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr "Traffic limit reached, account blocked"
 
-#: sipa/model/wu/user.py:286
+#: sipa/model/wu/user.py:283
 msgid "Unbekannt"
 msgstr "Unknown"
 
-#: sipa/model/wu/user.py:316
+#: sipa/model/wu/user.py:313
 msgid "Datenbank nicht erreichbar"
 msgstr "Database cannot be reached"
 
-#: sipa/model/wu/user.py:320
+#: sipa/model/wu/user.py:317
 msgid "Aktiviert"
 msgstr "Activated"
 
-#: sipa/model/wu/user.py:322
+#: sipa/model/wu/user.py:319
 msgid "Nicht aktiviert"
 msgstr "Not activated"
 

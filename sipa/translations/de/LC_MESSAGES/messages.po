@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-29 01:57+0100\n"
+"POT-Creation-Date: 2017-10-22 20:03+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.5.1\n"
 
 #: sipa/forms.py:18
 msgid "Kleinbuchstaben (a-z)"
@@ -199,52 +199,52 @@ msgid ""
 "paar Minuten noch mal."
 msgstr ""
 
-#: sipa/blueprints/generic.py:93
+#: sipa/blueprints/generic.py:94
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:109
+#: sipa/blueprints/generic.py:111
 msgid ""
 "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch "
 "mal."
 msgstr ""
 
-#: sipa/blueprints/generic.py:157
+#: sipa/blueprints/generic.py:156
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:164
+#: sipa/blueprints/generic.py:163
 msgid "Anmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:183
+#: sipa/blueprints/generic.py:180
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:234
+#: sipa/blueprints/generic.py:225
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-#: sipa/blueprints/generic.py:243
+#: sipa/blueprints/generic.py:234
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
 "angemeldet!"
 msgstr ""
 
-#: sipa/blueprints/generic.py:246
+#: sipa/blueprints/generic.py:237
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:300 sipa/blueprints/generic.py:330
+#: sipa/blueprints/generic.py:286 sipa/blueprints/generic.py:315
 #: sipa/blueprints/usersuite.py:95
 msgid "Nachricht wurde versandt."
 msgstr ""
 
-#: sipa/blueprints/generic.py:302 sipa/blueprints/generic.py:332
+#: sipa/blueprints/generic.py:288 sipa/blueprints/generic.py:317
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-#: sipa/blueprints/generic.py:308
+#: sipa/blueprints/generic.py:294
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims "
@@ -359,16 +359,16 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
-#: sipa/model/fancy_property.py:67
+#: sipa/model/fancy_property.py:68
 #: sipa/templates/usersuite/_index_status.html:9
 msgid "Nicht unterstützt"
 msgstr ""
 
-#: sipa/model/fancy_property.py:97
+#: sipa/model/fancy_property.py:98
 msgid "Nicht angegeben"
 msgstr ""
 
-#: sipa/model/fancy_property.py:239
+#: sipa/model/fancy_property.py:240
 msgid "Nicht verfügbar"
 msgstr ""
 
@@ -376,47 +376,47 @@ msgstr ""
 msgid "Beitrag in Miete inbegriffen"
 msgstr ""
 
-#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:248
+#: sipa/model/hss/user.py:245 tests/integration/test_hss_postgres.py:248
 msgid "Aktiv"
 msgstr ""
 
-#: sipa/model/hss/user.py:247 tests/integration/test_hss_postgres.py:257
+#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:257
 msgid "Passiv"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:90
+#: sipa/model/wu/database_utils.py:81
 msgid "ok"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:91
+#: sipa/model/wu/database_utils.py:82
 msgid "Nicht bezahlt, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:92
+#: sipa/model/wu/database_utils.py:83
 msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:94
+#: sipa/model/wu/database_utils.py:85
 msgid "Exaktiv"
 msgstr ""
 
-#: sipa/model/wu/database_utils.py:95
+#: sipa/model/wu/database_utils.py:86
 msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
 msgstr ""
 
-#: sipa/model/wu/user.py:286
+#: sipa/model/wu/user.py:283
 msgid "Unbekannt"
 msgstr ""
 
-#: sipa/model/wu/user.py:316
+#: sipa/model/wu/user.py:313
 msgid "Datenbank nicht erreichbar"
 msgstr ""
 
-#: sipa/model/wu/user.py:320
+#: sipa/model/wu/user.py:317
 msgid "Aktiviert"
 msgstr ""
 
-#: sipa/model/wu/user.py:322
+#: sipa/model/wu/user.py:319
 msgid "Nicht aktiviert"
 msgstr ""
 
