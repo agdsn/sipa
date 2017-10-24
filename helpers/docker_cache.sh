@@ -1,6 +1,4 @@
 #!/bin/bash
-# This file is part of the Pycroft project and licensed under the terms of
-# the Apache License, Version 2.0. See the NOTICE file for details.
 
 _check_context() {
     if [[  -z $1 && -z $DOCKER_CACHE_FILE ]]; then
