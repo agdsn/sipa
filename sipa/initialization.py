@@ -4,11 +4,11 @@ import logging.config
 import os
 import os.path
 
-from flask_babel import get_locale
+from flask_babel import Babel, get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
-from sipa.babel import babel, possible_locales
+from sipa.babel import possible_locales
 from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
@@ -38,6 +38,7 @@ def init_app(app, **kwargs):
     init_env_and_config(app)
     logger.debug('Initializing app')
     login_manager.init_app(app)
+    babel = Babel()
     babel.init_app(app)
     babel.localeselector(babel_selector)
     cf_pages.init_app(app)
