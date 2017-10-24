@@ -96,10 +96,7 @@ class Article(Node):
 
         :rtype: int
         """
-        try:
-            return self.localized_page.meta['rank']
-        except KeyError:
-            return 100
+        return self.localized_page.meta.get('rank', 100)
 
     @property
     def html(self):
@@ -121,13 +118,9 @@ class Article(Node):
         :raises: :py:obj:`AttributeError` if :py:attr:`localized_page`
                  doesn't have a link in the meta section.
         """
-        try:
-            raw_link = self.localized_page.meta['link']
-        except KeyError:
-            raise AttributeError()
-        else:
-            if raw_link and raw_link[0] == "/":
-                return dirname(request.url_root) + raw_link
+        raw_link = self.__getattr__('link')
+        if raw_link and raw_link[0] == "/":
+            return dirname(request.url_root) + raw_link
 
         return
 
@@ -145,8 +138,10 @@ class Article(Node):
         """
         try:
             return self.localized_page.meta[attr]
-        except KeyError:
-            raise AttributeError()
+        except KeyError as e:
+            raise AttributeError(
+                "{!r} object has no attribute {!r}"
+                .format(type(self).__name__, attr)) from e
 
     @property
     def localized_page(self):
@@ -200,8 +195,6 @@ class Category(Node):
 
         Only used for building the navigation bar
         """
-        if not self._articles:
-            return iter([])
         return iter(sorted(self._articles.values(), key=attrgetter('rank')))
 
     def __getattr__(self, attr):
@@ -210,9 +203,12 @@ class Category(Node):
         - Used for: ['rank', 'index', 'id', 'name']
         """
         try:
-            return getattr(self._articles['index'], attr, False)
-        except KeyError:
-            raise AttributeError()
+            index = self._articles['index']
+        except KeyError as e:
+            raise AttributeError(
+                "{!r} object has no attribute {!r}"
+                .format(type(self).__name__, attr)) from e
+        return getattr(index, attr)
 
     def add_child_category(self, id):
         """Create a new Category from an id, keep it and return it.
@@ -251,7 +247,7 @@ class Category(Node):
         except UnknownLocaleError:
             return basename, default_locale
 
-    def add_article(self, basename, page):
+    def add_article(self, prefix, page):
         """Add a page to an article and create the latter if nonexistent.
 
         Firstly, the article_id is being extracted according to
@@ -259,7 +255,7 @@ class Category(Node):
         is asked to add the page accordingly.
 
         """
-        article_id, locale = self._parse_page_basename(basename)
+        article_id, locale = self._parse_page_basename(prefix)
 
         article = self._articles.get(article_id)
         if article is None:
@@ -309,13 +305,11 @@ class CategorizedFlatPages:
 
         - ONLY used for fetching news
         """
-        articles = []
         category = self.get_category(category_id)
-        if category:
-            for a in category._articles.values():
-                if a.id != 'index':
-                    articles.append(a)
-        return articles
+        if category is None:
+            return []
+        return [article for article in category._articles.values()
+                if article.id != 'index']
 
     def get_or_404(self, category_id, article_id):
         """Fetch a static page"""
@@ -333,8 +327,8 @@ class CategorizedFlatPages:
             parent = self.root_category
             for category_id in components[:-1]:
                 parent = parent.add_child_category(category_id)
-            basename = components[-1]
-            parent.add_article(basename, page)
+            prefix = components[-1]
+            parent.add_article(prefix, page)
 
     def reload(self):
         self.flat_pages.reload()
