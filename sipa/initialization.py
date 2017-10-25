@@ -145,7 +145,7 @@ def try_register_uwsgi_timer(app):
         @timer(300)
         def update_uwsgi(signum):
             flatpages_root = app.config["FLATPAGES_ROOT"]
-            logger.debug("Udpating git repository at %s", flatpages_root)
+            logger.debug("Updating git repository at %s", flatpages_root)
             hasToReload = update_repo(flatpages_root)
             if hasToReload:
                 logger.debug("Reloading flatpages and uwsgi", extra={'data': {

@@ -98,7 +98,7 @@ def argstr(*args, **kwargs):
 
 
 def replace_empty_handler_callables(config, func):
-    """Register func as specfic handler's callable in a dict logging config.
+    """Register func as specific handler's callable in a dict logging config.
 
     This method looks at the elements of the 'handlers' section of the
     `config`.
