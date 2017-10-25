@@ -8,7 +8,7 @@ from flask import abort, request
 from flask_flatpages import FlatPages
 from yaml.scanner import ScannerError
 
-from .base import possible_locales
+from sipa.babel import get_user_locale_setting, possible_locales
 
 logger = logging.getLogger(__name__)
 
@@ -160,11 +160,16 @@ class Article(Node):
         :rtype: Whatever has been added, hopefully :py:class:`Page`
         """
         available_locales = list(self.localized_pages.keys())
+
+        user_locale = str(get_user_locale_setting())
+        if user_locale is None:
+            preferred_locales = []
+        else:
+            preferred_locales = [user_locale]
+        preferred_locales.extend(request.accept_languages.values())
+
         negotiated_locale = negotiate_locale(
-                request.accept_languages.values(),
-                available_locales,
-                sep='-'
-        )
+            preferred_locales, available_locales, sep='-')
         if negotiated_locale is not None:
             return self.localized_pages[negotiated_locale]
         return self.default_page
