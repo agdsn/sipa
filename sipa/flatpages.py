@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from operator import attrgetter
 from os.path import basename, dirname, splitext
 
@@ -6,6 +7,10 @@ from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, current_app, request
 from flask_flatpages import FlatPages
 from yaml.scanner import ScannerError
+
+from .base import possible_locales
+
+logger = logging.getLogger(__name__)
 
 
 class Node:
@@ -241,6 +246,12 @@ class Category(Node):
         try:
             locale = Locale(locale_identifier)
         except UnknownLocaleError:
+            logger.error("Unknown locale %s of arcticle %s",
+                         locale_identifier, basename)
+            return basename, default_locale
+        if locale not in possible_locales():
+            logger.warning("Locale %s of article is not a possible locale",
+                           locale_identifier, basename)
             return basename, default_locale
         return article_id, locale
 
