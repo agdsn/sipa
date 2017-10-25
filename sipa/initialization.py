@@ -15,6 +15,7 @@ from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
 from sipa.model import Backends
+from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import replace_empty_handler_callables, url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
@@ -43,6 +44,7 @@ def init_app(app, **kwargs):
     babel.init_app(app)
     babel.localeselector(select_locale)
     app.before_request(save_user_locale_setting)
+    app.session_interface = SeparateLocaleCookieSessionInterface()
     cf_pages = CategorizedFlatPages()
     cf_pages.init_app(app)
     backends = Backends()
