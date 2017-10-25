@@ -4,7 +4,7 @@ from operator import attrgetter
 from os.path import basename, dirname, splitext
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
-from flask import abort, current_app, request
+from flask import abort, request
 from flask_flatpages import FlatPages
 from yaml.scanner import ScannerError
 
@@ -16,7 +16,9 @@ logger = logging.getLogger(__name__)
 class Node:
     """An abstract object with a parent and an id"""
 
-    def __init__(self, parent, node_id):
+    def __init__(self, extension, parent, node_id):
+        #: The CategorizedFlatPages extension
+        self.extension = extension
         #: The parent object
         self.parent = parent
         #: This object's id
@@ -38,8 +40,8 @@ class Article(Node):
     Besides that, :py:meth:`__getattr__` comfortably passes queries to
     the :py:obj:`localized_page.meta` dict.
     """
-    def __init__(self, parent, article_id):
-        super().__init__(parent, article_id)
+    def __init__(self, extension, parent, article_id):
+        super().__init__(extension, parent, article_id)
         #: The dict containing the localized pages of this article
         self.localized_pages = {}
         #: The default page
@@ -65,7 +67,8 @@ class Article(Node):
             return
 
         self.localized_pages[str(locale)] = page
-        if self.default_page is None or locale == babel.default_locale:
+        default_locale = self.extension.app.babel_instance.default_locale
+        if self.default_page is None or locale == default_locale:
             self.default_page = page
 
     @staticmethod
@@ -186,8 +189,8 @@ class Category(Node):
 
     - Containing articles → should be iterable!
     """
-    def __init__(self, parent, category_id):
-        super().__init__(parent, category_id)
+    def __init__(self, extension, parent, category_id):
+        super().__init__(extension, parent, category_id)
         self.categories = {}
         self._articles = {}
 
@@ -221,12 +224,11 @@ class Category(Node):
         if category is not None:
             return category
 
-        category = Category(self, id)
+        category = Category(self.extension, self, id)
         self.categories[id] = category
         return category
 
-    @staticmethod
-    def _parse_page_basename(basename):
+    def _parse_page_basename(self, basename):
         """Split the page basename into the article id and locale.
 
         `basename` is (supposed to be) of the form
@@ -237,7 +239,7 @@ class Category(Node):
 
         :return: The tuple `(article_id, locale)`.
         """
-        default_locale = current_app.babel_instance.default_locale
+        default_locale = self.extension.app.babel_instance.default_locale
         article_id, sep, locale_identifier = basename.rpartition('.')
 
         if sep == '':
@@ -267,7 +269,7 @@ class Category(Node):
 
         article = self._articles.get(article_id)
         if article is None:
-            article = Article(self, article_id)
+            article = Article(self.extension, self, article_id)
             self._articles[article_id] = article
 
         article.add_page(page, locale)
@@ -284,9 +286,13 @@ class CategorizedFlatPages:
     """
     def __init__(self):
         self.flat_pages = FlatPages()
-        self.root_category = Category(None, '<root>')
+        self.root_category = Category(self, None, '<root>')
+        self.app = None
 
     def init_app(self, app):
+        assert self.app is None, "Already initialized with an app"
+        self.app = app
+        app.cf_pages = self
         self.flat_pages.init_app(app)
         self._init_categories()
 
@@ -341,6 +347,3 @@ class CategorizedFlatPages:
     def reload(self):
         self.flat_pages.reload()
         self._init_categories()
-
-
-cf_pages = CategorizedFlatPages()

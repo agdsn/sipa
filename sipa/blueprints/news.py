@@ -5,9 +5,7 @@ Blueprint providing features regarding the news entries.
 """
 from operator import attrgetter
 
-from flask import Blueprint, render_template, abort, request
-from sipa.flatpages import cf_pages
-
+from flask import Blueprint, abort, current_app, render_template, request
 
 bp_news = Blueprint('news', __name__, url_prefix='/news')
 
@@ -20,6 +18,7 @@ def show():
     """
     start = request.args.get('start', None, int)
     end = request.args.get('end', None, int)
+    cf_pages = current_app.cf_pages
     cf_pages.reload()
     news = sorted(
         (article for article in cf_pages.get_articles_of_category('news')
@@ -65,7 +64,7 @@ def show():
 
 @bp_news.route("/<filename>")
 def show_news(filename):
-    news = cf_pages.get_articles_of_category('news')
+    news = current_app.cf_pages.get_articles_of_category('news')
 
     for article in news:
         if article.file_basename == filename:

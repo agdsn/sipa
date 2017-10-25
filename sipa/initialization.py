@@ -12,7 +12,7 @@ from sipa.babel import possible_locales
 from sipa.base import IntegerConverter, babel_selector, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
-from sipa.flatpages import cf_pages
+from sipa.flatpages import CategorizedFlatPages
 from sipa.model import Backends
 from sipa.utils import replace_empty_handler_callables, url_self
 from sipa.utils.babel_utils import get_weekday
@@ -41,6 +41,7 @@ def init_app(app, **kwargs):
     babel = Babel()
     babel.init_app(app)
     babel.localeselector(babel_selector)
+    cf_pages = CategorizedFlatPages()
     cf_pages.init_app(app)
     backends = Backends()
     backends.init_app(app)
