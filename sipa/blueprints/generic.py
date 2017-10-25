@@ -114,14 +114,6 @@ def exceptionhandler_gerok(ex):
     return redirect(url_for('generic.index'))
 
 
-@bp_generic.route("/language/<string:lang>")
-def set_language(lang='de'):
-    """Set the session language via URL
-    """
-    session['locale'] = lang
-    return redirect(redirect_url())
-
-
 @bp_generic.route('/index.php')
 @bp_generic.route('/')
 def index():

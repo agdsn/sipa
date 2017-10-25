@@ -14,7 +14,7 @@ from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import cf_pages
 from sipa.model import Backends
-from sipa.utils import replace_empty_handler_callables
+from sipa.utils import replace_empty_handler_callables, url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.graph_utils import (generate_credit_chart,
@@ -75,7 +75,8 @@ def init_app(app, **kwargs):
         current_datasource=backends.current_datasource,
         form_label_width_class="col-sm-{}".format(form_label_width),
         form_input_width_class="col-sm-{}".format(form_input_width),
-        form_input_offset_class="col-sm-offset-{}".format(form_label_width)
+        form_input_offset_class="col-sm-offset-{}".format(form_label_width),
+        url_self=url_self,
     )
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})

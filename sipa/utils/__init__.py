@@ -86,6 +86,23 @@ def get_user_name(user=current_user):
     return ''
 
 
+def url_self(**values):
+    """Generate a URL to the request's current endpoint with the same view
+    arguments.
+
+    Additional arguments can be specified to override or extend the current view
+    arguments.
+
+    :param values: Additional variable arguments for the endpoint
+    :return: A URL to the current endpoint
+    """
+    if request.endpoint is None:
+        raise RuntimeError("No endpoint available.")
+    kw = request.view_args.copy()
+    kw.update(values)
+    return url_for(request.endpoint, **kw)
+
+
 def redirect_url(default='generic.index'):
     return request.args.get('next') or request.referrer or url_for(default)
 
