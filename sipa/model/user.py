@@ -144,7 +144,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     def generate_rows(self, description_dict):
         for key, val in description_dict.items():
-            yield Row(description=val, property=self.__getattribute__(key))
+            yield Row(description=val, property=getattr(self, key))
 
     @active_prop
     @abstractmethod
