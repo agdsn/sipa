@@ -8,8 +8,9 @@ from flask_babel import Babel, get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
-from sipa.babel import possible_locales
-from sipa.base import IntegerConverter, babel_selector, login_manager
+
+from sipa.babel import babel_selector, possible_locales
+from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
