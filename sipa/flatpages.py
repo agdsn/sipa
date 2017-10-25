@@ -233,16 +233,16 @@ class Category(Node):
         :return: The tuple `(article_id, locale)`.
         """
         default_locale = current_app.babel_instance.default_locale
-        components = basename.split('.')
+        article_id, sep, locale_identifier = basename.rpartition('.')
 
-        if len(components) == 1:
+        if sep == '':
             return basename, default_locale
 
-        article_id = '.'.join(components[:-1])
         try:
-            return article_id, Locale(components[-1])
+            locale = Locale(locale_identifier)
         except UnknownLocaleError:
             return basename, default_locale
+        return article_id, locale
 
     def add_article(self, prefix, page):
         """Add a page to an article and create the latter if nonexistent.
