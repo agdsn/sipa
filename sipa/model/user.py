@@ -20,6 +20,7 @@ class AuthenticatedUserMixin:
     is_active = True
     is_anonymous = False
 
+
 Row = namedtuple('Row', ['description', 'property'])
 
 
