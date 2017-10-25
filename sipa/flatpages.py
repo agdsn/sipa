@@ -3,10 +3,9 @@ from operator import attrgetter
 from os.path import basename, dirname, splitext
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
-from yaml.scanner import ScannerError
-
 from flask import abort, current_app, request
 from flask_flatpages import FlatPages
+from yaml.scanner import ScannerError
 
 
 class Node:
