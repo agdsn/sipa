@@ -5,7 +5,7 @@ Basic utilities for the Flask app
 These are basic utilities necessary for the Flask app which are
 disjoint from any blueprint.
 """
-from babel import Locale
+from babel import Locale, negotiate_locale
 from flask import request, session
 from flask_login import AnonymousUserMixin, LoginManager
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
@@ -62,9 +62,8 @@ def babel_selector():
             request.args['locale']) in possible_locales():
         session['locale'] = request.args['locale']
     elif not session.get('locale'):
-        langs = []
-        for lang in possible_locales():
-            langs.append(lang.language)
-        session['locale'] = request.accept_languages.best_match(langs)
+        session['locale'] = negotiate_locale(
+            request.accept_languages.values(),
+            list(map(str, possible_locales())), sep='-')
 
     return session.get('locale')
