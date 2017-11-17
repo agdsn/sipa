@@ -14,6 +14,9 @@ CONTENT_URL = None
 LOCALE_COOKIE_NAME = 'locale'
 LOCALE_COOKIE_MAX_AGE = 86400 * 31
 
+# Maximum number of reverse proxies
+NUM_PROXIES = 1
+
 BACKENDS = ['sample']
 
 FLATPAGES_ROOT = None
