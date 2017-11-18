@@ -8,13 +8,15 @@ from flask_babel import Babel, get_locale
 from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
-from sipa.babel import possible_locales
-from sipa.base import IntegerConverter, babel_selector, login_manager
+
+from sipa.babel import possible_locales, save_user_locale_setting, select_locale
+from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
-from sipa.flatpages import cf_pages
+from sipa.flatpages import CategorizedFlatPages
 from sipa.model import Backends
-from sipa.utils import replace_empty_handler_callables
+from sipa.session import SeparateLocaleCookieSessionInterface
+from sipa.utils import replace_empty_handler_callables, url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.graph_utils import (generate_credit_chart,
@@ -40,7 +42,10 @@ def init_app(app, **kwargs):
     login_manager.init_app(app)
     babel = Babel()
     babel.init_app(app)
-    babel.localeselector(babel_selector)
+    babel.localeselector(select_locale)
+    app.before_request(save_user_locale_setting)
+    app.session_interface = SeparateLocaleCookieSessionInterface()
+    cf_pages = CategorizedFlatPages()
     cf_pages.init_app(app)
     backends = Backends()
     backends.init_app(app)
@@ -75,7 +80,8 @@ def init_app(app, **kwargs):
         current_datasource=backends.current_datasource,
         form_label_width_class="col-sm-{}".format(form_label_width),
         form_input_width_class="col-sm-{}".format(form_input_width),
-        form_input_offset_class="col-sm-offset-{}".format(form_label_width)
+        form_input_offset_class="col-sm-offset-{}".format(form_label_width),
+        url_self=url_self,
     )
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})

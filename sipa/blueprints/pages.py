@@ -10,7 +10,6 @@ import json
 
 from flask import Blueprint, render_template, current_app
 
-from sipa.flatpages import cf_pages
 from sipa.model import backends
 
 logger = getLogger(__name__)
@@ -26,7 +25,7 @@ def show(category_id, article_id):
     display A section on the webpage where users can select their
     dormitory and see _specific_ information like financial data.
     """
-    article = cf_pages.get_or_404(category_id, article_id)
+    article = current_app.cf_pages.get_or_404(category_id, article_id)
 
     box_filename = os.path.join(
         os.path.abspath(current_app.config['FLATPAGES_ROOT']),

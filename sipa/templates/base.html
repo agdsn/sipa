@@ -153,7 +153,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                         <li {% if get_locale() == locale -%}
                                                  class="active"
                                              {%- endif %}>
-                                            <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
+                                            <a href="{{ url_self(locale=locale.language) }}">
                                                 <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
                                                 {{locale.display_name}}
                                             </a>
@@ -178,7 +178,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             <ul class="dropdown-menu" role="menu">
                                 {% for locale in possible_locales() %}
                                     <li>
-                                        <a href="{{ url_for('generic.set_language', lang=locale.language) }}">
+                                        <a href="{{ url_self(locale=locale.language) }}">
                                             <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
                                             {{locale.display_name}}
                                         </a>
