@@ -29,7 +29,7 @@ if (window.location.pathname.endsWith("contact")) {
         });
     });
     $("#message").keypress(function () {
-        applicable = hints.filter(function (hint) {
+        var applicable = hints.filter(function (hint) {
             var contains = hint.patterns.some(function (pattern) {
                 return pattern.test($("#message").val())
             });
