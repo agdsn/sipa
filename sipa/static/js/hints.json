@@ -3,7 +3,7 @@
     "not_in": [],
     "patterns": [
       "forgot.{0,10}password",
-      "can.+t.{0,10}login",
+      "can.?t.{0,10}login",
       "reset.{0,10}password",
       "passwort.{0,10}vergessen",
       "kann.{0,10}nicht.{0,10}einloggen",
