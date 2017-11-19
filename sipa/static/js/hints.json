@@ -15,7 +15,7 @@
     }
   },
   {
-    "not_in_dorm": ["hss"],
+    "not_in_dorm": ["hss", "ger"],
     "patterns": [
       "change.{0,10}mac",
       "mac.{0,10}address",
@@ -23,8 +23,8 @@
       "mac.{0,10}adresse"
     ],
     "hint": {
-      "de": "Du kannst deine MAC-Adresse auch selbst ändern wenn du dich einloggst.",
-      "en": "You can change your MAC address yourself if you are logged in."
+      "de": "Du kannst deine MAC-Adresse auch selbst ändern wenn du <a href='login'>dich einloggst.</a>",
+      "en": "You can change your MAC address yourself if you are <a href='login'>logged in.</a>"
     }
   }
 ]
