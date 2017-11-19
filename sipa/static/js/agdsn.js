@@ -1,19 +1,3 @@
-function guess_locale() {
-    // the locale defined in a cookie takes precedence
-    if (document.cookie.includes("de")) {
-        return "de"
-    }
-    if (document.cookie.includes("en")) {
-        return "en"
-    }
-
-    // if no cookie is found use the browsers default or english if the default language is not supported
-    if (navigator.language.toLowerCase().includes("de")) {
-        return "de";
-    }
-    return "en";
-}
-
 if (window.location.pathname.endsWith("contact")) {
     var hints = [];
     $.getJSON("static/js/hints.json", function (raw_hints) {
@@ -39,7 +23,7 @@ if (window.location.pathname.endsWith("contact")) {
         });
         $("#hints").empty();
         applicable.forEach(function (hint) {
-            var hint_text = hint.hint[guess_locale()];
+            var hint_text = hint.hint[get_language()];
             $("#hints").append("<div class='alert alert-warning'>" + hint_text + "</div>");
         });
     });
