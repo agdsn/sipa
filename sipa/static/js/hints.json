@@ -1,0 +1,26 @@
+[
+  {
+    "not_in": [],
+    "patterns": [
+      "forgot.{0,10}password",
+      "can.+t.{0,10}login",
+      "reset.{0,10}password",
+      "passwort.{0,10}vergessen",
+      "kann.{0,10}nicht.{0,10}einloggen",
+      "passwort.{0,10}zurücksetzen"
+    ],
+    "hint_de": "Wir können dein Passwort nicht zurücksetzen ohne dich zu identifizieren. Bitte komme mit einem Lichtbildausweis zu einer unserer <a href='pages/support/contacts'>Sprechstunden</a>",
+    "hint_en": "We can't reset your password without identifying you first. Please come with an id card to one of our <a href='pages/support/contacts'>office hours</a>"
+  },
+  {
+    "not_in": ["hss"],
+    "patterns": [
+      "change.{0,10}mac",
+      "mac.{0,10}address",
+      "mac.{0,10}ändern",
+      "mac.{0,10}adresse"
+    ],
+    "hint_de": "Du kannst deine MAC-Adresse auch selbst ändern wenn du dich einloggst.",
+    "hint_en": "You can change your MAC address yourself if you are logged in."
+  }
+]
