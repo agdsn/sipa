@@ -1,3 +1,7 @@
+function get_language() {
+    return JSON.parse(document.getElementById('locale').innerHTML);
+}
+
 if (window.location.pathname.endsWith("contact")) {
     var hints = [];
     $.getJSON("static/js/hints.json", function (raw_hints) {
