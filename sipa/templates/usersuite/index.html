@@ -2,7 +2,7 @@
 {% set page_title = _('Usersuite von ') + current_user.realname.value %}
 
 {% block content %}
-    <div class="row"><div class="col-md-8">
+    <div class="row"><div class="col-md-12">
         {% include 'usersuite/_index_status.html' %}
         {% if show_traffic_data %}
             {% include 'drafts/_traffic_overview.html' %}
