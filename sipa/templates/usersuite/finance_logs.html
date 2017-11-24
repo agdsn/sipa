@@ -27,12 +27,12 @@
                 </tr>
             {% endfor %}
         </tbody>
-        <tfooter>
+        <tfoot>
             <tr style="font-weight: bold">
                 <td>{{ _("Summe") }}:</td>
                 <td class="text-{{ value_context(balance) }}">{{ balance | money }}</td>
             </tr>
-        </tfooter>
+        </tfoot>
     </table>
 
     <a class="btn btn-default" href="{{ url_for('usersuite.index') }}">
