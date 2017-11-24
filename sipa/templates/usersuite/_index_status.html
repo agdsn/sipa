@@ -2,7 +2,7 @@
 <div class="btn-group">
     {% if current_user.can_change_password %}
     <a href="{{ url_for('.change_password') }}" class="btn btn-default">
-        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="glyphicon glyphicon-certificate"></span>
         {{ _("Passwort ändern") }}
     </a>
     {% else %}
