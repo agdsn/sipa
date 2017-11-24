@@ -7,7 +7,7 @@ from collections import OrderedDict
 import logging
 
 from flask import Blueprint, render_template, url_for, redirect, flash, abort
-from flask_babel import gettext
+from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
@@ -32,7 +32,8 @@ def index():
     info = current_user.finance_information
     last_update = info.last_update if info else None
     finance_update_string = (
-        " ({}: {})".format(gettext("Stand"), last_update.strftime("%Y-%m-%d"))
+        " ({}: {})".format(gettext("Stand"),
+                           format_date(last_update, 'short', rebase=False))
         if last_update
         else ""
     )
