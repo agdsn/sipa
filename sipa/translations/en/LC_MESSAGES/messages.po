@@ -546,6 +546,18 @@ msgstr "Change MAC address"
 msgid "Statusinformationen"
 msgstr "Status information"
 
+msgid "Buchungen"
+msgstr "Transactions"
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Wert"
+msgstr "Value"
+
+msgid "Summe"
+msgstr "Sum"
+
 msgid ""
 "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
 "Benachrichtigungsmail an uns gesandt."
@@ -596,24 +608,6 @@ msgid ""
 "Du kannst eine Weiterleitung deiner AGDSN-Mails in den Benutzereinstellungen "
 "einrichten."
 msgstr "You can set up a redirection of your AGDSN mails in the user settings."
-
-msgid "Finanzlogs"
-msgstr "Finance logs"
-
-msgid "Deine Transaktionen"
-msgstr "Your Transactions"
-
-msgid "Datum"
-msgstr "Date"
-
-msgid "Wert"
-msgstr "Value"
-
-msgid "Summe"
-msgstr "Sum"
-
-msgid "Zurück"
-msgstr "Back"
 
 msgid "Willst Du deine Datenbank wirklich löschen?"
 msgstr "Do you really want to delete your database?"

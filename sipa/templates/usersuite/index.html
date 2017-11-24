@@ -13,6 +13,11 @@
         {% include 'drafts/_traffic_chart.html' %}
     </div></div>
     {% endif %}
+    {% if show_transaction_log %}
+    <div class="row"><div class="col-md-12">
+        {% include 'usersuite/_transaction_log.html' %}
+    </div></div>
+    {% endif %}
 {% endblock %}
 
 {% block custom_script %}

@@ -63,13 +63,23 @@ def index():
         return redirect(url_for('generic.index'))
 
     datasource = current_user.datasource
-    show_traffic_data = current_user.has_connection
+    context = dict(rows=rows, webmailer_url=datasource.webmailer_url)
 
-    return render_template("usersuite/index.html",
-                           rows=rows,
-                           webmailer_url=datasource.webmailer_url,
-                           show_traffic_data=show_traffic_data,
-                           traffic_user=current_user)
+    if current_user.has_connection:
+        context.update(
+            show_traffic_data=True,
+            traffic_user=current_user,
+        )
+
+    if info and info.has_to_pay:
+        context.update(
+            show_transaction_log=True,
+            last_update=info.last_update,
+            balance=info.balance.raw_value,
+            logs=info.history,
+        )
+
+    return render_template("usersuite/index.html", **context)
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])
@@ -321,12 +331,4 @@ def hosting(action=None):
 @bp_usersuite.route("/finance-logs")
 @login_required
 def finance_logs():
-    info = current_user.finance_information
-
-    if not info or not info.has_to_pay:
-        abort(404)
-
-    return render_template('usersuite/finance_logs.html',
-                           last_update=info.last_update,
-                           balance=info.balance.raw_value,
-                           logs=info.history)
+    return redirect(url_for('usersuite.index', _anchor='transaction-log'))
