@@ -1,5 +1,5 @@
 <h2>{{ _("Statusinformationen") }}</h2>
-<p>
+<div class="btn-group">
     {% if current_user.can_change_password %}
     <a href="{{ url_for('.change_password') }}" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
@@ -21,7 +21,7 @@
         {{ _("Webmailer") }}
     </a>
     {% endif %}
-</p>
+</div>
 
 <div class="panel panel-default">
     <table class="panel-body table table-striped table-hover">
