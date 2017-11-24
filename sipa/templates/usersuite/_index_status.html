@@ -1,7 +1,7 @@
 <h2>{{ _("Statusinformationen") }}</h2>
 <div class="btn-group">
     {% if current_user.can_change_password %}
-    <a href="{{ url_for('.change_password') }}" class="btn btn-primary">
+    <a href="{{ url_for('.change_password') }}" class="btn btn-default">
         <span class="glyphicon glyphicon-pencil"></span>
         {{ _("Passwort ändern") }}
     </a>
