@@ -531,8 +531,8 @@ msgstr "Reset"
 msgid "Abbrechen"
 msgstr "Abort"
 
-msgid "Statusinformationen"
-msgstr "Status information"
+msgid "Häufige Aktionen"
+msgstr "Often Used Actions"
 
 msgid "Passwort ändern"
 msgstr "Change password"
@@ -542,6 +542,9 @@ msgstr "Webmailer"
 
 msgid "MAC-Adresse ändern"
 msgstr "Change MAC address"
+
+msgid "Statusinformationen"
+msgstr "Status information"
 
 msgid ""
 "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "

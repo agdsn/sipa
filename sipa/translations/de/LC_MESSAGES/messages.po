@@ -517,7 +517,7 @@ msgstr ""
 msgid "Abbrechen"
 msgstr ""
 
-msgid "Statusinformationen"
+msgid "Häufige Aktionen"
 msgstr ""
 
 msgid "Passwort ändern"
@@ -527,6 +527,9 @@ msgid "Webmailer"
 msgstr ""
 
 msgid "MAC-Adresse ändern"
+msgstr ""
+
+msgid "Statusinformationen"
 msgstr ""
 
 msgid ""
