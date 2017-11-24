@@ -11,6 +11,17 @@
         {{ _("Passwort ändern") }}
     </a>
     {% endif %}
+    {% if current_user.mac.capabilities.edit %}
+    <a href="{{ url_for('.change_mac') }}" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil"></span>
+        {{ _("MAC-Adresse ändern") }}
+    </a>
+    {% else %}
+    <a class="btn btn-default" disabled title="{{ _('Nicht unterstützt') }}">
+        <span class="glyphicon glyphicon-pencil"></span>
+        {{ _("MAC-Adresse ändern") }}
+    </a>
+    {% endif %}
     <a href="{{ url_for('.contact') }}" class="btn btn-default">
         <span class="glyphicon glyphicon-question-sign"></span>
         {{ _("Kontaktformular") }}
