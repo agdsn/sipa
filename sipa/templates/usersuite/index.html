@@ -4,11 +4,11 @@
 {% block content %}
     <div class="row"><div class="col-md-12">
         {% include 'usersuite/_index_status.html' %}
-        {% if show_traffic_data %}
-            {% include 'drafts/_traffic_overview.html' %}
-        {% endif %}
     </div></div>
     {% if show_traffic_data %}
+    <div class="row"><div class="col-md-12">
+            {% include 'drafts/_traffic_overview.html' %}
+    </div></div>
     <div class="row"><div class="col-md-12">
         {% include 'drafts/_traffic_chart.html' %}
     </div></div>
