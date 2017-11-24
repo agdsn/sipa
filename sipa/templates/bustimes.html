@@ -11,18 +11,22 @@
                         <div style="color: red;">{{ _('Fehler bei der Abfrage!') }}</div>
                     {% else %}
                         <table id="timetable" class="table table-bordered table-striped">
-                            <thead><tr>
-                                <th class="col-md-1">{{ _('Linie') }}</th>
-                                <th class="col-md-3">{{ _('Richtung') }}</th>
-                                <th class="col-md-1">in</th>
-                            </tr></thead>
-                            {% for i in stops[stop] %}
+                            <thead>
                                 <tr>
-                                    <td>{{ i.line }}</td>
-                                    <td>{{ i.dest }}</td>
-                                    <td{% if i.minutes_left < 6 %} style="font-weight: bold; color: red"{% endif %}>{{ i.minutes_left }} Min</td>
+                                    <th class="col-md-1">{{ _('Linie') }}</th>
+                                    <th class="col-md-3">{{ _('Richtung') }}</th>
+                                    <th class="col-md-1">in</th>
                                 </tr>
-                            {% endfor %}
+                            </thead>
+                            <tbody>
+                                {% for i in stops[stop] %}
+                                    <tr>
+                                        <td>{{ i.line }}</td>
+                                        <td>{{ i.dest }}</td>
+                                        <td{% if i.minutes_left < 6 %} style="font-weight: bold; color: red"{% endif %}>{{ i.minutes_left }} Min</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     {% endif %}
                 {% endfor %}

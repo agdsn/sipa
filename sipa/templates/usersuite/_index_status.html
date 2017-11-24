@@ -25,32 +25,34 @@
 
 <div class="panel panel-default">
     <table class="panel-body table table-striped table-hover">
-        {% for description, property in rows %}
-        <tr>
-            <td class="col-md-3">{{ description }}</td>
-            {%- set style = ("text-{}".format(property.style) if property.style else '') %}
-            <td class="col-md-3 {{ style }}">
-                {{ property.value }}
+        <tbody>
+            {% for description, property in rows %}
+            <tr>
+                <td class="col-md-3">{{ description }}</td>
+                {%- set style = ("text-{}".format(property.style) if property.style else '') %}
+                <td class="col-md-3 {{ style }}">
+                    {{ property.value }}
 
-                {% if property.capabilities.edit and property.empty %}
-                    <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
-                        <span class="glyphicon glyphicon-plus pull-right"></span>
-                    </a>
-                {% endif %}
+                    {% if property.capabilities.edit and property.empty %}
+                        <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
+                            <span class="glyphicon glyphicon-plus pull-right"></span>
+                        </a>
+                    {% endif %}
 
-                {% if property.capabilities.edit and not property.empty %}
-                    <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
-                        <span class="glyphicon glyphicon-pencil pull-right"></span>
-                    </a>
-                {% endif %}
+                    {% if property.capabilities.edit and not property.empty %}
+                        <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
+                            <span class="glyphicon glyphicon-pencil pull-right"></span>
+                        </a>
+                    {% endif %}
 
-                {% if property.capabilities.delete and not property.empty %}
-                    <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}">
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </a>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
+                    {% if property.capabilities.delete and not property.empty %}
+                        <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}">
+                            <span class="glyphicon glyphicon-remove pull-right"></span>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
