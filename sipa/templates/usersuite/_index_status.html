@@ -23,27 +23,29 @@
     {% endif %}
 </p>
 
-<table class="table table-striped table-bordered table-hover">
-    <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
-    {% for description, property in rows %}
-    <tr>
-        <td class="col-md-3">{{ description }}</td>
-        {%- set style = ("text-{}".format(property.style) if property.style else '') %}
-        <td class="col-md-3 {{ style }}">
-            {{ property.value }}
+<div class="panel panel-default">
+    <table class="panel-body table table-striped table-hover">
+        <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
+        {% for description, property in rows %}
+        <tr>
+            <td class="col-md-3">{{ description }}</td>
+            {%- set style = ("text-{}".format(property.style) if property.style else '') %}
+            <td class="col-md-3 {{ style }}">
+                {{ property.value }}
 
-            {% if property.capabilities.edit %}
-                <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
-                    <span class="glyphicon glyphicon-pencil pull-right"></span>
-                </a>
-            {% endif %}
+                {% if property.capabilities.edit %}
+                    <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
+                        <span class="glyphicon glyphicon-pencil pull-right"></span>
+                    </a>
+                {% endif %}
 
-            {% if property.capabilities.delete and not property.empty %}
-                <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}">
-                    <span class="glyphicon glyphicon-remove pull-right"></span>
-                </a>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+                {% if property.capabilities.delete and not property.empty %}
+                    <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}">
+                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
