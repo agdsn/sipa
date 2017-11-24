@@ -32,7 +32,13 @@
             <td class="col-md-3 {{ style }}">
                 {{ property.value }}
 
-                {% if property.capabilities.edit %}
+                {% if property.capabilities.edit and property.empty %}
+                    <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
+                        <span class="glyphicon glyphicon-plus pull-right"></span>
+                    </a>
+                {% endif %}
+
+                {% if property.capabilities.edit and not property.empty %}
                     <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
                         <span class="glyphicon glyphicon-pencil pull-right"></span>
                     </a>
