@@ -21,8 +21,12 @@ class AppInitialized(TestCase):
 
     This function contains some helper assert functions as well.
     """
-    def create_app(self, additional_config=None):
-        """Create a new instance of sipa using
+    @property
+    def app_config(self):
+        return {}
+
+    def create_app(self):
+        """Create a new instance of sipa using :py:func:`create_app`
 
         A new instance of sipa will be executed with the following
         config customizations:
@@ -37,10 +41,8 @@ class AppInitialized(TestCase):
 
             - PRESERVE_CONTEXT_ON_EXCEPTION
 
-        :param dict additional_config: a dict of additional config
-            values taking precedence of what has ben set before.  This
-            argument can be used when subclassing by calling ``super()``
-            with the desired config.
+        This config is extended by the values of the attribute
+        :py:attr:`app_config`.
         """
         test_app = Flask('sipa')
         test_app.config['SECRET_KEY'] = os.urandom(100)
@@ -49,11 +51,7 @@ class AppInitialized(TestCase):
         test_app.config['WTF_CSRF_ENABLED'] = False
         test_app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
         test_app.debug = True
-        test_app = create_app(
-            app=test_app,
-            config=additional_config if additional_config else {},
-        )
-        return test_app
+        return create_app(app=test_app, config=self.app_config)
 
     @contextmanager
     def temp_set_attribute(self, attr_name, value):
@@ -104,12 +102,12 @@ def dynamic_frontend_base(backend):
     change that ``'BACKENDS': [backend]`` is added to the config.
     """
     class cls(AppInitialized):
-        def create_app(self, *a, **kw):
-            config = {
-                **kw.pop('additional_config', {}),
+        @property
+        def app_config(self):
+            return {
+                **super().app_config,
                 'BACKENDS': [backend],
             }
-            return super().create_app(additional_config=config)
 
     return cls
 

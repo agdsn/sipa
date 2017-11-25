@@ -20,21 +20,20 @@ from tests.base import dynamic_frontend_base
 
 class WuFrontendTestBase(dynamic_frontend_base('wu')):
     """A 'wu' backend test base using A sqlite database"""
-    def create_app(self, *a, **kw):
+    @property
+    def app_config(self):
         # the userman uri is a psql database
         userman_uri = os.getenv('SIPA_TEST_DB_USERMAN_URI', None)
         if not userman_uri:
             self.skipTest("SIPA_TEST_DB_USERMAN_URI not set")
 
-        # TODO: use an attribute instead of always manipulating kwarg.
-        config = {
-            **kw.pop('additional_config', {}),
+        return {
+            **super().app_config,
             'DB_NETUSERS_URI': "sqlite:///",
             'DB_TRAFFIC_URI': "sqlite:///",
             'DB_USERMAN_URI': userman_uri,
             'DB_HELIOS_IP_MASK': "10.10.7.%",
         }
-        return super().create_app(*a, **kw, additional_config=config)
 
     def setUp(self):
         db.drop_all()

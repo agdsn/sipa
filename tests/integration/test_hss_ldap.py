@@ -22,15 +22,16 @@ class HssLdapAppInitialized(AppInitialized):
     # LDAP_ADMIN_PASSWORD given by env
     LDAP_USER_FORMAT_STRING = "uid={user},ou=users,dc=wh12,dc=tu-dresden,dc=de"
 
-    def create_app(self, *a, **kw):
+    @property
+    def app_config(self):
         try:
             self.LDAP_HOST = os.environ['SIPA_TEST_LDAP_HOST']
             self.LDAP_ADMIN_PASSWORD = os.environ['SIPA_TEST_LDAP_ADMIN_PASSWORD']
         except KeyError:
             self.skipTest("SIPA_TEST_LDAP_HOST and "
                           "SIPA_TEST_LDAP_ADMIN_PASSWORD must be set.")
-        conf = {
-            **kw.pop('additional_config', {}),
+        return {
+            **super().app_config,
             'HSS_LDAP_HOST': self.LDAP_HOST,
             'HSS_LDAP_PORT': self.LDAP_PORT,
             'HSS_LDAP_USERDN_FORMAT': self.LDAP_USER_FORMAT_STRING,
@@ -39,7 +40,6 @@ class HssLdapAppInitialized(AppInitialized):
             'HSS_LDAP_SEARCH_BASE': self.LDAP_USER_BASE,
             'HSS_LDAP_USE_SSL': False,
         }
-        return super().create_app(*a, additional_config=conf, **kw)
 
 
 class OneLdapUserFixture:
