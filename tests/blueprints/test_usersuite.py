@@ -74,11 +74,13 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
     def test_cache_toggling_works(self):
         self.assertEqual(self.current_user.use_cache, False)
 
-        resp = self.client.post(url_for('usersuite.change_use_cache'), data={'use_cache': "1"})
+        resp = self.client.post(url_for('usersuite.change_use_cache'),
+                                data={'use_cache': "1"})
         self.assert_redirects(resp, url_for('usersuite.index'))
         self.assertEqual(self.current_user.use_cache, True)
 
-        resp = self.client.post(url_for('usersuite.change_use_cache'), data={'use_cache': "0"})
+        resp = self.client.post(url_for('usersuite.change_use_cache'),
+                                data={'use_cache': "0"})
         self.assert_redirects(resp, url_for('usersuite.index'))
         self.assertEqual(self.current_user.use_cache, False)
 
