@@ -55,11 +55,6 @@
 # WU_LDAP_SEARCH_USER = None
 # WU_LDAP_SEARCH_PASSWORD = None
 
-# MySQL configuration
-# DB_ATLANTIS_HOST = "atlantis.agdsn"  # Must be set
-# DB_ATLANTIS_USER = None
-# DB_ATLANTIS_PASSWORD = None
-
 # Userman configuration
 # Form: "[{driver}+]{dialect}://{user}:{pw}@{host}:{port}/{db}?connect_timeout={timeout}"
 # Example: "mysql+pymysql://root:root@localhost:3306/testdb?connect_timeout=5"
