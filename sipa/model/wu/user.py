@@ -298,10 +298,12 @@ class User(BaseUser):
     def use_cache(self):
         if self._nutzer.use_cache:
             return {'value': gettext("Aktiviert"),
+                    'raw_value': True,
                     'style': 'success',
                     'empty': False,
                     }
         return {'value': gettext("Deaktiviert"),
+                'raw_value': False,
                 'empty': False,
                 }
 

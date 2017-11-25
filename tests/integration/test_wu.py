@@ -105,6 +105,23 @@ class UserWithDBTestCase(WuFrontendTestBase):
             self.assertIn(" could not ", warning_mock.call_args[0][0])
             self.assertIn("LDAP", warning_mock.call_args[0][0])
 
+    def test_cache_toggling_works(self):
+        login = self.nutzer.unix_account
+        user = self.User(uid=login, mail=None)
+        self.assertFalse(user.use_cache.raw_value)
+
+        user.use_cache = True
+        updated_user = self.User(uid=login, mail=None)
+        self.assertTrue(updated_user.use_cache.raw_value)
+        nutzer = db.session.query(Nutzer).filter_by(unix_account=login).one()
+        self.assertTrue(nutzer.use_cache)
+
+        user.use_cache = False
+        updated_user = self.User(uid=login, mail=None)
+        self.assertFalse(updated_user.use_cache.raw_value)
+        nutzer = db.session.query(Nutzer).filter_by(unix_account=login).one()
+        self.assertFalse(nutzer.use_cache)
+
 
 class UserNoComputersTestCase(WuFrontendTestBase):
     def setUp(self):
