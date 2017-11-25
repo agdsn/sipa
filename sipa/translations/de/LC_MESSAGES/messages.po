@@ -332,6 +332,33 @@ msgstr ""
 msgid "Datenbank nicht erreichbar"
 msgstr ""
 
+msgid "Dein Traffic"
+msgstr ""
+
+msgid "Traffic Tabelle"
+msgstr ""
+
+msgid "Wochentag"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "Gesamt"
+msgstr ""
+
+msgid "Credit"
+msgstr ""
+
+msgid "Verbleibender Credit"
+msgstr ""
+
+msgid "Traffic Diagramm"
+msgstr ""
+
 msgid "Kontakt"
 msgstr ""
 
@@ -485,27 +512,6 @@ msgid "Beschreibung"
 msgstr ""
 
 msgid "Autor"
-msgstr ""
-
-msgid "Dein Traffic"
-msgstr ""
-
-msgid "Wochentag"
-msgstr ""
-
-msgid "Download"
-msgstr ""
-
-msgid "Upload"
-msgstr ""
-
-msgid "Gesamt"
-msgstr ""
-
-msgid "Credit"
-msgstr ""
-
-msgid "Verbleibender Credit"
 msgstr ""
 
 msgid "Abschicken"

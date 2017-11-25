@@ -339,6 +339,33 @@ msgstr "Unknown"
 msgid "Datenbank nicht erreichbar"
 msgstr "Database cannot be reached"
 
+msgid "Dein Traffic"
+msgstr "Your traffic"
+
+msgid "Traffic Tabelle"
+msgstr "Traffic table"
+
+msgid "Wochentag"
+msgstr "Weekday"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Gesamt"
+msgstr "Overall"
+
+msgid "Credit"
+msgstr "Credit"
+
+msgid "Verbleibender Credit"
+msgstr "Remaining Credit"
+
+msgid "Traffic Diagramm"
+msgstr "Traffic chart"
+
 msgid "Kontakt"
 msgstr "Contact"
 
@@ -500,27 +527,6 @@ msgstr "Description"
 
 msgid "Autor"
 msgstr "Author"
-
-msgid "Dein Traffic"
-msgstr "Your traffic"
-
-msgid "Wochentag"
-msgstr "Weekday"
-
-msgid "Download"
-msgstr "Download"
-
-msgid "Upload"
-msgstr "Upload"
-
-msgid "Gesamt"
-msgstr "Overall"
-
-msgid "Credit"
-msgstr "Credit"
-
-msgid "Verbleibender Credit"
-msgstr "Remaining Credit"
 
 msgid "Abschicken"
 msgstr "Send"

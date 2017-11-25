@@ -1,4 +1,6 @@
 <h2>{{ _('Dein Traffic') }}</h2>
+
+<h3>{{ _('Traffic Tabelle') }}</h3>
 <div class="panel panel-default">
     <table class="panel-body table table-striped">
         <thead>
@@ -28,4 +30,16 @@
             </tr>
         </tbody>
     </table>
+</div>
+
+<h3>{{ _('Traffic Diagramm') }}</h3>
+<div class="panel panel-default">
+    <div class="panel-body">
+    <figure id="trafficchart">
+        {{ traffic_chart(traffic_user.traffic_history)|safe }}
+    </figure>
+    <figure id="creditchart">
+        {{ credit_chart(traffic_user.traffic_history, max_credit=traffic_user.max_credit)|safe }}
+    </figure>
+    </div>
 </div>
