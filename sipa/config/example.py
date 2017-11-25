@@ -50,8 +50,8 @@
 
 # LDAP configuration
 # WU_LDAP_URI = "ldap://atlantis.agdsn"  # Must be set
-# WU_LDAP_SEARCH_USER_BASE = None
-# WU_LDAP_SEARCH_GROUP_BASE = None
+# WU_LDAP_SEARCH_USER_BASE = None  # Must be set
+# WU_LDAP_SEARCH_GROUP_BASE = None  # Must be set
 # WU_LDAP_SEARCH_USER = None
 # WU_LDAP_SEARCH_PASSWORD = None
 
