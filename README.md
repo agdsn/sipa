@@ -215,6 +215,9 @@ section:
     link: http://http://www.awesome-page.com/
     rank: 1
 
+Translations
+------------
+Make sure you installed `Babel` via pip. Then, just run `make translate`.
 
 Adding dynamic content
 ----------------------

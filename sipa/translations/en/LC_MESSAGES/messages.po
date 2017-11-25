@@ -1,41 +1,37 @@
-# English translations for .
-# Copyright (C) 2016 ORGANIZATION
-# This file is distributed under the same license as the  project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+# English translations for sipa.
+# Copyright (C) 2017 AG DSN
+# This file is distributed under the same license as the sipa project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-09 16:20+0200\n"
-"PO-Revision-Date: 2017-10-09 16:26+0200\n"
+"POT-Creation-Date: 2017-11-25 19:47+0100\n"
+"PO-Revision-Date: 2017-11-25 19:47+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
-"Language-Team: en\n"
+"Language: en\n"
+"Language-Team: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.1\n"
-"Language: en\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Source-Language: de\n"
+"X-Generator: Poedit 2.0.3\n"
 
-#: sipa/forms.py:18
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
 
-#: sipa/forms.py:19
 msgid "Großbuchstaben (A-Z)"
 msgstr "upper case letters (A-Z)"
 
-#: sipa/forms.py:20
 msgid "Ziffern (0-9)"
 msgstr "digits (0-9)"
 
-#: sipa/forms.py:21
 msgid "andere Zeichen"
 msgstr "other characters"
 
-#: sipa/forms.py:22
 msgid ""
 "Dein Passwort muss mindestens {min_length} Zeichen lang sein und mindestens "
 "{min_classes} verschiedene Klassen von Zeichen enthalten. Zeichen von "
@@ -45,159 +41,129 @@ msgstr ""
 "least {min_classes} different characters classes. Character classes are: "
 "{classes}."
 
-#: sipa/forms.py:77 sipa/forms.py:97
 msgid "Deine E-Mail-Adresse"
 msgstr "Your e-mail address"
 
-#: sipa/forms.py:78 sipa/forms.py:98 sipa/forms.py:120 sipa/forms.py:154
 msgid "E-Mail ist nicht in gültigem Format!"
 msgstr "E-Mail is invalid!"
 
-#: sipa/forms.py:81
 msgid "Kategorie"
 msgstr "Category"
 
-#: sipa/forms.py:82
 msgid "Allgemeine Frage an die Administratoren"
 msgstr "General question for the administrators"
 
-#: sipa/forms.py:84
 msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
 msgstr "Disorders in the Wundtstraße/Zellescher Weg network"
 
-#: sipa/forms.py:85
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr "Financial concerns (contributions, fees)"
 
-#: sipa/forms.py:86
 msgid "Probleme mit privater Technik"
 msgstr "Problems with private technology"
 
-#: sipa/forms.py:88 sipa/forms.py:110 sipa/forms.py:127
 msgid "Betreff"
 msgstr "Subject"
 
-#: sipa/forms.py:89 sipa/forms.py:111 sipa/forms.py:128
 msgid "Betreff muss angegeben werden!"
 msgstr "Subject is missing!"
 
-#: sipa/forms.py:90 sipa/forms.py:112 sipa/forms.py:129
 msgid "Nachricht"
 msgstr "Message"
 
-#: sipa/forms.py:91 sipa/forms.py:113 sipa/forms.py:130
 msgid "Nachricht fehlt!"
 msgstr "Message is missing!"
 
-#: sipa/forms.py:102
 msgid "Dein Name"
 msgstr "Your Name"
 
-#: sipa/forms.py:103 sipa/forms.py:125
 msgid "Bitte gib einen Namen an!"
 msgstr "Please provide your name!"
 
-#: sipa/forms.py:106 sipa/forms.py:193
 msgid "Wohnheim"
 msgstr "Dormitory"
 
-#: sipa/forms.py:119
 msgid "E-Mail-Adresse"
 msgstr "Mail address"
 
-#: sipa/forms.py:124
 msgid "Name / Organisation"
 msgstr "Name / Organization"
 
-#: sipa/forms.py:135
 msgid "Altes Passwort"
 msgstr "Old password"
 
-#: sipa/forms.py:136
 msgid "Altes Passwort muss angegeben werden!"
 msgstr "Old password has to be submitted!"
 
-#: sipa/forms.py:137
 msgid "Neues Passwort"
 msgstr "New password"
 
-#: sipa/forms.py:138
 msgid "Neues Passwort fehlt!"
 msgstr "New password is missing!"
 
-#: sipa/forms.py:141 sipa/forms.py:221
 msgid "Bestätigung"
 msgstr "Confirmation"
 
-#: sipa/forms.py:142 sipa/forms.py:222
 msgid "Bestätigung des neuen Passworts fehlt!"
 msgstr "Verification of your new password is missing!"
 
-#: sipa/forms.py:144 sipa/forms.py:224
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-#: sipa/forms.py:150 sipa/forms.py:174 sipa/forms.py:210 sipa/forms.py:217
 msgid "Passwort"
 msgstr "Password"
 
-#: sipa/forms.py:151 sipa/forms.py:159 sipa/forms.py:175
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:153
 msgid "Neue Mail"
 msgstr "New mail"
 
-#: sipa/forms.py:169
 msgid "MAC muss unicast-Adresse sein!"
 msgstr "MAC has to be a unicast adress!"
 
-#: sipa/forms.py:177
 msgid "Neue MAC"
 msgstr "New mac"
 
-#: sipa/forms.py:198
+msgid "Cache-Nutzung"
+msgstr "Caching Service"
+
+msgid "Deaktiviert"
+msgstr "Disabled"
+
+msgid "Aktiviert"
+msgstr "Enabled"
+
 msgid "Kein gültiges Wohnheim!"
 msgstr "Not a valid dormitory!"
 
-#: sipa/forms.py:202
 msgid "Nutzername"
 msgstr "Username"
 
-#: sipa/forms.py:204
 msgid "Nutzername muss angegeben werden!"
 msgstr "No username submitted!"
 
-#: sipa/forms.py:205
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr "Username contains invalid characters!"
 
-#: sipa/forms.py:211 sipa/forms.py:218
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
 
-#: sipa/forms.py:213
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
-#: sipa/blueprints/generic.py:52
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr "Please log in to view this site."
 
-#: sipa/blueprints/generic.py:54
 msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
 msgstr "Your dormitory does not support this action."
 
-#: sipa/blueprints/generic.py:57
 msgid "Das von Dir angeforderte Dokument gibt es nicht."
 msgstr "The document you requested does not exist."
 
-#: sipa/blueprints/generic.py:59
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr "An error occured!"
 
-#: sipa/blueprints/generic.py:73
 msgid ""
 "Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein paar "
 "Minuten noch mal."
@@ -205,50 +171,38 @@ msgstr ""
 "Something went wrong with the database connection. Please try again in a few "
 "minutes."
 
-#: sipa/blueprints/generic.py:94
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
 msgstr "Connection to LDAP server could not be established!"
 
-#: sipa/blueprints/generic.py:111
 msgid ""
 "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch mal."
 msgstr "There has been an internal error. Please try again in a few minutes."
 
-#: sipa/blueprints/generic.py:156
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
-#: sipa/blueprints/generic.py:163
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 
-#: sipa/blueprints/generic.py:180
 msgid "Abmeldung erfolgreich!"
 msgstr "Logout successful!"
 
-#: sipa/blueprints/generic.py:225
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr "You can't see traffic data because of your account status."
 
-#: sipa/blueprints/generic.py:234
 msgid ""
 "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr "Another user than the one registered for this connection is logged in!"
 
-#: sipa/blueprints/generic.py:237
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
 msgstr "You will find here the traffic data for this connection."
 
-#: sipa/blueprints/generic.py:286 sipa/blueprints/generic.py:315
-#: sipa/blueprints/usersuite.py:95
 msgid "Nachricht wurde versandt."
 msgstr "Message was sent."
 
-#: sipa/blueprints/generic.py:288 sipa/blueprints/generic.py:317
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
 
-#: sipa/blueprints/generic.py:294
 msgid ""
 "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
@@ -257,201 +211,140 @@ msgstr ""
 "Are you sure you want to use the anonymous contact form? This is necessary "
 "only if you wish to contact administrators of a different dormitory."
 
-#: sipa/blueprints/usersuite.py:35
-#: sipa/templates/usersuite/finance_logs.html:13
 msgid "Stand"
 msgstr "Last update"
 
-#: sipa/blueprints/usersuite.py:40 sipa/templates/usertraffic.html:7
 msgid "Nutzer-ID"
 msgstr "User ID"
 
-#: sipa/blueprints/usersuite.py:41
 msgid "Voller Name"
 msgstr "Full name"
 
-#: sipa/blueprints/usersuite.py:42
 msgid "Accountname"
 msgstr "Account name"
 
-#: sipa/blueprints/usersuite.py:43
 msgid "Mitgliedsschaftsstatus"
 msgstr "Membership status"
 
-#: sipa/blueprints/usersuite.py:44
 msgid "Aktuelles Zimmer"
 msgstr "Current room"
 
-#: sipa/blueprints/usersuite.py:45
 msgid "Aktuelle IP-Adresse"
 msgstr "Current IP address"
 
-#: sipa/blueprints/usersuite.py:46
 msgid "Aktuelle MAC-Adresse"
 msgstr "Current MAC address"
 
-#: sipa/blueprints/usersuite.py:47
 msgid "E-Mail-Weiterleitung"
 msgstr "E-Mail forwarding address"
 
-#: sipa/blueprints/usersuite.py:48
-msgid "Cache-Nutzung"
-msgstr "Caching Service"
-
-#: sipa/blueprints/usersuite.py:49
 msgid "Hostname"
 msgstr "Hostname"
 
-#: sipa/blueprints/usersuite.py:50
 msgid "Hostalias"
 msgstr "Host alias"
 
-#: sipa/blueprints/usersuite.py:51 sipa/templates/usersuite/hosting.html:3
 msgid "MySQL Datenbank"
 msgstr "MySQL database"
 
-#: sipa/blueprints/usersuite.py:52
 msgid "Kontostand"
 msgstr "Finance balance"
 
-#: sipa/blueprints/usersuite.py:60
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
-#: sipa/blueprints/usersuite.py:101
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
 "eine E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
 
-#: sipa/blueprints/usersuite.py:156
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
-#: sipa/blueprints/usersuite.py:158
 msgid "Passwort wurde geändert"
 msgstr "Password has been changed"
 
-#: sipa/blueprints/usersuite.py:184 sipa/blueprints/usersuite.py:216
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
-#: sipa/blueprints/usersuite.py:186 sipa/blueprints/usersuite.py:218
-#: sipa/blueprints/usersuite.py:245
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
 
-#: sipa/blueprints/usersuite.py:188 sipa/blueprints/usersuite.py:220
 msgid "Nicht genügend LDAP-Rechte!"
 msgstr "Insufficient rights!"
 
-#: sipa/blueprints/usersuite.py:190
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"
 
-#: sipa/blueprints/usersuite.py:222
 msgid "E-Mail-Adresse wurde zurückgesetzt"
 msgstr "Email address has been reset"
 
-#: sipa/blueprints/usersuite.py:252
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-#: sipa/blueprints/usersuite.py:253 sipa/blueprints/usersuite.py:279
 msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr "It can take up to 10 minutes until the changes apply."
 
-#: sipa/blueprints/usersuite.py:276
 msgid "Cache-Nutzung wurde aktiviert!"
 msgstr "The cache service has been enabled."
 
-#: sipa/blueprints/usersuite.py:278
 msgid "Cache-Nutzung wurde deaktiviert!"
 msgstr "The cache service has been disabled."
 
-#: sipa/blueprints/usersuite.py:297
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
-#: sipa/blueprints/usersuite.py:305
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
-#: sipa/model/fancy_property.py:68
-#: sipa/templates/usersuite/_index_status.html:9
 msgid "Nicht unterstützt"
 msgstr "Not supported"
 
-#: sipa/model/fancy_property.py:98
 msgid "Nicht angegeben"
 msgstr "Not submitted"
 
-#: sipa/model/fancy_property.py:240
 msgid "Nicht verfügbar"
 msgstr "Unavailable"
 
-#: sipa/model/finance.py:34
 msgid "Beitrag in Miete inbegriffen"
 msgstr "Payment included in rental agreement"
 
-#: sipa/model/hss/user.py:245 tests/integration/test_hss_postgres.py:248
 msgid "Aktiv"
 msgstr "Active"
 
-#: sipa/model/hss/user.py:246 tests/integration/test_hss_postgres.py:257
 msgid "Passiv"
 msgstr "Passive"
 
-#: sipa/model/wu/database_utils.py:81
-msgid "ok"
-msgstr "ok"
-
-#: sipa/model/wu/database_utils.py:82
-msgid "Nicht bezahlt, Netzanschluss gesperrt"
-msgstr "Not payed, connection blocked"
-
-#: sipa/model/wu/database_utils.py:83
-msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
-msgstr "Violation of network usage agreement , connection blocked"
-
-#: sipa/model/wu/database_utils.py:85
-msgid "Exaktiv"
-msgstr "Formerly active"
-
-#: sipa/model/wu/database_utils.py:86
-msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
-msgstr "Traffic limit reached, account blocked"
-
-#: sipa/model/wu/user.py:283
-msgid "Unbekannt"
-msgstr "Unknown"
-
-#: sipa/model/wu/user.py:300 sipa/model/wu/user.py:336
-msgid "Aktiviert"
-msgstr "Enabled"
-
-#: sipa/model/wu/user.py:304
-msgid "Deaktiviert"
-msgstr "Disabled"
-
-#: sipa/model/wu/user.py:332
-msgid "Datenbank nicht erreichbar"
-msgstr "Database cannot be reached"
-
-#: sipa/model/wu/user.py:338
 msgid "Nicht aktiviert"
 msgstr "Not activated"
 
-#: sipa/templates/anonymous_contact.html:3 sipa/templates/base.html:257
-#: sipa/templates/official_contact.html:3
+msgid "ok"
+msgstr "ok"
+
+msgid "Nicht bezahlt, Netzanschluss gesperrt"
+msgstr "Not payed, connection blocked"
+
+msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
+msgstr "Violation of network usage agreement , connection blocked"
+
+msgid "Exaktiv"
+msgstr "Formerly active"
+
+msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
+msgstr "Traffic limit reached, account blocked"
+
+msgid "Unbekannt"
+msgstr "Unknown"
+
+msgid "Datenbank nicht erreichbar"
+msgstr "Database cannot be reached"
+
 msgid "Kontakt"
 msgstr "Contact"
 
-#: sipa/templates/anonymous_contact.html:8
 msgid "Hinweis:"
 msgstr "Note:"
 
-#: sipa/templates/anonymous_contact.html:9
 msgid ""
 "Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
 "identifizieren und Deine Anfrage schneller bearbeiten!"
@@ -459,7 +352,6 @@ msgstr ""
 "If you write us after you signed in, we can identify you as a member and are "
 "able to process your query faster!"
 
-#: sipa/templates/anonymous_contact.html:11
 msgid ""
 "Außerdem kannst Du in Deinen Einstellungen bereits einige Daten wie z.B. die "
 "MAC-Adresse selbstständig ändern."
@@ -467,148 +359,111 @@ msgstr ""
 "Also, on the settings page you can change certain data like the MAC address "
 "by yourself."
 
-#: sipa/templates/anonymous_contact.html:17
 msgid "Zum Kontaktformular für angemeldete Nutzer"
 msgstr "To the contact form for authenticated users"
 
-#: sipa/templates/anonymous_contact.html:20
 msgid "Zum Login"
 msgstr "To the login page"
 
-#: sipa/templates/base.html:7
 msgid "Login"
 msgstr "Login"
 
-#: sipa/templates/base.html:21
 msgid "Logout"
 msgstr "Logout"
 
-#: sipa/templates/base.html:84
 msgid "News"
 msgstr "News"
 
-#: sipa/templates/base.html:90
 msgid "Neueste"
 msgstr "Newest"
 
-#: sipa/templates/base.html:96
 msgid "Älteste"
 msgstr "Oldest"
 
-#: sipa/templates/base.html:102
 msgid "Alle"
 msgstr "Everything"
 
-#: sipa/templates/base.html:145
 msgid "Anmeldung"
 msgstr "Registration"
 
-#: sipa/templates/base.html:149
 msgid "Sprache"
 msgstr "Language"
 
-#: sipa/templates/base.html:235
 msgid "Verbleibender Traffic"
 msgstr "Remaining Credit"
 
-#: sipa/templates/base.html:242
 msgid "Für Details klicken"
 msgstr "Click for details"
 
-#: sipa/templates/base.html:248
 msgid "Fehler bei der Abfrage der Daten"
 msgstr "An error occurred"
 
-#: sipa/templates/base.html:279 sipa/templates/base.html:284
-#: sipa/templates/usersuite/_index_status.html:16
 msgid "Kontaktformular"
 msgstr "Contact form"
 
-#: sipa/templates/base.html:296
 msgid "Kontaktformular für Geschäftspartner"
 msgstr "Contact form for affiliates"
 
-#: sipa/templates/base.html:309
 msgid "Klingel"
 msgstr "Doorbell"
 
-#: sipa/templates/base.html:321
 msgid "Keller"
 msgstr "Basement"
 
-#: sipa/templates/base.html:333
 msgid "7. Etage"
 msgstr "7th floor"
 
-#: sipa/templates/base.html:381
 msgid "Informationen zur Version"
 msgstr "Version info"
 
-#: sipa/templates/bustimes.html:2
 msgid "Abfahrtszeiten"
 msgstr "Times of departure"
 
-#: sipa/templates/bustimes.html:9
 msgid "Haltestelle"
 msgstr "Stop"
 
-#: sipa/templates/bustimes.html:11 sipa/templates/bustimes.html:33
 msgid "Fehler bei der Abfrage!"
 msgstr "An error occurred!"
 
-#: sipa/templates/bustimes.html:15
 msgid "Linie"
 msgstr "Bus line"
 
-#: sipa/templates/bustimes.html:16
 msgid "Richtung"
 msgstr "Direction"
 
-#: sipa/templates/bustimes.html:29
 msgid "Quelle"
 msgstr "Source"
 
-#: sipa/templates/error.html:2 sipa/templates/error.html:7
 msgid "Fehler {} - {}"
 msgstr "Error {} - {}"
 
-#: sipa/templates/error.html:6
 msgid "Nanu?!"
 msgstr "Oops!"
 
-#: sipa/templates/error.html:10
 msgid "Zur Hauptseite"
 msgstr "Return to homepage"
 
-#: sipa/templates/index.html:34 sipa/templates/template.html:21
 msgid "Geschrieben von"
 msgstr "Written by"
 
-#: sipa/templates/index.html:36
 msgid "Vom"
 msgstr "On"
 
-#: sipa/templates/index.html:48
 msgid "Keine News Vorhanden!"
 msgstr "No News available!"
 
-#: sipa/templates/index.html:56
 msgid "Neuer"
 msgstr "Newer"
 
-#: sipa/templates/index.html:63
 msgid "Älter"
 msgstr "Older"
 
-#: sipa/templates/login.html:8
 msgid "Dieses Wohnheim erreichst du hier:"
 msgstr "You can reach this dormitory over here:"
 
-#: sipa/templates/official_contact.html:8
 msgid "Achtung:"
 msgstr "Attention:"
 
-#: sipa/templates/official_contact.html:8
 msgid ""
 "Hier wird dir\n"
 "            nicht mit deinem Anschluss geholfen!  Dieses Formular ist\n"
@@ -619,107 +474,80 @@ msgstr ""
 "communication with our partners.\n"
 "Abuse may be punished by blocking your account."
 
-#: sipa/templates/template.html:38
 msgid "Wohnheim auswählen"
 msgstr "Choose dormitory"
 
-#: sipa/templates/usertraffic.html:9
 msgid "Deine Nutzer-ID lautet"
 msgstr "Your user ID is"
 
-#: sipa/templates/version.html:5
 msgid "Aktuelle Version"
 msgstr "Current Version"
 
-#: sipa/templates/version.html:8
 msgid "Verwendeter Branch:"
 msgstr "Branch running:"
 
-#: sipa/templates/version.html:12
 msgid "Letzte Commits"
 msgstr "Latest Commits"
 
-#: sipa/templates/version.html:17
 msgid "Datum des Commits"
 msgstr "Commit date"
 
-#: sipa/templates/version.html:18
 msgid "Hash"
 msgstr "Hash"
 
-#: sipa/templates/version.html:19
 msgid "Beschreibung"
 msgstr "Description"
 
-#: sipa/templates/version.html:20
 msgid "Autor"
 msgstr "Author"
 
-#: sipa/templates/drafts/_traffic_overview.html:1
 msgid "Dein Traffic"
 msgstr "Your traffic"
 
-#: sipa/templates/drafts/_traffic_overview.html:4
 msgid "Wochentag"
 msgstr "Weekday"
 
-#: sipa/templates/drafts/_traffic_overview.html:5
 msgid "Download"
 msgstr "Download"
 
-#: sipa/templates/drafts/_traffic_overview.html:6
 msgid "Upload"
 msgstr "Upload"
 
-#: sipa/templates/drafts/_traffic_overview.html:7 sipa/utils/graph_utils.py:81
 msgid "Gesamt"
 msgstr "Overall"
 
-#: sipa/templates/drafts/_traffic_overview.html:8 sipa/utils/graph_utils.py:110
 msgid "Credit"
 msgstr "Credit"
 
-#: sipa/templates/drafts/_traffic_overview.html:22
 msgid "Verbleibender Credit"
 msgstr "Remaining Credit"
 
-#: sipa/templates/macros/forms.html:44
 msgid "Abschicken"
 msgstr "Send"
 
-#: sipa/templates/macros/forms.html:46
 msgid "Zurücksetzen"
 msgstr "Reset"
 
-#: sipa/templates/macros/forms.html:49
 msgid "Abbrechen"
 msgstr "Abort"
 
-#: sipa/templates/usersuite/_index_status.html:1
 msgid "Statusinformationen"
 msgstr "Status information"
 
-#: sipa/templates/usersuite/_index_status.html:6
-#: sipa/templates/usersuite/_index_status.html:11
-#: sipa/templates/usersuite/change_password.html:3
 msgid "Passwort ändern"
 msgstr "Change password"
 
-#: sipa/templates/usersuite/_index_status.html:21
 msgid "Webmailer"
 msgstr "Webmailer"
 
-#: sipa/templates/usersuite/change_mac.html:3
 msgid "MAC-Adresse ändern"
 msgstr "Change MAC address"
 
-#: sipa/templates/usersuite/change_mac.html:8
 msgid ""
 "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
 "Benachrichtigungsmail an uns gesandt."
 msgstr "Note: we will be notified about any change of your MAC address."
 
-#: sipa/templates/usersuite/change_mac.html:11
 msgid ""
 "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es "
 "ist nicht zulässig, den eigenen Account weiterzugeben."
@@ -727,7 +555,6 @@ msgstr ""
 "Please be aware that every user needs his own account. Sharing the account "
 "is not permitted."
 
-#: sipa/templates/usersuite/change_mac.html:12
 msgid ""
 "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-"
 "Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle "
@@ -736,16 +563,12 @@ msgstr ""
 "If you share your account with someone else (share login, enter someone "
 "else's MAC address) you are still liable for all activities of this account!"
 
-#: sipa/templates/usersuite/change_mail.html:3
-#: sipa/templates/usersuite/delete_mail.html:3
 msgid "E-Mail ändern"
 msgstr "Change email address"
 
-#: sipa/templates/usersuite/change_use_cache.html:3
 msgid "Cache-Nutzung ändern"
 msgstr "Change cache service"
 
-#: sipa/templates/usersuite/change_use_cache.html:8
 msgid ""
 "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. "
 "Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir "
@@ -754,139 +577,85 @@ msgstr ""
 "Please note, that this might cause problems with your clients. If there are "
 "problems, get in touch with us, the service providers won't be able to help."
 
-#: sipa/templates/usersuite/contact.html:3
 msgid "Nachricht an die Sektionsadmins"
 msgstr "Message to the admins"
 
-#: sipa/templates/usersuite/contact.html:9
 msgid "Hinweise:"
 msgstr "Notes:"
 
-#: sipa/templates/usersuite/contact.html:11
 msgid "Dein Username wird an die Nachricht angehängt."
 msgstr "Your username will be appended to your message."
 
-#: sipa/templates/usersuite/contact.html:12
 msgid "Die Antwort erhältst Du per Mail."
 msgstr "You will receive the answer via mail."
 
-#: sipa/templates/usersuite/contact.html:13
 msgid ""
 "Du kannst eine Weiterleitung deiner AGDSN-Mails in den Benutzereinstellungen "
 "einrichten."
 msgstr "You can set up a redirection of your AGDSN mails in the user settings."
 
-#: sipa/templates/usersuite/finance_logs.html:2
 msgid "Finanzlogs"
 msgstr "Finance logs"
 
-#: sipa/templates/usersuite/finance_logs.html:13
 msgid "Deine Transaktionen"
 msgstr "Your Transactions"
 
-#: sipa/templates/usersuite/finance_logs.html:18
 msgid "Datum"
 msgstr "Date"
 
-#: sipa/templates/usersuite/finance_logs.html:18
 msgid "Wert"
 msgstr "Value"
 
-#: sipa/templates/usersuite/finance_logs.html:32
 msgid "Summe"
 msgstr "Sum"
 
-#: sipa/templates/usersuite/finance_logs.html:40
 msgid "Zurück"
 msgstr "Back"
 
-#: sipa/templates/usersuite/hosting.html:8
 msgid "Willst Du deine Datenbank wirklich löschen?"
 msgstr "Do you really want to delete your database?"
 
-#: sipa/templates/usersuite/hosting.html:10
 msgid "Jawohl!"
 msgstr "Yes sir!"
 
-#: sipa/templates/usersuite/hosting.html:16
 msgid "Du kannst auf unserem Server eine MySQL-Datenbank anlegen."
 msgstr "You can create a MySQL database on our servers."
 
-#: sipa/templates/usersuite/hosting.html:17
 msgid "Weitere Infos zum Webhosting findest Du "
 msgstr "You can find more information"
 
-#: sipa/templates/usersuite/hosting.html:19
 msgid "hier"
 msgstr "over here"
 
-#: sipa/templates/usersuite/hosting.html:24
 msgid "Datenbank Erstellen"
 msgstr "Create Database"
 
-#: sipa/templates/usersuite/hosting.html:37
 msgid "Deine Datenbank"
 msgstr "Your Database"
 
-#: sipa/templates/usersuite/hosting.html:42
 msgid "Hier kannst Du Deine Datenbank löschen:"
 msgstr "You can delete your database here:"
 
-#: sipa/templates/usersuite/hosting.html:49
 msgid "Datenbank löschen"
 msgstr "Delete database"
 
-#: sipa/templates/usersuite/hosting.html:57
 msgid "Passwort Ändern"
 msgstr "Change Password"
 
-#: sipa/templates/usersuite/index.html:2
 msgid "Usersuite von "
 msgstr "Usersuite of "
 
-#: sipa/utils/graph_utils.py:67
 msgid "Traffic (MiB)"
 msgstr "Traffic (MiB)"
 
-#: sipa/utils/graph_utils.py:75
 msgid "Eingehend"
 msgstr "Incoming"
 
-#: sipa/utils/graph_utils.py:78
 msgid "Ausgehend"
 msgstr "Outgoing"
 
-#: sipa/utils/graph_utils.py:103
 msgid "Credit (GiB)"
 msgstr "Credit (GiB)"
 
-#: sipa/utils/graph_utils.py:113
 msgid "Maximum"
 msgstr "Maximum"
-
-#~ msgid "Verbindung zum SQL-Server konnte nicht hergestellt werden!"
-#~ msgstr "Connection to SQL server could not be established!"
-
-#~ msgid "Gerokstraße"
-#~ msgstr "Gerokstraße"
-
-#~ msgid "Beispielsektion"
-#~ msgstr "Sample Division"
-
-#~ msgid "Wundtstraße & Zellescher Weg"
-#~ msgstr " Wundtstraße & Zellescher Weg"
-
-#~ msgid "Accountstatus"
-#~ msgstr "Account status"
-
-#~ msgid "Partner"
-#~ msgstr "Partners"
-
-#~ msgid "der AG DSN wenden sich bitte bitte an"
-#~ msgstr "of the AG DSN please use"
-
-#~ msgid "dieses Kontaktformular"
-#~ msgstr "this contact form"
-
-#~ msgid "In Miete inbegriffen"
-#~ msgstr "Included in rental agreement"
