@@ -129,7 +129,7 @@ class SampleFrontendTestBase(dynamic_frontend_base('sample')):
             url_for('generic.logout')
         )
 
-WuFrontendTestBase = dynamic_frontend_base('wu')
+# WuFrontendTestBase is defined in `test_wu` with more features
 HssFrontendTestBase = dynamic_frontend_base('hss')
 GerokFrontendTestBase = dynamic_frontend_base('gerok')
 
