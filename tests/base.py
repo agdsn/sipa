@@ -5,8 +5,9 @@ from contextlib import contextmanager
 from flask import Flask, url_for
 from flask_testing import TestCase
 
-from sipa import create_app
+from sipa import create_app, model
 from sipa.defaults import WARNINGS_ONLY_CONFIG
+from sipa.model.sample.user import User as SampleUser
 
 
 class AppInitialized(TestCase):
@@ -113,6 +114,8 @@ def dynamic_frontend_base(backend):
 
 
 class SampleFrontendTestBase(dynamic_frontend_base('sample')):
+    User = SampleUser
+
     def login(self):
         # raise ValueError("login")
         return self.client.post(
@@ -121,10 +124,6 @@ class SampleFrontendTestBase(dynamic_frontend_base('sample')):
                   'username': 'test',
                   'password': 'test'},
         )
-
-    @property
-    def User(self):
-        return self.app.extensions['backends'].datasources[0].user_class
 
     @property
     def current_user(self):
