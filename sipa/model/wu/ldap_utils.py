@@ -14,8 +14,7 @@ logger = logging.getLogger(__name__)
 def init_ldap(app):
     try:
         app.extensions['ldap'] = {
-            'host': app.config['WU_LDAP_HOST'],
-            'port': int(app.config['WU_LDAP_PORT']),
+            'uri': app.config['WU_LDAP_URI'],
             'user': app.config['WU_LDAP_SEARCH_USER'],
             'password': app.config['WU_LDAP_SEARCH_PASSWORD'],
             'search_user_base': app.config['WU_LDAP_SEARCH_USER_BASE'],
@@ -50,8 +49,7 @@ class LdapConnector(ldap3.Connection):
                                            CONF['search_user_base'])
             bind_password = self.password
 
-        self.server = ldap3.Server(host=CONF['host'],
-                                   port=CONF['port'],
+        self.server = ldap3.Server(CONF['uri'],
                                    get_info=ldap3.SCHEMA,
                                    tls=None,  # accept any certificate
                                    connect_timeout=5)

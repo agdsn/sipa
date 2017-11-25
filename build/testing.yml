@@ -14,7 +14,7 @@ services:
       - CONNETION_TIMEOUT=60
       - SIPA_TEST_DB_USERMAN_URI=postgresql://sipa:password@postgres:5432/userman
       - SIPA_TEST_HSS_CONNECTION_STRING=postgresql://sipa:password@postgres:5432/
-      - SIPA_TEST_LDAP_HOST=ldap_hss
+      - SIPA_TEST_LDAP_URI=ldap://ldap_hss
       - SIPA_TEST_LDAP_ADMIN_PASSWORD=password
 
 

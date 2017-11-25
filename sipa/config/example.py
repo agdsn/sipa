@@ -49,8 +49,7 @@
 # MAILSERVER_PORT = 25
 
 # LDAP configuration
-# WU_LDAP_HOST = "atlantis.agdsn"  # Must be set
-# WU_LDAP_PORT = 389
+# WU_LDAP_URI = "ldap://atlantis.agdsn"  # Must be set
 # WU_LDAP_SEARCH_USER_BASE = None
 # WU_LDAP_SEARCH_GROUP_BASE = None
 # WU_LDAP_SEARCH_USER = None

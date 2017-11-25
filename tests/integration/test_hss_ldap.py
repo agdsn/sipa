@@ -1,5 +1,4 @@
 import os
-from functools import partial
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -15,8 +14,7 @@ from .test_hss_postgres import HSSOneAccountFixture, HssPgTestBase
 
 
 class HssLdapAppInitialized(AppInitialized):
-    # LDAP_HOST given by env
-    LDAP_PORT = 389
+    # LDAP_URI given by env
     LDAP_ADMIN_UID = 'cn=admin,dc=wh12,dc=tu-dresden,dc=de'
     LDAP_USER_BASE = 'ou=users,dc=wh12,dc=tu-dresden,dc=de'
     # LDAP_ADMIN_PASSWORD given by env
@@ -25,20 +23,18 @@ class HssLdapAppInitialized(AppInitialized):
     @property
     def app_config(self):
         try:
-            self.LDAP_HOST = os.environ['SIPA_TEST_LDAP_HOST']
+            self.LDAP_URI = os.environ['SIPA_TEST_LDAP_URI']
             self.LDAP_ADMIN_PASSWORD = os.environ['SIPA_TEST_LDAP_ADMIN_PASSWORD']
         except KeyError:
-            self.skipTest("SIPA_TEST_LDAP_HOST and "
+            self.skipTest("SIPA_TEST_LDAP_URI and "
                           "SIPA_TEST_LDAP_ADMIN_PASSWORD must be set.")
         return {
             **super().app_config,
-            'HSS_LDAP_HOST': self.LDAP_HOST,
-            'HSS_LDAP_PORT': self.LDAP_PORT,
+            'HSS_LDAP_URI': self.LDAP_URI,
             'HSS_LDAP_USERDN_FORMAT': self.LDAP_USER_FORMAT_STRING,
             'HSS_LDAP_SYSTEM_BIND': self.LDAP_ADMIN_UID,
             'HSS_LDAP_SYSTEM_PASSWORD': self.LDAP_ADMIN_PASSWORD,
             'HSS_LDAP_SEARCH_BASE': self.LDAP_USER_BASE,
-            'HSS_LDAP_USE_SSL': False,
         }
 
 
@@ -58,8 +54,7 @@ class OneLdapUserFixture:
 class LdapSetupMixin:
     def setUp(self):
         super().setUp()
-        server = ldap3.Server(self.LDAP_HOST, self.LDAP_PORT, use_ssl=False,
-                              get_info=ldap3.ALL)
+        server = ldap3.Server(self.LDAP_URI, get_info=ldap3.ALL)
 
         with ldap3.Connection(server, auto_bind=True,
                               client_strategy=ldap3.SYNC,
@@ -128,23 +123,21 @@ class GetLdapConnectionTestCase(SimpleLdapTestBase):
 
     May be deleted, just as said function.
     """
-    ldap_connect = partial(get_ldap_connection, use_ssl=False)
-
     def test_ldap_password_required(self):
         with self.assertRaises(LDAPPasswordIsMandatoryError):
-            self.ldap_connect(self.username, '')
+            get_ldap_connection(self.username, '')
 
     def test_ldap_wrong_password(self):
         with self.assertRaises(LDAPBindError):
-            self.ldap_connect(self.username, self.password + 'wrong')
+            get_ldap_connection(self.username, self.password + 'wrong')
 
     def test_ldap_wrong_username(self):
         with self.assertRaises(LDAPBindError):
-            self.ldap_connect(self.username + 'wrong', self.password)
+            get_ldap_connection(self.username + 'wrong', self.password)
 
     def test_ldap_successful_bind(self):
         try:
-            self.ldap_connect(self.username, self.password)
+            get_ldap_connection(self.username, self.password)
         except LDAPBindError:
             self.fail("LDAPBindError thrown instead of successful bind!")
 
