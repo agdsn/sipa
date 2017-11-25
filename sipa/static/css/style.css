@@ -15,6 +15,12 @@ body {
 	padding-top: 50px;
 }
 
+.affix {
+	top: 60px;
+	width: 100%;
+	max-width: inherit;
+}
+
 @media (min-width: 768px) {
 	.pg-header {
 		display: block;

@@ -1,4 +1,4 @@
-<h2>{{ _("Häufige Aktionen") }}</h2>
+<h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
 <div class="btn-group">
     {% if current_user.can_change_password %}
     <a href="{{ url_for('.change_password') }}" class="btn btn-default">
@@ -34,7 +34,7 @@
     {% endif %}
 </div>
 
-<h2>{{ _("Statusinformationen") }}</h2>
+<h2 id="status-information">{{ _("Statusinformationen") }}</h2>
 <div class="panel panel-default">
     <table class="panel-body table table-striped table-hover">
         <tbody>
