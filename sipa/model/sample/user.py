@@ -3,6 +3,7 @@ from datetime import datetime
 from random import random
 
 from flask import current_app
+from flask_babel import gettext
 from flask_login import AnonymousUserMixin
 from werkzeug import LocalProxy
 
@@ -175,14 +176,14 @@ class User(BaseUser):
     @active_prop
     def use_cache(self):
         if self.config[self.uid]['use_cache']:
-            return {'value': "Aktiviert",
+            return {'value': gettext("Aktiviert"),
                     'raw_value': True,
                     'style': 'success',
                     'empty': False,
                     }
-        return {'value': "Deaktiviert",
+        return {'value': gettext("Nicht aktiviert"),
                 'raw_value': False,
-                'empty': False}
+                'empty': True}
 
     @use_cache.setter
     def use_cache(self, value):

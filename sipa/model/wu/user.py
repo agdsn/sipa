@@ -302,10 +302,9 @@ class User(BaseUser):
                     'style': 'success',
                     'empty': False,
                     }
-        return {'value': gettext("Deaktiviert"),
+        return {'value': gettext("Nicht aktiviert"),
                 'raw_value': False,
-                'empty': False,
-                }
+                'empty': True}
 
     @use_cache.setter
     def use_cache(self, new_use_cache):
