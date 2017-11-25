@@ -295,6 +295,27 @@ class User(BaseUser):
         )
 
     @active_prop
+    def use_cache(self):
+        if self._nutzer.use_cache:
+            return {'value': gettext("Aktiviert"),
+                    'raw_value': True,
+                    'style': 'success',
+                    'empty': False,
+                    }
+        return {'value': gettext("Deaktiviert"),
+                'raw_value': False,
+                'empty': False,
+                }
+
+    @use_cache.setter
+    def use_cache(self, new_use_cache):
+        nutzer = self._nutzer
+        nutzer.use_cache = new_use_cache
+
+        db.session.add(nutzer)
+        db.session.commit()
+
+    @active_prop
     @connection_dependent
     def hostname(self):
         return ", ".join(c.c_hname for c in self._nutzer.computer)

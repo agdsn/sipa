@@ -18,6 +18,13 @@
                                 <input type="checkbox"> {{ field.default }}
                             </label></div>
                         </div>
+                    {% elif field.type == "RadioField" %}
+                        <label class="{{ form_label_width_class }} control-label">
+                            {{ field.label() }}
+                        </label>
+                        <div class="{{ form_input_width_class }}">
+                            {{ field(value=default, placeholder=description, autofocus=first) }}
+                        </div>
                     {% elif field.type != "HiddenField" %}
                         <label class="{{ form_label_width_class }} control-label">
                             {{ field.label() }}

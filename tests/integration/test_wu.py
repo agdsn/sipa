@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 
 from flask_login import AnonymousUserMixin
 
-from sipa.model.wu.user import User
+from sipa.model.wu.user import User as WuUser
 from sipa.model.wu.database_utils import STATUS
 from sipa.model.wu.schema import db, Nutzer, Buchung
 from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
@@ -15,23 +15,25 @@ from sipa.model.wu.factories import (ActiveNutzerFactory, InactiveNutzerFactory,
                                      NoHostAliasComputerFactory,
                                      CreditFactory, TrafficFactory)
 from sipa.utils import timetag_today
-from tests.base import WuFrontendTestBase
+from tests.base import dynamic_frontend_base
 
 
-class WuAtlantisFakeDBInitialized(WuFrontendTestBase):
-    def create_app(self, *a, **kw):
+class WuFrontendTestBase(dynamic_frontend_base('wu')):
+    """A 'wu' backend test base using A sqlite database"""
+    @property
+    def app_config(self):
+        # the userman uri is a psql database
         userman_uri = os.getenv('SIPA_TEST_DB_USERMAN_URI', None)
         if not userman_uri:
             self.skipTest("SIPA_TEST_DB_USERMAN_URI not set")
 
-        config = {
-            **kw.pop('additional_config', {}),
+        return {
+            **super().app_config,
             'DB_NETUSERS_URI': "sqlite:///",
             'DB_TRAFFIC_URI': "sqlite:///",
             'DB_USERMAN_URI': userman_uri,
             'DB_HELIOS_IP_MASK': "10.10.7.%",
         }
-        return super().create_app(*a, **kw, additional_config=config)
 
     def setUp(self):
         db.drop_all()
@@ -43,17 +45,15 @@ class WuAtlantisFakeDBInitialized(WuFrontendTestBase):
         self.assertIn(computer.c_hname, user.hostname)
         self.assertIn(computer.c_alias, user.hostalias)
 
-    @staticmethod
-    def create_user_ldap_patched(uid, mail):
-        with patch('sipa.model.wu.user.search_in_group',
-                   MagicMock(return_value=False)):
-            return User(
-                uid=uid,
-                mail=mail,
-            )
+    class User(WuUser):
+        """A User class with mocked LDAP lookup"""
+        def __init__(self, uid, mail):
+            with patch('sipa.model.wu.user.search_in_group',
+                       MagicMock(return_value=False)):
+                super().__init__(uid, mail)
 
 
-class UsersWithAddressesTestCase(WuAtlantisFakeDBInitialized):
+class UsersWithAddressesTestCase(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
 
@@ -73,7 +73,7 @@ class UsersWithAddressesTestCase(WuAtlantisFakeDBInitialized):
                                 msg='Address did not end with room number')
 
 
-class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
+class UserWithDBTestCase(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
 
@@ -85,14 +85,14 @@ class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
         return db.session.query(Nutzer).filter_by(unix_account=unix_account).one()
 
     def test_from_ip_returns_anonymous(self):
-        user = User.from_ip("141.30.228.66")
+        user = self.User.from_ip("141.30.228.66")
         self.assertIsInstance(user, AnonymousUserMixin)
 
     def test_from_ip_user_returned(self):
         with patch('sipa.model.wu.user.User.get') as user_get_mock:
             user_get_mock.side_effect = self.get_sql_user_from_login
 
-            user = User.from_ip(self.computer.c_ip)
+            user = self.User.from_ip(self.computer.c_ip)
             self.assertEqual(user_get_mock.call_args[0],
                              (self.nutzer.unix_account,))
             self.assertEqual(user, self.nutzer)
@@ -100,17 +100,34 @@ class UserWithDBTestCase(WuAtlantisFakeDBInitialized):
     def test_from_ip_user_not_in_ldap(self):
         with patch('sipa.model.wu.user.User.get', MagicMock(return_value=None)), \
                 patch('sipa.model.wu.user.logger.warning') as warning_mock:
-            user = User.from_ip(self.computer.c_ip)
+            user = self.User.from_ip(self.computer.c_ip)
             self.assertIsInstance(user, AnonymousUserMixin)
             self.assertIn(" could not ", warning_mock.call_args[0][0])
             self.assertIn("LDAP", warning_mock.call_args[0][0])
 
+    def test_cache_toggling_works(self):
+        login = self.nutzer.unix_account
+        user = self.User(uid=login, mail=None)
+        self.assertFalse(user.use_cache.raw_value)
 
-class UserNoComputersTestCase(WuAtlantisFakeDBInitialized):
+        user.use_cache = True
+        updated_user = self.User(uid=login, mail=None)
+        self.assertTrue(updated_user.use_cache.raw_value)
+        nutzer = db.session.query(Nutzer).filter_by(unix_account=login).one()
+        self.assertTrue(nutzer.use_cache)
+
+        user.use_cache = False
+        updated_user = self.User(uid=login, mail=None)
+        self.assertFalse(updated_user.use_cache.raw_value)
+        nutzer = db.session.query(Nutzer).filter_by(unix_account=login).one()
+        self.assertFalse(nutzer.use_cache)
+
+
+class UserNoComputersTestCase(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
         self.nutzer = NutzerFactory.create()
-        self.user = self.create_user_ldap_patched(
+        self.user = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         )
@@ -122,7 +139,7 @@ class UserNoComputersTestCase(WuAtlantisFakeDBInitialized):
         self.assertFalse(self.user.hostalias)
 
 
-class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
+class TestUserInitializedCase(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
 
@@ -131,7 +148,7 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
 
         self.mail = "foo@bar.baz"
 
-        self.user = self.create_user_ldap_patched(
+        self.user = self.User(
             uid=self.nutzer.unix_account,
             mail=self.mail,
         )
@@ -161,7 +178,7 @@ class TestUserInitializedCase(WuAtlantisFakeDBInitialized):
         )
 
 
-class ComputerWithoutAliasTestCase(WuAtlantisFakeDBInitialized):
+class ComputerWithoutAliasTestCase(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
 
@@ -170,7 +187,7 @@ class ComputerWithoutAliasTestCase(WuAtlantisFakeDBInitialized):
         self.name = "Test Nutzer"
         self.mail = "foo@bar.baz"
 
-        self.user = self.create_user_ldap_patched(
+        self.user = self.User(
             uid=self.nutzer.unix_account,
             mail=self.mail,
         )
@@ -200,7 +217,7 @@ class ComputerWithoutAliasTestCase(WuAtlantisFakeDBInitialized):
                     self.assertIn(computer.c_alias, self.user.hostalias)
 
 
-class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
+class UserStatusGivenCorrectly(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
         self.valid_status_nutzer_list = NutzerFactory.create_batch(20)
@@ -208,7 +225,7 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
 
     def test_unknown_status_empty(self):
         for nutzer in self.unknown_status_nutzer_list:
-            user = self.create_user_ldap_patched(
+            user = self.User(
                 uid=nutzer.unix_account,
                 mail=None,
             )
@@ -217,7 +234,7 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
 
     def test_known_status_passed(self):
         for nutzer in self.valid_status_nutzer_list:
-            user = self.create_user_ldap_patched(
+            user = self.User(
                 uid=nutzer.unix_account,
                 mail=None,
             )
@@ -225,7 +242,7 @@ class UserStatusGivenCorrectly(WuAtlantisFakeDBInitialized):
                 self.assertEqual(STATUS[nutzer.status][0], user.status)
 
 
-class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
+class CorrectUserHasConnection(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
         self.connection_nutzer_list = ActiveNutzerFactory.create_batch(20)
@@ -233,7 +250,7 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
 
     def test_correct_users_have_connection(self):
         for nutzer in self.connection_nutzer_list:
-            user = self.create_user_ldap_patched(
+            user = self.User(
                 uid=nutzer.unix_account,
                 mail=None
             )
@@ -242,7 +259,7 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
 
     def test_incorrect_users_no_connection(self):
         for nutzer in self.no_connection_nutzer_list:
-            user = self.create_user_ldap_patched(
+            user = self.User(
                 uid=nutzer.unix_account,
                 mail=None,
             )
@@ -250,7 +267,7 @@ class CorrectUserHasConnection(WuAtlantisFakeDBInitialized):
                 self.assertFalse(user.has_connection)
 
 
-class OneUserWithCredit(WuAtlantisFakeDBInitialized):
+class OneUserWithCredit(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
         self.nutzer = NutzerFactory.create()
@@ -266,7 +283,7 @@ class CreditTestCase(OneUserWithCredit):
         super().setUp()
 
     def test_credit_passed(self):
-        fetched_user = self.create_user_ldap_patched(
+        fetched_user = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         )
@@ -274,7 +291,7 @@ class CreditTestCase(OneUserWithCredit):
         self.assertEqual(fetched_user.credit, expected_credit)
 
     def test_credit_appears_in_history(self):
-        fetched_history = self.create_user_ldap_patched(
+        fetched_history = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         ).traffic_history
@@ -297,7 +314,7 @@ class TrafficOneComputerTestCase(OneUserWithCredit):
             self.traffic_entries.append(traffic_entry)
 
     def test_traffic_data_passed(self):
-        fetched_history = self.create_user_ldap_patched(
+        fetched_history = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         ).traffic_history
@@ -311,7 +328,7 @@ class TrafficOneComputerTestCase(OneUserWithCredit):
                 self.assertEqual(traffic_entry['output'], traffic_entry['output'])
 
 
-class UsermanInitializedTestCase(WuAtlantisFakeDBInitialized):
+class UsermanInitializedTestCase(WuFrontendTestBase):
     def test_userman_in_binds(self):
         self.assertIn('userman', self.app.config['SQLALCHEMY_BINDS'].keys())
 
@@ -333,7 +350,7 @@ class FinanceBalanceTestCase(OneUserWithCredit):
         for t in self.transactions:
             db.session.add(t)
         db.session.commit()
-        self.user = self.create_user_ldap_patched(
+        self.user = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         )
@@ -384,7 +401,7 @@ class HabenSollSwitchedTestCase(OneUserWithCredit):
         for t in self.transactions:
             db.session.add(t)
         db.session.commit()
-        self.user = self.create_user_ldap_patched(
+        self.user = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         )
@@ -394,11 +411,11 @@ class HabenSollSwitchedTestCase(OneUserWithCredit):
         self.assertEqual(self.user.finance_information.balance, expected_balance)
 
 
-class NoInternetByRentalTestCase(WuAtlantisFakeDBInitialized):
+class NoInternetByRentalTestCase(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
         self.nutzer = NutzerFactory()
-        self.user = self.create_user_ldap_patched(
+        self.user = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         )
@@ -407,11 +424,11 @@ class NoInternetByRentalTestCase(WuAtlantisFakeDBInitialized):
         self.assertTrue(self.user.finance_information.has_to_pay)
 
 
-class InternetByRentalTestCase(WuAtlantisFakeDBInitialized):
+class InternetByRentalTestCase(WuFrontendTestBase):
     def setUp(self):
         super().setUp()
         self.nutzer = NutzerFactory(internet_by_rental=True)
-        self.user = self.create_user_ldap_patched(
+        self.user = self.User(
             uid=self.nutzer.unix_account,
             mail=None,
         )

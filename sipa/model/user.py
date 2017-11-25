@@ -219,6 +219,15 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @active_prop
     @abstractmethod
+    def use_cache(self):
+        """**[Abstract]** Flag indicating cache usage.
+
+        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
+        """
+        pass
+
+    @active_prop
+    @abstractmethod
     def hostname(self):
         """**[Abstract]** The hostname.
 

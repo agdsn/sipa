@@ -37,6 +37,7 @@ class Nutzer(db.Model):
     status = Column(Integer, nullable=False, index=True,
                     server_default=text("'1'"))
     internet_by_rental = Column(Boolean, nullable=False)
+    use_cache = Column(Boolean, nullable=False)
 
     computer = relationship("Computer", backref="nutzer")
     credit_entries = relationship('Credit', backref="nutzer")

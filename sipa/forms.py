@@ -7,7 +7,7 @@ from flask import flash
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField)
+                     StringField, TextAreaField, RadioField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
                                 MacAddress, Regexp, ValidationError)
 
@@ -178,6 +178,16 @@ class ChangeMACForm(FlaskForm):
         validators=[DataRequired("MAC-Adresse nicht angegeben!"),
                     MacAddress("MAC ist nicht in gültigem Format!"),
                     require_unicast_mac])
+
+
+class ChangeUseCacheForm(FlaskForm):
+    use_cache = RadioField(
+        label=lazy_gettext("Cache-Nutzung"),
+        coerce=int,
+        choices=[(0, lazy_gettext('Deaktiviert')),
+                 (1, lazy_gettext('Aktiviert')),
+                 ]
+    )
 
 
 class LoginForm(FlaskForm):

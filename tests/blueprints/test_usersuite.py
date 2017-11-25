@@ -56,7 +56,7 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
         with patch('sipa.blueprints.usersuite.current_user'):
             urls = [
                 *(url_for(get_attribute_endpoint(attr))
-                  for attr in ['mail', 'mac', 'finance_balance']),
+                  for attr in ['mail', 'mac', 'finance_balance', 'use_cache']),
                 *(url_for(get_attribute_endpoint(attr, capability='delete'))
                   for attr in ['mail']),
                 url_for('usersuite.change_password'),
@@ -67,6 +67,20 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
             with self.subTest(url=url):
                 self.assertRegex(usersuite_response.data.decode('utf-8'),
                                  'href="[^"]*{}[^"]*"'.format(url))
+
+    def test_cache_200(self):
+        self.assert200(self.client.get(url_for('usersuite.change_use_cache')))
+
+    def test_cache_toggling_works(self):
+        self.assertEqual(self.current_user.use_cache, False)
+
+        resp = self.client.post(url_for('usersuite.change_use_cache'), data={'use_cache': "1"})
+        self.assert_redirects(resp, url_for('usersuite.index'))
+        self.assertEqual(self.current_user.use_cache, True)
+
+        resp = self.client.post(url_for('usersuite.change_use_cache'), data={'use_cache': "0"})
+        self.assert_redirects(resp, url_for('usersuite.index'))
+        self.assertEqual(self.current_user.use_cache, False)
 
 
 class FinanceLogsTestCase(SampleAuthenticatedTestBase):

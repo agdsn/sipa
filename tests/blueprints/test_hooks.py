@@ -36,11 +36,14 @@ class GitHookNoToken(GitHookTestBase):
 
 
 class GitHookExistent(GitHookTestBase):
-    def create_app(self):
-        self.token = "SuperDUPERsecret!!1"
-        return super().create_app(
-            additional_config={'GIT_UPDATE_HOOK_TOKEN': self.token}
-        )
+    token = "SuperDUPERsecret!!1"
+
+    @property
+    def app_config(self):
+        return {
+            **super().app_config,
+            'GIT_UPDATE_HOOK_TOKEN': self.token,
+        }
 
     def test_no_token_auth_required(self):
         """Test that `PUT`ting the hook w/o giving a token returns HTTP 401"""

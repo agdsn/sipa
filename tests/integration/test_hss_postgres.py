@@ -18,18 +18,17 @@ from sipa.model.hss.user import User, FinanceInformation
 
 
 class HssPgTestBase(HssFrontendTestBase):
-    def create_app(self, *a, **kw):
+    @property
+    def app_config(self):
         pg_uri = os.getenv('SIPA_TEST_HSS_CONNECTION_STRING', None)
         if not pg_uri:
             self.skipTest("SIPA_TEST_HSS_CONNECTION_STRING not set")
 
-        conf = {
-            **kw.pop('additional_config', {}),
+        return {
+            **super().app_config,
             'HSS_CONNECTION_STRING': pg_uri,
             'DB_HELIOS_IP_MASK': "10.10.7.%",
         }
-        test_app = super().create_app(*a, additional_config=conf, **kw)
-        return test_app
 
     def setUp(self, *a, **kw):
         super().setUp(*a, **kw)

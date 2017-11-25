@@ -23,7 +23,6 @@ class TestSampleUserCase(SampleFrontendTestBase):
     rows = expected_result.keys()
 
     def setUp(self):
-        self.User = sipa.model.sample.datasource.user_class
         self.user = self.User('test')
         self.sample_users = self.app.extensions['sample_users']
 

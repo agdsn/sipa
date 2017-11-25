@@ -1,0 +1,12 @@
+{% extends "base.html" %}#
+{% import "macros/forms.html" as forms %}
+{% set page_title = _("Cache-Nutzung ändern") %}
+
+{% block content %}
+{% call forms.render(form=form, form_id="change-use-cache-form", cancel_to=url_for('.index')) -%}
+        <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-warning">
+            {{ _('Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht helfen können.') }}
+        </div>
+{%-endcall %}
+
+{% endblock %}
