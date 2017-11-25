@@ -47,10 +47,7 @@ WU_LDAP_SEARCH_PASSWORD = None
 # DB_TRAFFIC_URI: not set
 
 # MySQL Helios configuration
-# DB_HELIOS_HOST: not set
-DB_HELIOS_PORT = 3306
-DB_HELIOS_USER = None
-DB_HELIOS_PASSWORD = None
+# DB_HELIOS_URI = None  # Must be set
 DB_HELIOS_IP_MASK = None
 
 SQL_TIMEOUT = 2

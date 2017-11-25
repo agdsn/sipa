@@ -47,10 +47,7 @@ class InitAtlantisTestCase(WuInitializationTestBase):
 
 class InitUserDBTestCase(WuInitializationTestBase):
     KEYS = {
-        'DB_HELIOS_USER': 'sipa',
-        'DB_HELIOS_PASSWORD': 'apis',
-        'DB_HELIOS_HOST': 'localhost',
-        'DB_HELIOS_PORT': '3306',
+        'DB_HELIOS_URI': 'mysql+pymysql://sipa:apis@localhost:3306/',
         'SQL_TIMEOUT': 5,
     }
 

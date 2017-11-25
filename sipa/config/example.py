@@ -64,10 +64,7 @@
 # DB_TRAFFIC_URI = None  # Must be set
 
 # MySQL Helios configuration
-# DB_HELIOS_HOST = "helios.agdsn"  # Must be set
-# DB_HELIOS_PORT = 3306
-# DB_HELIOS_USER = None
-# DB_HELIOS_PASSWORD = None
+# DB_HELIOS_URI = None  # Must be set
 # DB_HELIOS_IP_MASK = None
 
 # HSS_CONNECTION_STRING = "postgresql://user:pass@host:port/db"  # must be set
