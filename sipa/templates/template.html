@@ -25,7 +25,7 @@
     <hr />
 {% endblock %}
 
-{% block dynamic_content %}
+{% block sidebar %}
     {% if dynamic %}
         <div id="content">
             <div class="module">
@@ -64,6 +64,8 @@
             </div>
         </div>
     {% endif %}
+
+    {{ super() }}
 {% endblock %}
 
 {% block custom_script -%}

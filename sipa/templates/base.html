@@ -223,11 +223,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 </div>
 
                 <div id="sidebar" class="col-sm-3">
-                    <div id="content">
-                        {% block dynamic_content %}
-                        {% endblock %}
-                    </div>
-
+                    {% block sidebar %}
                     <div>
                         {% if not credit.foreign_user -%}
                             <div id="row-traffic">
@@ -364,6 +360,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             </div>
                         </div>
                     </div>
+                    {% endblock %}
                 </div>
 
 
