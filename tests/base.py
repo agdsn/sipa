@@ -122,6 +122,14 @@ class SampleFrontendTestBase(dynamic_frontend_base('sample')):
                   'password': 'test'},
         )
 
+    @property
+    def User(self):
+        return self.app.extensions['backends'].datasources[0].user_class
+
+    @property
+    def current_user(self):
+        return self.User.get('test')
+
     def logout(self):
         return self.client.get(
             url_for('generic.logout')

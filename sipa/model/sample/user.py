@@ -176,10 +176,12 @@ class User(BaseUser):
     def use_cache(self):
         if self.config[self.uid]['use_cache']:
             return {'value': "Aktiviert",
+                    'raw_value': True,
                     'style': 'success',
                     'empty': False,
                     }
         return {'value': "Deaktiviert",
+                'raw_value': False,
                 'empty': False}
 
     @use_cache.setter
