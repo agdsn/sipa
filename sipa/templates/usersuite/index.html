@@ -2,18 +2,12 @@
 {% set page_title = _('Usersuite von ') + current_user.realname.value %}
 
 {% block content %}
-    <div class="row"><div class="col-md-12">
-        {% include 'usersuite/_index_status.html' %}
-    </div></div>
+    {% include 'usersuite/_index_status.html' %}
     {% if show_traffic_data %}
-    <div class="row"><div class="col-md-12">
-        {% include '_traffic.html' %}
-    </div></div>
+    {% include '_traffic.html' %}
     {% endif %}
     {% if show_transaction_log %}
-    <div class="row"><div class="col-md-12">
-        {% include 'usersuite/_transaction_log.html' %}
-    </div></div>
+    {% include 'usersuite/_transaction_log.html' %}
     {% endif %}
 {% endblock %}
 
