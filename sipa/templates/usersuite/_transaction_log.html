@@ -6,7 +6,7 @@
     {%- endif %}
 {%- endmacro %}
 
-<h2 id="transaction-log">{{ _("Buchungen") }} <small>{{ _("Stand") }}: {{ last_update | date }}</small></h2>
+<h2 id="transaction-log">{{ _("Buchungen") }}</h2>
 <div class="panel panel-default">
     <table class="panel-body table table-hover">
         <thead>
@@ -24,9 +24,9 @@
             {% endfor %}
         </tbody>
         <tfoot>
-            <tr style="font-weight: bold">
-                <td>{{ _("Summe") }}:</td>
-                <td class="text-{{ value_context(balance) }}">{{ balance | money }}</td>
+            <tr>
+                <td><strong>{{ _("Summe") }}</strong> <em class="text-muted pull-right">{{ _("Stand") }} {{ last_update | date }}</em></td>
+                <td class="text-{{ value_context(balance) }}"><strong>{{ balance | money }}</strong></td>
             </tr>
         </tfoot>
     </table>
