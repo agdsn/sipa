@@ -1,0 +1,45 @@
+<h2 id="traffic">{{ _('Dein Traffic') }}</h2>
+
+<h3 id="traffic-table">{{ _('Traffic Tabelle') }}</h3>
+<div class="panel panel-default">
+    <table class="panel-body table table-striped">
+        <thead>
+            <tr>
+                <th>{{ _('Wochentag') }}</th>
+                <th>{{ _("Download") }}</th>
+                <th>{{ _("Upload") }}</th>
+                <th>{{ _("Gesamt") }}</th>
+                <th>{{ _("Credit") }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day in traffic_user.traffic_history %}
+                <tr>
+                    <td>{{ get_weekday(day['day']) }}</td>
+                    <td>{{ day['input'] | unit }}</td>
+                    <td>{{ day['output'] | unit }}</td>
+                    <td class="{{ day['throughput'] | traffic_color(traffic_user.daily_credit) }}">
+                        {{ day['throughput'] | unit }}
+                    </td>
+                    <td>{{ day['credit'] | unit }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td id="usersuite-traffic-sum" colspan="4">{{ _("Verbleibender Credit") }}</td>
+                <td>{{ traffic_user.credit | unit }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3 id="traffic-chart">{{ _('Traffic Diagramm') }}</h3>
+<div class="panel panel-default">
+    <div class="panel-body">
+    <figure id="trafficchart">
+        {{ traffic_chart(traffic_user.traffic_history)|safe }}
+    </figure>
+    <figure id="creditchart">
+        {{ credit_chart(traffic_user.traffic_history, max_credit=traffic_user.max_credit)|safe }}
+    </figure>
+    </div>
+</div>

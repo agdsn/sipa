@@ -2,20 +2,57 @@
 {% set page_title = _('Usersuite von ') + current_user.realname.value %}
 
 {% block content %}
-    <div class="row"><div class="col-md-8">
-        {% include 'usersuite/_index_status.html' %}
-        {% if show_traffic_data %}
-            {% include 'drafts/_traffic_overview.html' %}
-        {% endif %}
-    </div></div>
+    {% include 'usersuite/_index_status.html' %}
     {% if show_traffic_data %}
-    <div class="row"><div class="col-md-12">
-        {% include 'drafts/_traffic_chart.html' %}
-    </div></div>
+    {% include '_traffic.html' %}
+    {% endif %}
+    {% if show_transaction_log %}
+    {% include 'usersuite/_transaction_log.html' %}
     {% endif %}
 {% endblock %}
 
+{% block sidebar %}
+    <nav id="usersuite-sidebar-nav" class="hidden-xs hidden-print"></nav>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/bootstrap-toc.min.css") }}"/>
+    <style>
+        #usersuite-sidebar-nav .nav>li>a {
+            font-size: 20px;
+        }
+        #usersuite-sidebar-nav .nav .nav>li>a {
+            font-size: 19px;
+        }
+    </style>
+{% endblock %}
+
 {% block custom_script %}
+    <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap-toc.min.js") }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            var $selector = '#usersuite-sidebar-nav';
+            var $toc = $($selector);
+            var $parent = $toc.parent();
+            var offset = 60;
+            var $body = $('body');
+            Toc.init($toc);
+            $body.scrollspy({
+                target: $selector
+            });
+            $toc.affix({
+                offset: {
+                    top: function() {
+                        return $parent.offset().top - offset;
+                    }
+                }
+            });
+            // Handle window resize
+            $(window).resize(function(){
+                $toc.affix('checkPosition');
+            });
+        });
+    </script>
     <script type="text/javascript" src="{{ url_for("static", filename="js/svg.jquery.js") }}"></script>
     <script type="text/javascript" src="{{ url_for("static", filename="js/pygal-tooltips.js") }}"></script>
 {% endblock %}

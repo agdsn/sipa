@@ -1,0 +1,33 @@
+{% macro value_context(value) -%}
+    {% if value < 0 -%}
+        danger
+    {%- else -%}
+        success
+    {%- endif %}
+{%- endmacro %}
+
+<h2 id="transaction-log">{{ _("Buchungen") }}</h2>
+<div class="panel panel-default">
+    <table class="panel-body table table-hover">
+        <thead>
+            <tr>
+                <th>{{ _("Datum") }}</th> <th>{{ _("Wert") }}</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for date, value in logs %}
+                <tr class="{{ value_context(value) }}">
+                    <td>{{ date | date }}</td>
+                    <td>{{ value | money }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><strong>{{ _("Summe") }}</strong> <em class="text-muted pull-right">{{ _("Stand") }} {{ last_update | date }}</em></td>
+                <td class="text-{{ value_context(balance) }}"><strong>{{ balance | money }}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

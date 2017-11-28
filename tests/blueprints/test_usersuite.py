@@ -56,7 +56,7 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
         with patch('sipa.blueprints.usersuite.current_user'):
             urls = [
                 *(url_for(get_attribute_endpoint(attr))
-                  for attr in ['mail', 'mac', 'finance_balance', 'use_cache']),
+                  for attr in ['mail', 'mac', 'use_cache']),
                 *(url_for(get_attribute_endpoint(attr, capability='delete'))
                   for attr in ['mail']),
                 url_for('usersuite.change_password'),
@@ -83,17 +83,3 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
                                 data={'use_cache': "0"})
         self.assert_redirects(resp, url_for('usersuite.index'))
         self.assertEqual(self.current_user.use_cache, False)
-
-
-class FinanceLogsTestCase(SampleAuthenticatedTestBase):
-    def setUp(self):
-        super().setUp()
-        with patch('sipa.blueprints.usersuite.current_user'):
-            url = url_for(get_attribute_endpoint('finance_balance'))
-        self.rv = self.client.get(url)
-
-    def test_finance_logs_reachable(self):
-        self.assert200(self.rv)
-
-    def test_finance_logs_available(self):
-        self.assertTemplateUsed('usersuite/finance_logs.html')

@@ -1,14 +1,25 @@
-<h2>{{ _("Statusinformationen") }}</h2>
-<p>
+<h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
+<div class="btn-group">
     {% if current_user.can_change_password %}
-    <a href="{{ url_for('.change_password') }}" class="btn btn-primary">
-        <span class="glyphicon glyphicon-pencil"></span>
+    <a href="{{ url_for('.change_password') }}" class="btn btn-default">
+        <span class="glyphicon glyphicon-certificate"></span>
         {{ _("Passwort ändern") }}
     </a>
     {% else %}
     <a class="btn btn-default" disabled title="{{ _('Nicht unterstützt') }}">
         <span class="glyphicon glyphicon-pencil"></span>
         {{ _("Passwort ändern") }}
+    </a>
+    {% endif %}
+    {% if current_user.mac.capabilities.edit %}
+    <a href="{{ url_for('.change_mac') }}" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil"></span>
+        {{ _("MAC-Adresse ändern") }}
+    </a>
+    {% else %}
+    <a class="btn btn-default" disabled title="{{ _('Nicht unterstützt') }}">
+        <span class="glyphicon glyphicon-pencil"></span>
+        {{ _("MAC-Adresse ändern") }}
     </a>
     {% endif %}
     <a href="{{ url_for('.contact') }}" class="btn btn-default">
@@ -21,29 +32,39 @@
         {{ _("Webmailer") }}
     </a>
     {% endif %}
-</p>
+</div>
 
-<table class="table table-striped table-bordered table-hover">
-    <thead><tr><th>Eigenschaft</th><th>Wert</th></tr></thead>
-    {% for description, property in rows %}
-    <tr>
-        <td class="col-md-3">{{ description }}</td>
-        {%- set style = ("text-{}".format(property.style) if property.style else '') %}
-        <td class="col-md-3 {{ style }}">
-            {{ property.value }}
+<h2 id="status-information">{{ _("Statusinformationen") }}</h2>
+<div class="panel panel-default">
+    <table class="panel-body table table-striped table-hover">
+        <tbody>
+            {% for description, property in rows %}
+            <tr>
+                <td class="col-md-3">{{ description }}</td>
+                {%- set style = ("text-{}".format(property.style) if property.style else '') %}
+                <td class="col-md-3 {{ style }}">
+                    {{ property.value }}
 
-            {% if property.capabilities.edit %}
-                <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
-                    <span class="glyphicon glyphicon-pencil pull-right"></span>
-                </a>
-            {% endif %}
+                    {% if property.capabilities.edit and property.empty %}
+                        <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
+                            <span class="glyphicon glyphicon-plus pull-right"></span>
+                        </a>
+                    {% endif %}
 
-            {% if property.capabilities.delete and not property.empty %}
-                <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}">
-                    <span class="glyphicon glyphicon-remove pull-right"></span>
-                </a>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+                    {% if property.capabilities.edit and not property.empty %}
+                        <a href="{{ url_for(get_attribute_endpoint(property.name)) }}">
+                            <span class="glyphicon glyphicon-pencil pull-right"></span>
+                        </a>
+                    {% endif %}
+
+                    {% if property.capabilities.delete and not property.empty %}
+                        <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}">
+                            <span class="glyphicon glyphicon-remove pull-right"></span>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

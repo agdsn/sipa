@@ -13,22 +13,26 @@
 
     {% if commits %}
         <table class="table table-striped table-bordered col-md-8">
-            <thead><tr>
-                <th>{{ _("Datum des Commits") }}</th>
-                <th>{{ _("Hash") }}</th>
-                <th>{{ _("Beschreibung") }}</th>
-                <th>{{ _("Autor") }}</th>
-            </tr></thead>
-            {% for commit in commits %}
+            <thead>
                 <tr>
-                    <td>{{ commit['date'] }}</td>
-                    <td><a href="https://github.com/agdsn/sipa/commit/{{ commit['hexsha'] }}">
-                            {{ commit['hexsha'][:8] }}</a>
-                        </td>
-                    <td>{{ commit['message'] }}</td>
-                    <td>{{ commit['author'] }}</td>
+                    <th>{{ _("Datum des Commits") }}</th>
+                    <th>{{ _("Hash") }}</th>
+                    <th>{{ _("Beschreibung") }}</th>
+                    <th>{{ _("Autor") }}</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for commit in commits %}
+                    <tr>
+                        <td>{{ commit['date'] }}</td>
+                        <td><a href="https://github.com/agdsn/sipa/commit/{{ commit['hexsha'] }}">
+                                {{ commit['hexsha'][:8] }}</a>
+                            </td>
+                        <td>{{ commit['message'] }}</td>
+                        <td>{{ commit['author'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     {% endif %}
 {% endblock %}

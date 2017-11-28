@@ -35,8 +35,7 @@ class BaseFinanceInformation(metaclass=ABCMeta):
                                   raw_value=0, empty=True)
         return ActiveProperty('finance_balance',
                               value=format_money(self.raw_balance),
-                              raw_value=self.raw_balance,
-                              capabilities=Capabilities(edit=True, delete=False))
+                              raw_value=self.raw_balance)
 
     @property
     @abstractmethod
