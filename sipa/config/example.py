@@ -49,17 +49,11 @@
 # MAILSERVER_PORT = 25
 
 # LDAP configuration
-# WU_LDAP_HOST = "atlantis.agdsn"  # Must be set
-# WU_LDAP_PORT = 389
-# WU_LDAP_SEARCH_USER_BASE = None
-# WU_LDAP_SEARCH_GROUP_BASE = None
+# WU_LDAP_URI = "ldap://atlantis.agdsn"  # Must be set
+# WU_LDAP_SEARCH_USER_BASE = None  # Must be set
+# WU_LDAP_SEARCH_GROUP_BASE = None  # Must be set
 # WU_LDAP_SEARCH_USER = None
 # WU_LDAP_SEARCH_PASSWORD = None
-
-# MySQL configuration
-# DB_ATLANTIS_HOST = "atlantis.agdsn"  # Must be set
-# DB_ATLANTIS_USER = None
-# DB_ATLANTIS_PASSWORD = None
 
 # Userman configuration
 # Form: "[{driver}+]{dialect}://{user}:{pw}@{host}:{port}/{db}?connect_timeout={timeout}"
@@ -70,10 +64,7 @@
 # DB_TRAFFIC_URI = None  # Must be set
 
 # MySQL Helios configuration
-# DB_HELIOS_HOST = "helios.agdsn"  # Must be set
-# DB_HELIOS_PORT = 3306
-# DB_HELIOS_USER = None
-# DB_HELIOS_PASSWORD = None
+# DB_HELIOS_URI = None  # Must be set
 # DB_HELIOS_IP_MASK = None
 
 # HSS_CONNECTION_STRING = "postgresql://user:pass@host:port/db"  # must be set

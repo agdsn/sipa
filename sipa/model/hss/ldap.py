@@ -9,12 +9,10 @@ from sipa.model.exceptions import InvalidCredentials, UserNotFound
 logger = logging.getLogger(__name__)
 
 
-def get_ldap_connection(user, password, use_ssl=True):
+def get_ldap_connection(user, password):
     """Test method to establish an ldap connection"""
-    host = current_app.config['HSS_LDAP_HOST']
-    port = current_app.config['HSS_LDAP_PORT']
-    server = ldap3.Server(host, port, use_ssl=use_ssl,
-                          get_info=ldap3.ALL)
+    uri = current_app.config['HSS_LDAP_URI']
+    server = ldap3.Server(uri, get_info=ldap3.ALL)
     userdn_format = current_app.config['HSS_LDAP_USERDN_FORMAT']
 
     user_dn = (user if "dc=wh12,dc=tu-dresden,dc=de" in user
@@ -55,9 +53,7 @@ class BaseLdapConnector(ldap3.Connection, metaclass=ABCMeta):
             bind_user, bind_password = username, password
 
         self.server = ldap3.Server(
-            host=self.config['host'],
-            port=self.config['port'],
-            use_ssl=self.config.get('use_ssl', False),
+            self.config['uri'],
             **dict(self.DEFAULT_SERVER_ARGS, **server_args),
             # wu stuff:
             # get_info=ldap3.SCHEMA,
@@ -156,13 +152,11 @@ class HssConfigProxy:
         except RuntimeError:
             return {}
         return {
-            'host': conf['HSS_LDAP_HOST'],
-            'port': int(conf['HSS_LDAP_PORT']),
+            'uri': conf['HSS_LDAP_URI'],
             'userdn_format': conf['HSS_LDAP_USERDN_FORMAT'],
             'system_bind': conf['HSS_LDAP_SYSTEM_BIND'],
             'system_password': conf['HSS_LDAP_SYSTEM_PASSWORD'],
             'search_base': conf['HSS_LDAP_SEARCH_BASE'],
-            'use_ssl': conf.get('HSS_LDAP_USE_SSL', True),
         }
 
 

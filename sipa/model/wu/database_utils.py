@@ -47,11 +47,7 @@ def init_atlantis(app):
 def init_userdb(app):
     try:
         app.extensions['db_helios'] = create_engine(
-            'mysql+pymysql://{0}:{1}@{2}:{3}/'.format(
-                app.config['DB_HELIOS_USER'],
-                app.config['DB_HELIOS_PASSWORD'],
-                app.config['DB_HELIOS_HOST'],
-                int(app.config['DB_HELIOS_PORT'])),
+            app.config['DB_HELIOS_URI'],
             echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
         )
     except KeyError as exc:
