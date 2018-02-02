@@ -284,6 +284,9 @@ msgstr ""
 msgid "Cache-Nutzung wurde deaktiviert!"
 msgstr ""
 
+msgid "Infos zu den unterstützten Services und zur Funktionsweise des Caches findest Du hier."
+msgstr ""
+
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 

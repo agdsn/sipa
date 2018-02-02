@@ -291,6 +291,9 @@ msgstr "The cache service has been enabled."
 msgid "Cache-Nutzung wurde deaktiviert!"
 msgstr "The cache service has been disabled."
 
+msgid "Infos zu den unterstützten Services und zur Funktionsweise des Caches findest Du hier."
+msgstr "Information about supported services and how the cache works can be found here."
+
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
