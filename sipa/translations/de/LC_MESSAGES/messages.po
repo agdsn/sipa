@@ -1,13 +1,13 @@
 # German translations for sipa.
-# Copyright (C) 2017 AG DSN
+# Copyright (C) 2018 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-11-25 22:16+0100\n"
+"POT-Creation-Date: 2018-02-04 21:44+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.5.3\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -282,9 +282,6 @@ msgid "Cache-Nutzung wurde aktiviert!"
 msgstr ""
 
 msgid "Cache-Nutzung wurde deaktiviert!"
-msgstr ""
-
-msgid "Infos zu den unterstützten Services und zur Funktionsweise des Caches findest Du hier."
 msgstr ""
 
 msgid "Deine Datenbank wurde gelöscht."
@@ -576,9 +573,14 @@ msgid "Cache-Nutzung ändern"
 msgstr ""
 
 msgid ""
-"Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen "
-"kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird"
-" dir nicht helfen können."
+"Infos zu den unterstützten Services und zur Funktionsweise des Caches "
+"findest Du hier."
+msgstr ""
+
+msgid ""
+"Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. "
+"Sollten Probleme auftreten, kontaktiere uns, der Hersteller-Support wird "
+"dir nicht helfen können."
 msgstr ""
 
 msgid "Nachricht an die Sektionsadmins"
@@ -1294,5 +1296,13 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "In Miete inbegriffen"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Bitte beachte, dass diese Funktion "
+#~ "deinen Steam-Client beeinträchtigen kann. "
+#~ "Sollten Probleme auftreten, kontaktiere uns,"
+#~ " der Steam-Support wird dir nicht "
+#~ "helfen können."
 #~ msgstr ""
 
