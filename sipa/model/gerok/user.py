@@ -6,6 +6,7 @@ from functools import partial
 import requests
 from flask_login import AnonymousUserMixin
 from flask.globals import current_app
+from flask_babel import gettext
 from werkzeug.local import LocalProxy
 
 from sipa.model.user import BaseUser
@@ -218,6 +219,18 @@ class User(BaseUser):
 
     userdb = None
     finance_information = None
+
+    def payment_details(self):
+        return {
+            gettext("Zahlungsempfänger"): "Studentenrat TUD - AG DSN",
+            gettext("Bank"): "Ostsächsische Sparkasse Dresden",
+            gettext("IBAN"): "DE33 8505 0300 3120 2308 11",
+            gettext("BIC"): "OSDD DE 81 XXX",
+            gettext("Verwendungszweck"):
+                "gerok38/" +
+                + self.realname.value + ", "
+                + self.address.value,
+        }
 
 
 def do_api_call(request, method='get', postdata=None):

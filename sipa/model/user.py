@@ -295,6 +295,15 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
             return UnsupportedProperty('finance_balance')
         return info.balance
 
+    @abstractmethod
+    def payment_details(self):
+        """**[Abstract]** Payment details for the User.
+
+        :return A dict with beneficiary, IBAN, purpose etc.
+        :rtype: dict
+        """
+        pass
+
 
 class BaseUserDB(metaclass=ABCMeta):
     """An abstract base class defining an interface for a user's

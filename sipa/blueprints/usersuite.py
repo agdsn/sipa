@@ -123,6 +123,15 @@ def contact():
     return render_template("usersuite/contact.html", form=form)
 
 
+@bp_usersuite.route("/payment_details", methods=['GET'])
+@login_required
+def payment_details():
+    """Display the payment details for logged in users,
+    especially the purpose string to use.
+    """
+    return render_template("usersuite/payment_details.html", payment_details=current_user.payment_details())
+
+
 def get_attribute_endpoint(attribute, capability='edit'):
     """Try to determine the flask endpoint for the according property."""
     if capability == 'edit':

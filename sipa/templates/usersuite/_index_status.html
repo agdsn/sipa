@@ -32,6 +32,10 @@
         {{ _("Webmailer") }}
     </a>
     {% endif %}
+    <a href="{{ url_for('.payment_details') }}" class="btn btn-default">
+        <span class="glyphicon glyphicon-euro"></span>
+        {{ _("Zahlungsdetails") }}
+    </a>
 </div>
 
 <h2 id="status-information">{{ _("Statusinformationen") }}</h2>

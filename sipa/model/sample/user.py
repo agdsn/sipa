@@ -201,6 +201,14 @@ class User(BaseUser):
     def userdb_status(self):
         pass
 
+    def payment_details(self):
+        return {gettext("Zahlungsempfänger"): "Donald Duck",
+                gettext("Bank"): "Geldspeicher GbR",
+                gettext("IBAN"): "EH12432543209523",
+                gettext("BIC"): "ENTHAUS123",
+                gettext("Verwendungszweck"): self.id.value,
+                }
+
     userdb = None
 
     finance_information = SampleFinanceInformation()

@@ -351,6 +351,18 @@ class User(BaseUser):
             return NoNeedToPayInformation()
         return FinanceInformation(transactions=self._nutzer.transactions)
 
+    def payment_details(self):
+        return {
+            gettext("Zahlungsempfänger"): "Studentenrat TUD - AG DSN",
+            gettext("Bank"): "Ostsächsische Sparkasse Dresden",
+            gettext("IBAN"): "DE61 8505 0300 3120 2195 40",
+            gettext("BIC"): "OSDD DE 81 XXX",
+            gettext("Verwendungszweck"):
+                self.id.value + ", "
+                + self._nutzer.name.value + ", "
+                + self._nutzer.vname.value + ", "
+                + self.address.value,
+        }
 
 class NoNeedToPayInformation(BaseFinanceInformation):
     has_to_pay = False

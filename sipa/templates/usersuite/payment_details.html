@@ -1,0 +1,16 @@
+{% extends "base.html" %}#
+{% block content %}
+    <h2 id="status-information">{{ _("Zahlungsdetails") }}</h2>
+    <div class="panel panel-default">
+        <table class="panel-body table table-striped table-hover">
+            <tbody>
+                {% for key in payment_details %}
+                <tr>
+                    <td class="col-md-3">{{ key }}</td>
+                    <td class="col-md-3">{{ payment_details[key] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

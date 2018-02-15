@@ -277,6 +277,18 @@ class User(BaseUser):
     def finance_information(self):
         return FinanceInformation.from_pg_account(self._pg_account)
 
+    def payment_details(self):
+        return {
+            gettext("Zahlungsempfänger"): "Studentenrat TUD - AG DSN",
+            gettext("Bank"): "Ostsächsische Sparkasse Dresden",
+            gettext("IBAN"): "DE40 8505 0300 3120 2419 37",
+            gettext("BIC"): "OSDD DE 81 XXX",
+            gettext("Verwendungszweck"):
+                self.name.value + ", "
+                + self.realname.value + ", "
+                + self.address.value,
+        }
+
 
 class FinanceInformation(BaseFinanceInformation):
     has_to_pay = True

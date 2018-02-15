@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-04 21:44+0100\n"
-"PO-Revision-Date: 2018-02-04 21:46+0100\n"
+"POT-Creation-Date: 2018-02-16 00:43+0100\n"
+"PO-Revision-Date: 2018-02-16 00:44+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -309,6 +309,21 @@ msgstr "Unavailable"
 msgid "Beitrag in Miete inbegriffen"
 msgstr "Payment included in rental agreement"
 
+msgid "Zahlungsempfänger"
+msgstr "Beneficiary"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Verwendungszweck"
+msgstr "Purpose/Intended use"
+
 msgid "Aktiv"
 msgstr "Active"
 
@@ -548,6 +563,9 @@ msgstr "Change MAC address"
 
 msgid "Webmailer"
 msgstr "Webmailer"
+
+msgid "Zahlungsdetails"
+msgstr "Payment details"
 
 msgid "Statusinformationen"
 msgstr "Status information"
