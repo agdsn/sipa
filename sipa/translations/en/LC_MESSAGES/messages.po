@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-16 00:43+0100\n"
-"PO-Revision-Date: 2018-02-16 00:44+0100\n"
+"POT-Creation-Date: 2018-02-16 16:58+0100\n"
+"PO-Revision-Date: 2018-02-16 16:59+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -258,6 +258,21 @@ msgid ""
 "eine E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
 
+msgid "Zahlungsempfänger"
+msgstr "Beneficiary"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Verwendungszweck"
+msgstr "Purpose/Intended use"
+
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
 
@@ -308,21 +323,6 @@ msgstr "Unavailable"
 
 msgid "Beitrag in Miete inbegriffen"
 msgstr "Payment included in rental agreement"
-
-msgid "Zahlungsempfänger"
-msgstr "Beneficiary"
-
-msgid "Bank"
-msgstr "Bank"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "Verwendungszweck"
-msgstr "Purpose/Intended use"
 
 msgid "Aktiv"
 msgstr "Active"
@@ -672,6 +672,9 @@ msgstr "Change Password"
 
 msgid "Usersuite von "
 msgstr "Usersuite of "
+
+msgid "Zahlungsdetails für "
+msgstr "Payment details for "
 
 msgid "Traffic (MiB)"
 msgstr "Traffic (MiB)"

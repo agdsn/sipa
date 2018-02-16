@@ -142,6 +142,7 @@ def payment_details():
     """
     return render_template(
         "usersuite/payment_details.html",
+        realname=current_user.realname.value,
         payment_details=render_payment_details(current_user.payment_details())
     )
 

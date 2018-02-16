@@ -1,13 +1,13 @@
 {% extends "base.html" %}#
 {% block content %}
-    <h2 id="status-information">{{ _("Zahlungsdetails") }}</h2>
+    <h2 id="status-information">{{ _("Zahlungsdetails für ") + realname }}</h2>
     <div class="panel panel-default">
         <table class="panel-body table table-striped table-hover">
             <tbody>
-                {% for key in payment_details %}
+                {% for key, value in payment_details.items() %}
                 <tr>
                     <td class="col-md-3">{{ key }}</td>
-                    <td class="col-md-3">{{ payment_details[key] }}</td>
+                    <td class="col-md-3">{{ value }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
