@@ -283,13 +283,12 @@ class User(BaseUser):
             bank="Ostsächsische Sparkasse Dresden",
             iban="DE40 8505 0300 3120 2419 37",
             bic="OSDD DE 81 XXX",
-            purpose= "{uid}, {name}, {address}".format(
+            purpose="{uid}, {name}, {address}".format(
                 uid=self.name.value,
                 name=self.realname.value,
                 address=self.address.value,
             ),
         )
-
 
 
 class FinanceInformation(BaseFinanceInformation):
