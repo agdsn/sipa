@@ -5,6 +5,7 @@ from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
 from sipa.model.fancy_property import active_prop, UnsupportedProperty
+from sipa.model.misc import PaymentDetails
 
 
 # noinspection PyMethodMayBeStatic
@@ -296,7 +297,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         return info.balance
 
     @abstractmethod
-    def payment_details(self):
+    def payment_details(self) -> PaymentDetails:
         """**[Abstract]** Payment details for the User.
 
         :return A dict with beneficiary, IBAN, purpose etc.

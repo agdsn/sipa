@@ -17,6 +17,7 @@ from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
+from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
 
@@ -123,13 +124,26 @@ def contact():
     return render_template("usersuite/contact.html", form=form)
 
 
+def render_payment_details(details: PaymentDetails):
+    return {
+        gettext("Zahlungsempfänger"): details.recipient,
+        gettext("Bank"): details.bank,
+        gettext("IBAN"): details.iban,
+        gettext("BIC"): details.bic,
+        gettext("Verwendungszweck"): details.purpose,
+    }
+
+
 @bp_usersuite.route("/payment_details", methods=['GET'])
 @login_required
 def payment_details():
     """Display the payment details for logged in users,
     especially the purpose string to use.
     """
-    return render_template("usersuite/payment_details.html", payment_details=current_user.payment_details())
+    return render_template(
+        "usersuite/payment_details.html",
+        payment_details=render_payment_details(current_user.payment_details())
+    )
 
 
 def get_attribute_endpoint(attribute, capability='edit'):

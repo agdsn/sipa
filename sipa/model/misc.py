@@ -30,3 +30,6 @@ def xor_hashes(*elements):
         _hash ^= hash(element)
 
     return _hash
+
+
+PaymentDetails = namedtuple('PaymentDetails', 'recipient bank iban bic purpose')

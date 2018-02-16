@@ -12,6 +12,7 @@ from werkzeug.local import LocalProxy
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop
+from sipa.model.misc import PaymentDetails
 from sipa.utils import argstr
 from sipa.model.exceptions import PasswordInvalid, UserNotFound
 
@@ -221,16 +222,14 @@ class User(BaseUser):
     finance_information = None
 
     def payment_details(self):
-        return {
-            gettext("Zahlungsempfänger"): "Studentenrat TUD - AG DSN",
-            gettext("Bank"): "Ostsächsische Sparkasse Dresden",
-            gettext("IBAN"): "DE33 8505 0300 3120 2308 11",
-            gettext("BIC"): "OSDD DE 81 XXX",
-            gettext("Verwendungszweck"):
-                "gerok38/" +
-                + self.realname.value + ", "
-                + self.address.value,
-        }
+        return PaymentDetails(
+            recipient="Studentenrat TUD - AG DSN",
+            bank="Ostsächsische Sparkasse Dresden",
+            iban="DE33 8505 0300 3120 2308 11",
+            bic="OSDD DE 81 XXX",
+            purpose="gerok38/{name}/{address}".format(name=self.realname.value,
+                                                      address=self.address.value),
+        )
 
 
 def do_api_call(request, method='get', postdata=None):

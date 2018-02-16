@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.model.finance import BaseFinanceInformation
-from sipa.model.misc import compare_all_attributes
+from sipa.model.misc import compare_all_attributes, PaymentDetails
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP, AccountStatementLog, TrafficQuota
@@ -278,16 +278,18 @@ class User(BaseUser):
         return FinanceInformation.from_pg_account(self._pg_account)
 
     def payment_details(self):
-        return {
-            gettext("Zahlungsempfänger"): "Studentenrat TUD - AG DSN",
-            gettext("Bank"): "Ostsächsische Sparkasse Dresden",
-            gettext("IBAN"): "DE40 8505 0300 3120 2419 37",
-            gettext("BIC"): "OSDD DE 81 XXX",
-            gettext("Verwendungszweck"):
-                self.name.value + ", "
-                + self.realname.value + ", "
-                + self.address.value,
-        }
+        return PaymentDetails(
+            recipient="Studentenrat TUD - AG DSN",
+            bank="Ostsächsische Sparkasse Dresden",
+            iban="DE40 8505 0300 3120 2419 37",
+            bic="OSDD DE 81 XXX",
+            purpose= "{uid}, {name}, {address}".format(
+                uid=self.name.value,
+                name=self.realname.value,
+                address=self.address.value,
+            ),
+        )
+
 
 
 class FinanceInformation(BaseFinanceInformation):
