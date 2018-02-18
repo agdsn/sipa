@@ -64,7 +64,9 @@ def index():
         return redirect(url_for('generic.index'))
 
     datasource = current_user.datasource
-    context = dict(rows=rows, webmailer_url=datasource.webmailer_url)
+    context = dict(rows=rows,
+                   webmailer_url=datasource.webmailer_url,
+                   payment_details=render_payment_details(current_user.payment_details()))
 
     if current_user.has_connection:
         context.update(
@@ -132,19 +134,6 @@ def render_payment_details(details: PaymentDetails):
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
     }
-
-
-@bp_usersuite.route("/payment_details", methods=['GET'])
-@login_required
-def payment_details():
-    """Display the payment details for logged in users,
-    especially the purpose string to use.
-    """
-    return render_template(
-        "usersuite/payment_details.html",
-        realname=current_user.realname.value,
-        payment_details=render_payment_details(current_user.payment_details())
-    )
 
 
 def get_attribute_endpoint(attribute, capability='edit'):
