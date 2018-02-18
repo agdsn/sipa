@@ -284,7 +284,7 @@ class User(BaseUser):
             iban="DE40 8505 0300 3120 2419 37",
             bic="OSDD DE 81 XXX",
             purpose="{uid}, {name}, {address}".format(
-                uid=self.name.value,
+                uid=self.name,
                 name=self.realname.value,
                 address=self.address.value,
             ),
