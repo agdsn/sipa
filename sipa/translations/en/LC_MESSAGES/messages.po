@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-04 21:44+0100\n"
-"PO-Revision-Date: 2018-02-04 21:46+0100\n"
+"POT-Creation-Date: 2018-02-16 16:58+0100\n"
+"PO-Revision-Date: 2018-02-16 16:59+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -257,6 +257,21 @@ msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
 "eine E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
+
+msgid "Zahlungsempfänger"
+msgstr "Beneficiary"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Verwendungszweck"
+msgstr "Purpose/Intended use"
 
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
@@ -549,6 +564,9 @@ msgstr "Change MAC address"
 msgid "Webmailer"
 msgstr "Webmailer"
 
+msgid "Zahlungsdetails"
+msgstr "Payment details"
+
 msgid "Statusinformationen"
 msgstr "Status information"
 
@@ -654,6 +672,9 @@ msgstr "Change Password"
 
 msgid "Usersuite von "
 msgstr "Usersuite of "
+
+msgid "Zahlungsdetails für "
+msgstr "Payment details for "
 
 msgid "Traffic (MiB)"
 msgstr "Traffic (MiB)"

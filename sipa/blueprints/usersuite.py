@@ -17,6 +17,7 @@ from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound
+from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +64,9 @@ def index():
         return redirect(url_for('generic.index'))
 
     datasource = current_user.datasource
-    context = dict(rows=rows, webmailer_url=datasource.webmailer_url)
+    context = dict(rows=rows,
+                   webmailer_url=datasource.webmailer_url,
+                   payment_details=render_payment_details(current_user.payment_details()))
 
     if current_user.has_connection:
         context.update(
@@ -121,6 +124,16 @@ def contact():
     )
 
     return render_template("usersuite/contact.html", form=form)
+
+
+def render_payment_details(details: PaymentDetails):
+    return {
+        gettext("Zahlungsempfänger"): details.recipient,
+        gettext("Bank"): details.bank,
+        gettext("IBAN"): details.iban,
+        gettext("BIC"): details.bic,
+        gettext("Verwendungszweck"): details.purpose,
+    }
 
 
 def get_attribute_endpoint(attribute, capability='edit'):

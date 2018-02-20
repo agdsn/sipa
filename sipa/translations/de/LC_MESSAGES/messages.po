@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-04 21:44+0100\n"
+"POT-Creation-Date: 2018-02-16 16:58+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -249,6 +249,21 @@ msgstr ""
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an {}"
+msgstr ""
+
+msgid "Zahlungsempfänger"
+msgstr ""
+
+msgid "Bank"
+msgstr ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "Verwendungszweck"
 msgstr ""
 
 msgid "Altes Passwort war inkorrekt!"
@@ -535,6 +550,9 @@ msgstr ""
 msgid "Webmailer"
 msgstr ""
 
+msgid "Zahlungsdetails"
+msgstr ""
+
 msgid "Statusinformationen"
 msgstr ""
 
@@ -631,6 +649,9 @@ msgid "Passwort Ändern"
 msgstr ""
 
 msgid "Usersuite von "
+msgstr ""
+
+msgid "Zahlungsdetails für "
 msgstr ""
 
 msgid "Traffic (MiB)"

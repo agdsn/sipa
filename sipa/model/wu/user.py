@@ -14,6 +14,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sipa.model.user import BaseUser, BaseUserDB
 from sipa.model.fancy_property import active_prop, connection_dependent
 from sipa.model.finance import BaseFinanceInformation
+from sipa.model.misc import PaymentDetails
 from sipa.model.wu.database_utils import STATUS, ACTIVE_STATUS
 from sipa.model.wu.ldap_utils import LdapConnector, change_email, \
     change_password, search_in_group
@@ -350,6 +351,20 @@ class User(BaseUser):
         if self._nutzer.internet_by_rental:
             return NoNeedToPayInformation()
         return FinanceInformation(transactions=self._nutzer.transactions)
+
+    def payment_details(self):
+        return PaymentDetails(
+            recipient="Studentenrat TUD - AG DSN",
+            bank="Ostsächsische Sparkasse Dresden",
+            iban="DE61 8505 0300 3120 2195 40",
+            bic="OSDD DE 81 XXX",
+            purpose="{id}, {name}, {vname}, {address}".format(
+                id=self.id.value,
+                name=self._nutzer.name,
+                vname=self._nutzer.vname,
+                address=self.address.value,
+            ),
+        )
 
 
 class NoNeedToPayInformation(BaseFinanceInformation):

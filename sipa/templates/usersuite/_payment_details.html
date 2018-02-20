@@ -1,0 +1,13 @@
+<h2 id="payment-details">{{ _("Zahlungsdetails") }}</h2>
+<div class="panel panel-default">
+    <table class="panel-body table table-striped table-hover">
+        <tbody>
+            {% for key, value in payment_details.items() %}
+            <tr>
+                <td class="col-md-3">{{ key }}</td>
+                <td class="col-md-3">{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

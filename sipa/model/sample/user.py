@@ -10,6 +10,7 @@ from werkzeug import LocalProxy
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.model.finance import BaseFinanceInformation
+from sipa.model.misc import PaymentDetails
 from sipa.utils import argstr
 from sipa.model.exceptions import PasswordInvalid, UserNotFound
 
@@ -200,6 +201,15 @@ class User(BaseUser):
     @unsupported_prop
     def userdb_status(self):
         pass
+
+    def payment_details(self):
+        return PaymentDetails(
+            recipient="Donald Duck",
+            bank="Geldspeicher GbR",
+            iban="EH12432543209523",
+            bic="ENTHAUS123",
+            purpose=self.id.value,
+        )
 
     userdb = None
 

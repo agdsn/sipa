@@ -6,11 +6,13 @@ from functools import partial
 import requests
 from flask_login import AnonymousUserMixin
 from flask.globals import current_app
+from flask_babel import gettext
 from werkzeug.local import LocalProxy
 
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop
+from sipa.model.misc import PaymentDetails
 from sipa.utils import argstr
 from sipa.model.exceptions import PasswordInvalid, UserNotFound
 
@@ -218,6 +220,16 @@ class User(BaseUser):
 
     userdb = None
     finance_information = None
+
+    def payment_details(self):
+        return PaymentDetails(
+            recipient="Studentenrat TUD - AG DSN",
+            bank="Ostsächsische Sparkasse Dresden",
+            iban="DE33 8505 0300 3120 2308 11",
+            bic="OSDD DE 81 XXX",
+            purpose="gerok38/{name}/{address}".format(name=self.realname.value,
+                                                      address=self.address.value),
+        )
 
 
 def do_api_call(request, method='get', postdata=None):
