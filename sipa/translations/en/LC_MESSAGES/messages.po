@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-16 16:58+0100\n"
-"PO-Revision-Date: 2018-02-16 16:59+0100\n"
+"POT-Creation-Date: 2018-02-21 20:55+0100\n"
+"PO-Revision-Date: 2018-02-21 20:55+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -324,6 +324,9 @@ msgstr "Unavailable"
 msgid "Beitrag in Miete inbegriffen"
 msgstr "Payment included in rental agreement"
 
+msgid "Raumnummer"
+msgstr "Room number"
+
 msgid "Aktiv"
 msgstr "Active"
 
@@ -564,11 +567,11 @@ msgstr "Change MAC address"
 msgid "Webmailer"
 msgstr "Webmailer"
 
-msgid "Zahlungsdetails"
-msgstr "Payment details"
-
 msgid "Statusinformationen"
 msgstr "Status information"
+
+msgid "Zahlungsdetails"
+msgstr "Payment details"
 
 msgid "Buchungen"
 msgstr "Transactions"
@@ -673,9 +676,6 @@ msgstr "Change Password"
 msgid "Usersuite von "
 msgstr "Usersuite of "
 
-msgid "Zahlungsdetails für "
-msgstr "Payment details for "
-
 msgid "Traffic (MiB)"
 msgstr "Traffic (MiB)"
 
@@ -699,3 +699,6 @@ msgstr "Maximum"
 #~ "Please note, that this might cause problems with your clients. If there "
 #~ "are problems, get in touch with us, the service providers won't be able "
 #~ "to help."
+
+#~ msgid "Zahlungsdetails für "
+#~ msgstr "Payment details for "

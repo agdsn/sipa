@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-16 16:58+0100\n"
+"POT-Creation-Date: 2018-02-21 20:55+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -317,6 +317,9 @@ msgstr ""
 msgid "Beitrag in Miete inbegriffen"
 msgstr ""
 
+msgid "Raumnummer"
+msgstr ""
+
 msgid "Aktiv"
 msgstr ""
 
@@ -550,10 +553,10 @@ msgstr ""
 msgid "Webmailer"
 msgstr ""
 
-msgid "Zahlungsdetails"
+msgid "Statusinformationen"
 msgstr ""
 
-msgid "Statusinformationen"
+msgid "Zahlungsdetails"
 msgstr ""
 
 msgid "Buchungen"
@@ -649,9 +652,6 @@ msgid "Passwort Ändern"
 msgstr ""
 
 msgid "Usersuite von "
-msgstr ""
-
-msgid "Zahlungsdetails für "
 msgstr ""
 
 msgid "Traffic (MiB)"
@@ -1325,5 +1325,8 @@ msgstr ""
 #~ "Sollten Probleme auftreten, kontaktiere uns,"
 #~ " der Steam-Support wird dir nicht "
 #~ "helfen können."
+#~ msgstr ""
+
+#~ msgid "Zahlungsdetails für "
 #~ msgstr ""
 

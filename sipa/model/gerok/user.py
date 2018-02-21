@@ -227,8 +227,10 @@ class User(BaseUser):
             bank="Ostsächsische Sparkasse Dresden",
             iban="DE33 8505 0300 3120 2308 11",
             bic="OSDD DE 81 XXX",
-            purpose="gerok38/{name}/{address}".format(name=self.realname.value,
-                                                      address=self.address.value),
+            purpose="gerok38/{name}/{login}/{address}".format(name=self.realname.value,
+                                                              login=self.login.value,
+                                                              address=gettext("Raumnummer"),
+                                                              ),
         )
 
 
