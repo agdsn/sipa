@@ -5,9 +5,14 @@
     <div class="jumbotron">
         <h1>{{ _("Nanu?!") }}</h1>
         <p>{{ _("Fehler {} - {}").format(errorcode, message) }}</p>
-
-        <p><a class="btn btn-primary btn-lg" href="{{ url_for('generic.index') }}" role="button">
-                {{ _("Zur Hauptseite") }}
-        </a></p>
+        {%  if errorcode==401 %}
+            <p><a class="btn btn-primary btn-lg" href="{{ url_for('generic.login') }}" role="button">
+                    {{ _("Login") }}
+            </a></p>
+        {% else %}
+            <p><a class="btn btn-primary btn-lg" href="{{ url_for('generic.index') }}" role="button">
+                    {{ _("Zur Hauptseite") }}
+            </a></p>
+        {% endif %}
     </div>
 {% endblock %}
