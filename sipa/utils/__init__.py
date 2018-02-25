@@ -97,10 +97,12 @@ def url_self(**values):
     :return: A URL to the current endpoint
     """
     if request.endpoint is None:
-        raise RuntimeError("No endpoint available.")
+        endpoint = request.endpoint
+    else:
+        endpoint = 'generic.index'
     kw = request.view_args.copy()
     kw.update(values)
-    return url_for(request.endpoint, **kw)
+    return url_for(endpoint, **kw)
 
 
 def redirect_url(default='generic.index'):
