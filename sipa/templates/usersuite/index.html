@@ -25,6 +25,10 @@
         #usersuite-sidebar-nav .nav .nav>li>a {
             font-size: 19px;
         }
+        h2,h3 {
+            padding-top: 70px;
+            margin-top: -50px;
+        }
     </style>
 {% endblock %}
 
@@ -32,14 +36,15 @@
     <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap-toc.min.js") }}"></script>
     <script type="text/javascript">
         $(function() {
-            var $selector = '#usersuite-sidebar-nav';
-            var $toc = $($selector);
+            var selector = '#usersuite-sidebar-nav';
+            var $toc = $(selector);
             var $parent = $toc.parent();
             var offset = 60;
             var $body = $('body');
             Toc.init($toc);
             $body.scrollspy({
-                target: $selector
+                target: selector,
+                offset: offset
             });
             $toc.affix({
                 offset: {
