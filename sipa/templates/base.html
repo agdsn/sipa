@@ -138,7 +138,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     </ul>
 
                     <ul id="navbar-right-dropdown" class="nav navbar-nav navbar-right visible-md-block visible-sm-block">
-                        <li id="language-dropdown">
+                        <li>
                             <button id="language-dropdown-button" type="button" class="btn btn-default navbar-btn" data-toggle="dropdown">
                                 <span class="glyphicon glyphicon glyphicon-cog"></span>
                             </button>
@@ -149,7 +149,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                                 <li class="dropdown-header">{{ _("Sprache") }}</li>
 
-                                <li id="language-dropdown-small">
+                                <li>
                                     {%- for locale in possible_locales() %}
                                         <li {% if get_locale() == locale -%}
                                                  class="active"
@@ -171,7 +171,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     <ul id="navbar-right" class="nav navbar-nav navbar-right hidden-sm hidden-md">
                         {{ user_nav_items() }}
 
-                        <li id="language-dropdown">
+                        <li>
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
                                 <span class="caret"></span>
