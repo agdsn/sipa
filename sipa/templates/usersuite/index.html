@@ -36,14 +36,14 @@
     <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap-toc.min.js") }}"></script>
     <script type="text/javascript">
         $(function() {
-            var $selector = '#usersuite-sidebar-nav';
-            var $toc = $($selector);
+            var selector = '#usersuite-sidebar-nav';
+            var $toc = $(selector);
             var $parent = $toc.parent();
             var offset = 60;
             var $body = $('body');
             Toc.init($toc);
             $body.scrollspy({
-                target: $selector
+                target: selector,
             });
             $toc.affix({
                 offset: {
