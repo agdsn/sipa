@@ -7,11 +7,15 @@ disjoint from any blueprint.
 """
 from flask import request, session
 from flask_login import AnonymousUserMixin, LoginManager
+from flask_babel import gettext
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from sipa.model import backends
 
 login_manager = LoginManager()
+login_manager.login_view = "generic.login"
+login_manager.localize_callback = gettext
+login_manager.login_message = "Bitte melde Dich an, um die Seite zu sehen."
 
 
 class IntegerConverter(BaseIntegerConverter):
