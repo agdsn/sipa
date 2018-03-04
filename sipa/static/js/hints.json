@@ -4,6 +4,7 @@
     "patterns": [
       "forgot.{0,10}password",
       "can.?t.{0,10}login",
+      "change.{0,10}password",
       "reset.{0,10}password",
       "passwort.{0,10}vergessen",
       "kann.{0,10}nicht.{0,10}einloggen",
