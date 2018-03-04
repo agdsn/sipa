@@ -97,9 +97,9 @@ def url_self(**values):
     :return: A URL to the current endpoint
     """
     if request.endpoint is None:
-        endpoint = request.endpoint
-    else:
         endpoint = 'generic.index'
+    else:
+        endpoint = request.endpoint
     kw = request.view_args.copy()
     kw.update(values)
     return url_for(endpoint, **kw)
