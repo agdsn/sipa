@@ -15,7 +15,7 @@ env:
   global:
     - DOCKER_CACHE_FILE=/home/travis/docker/cache.tar.gz
     - DOCKER_IMAGE_NAME=sipa
-    - DOCKER_COMPOSE="docker-compose -f build/testing.yml"
+    - DOCKER_COMPOSE="docker-compose -f build/testing/docker-compose.yml"
 
 before_install:
   - apt-cache madison docker-engine
@@ -37,7 +37,7 @@ script:
 after_success:
   # we don't want to deploy from the testing compose file
   # due to the additional testing requirements in this image
-  - docker-compose -f build/development.yml build sipa
+  - docker-compose -f build/dev/docker-compose.yml build sipa
   - sudo ./helpers/registry.sh all
 
 before_cache:
