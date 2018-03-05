@@ -4,12 +4,12 @@
 
 {% block content %}
     {% call forms.render(form=form, form_id='anonymous_contact_form', reset_button=False, cancel_to=url_for('generic.index')) %}
+        <div id="hints" class="{{ form_input_offset_class }} {{ form_input_width_class }}">
+        </div>
         <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
             <strong>{{ _("Hinweis:") }}</strong>
             {{ _("Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
             "identifizieren und Deine Anfrage schneller bearbeiten!") }}
-            {{ _("Außerdem kannst Du in Deinen Einstellungen bereits einige Daten "
-            "wie z.B. die MAC-Adresse selbstständig ändern.") }}
             <div>
                 <span class="glyphicon glyphicon-share-alt"></span>
                 {% if current_user.is_authenticated -%}

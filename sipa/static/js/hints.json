@@ -1,0 +1,44 @@
+[
+  {
+    "not_in_dorm": [],
+    "patterns": [
+      "forgot.{0,10}password",
+      "can.?t.{0,10}login",
+      "change.{0,10}password",
+      "reset.{0,10}password",
+      "passwort.{0,10}vergessen",
+      "kann.{0,10}nicht.{0,10}einloggen",
+      "passwort.{0,10}zurücksetzen"
+    ],
+    "hint": {
+      "de":"Wir können dein Passwort nicht zurücksetzen ohne dich zu identifizieren. Bitte komme mit einem Lichtbildausweis zu einer unserer <a href='pages/support/contacts'>Sprechstunden</a>",
+      "en":"We can't reset your password without identifying you first. Please come with an id card to one of our <a href='pages/support/contacts'>office hours</a>"
+    }
+  },
+  {
+    "not_in_dorm": ["hss", "ger"],
+    "patterns": [
+      "change.{0,10}mac",
+      "mac.{0,10}address",
+      "mac.{0,10}ändern",
+      "mac.{0,10}adresse"
+    ],
+    "hint": {
+      "de": "Du kannst deine MAC-Adresse auch selbst ändern wenn du <a href='login'>dich einloggst.</a>",
+      "en": "You can change your MAC address yourself if you are <a href='login'>logged in.</a>"
+    }
+  },
+  {
+    "not_in_dorm": ["ger"],
+    "patterns": [
+      "balance",
+      "transfer",
+      "überweis",
+      "überwies"
+    ],
+    "hint": {
+      "de": "Wenn du wissen möchtest für wie viele Monate du deinen Mitgliedschaftsbeitrag noch bezahlt hast kannst du das <a href='login'>eingeloggt</a> selbst tun. Beachte aber, dass Banküberweisungen einige Tage dauern können.",
+      "en": "If you want to know your balance you can check it yourself after <a href='login'>logging in</a>. Please be aware that bank transfers can take some days."
+    }
+  }
+]

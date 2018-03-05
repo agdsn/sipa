@@ -57,6 +57,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-social.css') }}"/>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
         {% block custom_css %}{% endblock %}
+
+        <script type="application/json" id="locale">
+            {{ get_locale() | string | tojson }}
+        </script>
     </head>
 
     <body>
