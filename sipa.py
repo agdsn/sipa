@@ -10,8 +10,12 @@
 """
 
 import argparse
+import logging
 
 from sipa import create_app
+
+logger = logging.getLogger(__name__)
+logger.info('Starting sipa...')
 
 
 if __name__ == "__main__":
@@ -24,10 +28,6 @@ if __name__ == "__main__":
                         help="tcp port to use", type=int, default=5000)
     args = parser.parse_args()
 
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.info('Starting sipa...')
-
     def preparation(app):
         if args.debug:
             app.debug = True
@@ -37,4 +37,13 @@ if __name__ == "__main__":
     app.run(debug=args.debug, host=args.host, port=args.port)
 
 else:
+    # __name__ == 'uwsgi_file_sipa'
+    import uwsgi
+    debug = uwsgi.opt.get('debug', False)
     app = create_app()
+    if debug:
+        logger.warning("Running in debug mode")
+        app.debug = True
+        from werkzeug.debug import DebuggedApplication
+        app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
+    # app will now be used by `uwsgi`

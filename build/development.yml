@@ -1,18 +1,11 @@
 version: '2'
 services:
-  sipa_debug:
-    build:
-      context: ..
-      dockerfile: build/Dockerfile
-    command: python sipa.py --debug --exposed
-    volumes:
-      - ../:/home/sipa/sipa
   sipa:
     build:
       context: ..
       dockerfile: build/Dockerfile
     image: sipa  # tag of the built image
-    command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa
+    command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa --set debug=True --set py-autoreload=1
     volumes:
       - ../:/home/sipa/sipa
   nginx:
@@ -24,4 +17,3 @@ services:
       - "80:80"
     links:
       - sipa
-      - sipa_debug
