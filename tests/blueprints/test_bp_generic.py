@@ -1,5 +1,6 @@
 import logging
 from functools import partial
+from urllib.parse import urljoin
 
 from flask import abort, url_for
 from tests.base import SampleFrontendTestBase, FormTemplateTestMixin
@@ -130,3 +131,11 @@ class OfficialContactTestCase(FormTemplateTestMixin, ContactFormTestBase):
             {**self.valid_data[0], 'subject': ''},
             {**self.valid_data[0], 'message': ''},
         ]
+
+
+class InexistentUrlTest(SampleFrontendTestBase):
+    def test_nonexistent_url_returns_404(self):
+        fake_url = urljoin(url_for('generic.index'), "nonexistent")
+        response = self.client.get(fake_url)
+        self.assert404(response)
+        self.assertIsNone(response.location)
