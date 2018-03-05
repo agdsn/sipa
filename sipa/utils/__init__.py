@@ -100,7 +100,9 @@ def url_self(**values):
         endpoint = 'generic.index'
     else:
         endpoint = request.endpoint
-    kw = request.view_args.copy()
+    # if no endpoint matches the given URL, `request.view_args` is
+    # ``None``, not ``{}``
+    kw = request.view_args.copy() if request.view_args is not None else {}
     kw.update(values)
     return url_for(endpoint, **kw)
 
