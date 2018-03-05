@@ -2,7 +2,7 @@ version: '2'
 services:
   sipa_testing_base:
     build:
-      context: ..
+      context: ../..
       dockerfile: build/Dockerfile
       args:
         additional_requirements: requirements_testing.txt
@@ -29,7 +29,7 @@ services:
     volumes:
       # Note: ../ is relative to the path of the .yml
       # Thus: be careful with symlinks!
-      - ../:/home/sipa/sipa
+      - ../..:/home/sipa/sipa
     links:
       - postgres
       - ldap_hss

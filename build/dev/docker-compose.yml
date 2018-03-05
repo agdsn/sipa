@@ -2,16 +2,16 @@ version: '2'
 services:
   sipa:
     build:
-      context: ..
+      context: ../..
       dockerfile: build/Dockerfile
     image: sipa  # tag of the built image
     command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa --set debug=True --set py-autoreload=1
     volumes:
-      - ../:/home/sipa/sipa
+      - ../..:/home/sipa/sipa
   nginx:
     image: nginx
     volumes:
-      - ../example/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../../example/nginx.conf:/etc/nginx/nginx.conf:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
     ports:
       - "80:80"
