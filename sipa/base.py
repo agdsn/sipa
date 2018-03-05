@@ -6,16 +6,14 @@ These are basic utilities necessary for the Flask app which are
 disjoint from any blueprint.
 """
 from flask import request, session
-from flask_login import AnonymousUserMixin, LoginManager
-from flask_babel import gettext
+from flask_login import AnonymousUserMixin
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
+from sipa.login_manager import SipaLoginManager
 from sipa.model import backends
 
-login_manager = LoginManager()
+login_manager = SipaLoginManager()
 login_manager.login_view = "generic.login"
-login_manager.localize_callback = gettext
-login_manager.login_message = "Bitte melde Dich an, um die Seite zu sehen."
 
 
 class IntegerConverter(BaseIntegerConverter):
@@ -33,9 +31,6 @@ class IntegerConverter(BaseIntegerConverter):
 def load_user(username):
     """Loads a User object from/into the session at every request
     """
-    if request.blueprint == "documents" or request.endpoint == "static":
-        return AnonymousUserMixin()
-
     dormitory = backends.get_dormitory(session.get('dormitory', None))
     if dormitory:
         return dormitory.datasource.user_class.get(username)

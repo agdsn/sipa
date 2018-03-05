@@ -157,6 +157,8 @@ def login():
         flash_formerrors(form)
 
     if current_user.is_authenticated:
+        # `url_redirect` would not be bad here because this would allow for URL
+        # injection using the `next` parameter
         return redirect(url_for('usersuite.index'))
 
     return render_template('login.html', form=form,

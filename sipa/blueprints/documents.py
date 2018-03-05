@@ -6,6 +6,9 @@ from flask import Blueprint, send_from_directory, current_app
 from flask_login import current_user
 from flask.views import View
 
+from sipa.base import login_manager
+
+
 bp_documents = Blueprint('documents', __name__)
 
 
@@ -30,14 +33,15 @@ class StaticFiles(View):
 bp_documents.add_url_rule('/images/<path:filename>',
                           view_func=StaticFiles.as_view('show_image',
                                                         '../content/images'))
-
+login_manager.ignore_endpoint('documents.show_image')
 
 bp_documents.add_url_rule('/documents/<path:filename>',
                           view_func=StaticFiles.as_view('show_document',
                                                         '../content/documents'))
+login_manager.ignore_endpoint('documents.show_document')
 
 
-bp_documents.add_url_rule('/documents/restricted/<path:filename>',
+bp_documents.add_url_rule('/documents_restricted/<path:filename>',
                           view_func=StaticFiles.as_view('show_document_restricted',
-                                                        '../content/documents/restricted',
-                                                        True))
+                                                        '../content/documents_restricted',
+                                                        login_required=True))

@@ -23,3 +23,14 @@ class TestSipaFrontendCase(AppInitialized):
     def test_root_redirect(self):
         response = self.client.get('/')
         self.assert_redirects(response, url_for('news.show'))
+
+    def test_restricted_area(self):
+        response = self.client.get('/documents_restricted/fake-doc.txt')
+        self.assert_redirects(
+            response,
+            url_for('generic.login', next='/documents_restricted/fake-doc.txt')
+        )
+
+    def test_unrestricted_area(self):
+        response = self.client.get('/documents/fake-doc.txt')
+        self.assert404(response)
