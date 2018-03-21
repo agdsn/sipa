@@ -223,7 +223,19 @@ class User(BaseUser):
 
     @active_prop
     def mac(self):
-        return ", ".join(mac.mac.lower() for mac in self._pg_account.macs)
+        return {'value': ", ".join(mac.mac.lower() for mac in self._pg_account.macs),
+                'tmp_readonly': len(self._pg_account.macs) > 1}
+
+    @mac.setter
+    def mac(self, new_mac):
+        # if this has been reached despite `tmp_readonly`, this is a bug.
+        assert len(self._pg_account.macs) == 1 or not self.has_connection
+
+        mac = self._pg_account.macs[0]
+        mac.mac = new_mac
+
+        db.session.add(mac)
+        db.session.commit()
 
     @active_prop
     def mail(self):
