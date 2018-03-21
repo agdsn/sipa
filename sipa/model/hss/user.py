@@ -271,7 +271,7 @@ class User(BaseUser):
 
     @property
     def has_connection(self):
-        return self._pg_account.properties.active
+        return True
 
     @property
     def finance_information(self):
