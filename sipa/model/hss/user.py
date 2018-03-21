@@ -253,7 +253,7 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        if self.has_connection:
+        if self._pg_account.properties.active:
             return gettext("Aktiv")
         return gettext("Passiv")
 
