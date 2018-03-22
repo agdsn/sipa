@@ -6,14 +6,14 @@ These are basic utilities necessary for the Flask app which are
 disjoint from any blueprint.
 """
 from flask import request, session
-from flask_login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin, LoginManager
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
-from sipa.login_manager import SipaLoginManager
 from sipa.backends import backends
 
-login_manager = SipaLoginManager()
+login_manager = LoginManager()
 login_manager.login_view = "generic.login"
+login_manager.login_message = "Bitte melde Dich an, um die Seite zu sehen."
 
 
 class IntegerConverter(BaseIntegerConverter):
