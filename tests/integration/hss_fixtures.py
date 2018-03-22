@@ -16,6 +16,7 @@ class HSSOneAccountFixture:
                     name="Sipa Tinator",
                     traffic_balance=105*1024**3,
                     access_id=1,
+                    use_cache=False,
                 ),
             ]),
             (AccountProperty, [
@@ -133,11 +134,13 @@ class HSSAccountsWithPropertiesFixture:
                     account='sipatinator',
                     name="Sipa Tinator",
                     traffic_balance=105*1024**3,
+                    use_cache=False,
                 ),
                 Account(
                     account='active_user',
                     name="Active user",
                     traffic_balance=105*1024**3,
+                    use_cache=False,
                 ),
             ]),
             (AccountProperty, [
