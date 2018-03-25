@@ -27,7 +27,6 @@ class Account(db.Model):
     traffic_log = relationship('TrafficLog')
     traffic_quota_id = Column('traffic_quota', Integer, ForeignKey('traffic_quota.id'))
     # traffic_quota is available using a backref
-    use_cache = Column(Boolean, nullable=False)
 
     properties = relationship('AccountProperty', uselist=False)
 
