@@ -231,11 +231,11 @@ class UsersActiveTestCase(
         super().setUp()
         self.accounts = self.session.query(Account).all()
 
-    def test_user_is_active_or_not(self):
+    def test_user_is_connected_or_not(self):
         for account in self.accounts:
             with self.subTest(account=account):
                 user = User.get(account.account)
-                self.assertEqual(user.has_connection, account.properties.active)
+                self.assertTrue(user.has_connection)
 
     def test_active_user_status_correct(self):
         for account in self.accounts:
