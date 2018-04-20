@@ -569,6 +569,12 @@ msgstr "Status information"
 msgid "Zahlungsdetails"
 msgstr "Payment details"
 
+msgid "Giro-Code"
+msgstr ""
+
+msgid "Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
+msgstr "Scan this QR-Code to import the payment details into your banking app."
+
 msgid "Buchungen"
 msgstr "Transactions"
 

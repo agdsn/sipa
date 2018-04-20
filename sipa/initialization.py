@@ -9,6 +9,7 @@ from raven import setup_logging
 from raven.contrib.flask import Sentry
 from raven.handlers.logging import SentryHandler
 from werkzeug.contrib.fixers import ProxyFix
+from flask_qrcode import QRcode
 
 from sipa.babel import possible_locales, save_user_locale_setting, select_locale
 from sipa.base import IntegerConverter, login_manager
@@ -50,6 +51,7 @@ def init_app(app, **kwargs):
     cf_pages.init_app(app)
     backends = Backends()
     backends.init_app(app)
+    QRcode(app)
 
     app.url_map.converters['int'] = IntegerConverter
 

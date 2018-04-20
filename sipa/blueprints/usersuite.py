@@ -66,7 +66,8 @@ def index():
     datasource = current_user.datasource
     context = dict(rows=rows,
                    webmailer_url=datasource.webmailer_url,
-                   payment_details=render_payment_details(current_user.payment_details()))
+                   payment_details=render_payment_details(current_user.payment_details()),
+                   girocode=generate_epc_qr_code(current_user.payment_details()))
 
     if current_user.has_connection:
         context.update(
@@ -134,6 +135,16 @@ def render_payment_details(details: PaymentDetails):
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
     }
+
+
+def generate_epc_qr_code(details: PaymentDetails):
+    # generate content for epc-qr-code (also known as giro-code)
+    return "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n".format(
+        bic=details.bic,
+        recipient=details.recipient,
+        iban=details.iban,
+        amount=5.00,
+        purpose=details.purpose)
 
 
 def get_attribute_endpoint(attribute, capability='edit'):

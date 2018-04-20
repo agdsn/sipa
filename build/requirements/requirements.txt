@@ -16,3 +16,4 @@ PyMySQL~=0.7.11
 blinker~=1.4.0
 factory-boy~=2.9.2
 psycopg2~=2.7.3
+Flask-QRcode~=2.0.2

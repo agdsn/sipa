@@ -557,6 +557,12 @@ msgstr ""
 msgid "Zahlungsdetails"
 msgstr ""
 
+msgid "Giro-Code"
+msgstr ""
+
+msgid "Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
+msgstr ""
+
 msgid "Buchungen"
 msgstr ""
 
