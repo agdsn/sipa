@@ -12,7 +12,7 @@ from flask_login import current_user, login_required
 
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
-    ChangeUseCacheForm
+    ChangeUseCacheForm, PaymentForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
 
-@bp_usersuite.route("/")
+@bp_usersuite.route("/", methods=['GET','POST'])
 @login_required
 def index():
     """Usersuite landing page with user account information
@@ -63,11 +63,14 @@ def index():
               "error")
         return redirect(url_for('generic.index'))
 
+    payment_form = PaymentForm()
+    months = payment_form.months.data
+
     datasource = current_user.datasource
     context = dict(rows=rows,
                    webmailer_url=datasource.webmailer_url,
-                   payment_details=render_payment_details(current_user.payment_details()),
-                   girocode=generate_epc_qr_code(current_user.payment_details()))
+                   payment_details=render_payment_details(current_user.payment_details(), months),
+                   girocode=generate_epc_qr_code(current_user.payment_details(), months))
 
     if current_user.has_connection:
         context.update(
@@ -83,7 +86,7 @@ def index():
             logs=info.history,
         )
 
-    return render_template("usersuite/index.html", **context)
+    return render_template("usersuite/index.html", payment_form=payment_form, **context)
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])
@@ -127,23 +130,24 @@ def contact():
     return render_template("usersuite/contact.html", form=form)
 
 
-def render_payment_details(details: PaymentDetails):
+def render_payment_details(details: PaymentDetails, months):
     return {
         gettext("Zahlungsempfänger"): details.recipient,
         gettext("Bank"): details.bank,
         gettext("IBAN"): details.iban,
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
+        gettext("Betrag"): "{} €".format(months*5.00),
     }
 
 
-def generate_epc_qr_code(details: PaymentDetails):
+def generate_epc_qr_code(details: PaymentDetails, months):
     # generate content for epc-qr-code (also known as giro-code)
     return "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n".format(
         bic=details.bic,
         recipient=details.recipient,
         iban=details.iban,
-        amount=5.00,
+        amount=months*5.00,
         purpose=details.purpose)
 
 

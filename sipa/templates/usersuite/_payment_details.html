@@ -1,4 +1,10 @@
 <h2 id="payment-details">{{ _("Zahlungsdetails") }}</h2>
+<form action="#payment-details" method="post">
+    {{ _("Beitrag für") }}
+    {{ payment_form.months(class_="form-control",style="width:100px;display:inline;") }}
+    {{ _("Monat(e) zahlen.") }}
+    <button type="submit">{{ _("aktualisieren") }}</button><br>
+</form>
 <div class="panel panel-default">
     <table class="panel-body table table-striped table-hover">
         <tbody>

@@ -270,6 +270,9 @@ msgstr "IBAN"
 msgid "BIC"
 msgstr "BIC"
 
+msgid "Betrag"
+msgstr "Amount"
+
 msgid "Verwendungszweck"
 msgstr "Purpose/Intended use"
 
@@ -569,11 +572,23 @@ msgstr "Status information"
 msgid "Zahlungsdetails"
 msgstr "Payment details"
 
+msgid "Beitrag für"
+msgstr "Pay membership contribution for"
+
+msgid "Monat(e) zahlen."
+msgstr "month(s)."
+
+msgid "aktualisieren"
+msgstr "update"
+
 msgid "Giro-Code"
 msgstr ""
 
 msgid "Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
 msgstr "Scan this QR-Code to import the payment details into your banking app."
+
+msgid "Muss mindestens 1 Monat sein."
+msgstr "Has to be at least 1 month."
 
 msgid "Buchungen"
 msgstr "Transactions"

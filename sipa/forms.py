@@ -7,9 +7,9 @@ from flask import flash
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField, RadioField)
+                     StringField, TextAreaField, RadioField, IntegerField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
-                                MacAddress, Regexp, ValidationError)
+                                MacAddress, Regexp, ValidationError, NumberRange)
 
 from sipa.model import backends
 
@@ -226,6 +226,10 @@ class HostingForm(FlaskForm):
                 message=lazy_gettext("Neue Passwörter stimmen nicht überein!"))
     ])
     action = HiddenField()
+
+
+class PaymentForm(FlaskForm):
+    months = IntegerField(default=1)
 
 
 def flash_formerrors(form):
