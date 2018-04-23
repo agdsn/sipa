@@ -15,7 +15,7 @@ if (window.location.pathname.endsWith("contact")) {
             };
         });
     });
-    $("#message").keypress(function () {
+    $("#message").on("input", function () {
         var applicable = hints.filter(function (hint) {
             var contains = hint.patterns.some(function (pattern) {
                 return pattern.test($("#message").val())
