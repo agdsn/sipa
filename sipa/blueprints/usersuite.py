@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
 
-@bp_usersuite.route("/", methods=['GET','POST'])
+@bp_usersuite.route("/", methods=['GET', 'POST'])
 @login_required
 def index():
     """Usersuite landing page with user account information
@@ -73,7 +73,8 @@ def index():
     datasource = current_user.datasource
     context = dict(rows=rows,
                    webmailer_url=datasource.webmailer_url,
-                   payment_details=render_payment_details(current_user.payment_details(), months),
+                   payment_details=render_payment_details(current_user.payment_details(),
+                                                          months),
                    girocode=generate_epc_qr_code(current_user.payment_details(), months))
 
     if current_user.has_connection:
@@ -141,17 +142,20 @@ def render_payment_details(details: PaymentDetails, months):
         gettext("IBAN"): details.iban,
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): "{:.2f} €".format(months*5.00),
+        gettext("Betrag"): "{:.2f} €".format(months * 5.00),
     }
 
 
 def generate_epc_qr_code(details: PaymentDetails, months):
     # generate content for epc-qr-code (also known as giro-code)
-    return "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n".format(
+    EPC_FORMAT = \
+        "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n"
+
+    return EPC_FORMAT.format(
         bic=details.bic,
         recipient=details.recipient,
         iban=details.iban,
-        amount=months*5.00,
+        amount=months * 5.00,
         purpose=details.purpose)
 
 
