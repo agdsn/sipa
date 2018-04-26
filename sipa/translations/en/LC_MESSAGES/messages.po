@@ -152,6 +152,12 @@ msgstr "No password submitted!"
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
+msgid "Monate"
+msgstr "Months"
+
+msgid "Muss mindestens 1 Monat sein."
+msgstr "Has to be at least 1 month."
+
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr "Please log in to view this site."
 
@@ -586,9 +592,6 @@ msgstr ""
 
 msgid "Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
 msgstr "Scan this QR-Code to import the payment details into your banking app."
-
-msgid "Muss mindestens 1 Monat sein."
-msgstr "Has to be at least 1 month."
 
 msgid "Buchungen"
 msgstr "Transactions"

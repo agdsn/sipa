@@ -147,6 +147,12 @@ msgstr ""
 msgid "Anmeldung merken"
 msgstr ""
 
+msgid "Monate"
+msgstr ""
+
+msgid "Muss mindestens 1 Monat sein."
+msgstr ""
+
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
@@ -573,9 +579,6 @@ msgid "Giro-Code"
 msgstr ""
 
 msgid "Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
-msgstr ""
-
-msgid "Muss mindestens 1 Monat sein."
 msgstr ""
 
 msgid "Buchungen"

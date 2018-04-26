@@ -1,5 +1,6 @@
 <h2 id="payment-details">{{ _("Zahlungsdetails") }}</h2>
 <form action="#payment-details" method="post">
+    {{ payment_form.csrf_token }}
     {{ _("Beitrag für") }}
     {{ payment_form.months(class_="form-control",style="width:100px;display:inline;") }}
     {{ _("Monat(e) zahlen.") }}

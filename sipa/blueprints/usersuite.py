@@ -64,7 +64,11 @@ def index():
         return redirect(url_for('generic.index'))
 
     payment_form = PaymentForm()
-    months = payment_form.months.data
+    if payment_form.validate_on_submit():
+        months = payment_form.months.data
+    else:
+        months = payment_form.months.default
+        flash_formerrors(payment_form)
 
     datasource = current_user.datasource
     context = dict(rows=rows,

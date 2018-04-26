@@ -229,7 +229,9 @@ class HostingForm(FlaskForm):
 
 
 class PaymentForm(FlaskForm):
-    months = IntegerField(default=1)
+    months = IntegerField(lazy_gettext("Monate"), default=1,
+                          validators=[NumberRange(min=1, message=lazy_gettext(
+                              "Muss mindestens 1 Monat sein."))])
 
 
 def flash_formerrors(form):
