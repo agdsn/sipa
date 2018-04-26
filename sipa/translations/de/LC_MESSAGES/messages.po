@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-19 16:13+0100\n"
+"POT-Creation-Date: 2018-04-26 11:19+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -269,10 +269,10 @@ msgstr ""
 msgid "BIC"
 msgstr ""
 
-msgid "Betrag"
+msgid "Verwendungszweck"
 msgstr ""
 
-msgid "Verwendungszweck"
+msgid "Betrag"
 msgstr ""
 
 msgid "Altes Passwort war inkorrekt!"
@@ -569,16 +569,18 @@ msgstr ""
 msgid "Beitrag für"
 msgstr ""
 
+msgid "Aktualisieren"
+msgstr ""
+
 msgid "Monat(e) zahlen."
 msgstr ""
 
-msgid "aktualisieren"
+msgid "GiroCode"
 msgstr ""
 
-msgid "Giro-Code"
-msgstr ""
-
-msgid "Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
+msgid ""
+"Nutze den GiroCode, um die Überweisungsdaten automatisch in deine "
+"Banking-App zu übernehmen."
 msgstr ""
 
 msgid "Buchungen"

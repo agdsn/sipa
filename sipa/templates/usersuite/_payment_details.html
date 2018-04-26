@@ -1,11 +1,16 @@
 <h2 id="payment-details">{{ _("Zahlungsdetails") }}</h2>
-<form action="#payment-details" method="post">
+<form action="#payment-details" method="post" class="form-inline">
     {{ payment_form.csrf_token }}
     {{ _("Beitrag für") }}
-    {{ payment_form.months(class_="form-control",style="width:100px;display:inline;") }}
+    <div class="input-group">
+        {{ payment_form.months(class_="form-control", size="2") }}
+        <span class="input-group-btn">
+            <button type="submit" class="btn btn-default">{{ _("Aktualisieren") }}</button>
+        </span>
+    </div>
     {{ _("Monat(e) zahlen.") }}
-    <button type="submit">{{ _("aktualisieren") }}</button><br>
 </form>
+<br>
 <div class="panel panel-default">
     <table class="panel-body table table-striped table-hover">
         <tbody>
@@ -16,10 +21,10 @@
             </tr>
             {% endfor %}
             <tr>
-                <td class="col-md-3">{{ _("Giro-Code") }}<br>
-                    <i>{{ _("Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen.") }}</i>
+                <td class="col-md-3">{{ _("GiroCode") }}<br>
+                    <i>{{ _("Nutze den GiroCode, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen.") }}</i>
                 </td>
-                <td class="col-md-3"><img src="{{ qrcode(girocode) }}" height="100px"></td>
+                <td class="col-md-3"><img src="{{ qrcode(girocode, box_size=3) }}"></td>
             </tr>
         </tbody>
     </table>

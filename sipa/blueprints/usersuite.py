@@ -141,7 +141,7 @@ def render_payment_details(details: PaymentDetails, months):
         gettext("IBAN"): details.iban,
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): "{} €".format(months*5.00),
+        gettext("Betrag"): "{:.2f} €".format(months*5.00),
     }
 
 

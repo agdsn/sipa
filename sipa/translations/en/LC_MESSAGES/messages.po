@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-19 16:13+0100\n"
-"PO-Revision-Date: 2018-03-19 16:14+0100\n"
+"POT-Creation-Date: 2018-04-26 11:19+0200\n"
+"PO-Revision-Date: 2018-04-26 11:19+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -276,11 +276,11 @@ msgstr "IBAN"
 msgid "BIC"
 msgstr "BIC"
 
-msgid "Betrag"
-msgstr "Amount"
-
 msgid "Verwendungszweck"
 msgstr "Purpose/Intended use"
+
+msgid "Betrag"
+msgstr "Amount"
 
 msgid "Altes Passwort war inkorrekt!"
 msgstr "Old password was incorrect!"
@@ -581,16 +581,18 @@ msgstr "Payment details"
 msgid "Beitrag für"
 msgstr "Pay membership contribution for"
 
+msgid "Aktualisieren"
+msgstr "Update"
+
 msgid "Monat(e) zahlen."
 msgstr "month(s)."
 
-msgid "aktualisieren"
-msgstr "update"
+msgid "GiroCode"
+msgstr "GiroCode"
 
-msgid "Giro-Code"
-msgstr ""
-
-msgid "Nutze den Giro-Code, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
+msgid ""
+"Nutze den GiroCode, um die Überweisungsdaten automatisch in deine Banking-"
+"App zu übernehmen."
 msgstr "Scan this QR-Code to import the payment details into your banking app."
 
 msgid "Buchungen"
