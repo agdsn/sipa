@@ -74,3 +74,7 @@ BUSSTOPS = [
     "Strehlener Platz",
     "Weberplatz"
 ]
+
+# Membership contribution
+# Amount of membership contribution in cents
+MEMBERSHIP_CONTRIBUTION = 500

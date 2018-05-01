@@ -6,10 +6,12 @@
 from collections import OrderedDict
 import logging
 
+from babel.numbers import format_currency
 from flask import Blueprint, render_template, url_for, redirect, flash, abort
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
 
+from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
     ChangeUseCacheForm, PaymentForm
@@ -142,7 +144,7 @@ def render_payment_details(details: PaymentDetails, months):
         gettext("IBAN"): details.iban,
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): "{:.2f} €".format(months * 5.00),
+        gettext("Betrag"): format_currency(months * MEMBERSHIP_CONTRIBUTION / 100, 'EUR', locale='de_DE')
     }
 
 
@@ -155,7 +157,7 @@ def generate_epc_qr_code(details: PaymentDetails, months):
         bic=details.bic,
         recipient=details.recipient,
         iban=details.iban,
-        amount=months * 5.00,
+        amount=months * MEMBERSHIP_CONTRIBUTION / 100,
         purpose=details.purpose)
 
 
