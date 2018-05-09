@@ -144,7 +144,8 @@ def render_payment_details(details: PaymentDetails, months):
         gettext("IBAN"): details.iban,
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): format_currency(months * MEMBERSHIP_CONTRIBUTION / 100, 'EUR', locale='de_DE')
+        gettext("Betrag"): format_currency(months * MEMBERSHIP_CONTRIBUTION / 100, 'EUR',
+                                           locale='de_DE')
     }
 
 
