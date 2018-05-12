@@ -71,7 +71,7 @@ class CreditFactory(WuFactory):
 
     nutzer = SubFactory(NutzerFactory)
     user_id = LazyAttribute(lambda self: self.nutzer.nutzer_id)
-    amount = FuzzyInteger(low=0, high=63*1024*1024)
+    amount = FuzzyInteger(low=0, high=105*1024*1024)
     timetag = FuzzyInteger(low=timetag_today() - 21,
                            high=timetag_today())
 

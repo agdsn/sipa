@@ -203,8 +203,8 @@ class User(BaseUser):
 
         return credit - traffic_today
 
-    max_credit = 63 * 1024 * 1024
-    daily_credit = 3 * 1024 * 1024
+    max_credit = 105 * 1024 * 1024
+    daily_credit = 5 * 1024 * 1024
 
     @contextmanager
     def tmp_authentication(self, password):
