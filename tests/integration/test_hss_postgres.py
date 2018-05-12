@@ -101,8 +101,8 @@ class PgUserDataTestCase(OneAccountTestBase):
     def test_uninitialized_max_credit_throws_warning(self):
         logger = logging.getLogger('sipa.model.hss.user')
         with self.assertLogs(logger, level='WARNING') as cm:
-            self.assertEqual(self.user.max_credit, 63 * 1024**2)
-            self.assertEqual(self.user.daily_credit, 3 * 1024**2)
+            self.assertEqual(self.user.max_credit, 105 * 1024**2)
+            self.assertEqual(self.user.daily_credit, 5 * 1024**2)
 
             self.assertEqual(len(cm.output), 2)
             last_log = cm.output.pop()
@@ -203,7 +203,7 @@ class UserTrafficLogTestCaseMixin:
                 except IndexError:
                     pass
                 else:
-                    self.assertEqual(credit_difference, 3 * 1024**2 - entry['throughput'])
+                    self.assertEqual(credit_difference, 5 * 1024**2 - entry['throughput'])
 
 
 class UserTrafficLogTestCase(
