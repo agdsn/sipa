@@ -118,15 +118,15 @@ class User(BaseUser):
                 'output': o,
                 'throughput': i + o,
             })(rand(), rand()*0.04),
-            'credit': random() * 1024**2 * 63,
+            'credit': random() * 1024**2 * 105,
         } for day in range(7)]
 
     @property
     def credit(self):
-        return random() * 1024**2 * 63
+        return random() * 1024**2 * 105
 
-    max_credit = 63 * 1024 * 1024
-    daily_credit = 3 * 1024 * 1024
+    max_credit = 105 * 1024 * 1024
+    daily_credit = 5 * 1024 * 1024
 
     @active_prop
     def realname(self):
