@@ -157,7 +157,7 @@ def generate_epc_qr_code(details: PaymentDetails, months):
     return EPC_FORMAT.format(
         bic=details.bic,
         recipient=details.recipient,
-        iban=details.iban,
+        iban=details.iban.replace(' ', ''),
         amount=months * MEMBERSHIP_CONTRIBUTION / 100,
         purpose=details.purpose)
 
