@@ -302,6 +302,26 @@ class User(BaseUser):
             ),
         )
 
+    @active_prop
+    def use_cache(self):
+        if self._pg_account.use_cache:
+            return {'value': gettext("Aktiviert"),
+                    'raw_value': True,
+                    'style': 'success',
+                    'empty': False,
+                    }
+        return {'value': gettext("Nicht aktiviert"),
+                'raw_value': False,
+                'empty': True}
+
+    @use_cache.setter
+    def use_cache(self, new_use_cache):
+        account = self._pg_account
+        account.use_cache = new_use_cache
+
+        db.session.add(account)
+        db.session.commit()
+
 
 class FinanceInformation(BaseFinanceInformation):
     has_to_pay = True
