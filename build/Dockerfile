@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
 	libldap2-dev \
 	libsasl2-dev \
-	libmysqlclient-dev \
+	default-libmysqlclient-dev \
 	libxml2-dev \
 	libxslt1-dev \
     && \
