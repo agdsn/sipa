@@ -203,7 +203,8 @@ class UserTrafficLogTestCaseMixin:
                 except IndexError:
                     pass
                 else:
-                    self.assertEqual(credit_difference, 10 * 1024**2 - entry['throughput'])
+                    self.assertEqual(credit_difference,
+                                     10 * 1024**2 - entry['throughput'])
 
 
 class UserTrafficLogTestCase(
