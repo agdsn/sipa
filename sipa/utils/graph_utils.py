@@ -87,7 +87,7 @@ def generate_traffic_chart(traffic_data, inline=True):
 
 def generate_credit_chart(traffic_data,
                           inline=True,
-                          max_credit=(105 * 1024 ** 2)):
+                          max_credit=(210 * 1024 ** 2)):
     """Create a graph object from the input traffic data with pygal.
      If inline is set, the chart is being passed the option to not add an xml
      declaration header to the beginning of the `render()` output, so it can

@@ -195,7 +195,7 @@ class User(BaseUser):
         try:
             return self._pg_trafficquota.max_credit / 1024
         except NoResultFound:
-            return 105 * 1024 ** 2
+            return 210 * 1024 ** 2
 
     @property
     def daily_credit(self):
@@ -203,7 +203,7 @@ class User(BaseUser):
         try:
             return self._pg_trafficquota.daily_credit / 1024
         except NoResultFound:
-            return 5 * 1024 ** 2
+            return 10 * 1024 ** 2
 
     @active_prop
     def ips(self):
