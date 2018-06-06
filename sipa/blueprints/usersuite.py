@@ -285,7 +285,9 @@ def change_mac():
         try:
             with current_user.tmp_authentication(password):
                 current_user.mac = mac
-
+        except PasswordInvalid:
+            flash(gettext("Passwort war inkorrekt!"), "error")
+        else:
             logger.info('Successfully changed MAC address',
                         extra={'data': {'mac': mac},
                                'tags': {'rate_critical': True}})
@@ -295,8 +297,7 @@ def change_mac():
                           "bis die Änderung wirksam ist."), 'info')
 
             return redirect(url_for('.index'))
-        except PasswordInvalid:
-            flash(gettext("Passwort war inkorrekt!"), "error")
+
     elif form.is_submitted():
         flash_formerrors(form)
 
