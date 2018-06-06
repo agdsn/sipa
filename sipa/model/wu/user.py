@@ -239,10 +239,9 @@ class User(BaseUser):
     def mail(self, new_mail):
         change_email(self.uid, self._tmp_password, new_mail)
 
-    # See https://github.com/agdsn/sipa/issues/234
-    # @mail.deleter
-    # def mail(self):
-    #     self._mail = ''
+    @mail.deleter
+    def mail(self):
+        change_email(self.uid, self._tmp_password, None)
 
     @active_prop
     def address(self):

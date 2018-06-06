@@ -128,10 +128,15 @@ def change_email(username, password, email):
     attribute, if it is not yet set up (replace removes all
     attributes of the given kind and puts the new one in place)
     """
+    delete = email is None
     try:
         with LdapConnector(username, password) as l:
-            l.modify(dn=l.get_dn(),
-                     changes={'mail': [(ldap3.MODIFY_REPLACE, [email])]})
+            if delete:
+                l.modify(dn=l.get_dn(),
+                         changes={'mail': [(ldap3.MODIFY_DELETE, [])]})
+            else:
+                l.modify(dn=l.get_dn(),
+                         changes={'mail': [(ldap3.MODIFY_REPLACE, [email])]})
     except ldap3.core.exceptions.LDAPNoSuchObjectResult as e:
         logger.error('LDAP user not found when attempting '
                      'change of mail address',
@@ -146,7 +151,10 @@ def change_email(username, password, email):
         logger.error('Not sufficient rights to change the mail address')
         raise LDAPConnectionError
     else:
-        logger.info('Mail address successfully changed to "%s"', email)
+        if delete:
+            logger.info('Mail address successfully deleted.')
+        else:
+            logger.info('Mail address successfully changed to "%s"', email)
 
 
 def change_password(username, old, new):
