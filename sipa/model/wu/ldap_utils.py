@@ -124,19 +124,17 @@ def search_in_group(username, group):
 def change_email(username, password, email):
     """Change a user's email
 
-    Uses ldap3.MODIFY_REPLACE in any case, it should add the
+    Uses ldap3.MODIFY_DELETE if email is None.
+
+    Uses ldap3.MODIFY_REPLACE in any other case, it should add the
     attribute, if it is not yet set up (replace removes all
     attributes of the given kind and puts the new one in place)
     """
     delete = email is None
+    mail_change = (ldap3.MODIFY_DELETE, []) if delete else (ldap3.MODIFY_REPLACE, [email])
     try:
         with LdapConnector(username, password) as l:
-            if delete:
-                l.modify(dn=l.get_dn(),
-                         changes={'mail': [(ldap3.MODIFY_DELETE, [])]})
-            else:
-                l.modify(dn=l.get_dn(),
-                         changes={'mail': [(ldap3.MODIFY_REPLACE, [email])]})
+            l.modify(dn=l.get_dn(), changes={'mail': [mail_change]})
     except ldap3.core.exceptions.LDAPNoSuchObjectResult as e:
         logger.error('LDAP user not found when attempting '
                      'change of mail address',
