@@ -200,8 +200,8 @@ def change_password():
         new = form.new.data
 
         try:
-            current_user.re_authenticate(old)
-            current_user.change_password(old, new)
+            with current_user.tmp_authentication(old):
+                current_user.change_password(old, new)
         except PasswordInvalid:
             flash(gettext("Altes Passwort war inkorrekt!"), "error")
         else:
@@ -225,11 +225,8 @@ def change_mail():
         email = form.email.data
 
         try:
-            try:
+            with current_user.tmp_authentication(password):
                 current_user.mail = email
-            except AttributeError:
-                with current_user.tmp_authentication(password):
-                    current_user.mail = email
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -257,11 +254,8 @@ def delete_mail():
         password = form.password.data
 
         try:
-            try:
+            with current_user.tmp_authentication(password):
                 del current_user.mail
-            except AttributeError:
-                with current_user.tmp_authentication(password):
-                    del current_user.mail
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -289,12 +283,9 @@ def change_mac():
         mac = form.mac.data
 
         try:
-            current_user.re_authenticate(password)
+            with current_user.tmp_authentication(password):
+                current_user.mac = mac
 
-        except PasswordInvalid:
-            flash(gettext("Passwort war inkorrekt!"), "error")
-        else:
-            current_user.mac = mac
             logger.info('Successfully changed MAC address',
                         extra={'data': {'mac': mac},
                                'tags': {'rate_critical': True}})
@@ -304,6 +295,8 @@ def change_mac():
                           "bis die Änderung wirksam ist."), 'info')
 
             return redirect(url_for('.index'))
+        except PasswordInvalid:
+            flash(gettext("Passwort war inkorrekt!"), "error")
     elif form.is_submitted():
         flash_formerrors(form)
 

@@ -3,6 +3,7 @@
 # noinspection PyMethodMayBeStatic
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
+from contextlib import contextmanager
 
 from sipa.model.fancy_property import active_prop, UnsupportedProperty
 from sipa.model.misc import PaymentDetails
@@ -84,6 +85,25 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     def re_authenticate(self, password):
         self.authenticate(self.uid, password)
+
+    @contextmanager
+    def tmp_authentication(self, password):
+        """Check and temporarily store the given password.
+
+        Returns a context manager.  The password is stored in
+        `self._tmp_password`.
+
+        This is quite an ugly hack, only existing because some datasources
+        need the user password to change certain user properties such as mail
+        address and MAC address. The need for the password breaks
+        compatability with the usual `instance.property = value`.
+
+        I could not think of a better way to get around this.
+        """
+        self.re_authenticate(password)
+        self._tmp_password = password
+        yield
+        del self._tmp_password
 
     @classmethod
     @abstractmethod

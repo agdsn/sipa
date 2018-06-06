@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import logging
-from contextlib import contextmanager
 from datetime import datetime, timedelta
 from ipaddress import IPv4Address, AddressValueError
 
@@ -206,27 +205,6 @@ class User(BaseUser):
     max_credit = 210 * 1024 * 1024
     daily_credit = 10 * 1024 * 1024
 
-    @contextmanager
-    def tmp_authentication(self, password):
-        """Check and temporarily store the given password.
-
-        Returns a context manager.  The password is stored in
-        `self.__password`.
-
-        This is quite an ugly hack, only existing because sipa does
-        not have an ldap bind for this datasource and needs the user's
-        password.  THe need for the password breaks compatability with
-        the usual `instance.property = value` – now, an AttributeError
-        has to be catched and in that case this wrapper has to be used.
-
-        I could not think of a better way to get around this.
-
-        """
-        self.re_authenticate(password)
-        self.__password = password
-        yield
-        del self.__password
-
     @active_prop
     def login(self):
         return self.uid
@@ -259,7 +237,7 @@ class User(BaseUser):
 
     @mail.setter
     def mail(self, new_mail):
-        change_email(self.uid, self.__password, new_mail)
+        change_email(self.uid, self._tmp_password, new_mail)
 
     # See https://github.com/agdsn/sipa/issues/234
     # @mail.deleter
