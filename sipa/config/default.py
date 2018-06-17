@@ -55,6 +55,9 @@ SQL_TIMEOUT = 2
 GEROK_ENDPOINT = ""
 GEROK_API_TOKEN = None
 
+PYCROFT_ENDPOINT = ""
+PYCROFT_API_KEY = None
+
 # Whether to use the timer
 UWSGI_TIMER_ENABLED = False
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-26 11:19+0200\n"
-"PO-Revision-Date: 2018-04-26 11:19+0200\n"
+"POT-Creation-Date: 2018-06-17 02:20+0200\n"
+"PO-Revision-Date: 2018-06-17 02:21+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -344,6 +344,21 @@ msgstr "Passive"
 
 msgid "Nicht aktiviert"
 msgstr "Not activated"
+
+msgid "Verstoß gegen Netzordnung"
+msgstr "Violation of network usage agreement"
+
+msgid "Nicht bezahlt"
+msgstr "Not payed"
+
+msgid "Trafficlimit überschritten"
+msgstr "Traffic limit exceeded"
+
+msgid "Kein Mitglied"
+msgstr "Not a member"
+
+msgid "Netzzugang gesperrt"
+msgstr "Network access blocked"
 
 msgid "ok"
 msgstr "ok"

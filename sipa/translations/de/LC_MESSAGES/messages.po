@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-26 11:19+0200\n"
+"POT-Creation-Date: 2018-06-17 02:20+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -336,6 +336,21 @@ msgid "Passiv"
 msgstr ""
 
 msgid "Nicht aktiviert"
+msgstr ""
+
+msgid "Verstoß gegen Netzordnung"
+msgstr ""
+
+msgid "Nicht bezahlt"
+msgstr ""
+
+msgid "Trafficlimit überschritten"
+msgstr ""
+
+msgid "Kein Mitglied"
+msgstr ""
+
+msgid "Netzzugang gesperrt"
 msgstr ""
 
 msgid "ok"
