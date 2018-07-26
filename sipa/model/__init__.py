@@ -146,7 +146,7 @@ class Backends:
             raise InvalidConfiguration('Datasource {} already registered'
                                        .format(name))
 
-        if not evaluates_uniquely(AVAILABLE_DATASOURCES,
+        if not evaluates_uniquely(self.available_datasources,
                                   func=operator.attrgetter('name')):
             raise ValueError("Implememented datasources have non-unique names")
 
