@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 import operator
 from collections.__init__ import namedtuple
 from ipaddress import IPv4Address, AddressValueError
-from typing import Callable
+from typing import Callable, List, Optional, NamedTuple, cast
 
 from flask import request, session, current_app, Flask
 from flask_login import AnonymousUserMixin
@@ -154,7 +155,7 @@ class Backends:
         for dormitory in new_datasource.dormitories:
             self._register_dormitory(dormitory)
 
-    def _register_dormitory(self, dormitory):
+    def _register_dormitory(self, dormitory: Dormitory):
         """Register a dormitory by putting it to the dict
 
         :param dormitory: The dormitory to register
@@ -168,7 +169,7 @@ class Backends:
         self._dormitories[name] = dormitory
 
     @property
-    def pre_init_hook(self):
+    def pre_init_hook(self) -> Callable[[Callable], Callable]:  # Decorators are fun :-)
         def decorator(f):
             self._pre_backends_init_hook = f
         return decorator
@@ -191,20 +192,20 @@ class Backends:
     # CENTRAL PROPERTIES
 
     @property
-    def datasources(self):
+    def datasources(self) -> List[DataSource]:
         """A list of the currently registered datasources"""
         return list(self._datasources.values())
 
     @property
-    def dormitories(self):
+    def dormitories(self) -> List[Dormitory]:
         """A list of the currently registered dormitories"""
         return list(self._dormitories.values())
 
     # The logic is removed, but the interface is still used
-    premature_dormitories = []
+    premature_dormitories: List[Dormitory] = []
 
     @property
-    def all_dormitories(self):
+    def all_dormitories(self) -> List[Dormitory]:
         """A list of the currently registered dormitories including
         premature dormitories.
         """
@@ -213,7 +214,7 @@ class Backends:
     # CONVENIENCE PROPERTIES
 
     @property
-    def dormitories_short(self):
+    def dormitories_short(self) -> List[_dorm_summary]:
         """Return a list of dormitories as tuples instead of objects
 
         :return: a list of ``(name, display_name)`` tuples
@@ -226,7 +227,7 @@ class Backends:
         ])
 
     @property
-    def supported_dormitories_short(self):
+    def supported_dormitories_short(self) -> List[_dorm_summary]:
         """Return a list of supported dormitories as tuples instead of
         objects
 
@@ -241,7 +242,7 @@ class Backends:
 
     # LOOKUP METHODS
 
-    def get_dormitory(self, name):
+    def get_dormitory(self, name: str) -> Optional[Dormitory]:
         """Lookup the dormitory with name ``name``.
 
         :param str name: The dormitory's ``name``
@@ -253,7 +254,7 @@ class Backends:
             if dormitory.name == name:
                 return dormitory
 
-    def get_datasource(self, name):
+    def get_datasource(self, name: str) -> Optional[DataSource]:
         """Lookup the datasource with name ``name``.
 
         :param str name: The datasource's ``name``
@@ -265,7 +266,7 @@ class Backends:
             if datasource.name == name:
                 return datasource
 
-    def dormitory_from_ip(self, ip):
+    def dormitory_from_ip(self, ip: str) -> Optional[Dormitory]:
         """Return the dormitory whose subnets contain ``ip``
 
         :param str ip: The ip
@@ -282,7 +283,7 @@ class Backends:
                 if address in dormitory.subnets:
                     return dormitory
 
-    def preferred_dormitory_name(self):
+    def preferred_dormitory_name(self) -> Optional[str]:
         """Return the name of the preferred dormitory based on the
         request's ip
 
@@ -293,7 +294,7 @@ class Backends:
         if dormitory:
             return dormitory.name
 
-    def user_from_ip(self, ip):
+    def user_from_ip(self, ip: str) -> Optional[object]:
         """Return the User that corresponds to ``ip`` according to the
         datasource.
 
@@ -315,14 +316,14 @@ class Backends:
 
     # PROXIES
 
-    def current_dormitory(self):
+    def current_dormitory(self) -> Optional[Dormitory]:
         """Read the current dormitory from the session
 
         :rtype: :py:class:`~sipa.model.datasource.Dormitory`
         """
         return self.get_dormitory(session['dormitory'])
 
-    def current_datasource(self):
+    def current_datasource(self) -> Optional[DataSource]:
         """Read the current datasource from the session
 
         :rtype: :py:class:`~sipa.model.datasource.Datasource`
@@ -333,6 +334,7 @@ class Backends:
 
 
 #: A namedtuple to improve readability of some return values
-_dorm_summary = namedtuple('_dorm_summary', ['name', 'display_name'])
-backends = LocalProxy(lambda: current_app.extensions['backends'])
+_dorm_summary = NamedTuple('_dorm_summary', [('name', str), ('display_name', str)])
+backends: Backends = cast(Backends,
+                          LocalProxy(lambda: current_app.extensions['backends']))
 

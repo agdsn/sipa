@@ -1,13 +1,14 @@
 import re
 from base64 import urlsafe_b64encode
 from os import urandom
+from typing import cast
 from unittest import TestCase
 from unittest.mock import MagicMock
 
 from ipaddress import IPv4Network
 from flask import Flask
 
-from sipa.backends import Backends, DataSource, Dormitory
+from sipa.backends import Backends, DataSource, Dormitory, InitContextCallable
 
 
 class TestBackendInitializationCase(TestCase):
@@ -111,7 +112,7 @@ class DatasourceTestCase(TestCase):
         self.app.config = {}
 
     def test_init_context_gets_called_correctly(self):
-        init_mock = MagicMock()
+        init_mock = cast(InitContextCallable, MagicMock())
         datasource = DataSource(
             **self.default_args,
             init_context=init_mock,
