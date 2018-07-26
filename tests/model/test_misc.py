@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from sipa.model.misc import compare_all_attributes, xor_hashes
+from sipa.utils import compare_all_attributes, xor_hashes
 
 
 class CompareAllAttributesTestCase(TestCase):

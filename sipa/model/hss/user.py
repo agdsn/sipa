@@ -9,11 +9,11 @@ from sqlalchemy.orm.exc import NoResultFound
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.model.finance import BaseFinanceInformation
-from sipa.model.misc import compare_all_attributes, PaymentDetails
+from sipa.model.misc import PaymentDetails
 from sipa.model.sqlalchemy import db
 from sipa.model.hss.ldap import HssLdapConnector, change_password
 from sipa.model.hss.schema import Account, IP, AccountStatementLog, TrafficQuota
-from sipa.utils import argstr
+from sipa.utils import argstr, compare_all_attributes
 from sipa.model.exceptions import InvalidCredentials
 logger = logging.getLogger(__name__)
 

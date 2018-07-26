@@ -16,7 +16,8 @@ from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
-from sipa.model import Backends
+from sipa.model import build_backends_ext
+from sipa.model.misc import query_gauge_data
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import replace_empty_handler_callables, url_self
 from sipa.utils.babel_utils import get_weekday
@@ -49,7 +50,7 @@ def init_app(app, **kwargs):
     app.session_interface = SeparateLocaleCookieSessionInterface()
     cf_pages = CategorizedFlatPages()
     cf_pages.init_app(app)
-    backends = Backends()
+    backends = build_backends_ext()
     backends.init_app(app)
     QRcode(app)
 
@@ -67,7 +68,6 @@ def init_app(app, **kwargs):
     app.register_blueprint(bp_news)
     app.register_blueprint(bp_hooks)
 
-    from sipa.model import query_gauge_data
     logger.debug('Registering Jinja globals')
     form_label_width = 3
     form_input_width = 7

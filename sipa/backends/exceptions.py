@@ -1,0 +1,2 @@
+class InvalidConfiguration(IndexError):
+    pass

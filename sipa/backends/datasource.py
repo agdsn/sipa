@@ -1,10 +1,8 @@
 import logging
 from ipaddress import IPv4Network
 
-from sipa.utils import argstr
-from .misc import xor_hashes, compare_all_attributes
-
-logger = logging.getLogger(__name__)
+from sipa.utils import argstr, compare_all_attributes, xor_hashes
+from .logging import logger
 
 
 class DataSource:

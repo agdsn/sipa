@@ -14,7 +14,7 @@ from ldap3.core.exceptions import LDAPCommunicationError
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
     OfficialContactForm
 from sipa.mail import send_official_contact_mail, send_contact_mail
-from sipa.model import backends
+from sipa.backends.extension import backends
 from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
 from sipa.model.exceptions import UserNotFound, InvalidCredentials

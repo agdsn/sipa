@@ -3,9 +3,9 @@ from unittest.mock import MagicMock, patch
 
 from flask import Flask
 
+from sipa.model import prepare_sqlalchemy
 from sipa.model.wu.database_utils import init_atlantis, init_userdb, init_db
-from sipa.model.exceptions import InvalidConfiguration
-from sipa.model import Backends
+from sipa.backends.exceptions import InvalidConfiguration
 
 
 class WuInitializationTestBase(TestCase):
@@ -13,7 +13,7 @@ class WuInitializationTestBase(TestCase):
         super().setUp()
         self.app = Flask('sipa')
         self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        Backends.backends_preinit(self.app)
+        prepare_sqlalchemy(self.app)
 
 
 class InitAtlantisTestCase(WuInitializationTestBase):

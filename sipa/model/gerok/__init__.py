@@ -2,9 +2,10 @@
 
 from ipaddress import IPv4Network
 
-from ..datasource import DataSource, Dormitory
+# TODO think about InvalidConfiguration splitting up between sipa and backends
+from sipa.backends import DataSource, Dormitory
+from sipa.backends.exceptions import InvalidConfiguration
 from . import user
-from sipa.model.exceptions import InvalidConfiguration
 
 
 def init_context(app):

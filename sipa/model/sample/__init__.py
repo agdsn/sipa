@@ -2,7 +2,7 @@
 
 from ipaddress import IPv4Network
 
-from ..datasource import DataSource, Dormitory
+from sipa.backends import DataSource, Dormitory
 from . import user
 
 datasource = DataSource(

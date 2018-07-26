@@ -6,7 +6,8 @@ import ldap3
 from werkzeug.local import LocalProxy
 
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
-    LDAPConnectionError, InvalidConfiguration
+    LDAPConnectionError
+from sipa.backends.exceptions import InvalidConfiguration
 
 logger = logging.getLogger(__name__)
 

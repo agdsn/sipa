@@ -25,7 +25,3 @@ class DBQueryEmpty(Exception):
 
 class LDAPConnectionError(Exception):
     pass
-
-
-class InvalidConfiguration(IndexError):
-    pass

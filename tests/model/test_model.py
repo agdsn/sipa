@@ -7,8 +7,7 @@ from unittest.mock import MagicMock
 from ipaddress import IPv4Network
 from flask import Flask
 
-from sipa.model import Backends
-from sipa.model.datasource import DataSource, Dormitory
+from sipa.backends import Backends, DataSource, Dormitory
 
 
 class TestBackendInitializationCase(TestCase):
@@ -29,7 +28,8 @@ class TestBackendInitializationCase(TestCase):
         Dormitory(name='test', display_name="",
                   datasource=datasource, subnets=[IPv4Network('127.0.0.0/8')])
 
-        self.backends = Backends(available_datasources=[datasource])
+        self.backends = Backends()
+        self.backends.register(datasource)
         self.backends.init_app(self.app)
         self.backends.init_backends()
 
@@ -139,7 +139,7 @@ class DatasourceTestCase(TestCase):
         bad_config = {key: None for key in bad_keys}
         self.app.config['BACKENDS_CONFIG'] = {datasource.name: bad_config}
 
-        with self.assertLogs('sipa.model.datasource', level='WARNING') as context:
+        with self.assertLogs('sipa.backends', level='WARNING') as context:
             datasource.init_context(self.app)
 
         for log in context.output:
