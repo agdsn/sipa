@@ -146,6 +146,9 @@ class Dormitory:
         self.name = name
         self.display_name = display_name
         self.datasource = datasource
+        # TODO rework dormitory registration (make it safe)
+        # Add a `Backends` binding to `Datasource` and check global dorm
+        # existence when calling `register_dormitory`
         datasource.register_dormitory(self)
         self.subnets = SubnetCollection(subnets if subnets else [])
 
