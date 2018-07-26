@@ -154,19 +154,3 @@ class Dormitory:
 
     def __hash__(self):
         return xor_hashes(self.name, self.display_name, self.datasource, self.subnets)
-
-
-class PrematureDataSource:
-    """A dormitory not yet supported by SIPA"""
-
-    def __init__(self, name, website_url, support_mail):
-        self.name = name
-        self.website_url = website_url
-        self.support_mail = support_mail
-
-    def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            name=self.name,
-            website_url=self.website_url,
-            support_mail=self.support_mail,
-        ))

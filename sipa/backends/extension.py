@@ -94,8 +94,6 @@ class Backends:
         self._datasources: dict[str, DataSource] = {}
         #: The dormitory dict
         self._dormitories: dict[str, Dormitory] = {}
-        #: The premature_dormitories dict
-        self._premature_dormitories: dict[str, Dormitory] = {}
         self.app: Flask = None
         self._pre_backends_init_hook: Callable[[Flask], None] = lambda app: None
 
@@ -202,17 +200,15 @@ class Backends:
         """A list of the currently registered dormitories"""
         return list(self._dormitories.values())
 
-    @property
-    def premature_dormitories(self):
-        """A list of the currently registered premature dormitories"""
-        return list(self._premature_dormitories.values())
+    # The logic is removed, but the interface is still used
+    premature_dormitories = []
 
     @property
     def all_dormitories(self):
         """A list of the currently registered dormitories including
         premature dormitories.
         """
-        return self.dormitories + list(self._premature_dormitories.values())
+        return self.dormitories + self.premature_dormitories
 
     # CONVENIENCE PROPERTIES
 
