@@ -11,7 +11,7 @@ from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
                                 MacAddress, Regexp, ValidationError, NumberRange)
 
-from sipa.model import backends
+from sipa.backends.extension import backends
 
 
 class PasswordComplexity(object):

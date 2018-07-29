@@ -1,10 +1,14 @@
-import logging
-from ipaddress import IPv4Network
+from __future__ import annotations
+from ipaddress import IPv4Network, IPv4Address
+from typing import Callable, Dict, List
 
-from sipa.utils import argstr
-from .misc import xor_hashes, compare_all_attributes
+from flask import Flask
 
-logger = logging.getLogger(__name__)
+from sipa.utils import argstr, compare_all_attributes, xor_hashes
+from .logging import logger
+
+
+InitContextCallable = Callable[[Flask], None]
 
 
 class DataSource:
@@ -13,10 +17,10 @@ class DataSource:
     This class provides information about the backend you defined, for
     instance the user class.
     """
-    def __init__(self, name, user_class, mail_server,
-                 webmailer_url=None,
-                 support_mail=None,
-                 init_context=None):
+    def __init__(self, name: str, user_class: type, mail_server: str,
+                 webmailer_url: str = None,
+                 support_mail: str = None,
+                 init_context: InitContextCallable = None) -> None:
         super().__init__()
 
         #: Holds the name of this datasource.  Must be unique among
@@ -36,7 +40,7 @@ class DataSource:
         self.support_mail = (support_mail if support_mail
                              else "support@{}".format(mail_server))
         self._init_context = init_context
-        self._dormitories = {}
+        self._dormitories: Dict[str, Dormitory] = {}
 
     def __eq__(self, other):
         return compare_all_attributes(self, other, ['name'])
@@ -50,7 +54,7 @@ class DataSource:
     def __hash__(self):
         return xor_hashes(self.name, self.user_class, self.support_mail, self.mail_server)
 
-    def register_dormitory(self, dormitory):
+    def register_dormitory(self, dormitory: Dormitory):
         name = dormitory.name
         if name in self._dormitories:
             raise ValueError("Dormitory {} already registered", name)
@@ -65,7 +69,7 @@ class DataSource:
         """
         return list(self._dormitories.values())
 
-    def init_context(self, app):
+    def init_context(self, app: Flask):
         """Initialize this backend
 
             - Apply the custom configuration of
@@ -104,7 +108,7 @@ class SubnetCollection:
     Provides __contains__ functionality for IPv4Addresses.
     """
 
-    def __init__(self, subnets):
+    def __init__(self, subnets: List[IPv4Network]) -> None:
         if isinstance(subnets, list):
             for subnet in subnets:
                 if not isinstance(subnet, IPv4Network):
@@ -120,7 +124,8 @@ class SubnetCollection:
             subnets=self.subnets,
         ))
 
-    def __contains__(self, address):
+    # hint should be replaced with typing info from stub
+    def __contains__(self, address: IPv4Address):
         for subnet in self.subnets:
             if address in subnet:
                 return True
@@ -136,10 +141,14 @@ class SubnetCollection:
 class Dormitory:
     """A dormitory as selectable on the login page."""
 
-    def __init__(self, name, display_name, datasource, subnets=None):
+    def __init__(self, name: str, display_name: str, datasource: DataSource,
+                 subnets=None) -> None:
         self.name = name
         self.display_name = display_name
         self.datasource = datasource
+        # TODO rework dormitory registration (make it safe)
+        # Add a `Backends` binding to `Datasource` and check global dorm
+        # existence when calling `register_dormitory`
         datasource.register_dormitory(self)
         self.subnets = SubnetCollection(subnets if subnets else [])
 
@@ -156,19 +165,3 @@ class Dormitory:
 
     def __hash__(self):
         return xor_hashes(self.name, self.display_name, self.datasource, self.subnets)
-
-
-class PrematureDataSource:
-    """A dormitory not yet supported by SIPA"""
-
-    def __init__(self, name, website_url, support_mail):
-        self.name = name
-        self.website_url = website_url
-        self.support_mail = support_mail
-
-    def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            name=self.name,
-            website_url=self.website_url,
-            support_mail=self.support_mail,
-        ))

@@ -10,7 +10,7 @@ from flask_login import AnonymousUserMixin
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from sipa.login_manager import SipaLoginManager
-from sipa.model import backends
+from sipa.backends import backends
 
 login_manager = SipaLoginManager()
 login_manager.login_view = "generic.login"

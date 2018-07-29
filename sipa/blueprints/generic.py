@@ -14,7 +14,7 @@ from ldap3.core.exceptions import LDAPCommunicationError
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
     OfficialContactForm
 from sipa.mail import send_official_contact_mail, send_contact_mail
-from sipa.model import backends
+from sipa.backends.extension import backends
 from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
 from sipa.model.exceptions import UserNotFound, InvalidCredentials
@@ -198,6 +198,7 @@ def to_gigabytes(number):
 @bp_generic.app_template_filter('date')
 def jinja_format_date(date):
     return format_date(date)
+
 
 bp_generic.add_app_template_filter(format_money, name='money')
 

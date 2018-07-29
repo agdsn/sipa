@@ -23,8 +23,7 @@ from email.mime.text import MIMEText
 from flask import current_app
 from flask_login import current_user
 
-from sipa.model import backends
-
+from sipa.backends.extension import backends
 
 logger = logging.getLogger(__name__)
 

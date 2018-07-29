@@ -5,7 +5,7 @@ from random import random
 from flask import current_app
 from flask_babel import gettext
 from flask_login import AnonymousUserMixin
-from werkzeug import LocalProxy
+from werkzeug.local import LocalProxy
 
 from sipa.model.user import BaseUser
 from sipa.model.fancy_property import active_prop, unsupported_prop
@@ -32,6 +32,7 @@ def init_context(app):
             'use_cache': False,
         }
     }
+
 
 config = LocalProxy(lambda: current_app.extensions['sample_users'])
 

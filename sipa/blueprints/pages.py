@@ -11,7 +11,7 @@ import json
 from flask import Blueprint, render_template, current_app
 from flask_login import current_user
 
-from sipa.model import backends
+from sipa.backends.extension import backends
 
 logger = getLogger(__name__)
 

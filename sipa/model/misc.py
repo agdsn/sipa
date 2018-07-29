@@ -1,35 +1,26 @@
 from collections import namedtuple
 
+from flask import request
+from flask_login import current_user
+from sqlalchemy.exc import OperationalError
+
+from sipa.backends.extension import backends
+
 TransactionTuple = namedtuple('Transaction', ['datum', 'value'])
 
-
-def compare_all_attributes(one, other, attr_list):
-    """Safely compare whether two ojbect's attributes are equal.
-
-    :param one: The first object
-    :param other: The second object
-    :param list attr_list: A list of attributes (strings).
-
-    :returns: Whether the attributes are equal or false on
-              `AttributeError`
-
-    :rtype: bool
-    """
-    try:
-        return all(getattr(one, attr) == getattr(other, attr)
-                   for attr in attr_list)
-    except AttributeError:
-        return False
-
-
-def xor_hashes(*elements):
-    """Combine all element's hashes with xor
-    """
-    _hash = 0
-    for element in elements:
-        _hash ^= hash(element)
-
-    return _hash
-
-
 PaymentDetails = namedtuple('PaymentDetails', 'recipient bank iban bic purpose')
+
+
+def query_gauge_data():
+    credit = {'data': None, 'error': False, 'foreign_user': False}
+    try:
+        if current_user.is_authenticated and current_user.has_connection:
+            user = current_user
+        else:
+            user = backends.user_from_ip(request.remote_addr)
+        credit['data'] = user.credit
+    except OperationalError:
+        credit['error'] = True
+    except AttributeError:
+        credit['foreign_user'] = True
+    return credit
