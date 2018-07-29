@@ -17,12 +17,7 @@ from werkzeug.http import parse_date
 
 logger = logging.getLogger(__name__)
 
-endpoint = LocalProxy(lambda: current_app.extensions['pycroft_api']['endpoint'])
-token = LocalProxy(lambda: current_app.extensions['pycroft_api']['api_key'])
-
-
-def api():
-    return PycroftApi(endpoint, token)
+api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
 
 
 class User(BaseUser):
@@ -32,7 +27,7 @@ class User(BaseUser):
 
     @classmethod
     def get(cls, username):
-        status, user_data = api().get_user(username)
+        status, user_data = api.get_user(username)
 
         if status != 200:
             raise UserNotFound
@@ -41,7 +36,7 @@ class User(BaseUser):
 
     @classmethod
     def from_ip(cls, ip):
-        status, user_data = api().get_user_from_ip(ip)
+        status, user_data = api.get_user_from_ip(ip)
 
         if status != 200:
             return AnonymousUserMixin()
@@ -53,7 +48,7 @@ class User(BaseUser):
 
     @classmethod
     def authenticate(cls, username, password):
-        status, result = api().authenticate(username, password)
+        status, result = api.authenticate(username, password)
 
         if status != 200:
             raise PasswordInvalid
@@ -81,7 +76,7 @@ class User(BaseUser):
     can_change_password = True
 
     def change_password(self, old, new):
-        status, result = api().change_password(self._id, old, new)
+        status, result = api.change_password(self._id, old, new)
 
         if status != 200:
             raise PasswordInvalid
@@ -137,7 +132,7 @@ class User(BaseUser):
 
     @mail.setter
     def mail(self, new_mail):
-        result, status = api().change_mail(self._id, self._tmp_password, new_mail)
+        result, status = api.change_mail(self._id, self._tmp_password, new_mail)
 
         if status == 401:
             raise PasswordInvalid
@@ -146,7 +141,7 @@ class User(BaseUser):
 
     @mail.deleter
     def mail(self):
-        result, status = api().change_mail(self._id, self._tmp_password, new_mail=None)
+        result, status = api.change_mail(self._id, self._tmp_password, new_mail=None)
         if status == 401:
             raise PasswordInvalid
         elif status == 404:
@@ -179,7 +174,7 @@ class User(BaseUser):
 
     @use_cache.setter
     def use_cache(self, new_use_cache):
-        api().change_cache_usage(self._id, new_use_cache)
+        api.change_cache_usage(self._id, new_use_cache)
 
     @unsupported_prop
     def hostname(self):

@@ -4,15 +4,15 @@ from ipaddress import IPv4Network
 
 from sipa.backends import DataSource, Dormitory
 from sipa.backends.exceptions import InvalidConfiguration
-from . import user
+from . import user, api
 
 
 def init_context(app):
     try:
-        app.extensions['pycroft_api'] = {
-            'endpoint': app.config['PYCROFT_ENDPOINT'],
-            'api_key': app.config['PYCROFT_API_KEY']
-        }
+        app.extensions['pycroft_api'] = api.PycroftApi(
+            endpoint=app.config['PYCROFT_ENDPOINT'],
+            api_key=app.config['PYCROFT_API_KEY'],
+        )
     except KeyError as exception:
         raise InvalidConfiguration(*exception.args)
 
