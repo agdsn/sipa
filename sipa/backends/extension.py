@@ -337,4 +337,3 @@ class Backends:
 _dorm_summary = NamedTuple('_dorm_summary', [('name', str), ('display_name', str)])
 backends: Backends = cast(Backends,
                           LocalProxy(lambda: current_app.extensions['backends']))
-

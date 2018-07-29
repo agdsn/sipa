@@ -199,6 +199,7 @@ def to_gigabytes(number):
 def jinja_format_date(date):
     return format_date(date)
 
+
 bp_generic.add_app_template_filter(format_money, name='money')
 
 

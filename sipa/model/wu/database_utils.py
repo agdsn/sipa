@@ -73,6 +73,7 @@ def init_db(app):
                     " Skipping `init_userdb()`.",
                     *exception.args)
 
+
 STATUS = {
     1: (lazy_gettext('ok'), 'success'),
     2: (lazy_gettext('Nicht bezahlt, Netzanschluss gesperrt'), 'warning'),

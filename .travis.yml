@@ -6,7 +6,7 @@ cache:
   - pip
 
 python:
-  - "3.5"
+  - "3.7-dev"
 
 services:
   - docker
@@ -30,7 +30,7 @@ install:
 
 script:
   - echo "Running local tests…" && python manage.py test  # skips integration tests
-  - "pep8 ."
+  - "pycodestyle ."
   - $DOCKER_COMPOSE build
   - echo "Running complete test suite…" && $DOCKER_COMPOSE run --rm sipa_testing_no_volumes python manage.py test
 

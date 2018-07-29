@@ -18,9 +18,9 @@ class DataSource:
     instance the user class.
     """
     def __init__(self, name: str, user_class: type, mail_server: str,
-                 webmailer_url: str=None,
-                 support_mail: str=None,
-                 init_context: InitContextCallable=None) -> None:
+                 webmailer_url: str = None,
+                 support_mail: str = None,
+                 init_context: InitContextCallable = None) -> None:
         super().__init__()
 
         #: Holds the name of this datasource.  Must be unique among
