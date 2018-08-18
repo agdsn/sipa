@@ -65,6 +65,7 @@ class User(BaseUser):
         self._mail = user_data['mail']
         self._use_cache = user_data['cache']
         self._credit = user_data['traffic_balance']
+        self._traffic_history = user_data['traffic_history']
         self._interfaces = user_data['interfaces']
         self._finance_information = FinanceInformation(
             balance=user_data['finance_balance'],
@@ -83,27 +84,19 @@ class User(BaseUser):
 
     @property
     def traffic_history(self):
-        # TODO: Implement
-        from random import random
-
-        def rand():
-            return random() * 7 * 1024 ** 2
-
         return [{
             'day': day,
-            **(lambda i, o: {
-                'input': i,
-                'output': o,
-                'throughput': i + o,
-            })(rand(), rand() * 0.04),
-            'credit': random() * 1024 ** 2 * 210,
-        } for day in range(7)]
+            'input': to_kib(entry['ingress']),
+            'output': to_kib(entry['egress']),
+            'throughput': to_kib(entry['ingress']) + to_kib(entry['egress']),
+            'credit': to_kib(entry['balance']),
+        } for day, entry in enumerate(self._traffic_history)]
 
     @property
     def credit(self):
-        return self._credit
+        return to_kib(self._credit)
 
-    max_credit = 105 * 1024 * 1024
+    max_credit = 210 * 1024 * 1024
     daily_credit = 5 * 1024 * 1024
 
     @active_prop
@@ -213,6 +206,8 @@ class User(BaseUser):
             ),
         )
 
+def to_kib(v):
+    return (v // 1024) if v is not None else 0
 
 def evaluate_status(status):
     message = None
