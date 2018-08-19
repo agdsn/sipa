@@ -39,7 +39,7 @@ class PycroftApi():
         return self._do_api_call(request_function, url)
 
     def post(self, url, data=None):
-        request_function = partial(requests.get, data=data or {})
+        request_function = partial(requests.post, data=data or {})
         return self._do_api_call(request_function, url)
 
     def _do_api_call(self, request_function, url):
