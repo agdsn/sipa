@@ -14,13 +14,13 @@
 # The datasources to use.  Must be a list of strings being the name of
 # an implemented datasource.  The list of available datasources is
 # defined at the top of `model.__init__`.
-# BACKENDS = ['wu', 'hss', 'gerok', 'sample', 'pycroft', …]
+# BACKENDS = ['hss', 'sample', 'pycroft', …]
 
 # Datasource-specific config
 # For each backend, you can set a config dict.
 # Currently, only the backends `support_mail` can be customized.
 # _conf = {'support_mail': 'foo@bar.baz'}
-# BACKEND_CONFIG = {'wu': _conf, 'hss': _conf}
+# BACKEND_CONFIG = {'hss': _conf}
 
 
 # The Sentry DSN.
@@ -48,20 +48,9 @@
 # MAILSERVER_HOST = "atlantis.agdsn"
 # MAILSERVER_PORT = 25
 
-# LDAP configuration
-# WU_LDAP_URI = "ldap://atlantis.agdsn"  # Must be set
-# WU_LDAP_SEARCH_USER_BASE = None  # Must be set
-# WU_LDAP_SEARCH_GROUP_BASE = None  # Must be set
-# WU_LDAP_SEARCH_USER = None
-# WU_LDAP_SEARCH_PASSWORD = None
-
-# Userman configuration
-# Form: "[{driver}+]{dialect}://{user}:{pw}@{host}:{port}/{db}?connect_timeout={timeout}"
-# Example: "mysql+pymysql://root:root@localhost:3306/testdb?connect_timeout=5"
-# A timeout or similiar must be set manually.
-# DB_USERMAN_URI = None  # Must be set
-# DB_NETUSERS_URI = None  # Must be set
-# DB_TRAFFIC_URI = None  # Must be set
+# Pycroft backend
+# PYCROFT_ENDPOINT = "https://pycroft.agdsn.de/api/v0/"
+# PYCROFT_API_KEY = secret.pycroft_api_key
 
 # MySQL Helios configuration
 # DB_HELIOS_URI = None  # Must be set
@@ -71,11 +60,6 @@
 
 # The SQL_TIMEOUT in seconds.
 # SQL_TIMEOUT = 2
-
-# The data for the gerok api.
-
-# GEROK_ENDPOINT = "https://gerok.agdsn:3000/api"
-# GEROK_API_TOKEN = ""
 
 # The Token for the git update hook.
 # It is disabled if nothing provided
