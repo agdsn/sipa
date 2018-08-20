@@ -251,7 +251,7 @@ class OfficialContactMailTestCase(MailSendingTestBase):
 class ContactMailTestCase(MailSendingTestBase):
     def setUp(self):
         self.backends_mock = MagicMock()
-        self.dorm_display_name = "Testdormitory (nicht die Wu)"
+        self.dorm_display_name = "Testdormitory"
         self.backends_mock.get_dormitory('test').display_name = self.dorm_display_name
         self.dorm_mail = "support@foo.bar"
         self.backends_mock.get_dormitory('test').datasource.support_mail = self.dorm_mail

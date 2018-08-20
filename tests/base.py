@@ -135,9 +135,7 @@ class SampleFrontendTestBase(dynamic_frontend_base('sample')):
         )
 
 
-# WuFrontendTestBase is defined in `test_wu` with more features
 HssFrontendTestBase = dynamic_frontend_base('hss')
-GerokFrontendTestBase = dynamic_frontend_base('gerok')
 
 
 class FormTemplateTestMixin:

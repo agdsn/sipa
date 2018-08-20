@@ -34,29 +34,14 @@ FLATPAGES_MARKDOWN_EXTENSIONS = [
 MAILSERVER_HOST = ""
 MAILSERVER_PORT = 25
 
-# LDAP configuration
-WU_LDAP_URI = ""
-WU_LDAP_SEARCH_USER_BASE = None
-WU_LDAP_SEARCH_GROUP_BASE = None
-WU_LDAP_SEARCH_USER = None
-WU_LDAP_SEARCH_PASSWORD = None
-
-# Userman configuration
-# DB_USERMAN_URI: not set
-# DB_NETUSERS_URI: not set
-# DB_TRAFFIC_URI: not set
-
 # MySQL Helios configuration
 # DB_HELIOS_URI = None  # Must be set
 DB_HELIOS_IP_MASK = None
 
 SQL_TIMEOUT = 2
 
-GEROK_ENDPOINT = ""
-GEROK_API_TOKEN = None
-
-PYCROFT_ENDPOINT = ""
-PYCROFT_API_KEY = None
+# PYCROFT_ENDPOINT  # Must be set
+# PYCROFT_API_KEY  # Must be set
 
 # Whether to use the timer
 UWSGI_TIMER_ENABLED = False

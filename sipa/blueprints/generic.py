@@ -102,18 +102,6 @@ def exceptionhandler_ldap(ex):
     return redirect(url_for('generic.index'))
 
 
-@bp_generic.app_errorhandler(ConnectionError)
-def exceptionhandler_gerok(ex):
-    """Handles ConnectionErrors
-
-    Session is cleared to avoid redirect loops, as above.
-    """
-    flash(gettext("Es gab einen internen Fehler. "
-                  "Bitte probiere es in ein paar Minuten noch mal."))
-    session.clear()
-    return redirect(url_for('generic.index'))
-
-
 @bp_generic.route('/index.php')
 @bp_generic.route('/')
 def index():

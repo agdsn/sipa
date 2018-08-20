@@ -2,7 +2,7 @@
 import logging
 
 from sipa.backends import Backends
-from . import sample, wu, gerok, hss, pycroft
+from . import sample, hss, pycroft
 from .sqlalchemy import db
 
 
@@ -12,8 +12,6 @@ logger = logging.getLogger(__name__)
 #: The implemented datasources available by default
 AVAILABLE_DATASOURCES = [
     sample.datasource,
-    wu.datasource,
-    gerok.datasource,
     hss.datasource,
     pycroft.datasource
 ]

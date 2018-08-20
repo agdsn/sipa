@@ -57,6 +57,9 @@ datasource = DataSource(
         ('gps', "Gret-Palucca-Straße", [
             IPv4Network('141.30.207.0/24'),  # GPS11
         ]),
+        ('gerok', "Gerokstraße", [
+            IPv4Network('141.76.124.0/24'),  # Ger
+        ]),
     ]
 ]
 

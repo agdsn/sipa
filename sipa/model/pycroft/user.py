@@ -206,8 +206,10 @@ class User(BaseUser):
             ),
         )
 
+
 def to_kib(v):
     return (v // 1024) if v is not None else 0
+
 
 def evaluate_status(status):
     message = None
