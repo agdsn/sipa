@@ -15,7 +15,7 @@ class PycroftApi():
         return self.get('user/{}'.format(username))
 
     def get_user_from_ip(self, ip):
-        return self.get('/user/from-ip', params={'ip': ip})
+        return self.get('user/from-ip', params={'ip': ip})
 
     def authenticate(self, username, password):
         return self.post('user/authenticate',
