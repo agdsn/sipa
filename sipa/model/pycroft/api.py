@@ -46,7 +46,6 @@ class PycroftApi():
         try:
             response = request_function(
                 self._endpoint + url,
-                verify=False,
                 headers={'Authorization': 'ApiKey {}'.format(self._api_key)},
             )
         except ConnectionError as e:
