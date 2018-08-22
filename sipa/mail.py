@@ -171,7 +171,7 @@ def send_usersuite_contact_mail(subject, message, category, user=current_user):
     """
     return send_complex_mail(
         sender="{login}@{server}".format(
-            login=user.login,
+            login=user.login.value,
             server=user.datasource.mail_server
         ),
         recipient=user.datasource.support_mail,
@@ -179,7 +179,7 @@ def send_usersuite_contact_mail(subject, message, category, user=current_user):
         message=message,
         tag="Usersuite",
         category=category,
-        header={'Login': user.login},
+        header={'Login': user.login.value},
     )
 
 

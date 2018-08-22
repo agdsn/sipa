@@ -130,7 +130,7 @@ def contact():
         flash_formerrors(form)
 
     form.email.default = "{login}@{server}".format(
-        login=current_user.login,
+        login=current_user.login.value,
         server=current_user.datasource.mail_server
     )
 
