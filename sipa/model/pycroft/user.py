@@ -85,12 +85,12 @@ class User(BaseUser):
     @property
     def traffic_history(self):
         return [{
-            'day': day,
+            'day': parse_date(entry['timestamp']).weekday(),
             'input': to_kib(entry['ingress']),
             'output': to_kib(entry['egress']),
             'throughput': to_kib(entry['ingress']) + to_kib(entry['egress']),
             'credit': to_kib(entry['balance']),
-        } for day, entry in enumerate(self._traffic_history)]
+        } for entry in self._traffic_history]
 
     @property
     def credit(self):
