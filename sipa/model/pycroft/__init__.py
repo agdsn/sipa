@@ -20,7 +20,7 @@ def init_context(app):
 datasource = DataSource(
     name='pycroft',
     user_class=user.User,
-    mail_server="member.agdsn.me",
+    mail_server="wh2.tu-dresden.de",
     webmailer_url="https://mail.agdsn.de",
     init_context=init_context
 )
