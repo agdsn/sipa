@@ -129,8 +129,8 @@ def contact():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    form.email.default = "{uid}@{server}".format(
-        uid=current_user.uid,
+    form.email.default = "{login}@{server}".format(
+        login=current_user.login,
         server=current_user.datasource.mail_server
     )
 

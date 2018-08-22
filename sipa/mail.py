@@ -170,8 +170,8 @@ def send_usersuite_contact_mail(subject, message, category, user=current_user):
     :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
-        sender="{uid}@{server}".format(
-            uid=user.uid,
+        sender="{login}@{server}".format(
+            login=user.login,
             server=user.datasource.mail_server
         ),
         recipient=user.datasource.support_mail,
@@ -179,7 +179,7 @@ def send_usersuite_contact_mail(subject, message, category, user=current_user):
         message=message,
         tag="Usersuite",
         category=category,
-        header={'Login': user.uid},
+        header={'Login': user.login},
     )
 
 
