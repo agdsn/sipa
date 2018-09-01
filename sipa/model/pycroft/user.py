@@ -6,7 +6,7 @@ from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop
 from sipa.model.misc import PaymentDetails
-from sipa.model.exceptions import UserNotFound, PasswordInvalid
+from sipa.model.exceptions import UserNotFound, PasswordInvalid, MacAlreadyExists
 from .api import PycroftApi
 
 from flask_login import AnonymousUserMixin
@@ -115,9 +115,21 @@ class User(BaseUser):
     @active_prop
     @connection_dependent
     def mac(self):
-        return ", ".join(i['mac'] for i in self._interfaces)
+        return {'value': ", ".join(i['mac'] for i in self._interfaces),
+                'tmp_readonly': len(self._interfaces) != 1}
 
-    # TODO: Implement changing of MAC
+    @mac.setter
+    def mac(self, new_mac):
+        # if this has been reached despite `tmp_readonly`, this is a bug.
+        assert len(self._interfaces) == 1
+
+        status, result = api.change_mac(self._id, self._tmp_password,
+                                        self._interfaces[0]['id'], new_mac)
+
+        if status == 401:
+            raise PasswordInvalid
+        elif status == 400:
+            raise MacAlreadyExists
 
     @active_prop
     def mail(self):

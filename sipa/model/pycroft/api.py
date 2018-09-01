@@ -34,6 +34,10 @@ class PycroftApi():
         return self.post('user/{}/change-cache-usage'.format(user_id),
                          data={'use_cache': use_cache})
 
+    def change_mac(self, user_id, password, interface_id, new_mac):
+        return self.post('user/{}/change-mac/{}'.format(user_id, interface_id),
+                         data={'password': password, 'mac': new_mac})
+
     def get(self, url, params=None):
         request_function = partial(requests.get, params=params or {})
         return self._do_api_call(request_function, url)

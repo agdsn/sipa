@@ -19,6 +19,10 @@ class PasswordInvalid(InvalidCredentials):
     pass
 
 
+class MacAlreadyExists(Exception):
+    pass
+
+
 class DBQueryEmpty(Exception):
     pass
 

@@ -18,7 +18,7 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
-    PasswordInvalid, UserNotFound
+    PasswordInvalid, UserNotFound, MacAlreadyExists
 from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
@@ -287,6 +287,8 @@ def change_mac():
                 current_user.mac = mac
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
+        except MacAlreadyExists:
+            flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
         else:
             logger.info('Successfully changed MAC address',
                         extra={'data': {'mac': mac},
