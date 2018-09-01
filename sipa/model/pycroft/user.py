@@ -137,7 +137,7 @@ class User(BaseUser):
 
     @mail.setter
     def mail(self, new_mail):
-        result, status = api.change_mail(self._id, self._tmp_password, new_mail)
+        status, result = api.change_mail(self._id, self._tmp_password, new_mail)
 
         if status == 401:
             raise PasswordInvalid
@@ -146,7 +146,7 @@ class User(BaseUser):
 
     @mail.deleter
     def mail(self):
-        result, status = api.change_mail(self._id, self._tmp_password, new_mail=None)
+        status, result = api.change_mail(self._id, self._tmp_password, new_mail=None)
         if status == 401:
             raise PasswordInvalid
         elif status == 404:
