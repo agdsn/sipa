@@ -21,7 +21,7 @@ def init_context(app):
 datasource = DataSource(
     name='hss',
     user_class=user.User,
-    mail_server="imap.agdsn.de",
+    mail_server="agdsn.me",
     # to be included when it becomes a DataSource
     webmailer_url="https://mail.agdsn.de",
     init_context=init_context,
