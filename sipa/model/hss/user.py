@@ -219,7 +219,7 @@ class User(BaseUser):
 
     @active_prop
     def login(self):
-        return self._pg_account.account
+        return self._pg_account.account.strip()
 
     @active_prop
     def mac(self):
