@@ -239,7 +239,7 @@ class User(BaseUser):
 
     @active_prop
     def mail(self):
-        return "{}@agdsn.me".format(self._pg_account.account)
+        return None
 
     @active_prop
     def address(self):
