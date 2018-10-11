@@ -38,6 +38,10 @@ class PycroftApi():
         return self.post('user/{}/change-mac/{}'.format(user_id, interface_id),
                          data={'password': password, 'mac': new_mac})
 
+    def activate_network_access(self, user_id, password, mac, birthdate, host_name):
+        return self.post('user/{}/activate-network-access'.format(user_id),
+                         data={'password': password, 'mac': mac, 'birthdate': birthdate, 'host_name': host_name})
+
     def get(self, url, params=None):
         request_function = partial(requests.get, params=params or {})
         return self._do_api_call(request_function, url)

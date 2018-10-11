@@ -7,9 +7,9 @@ from flask import flash
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField, RadioField, IntegerField)
+                     StringField, TextAreaField, RadioField, IntegerField, DateField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
-                                MacAddress, Regexp, ValidationError, NumberRange)
+                                MacAddress, Regexp, ValidationError, NumberRange, Optional)
 
 from sipa.backends.extension import backends
 
@@ -178,6 +178,23 @@ class ChangeMACForm(FlaskForm):
         validators=[DataRequired("MAC-Adresse nicht angegeben!"),
                     MacAddress("MAC ist nicht in gültigem Format!"),
                     require_unicast_mac])
+class ActivateNetworkAccessForm(FlaskForm):
+    password = PasswordField(
+        label=lazy_gettext("Passwort"),
+        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
+    mac = StrippedStringField(
+        label=lazy_gettext("MAC-Adresse"),
+        validators=[DataRequired(lazy_gettext("MAC-Adresse nicht angegeben!")),
+                    MacAddress(lazy_gettext("MAC ist nicht in gültigem Format!")),
+                    require_unicast_mac],
+        description="XX:XX:XX:XX:XX:XX")
+    birthdate = DateField(label=lazy_gettext("Geburtsdatum"),
+                          validators=[DataRequired(lazy_gettext("Geburtsdatum nicht angegeben!"))],
+                          description="YYYY-MM-DD (z.B. 1995-10-23)")
+    host_name = StringField(label=lazy_gettext("Gerätename (Optional)"),
+                            validators=[Regexp(regex="^[a-zA-Z0-9 ]+", message=u"Gerätename ist ungültig"),
+                                        Optional()],
+                            description="TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä.")
 
 
 class ChangeUseCacheForm(FlaskForm):

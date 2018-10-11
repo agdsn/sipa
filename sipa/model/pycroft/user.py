@@ -6,7 +6,7 @@ from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop
 from sipa.model.misc import PaymentDetails
-from sipa.model.exceptions import UserNotFound, PasswordInvalid, MacAlreadyExists
+from sipa.model.exceptions import UserNotFound, PasswordInvalid, MacAlreadyExists, NetworkAccessAlreadyActive
 from .api import PycroftApi
 
 from flask_login import AnonymousUserMixin
@@ -117,6 +117,26 @@ class User(BaseUser):
     def mac(self):
         return {'value': ", ".join(i['mac'] for i in self._interfaces),
                 'tmp_readonly': len(self._interfaces) != 1}
+
+    @active_prop
+    @connection_dependent
+    def network_access_active(self):
+        return {'value': gettext("Aktiviert") if len(self._interfaces) > 0 else gettext("Nicht aktiviert"),
+                'tmp_readonly': len(self._interfaces) > 0}
+
+    @network_access_active.setter
+    def network_access_active(self, value):
+        pass
+
+    def activate_network_access(self, password, mac, birthdate, host_name):
+        status, result = api.activate_network_access(self._id, password, mac, birthdate, host_name)
+
+        if status == 401:
+            raise PasswordInvalid
+        elif status == 400:
+            raise MacAlreadyExists
+        elif status == 412:
+            raise NetworkAccessAlreadyActive
 
     @mac.setter
     def mac(self, new_mac):

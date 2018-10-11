@@ -14,7 +14,7 @@ from flask_login import current_user, login_required
 from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
-    ChangeUseCacheForm, PaymentForm
+    ChangeUseCacheForm, PaymentForm, ActivateNetworkAccessForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
@@ -306,6 +306,43 @@ def change_mac():
     form.mac.default = current_user.mac.value
 
     return render_template('usersuite/change_mac.html', form=form)
+
+
+@bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
+@login_required
+def activate_network_access():
+    """As user, activate your network access
+    """
+    form = ActivateNetworkAccessForm()
+
+    if form.validate_on_submit():
+        password = form.password.data
+        mac = form.mac.data
+        birthdate = form.birthdate.data
+        host_name = form.host_name.data
+
+        try:
+            with current_user.tmp_authentication(password):
+                current_user.activate_network_access(password, mac, birthdate, host_name)
+        except PasswordInvalid:
+            flash(gettext("Passwort war inkorrekt!"), "error")
+        except MacAlreadyExists:
+            flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
+        else:
+            logger.info('Successfully activated network access',
+                        extra={'data': {'mac': mac, 'birthdate': birthdate, 'host_name': host_name},
+                               'tags': {'rate_critical': True}})
+
+            flash(gettext("Netzwerkzugang wurde aktiviert!"), 'success')
+            flash(gettext("Es kann bis zu 10 Minuten dauern, "
+                          "bis der Netzwerkzugang funktioniert."), 'info')
+
+            return redirect(url_for('.index'))
+
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template('usersuite/activate_network_access.html', form=form)
 
 
 @bp_usersuite.route("/change_use_cache", methods=['GET', 'POST'])

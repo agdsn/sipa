@@ -23,6 +23,10 @@ class MacAlreadyExists(Exception):
     pass
 
 
+class NetworkAccessAlreadyActive(Exception):
+    pass
+
+
 class DBQueryEmpty(Exception):
     pass
 
