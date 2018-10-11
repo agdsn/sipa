@@ -34,9 +34,9 @@ class PycroftApi():
         return self.post('user/{}/change-cache-usage'.format(user_id),
                          data={'use_cache': use_cache})
 
-    def change_mac(self, user_id, password, interface_id, new_mac):
+    def change_mac(self, user_id, password, interface_id, new_mac, host_name):
         return self.post('user/{}/change-mac/{}'.format(user_id, interface_id),
-                         data={'password': password, 'mac': new_mac})
+                         data={'password': password, 'mac': new_mac, 'host_name': host_name})
 
     def activate_network_access(self, user_id, password, mac, birthdate, host_name):
         return self.post('user/{}/activate-network-access'.format(user_id),

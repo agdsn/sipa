@@ -281,10 +281,11 @@ def change_mac():
     if form.validate_on_submit():
         password = form.password.data
         mac = form.mac.data
+        host_name = form.host_name.data
 
         try:
             with current_user.tmp_authentication(password):
-                current_user.mac = mac
+                current_user.change_mac_address(mac, host_name)
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:

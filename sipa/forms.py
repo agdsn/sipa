@@ -178,6 +178,12 @@ class ChangeMACForm(FlaskForm):
         validators=[DataRequired("MAC-Adresse nicht angegeben!"),
                     MacAddress("MAC ist nicht in gültigem Format!"),
                     require_unicast_mac])
+    host_name = StringField(label=lazy_gettext("Neuer Gerätename (Optional)"),
+                            validators=[Regexp(regex="^[a-zA-Z0-9 ]+", message=u"Gerätename ist ungültig"),
+                                        Optional()],
+                            description="TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä.")
+
+
 class ActivateNetworkAccessForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),

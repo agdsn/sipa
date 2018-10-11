@@ -140,11 +140,15 @@ class User(BaseUser):
 
     @mac.setter
     def mac(self, new_mac):
+        pass
+
+    def change_mac_address(self, new_mac, host_name):
         # if this has been reached despite `tmp_readonly`, this is a bug.
         assert len(self._interfaces) == 1
 
         status, result = api.change_mac(self._id, self._tmp_password,
-                                        self._interfaces[0]['id'], new_mac)
+                                        self._interfaces[0]['id'], new_mac,
+                                        host_name)
 
         if status == 401:
             raise PasswordInvalid
