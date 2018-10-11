@@ -175,9 +175,10 @@ class ChangeMACForm(FlaskForm):
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     mac = StrippedStringField(
         label=lazy_gettext("Neue MAC"),
-        validators=[DataRequired("MAC-Adresse nicht angegeben!"),
-                    MacAddress("MAC ist nicht in gültigem Format!"),
-                    require_unicast_mac])
+        validators=[DataRequired(lazy_gettext("MAC-Adresse nicht angegeben!")),
+                    MacAddress(lazy_gettext("MAC ist nicht in gültigem Format!")),
+                    require_unicast_mac],
+        description="XX:XX:XX:XX:XX:XX")
     host_name = StringField(label=lazy_gettext("Neuer Gerätename (Optional)"),
                             validators=[Regexp(regex="^[a-zA-Z0-9 ]+", message=u"Gerätename ist ungültig"),
                                         Optional()],
