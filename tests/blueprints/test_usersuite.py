@@ -43,6 +43,9 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
     def test_mac_edit_200(self):
         self.assert200(self.client.get(url_for('usersuite.change_mac')))
 
+    def activate_network_access_200(self):
+        self.assert200(self.client.get(url_for('usersuite.activate_network_access')))
+
     def test_mail_edit_200(self):
         self.assert200(self.client.get(url_for('usersuite.change_mail')))
 
