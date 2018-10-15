@@ -9,7 +9,7 @@ from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
                      StringField, TextAreaField, RadioField, IntegerField, DateField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
-                                MacAddress, Regexp, ValidationError, NumberRange, Optional)
+                                MacAddress, Regexp, ValidationError, NumberRange, Optional, Length)
 
 from sipa.backends.extension import backends
 
@@ -200,7 +200,7 @@ class ActivateNetworkAccessForm(FlaskForm):
                           description="YYYY-MM-DD (z.B. 1995-10-23)")
     host_name = StringField(label=lazy_gettext("Gerätename (Optional)"),
                             validators=[Regexp(regex="^[a-zA-Z0-9 ]+", message=u"Gerätename ist ungültig"),
-                                        Optional()],
+                                        Optional(), Length(-1, 30), lazy_gettext("Gerätename zu lang")],
                             description="TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä.")
 
 
