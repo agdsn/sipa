@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-09-01 13:48+0200\n"
+"POT-Creation-Date: 2018-10-23 20:54+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -120,6 +120,39 @@ msgstr ""
 msgid "Neue MAC"
 msgstr ""
 
+msgid "MAC-Adresse nicht angegeben!"
+msgstr ""
+
+msgid "MAC ist nicht in gültigem Format!"
+msgstr ""
+
+msgid "Neuer Gerätename (Optional)"
+msgstr ""
+
+msgid "Gerätename ist ungültig"
+msgstr ""
+
+msgid "Gerätename zu lang"
+msgstr ""
+
+msgid "TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."
+msgstr ""
+
+msgid "MAC-Adresse"
+msgstr ""
+
+msgid "Geburtsdatum"
+msgstr ""
+
+msgid "Geburtsdatum nicht angegeben!"
+msgstr ""
+
+msgid "YYYY-MM-DD (z.B. 1995-10-23)"
+msgstr ""
+
+msgid "Gerätename (Optional)"
+msgstr ""
+
 msgid "Cache-Nutzung"
 msgstr ""
 
@@ -171,11 +204,6 @@ msgid ""
 msgstr ""
 
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
-msgstr ""
-
-msgid ""
-"Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch "
-"mal."
 msgstr ""
 
 msgid "Anmeldedaten fehlerhaft!"
@@ -302,13 +330,22 @@ msgstr ""
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
+msgid "Es kann bis zu 24 Stunden (!) dauern, bis die Änderung wirksam ist."
+msgstr ""
+
+msgid "Netzwerkzugang wurde aktiviert!"
+msgstr ""
+
+msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
 msgstr ""
 
 msgid "Cache-Nutzung wurde aktiviert!"
 msgstr ""
 
 msgid "Cache-Nutzung wurde deaktiviert!"
+msgstr ""
+
+msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
 msgid "Deine Datenbank wurde gelöscht."
@@ -327,9 +364,6 @@ msgid "Nicht verfügbar"
 msgstr ""
 
 msgid "Beitrag in Miete inbegriffen"
-msgstr ""
-
-msgid "Raumnummer"
 msgstr ""
 
 msgid "Aktiv"
@@ -357,24 +391,6 @@ msgid "Netzzugang gesperrt"
 msgstr ""
 
 msgid "ok"
-msgstr ""
-
-msgid "Nicht bezahlt, Netzanschluss gesperrt"
-msgstr ""
-
-msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
-msgstr ""
-
-msgid "Exaktiv"
-msgstr ""
-
-msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
-msgstr ""
-
-msgid "Unbekannt"
-msgstr ""
-
-msgid "Datenbank nicht erreichbar"
 msgstr ""
 
 msgid "Dein Traffic"
@@ -570,6 +586,9 @@ msgid "Passwort ändern"
 msgstr ""
 
 msgid "MAC-Adresse ändern"
+msgstr ""
+
+msgid "Netzwerkanschluss aktivieren"
 msgstr ""
 
 msgid "Kontaktformular"
@@ -1377,5 +1396,32 @@ msgstr ""
 #~ "Einstellungen bereits einige Daten wie "
 #~ "z.B. die MAC-Adresse selbstständig "
 #~ "ändern."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Es gab einen internen Fehler. Bitte "
+#~ "probiere es in ein paar Minuten "
+#~ "noch mal."
+#~ msgstr ""
+
+#~ msgid "Raumnummer"
+#~ msgstr ""
+
+#~ msgid "Nicht bezahlt, Netzanschluss gesperrt"
+#~ msgstr ""
+
+#~ msgid "Verstoß gegen Netzordnung, Netzanschluss gesperrt"
+#~ msgstr ""
+
+#~ msgid "Exaktiv"
+#~ msgstr ""
+
+#~ msgid "Trafficlimit überschritten, Netzanschluss gesperrt"
+#~ msgstr ""
+
+#~ msgid "Unbekannt"
+#~ msgstr ""
+
+#~ msgid "Datenbank nicht erreichbar"
 #~ msgstr ""
 
