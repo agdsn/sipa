@@ -48,7 +48,7 @@ def wrap_message(message, chars_in_line=80):
     return '\n'.join(return_text)
 
 
-def send_mail(sender, recipient, subject, message):
+def send_mail(author, recipient, subject, message):
     """Send a MIME text mail
 
     Send a mail from ``sender`` to ``receipient`` with ``subject`` and
@@ -58,7 +58,7 @@ def send_mail(sender, recipient, subject, message):
     Returns False, if sending from localhost:25 fails.  Else returns
     True.
 
-    :param str sender: The mail address of the sender
+    :param str author: The mail address of the sender
     :param str recipient: The mail address of the recipient
     :param str subject:
     :param str message:
@@ -71,7 +71,7 @@ def send_mail(sender, recipient, subject, message):
     mail = MIMEText(message, _charset='utf-8')
 
     mail['Message-Id'] = make_msgid()
-    mail['From'] = sender
+    mail['From'] = author
     mail['To'] = recipient
     mail['Subject'] = subject
     mail['Date'] = formatdate(localtime=True)
@@ -83,7 +83,7 @@ def send_mail(sender, recipient, subject, message):
         smtp = smtplib.SMTP()
         smtp.connect(host=mailserver_host,
                      port=mailserver_port)
-        smtp.sendmail(sender, recipient, mail.as_string(0))
+        smtp.sendmail(author, recipient, mail.as_string(0))
         smtp.close()
     except IOError as e:
         # smtp.connect failed to connect
@@ -96,7 +96,7 @@ def send_mail(sender, recipient, subject, message):
         return False
     else:
         logger.info('Successfully sent mail from usersuite', extra={
-            'tags': {'from': sender, 'to': recipient,
+            'tags': {'from': author, 'to': recipient,
                      'mailserver': '{}:{}'.format(mailserver_host,
                                                   mailserver_port)},
             'data': {'subject': subject, 'message': message}
@@ -104,13 +104,13 @@ def send_mail(sender, recipient, subject, message):
         return True
 
 
-def send_contact_mail(sender, subject, message, name, dormitory_name):
+def send_contact_mail(author, subject, message, name, dormitory_name):
     """Compose a mail for anonymous contacting.
 
     Call :py:func:`send_complex_mail` setting a tag plus name and
     dormitory in the header.
 
-    :param str sender: The e-mail of the sender
+    :param str author: The e-mail of the sender
     :param str subject:
     :param str message:
     :param str name: The sender's real-life name
@@ -122,7 +122,7 @@ def send_contact_mail(sender, subject, message, name, dormitory_name):
     dormitory = backends.get_dormitory(dormitory_name)
 
     return send_complex_mail(
-        sender=sender,
+        author=author,
         recipient=dormitory.datasource.support_mail,
         subject=subject,
         message=message,
@@ -131,12 +131,12 @@ def send_contact_mail(sender, subject, message, name, dormitory_name):
     )
 
 
-def send_official_contact_mail(sender, subject, message, name):
+def send_official_contact_mail(author, subject, message, name):
     """Compose a mail for official contacting.
 
     Call :py:func:`send_complex_mail` setting a tag.
 
-    :param str sender: The e-mail address of the sender
+    :param str author: The e-mail address of the sender
     :param str subject:
     :param str message:
     :param str name: The sender's real-life name
@@ -144,7 +144,7 @@ def send_official_contact_mail(sender, subject, message, name):
     :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
-        sender=sender,
+        author=author,
         recipient="vorstand@lists.agdsn.de",
         subject=subject,
         message=message,
@@ -170,7 +170,7 @@ def send_usersuite_contact_mail(subject, message, category, user=current_user):
     :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
-        sender="{login}@{server}".format(
+        author="{login}@{server}".format(
             login=user.login.value,
             server=user.datasource.mail_server
         ),

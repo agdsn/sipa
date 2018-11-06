@@ -95,7 +95,7 @@ class SendMailTestCase(TestCase):
         self.wrap_mock = MagicMock(side_effect=dont_wrap_message)
 
         self.args = {
-            'sender': "foo@bar.baz",
+            'author': "foo@bar.baz",
             'recipient': "support@agd.sn",
             'subject': "Internet broken",
             'message': "Fix it!!!",
@@ -123,7 +123,7 @@ class SendMailTestCase(TestCase):
 
     def test_sendmail_sender_passed(self):
         sender = self.observed_call_args[0]
-        self.assertEqual(sender, self.args['sender'])
+        self.assertEqual(sender, self.args['author'])
         message = self.observed_call_args[2]
         self.assertIn(f"From: {sender}", message)
 
@@ -181,7 +181,7 @@ class ComplexMailContentTestCase(MailSendingTestBase):
     @property
     def args(self):
         return {
-            'sender': "foo@bar.baz",
+            'author': "foo@bar.baz",
             'subject': "test",
             'message': "Dies ist eine Testnachricht.",
             'tag': "Testtag",
@@ -215,7 +215,7 @@ class ComplexMailContentTestCase(MailSendingTestBase):
 class ComplexMailArgumentsTestCase(TestCase):
     def test_fails_on_missing_argument(self):
         """Test send_complex_mail needs all of the required arguments"""
-        required_args = ['sender', 'recipient', 'subject', 'message']
+        required_args = ['author', 'recipient', 'subject', 'message']
 
         for blacklist_arg in required_args:
             kwargs = {arg: MagicMock() for arg in required_args
@@ -230,7 +230,7 @@ class OfficialContactMailTestCase(MailSendingTestBase):
     @property
     def args(self):
         return {
-            'sender': "foo@bar.baz",
+            'author': "foo@bar.baz",
             'subject': "test",
             'message': "Suchen sie einen Partner?",
             'name': "Paul Dirac",
@@ -240,7 +240,7 @@ class OfficialContactMailTestCase(MailSendingTestBase):
         self.assertTrue(self.success)
 
     def test_sender_mail_passed(self):
-        self.assert_arg_equals_call_arg('sender', 'sender')
+        self.assert_arg_equals_call_arg('author', 'author')
 
     def test_subject_complete(self):
         self.assert_arg_in_call_arg('subject', 'subject')
@@ -265,7 +265,7 @@ class ContactMailTestCase(MailSendingTestBase):
     @property
     def args(self):
         return {
-            'sender': "foo@bar.baz",
+            'author': "foo@bar.baz",
             'subject': "test",
             'name': "Paul Dirac",
             'message': "Nö",
@@ -289,7 +289,7 @@ class ContactMailTestCase(MailSendingTestBase):
         self.assert_arg_in_call_arg('subject', 'subject')
 
     def test_sender_mail_passed(self):
-        self.assert_arg_equals_call_arg('sender', 'sender')
+        self.assert_arg_equals_call_arg('author', 'author')
 
     def test_recipient_passed(self):
         recipient = self.send_mail_mock.call_args[1]['recipient']
@@ -324,7 +324,7 @@ class UsersuiteContactMailTestCase(MailSendingTestBase):
         self.assertTrue(self.success)
 
     def test_sender_composed_correctly(self):
-        sender = self.send_mail_mock.call_args[1]['sender']
+        sender = self.send_mail_mock.call_args[1]['author']
         self.assertTrue(sender.endswith(self.user_mock.datasource.mail_server),
                         msg="Sender does not end with mail_server")
         self.assertTrue(sender.startswith(self.user_mock.uid),
