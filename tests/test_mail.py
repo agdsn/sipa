@@ -19,6 +19,8 @@ class MailSendingTestBase(TestCase):
     staticmethod).  If that is not enough (because something needs to
     be patched or similar), override ``self._call_mail_function``.
     """
+    mail_function: staticmethod
+
     def setUp(self):
         super().setUp()
         self.send_mail_mock = MagicMock(return_value=True)
@@ -107,7 +109,7 @@ class SendMailTestCase(TestCase):
 
         self.log = log
 
-        self.call_args = self.smtp_mock().sendmail.call_args[0]
+        self.observed_call_args = self.smtp_mock().sendmail.call_args[0]
 
     def test_wrap_message_called(self):
         self.assertEqual(self.wrap_mock.call_count, 1)
@@ -120,19 +122,19 @@ class SendMailTestCase(TestCase):
         self.assertTrue(self.smtp_mock().close.called)
 
     def test_sendmail_sender_passed(self):
-        sender = self.call_args[0]
+        sender = self.observed_call_args[0]
         self.assertEqual(sender, self.args['sender'])
-        message = self.call_args[2]
+        message = self.observed_call_args[2]
         self.assertIn("From: {}".format(sender), message)
 
     def test_sendmail_recipient_passed(self):
-        recipient = self.call_args[1]
+        recipient = self.observed_call_args[1]
         self.assertEqual(recipient, self.args['recipient'])
-        message = self.call_args[2]
+        message = self.observed_call_args[2]
         self.assertIn("To: {}".format(recipient), message)
 
     def test_sendmail_subject_passed(self):
-        message = self.call_args[2]
+        message = self.observed_call_args[2]
         self.assertIn("Subject: {}".format(self.args['subject']), message)
 
     def test_returned_true(self):
