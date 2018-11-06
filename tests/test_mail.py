@@ -79,7 +79,7 @@ class ComposeBodyTestCase(TestCase):
         composed = compose_body(self.message, header=info)
 
         for key, val in info.items():
-            self.assertIn("{}: {}".format(key, val), composed)
+            self.assertIn(f"{key}: {val}", composed)
 
         self.assertIn(self.message, composed)
 
@@ -125,17 +125,17 @@ class SendMailTestCase(TestCase):
         sender = self.observed_call_args[0]
         self.assertEqual(sender, self.args['sender'])
         message = self.observed_call_args[2]
-        self.assertIn("From: {}".format(sender), message)
+        self.assertIn(f"From: {sender}", message)
 
     def test_sendmail_recipient_passed(self):
         recipient = self.observed_call_args[1]
         self.assertEqual(recipient, self.args['recipient'])
         message = self.observed_call_args[2]
-        self.assertIn("To: {}".format(recipient), message)
+        self.assertIn(f"To: {recipient}", message)
 
     def test_sendmail_subject_passed(self):
         message = self.observed_call_args[2]
-        self.assertIn("Subject: {}".format(self.args['subject']), message)
+        self.assertIn(f"Subject: {self.args['subject']}", message)
 
     def test_returned_true(self):
         self.assertEqual(self.success, True)
