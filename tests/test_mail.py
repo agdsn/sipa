@@ -1,3 +1,5 @@
+from dataclasses import dataclass, field
+from typing import List
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
@@ -109,7 +111,16 @@ class SendMailTestCase(TestCase):
 
         self.log = log
 
-        self.observed_call_args = self.smtp_mock().sendmail.call_args[0]
+        @dataclass
+        class SendmailSig:
+            """Signature of SMTP().sendmail()"""
+            from_addr: str
+            to_addrs: List[str]
+            msg: str
+            mail_options: List = field(default_factory=lambda: [])
+            rcpt_options: List = field(default_factory=lambda: [])
+
+        self.observed_call_args = SendmailSig(*self.smtp_mock().sendmail.call_args[0])
 
     def test_wrap_message_called(self):
         self.assertEqual(self.wrap_mock.call_count, 1)
@@ -122,19 +133,19 @@ class SendMailTestCase(TestCase):
         self.assertTrue(self.smtp_mock().close.called)
 
     def test_sendmail_sender_passed(self):
-        sender = self.observed_call_args[0]
+        sender = self.observed_call_args.from_addr
         self.assertEqual(sender, self.args['author'])
-        message = self.observed_call_args[2]
+        message = self.observed_call_args.msg
         self.assertIn(f"From: {sender}", message)
 
     def test_sendmail_recipient_passed(self):
-        recipient = self.observed_call_args[1]
+        recipient = self.observed_call_args.to_addrs
         self.assertEqual(recipient, self.args['recipient'])
-        message = self.observed_call_args[2]
+        message = self.observed_call_args.msg
         self.assertIn(f"To: {recipient}", message)
 
     def test_sendmail_subject_passed(self):
-        message = self.observed_call_args[2]
+        message = self.observed_call_args.msg
         self.assertIn(f"Subject: {self.args['subject']}", message)
 
     def test_returned_true(self):
