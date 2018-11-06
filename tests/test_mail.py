@@ -299,7 +299,7 @@ class ContactMailTestCase(MailSendingTestBase):
 class UsersuiteContactMailTestCase(MailSendingTestBase):
     def setUp(self):
         mock = MagicMock()
-        mock.uid = 'test_uid'
+        mock.login.value = 'test_login'
         mock.datasource.mail_server = "agdsn.de"
         mock.datasource.support_mail = "support@agd.sn"
 
@@ -327,8 +327,8 @@ class UsersuiteContactMailTestCase(MailSendingTestBase):
         sender = self.send_mail_mock.call_args[1]['author']
         self.assertTrue(sender.endswith(self.user_mock.datasource.mail_server),
                         msg="Sender does not end with mail_server")
-        self.assertTrue(sender.startswith(self.user_mock.uid),
-                        msg="Sender does not start with uid")
+        self.assertTrue(sender.startswith(self.user_mock.login.value),
+                        msg="Sender does not start with login")
 
     def test_recipient_passed(self):
         expected_recipient = self.user_mock.datasource.support_mail
@@ -341,4 +341,4 @@ class UsersuiteContactMailTestCase(MailSendingTestBase):
 
     def test_message_complete(self):
         self.assert_arg_in_call_arg('message', 'message')
-        self.assertIn(self.user_mock.uid, self.send_mail_mock.call_args[1]['message'])
+        self.assertIn(self.user_mock.login.value, self.send_mail_mock.call_args[1]['message'])
