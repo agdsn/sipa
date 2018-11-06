@@ -86,11 +86,22 @@ class ComposeBodyTestCase(TestCase):
         self.assertIn(self.message, composed)
 
 
-class SendMailTestCase(TestCase):
+class SMTPTestBase(TestCase):
+    """Base class providing mocks for current_app and SMTP().send_mail()"""
+    def setUp(self):
+        self.app_mock = MagicMock()
+        self.smtp_mock = MagicMock()
+        self.app_mock.config = {
+            'MAILSERVER_HOST': 'some-mailserver.agdsn.network',
+            'MAILSERVER_PORT': 25,
+            'CONTACT_SENDER_MAIL': 'noreply@agdsn.de',
+        }
+
+
+class SendMailTestCase(SMTPTestBase):
     def setUp(self):
         super().setUp()
         self.smtp_mock = MagicMock()
-        self.app_mock = MagicMock()
 
         def dont_wrap_message(msg):
             return msg
@@ -120,7 +131,8 @@ class SendMailTestCase(TestCase):
             mail_options: List = field(default_factory=lambda: [])
             rcpt_options: List = field(default_factory=lambda: [])
 
-        self.observed_call_args = SendmailSig(*self.smtp_mock().sendmail.call_args[0])
+        call_args = self.smtp_mock().sendmail.call_args
+        self.observed_call_args = SendmailSig(*call_args[0], **call_args[1])
 
     def test_wrap_message_called(self):
         self.assertEqual(self.wrap_mock.call_count, 1)
@@ -132,11 +144,25 @@ class SendMailTestCase(TestCase):
     def test_smtp_close_called(self):
         self.assertTrue(self.smtp_mock().close.called)
 
-    def test_sendmail_sender_passed(self):
-        sender = self.observed_call_args.from_addr
-        self.assertEqual(sender, self.args['author'])
-        message = self.observed_call_args.msg
-        self.assertIn(f"From: {sender}", message)
+    def test_sendmail_envelope_sender(self):
+        self.assertEqual(self.observed_call_args.from_addr,
+                         self.app_mock.config['CONTACT_SENDER_MAIL'],
+                         "Wrong envelope sender set!")
+
+    def test_sendmail_from_header(self):
+        self.assertIn(f"From: {self.app_mock.config['CONTACT_SENDER_MAIL']}\n",
+                      self.observed_call_args.msg,
+                      "Wrong From: header!")
+
+    def test_sendmail_otrs_header(self):
+        self.assertIn(f"X-OTRS-CustomerId: {self.args['author']}\n",
+                      self.observed_call_args.msg,
+                      "X-OTRS-CustumerId incorrect!")
+
+    def test_sendmail_reply_to(self):
+        self.assertIn(f"Reply-To: {self.args['author']}\n",
+                      self.observed_call_args.msg,
+                      "Wrong Reply-To: header!")
 
     def test_sendmail_recipient_passed(self):
         recipient = self.observed_call_args.to_addrs
@@ -158,18 +184,16 @@ class SendMailTestCase(TestCase):
         self.assertFalse(self.log.output)
 
 
-class SendMailFailingTestCase(TestCase):
+class SendMailFailingTestCase(SMTPTestBase):
     def setUp(self):
         super().setUp()
-
-        self.smtp_mock = MagicMock()
 
         def bad_sendmail(*_, **__):
             raise IOError()
         self.smtp_mock().sendmail.side_effect = bad_sendmail
 
         with patch('sipa.mail.smtplib.SMTP', self.smtp_mock), \
-                patch('sipa.mail.current_app', MagicMock()), \
+                patch('sipa.mail.current_app', self.app_mock) as app, \
                 self.assertLogs('sipa.mail', level='ERROR') as log:
             self.success = send_mail('', '', '', '')
 
