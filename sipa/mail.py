@@ -67,11 +67,14 @@ def send_mail(author, recipient, subject, message):
 
     :rtype: bool
     """
+    sender = current_app.config['CONTACT_SENDER_MAIL']
     message = wrap_message(message)
     mail = MIMEText(message, _charset='utf-8')
 
     mail['Message-Id'] = make_msgid()
-    mail['From'] = author
+    mail['From'] = sender
+    mail['Reply-To'] = author
+    mail['X-OTRS-CustomerId'] = author
     mail['To'] = recipient
     mail['Subject'] = subject
     mail['Date'] = formatdate(localtime=True)
@@ -83,7 +86,7 @@ def send_mail(author, recipient, subject, message):
         smtp = smtplib.SMTP()
         smtp.connect(host=mailserver_host,
                      port=mailserver_port)
-        smtp.sendmail(author, recipient, mail.as_string(0))
+        smtp.sendmail(from_addr=sender, to_addrs=recipient, msg=mail.as_string(0))
         smtp.close()
     except IOError as e:
         # smtp.connect failed to connect

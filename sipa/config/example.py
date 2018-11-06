@@ -47,6 +47,7 @@
 # Mail configuration
 # MAILSERVER_HOST = "atlantis.agdsn"
 # MAILSERVER_PORT = 25
+# CONTACT_SENDER_MAIL = None  # Must be set
 
 # Pycroft backend
 # PYCROFT_ENDPOINT = "https://pycroft.agdsn.de/api/v0/"

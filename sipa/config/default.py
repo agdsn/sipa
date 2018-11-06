@@ -33,6 +33,7 @@ FLATPAGES_MARKDOWN_EXTENSIONS = [
 # Mail configuration
 MAILSERVER_HOST = ""
 MAILSERVER_PORT = 25
+# CONTACT_SENDER_MAIL  # Must be set
 
 # MySQL Helios configuration
 # DB_HELIOS_URI = None  # Must be set
