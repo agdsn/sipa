@@ -92,12 +92,6 @@ class PgUserDataTestCase(OneAccountTestBase):
             with self.subTest(part=part):
                 self.assertIn(part, self.user.address)
 
-    def test_mail_correct(self):
-        acc = self.fixtures_pg[Account][0]
-        user = User.get(acc.account)
-        expected_mail = "{}@agdsn.me".format(acc.account)
-        self.assertEqual(user.mail, expected_mail)
-
     def test_uninitialized_max_credit_throws_warning(self):
         logger = logging.getLogger('sipa.model.hss.user')
         with self.assertLogs(logger, level='WARNING') as cm:
