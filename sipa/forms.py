@@ -179,10 +179,14 @@ class ChangeMACForm(FlaskForm):
                     MacAddress(lazy_gettext("MAC ist nicht in gültigem Format!")),
                     require_unicast_mac],
         description="XX:XX:XX:XX:XX:XX")
-    host_name = StringField(label=lazy_gettext("Neuer Gerätename (Optional)"),
-                            validators=[Regexp(regex="^[a-zA-Z0-9 ]+", message=lazy_gettext("Gerätename ist ungültig")),
-                                        Optional(), Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
-                            description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."))
+    host_name = StringField(
+        label=lazy_gettext("Neuer Gerätename (Optional)"),
+        validators=[Regexp(regex="^[a-zA-Z0-9 ]+",
+                           message=lazy_gettext("Gerätename ist ungültig")),
+                    Optional(),
+                    Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
+        description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."),
+    )
 
 
 class ActivateNetworkAccessForm(FlaskForm):
@@ -198,10 +202,14 @@ class ActivateNetworkAccessForm(FlaskForm):
     birthdate = DateField(label=lazy_gettext("Geburtsdatum"),
                           validators=[DataRequired(lazy_gettext("Geburtsdatum nicht angegeben!"))],
                           description=lazy_gettext("YYYY-MM-DD (z.B. 1995-10-23)"))
-    host_name = StringField(label=lazy_gettext("Gerätename (Optional)"),
-                            validators=[Regexp(regex="^[a-zA-Z0-9 ]+", message=lazy_gettext("Gerätename ist ungültig")),
-                                        Optional(), Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
-                            description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."))
+    host_name = StringField(
+        label=lazy_gettext("Gerätename (Optional)"),
+        validators=[Regexp(regex="^[a-zA-Z0-9 ]+",
+                           message=lazy_gettext("Gerätename ist ungültig")),
+                    Optional(),
+                    Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
+        description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä.")
+    )
 
 
 class ChangeUseCacheForm(FlaskForm):
