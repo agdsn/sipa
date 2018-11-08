@@ -51,6 +51,7 @@ class AppInitialized(TestCase):
         test_app.config['LOG_CONFIG'] = WARNINGS_ONLY_CONFIG
         test_app.config['WTF_CSRF_ENABLED'] = False
         test_app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
+        test_app.config['CONTACT_SENDER_MAIL'] = "test@foo.de"
         test_app.debug = True
         return create_app(app=test_app, config=self.app_config)
 
