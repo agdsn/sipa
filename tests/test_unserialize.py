@@ -2,7 +2,8 @@
 from typing import Any, List
 from unittest import TestCase
 
-from sipa.model.pycroft.unserialize import unserializer, MissingKeysError, ConversionError
+from sipa.model.pycroft.unserialize import unserializer, MissingKeysError, ConversionError, \
+    UnserializationError
 
 
 class UnserializerTest(TestCase):
@@ -42,13 +43,17 @@ class UnserializerTest(TestCase):
         with self.assertRaises(ConversionError):
             Foo({'count': "not_an_int"})
 
-    def test_list_cannot_convert(self):
+    def test_list_can_convert(self):
         @unserializer
         class Foo:
             items: List[str]
 
-        with self.assertRaises(ConversionError):
-            Foo({'items': ["bar", "baz"]})
+        try:
+            f = Foo({'items': ["bar", "baz"]})
+        except ConversionError:
+            self.fail()
+        else:
+            self.assertEqual(f.items, ["bar", "baz"])
 
     def test_complex_unserializer(self):
         @unserializer
@@ -61,3 +66,38 @@ class UnserializerTest(TestCase):
         self.assertEqual(f.name, "Hans")
         self.assertEqual(f.id, 555)
         self.assertEqual(f.items, ["one", "two"])
+
+
+class NestedUnserializationTest(TestCase):
+    def setUp(self):
+        @unserializer
+        class Note:
+            id_: int
+            name: str
+
+        @unserializer
+        class Bar:
+            description: str
+            notes: List[Note]
+        self._bar_cls = Bar
+
+        @unserializer
+        class Baz:
+            inner: Bar
+
+        try:
+            self.baz = Baz({'inner': {'description': "Beschreibung",
+                                      'notes': [{'id': 1, 'name': "a"},
+                                                {'id': 2, 'name': "b"}]}})
+        except UnserializationError:
+            self.fail("Unserialization failed")
+
+    def test(self):
+        self.assertIsInstance(self.baz.inner, self._bar_cls)
+        self.assertEqual(self.baz.inner.description, "Beschreibung")
+        notes = self.baz.inner.notes
+        self.assertEqual(len(notes), 2)
+        self.assertEqual(notes[0].name, "a")
+        self.assertEqual(notes[0].id, 1)
+        self.assertEqual(notes[1].name, "b")
+        self.assertEqual(notes[1].id, 2)
