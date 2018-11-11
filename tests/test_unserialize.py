@@ -69,29 +69,32 @@ class UnserializerTest(TestCase):
         self.assertEqual(f.items, ["one", "two"])
 
 
+@unserializer
+class Note:
+    id_: int
+    name: str
+
+
+@unserializer
+class Bar:  # We need to dofine this at module level so the lookup works
+    description: str
+    notes: List[Note]
+
+
+@unserializer
+class Baz:
+    inner: Bar
+
+
 class NestedUnserializationTest(TestCase):
     def setUp(self):
-        @unserializer
-        class Note:
-            id_: int
-            name: str
-
-        @unserializer
-        class Bar:
-            description: str
-            notes: List[Note]
         self._bar_cls = Bar
-
-        @unserializer
-        class Baz:
-            inner: Bar
-
         try:
             self.baz = Baz({'inner': {'description': "Beschreibung",
                                       'notes': [{'id': 1, 'name': "a"},
                                                 {'id': 2, 'name': "b"}]}})
-        except UnserializationError:
-            self.fail("Unserialization failed")
+        except UnserializationError as e:
+            self.fail(f"Unserialization failed: {e}")
 
     def test(self):
         self.assertIsInstance(self.baz.inner, self._bar_cls)
