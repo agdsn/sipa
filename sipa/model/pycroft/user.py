@@ -100,7 +100,8 @@ class User(BaseUser):
     @active_prop
     @connection_dependent
     def ips(self):
-        return ", ".join(ip for i in self.user_data.interfaces for ip in i.ips)
+        ips = sorted(ip for i in self.user_data.interfaces for ip in i.ips)
+        return ", ".join(ips)
 
     @active_prop
     @connection_dependent
