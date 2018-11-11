@@ -27,6 +27,7 @@ from sipa.utils.graph_utils import (generate_credit_chart,
                                     provide_render_function)
 
 logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler())  # for before logging is configured
 
 
 def init_app(app, **kwargs):
@@ -110,6 +111,8 @@ def load_config_file(app, config=None):
         else:
             logger.info("Successfully read config file %s",
                         os.environ['SIPA_CONFIG_FILE'])
+    else:
+        logger.info("No SIPA_CONFIG_FILE configured. Moving on.")
 
 
 def init_env_and_config(app):

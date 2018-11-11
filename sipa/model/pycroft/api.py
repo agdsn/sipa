@@ -6,6 +6,7 @@ from typing import Callable, Tuple, Any
 import requests
 from requests import ConnectionError, HTTPError
 
+from sipa.backends.exceptions import InvalidConfiguration
 from .exc import PycroftBackendError
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 class PycroftApi():
     def __init__(self, endpoint, api_key):
+        if not endpoint.endswith("/"):
+            raise InvalidConfiguration("API endpoint must end with a '/'")
         self._endpoint = endpoint
         self._api_key = api_key
 
