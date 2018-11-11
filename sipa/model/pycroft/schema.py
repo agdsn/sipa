@@ -18,7 +18,7 @@ class UserData:
     traffic_balance: int
     traffic_history: List[TrafficHistoryEntry]
     interfaces: List[Interface]
-    finance_balance: str
+    finance_balance: int
     finance_history: List[FinanceHistoryEntry]
     # TODO implement `cls.Meta.custom_constructors`, use `parse_date` for this
     last_finance_update: str
