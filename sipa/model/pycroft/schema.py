@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from typing import Any
+from __future__ import annotations
+from typing import List
 
 from sipa.model.pycroft.unserialize import unserializer
 
@@ -10,16 +11,47 @@ class UserData:
     user_id: str
     login: str
     realname: str
-    # TODO introduce UserStatus when nested unserialization
-    status: Any
+    status: UserStatus
     room: str
     mail: str
-    cache: bool  # TODO test that this works by a `json.loads(json.dumps(foo=True))` test
-    traffic_balance: int  # TODO test what comes out there
-    traffic_history: Any
-    interfaces: Any
+    cache: bool
+    traffic_balance: int
+    traffic_history: List[TrafficHistoryEntry]
+    interfaces: List[Interface]
     finance_balance: str
-    finance_history: Any
-    last_finance_update: str  # TODO what type does parse_date expect?
+    finance_history: List[FinanceHistoryEntry]
+    # TODO implement `cls.Meta.custom_constructors`, use `parse_date` for this
+    last_finance_update: str
 
     # TODO introduce properties once they can be excluded
+
+
+@unserializer
+class UserStatus:
+    member: bool
+    traffic_exceeded: bool
+    network_access: bool
+    account_balanced: bool
+    violation: bool
+
+
+@unserializer
+class Interface:
+    id: int
+    mac: str
+    ips: List[str]
+
+
+@unserializer
+class TrafficHistoryEntry:
+    timestamp: str
+    ingress: int
+    egress: int
+    balance: int
+
+
+@unserializer
+class FinanceHistoryEntry:
+    valid_on: str
+    amount: int
+    description: str

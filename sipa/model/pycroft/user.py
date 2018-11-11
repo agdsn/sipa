@@ -9,7 +9,7 @@ from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive
 from .api import PycroftApi
-from .schema import UserData
+from .schema import UserData, UserStatus
 
 from flask_login import AnonymousUserMixin
 from flask.globals import current_app
@@ -26,7 +26,7 @@ class User(BaseUser):
     user_data: UserData
 
     def __init__(self, user_data: dict):
-        self.user_data = UserData(user_data)
+        self.user_data: UserData = UserData(user_data)
         super().__init__(uid=str(self.user_data.id))
 
     @classmethod
@@ -70,11 +70,11 @@ class User(BaseUser):
     @property
     def traffic_history(self):
         return [{
-            'day': parse_date(entry['timestamp']).weekday(),
-            'input': to_kib(entry['ingress']),
-            'output': to_kib(entry['egress']),
-            'throughput': to_kib(entry['ingress']) + to_kib(entry['egress']),
-            'credit': to_kib(entry['balance']),
+            'day': parse_date(entry.timestamp).weekday(),
+            'input': to_kib(entry.ingress),
+            'output': to_kib(entry.egress),
+            'throughput': to_kib(entry.ingress + entry.egress),
+            'credit': to_kib(entry.balance),
         } for entry in self.user_data.traffic_history]
 
     @property
@@ -95,7 +95,7 @@ class User(BaseUser):
     @active_prop
     @connection_dependent
     def ips(self):
-        return ", ".join(ip for i in self.user_data.interfaces for ip in i['ips'])
+        return ", ".join(ip for i in self.user_data.interfaces for ip in i.ips)
 
     @active_prop
     @connection_dependent
@@ -134,8 +134,8 @@ class User(BaseUser):
         assert len(self.user_data.interfaces) == 1
 
         status, result = api.change_mac(self.user_data.id, self._tmp_password,
-                                        self.user_data.interfaces[0]['id'], new_mac,
-                                        host_name)
+                                        self.user_data.interfaces[0].id,
+                                        new_mac, host_name)
 
         if status == 401:
             raise PasswordInvalid
@@ -216,7 +216,7 @@ class User(BaseUser):
     def finance_information(self):
         return FinanceInformation(
             balance=self.user_data.finance_balance,
-            transactions=((parse_date(t['valid_on']), t['amount']) for t in
+            transactions=((parse_date(t.valid_on), t.amount) for t in
                           self.user_data.finance_history),
             last_update=parse_date(self.user_data.last_finance_update)
         )
@@ -235,23 +235,23 @@ class User(BaseUser):
         )
 
 
-def to_kib(v):
+def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
 
 
-def evaluate_status(status):
+def evaluate_status(status: UserStatus):
     message = None
     style = None
-    if status['violation']:
+    if status.violation:
         message, style = gettext('Verstoß gegen Netzordnung'), 'danger'
-    elif not status['account_balanced']:
+    elif not status.account_balanced:
         message, style = gettext('Nicht bezahlt'), 'warning'
-    elif status['traffic_exceeded']:
+    elif status.traffic_exceeded:
         message, style = gettext('Trafficlimit überschritten'), 'danger'
-    elif not status['member']:
+    elif not status.member:
         message, style = gettext('Kein Mitglied'), 'muted'
 
-    if status['member'] and not status['network_access']:
+    if status.member and not status.network_access:
         if message is not None:
             message += ', {}'.format(gettext('Netzzugang gesperrt'))
         else:
