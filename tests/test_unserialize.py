@@ -69,6 +69,20 @@ class UnserializerTest(TestCase):
         self.assertEqual(f.items, ["one", "two"])
 
 
+class EmptyArgumentsTest(TestCase):
+    @unserializer
+    class Foo:
+        bar: str
+
+    def test_no_argument_throws(self):
+        with self.assertRaises(MissingKeysError):
+            self.Foo()
+
+    def test_argument_none_throws(self):
+        with self.assertRaises(MissingKeysError):
+            self.Foo(None)
+
+
 @unserializer
 class Note:
     id_: int

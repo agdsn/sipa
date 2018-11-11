@@ -101,7 +101,10 @@ def unserializer(cls: type) -> type:
 
     _maybe_setattr(cls, '_json_keys', _json_keys)
 
-    def __init__(self, dict_like: dict):
+    def __init__(self, dict_like: dict = None):
+        if not dict_like:
+            dict_like = {}
+
         # TODO read `Optional` attributes
         module = sys.modules[type(self).__module__]
         constructor_map = {key: constructor_from_annotation(type_=val,
@@ -110,8 +113,11 @@ def unserializer(cls: type) -> type:
 
         missing_keys = set(constructor_map.keys()) - set(dict_like.keys())
         if missing_keys:
-            raise MissingKeysError(f"Missing {len(missing_keys)} keys:"
-                                   f" {', '.join(missing_keys)}")
+            raise MissingKeysError(
+                f"Missing {len(missing_keys)} keys"
+                f" to construct {type(self).__name__}:"
+                f" {', '.join(missing_keys)}"
+            )
         # TODO perhaps warn on superfluous keys
 
         for attrname, constructor in constructor_map.items():
