@@ -1,7 +1,12 @@
 import logging
 
 from functools import partial
+from typing import Callable, Tuple, Any
+
 import requests
+from requests import ConnectionError, HTTPError
+
+from .exc import PycroftBackendError
 
 logger = logging.getLogger(__name__)
 
@@ -60,9 +65,13 @@ class PycroftApi():
         except ConnectionError as e:
             logger.error("Caught a ConnectionError when accessing Pycroft API",
                          extra={'data': {'endpoint': self._endpoint + url}})
-            raise ConnectionError("Pycroft API unreachable") from e
+            raise PycroftBackendError("Pycroft API unreachable") from e
 
         if response.status_code not in [200, 400, 401, 403, 404]:
-            response.raise_for_status()
+            try:
+                response.raise_for_status()
+            except HTTPError as e:
+                raise PycroftBackendError(f"Pycroft API returned status"
+                                          f" {response.status_code}") from e
 
         return response.status_code, response.json()

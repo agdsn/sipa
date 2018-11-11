@@ -9,7 +9,9 @@ from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive
 from .api import PycroftApi
+from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
+from .unserialize import UnserializationError
 
 from flask_login import AnonymousUserMixin
 from flask.globals import current_app
@@ -26,7 +28,10 @@ class User(BaseUser):
     user_data: UserData
 
     def __init__(self, user_data: dict):
-        self.user_data: UserData = UserData(user_data)
+        try:
+            self.user_data: UserData = UserData(user_data)
+        except UnserializationError as e:
+            raise PycroftBackendError("Error when parsing user lookup response") from e
         super().__init__(uid=str(self.user_data.id))
 
     @classmethod
