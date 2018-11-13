@@ -19,24 +19,24 @@ import textwrap
 
 from email.utils import formatdate, make_msgid
 from email.mime.text import MIMEText
+from typing import Optional, Dict, Any
 
 from flask import current_app
 from flask_login import current_user
 
 from sipa.backends.extension import backends
+from sipa.model.user import BaseUser
 
 logger = logging.getLogger(__name__)
 
 
-def wrap_message(message, chars_in_line=80):
+def wrap_message(message: str, chars_in_line: int = 80) -> str:
     """Wrap a block of text to a certain amount of characters
 
-    :param str message: The message
-    :param int chars_in_line: The width to wrap against
+    :param message:
+    :param chars_in_line: The width to wrap against
 
     :returns: the wrapped message
-
-    :rtype: str
     """
     return_text = []
     for paragraph in message.split('\n'):
@@ -48,24 +48,22 @@ def wrap_message(message, chars_in_line=80):
     return '\n'.join(return_text)
 
 
-def send_mail(author, recipient, subject, message):
+def send_mail(author: str, recipient: str, subject: str, message: str) -> bool:
     """Send a MIME text mail
 
-    Send a mail from ``sender`` to ``receipient`` with ``subject`` and
+    Send a mail from ``author`` to ``receipient`` with ``subject`` and
     ``message``.  The message will be wrapped to 80 characters and
     encoded to UTF8.
 
     Returns False, if sending from localhost:25 fails.  Else returns
     True.
 
-    :param str author: The mail address of the sender
-    :param str recipient: The mail address of the recipient
-    :param str subject:
-    :param str message:
+    :param author: The mail address of the author
+    :param recipient: The mail address of the recipient
+    :param subject:
+    :param message:
 
     :returns: Whether the transmission succeeded
-
-    :rtype: bool
     """
     sender = current_app.config['CONTACT_SENDER_MAIL']
     message = wrap_message(message)
@@ -107,18 +105,18 @@ def send_mail(author, recipient, subject, message):
         return True
 
 
-def send_contact_mail(author, subject, message, name, dormitory_name):
+def send_contact_mail(author: str, subject: str, message: str,
+                      name: str, dormitory_name: str) -> bool:
     """Compose a mail for anonymous contacting.
 
     Call :py:func:`send_complex_mail` setting a tag plus name and
     dormitory in the header.
 
-    :param str author: The e-mail of the sender
-    :param str subject:
-    :param str message:
-    :param str name: The sender's real-life name
-    :param str dormitory_name: The string identifier of the chosen
-        dormitory
+    :param author: The e-mail of the author
+    :param subject:
+    :param message:
+    :param name: The author's real-life name
+    :param dormitory_name: The string identifier of the chosen dormitory
 
     :returns: see :py:func:`send_complex_mail`
     """
@@ -134,15 +132,16 @@ def send_contact_mail(author, subject, message, name, dormitory_name):
     )
 
 
-def send_official_contact_mail(author, subject, message, name):
+def send_official_contact_mail(author: str, subject: str, message: str,
+                               name: str) -> bool:
     """Compose a mail for official contacting.
 
     Call :py:func:`send_complex_mail` setting a tag.
 
-    :param str author: The e-mail address of the sender
-    :param str subject:
-    :param str message:
-    :param str name: The sender's real-life name
+    :param author: The e-mail address of the author
+    :param subject:
+    :param message:
+    :param name: The author's real-life name
 
     :returns: see :py:func:`send_complex_mail`
     """
@@ -156,19 +155,20 @@ def send_official_contact_mail(author, subject, message, name):
     )
 
 
-def send_usersuite_contact_mail(subject, message, category, user=current_user):
+def send_usersuite_contact_mail(subject: str, message: str, category: str,
+                                user: BaseUser = current_user) -> bool:
     """Compose a mail for contacting from the usersuite
 
     Call :py:func:`send_complex_mail` setting a tag and the category
     plus the user's login in the header.
 
-    The sender is chosen to be the user's mailaccount on the
+    The author is chosen to be the user's mailaccount on the
     datasource's mail server.
 
-    :param str subject:
-    :param str message:
-    :param str category: The Category as to be included in the title
-    :param BaseUser user: The user object
+    :param subject:
+    :param message:
+    :param category: The Category as to be included in the title
+    :param user:
 
     :returns: see :py:func:`send_complex_mail`
     """
@@ -186,17 +186,19 @@ def send_usersuite_contact_mail(subject, message, category, user=current_user):
     )
 
 
-def send_complex_mail(subject, message, tag="", category="", header=None, **kwargs):
+def send_complex_mail(subject: str, message: str, tag: str = "",
+                      category: str = "", header: Optional[Dict[str, Any]] = None,
+                      **kwargs) -> bool:
     """Send a mail with context information in subject and body.
 
     This function is just a modified call of :py:func:`send_mail`, to
     which all the other arguments are passed.
 
-    :param str subject:
-    :param str message:
-    :param str tag: See :py:func:`compose_subject`
-    :param str category: See :py:func:`compose_subject`
-    :param dict header: See :py:func:`compose_body`
+    :param subject:
+    :param message:
+    :param tag: See :py:func:`compose_subject`
+    :param category: See :py:func:`compose_subject`
+    :param header: See :py:func:`compose_body`
 
     :returns: see :py:func:`send_mail`
     """
@@ -207,19 +209,17 @@ def send_complex_mail(subject, message, tag="", category="", header=None, **kwar
     )
 
 
-def compose_subject(raw_subject, tag="", category=""):
+def compose_subject(raw_subject: str, tag: str = "", category: str = "") -> str:
     """Compose a subject containing a tag and a category.
 
     If any of tag or category is missing, don't print the
     corresponding part (without whitespace issues).
 
-    :param str raw_subject: The original subject
-    :param str tag:
-    :param str category:
+    :param raw_subject: The original subject
+    :param tag:
+    :param category:
 
     :returns: The subject.  Form: "[{tag}] {category}: {raw_subject}"
-
-    :rtype: str
     """
     subject = ""
     if tag:
@@ -233,21 +233,19 @@ def compose_subject(raw_subject, tag="", category=""):
     return subject
 
 
-def compose_body(message, header=None):
+def compose_body(message: str, header: Optional[Dict[str, Any]] = None):
     """Prepend additional information to a message.
 
-    :param str message:
-    :param dict header: Dict of the additional "key: value"
+    :param message:
+    :param header: Dict of the additional "key: value"
         entries to be prepended to the mail.
 
     :returns: The composed body
-
-    :rtype: str
     """
     if not header:
         return message
 
-    header = "\n".join("{key}: {value}".format(key=key, value=value)
-                       for key, value in header.items())
+    serialized_header = "\n".join("{key}: {value}".format(key=key, value=value)
+                                  for key, value in header.items())
 
-    return "{header}\n\n{body}".format(header=header, body=message)
+    return "{header}\n\n{body}".format(header=serialized_header, body=message)
