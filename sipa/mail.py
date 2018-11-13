@@ -90,16 +90,14 @@ def send_mail(author: str, recipient: str, subject: str, message: str) -> bool:
         # smtp.connect failed to connect
         logger.critical('Unable to connect to SMTP server', extra={
             'trace': True,
-            'tags': {'mailserver': '{}:{}'.format(mailserver_host,
-                                                  mailserver_port)},
+            'tags': {'mailserver': f"{mailserver_host}:{mailserver_port}"},
             'data': {'exception_arguments': e.args}
         })
         return False
     else:
         logger.info('Successfully sent mail from usersuite', extra={
             'tags': {'from': author, 'to': recipient,
-                     'mailserver': '{}:{}'.format(mailserver_host,
-                                                  mailserver_port)},
+                     'mailserver': f"{mailserver_host}:{mailserver_port}"},
             'data': {'subject': subject, 'message': message}
         })
         return True
@@ -173,10 +171,7 @@ def send_usersuite_contact_mail(subject: str, message: str, category: str,
     :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
-        author="{login}@{server}".format(
-            login=user.login.value,
-            server=user.datasource.mail_server
-        ),
+        author=f"{user.login.value}@{user.datasource.mail_server}",
         recipient=user.datasource.support_mail,
         subject=subject,
         message=message,
@@ -223,10 +218,10 @@ def compose_subject(raw_subject: str, tag: str = "", category: str = "") -> str:
     """
     subject = ""
     if tag:
-        subject += "[{}] ".format(tag)
+        subject += f"[{tag}] "
 
     if category:
-        subject += "{}: ".format(category)
+        subject += f"{category}: "
 
     subject += raw_subject
 
@@ -245,7 +240,6 @@ def compose_body(message: str, header: Optional[Dict[str, Any]] = None):
     if not header:
         return message
 
-    serialized_header = "\n".join("{key}: {value}".format(key=key, value=value)
-                                  for key, value in header.items())
+    serialized_header = "\n".join(f"{k}: {v}" for k, v in header.items())
 
-    return "{header}\n\n{body}".format(header=serialized_header, body=message)
+    return f"{serialized_header}\n\n{message}"
