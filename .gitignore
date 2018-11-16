@@ -160,7 +160,8 @@ ENV/
 venv
 content
 documents
-.idea
+.idea/*
+!.idea/codeStyles
 
 messages.pot
 

@@ -258,7 +258,7 @@ def contact():
 
     if form.validate_on_submit():
         success = send_contact_mail(
-            sender=form.email.data,
+            author=form.email.data,
             subject=form.subject.data,
             name=form.name.data,
             message=form.message.data,
@@ -288,7 +288,7 @@ def contact_official():
 
     if form.validate_on_submit():
         success = send_official_contact_mail(
-            sender=form.email.data,
+            author=form.email.data,
             subject=form.subject.data,
             name=form.name.data,
             message=form.message.data,
