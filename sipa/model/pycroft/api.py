@@ -1,17 +1,25 @@
 import logging
 
 from functools import partial
+from typing import Callable, Tuple, Any
+
 import requests
+from requests import ConnectionError, HTTPError
+
+from sipa.backends.exceptions import InvalidConfiguration
+from .exc import PycroftBackendError
 
 logger = logging.getLogger(__name__)
 
 
 class PycroftApi():
-    def __init__(self, endpoint, api_key):
+    def __init__(self, endpoint: str, api_key: str):
+        if not endpoint.endswith("/"):
+            raise InvalidConfiguration("API endpoint must end with a '/'")
         self._endpoint = endpoint
         self._api_key = api_key
 
-    def get_user(self, username):
+    def get_user(self, username: str) -> Tuple[int, dict]:
         return self.get('user/{}'.format(username))
 
     def get_user_from_ip(self, ip):
@@ -51,7 +59,7 @@ class PycroftApi():
         request_function = partial(requests.post, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def _do_api_call(self, request_function, url):
+    def _do_api_call(self, request_function: Callable, url: str) -> Tuple[int, Any]:
         try:
             response = request_function(
                 self._endpoint + url,
@@ -60,9 +68,13 @@ class PycroftApi():
         except ConnectionError as e:
             logger.error("Caught a ConnectionError when accessing Pycroft API",
                          extra={'data': {'endpoint': self._endpoint + url}})
-            raise ConnectionError("Pycroft API unreachable") from e
+            raise PycroftBackendError("Pycroft API unreachable") from e
 
         if response.status_code not in [200, 400, 401, 403, 404]:
-            response.raise_for_status()
+            try:
+                response.raise_for_status()
+            except HTTPError as e:
+                raise PycroftBackendError(f"Pycroft API returned status"
+                                          f" {response.status_code}") from e
 
         return response.status_code, response.json()

@@ -11,6 +11,7 @@ from flask_login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import DatabaseError
 from ldap3.core.exceptions import LDAPCommunicationError
 
+from sipa.backends.exceptions import BackendError
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
     OfficialContactForm
 from sipa.mail import send_official_contact_mail, send_contact_mail
@@ -100,6 +101,19 @@ def exceptionhandler_ldap(ex):
         exc_info=True,
     )
     return redirect(url_for('generic.index'))
+
+
+@bp_generic.app_errorhandler(BackendError)
+def exceptionhandler_backend(ex: BackendError):
+    flash(gettext("Fehler bei der Kommunikation mit unserem Server"
+                  f" (Backend '{ex.backend_name}')"),
+          'error')
+    logger.critical(
+        'Backend error: %s', ex.backend_name,
+        extra={'data': {'exception_args': ex.args}},
+        exc_info=True,
+    )
+    return redirect(url_for('generic.index'), 302)
 
 
 @bp_generic.route('/index.php')

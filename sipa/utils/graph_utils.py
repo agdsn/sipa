@@ -53,7 +53,8 @@ def generate_traffic_chart(traffic_data, inline=True):
     :return: The graph object
     """
     # choose unit according to maximum of `throughput`
-    divisions = max_divisions(max(day['throughput'] for day in traffic_data))
+    divisions = (max_divisions(max(day['throughput'] for day in traffic_data))
+                 if traffic_data else 0)
 
     traffic_data = [{key: (reduce_by_base(val, divisions=divisions)
                            if key in ['input', 'output', 'throughput']
