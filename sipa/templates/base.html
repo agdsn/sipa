@@ -229,6 +229,11 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <div id="sidebar" class="col-sm-3">
                     {% block sidebar %}
                     <div>
+                        {% if should_display_traffic_data() -%}
+                        <div class="module"><h2>
+                            <a href="{{ url_for('generic.usertraffic') }}"><span class="glyphicon glyphicon-stats"></span> Traffic</a>
+                        </h2></div>
+                        {%- endif %}
                         <div id="row-contact">
                             <div class="module">
                                 <h2>{{ _("Kontakt") }} </h2>

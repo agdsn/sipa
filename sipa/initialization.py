@@ -17,6 +17,7 @@ from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
 from sipa.model import build_backends_ext
+from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import replace_empty_handler_callables, url_self
 from sipa.utils.babel_utils import get_weekday
@@ -75,6 +76,7 @@ def init_app(app, **kwargs):
         get_weekday=get_weekday,
         possible_locales=possible_locales,
         get_attribute_endpoint=get_attribute_endpoint,
+        should_display_traffic_data=should_display_traffic_data,
         traffic_chart=provide_render_function(generate_traffic_chart),
         current_datasource=backends.current_datasource,
         form_label_width_class="col-sm-{}".format(form_label_width),
