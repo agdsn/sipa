@@ -83,35 +83,11 @@ class PgUserDataTestCase(OneAccountTestBase):
     def test_login_passed(self):
         self.assertEqual(self.user.login, self.account.account)
 
-    def test_credit_passed(self):
-        self.assertEqual(self.user.credit, self.account.traffic_balance / 1024)
-
     def test_address_passed(self):
         access = self.account.access
         for part in [access.building, access.floor, access.flat, access.room]:
             with self.subTest(part=part):
                 self.assertIn(part, self.user.address)
-
-    def test_uninitialized_max_credit_throws_warning(self):
-        logger = logging.getLogger('sipa.model.hss.user')
-        with self.assertLogs(logger, level='WARNING') as cm:
-            self.assertEqual(self.user.max_credit, 210 * 1024**2)
-            self.assertEqual(self.user.daily_credit, 10 * 1024**2)
-
-            self.assertEqual(len(cm.output), 2)
-            last_log = cm.output.pop()
-            self.assertEqual(cm.output.pop(), last_log)
-            self.assertIn("No traffic quota object found", last_log)
-
-
-class CreditMaximumTestCase(OneCreditAccountFixture, OneAccountTestBase):
-    def test_correct_max_credit_passed(self):
-        self.assertEqual(self.user.max_credit * 1024,
-                         self.fixtures_pg[TrafficQuota][0].max_credit)
-
-    def test_correct_daily_credit_passed(self):
-        self.assertEqual(self.user.daily_credit * 1024,
-                         self.fixtures_pg[TrafficQuota][0].daily_credit)
 
 
 class UserFromIpTestCase(OneAccountTestBase):
@@ -188,17 +164,6 @@ class UserTrafficLogTestCaseMixin:
                     self.assertEqual(entry['day'], expected_log.date.weekday())
                     self.assertEqual(entry['input'], expected_log.bytes_in / 1024)
                     self.assertEqual(entry['output'], expected_log.bytes_out / 1024)
-
-    def test_correct_credit_difference(self):
-        for i, entry in enumerate(self.history):
-            with self.subTest(i=i, entry=entry):
-                try:
-                    credit_difference = self.history[i+1]['credit'] - entry['credit']
-                except IndexError:
-                    pass
-                else:
-                    self.assertEqual(credit_difference,
-                                     10 * 1024**2 - entry['throughput'])
 
 
 class UserTrafficLogTestCase(

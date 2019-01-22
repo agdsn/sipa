@@ -133,7 +133,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @property
     @abstractmethod
     def traffic_history(self):
-        """Return the current credit and the traffic history as a dict.
+        """Return the current traffic history as a dict.
 
         The history should cover one week. The assumed unit is KiB.
 
@@ -144,22 +144,12 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
                 'input': in,
                 'output': out,
                 'throughput': in + out,
-                'credit': credit,
             }, …]
 
         The traffic values shall be in KiB, as usual.
 
         :return: The history of the used traffic
         :rtype: list of dicts
-        """
-        pass
-
-    @property
-    @abstractmethod
-    def credit(self):
-        """**[Abstract]** The current credit in KiB
-
-        :rtype: int/float
         """
         pass
 

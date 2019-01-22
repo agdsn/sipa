@@ -86,42 +86,6 @@ def generate_traffic_chart(traffic_data, inline=True):
     return traffic_chart
 
 
-def generate_credit_chart(traffic_data,
-                          inline=True,
-                          max_credit=(210 * 1024 ** 2)):
-    """Create a graph object from the input traffic data with pygal.
-     If inline is set, the chart is being passed the option to not add an xml
-     declaration header to the beginning of the `render()` output, so it can
-      be directly included in HTML code (wrapped by a `<figure>`)
-    :param traffic_data: The traffic data as given by `user.traffic_history`
-    :param inline: Determines the option `disable_xml_declaration`
-    :return: The graph object
-    """
-    raw_max = max_credit
-    divisions = max_divisions(raw_max)
-    max = reduce_by_base(raw_max, divisions)
-
-    credit_chart = default_chart(
-        pygal.Line,
-        gettext("Credit (GiB)"),
-        inline,
-        value_formatter=lambda value: format_as_traffic(value, divisions, divide=False),
-    )
-    credit_chart.range = (0, max)
-
-    credit_chart.x_labels = (get_weekday(day['day']) for day in traffic_data)
-    credit_chart.add(gettext("Credit"),
-                     [reduce_by_base(day['credit'], divisions=divisions)
-                      for day in traffic_data])
-    credit_chart.add(gettext("Maximum"),
-                     [max]*len(traffic_data),
-                     stroke_style={'dasharray': '7', 'width': '2'},
-                     fill=False,
-                     show_dots=False)
-
-    return credit_chart
-
-
 def provide_render_function(generator):
     def renderer(data, **kwargs):
         return generator(data, **kwargs).render()

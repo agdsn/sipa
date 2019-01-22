@@ -22,7 +22,6 @@ class DegenerateUser(BaseUser):
     authenticate = None
     can_change_password = None
     change_password = None
-    credit = None
     finance_information = None
     from_ip = None
     get = None

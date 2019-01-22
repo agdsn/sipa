@@ -53,8 +53,7 @@ class OneCreditAccountFixture(HSSOneAccountFixture):
         fixtures = OrderedDict([
             *super().fixtures_pg.items(),
             (TrafficQuota, [
-                TrafficQuota(id=1, daily_credit=2*1024**3, max_credit=21*1024**3,
-                             description="Testquota differing from the default one")
+                TrafficQuota(id=1, description="Testquota differing from the default one")
             ]),
         ])
         fixtures[Account][0].traffic_quota_id = 1

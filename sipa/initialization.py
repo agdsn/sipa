@@ -17,14 +17,11 @@ from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
 from sipa.model import build_backends_ext
-from sipa.model.misc import query_gauge_data
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import replace_empty_handler_callables, url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
-from sipa.utils.graph_utils import (generate_credit_chart,
-                                    generate_traffic_chart,
-                                    provide_render_function)
+from sipa.utils.graph_utils import generate_traffic_chart, provide_render_function
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())  # for before logging is configured
@@ -74,13 +71,11 @@ def init_app(app, **kwargs):
     form_input_width = 7
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
-        gauge_data=query_gauge_data,
         get_locale=get_locale,
         get_weekday=get_weekday,
         possible_locales=possible_locales,
         get_attribute_endpoint=get_attribute_endpoint,
         traffic_chart=provide_render_function(generate_traffic_chart),
-        credit_chart=provide_render_function(generate_credit_chart),
         current_datasource=backends.current_datasource,
         form_label_width_class="col-sm-{}".format(form_label_width),
         form_input_width_class="col-sm-{}".format(form_input_width),

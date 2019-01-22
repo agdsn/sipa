@@ -79,15 +79,7 @@ class User(BaseUser):
             'input': to_kib(entry.ingress),
             'output': to_kib(entry.egress),
             'throughput': to_kib(entry.ingress + entry.egress),
-            'credit': to_kib(entry.balance),
         } for entry in self.user_data.traffic_history]
-
-    @property
-    def credit(self):
-        return to_kib(self.user_data.traffic_balance)
-
-    max_credit = 210 * 1024 * 1024
-    daily_credit = 5 * 1024 * 1024
 
     @active_prop
     def realname(self):

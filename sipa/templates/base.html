@@ -1,4 +1,3 @@
-{%- set credit = gauge_data() -%}
 {%- macro user_nav_items() -%}
     {% if current_user.is_anonymous -%}
         <li>
@@ -230,29 +229,6 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <div id="sidebar" class="col-sm-3">
                     {% block sidebar %}
                     <div>
-                        {% if not credit.foreign_user -%}
-                            <div id="row-traffic">
-                                <div class="module">
-                                    <h2>{{ _("Verbleibender Traffic") }}</h2>
-
-                                    <hr class="full">
-
-                                    <a id="traffic_gauge_link" href="{{ url_for('generic.usertraffic') }}">
-                                        <div id="trafficgauge"></div>
-                                        <div class="text-center">
-                                            <small>({{ _("Für Details klicken") }})</small>
-                                        </div>
-                                    </a>
-
-                                    {% if credit.error -%}
-                                        <div id="traffic_gauge_error" class="text-danger text-center">
-                                            {{ _("Fehler bei der Abfrage der Daten") }}!
-                                        </div>
-                                    {%- endif %}
-                                </div>
-                            </div>
-                        {%- endif %}
-
                         <div id="row-contact">
                             <div class="module">
                                 <h2>{{ _("Kontakt") }} </h2>
@@ -391,30 +367,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
         <script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
         <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
         <script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
-        <script type="text/javascript" src="{{ url_for("static", filename="js/justgage.1.0.1.js") }}"></script>
         <script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
-        {%- set gauge_max = 210 -%}
-        {%- if credit.data -%}
-            {% set gauge_val = credit.data|gib|round(2) %}
-            {% set gauge_label = "GiB" %}
-        {%- else -%}
-            {% set gauge_val = 0 %}
-            {% set gauge_label = "–" %}
-        {%- endif -%}
-        <script type="text/javascript">
-            $(function(){
-                new JustGage({
-                    id: "trafficgauge",
-                    value: "{{ gauge_val }}",
-                    min: 0,
-                    startAnimationTime: 0,
-                    relativeGaugeSize: true,
-                    max: {{ gauge_max }},
-                    label: "{{ gauge_label }}",
-                    levelColors: ["#ff7f7f", "#ffff7f", "#7fff7f"]
-                });
-            });
-        </script>
         {% block custom_script %}{% endblock %}
     </body>
 </html>
