@@ -106,7 +106,7 @@ def exceptionhandler_ldap(ex):
 @bp_generic.app_errorhandler(BackendError)
 def exceptionhandler_backend(ex: BackendError):
     flash(gettext("Fehler bei der Kommunikation mit unserem Server"
-                  f" (Backend '{ex.backend_name}')"),
+                  " (Backend '%(name)')", name=ex.backend_name),
           'error')
     logger.critical(
         'Backend error: %s', ex.backend_name,
