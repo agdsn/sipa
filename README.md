@@ -29,7 +29,7 @@ As a general note, you should have `docker` and `docker-compose`
 installed.  Just using python and e.g. a virtualenv is possible, but
 discouraged.
 
-The simplest method is to run `docker-compose -f build/development.yml
+The simplest method is to run `docker-compose -f build/dev/docker-compose.yml
 up -d`.
 
 This should automatically set up an nginx container on port 80
@@ -58,11 +58,11 @@ part consists of automatic inclusion of module documentation using
 How can I run the tests?
 ------------------------
 
-For testing, there exists the docker-compose file `build/testing.yml`:
+For testing, there exists the docker-compose file `build/testing/docker-compose.yml`:
 
 ```shell
-docker-compose -f build/testing.yml up -d
-docker-compose -f build/testing.yml run --rm sipa_testing python manage.py test
+docker-compose -f build/testing/docker-compose.yml up -d
+docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing python manage.py test
 ```
 
 …ore choose any other testing command you wish.  For example, you can
