@@ -8,7 +8,7 @@ Flask-SQLAlchemy~=2.3.2
 Markdown==2.6.11
 raven~=6.2.1
 ldap3~=2.5.0
-requests~=2.18.4
+requests~=2.21.0
 Flask-FlatPages~=0.6.0
 pygal~=2.4.0
 GitPython~=2.1.7
