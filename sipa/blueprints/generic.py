@@ -180,15 +180,6 @@ def logout():
 bp_generic.add_app_template_filter(dynamic_unit, name='unit')
 
 
-@bp_generic.app_template_filter('traffic_color')
-def traffic_color(amount):
-    # TODO think about other thresholds replacing `User.daily_credit`
-    daily_credit = 10 * 1024 * 1024
-    return ("" if amount < daily_credit
-            else "bg-warning" if amount < 2 * daily_credit
-            else "bg-danger")
-
-
 @bp_generic.app_template_filter('gib')
 def to_gigabytes(number):
     """Convert a number from KiB to GiB

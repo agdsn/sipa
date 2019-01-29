@@ -17,7 +17,7 @@
                     <td>{{ get_weekday(day['day']) }}</td>
                     <td>{{ day['input'] | unit }}</td>
                     <td>{{ day['output'] | unit }}</td>
-                    <td class="{{ day['throughput'] | traffic_color }}">
+                    <td class="{{ day['throughput'] }}">
                         {{ day['throughput'] | unit }}
                     </td>
                 </tr>
