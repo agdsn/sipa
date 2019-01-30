@@ -138,14 +138,8 @@ class TrafficQuota(db.Model):
     __bind_key__ = 'hss'
 
     id = Column(Integer, primary_key=True)
-    daily_credit = Column(BigInteger, nullable=False, default=0)
-    max_credit = Column(BigInteger, nullable=False, default=0)
     description = Column(String(255), nullable=False)
     accounts = relationship('Account', backref='traffic_quota')
 
     def __repr__(self):
-        return ("<{cls} #{obj.id} daily={obj.daily_credit} max={obj.max_credit} "
-                "'{obj.description}'>".format(
-                    cls=type(self).__name__,
-                    obj=self,
-                ))
+        return f"<{type(self).__name__} #{self.id} '{self.description}'>"

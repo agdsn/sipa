@@ -122,16 +122,7 @@ class User(BaseUser):
 
     @property
     def traffic_history(self):
-        """Return the current credit and the traffic history as a dict.
-
-        The history should cover one week. The assumed unit is KiB.
-
-        The dict syntax is as follows:
-
-        return {'credit': 0,
-                'history': [(day, <in>, <out>, <credit>)
-                            for day in range(7)]}
-
+        """See `model.User.traffic_history`
         """
         history = []
 
@@ -147,7 +138,6 @@ class User(BaseUser):
                     'input': 0,
                     'output': 0,
                     'throughput': 0,
-                    'credit': 0,
                 })
             else:
                 history.append({
@@ -155,55 +145,10 @@ class User(BaseUser):
                     'input': log.bytes_in / 1024,
                     'output': log.bytes_out / 1024,
                     'throughput': (log.bytes_in + log.bytes_out) / 1024,
-                    'credit': 0,
                 })
                 # get the history from the expected_date
 
-        return self.reconstruct_credit(history, self.credit)
-
-    def reconstruct_credit(self, old_history, last_credit):
-        history = old_history.copy()
-        history[-1]['credit'] = last_credit - history[-1]['throughput']
-
-        for i, entry in enumerate(reversed(history)):
-            try:
-                # previous means *chronologically* previous (we
-                # iterate over `reversed`) ⇒ use [i+1]
-                previous_entry = list(reversed(history))[i+1]
-            except IndexError:
-                pass
-            else:
-                # Throughput: gets *subtracted* after the day → `+` for before
-                # Credit: gets *added* after the day → `-` for before
-                previous_entry['credit'] = (
-                    entry['credit'] + previous_entry['throughput'] - self.daily_credit
-                    # 3 → 3 KiB
-                    # 3 * 1024 → 3 MiB
-                    # 3 * 1024**2 → 3 GiB
-                )
-
         return history
-
-    @property
-    def credit(self):
-        """Return the current credit in KiB"""
-        return self._pg_account.traffic_balance / 1024
-
-    @property
-    def max_credit(self):
-        """Return the current credit in KiB"""
-        try:
-            return self._pg_trafficquota.max_credit / 1024
-        except NoResultFound:
-            return 210 * 1024 ** 2
-
-    @property
-    def daily_credit(self):
-        """Return the current credit in KiB"""
-        try:
-            return self._pg_trafficquota.daily_credit / 1024
-        except NoResultFound:
-            return 10 * 1024 ** 2
 
     @active_prop
     def ips(self):

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-01-24 00:47+0100\n"
+"POT-Creation-Date: 2019-01-24 11:19+0100\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -414,12 +414,6 @@ msgstr ""
 msgid "Gesamt"
 msgstr ""
 
-msgid "Credit"
-msgstr ""
-
-msgid "Verbleibender Credit"
-msgstr ""
-
 msgid "Traffic Diagramm"
 msgstr ""
 
@@ -462,15 +456,6 @@ msgid "Anmeldung"
 msgstr ""
 
 msgid "Sprache"
-msgstr ""
-
-msgid "Verbleibender Traffic"
-msgstr ""
-
-msgid "Für Details klicken"
-msgstr ""
-
-msgid "Fehler bei der Abfrage der Daten"
 msgstr ""
 
 msgid "Kontaktformular für Mitglieder"
@@ -725,12 +710,6 @@ msgid "Eingehend"
 msgstr ""
 
 msgid "Ausgehend"
-msgstr ""
-
-msgid "Credit (GiB)"
-msgstr ""
-
-msgid "Maximum"
 msgstr ""
 
 #~ msgid "Bezahlt, verbunden"
@@ -1428,3 +1407,8 @@ msgstr ""
 #~ msgid "Datenbank nicht erreichbar"
 #~ msgstr ""
 
+#~ msgid "Für Details klicken"
+#~ msgstr ""
+
+#~ msgid "Fehler bei der Abfrage der Daten"
+#~ msgstr ""

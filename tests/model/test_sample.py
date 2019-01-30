@@ -86,15 +86,9 @@ class TestSampleUserCase(SampleFrontendTestBase):
             self.sample_users['test']['password']
         )
 
-    def test_credit_valid(self):
-        """check whether the credit is positive and below 63GiB.
-        """
-        assert 0 <= self.user.credit <= 1024**2 * 210
-
     def test_traffic_history(self):
         for day in self.user.traffic_history:
             assert 0 <= day['day'] <= 6
             assert 0 <= day['input']
             assert 0 <= day['output']
             self.assertEqual(day['throughput'], day['input'] + day['output'])
-            assert 0 <= day['credit'] <= 1024**2 * 210

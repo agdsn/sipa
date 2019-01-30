@@ -1,12 +1,12 @@
 language: python
 sudo: required
-dist: trusty
+dist: xenial
 
 cache:
   - pip
 
 python:
-  - "3.7-dev"
+  - "3.7"
 
 services:
   - docker

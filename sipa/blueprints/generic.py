@@ -180,13 +180,6 @@ def logout():
 bp_generic.add_app_template_filter(dynamic_unit, name='unit')
 
 
-@bp_generic.app_template_filter('traffic_color')
-def traffic_color(amount, daily_credit):
-    return ("" if amount < daily_credit
-            else "bg-warning" if amount < 2 * daily_credit
-            else "bg-danger")
-
-
 @bp_generic.app_template_filter('gib')
 def to_gigabytes(number):
     """Convert a number from KiB to GiB
@@ -257,13 +250,12 @@ def traffic_api():
     } for x in reversed(user.traffic_history))
 
     trafficdata = {
-        'quota': user.credit,
         # `next` gets the first entry (“today”)
         'traffic': next(traffic_history),
         'history': list(traffic_history),
     }
 
-    return jsonify(version=2, **trafficdata)
+    return jsonify(version=3, **trafficdata)
 
 
 @bp_generic.route('/contact', methods=['GET', 'POST'])

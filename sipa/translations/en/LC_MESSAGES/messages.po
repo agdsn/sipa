@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-01-24 00:47+0100\n"
-"PO-Revision-Date: 2019-01-24 00:49+0100\n"
+"POT-Creation-Date: 2019-01-24 11:19+0100\n"
+"PO-Revision-Date: 2019-01-24 11:19+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -422,12 +422,6 @@ msgstr "Upload"
 msgid "Gesamt"
 msgstr "Overall"
 
-msgid "Credit"
-msgstr "Credit"
-
-msgid "Verbleibender Credit"
-msgstr "Remaining Credit"
-
 msgid "Traffic Diagramm"
 msgstr "Traffic chart"
 
@@ -473,15 +467,6 @@ msgstr "Registration"
 
 msgid "Sprache"
 msgstr "Language"
-
-msgid "Verbleibender Traffic"
-msgstr "Remaining Credit"
-
-msgid "Für Details klicken"
-msgstr "Click for details"
-
-msgid "Fehler bei der Abfrage der Daten"
-msgstr "An error occurred"
 
 msgid "Kontaktformular für Mitglieder"
 msgstr "Contact form for members"
@@ -748,12 +733,6 @@ msgstr "Incoming"
 msgid "Ausgehend"
 msgstr "Outgoing"
 
-msgid "Credit (GiB)"
-msgstr "Credit (GiB)"
-
-msgid "Maximum"
-msgstr "Maximum"
-
 #~ msgid ""
 #~ "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen "
 #~ "kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird "
@@ -798,3 +777,9 @@ msgstr "Maximum"
 
 #~ msgid "Datenbank nicht erreichbar"
 #~ msgstr "Database cannot be reached"
+
+#~ msgid "Für Details klicken"
+#~ msgstr "Click for details"
+
+#~ msgid "Fehler bei der Abfrage der Daten"
+#~ msgstr "An error occurred"
