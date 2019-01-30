@@ -11,5 +11,5 @@ PaymentDetails = namedtuple('PaymentDetails', 'recipient bank iban bic purpose')
 
 
 def should_display_traffic_data():
-    return ((current_user.is_authenticated and current_user.has_connection)
-            or backends.user_from_ip(request.remote_addr) is not None)
+    return ((current_user.is_authenticated and current_user.has_connection) or
+            backends.user_from_ip(request.remote_addr) is not None)
