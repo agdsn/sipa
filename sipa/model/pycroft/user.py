@@ -83,7 +83,7 @@ class User(BaseUser):
 
     @active_prop
     def realname(self):
-        return self.user_data.realname
+        return self.user_data.name
 
     @active_prop
     def login(self):

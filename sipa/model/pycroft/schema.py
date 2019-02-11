@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
-from typing import List
+from typing import List, Optional
 
 from sipa.model.pycroft.unserialize import unserializer
 
@@ -10,7 +10,7 @@ class UserData:
     id: int
     user_id: str
     login: str
-    realname: str
+    name: str
     status: UserStatus
     room: str
     mail: str
@@ -45,9 +45,9 @@ class Interface:
 @unserializer
 class TrafficHistoryEntry:
     timestamp: str
-    ingress: int
-    egress: int
-    balance: int
+    ingress: Optional[int]
+    egress: Optional[int]
+    balance: Optional[int]
 
 
 @unserializer
