@@ -78,7 +78,7 @@ class User(BaseUser):
             'day': parse_date(entry.timestamp).weekday(),
             'input': to_kib(entry.ingress),
             'output': to_kib(entry.egress),
-            'throughput': to_kib(entry.ingress + entry.egress),
+            'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
         } for entry in self.user_data.traffic_history]
 
     @active_prop
