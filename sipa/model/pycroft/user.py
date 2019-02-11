@@ -98,7 +98,7 @@ class User(BaseUser):
     @active_prop
     @connection_dependent
     def mac(self):
-        return {'value': ", ".join(i['mac'] for i in self.user_data.interfaces),
+        return {'value': ", ".join(i.mac for i in self.user_data.interfaces),
                 'tmp_readonly': len(self.user_data.interfaces) != 1}
 
     @active_prop
