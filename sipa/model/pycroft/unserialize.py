@@ -26,8 +26,12 @@ def _maybe_setattr(cls, attrname, attr):
     setattr(cls, attrname, attr)
 
 
+NoneType = type(None)
+
+
 def _is_optional(t):
-    return t.__origin__ is Union and len(t.__args__) == 2 and t.__args__[1] is type(None)
+    return getattr(t, '__origin__', None) is Union and \
+           len(t.__args__) == 2 and t.__args__[1] is NoneType
 
 
 MAXDEPTH = 100
