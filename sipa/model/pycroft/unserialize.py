@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import inspect
 import sys
-from typing import Callable, Optional, Any, List
+from typing import Callable, Optional, Any, List, Union
 
 
 class UnserializationError(Exception):
@@ -26,6 +26,10 @@ def _maybe_setattr(cls, attrname, attr):
     setattr(cls, attrname, attr)
 
 
+def _is_optional(t):
+    return t.__origin__ is Union and len(t.__args__) == 2 and t.__args__[1] is type(None)
+
+
 MAXDEPTH = 100
 
 
@@ -48,6 +52,15 @@ def constructor_from_generic(name: str, args: tuple, *a, **kw) -> Optional[Calla
         else:
             raise UnserializationError("Cannot find constructor for List[A, ...]"
                                        " with more than one argument.")
+    elif name == Optional._name:
+        if len(args) >= 1:
+            item_constructor = constructor_from_annotation(args[0], *a, **kw)
+
+            def constructor(val):
+                return item_constructor(val) if val is not None else None
+        else:
+            raise UnserializationError("Cannot find constructor for Optional[...]"
+                                       " with less than one argument.")
     else:
         raise UnserializationError(f"Generic type '{name}' not supported")
 
@@ -74,8 +87,10 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
 
     # Case 1: known generic
     if hasattr(type_, '_name'):
-        # TODO: make everything else required, except if we get Optional[...] here
-        constructor = constructor_from_generic(type_._name, getattr(type_, '__args__', ()),
+        type_name = type_._name
+        if _is_optional(type_):
+            type_name = Optional._name
+        constructor = constructor_from_generic(type_name, getattr(type_, '__args__', ()),
                                                module=module, maxdepth=maxdepth-1)
 
     # cases 2, 3: Is an unserializer or something builtin

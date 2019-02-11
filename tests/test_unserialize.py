@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
-from typing import Any, List
+from typing import Any, List, Optional
 from unittest import TestCase
 
 from sipa.model.pycroft.unserialize import unserializer, MissingKeysError, ConversionError, \
@@ -55,6 +55,23 @@ class UnserializerTest(TestCase):
             self.fail()
         else:
             self.assertEqual(f.items, ["bar", "baz"])
+
+    def test_optional_can_convert(self):
+        @unserializer
+        class Foo:
+            opt: Optional[str]
+
+        try:
+            f = Foo({'opt': "bar"})
+            self.assertEqual(f.opt, "bar")
+        except ConversionError:
+            self.fail()
+
+        try:
+            f = Foo({'opt': None})
+            self.assertEqual(f.opt, None)
+        except ConversionError:
+            self.fail()
 
     def test_complex_unserializer(self):
         @unserializer
