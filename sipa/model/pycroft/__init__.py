@@ -71,6 +71,9 @@ datasource = DataSource(
             IPv4Network('141.30.212.0/24'),  # Gu29a
             IPv4Network('141.30.213.0/24'),  # Gu29b
         ]),
+        ('hoy', "Hoyerswerdaerstraße", [
+            IPv4Network('141.76.119.0/25'),  # Hoy10
+        ]),
     ]
 ]
 
