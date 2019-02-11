@@ -227,7 +227,7 @@ class User(BaseUser):
             bic="OSDD DE 81 XXX",
             purpose="{id}, {name}, {address}".format(
                 id=self.user_data.user_id,
-                name=self.user_data.realname,
+                name=self.user_data.name,
                 address=self.user_data.room,
             ),
         )
