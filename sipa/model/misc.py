@@ -10,6 +10,10 @@ TransactionTuple = namedtuple('Transaction', ['datum', 'value'])
 PaymentDetails = namedtuple('PaymentDetails', 'recipient bank iban bic purpose')
 
 
+def has_connection(user):
+    return user.is_authenticated and user.has_connection
+
+
 def should_display_traffic_data():
-    return ((current_user.is_authenticated and current_user.has_connection) or
-            backends.user_from_ip(request.remote_addr) is not None)
+    return has_connection(current_user) or has_connection(
+        backends.user_from_ip(request.remote_addr))
