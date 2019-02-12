@@ -15,7 +15,6 @@ class UserData:
     room: str
     mail: str
     cache: bool
-    traffic_balance: int
     traffic_history: List[TrafficHistoryEntry]
     interfaces: List[Interface]
     finance_balance: int
@@ -47,7 +46,6 @@ class TrafficHistoryEntry:
     timestamp: str
     ingress: Optional[int]
     egress: Optional[int]
-    balance: Optional[int]
 
 
 @unserializer
