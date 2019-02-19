@@ -150,7 +150,7 @@ class SendMailTestCase(SMTPTestBase):
                          "Wrong envelope sender set!")
 
     def test_sendmail_from_header(self):
-        self.assertIn(f"From: {self.app_mock.config['CONTACT_SENDER_MAIL']}\n",
+        self.assertIn(f"From: {self.args['author']}\n",
                       self.observed_call_args.msg,
                       "Wrong From: header!")
 

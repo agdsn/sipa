@@ -70,7 +70,7 @@ def send_mail(author: str, recipient: str, subject: str, message: str) -> bool:
     mail = MIMEText(message, _charset='utf-8')
 
     mail['Message-Id'] = make_msgid()
-    mail['From'] = sender
+    mail['From'] = author
     mail['Reply-To'] = author
     mail['X-OTRS-CustomerId'] = author
     mail['To'] = recipient
