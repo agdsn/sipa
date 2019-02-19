@@ -84,7 +84,7 @@ def send_mail(author: str, recipient: str, subject: str, message: str) -> bool:
         smtp = smtplib.SMTP()
         smtp.connect(host=mailserver_host,
                      port=mailserver_port)
-        smtp.sendmail(from_addr=sender, to_addrs=recipient, msg=mail.as_string(0))
+        smtp.sendmail(from_addr=sender, to_addrs=recipient, msg=mail.as_string())
         smtp.close()
     except IOError as e:
         # smtp.connect failed to connect
