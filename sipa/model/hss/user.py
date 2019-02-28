@@ -203,12 +203,15 @@ class User(BaseUser):
     @active_prop
     def address(self):
         acc = self._pg_account.access
-        return "{building} {floor}-{flat}{room}".format(
-            floor=acc.floor,
-            flat=acc.flat,
-            room=acc.room,
-            building=acc.building,
-        )
+        if acc is not None:
+            return "{building} {floor}-{flat}{room}".format(
+                floor=acc.floor,
+                flat=acc.flat,
+                room=acc.room,
+                building=acc.building,
+            )
+        else:
+            return None
 
     @active_prop
     def status(self):
