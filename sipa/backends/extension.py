@@ -245,6 +245,7 @@ class Backends:
         for dormitory in self.all_dormitories:
             if dormitory.name == name:
                 return dormitory
+        return None
 
     def get_datasource(self, name: str) -> Optional[DataSource]:
         """Lookup the datasource with name ``name``.
@@ -256,6 +257,7 @@ class Backends:
         for datasource in self.datasources:
             if datasource.name == name:
                 return datasource
+        return None
 
     def dormitory_from_ip(self, ip: str) -> Optional[Dormitory]:
         """Return the dormitory whose subnets contain ``ip``
@@ -272,6 +274,7 @@ class Backends:
             for dormitory in self.dormitories:
                 if address in dormitory.subnets:
                     return dormitory
+        return None
 
     def preferred_dormitory_name(self) -> Optional[str]:
         """Return the name of the preferred dormitory based on the
@@ -282,6 +285,7 @@ class Backends:
         dormitory = self.dormitory_from_ip(request.remote_addr)
         if dormitory:
             return dormitory.name
+        return None
 
     def user_from_ip(self, ip: str) -> Optional[UserLike]:
         """Return the User that corresponds to ``ip`` according to the
@@ -313,6 +317,7 @@ class Backends:
         dormitory = self.current_dormitory()
         if dormitory:
             return dormitory.datasource
+        return None
 
 
 #: A namedtuple to improve readability of some return values

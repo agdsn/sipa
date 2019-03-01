@@ -121,7 +121,7 @@ class Article(Node):
         if raw_link and raw_link[0] == "/":
             return dirname(request.url_root) + raw_link
 
-        return
+        return None
 
     def __getattr__(self, attr: str) -> str:
         """Return the meta attribute of the localized page
