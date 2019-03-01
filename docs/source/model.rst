@@ -38,7 +38,7 @@ Sipa distinguishes between two concepts:
   `display_name` and the datasource it belongs to.  Also, it holds information about the IP
   subnets, since these are bound to a location, and not the technical backend.
 
-.. automodule:: sipa.model.datasource
+.. automodule:: sipa.backends.datasource
    :member-order: bysource
    :members:
    :undoc-members:
