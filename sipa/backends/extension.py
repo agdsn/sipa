@@ -12,6 +12,7 @@ from werkzeug.local import LocalProxy
 from .datasource import DataSource, Dormitory
 from .logging import logger
 from .exceptions import InvalidConfiguration
+from .types import UserLike
 
 
 def evaluates_uniquely(objects, func) -> bool:
@@ -282,7 +283,7 @@ class Backends:
         if dormitory:
             return dormitory.name
 
-    def user_from_ip(self, ip: str) -> Optional[object]:
+    def user_from_ip(self, ip: str) -> Optional[UserLike]:
         """Return the User that corresponds to ``ip`` according to the
         datasource.
 

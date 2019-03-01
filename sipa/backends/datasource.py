@@ -1,11 +1,12 @@
 from __future__ import annotations
 from ipaddress import IPv4Network, IPv4Address
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Type
 
 from flask import Flask
 
 from sipa.utils import argstr, compare_all_attributes, xor_hashes
 from .logging import logger
+from .types import UserLike
 
 
 InitContextCallable = Callable[[Flask], None]
@@ -17,7 +18,7 @@ class DataSource:
     This class provides information about the backend you defined, for
     instance the user class.
     """
-    def __init__(self, name: str, user_class: type, mail_server: str,
+    def __init__(self, name: str, user_class: Type[UserLike], mail_server: str,
                  webmailer_url: str = None,
                  support_mail: str = None,
                  init_context: InitContextCallable = None) -> None:
@@ -27,11 +28,10 @@ class DataSource:
         #: what you register onto your `Backends` object.
         self.name = name
 
-        class _user_class(user_class):
+        class _user_class(user_class):  # type: ignore
             datasource = self
-        #: the user_class used in the sense of ``flask_login``.  See
-        #: :py:class:`~.user.BaseUser`
-        self.user_class = _user_class
+        #: the user_class used in the sense of ``flask_login``.
+        self.user_class: Type[UserLike] = _user_class
 
         #: The mail server to be appended to a user's login in order
         #: to construct the mail address.
