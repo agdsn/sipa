@@ -14,7 +14,7 @@ from .logging import logger
 from .exceptions import InvalidConfiguration
 
 
-def evaluates_uniquely(objects, func):
+def evaluates_uniquely(objects, func) -> bool:
     """Return true if the return value of ``func`` is unique among
     ``objects``.
 
@@ -38,7 +38,6 @@ def evaluates_uniquely(objects, func):
         parameter.  Must return something hashable.
 
     :return: whether the uniqueness holds
-    :rtype: bool
     """
     values = [func(obj) for obj in objects]
     return len(values) == len(set(values))
@@ -215,11 +214,7 @@ class Backends:
 
     @property
     def dormitories_short(self) -> List[_dorm_summary]:
-        """Return a list of dormitories as tuples instead of objects
-
-        :return: a list of ``(name, display_name)`` tuples
-        :rtype: list of :py:data:`_dorm_summary` namedtuples
-        """
+        """Return a list of dormitories as tuples instead of objects"""
         return sorted([
             _dorm_summary(name=dormitory.name,
                           display_name=dormitory.display_name)
@@ -230,9 +225,6 @@ class Backends:
     def supported_dormitories_short(self) -> List[_dorm_summary]:
         """Return a list of supported dormitories as tuples instead of
         objects
-
-        :return: a list of ``(name, display_name)`` tuples
-        :rtype: list of :py:data:`_dorm_summary` namedtuples
         """
         return sorted([
             _dorm_summary(name=dormitory.name,
@@ -245,10 +237,9 @@ class Backends:
     def get_dormitory(self, name: str) -> Optional[Dormitory]:
         """Lookup the dormitory with name ``name``.
 
-        :param str name: The dormitory's ``name``
+        :param name: The dormitory's ``name``
 
         :return: The dormitory object
-        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
         """
         for dormitory in self.all_dormitories:
             if dormitory.name == name:
@@ -257,10 +248,9 @@ class Backends:
     def get_datasource(self, name: str) -> Optional[DataSource]:
         """Lookup the datasource with name ``name``.
 
-        :param str name: The datasource's ``name``
+        :param name: The datasource's ``name``
 
         :return: The datasource object
-        :rtype: :py:class:`~sipa.model.datasource.Datasource`
         """
         for datasource in self.datasources:
             if datasource.name == name:
@@ -269,10 +259,9 @@ class Backends:
     def dormitory_from_ip(self, ip: str) -> Optional[Dormitory]:
         """Return the dormitory whose subnets contain ``ip``
 
-        :param str ip: The ip
+        :param ip: The ip
 
         :return: The dormitory containing ``ip``
-        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
         """
         try:
             address = IPv4Address(str(ip))
@@ -288,7 +277,6 @@ class Backends:
         request's ip
 
         :return: name of the dormitory
-        :rtype: str
         """
         dormitory = self.dormitory_from_ip(request.remote_addr)
         if dormitory:
@@ -298,11 +286,10 @@ class Backends:
         """Return the User that corresponds to ``ip`` according to the
         datasource.
 
-        :param str ip: The ip
+        :param ip: The ip
 
         :return: The corresponding User in the sense of the
                  datasource.
-        :rtype: The corresponding datasources ``user_class``.
         """
         dormitory = self.dormitory_from_ip(ip)
         if not dormitory:
@@ -317,17 +304,11 @@ class Backends:
     # PROXIES
 
     def current_dormitory(self) -> Optional[Dormitory]:
-        """Read the current dormitory from the session
-
-        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
-        """
+        """Read the current dormitory from the session"""
         return self.get_dormitory(session['dormitory'])
 
     def current_datasource(self) -> Optional[DataSource]:
-        """Read the current datasource from the session
-
-        :rtype: :py:class:`~sipa.model.datasource.Datasource`
-        """
+        """Read the current datasource from the session"""
         dormitory = self.current_dormitory()
         if dormitory:
             return dormitory.datasource

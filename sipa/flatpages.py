@@ -2,10 +2,11 @@
 import logging
 from operator import attrgetter
 from os.path import basename, dirname, splitext
+from typing import Optional, Dict, Any
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, request
-from flask_flatpages import FlatPages
+from flask_flatpages import FlatPages, Page
 from yaml.scanner import ScannerError
 
 from sipa.babel import get_user_locale_setting, possible_locales
@@ -43,11 +44,11 @@ class Article(Node):
     def __init__(self, extension, parent, article_id):
         super().__init__(extension, parent, article_id)
         #: The dict containing the localized pages of this article
-        self.localized_pages = {}
+        self.localized_pages: Dict[Any, Page] = {}
         #: The default page
-        self.default_page = None
+        self.default_page: Page = None
 
-    def add_page(self, page, locale):
+    def add_page(self, page: Page, locale: Locale):
         """Add a page to the pages list.
 
         If the name is not ``index`` and the validation via
@@ -60,8 +61,8 @@ class Article(Node):
         Update the :py:attr:`localized_pages` dict at the
         ``str(locale)`` key to ``page``.
 
-        :param Page page: The page to add
-        :param Locale locale: The locale of this page
+        :param page: The page to add
+        :param locale: The locale of this page
         """
         if not (self.id == 'index' or self.validate_page_meta(page)):
             return
@@ -72,7 +73,7 @@ class Article(Node):
             self.default_page = page
 
     @staticmethod
-    def validate_page_meta(page):
+    def validate_page_meta(page: Page) -> bool:
         """Validate that the pages meta-section.
 
         This function is necessary because a page with incorrect
@@ -82,8 +83,6 @@ class Article(Node):
         :param page: The page to validate
 
         :returns: Whether the page is valid
-
-        :rtype: bool
         """
         try:
             return 'title' in page.meta
@@ -91,34 +90,29 @@ class Article(Node):
             return False
 
     @property
-    def rank(self):
+    def rank(self) -> int:
         """The rank of the :py:attr:`localized_page`
 
         This is what is given in the page's ``rank`` meta-attribute if
         available else ``100``.
 
         :returns: The :py:attr:`localized_page` s rank
-
-        :rtype: int
         """
         return self.localized_page.meta.get('rank', 100)
 
     @property
-    def html(self):
+    def html(self) -> str:
         """The :py:attr:`localized_page` as html
 
         :returns: The :py:attr:`localized_page` converted to html
-        :rtype: str
         """
         return self.localized_page.html
 
     @property
-    def link(self):
+    def link(self) -> Optional[str]:
         """A valid link to this article
 
         :returns: The URL or ``None`` if the link starts with ``"/"``
-
-        :rtype: str
 
         :raises: :py:obj:`AttributeError` if :py:attr:`localized_page`
                  doesn't have a link in the meta section.
@@ -129,14 +123,12 @@ class Article(Node):
 
         return
 
-    def __getattr__(self, attr):
+    def __getattr__(self, attr: str) -> str:
         """Return the meta attribute of the localized page
 
-        :param str attr: The meta attribute to access
+        :param attr: The meta attribute to access
 
         :returns: The meta attribute of :py:attr:`localized_page`
-
-        :rtype: str
 
         :raises: :py:obj:`AttributeError` if :py:obj:`attr` doesn't
                  exist in the page's meta
@@ -149,7 +141,7 @@ class Article(Node):
                 .format(type(self).__name__, attr)) from e
 
     @property
-    def localized_page(self):
+    def localized_page(self) -> Page:
         """The current localized page
 
         This is the flatpage of the first available locale from
@@ -157,7 +149,6 @@ class Article(Node):
         :py:attr:`default_page`.
 
         :returns: The localized page
-        :rtype: Whatever has been added, hopefully :py:class:`Page`
         """
         available_locales = list(self.localized_pages.keys())
 
@@ -175,14 +166,12 @@ class Article(Node):
         return self.default_page
 
     @property
-    def file_basename(self):
+    def file_basename(self) -> str:
         """The basename of the localized page without extension.
 
         Example: `categ/article.en.md` → `article.en`
 
         :returns: The basename of the :py:attr:`localized_page`
-
-        :rtype: str
         """
         return splitext(basename(self.localized_page.path))[0]
 

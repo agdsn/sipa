@@ -61,12 +61,8 @@ class DataSource:
         self._dormitories[name] = dormitory
 
     @property
-    def dormitories(self):
-        """A list of all registered dormitories.
-
-        :rtype: list of ``Dormitory`` instances
-        :returns: the registered dormitories
-        """
+    def dormitories(self) -> List[Dormitory]:
+        """A list of all registered dormitories."""
         return list(self._dormitories.values())
 
     def init_context(self, app: Flask):

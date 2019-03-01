@@ -1,11 +1,14 @@
+from __future__ import annotations
 # -*- coding: utf-8 -*-
 
 # noinspection PyMethodMayBeStatic
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 from contextlib import contextmanager
+from typing import TypeVar, Type, List, Dict, Optional
 
-from sipa.model.fancy_property import active_prop, UnsupportedProperty
+from sipa.model.fancy_property import active_prop, UnsupportedProperty, PropertyBase
+from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
 
 
@@ -24,6 +27,9 @@ class AuthenticatedUserMixin:
 
 
 Row = namedtuple('Row', ['description', 'property'])
+
+# for annotating the classmethods
+T = TypeVar('T', bound='BaseUser')
 
 
 class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
@@ -62,24 +68,22 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
-    def get(cls, username):
+    def get(cls: Type[T], username: str) -> T:
         """Fetch a user given his username.
 
-        :param str username: the username
+        :param username: the username
         :return: the user object
-        :rtype: this class
         """
         pass
 
     @classmethod
     @abstractmethod
-    def from_ip(cls, ip):
+    def from_ip(cls: Type[T], ip: str) -> T:
         """Return a user based on an ip.
 
         If there is no user associated with this ip, return AnonymousUserMixin.
-        :param str ip: the ip
+        :param ip: the ip
         :return: the user object
-        :rtype: this class
         """
         pass
 
@@ -113,11 +117,8 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def can_change_password(self):
-        """Whether password change is possible/permitted.
-
-        :rtype: bool
-        """
+    def can_change_password(self) -> bool:
+        """Whether password change is possible/permitted."""
         pass
 
     @abstractmethod
@@ -132,7 +133,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def traffic_history(self):
+    def traffic_history(self) -> List[Dict]:
         """Return the current traffic history as a dict.
 
         The history should cover one week. The assumed unit is KiB.
@@ -149,149 +150,115 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         The traffic values shall be in KiB, as usual.
 
         :return: The history of the used traffic
-        :rtype: list of dicts
         """
         pass
 
-    def generate_rows(self, description_dict):
+    def generate_rows(self, description_dict: Dict):
         for key, val in description_dict.items():
             yield Row(description=val, property=getattr(self, key))
 
     @active_prop
     @abstractmethod
-    def realname(self):
-        """**[Abstract]** The real-life name
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
-        """
+    def realname(self) -> PropertyBase:
+        """**[Abstract]** The real-life name"""
         pass
 
     @active_prop
     @abstractmethod
-    def login(self):
-        """**[Abstract]** The login
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
-        """
+    def login(self) -> PropertyBase:
+        """**[Abstract]** The login"""
         pass
 
     @active_prop
     @abstractmethod
-    def mac(self):
-        """**[Abstract]** The MAC Address
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
-        """
+    def mac(self) -> PropertyBase:
+        """**[Abstract]** The MAC Address"""
         pass
 
     @active_prop
     @abstractmethod
-    def mail(self):
+    def mail(self) -> PropertyBase:
         """**[Abstract]** The mail address.
 
         This can either be the forward or the internal adress
         (``"{login}@{server}"``)
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
         """
         pass
 
     @active_prop
     @abstractmethod
-    def address(self):
-        """**[Abstract]** Where the user lives
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
-        """
+    def address(self) -> PropertyBase:
+        """**[Abstract]** Where the user lives"""
         pass
 
     @active_prop
     @abstractmethod
-    def status(self):
+    def status(self) -> PropertyBase:
         """**[Abstract]** The current membership status in the sense of
         the AG DSN constitution.
 
         This mostly means active, ex-active or passive.
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
         """
         pass
 
     @active_prop
     @abstractmethod
-    def id(self):
+    def id(self) -> PropertyBase:
         """**[Abstract]** The “user-id”.
 
         Some Backends provide a secondary id besides the login.
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
         """
         pass
 
     @active_prop
     @abstractmethod
-    def use_cache(self):
-        """**[Abstract]** Flag indicating cache usage.
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
-        """
+    def use_cache(self) -> PropertyBase:
+        """**[Abstract]** Flag indicating cache usage."""
         pass
 
     @active_prop
     @abstractmethod
-    def hostname(self):
+    def hostname(self) -> PropertyBase:
         """**[Abstract]** The hostname.
 
         This usually is an alias consisting of the last digits of the
         mac/ip.
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
         """
         pass
 
     @active_prop
     @abstractmethod
-    def hostalias(self):
+    def hostalias(self) -> PropertyBase:
         """**[Abstract]** The hostalias.
 
         An optionally configurable alias for the device.
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
         """
         pass
 
     @property
     @abstractmethod
-    def userdb_status(self):
-        """The status of the user's db, if available.
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
-        """
+    def userdb_status(self) -> PropertyBase:
+        """The status of the user's db, if available."""
         pass
 
     @property
     @abstractmethod
-    def userdb(self):
+    def userdb(self) -> BaseUserDB:
         """**[Abstract]** The `BaseUserDB` object, if available.
 
         If :data:`userdb_status` is non-empty, it is assumed to exist.
-
-        :rtype: :class:`BaseUserDB`
         """
         pass
 
     @property
     @abstractmethod
-    def has_connection(self):
-        """**[Abstract]** Whether the user has a connection
-
-        :rtype: :py:class:`~sipa.model.fancy_property.PropertyBase`
-        """
+    def has_connection(self) -> PropertyBase:
+        """**[Abstract]** Whether the user has a connection"""
         pass
 
     @property
     @abstractmethod
-    def finance_information(self):
+    def finance_information(self) -> Optional[BaseFinanceInformation]:
         """**[Abstract]** Finance information about the User.
 
         If not supported, set to None.
@@ -299,7 +266,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         pass
 
     @property
-    def finance_balance(self):
+    def finance_balance(self) -> PropertyBase:
         """The ``FancyProperty`` representing the finance balance"""
         info = self.finance_information
         if not info:
@@ -308,11 +275,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @abstractmethod
     def payment_details(self) -> PaymentDetails:
-        """**[Abstract]** Payment details for the User.
-
-        :return A dict with beneficiary, IBAN, purpose etc.
-        :rtype: dict
-        """
+        """**[Abstract]** Payment details for the User."""
         pass
 
 
@@ -324,26 +287,20 @@ class BaseUserDB(metaclass=ABCMeta):
     defines methods that must be made available when enabling support
     for this in the corresponding user_class.
     """
-    def __init__(self, user):
+    def __init__(self, user: BaseUser):
         """Set the `BaseUser` object `user`"""
         #: A backreference to the :class:`User` object
         self.user = user
 
     @property
     @abstractmethod
-    def has_db(self):
-        """**[Abstract]** Wheter the database is enabled
-
-        :rtype: bool
-        """
+    def has_db(self) -> bool:
+        """**[Abstract]** Wheter the database is enabled"""
         pass
 
     @abstractmethod
-    def create(self, password):
-        """**[Abstract]** Create the database
-
-        :param str password: The password of the database
-        """
+    def create(self, password: str):
+        """**[Abstract]** Create the database"""
         pass
 
     @abstractmethod
@@ -352,9 +309,6 @@ class BaseUserDB(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def change_password(self, password):
-        """**[Abstract]** Change the password of the database
-
-        :param str password: the new password of the database
-        """
+    def change_password(self, password: str):
+        """**[Abstract]** Change the password of the database"""
         pass
