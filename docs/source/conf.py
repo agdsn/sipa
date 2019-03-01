@@ -37,6 +37,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -352,3 +353,10 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #
 # texinfo_no_detailmenu = False
+
+### Intersphinx
+
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'flask_flatpages': ('https://flask-login.readthedocs.io/en/latest/', None),
+}

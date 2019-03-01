@@ -81,7 +81,9 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def from_ip(cls: Type[T], ip: str) -> T:
         """Return a user based on an ip.
 
-        If there is no user associated with this ip, return AnonymousUserMixin.
+        If there is no user associated with this ip, return
+        :py:class:`~flask_login.AnonymousUserMixin`.
+
         :param ip: the ip
         :return: the user object
         """
