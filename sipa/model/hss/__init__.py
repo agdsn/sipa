@@ -18,6 +18,7 @@ def init_context(app):
         raise InvalidConfiguration(*exception.args)
 
 
+#: The HSS datasource
 datasource = DataSource(
     name='hss',
     user_class=user.User,

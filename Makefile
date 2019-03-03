@@ -17,6 +17,9 @@ translate:
 	poedit sipa/translations/en/LC_MESSAGES/messages.po
 	pybabel compile -d sipa/translations/
 
+docs-clean:
+	$(MAKE) -C docs clean
+
 docs:
 	sphinx-apidoc -o docs/source/ref sipa
 	$(MAKE) -C docs html

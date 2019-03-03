@@ -45,6 +45,9 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     This includes setting :data:`uid` in :meth:`__init__`, defining
     equality, and some others.
 
+    This class adheres to the protocol imposed by
+    :class:`Flask-Login <flask_login:flask_login.UserMixin>`
+
     Abstract methods / properties are prepended with ``[Abstract]``.
     """
 
@@ -59,11 +62,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     datasource = None
 
     def get_id(self):
-        """This method is Required by flask-login.
-
-        See the `flask_login manual
-        <https://flask-login.readthedocs.io/en/latest/#your-user-class>`
-        """
+        """This method is Required by flask-login."""
         return self.uid
 
     @classmethod
@@ -246,7 +245,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @property
     @abstractmethod
     def userdb(self) -> BaseUserDB:
-        """**[Abstract]** The `BaseUserDB` object, if available.
+        """**[Abstract]** The :class:`BaseUserDB` object, if available.
 
         If :data:`userdb_status` is non-empty, it is assumed to exist.
         """
@@ -269,7 +268,8 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     def finance_balance(self) -> PropertyBase:
-        """The ``FancyProperty`` representing the finance balance"""
+        """The :class:`fancy property <sipa.model.fancy_property.PropertyBase>`
+        representing the finance balance"""
         info = self.finance_information
         if not info:
             return UnsupportedProperty('finance_balance')

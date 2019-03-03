@@ -358,6 +358,8 @@ texinfo_documents = [
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
-    'flask_flatpages': ('https://flask-login.readthedocs.io/en/latest/', None),
+    'flask_login': ('https://flask-login.readthedocs.io/en/latest/', None),
     'flask': ('http://flask.pocoo.org/docs/1.0/', None),
+    'ffp': ('https://flask-flatpages.readthedocs.io/en/latest/', None),
+    'sqla': ('https://docs.sqlalchemy.org/en/latest/', None),
 }

@@ -2,6 +2,7 @@
 from datetime import datetime
 from logging import getLogger
 from subprocess import call
+from typing import List
 
 import git
 from flask_babel import format_datetime
@@ -60,12 +61,11 @@ def update_repo(repo_dir):
         }})
 
 
-def get_repo_active_branch(repo_dir):
+def get_repo_active_branch(repo_dir: str) -> str:
     """
     :param repo_dir: path of repo
-    :type repo_dir: str
+
     :return: name of currently checked out branch
-    :rtype: str
     """
     try:
         sipa_repo = git.Repo(repo_dir)
@@ -76,15 +76,14 @@ def get_repo_active_branch(repo_dir):
         return "@{}".format(sipa_repo.head.commit.hexsha[:8])
 
 
-def get_latest_commits(repo_dir, commit_count):
-    """
+def get_latest_commits(repo_dir: str, commit_count: int) -> List[dict]:
+    """Get a given number of latest commits.
+
     :param repo_dir: path of repo
-    :type repo_dir: str
     :param commit_count: number of commits to return
-    :type commit_count: int
+
     :return: commit information (hash, message, author, date) about
-    commit_count last commits
-    :rtype: list of dicts
+             commit_count last commits
     """
     try:
         sipa_repo = git.Repo(repo_dir)
