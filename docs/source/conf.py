@@ -37,6 +37,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -127,7 +128,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'nature'
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -182,7 +183,15 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 #
-# html_sidebars = {}
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+        'donate.html',            
+    ]        
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -344,3 +353,13 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #
 # texinfo_no_detailmenu = False
+
+### Intersphinx
+
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'flask_login': ('https://flask-login.readthedocs.io/en/latest/', None),
+    'flask': ('http://flask.pocoo.org/docs/1.0/', None),
+    'ffp': ('https://flask-flatpages.readthedocs.io/en/latest/', None),
+    'sqla': ('https://docs.sqlalchemy.org/en/latest/', None),
+}

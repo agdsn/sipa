@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from typing import List
+
 import pygal
 from flask_babel import gettext
+from pygal import Graph
 from pygal.colors import hsl_to_rgb
 from pygal.style import Style
 
@@ -43,13 +46,15 @@ def default_chart(chart_type, title, inline=True, **kwargs):
     )
 
 
-def generate_traffic_chart(traffic_data, inline=True):
+def generate_traffic_chart(traffic_data: List[dict], inline: bool = True) -> Graph:
     """Create a graph object from the input traffic data with pygal.
      If inline is set, the chart is being passed the option to not add an xml
      declaration header to the beginning of the `render()` output, so it can
       be directly included in HTML code (wrapped by a `<figure>`)
+
     :param traffic_data: The traffic data as given by `user.traffic_history`
     :param inline: Determines the option `disable_xml_declaration`
+
     :return: The graph object
     """
     # choose unit according to maximum of `throughput`

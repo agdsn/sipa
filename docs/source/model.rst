@@ -2,69 +2,63 @@
 Model
 =====
 
-The `model` package contains
+The :mod:`sipa.model` package mainly contains:
 
-* The :py:class:`Backends` extension providing the infrastructure to
-  use multiple backends
-* The implementations of such backends in the sub-packages.
-
-Backends
---------
-
-This is automatically generated documentation from  the `sipa.model` package.
-
-.. automodule:: sipa.model
-   :members:
-   :exclude-members: Backends
-
-.. autoclass:: Backends
-   :members:
-   :undoc-members:
-
-.. data:: backends
-
-   A proxy pointing to the curent app's :py:data:`backends` object.
+#. :class:`~sipa.backends.datasource.Datasource` implementations for the
+   :py:mod:`sipa.backends` extension and everything that comes with it
+   (such as database setups)
+#. An abstract :class:`BaseUser` class which defines all the properties a
+   backend's user should provide.
+#. Related to the second, a smart property-like type which is able to express
+   whether a particular property is “supported” or not and whether it allows
+   for editing and / or deleting.
 
 
-Datasource
-----------
+Implemented backends
+--------------------
 
-Sipa distinguishes between two concepts:
+Sipa registers the following datasources:
 
-* A *Datasource* is the technical entity providing data, such as the
-  user class, the mail server, etc.
-* A *Dormitory* is the entity that should be displayed as an option on
-  the login field.  Therefore, its most important property is the
-  `display_name` and the datasource it belongs to.  Also, it holds information about the IP
-  subnets, since these are bound to a location, and not the technical backend.
+.. autodata:: sipa.model.AVAILABLE_DATASOURCES
+   :noindex:
 
-.. automodule:: sipa.model.datasource
-   :member-order: bysource
-   :members:
-   :undoc-members:
+Their implementations are in the corresponding modules
+
+* :mod:`sipa.model.hss`
+* :mod:`sipa.model.pycroft`
+* :mod:`sipa.model.sample`
 
 
 User
 ----
 
-.. automodule:: sipa.model.user
-   :member-order: groupwise
+.. class:: sipa.model.user.BaseUser
+   :noindex:
+
+
+`.fancy_property`
+-----------------
+
+..
+  TODO use better documentation here!
+
+
+.. automodule:: sipa.model.fancy_property
+   :member-order: bysource
    :members:
    :undoc-members:
+   :noindex:
 
-Finance
--------
+
+`.finance`
+----------
+
+Related to the information the user returns, we demand the following form
+of the finance information:
 
 .. automodule:: sipa.model.finance
    :member-order: bysource
    :members:
    :private-members:
    :undoc-members:
-
-Property
---------
-
-.. automodule:: sipa.model.fancy_property
-   :member-order: bysource
-   :members:
-   :undoc-members:
+   :noindex:

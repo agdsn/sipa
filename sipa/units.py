@@ -14,7 +14,7 @@ TRAFFIC_FORMAT_STRING = "{0:.2f} {1}"
 MONEY_FORMAT_STRING = "{:+.2f} €"
 
 
-def max_divisions(number, base=1024, unit_list=None):
+def max_divisions(number: float, base: int = 1024, unit_list: list = None) -> int:
     """Find the maximum number of divisions to get 0 ≤ ``number`` ≤
     ``base``
 
@@ -22,13 +22,11 @@ def max_divisions(number, base=1024, unit_list=None):
     of ``unit_list``.  If you give three units, no more than three
     divisions will be determined.
 
-    :param int number: The number to test
-    :param int base: The base to consider
-    :param list unit_list: The list of units available
+    :param number: The number to test
+    :param base: The base to consider
+    :param unit_list: The list of units available
 
     :returns: The determined number of divisions
-
-    :rtype: int
     """
     if unit_list is None:
         unit_list = UNIT_LIST
@@ -40,12 +38,12 @@ def max_divisions(number, base=1024, unit_list=None):
     return max(0, min(floor(log(abs(number), base)), len(unit_list) - 1))
 
 
-def reduce_by_base(number, divisions, base=1024):
+def reduce_by_base(number: float, divisions: int, base: int = 1024) -> float:
     """Divide ``number`` by ``divisions`` potences of ``base``"""
     return number / base**divisions
 
 
-def format_as_traffic(number, divisions, divide=True):
+def format_as_traffic(number: float, divisions: int, divide: bool = True) -> str:
     """Format ``number`` as traffic value
 
     If ``divide`` is True, reduce ``value`` ``divisions`` times.
@@ -57,24 +55,20 @@ def format_as_traffic(number, divisions, divide=True):
         ``False``, leave as is.
 
     :returns: The formatted value
-
-    :rtype: str
     """
     if divide:
         number = reduce_by_base(number, divisions)
     return TRAFFIC_FORMAT_STRING.format(number, UNIT_LIST[divisions])
 
 
-def dynamic_unit(number):
+def dynamic_unit(number: float) -> str:
     """Format a traffic value with a unit according to its size.
 
-    :param float number: The traffic in units of the first element of
+    :param number: The traffic in units of the first element of
         :py:obj:`UNIT_LIST`
 
     :returns: The formatted value in a nice unit.  See
               :py:obj:`TRAFFIC_FORMAT_STRING`
-
-    :rtype: str
     """
     divisions = max_divisions(number)
     return format_as_traffic(number, divisions=divisions, divide=True)
@@ -108,7 +102,7 @@ def money(func):
 def money_style(amount: float) -> str:
     """Return a corresponding bootstrap style to an amount of money
 
-    :param float amount: The amount of money
+    :param amount: The amount of money
 
     :returns: The bootstrap style
     """
@@ -118,7 +112,7 @@ def money_style(amount: float) -> str:
 def format_money(amount: float) -> str:
     """Nicely format a monetary value
 
-    :param float amount: The amount of euros
+    :param amount: The amount of euros
 
     :returns: The formatted value
     """

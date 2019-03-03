@@ -10,6 +10,7 @@ import socket
 import time
 from functools import wraps
 from itertools import chain
+from typing import Iterable
 
 from flask import flash, redirect, request, url_for
 from flask_login import current_user
@@ -118,7 +119,7 @@ def argstr(*args, **kwargs):
     ))
 
 
-def replace_empty_handler_callables(config, func):
+def replace_empty_handler_callables(config: dict, func) -> dict:
     """Register func as specific handler's callable in a dict logging config.
 
     This method looks at the elements of the 'handlers' section of the
@@ -136,7 +137,7 @@ def replace_empty_handler_callables(config, func):
     the default config dict, but *before* the knowledge whether a
     `SENTRY_DSN` is given, it has to be dynamically created.
 
-    :param dict config: A dict as used for logging.dictConfig()
+    :param config: A dict as used for logging.dictConfig()
     :return: The new, modified dict
     """
 
@@ -161,17 +162,15 @@ def dict_diff(d1, d2):
             yield key
 
 
-def compare_all_attributes(one, other, attr_list):
+def compare_all_attributes(one: object, other: object, attr_list: Iterable[str]) -> bool:
     """Safely compare whether two ojbect's attributes are equal.
 
     :param one: The first object
     :param other: The second object
-    :param list attr_list: A list of attributes (strings).
+    :param attr_list: A list of attribute names.
 
     :returns: Whether the attributes are equal or false on
               `AttributeError`
-
-    :rtype: bool
     """
     try:
         return all(getattr(one, attr) == getattr(other, attr)
@@ -180,7 +179,7 @@ def compare_all_attributes(one, other, attr_list):
         return False
 
 
-def xor_hashes(*elements):
+def xor_hashes(*elements: object) -> int:
     """Combine all element's hashes with xor
     """
     _hash = 0

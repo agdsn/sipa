@@ -1,0 +1,36 @@
+.. py:module:: sipa.backends
+
+==========================
+Backends (Flask extension)
+==========================
+
+sipa.backends
+-------------
+
+.. autoclass:: Backends
+   :members:
+   :undoc-members:
+   :noindex:
+
+.. data:: backends
+
+   A proxy pointing to the curent app's :py:data:`backends` object.
+
+
+Datasource
+----------
+
+Sipa distinguishes between two concepts:
+
+* A *Datasource* is the technical entity providing data, such as the
+  user class, the mail server, etc.
+* A *Dormitory* is the entity that should be displayed as an option on
+  the login field.  Therefore, its most important property is the
+  `display_name` and the datasource it belongs to.  Also, it holds information about the IP
+  subnets, since these are bound to a location, and not the technical backend.
+
+.. automodule:: sipa.backends.datasource
+   :member-order: bysource
+   :members:
+   :undoc-members:
+   :noindex:

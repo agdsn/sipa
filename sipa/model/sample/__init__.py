@@ -5,6 +5,7 @@ from ipaddress import IPv4Network
 from sipa.backends import DataSource, Dormitory
 from . import user
 
+#: The sample datasource, used for frontend debugging.
 datasource = DataSource(
     name='sample',
     user_class=user.User,

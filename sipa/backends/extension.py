@@ -12,9 +12,10 @@ from werkzeug.local import LocalProxy
 from .datasource import DataSource, Dormitory
 from .logging import logger
 from .exceptions import InvalidConfiguration
+from .types import UserLike
 
 
-def evaluates_uniquely(objects, func):
+def evaluates_uniquely(objects, func) -> bool:
     """Return true if the return value of ``func`` is unique among
     ``objects``.
 
@@ -38,7 +39,6 @@ def evaluates_uniquely(objects, func):
         parameter.  Must return something hashable.
 
     :return: whether the uniqueness holds
-    :rtype: bool
     """
     values = [func(obj) for obj in objects]
     return len(values) == len(set(values))
@@ -58,7 +58,7 @@ class Backends:
     as its name, the email suffix, the user class, the initialization
     method, and so on.
 
-    Originating from the needs of the [AG DSN](github.com/agdsn), the
+    Originating from the needs of the `AG DSN <https://github.com/agdsn>`_, the
     user should not select the backend, but the location where he
     lives.  Thus, he selects a :py:class:`Dormitory`, which has not
     only a name, but also a `display_name` and ip subnets.  The latter
@@ -215,11 +215,7 @@ class Backends:
 
     @property
     def dormitories_short(self) -> List[_dorm_summary]:
-        """Return a list of dormitories as tuples instead of objects
-
-        :return: a list of ``(name, display_name)`` tuples
-        :rtype: list of :py:data:`_dorm_summary` namedtuples
-        """
+        """Return a list of dormitories as tuples instead of objects"""
         return sorted([
             _dorm_summary(name=dormitory.name,
                           display_name=dormitory.display_name)
@@ -230,9 +226,6 @@ class Backends:
     def supported_dormitories_short(self) -> List[_dorm_summary]:
         """Return a list of supported dormitories as tuples instead of
         objects
-
-        :return: a list of ``(name, display_name)`` tuples
-        :rtype: list of :py:data:`_dorm_summary` namedtuples
         """
         return sorted([
             _dorm_summary(name=dormitory.name,
@@ -245,34 +238,33 @@ class Backends:
     def get_dormitory(self, name: str) -> Optional[Dormitory]:
         """Lookup the dormitory with name ``name``.
 
-        :param str name: The dormitory's ``name``
+        :param name: The dormitory's ``name``
 
         :return: The dormitory object
-        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
         """
         for dormitory in self.all_dormitories:
             if dormitory.name == name:
                 return dormitory
+        return None
 
     def get_datasource(self, name: str) -> Optional[DataSource]:
         """Lookup the datasource with name ``name``.
 
-        :param str name: The datasource's ``name``
+        :param name: The datasource's ``name``
 
         :return: The datasource object
-        :rtype: :py:class:`~sipa.model.datasource.Datasource`
         """
         for datasource in self.datasources:
             if datasource.name == name:
                 return datasource
+        return None
 
     def dormitory_from_ip(self, ip: str) -> Optional[Dormitory]:
         """Return the dormitory whose subnets contain ``ip``
 
-        :param str ip: The ip
+        :param ip: The ip
 
         :return: The dormitory containing ``ip``
-        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
         """
         try:
             address = IPv4Address(str(ip))
@@ -282,27 +274,27 @@ class Backends:
             for dormitory in self.dormitories:
                 if address in dormitory.subnets:
                     return dormitory
+        return None
 
     def preferred_dormitory_name(self) -> Optional[str]:
         """Return the name of the preferred dormitory based on the
         request's ip
 
         :return: name of the dormitory
-        :rtype: str
         """
         dormitory = self.dormitory_from_ip(request.remote_addr)
         if dormitory:
             return dormitory.name
+        return None
 
-    def user_from_ip(self, ip: str) -> Optional[object]:
+    def user_from_ip(self, ip: str) -> Optional[UserLike]:
         """Return the User that corresponds to ``ip`` according to the
         datasource.
 
-        :param str ip: The ip
+        :param ip: The ip
 
         :return: The corresponding User in the sense of the
                  datasource.
-        :rtype: The corresponding datasources ``user_class``.
         """
         dormitory = self.dormitory_from_ip(ip)
         if not dormitory:
@@ -317,20 +309,15 @@ class Backends:
     # PROXIES
 
     def current_dormitory(self) -> Optional[Dormitory]:
-        """Read the current dormitory from the session
-
-        :rtype: :py:class:`~sipa.model.datasource.Dormitory`
-        """
+        """Read the current dormitory from the session"""
         return self.get_dormitory(session['dormitory'])
 
     def current_datasource(self) -> Optional[DataSource]:
-        """Read the current datasource from the session
-
-        :rtype: :py:class:`~sipa.model.datasource.Datasource`
-        """
+        """Read the current datasource from the session"""
         dormitory = self.current_dormitory()
         if dormitory:
             return dormitory.datasource
+        return None
 
 
 #: A namedtuple to improve readability of some return values

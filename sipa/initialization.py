@@ -31,10 +31,10 @@ logger.addHandler(logging.StreamHandler())  # for before logging is configured
 def init_app(app, **kwargs):
     """Initialize the Flask app located in the module sipa.
     This initializes the Flask app by:
+
     * calling the internal init_app() procedures of each module
     * registering the Blueprints
     * registering the Jinja global variables
-    :return: None
     """
     load_config_file(app, config=kwargs.pop('config', None))
     app.wsgi_app = ProxyFix(app.wsgi_app, app.config['NUM_PROXIES'])

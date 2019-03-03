@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from typing import List, Optional
 
 from babel import Locale, UnknownLocaleError, negotiate_locale
 from flask import request, session
@@ -9,17 +10,12 @@ from werkzeug.exceptions import BadRequest
 logger = logging.getLogger(__name__)
 
 
-def possible_locales():
-    """Return the locales usable for sipa.
-
-    :returns: Said Locales
-
-    :rtype: List of :py:obj:`Locale` s
-    """
+def possible_locales() -> List[Locale]:
+    """Return the locales usable for sipa."""
     return [Locale('de'), Locale('en')]
 
 
-def get_user_locale_setting():
+def get_user_locale_setting() -> Optional[Locale]:
     """Get a user's explicit locale setting, if available."""
     locale_identifier = session.get('locale')
     if locale_identifier is None:
@@ -60,7 +56,7 @@ def save_user_locale_setting():
     session['locale'] = str(locale)
 
 
-def select_locale():
+def select_locale() -> str:
     """Select a suitable locale
 
     Try to pick a locale from the following ordered sources:
@@ -70,8 +66,6 @@ def select_locale():
         2. The best match according to the ``Accept-Language`` request header
 
     :returns: The locale string
-
-    :rtype: str
     """
     locale = get_user_locale_setting()
     if locale is not None:
