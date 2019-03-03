@@ -49,7 +49,7 @@ deploy:
   # To be set in the travis settings page as a secure variable
   github-token: $GITHUB_TOKEN
   keep-history: true
-  local_dir: build/html
+  local_dir: docs/build/html
   # see https://docs.travis-ci.com/user/deployment/#examples-of-conditional-deployment
   on:
     all_branches: true
