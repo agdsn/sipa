@@ -41,5 +41,16 @@ after_success:
   - docker-compose -f build/dev/docker-compose.yml build sipa
   - sudo ./helpers/registry.sh all
 
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: true
+  local_dir: build/html
+
 before_cache:
   - ./helpers/docker_cache.sh save_cache || echo "Cache saving failed"
+
+stages:
+  - name: deploy
+    if: branch IN (master, develop)
