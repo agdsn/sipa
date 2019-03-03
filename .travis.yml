@@ -42,9 +42,12 @@ after_success:
   - sudo ./helpers/registry.sh all
 
 deploy:
+  # See https://docs.travis-ci.com/user/deployment/pages/
   provider: pages
   skip-cleanup: true
-  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  # THIS MUST BE A PERSONAL ACCESS TOKEN (not of the organization)!
+  # To be set in the travis settings page as a secure variable
+  github-token: $GITHUB_TOKEN
   keep-history: true
   local_dir: build/html
 
