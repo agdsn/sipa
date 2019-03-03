@@ -18,6 +18,7 @@ translate:
 	pybabel compile -d sipa/translations/
 
 docs:
+	sphinx-apidoc -o docs/source/ref sipa
 	$(MAKE) -C docs html
 
 show_docs:

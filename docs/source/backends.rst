@@ -10,6 +10,7 @@ sipa.backends
 .. autoclass:: Backends
    :members:
    :undoc-members:
+   :noindex:
 
 .. data:: backends
 
@@ -32,3 +33,4 @@ Sipa distinguishes between two concepts:
    :member-order: bysource
    :members:
    :undoc-members:
+   :noindex:

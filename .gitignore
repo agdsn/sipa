@@ -171,3 +171,4 @@ config.py
 # that
 /docs/build
 TAGS
+/docs/source/ref

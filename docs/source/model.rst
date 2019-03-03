@@ -1,8 +1,8 @@
-============
-`sipa.model`
-============
+=====
+Model
+=====
 
-The `model` package mainly contains:
+The :mod:`sipa.model` package mainly contains:
 
 #. :class:`~sipa.backends.datasource.Datasource` implementations for the
    :py:mod:`sipa.backends` extension and everything that comes with it
@@ -20,6 +20,7 @@ Implemented backends
 Sipa registers the following datasources:
 
 .. autodata:: sipa.model.AVAILABLE_DATASOURCES
+   :noindex:
 
 Their implementations are in the corresponding modules
 
@@ -28,13 +29,11 @@ Their implementations are in the corresponding modules
 * :mod:`sipa.model.sample`
 
 
-`.user`
--------
+User
+----
 
-.. automodule:: sipa.model.user
-   :member-order: groupwise
-   :members:
-   :undoc-members:
+.. class:: sipa.model.user.BaseUser
+   :noindex:
 
 
 `.fancy_property`
@@ -48,6 +47,7 @@ Their implementations are in the corresponding modules
    :member-order: bysource
    :members:
    :undoc-members:
+   :noindex:
 
 
 `.finance`
@@ -61,3 +61,4 @@ of the finance information:
    :members:
    :private-members:
    :undoc-members:
+   :noindex:

@@ -20,7 +20,7 @@ user's properties foran arbitrary backend.
 This is
 
 
-Package reference
+Package survey
 -----------------
 
 .. toctree::
@@ -29,6 +29,7 @@ Package reference
    sipa
    backends
    model
+   Complete Reference <ref/modules>
 
 
 Indices and tables

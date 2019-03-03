@@ -7,48 +7,12 @@ subpackages are mainly frontend-related.
 
 `.blueprints`
 -------------
-The `sipa.blueprints` package contains the actual endpoint definitions.
+The :mod:`sipa.blueprints` package contains the actual endpoint definitions.
 For an overview of flask blueprints, refer to the :ref:`flask documentation <flask:blueprints>`.
 
-`.initialization`
------------------
-
-.. automodule:: sipa.initialization
-   :members:
-
-`.mail`
--------
-
-.. automodule:: sipa.mail
-   :members:
-
-`.units`
---------
-
-.. automodule:: sipa.units
-   :members:
-   :undoc-members:
-
-`.base`
--------
-
-.. automodule:: sipa.base
-   :members:
-
-`.babel`
---------
-
-.. automodule:: sipa.babel
-   :members:
-   :undoc-members:
-   :exclude-members: request
 
 `.flatpages`
 ------------
 
-.. automodule:: sipa.flatpages
-   :members:
-   :undoc-members:
-   :private-members:
-   :special-members: __getattr__
-   :exclude-members: request
+The :mod:`sipa.flatpages` module provides the :class:`~sipa.flatpages.CategorizedFlatPages`
+flask extension, which is based on :mod:`Flask-FlatPages <ffp:flask_flatpages>`.
