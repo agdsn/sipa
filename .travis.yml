@@ -33,6 +33,7 @@ script:
   - "pycodestyle ."
   - $DOCKER_COMPOSE build
   - echo "Running complete test suite…" && $DOCKER_COMPOSE run --rm sipa_testing_no_volumes python manage.py test
+  - echo "Building documentation…" && make docs
 
 after_success:
   # we don't want to deploy from the testing compose file
