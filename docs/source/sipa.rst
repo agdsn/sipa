@@ -1,42 +1,50 @@
-=====
-Sipa
-=====
+======
+`sipa`
+======
 
-The `sipa` package contains everything necessary for the frontend.
+The `sipa` package contains everything – things that are not grouped in
+subpackages are mainly frontend-related.
 
+`.blueprints`
+-------------
+The `sipa.blueprints` package contains the actual endpoint definitions.
+For an overview of flask blueprints, refer to the :ref:`flask documentation <flask:blueprints>`.
 
-Mail
-----
+`.initialization`
+-----------------
+
+.. automodule:: sipa.initialization
+   :members:
+
+`.mail`
+-------
 
 .. automodule:: sipa.mail
    :members:
 
-Units
------
+`.units`
+--------
 
 .. automodule:: sipa.units
    :members:
    :undoc-members:
 
-
-Base
-----
+`.base`
+-------
 
 .. automodule:: sipa.base
    :members:
 
-
-Babel
------
+`.babel`
+--------
 
 .. automodule:: sipa.babel
    :members:
    :undoc-members:
    :exclude-members: request
 
-
-Flatpages
----------
+`.flatpages`
+------------
 
 .. automodule:: sipa.flatpages
    :members:

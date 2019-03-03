@@ -6,13 +6,6 @@
 Welcome to Sipa's documentation!
 ================================
 
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   model
-   sipa
 
 
 Challenges
@@ -25,6 +18,17 @@ mostly the usersuite, in which one view and template have to display a
 user's properties foran arbitrary backend.
 
 This is
+
+
+Package reference
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   sipa
+   backends
+   model
 
 
 Indices and tables

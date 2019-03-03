@@ -58,7 +58,7 @@ class Backends:
     as its name, the email suffix, the user class, the initialization
     method, and so on.
 
-    Originating from the needs of the [AG DSN](github.com/agdsn), the
+    Originating from the needs of the `AG DSN <https://github.com/agdsn>`_, the
     user should not select the backend, but the location where he
     lives.  Thus, he selects a :py:class:`Dormitory`, which has not
     only a name, but also a `display_name` and ip subnets.  The latter
