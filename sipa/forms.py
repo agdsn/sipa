@@ -71,6 +71,7 @@ class ReadonlyStringField(StrippedStringField):
         return super().__call__(
             *args, readonly=True, **kwargs)
 
+
 class SpamCheckField(StringField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -81,11 +82,13 @@ class SpamCheckField(StringField):
         kwargs['autocomplete'] = 'off'
         return super().__call__(*args, **kwargs)
 
+
 class SpamProtectedForm(FlaskForm):
     # Adds a honypot for bots to the form.
     # This field must not be filled out to submit the form.
     # We're using 'website' as the field-name since we won't give bots a hint.
-    website = SpamCheckField(label="", validators=[Length(0,0,"You seem to like honey.")])
+    website = SpamCheckField(label="", validators=[Length(0, 0, "You seem to like honey.")])
+
 
 class ContactForm(SpamProtectedForm):
     email = ReadonlyStringField(
