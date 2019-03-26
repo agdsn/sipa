@@ -72,7 +72,25 @@ class ReadonlyStringField(StrippedStringField):
             *args, readonly=True, **kwargs)
 
 
-class ContactForm(FlaskForm):
+class SpamCheckField(StringField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        c = kwargs.pop('class', '') or kwargs.pop('class_', '')
+        kwargs['class'] = u'%s %s' % ('honey', c)
+        kwargs['autocomplete'] = 'off'
+        return super().__call__(*args, **kwargs)
+
+
+class SpamProtectedForm(FlaskForm):
+    # Adds a honypot for bots to the form.
+    # This field must not be filled out to submit the form.
+    # We're using 'website' as the field-name since we won't give bots a hint.
+    website = SpamCheckField(label="", validators=[Length(0, 0, "You seem to like honey.")])
+
+
+class ContactForm(SpamProtectedForm):
     email = ReadonlyStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
         validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem "
@@ -92,7 +110,7 @@ class ContactForm(FlaskForm):
     ])
 
 
-class AnonymousContactForm(FlaskForm):
+class AnonymousContactForm(SpamProtectedForm):
     email = StrippedStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
         validators=[Email(lazy_gettext("E-Mail ist nicht "
@@ -114,7 +132,7 @@ class AnonymousContactForm(FlaskForm):
     ])
 
 
-class OfficialContactForm(FlaskForm):
+class OfficialContactForm(SpamProtectedForm):
     email = StrippedStringField(
         label=lazy_gettext("E-Mail-Adresse"),
         validators=[Email(lazy_gettext("E-Mail ist nicht "
