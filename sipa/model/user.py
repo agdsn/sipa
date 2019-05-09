@@ -296,8 +296,11 @@ class BaseUserDB(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def has_db(self) -> bool:
-        """**[Abstract]** Wheter the database is enabled"""
+    def has_db(self) -> Optional[bool]:
+        """**[Abstract]** Whether the database is enabled
+
+        Returns None, if the user database is unreachable.
+        """
         pass
 
     @abstractmethod
