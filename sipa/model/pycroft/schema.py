@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
+
+from decimal import Decimal
 from typing import List, Optional
 
 from sipa.model.pycroft.unserialize import unserializer
@@ -17,7 +19,7 @@ class UserData:
     cache: bool
     traffic_history: List[TrafficHistoryEntry]
     interfaces: List[Interface]
-    finance_balance: int
+    finance_balance: Decimal
     finance_history: List[FinanceHistoryEntry]
     # TODO implement `cls.Meta.custom_constructors`, use `parse_date` for this
     last_finance_update: str
