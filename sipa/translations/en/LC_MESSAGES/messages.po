@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-02-11 02:40+0100\n"
-"PO-Revision-Date: 2019-02-11 02:41+0100\n"
+"POT-Creation-Date: 2019-05-10 01:31+0200\n"
+"PO-Revision-Date: 2019-05-10 01:31+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -386,6 +386,9 @@ msgstr "Passive"
 
 msgid "Nicht aktiviert"
 msgstr "Not activated"
+
+msgid "Datenbank nicht erreichbar"
+msgstr "Database is unreachable"
 
 msgid "Verstoß gegen Netzordnung"
 msgstr "Violation of network usage agreement"
@@ -775,9 +778,6 @@ msgstr "Outgoing"
 
 #~ msgid "Unbekannt"
 #~ msgstr "Unknown"
-
-#~ msgid "Datenbank nicht erreichbar"
-#~ msgstr "Database cannot be reached"
 
 #~ msgid "Für Details klicken"
 #~ msgstr "Click for details"

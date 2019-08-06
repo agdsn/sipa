@@ -12,6 +12,7 @@ from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
 from .unserialize import UnserializationError
+from .userdb import UserDB
 
 from flask_login import AnonymousUserMixin
 from flask.globals import current_app
@@ -30,6 +31,7 @@ class User(BaseUser):
     def __init__(self, user_data: dict):
         try:
             self.user_data: UserData = UserData(user_data)
+            self._userdb: UserDB = UserDB(self)
         except UnserializationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
         super().__init__(uid=str(self.user_data.id))
@@ -198,13 +200,24 @@ class User(BaseUser):
     def hostalias(self):
         raise NotImplementedError
 
-    @unsupported_prop
+    @active_prop
     def userdb_status(self):
-        raise NotImplementedError
+        status = self.userdb.has_db
 
-    @unsupported_prop
+        if status is None:
+            return {'value': gettext("Datenbank nicht erreichbar"),
+                    'style': 'danger', 'empty': True}
+        if status:
+            return {'value': gettext("Aktiviert"),
+                    'style': 'success'}
+        return {'value': gettext("Nicht aktiviert"),
+                'empty': True}
+
+    userdb_status = userdb_status.fake_setter()
+
+    @property
     def userdb(self):
-        raise NotImplementedError
+        return self._userdb
 
     @property
     def has_connection(self):
