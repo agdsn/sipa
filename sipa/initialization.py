@@ -3,6 +3,7 @@ import logging
 import logging.config
 import os
 import os.path
+from datetime import datetime
 
 from flask_babel import Babel, get_locale
 from raven import setup_logging
@@ -83,6 +84,7 @@ def init_app(app, **kwargs):
         form_input_width_class="col-sm-{}".format(form_input_width),
         form_input_offset_class="col-sm-offset-{}".format(form_label_width),
         url_self=url_self,
+        now=datetime.utcnow()
     )
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
