@@ -23,7 +23,7 @@
     {%- endif %}
 {%- endmacro -%}
 <!DOCTYPE html>
-<html lang="{{ get_locale().language }}" xmlns="http://www.w3.org/1999/html">
+<html lang="{{ get_locale().language }}">
 
 <!--
     ___    ______           ____    _____    _   __
@@ -63,7 +63,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     </head>
 
     <body>
-        <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
@@ -74,7 +74,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     </button>
 
                     <a class="navbar-brand" href="{{ url_for('generic.index') }}">
-                        <div id="logo"></div>
+                        <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}" alt="AG DSN" />
                     </a>
                     <a class="navbar-brand visible-xs" href="{{ url_for('generic.index') }}">
                         AG DSN
@@ -82,7 +82,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 </div>
 
                 <div class="collapse navbar-collapse" id="navbar">
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav" role="menu">
                         <li class="dropdown">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 {{ _("News") }}<span class="caret"></span>
@@ -142,8 +142,9 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                     <ul id="navbar-right-dropdown" class="nav navbar-nav navbar-right visible-md-block visible-sm-block">
                         <li>
-                            <button id="language-dropdown-button" type="button" class="btn btn-default navbar-btn" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon glyphicon-cog"></span>
+                            <button id="language-dropdown-button" type="button" class="btn btn-default navbar-btn"
+                                    data-toggle="dropdown" aria-label="Toggle Menu">
+                                <span class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="language-dropdown-button">
                                 <li class="dropdown-header">{{ _("Anmeldung") }}</li>
@@ -158,8 +159,9 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                                  class="active"
                                              {%- endif %}>
                                             <a href="{{ url_self(locale=locale.language) }}">
-                                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
-                                                {{locale.display_name}}
+                                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+                                                     alt="{{ locale.display_name }}" />
+                                                {{ locale.display_name }}
                                             </a>
                                         </li>
                                     {% endfor %}
@@ -176,15 +178,17 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                         <li>
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                                <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
+                                <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}"
+                                     alt="{{ get_locale().display_name }}" />
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 {% for locale in possible_locales() %}
                                     <li>
                                         <a href="{{ url_self(locale=locale.language) }}">
-                                            <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
-                                            {{locale.display_name}}
+                                            <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+                                                 alt="{{ locale.display_name }}" />
+                                            {{ locale.display_name }}
                                         </a>
                                     </li>
                                 {% endfor %}
@@ -205,7 +209,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
         <div id="center" class="container">
             <div class="row">
-                <div class="col-sm-9">
+                <main class="col-sm-9">
                     {%- with messages = get_flashed_messages(with_categories=True) -%}
                         {%- if messages -%}
                             {% for cat, msg in messages %}
@@ -224,7 +228,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                     {% block content %}
                     {% endblock %}
-                </div>
+                </main>
 
                 <div id="sidebar" class="col-sm-3">
                     {% block sidebar %}
@@ -323,20 +327,23 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                     <div class ="row">
                                         <div class ="col-xs-4 text-center">
                                             <a class="btn btn-social-icon btn-twitter"
-                                                href="https://twitter.com/ag_dsn">
-                                            <span class="fa fa-twitter"></span>
+                                                href="https://twitter.com/ag_dsn"
+                                                aria-label="Twitter">
+                                            <span class="fa fa-twitter" aria-hidden="true"></span>
                                             </a>
                                         </div>
                                         <div class ="col-xs-4 text-center">
                                             <a class="btn btn-social-icon btn-facebook"
-                                                href="https://www.facebook.com/DresdnerStudentenNetz">
-                                            <span class="fa fa-facebook"></span>
+                                                href="https://www.facebook.com/DresdnerStudentenNetz"
+                                                aria-label="Facebook">
+                                            <span class="fa fa-facebook" aria-hidden="true"></span>
                                             </a>
                                         </div>
                                             <div class="col-xs-4 text-center">
                                             <a class="btn btn-social-icon btn-github"
-                                                href="https://github.com/agdsn/sipa">
-                                                <span class="fa fa-github"></span>
+                                                href="https://github.com/agdsn/sipa"
+                                                aria-label="Github">
+                                                <span class="fa fa-github" aria-hidden="true"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -369,10 +376,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
             </div>
         </footer>
 
-        <script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
-        <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
-        <script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
-        <script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
         {% block custom_script %}{% endblock %}
     </body>
 </html>

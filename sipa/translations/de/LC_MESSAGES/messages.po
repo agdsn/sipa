@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-05-10 01:31+0200\n"
+"POT-Creation-Date: 2019-08-22 21:57+0200\n"
 "PO-Revision-Date: 2014-08-01 19:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.6.0\n"
+"Generated-By: Babel 2.7.0\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -592,7 +592,19 @@ msgstr ""
 msgid "Statusinformationen"
 msgstr ""
 
+msgid "Hinzufügen"
+msgstr ""
+
+msgid "Bearbeiten"
+msgstr ""
+
+msgid "Löschen"
+msgstr ""
+
 msgid "Zahlungsdetails"
+msgstr ""
+
+msgid "Monate der Beitragszahlung angeben"
 msgstr ""
 
 msgid "Beitrag für"
@@ -1416,3 +1428,4 @@ msgstr ""
 
 #~ msgid "Fehler bei der Abfrage der Daten"
 #~ msgstr ""
+
