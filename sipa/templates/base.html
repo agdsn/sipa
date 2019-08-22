@@ -23,7 +23,7 @@
     {%- endif %}
 {%- endmacro -%}
 <!DOCTYPE html>
-<html lang="{{ get_locale().language }}" xmlns="http://www.w3.org/1999/html">
+<html lang="{{ get_locale().language }}">
 
 <!--
     ___    ______           ____    _____    _   __
@@ -63,7 +63,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     </head>
 
     <body>
-        <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
@@ -376,10 +376,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
             </div>
         </footer>
 
-        <script type="text/javascript" src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
-        <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
-        <script type="text/javascript" src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
-        <script type="text/javascript" src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
+        <script src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
         {% block custom_script %}{% endblock %}
     </body>
 </html>
