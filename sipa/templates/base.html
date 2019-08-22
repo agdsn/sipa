@@ -82,7 +82,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 </div>
 
                 <div class="collapse navbar-collapse" id="navbar">
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav" role="menu">
                         <li class="dropdown">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 {{ _("News") }}<span class="caret"></span>
@@ -142,8 +142,9 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                     <ul id="navbar-right-dropdown" class="nav navbar-nav navbar-right visible-md-block visible-sm-block">
                         <li>
-                            <button id="language-dropdown-button" type="button" class="btn btn-default navbar-btn" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon glyphicon-cog"></span>
+                            <button id="language-dropdown-button" type="button" class="btn btn-default navbar-btn"
+                                    data-toggle="dropdown" aria-label="Toggle Menu">
+                                <span class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="language-dropdown-button">
                                 <li class="dropdown-header">{{ _("Anmeldung") }}</li>
@@ -208,7 +209,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
         <div id="center" class="container">
             <div class="row">
-                <div class="col-sm-9">
+                <main class="col-sm-9">
                     {%- with messages = get_flashed_messages(with_categories=True) -%}
                         {%- if messages -%}
                             {% for cat, msg in messages %}
@@ -227,7 +228,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                     {% block content %}
                     {% endblock %}
-                </div>
+                </main>
 
                 <div id="sidebar" class="col-sm-3">
                     {% block sidebar %}
@@ -326,20 +327,23 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                     <div class ="row">
                                         <div class ="col-xs-4 text-center">
                                             <a class="btn btn-social-icon btn-twitter"
-                                                href="https://twitter.com/ag_dsn">
-                                            <span class="fa fa-twitter"></span>
+                                                href="https://twitter.com/ag_dsn"
+                                                aria-label="Twitter">
+                                            <span class="fa fa-twitter" aria-hidden="true"></span>
                                             </a>
                                         </div>
                                         <div class ="col-xs-4 text-center">
                                             <a class="btn btn-social-icon btn-facebook"
-                                                href="https://www.facebook.com/DresdnerStudentenNetz">
-                                            <span class="fa fa-facebook"></span>
+                                                href="https://www.facebook.com/DresdnerStudentenNetz"
+                                                aria-label="Facebook">
+                                            <span class="fa fa-facebook" aria-hidden="true"></span>
                                             </a>
                                         </div>
                                             <div class="col-xs-4 text-center">
                                             <a class="btn btn-social-icon btn-github"
-                                                href="https://github.com/agdsn/sipa">
-                                                <span class="fa fa-github"></span>
+                                                href="https://github.com/agdsn/sipa"
+                                                aria-label="Github">
+                                                <span class="fa fa-github" aria-hidden="true"></span>
                                             </a>
                                         </div>
                                     </div>
