@@ -52,9 +52,7 @@ body {
 
 #logo {
 	margin-top: -5px;
-	background-image: url(../img/logo_hover.png);
 	opacity: 0.5;
-	background-size: 32px;
 	width: 32px;
 	height: 32px;
 }

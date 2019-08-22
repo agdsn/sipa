@@ -74,7 +74,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     </button>
 
                     <a class="navbar-brand" href="{{ url_for('generic.index') }}">
-                        <div id="logo"></div>
+                        <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}" alt="AG DSN" />
                     </a>
                     <a class="navbar-brand visible-xs" href="{{ url_for('generic.index') }}">
                         AG DSN
@@ -158,8 +158,9 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                                  class="active"
                                              {%- endif %}>
                                             <a href="{{ url_self(locale=locale.language) }}">
-                                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
-                                                {{locale.display_name}}
+                                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+                                                     alt="{{ locale.display_name }}" />
+                                                {{ locale.display_name }}
                                             </a>
                                         </li>
                                     {% endfor %}
@@ -176,15 +177,17 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                         <li>
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                                <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}" />
+                                <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}"
+                                     alt="{{ get_locale().display_name }}" />
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 {% for locale in possible_locales() %}
                                     <li>
                                         <a href="{{ url_self(locale=locale.language) }}">
-                                            <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}" />
-                                            {{locale.display_name}}
+                                            <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+                                                 alt="{{ locale.display_name }}" />
+                                            {{ locale.display_name }}
                                         </a>
                                     </li>
                                 {% endfor %}
