@@ -19,9 +19,9 @@
                             </label></div>
                         </div>
                     {% elif field.type == "RadioField" %}
-                        <label class="{{ form_label_width_class }} control-label">
+                        <div class="{{ form_label_width_class }} control-label">
                             {{ field.label() }}
-                        </label>
+                        </div>
                         <div class="{{ form_input_width_class }}">
                             {% for subfield in field %}
                                 <div class="radio"><label>
@@ -31,9 +31,9 @@
                             {% endfor %}
                         </div>
                     {% elif field.type != "HiddenField" %}
-                        <label class="{{ form_label_width_class }} control-label">
+                        <div class="{{ form_label_width_class }} control-label">
                             {{ field.label() }}
-                        </label>
+                        </div>
                         <div class="{{ form_input_width_class }}">
                             {{ render_field(field, focus=focus) }}
                         </div>
