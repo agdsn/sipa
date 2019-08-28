@@ -280,6 +280,10 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """**[Abstract]** Payment details for the User."""
         pass
 
+    def has_property(self, property):
+        """Method to check if a user has a property"""
+        return False
+
 
 class BaseUserDB(metaclass=ABCMeta):
     """An abstract base class defining an interface for a user's

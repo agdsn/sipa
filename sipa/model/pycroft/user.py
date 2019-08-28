@@ -245,6 +245,9 @@ class User(BaseUser):
             ),
         )
 
+    def has_property(self, property):
+        return property in self.user_data.properties
+
 
 def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0

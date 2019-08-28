@@ -17,6 +17,7 @@ class UserData:
     room: str
     mail: str
     cache: bool
+    properties: List[str]
     traffic_history: List[TrafficHistoryEntry]
     interfaces: List[Interface]
     finance_balance: Decimal
