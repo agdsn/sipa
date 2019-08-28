@@ -4,7 +4,7 @@ import logging
 from sipa.model.user import BaseUser
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import active_prop, connection_dependent, \
-    unsupported_prop, ActiveProperty, UnsupportedProperty
+    unsupported_prop, ActiveProperty, UnsupportedProperty, Capabilities
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive
@@ -204,6 +204,8 @@ class User(BaseUser):
     def userdb_status(self):
         status = self.userdb.has_db
 
+        capabilities = Capabilities(edit=True, delete=True)
+
         if not self.has_property("userdb"):
             return UnsupportedProperty("userdb_status")
 
@@ -216,14 +218,14 @@ class User(BaseUser):
         if status:
             return ActiveProperty(name="userdb_status",
                                   value=gettext("Aktiviert"),
-                                  style='success')
+                                  style='success',
+                                  capabilities=capabilities)
 
         return ActiveProperty(name="userdb_status",
                                   value=gettext("Nicht aktiviert"),
-                                  empty=True)
+                                  empty=True,
+                                  capabilities=capabilities)
 
-
-    # userdb_status = userdb_status.fake_setter()
 
     @property
     def userdb(self):
