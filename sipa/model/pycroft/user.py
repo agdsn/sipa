@@ -4,7 +4,7 @@ import logging
 from sipa.model.user import BaseUser
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import active_prop, connection_dependent, \
-    unsupported_prop
+    unsupported_prop, ActiveProperty, UnsupportedProperty
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive
@@ -200,20 +200,30 @@ class User(BaseUser):
     def hostalias(self):
         raise NotImplementedError
 
-    @active_prop
+    @property
     def userdb_status(self):
         status = self.userdb.has_db
 
-        if status is None:
-            return {'value': gettext("Datenbank nicht erreichbar"),
-                    'style': 'danger', 'empty': True}
-        if status:
-            return {'value': gettext("Aktiviert"),
-                    'style': 'success'}
-        return {'value': gettext("Nicht aktiviert"),
-                'empty': True}
+        if not self.has_property("userdb"):
+            return UnsupportedProperty("userdb_status")
 
-    userdb_status = userdb_status.fake_setter()
+        if status is None:
+            return ActiveProperty(name="userdb_status",
+                                  value=gettext("Datenbank nicht erreichbar"),
+                                  style='danger',
+                                  empty=True)
+
+        if status:
+            return ActiveProperty(name="userdb_status",
+                                  value=gettext("Aktiviert"),
+                                  style='success')
+
+        return ActiveProperty(name="userdb_status",
+                                  value=gettext("Nicht aktiviert"),
+                                  empty=True)
+
+
+    # userdb_status = userdb_status.fake_setter()
 
     @property
     def userdb(self):

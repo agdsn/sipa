@@ -376,6 +376,9 @@ def change_use_cache():
 def hosting(action=None):
     """Change various settings for Helios.
     """
+    if not current_user.has_property("userdb"):
+        abort(403)
+
     if action == "confirm":
         current_user.userdb.drop()
         flash(gettext("Deine Datenbank wurde gelöscht."), 'success')
