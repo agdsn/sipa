@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+from datetime import date
 from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
@@ -7,7 +8,7 @@ from flask import flash
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField, RadioField, IntegerField, DateField)
+                     StringField, TextAreaField, RadioField, IntegerField, DateField, FloatField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
                                 MacAddress, Regexp, ValidationError, NumberRange, Optional, Length)
 
@@ -228,6 +229,50 @@ class ActivateNetworkAccessForm(FlaskForm):
                     Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
         description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä.")
     )
+
+
+class TerminateMembershipForm(FlaskForm):
+    end_date = DateField(label=lazy_gettext("Austrittsdatum"),
+                         validators=[DataRequired(lazy_gettext("Austrittsdatum nicht angegeben!"))],
+                         description=lazy_gettext("YYYY-MM-DD (z.B. 2018-10-01)"))
+
+    def validate_end_date(form, field):
+        if field.data < date.today():
+            raise ValidationError(lazy_gettext("Das Austrittsdatum darf nicht in der Vergangenheit "
+                                               "liegen!"))
+
+
+class TerminateMembershipConfirmForm(FlaskForm):
+    end_date = DateField(label=lazy_gettext("Austrittsdatum"),
+                         render_kw={'readonly': True},
+                         validators=[DataRequired("invalid end date")])
+
+    estimated_balance = FloatField(label=lazy_gettext("Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"),
+                                   render_kw={'readonly': True},
+                                   validators=[DataRequired("invalid balance")])
+
+    confirm_termination = BooleanField(default=lazy_gettext(
+        "Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden möchte"),
+        validators=[
+            DataRequired(lazy_gettext("Bitte bestätige die Beendigung der Mitgliedschaft"))])
+
+    confirm_settlement = BooleanField(default=lazy_gettext(
+        "Ich bestätige, dass ich ggf. ausstehende Beiträge baldmöglichst bezahle"),
+        validators=[
+            DataRequired(lazy_gettext("Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."))])
+
+    confirm_donation = BooleanField(default=lazy_gettext(
+        "Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht innerhalb "
+        "von 31 Tagen nach Mitgliedschaftsende einen Rückerüberweisungsantrag stelle"),
+        validators=[
+            DataRequired(lazy_gettext("Bitte bestätige die Spendeneinwilligung."))])
+
+
+class ContinueMembershipForm(FlaskForm):
+    confirm_continuation = BooleanField(default=lazy_gettext(
+        "Ich bestätige, dass ich die Kündigung meiner Mitgliedschaft zurückziehe"),
+        validators=[
+            DataRequired(lazy_gettext("Bitte bestätige die Aufhebung der Kündigung"))])
 
 
 class ChangeUseCacheForm(FlaskForm):

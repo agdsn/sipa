@@ -2,23 +2,25 @@
 
 """Blueprint for Usersuite components
 """
-
 from collections import OrderedDict
 import logging
+from datetime import datetime
 
 from babel.numbers import format_currency
-from flask import Blueprint, render_template, url_for, redirect, flash, abort
+from flask import Blueprint, render_template, url_for, redirect, flash, abort, request
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
 
 from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
-    ChangeUseCacheForm, PaymentForm, ActivateNetworkAccessForm
+    ChangeUseCacheForm, PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
+    TerminateMembershipConfirmForm, ContinueMembershipForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
-    PasswordInvalid, UserNotFound, MacAlreadyExists
+    PasswordInvalid, UserNotFound, MacAlreadyExists, TerminationNotPossible, UnkownError, \
+    ContinuationNotPossible
 from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
@@ -75,6 +77,8 @@ def index():
     datasource = current_user.datasource
     context = dict(rows=rows,
                    webmailer_url=datasource.webmailer_url,
+                   terminate_membership_url=url_for('.terminate_membership'),
+                   continue_membership_url=url_for('.continue_membership'),
                    payment_details=render_payment_details(current_user.payment_details(),
                                                           months),
                    girocode=generate_epc_qr_code(current_user.payment_details(), months))
@@ -408,3 +412,119 @@ def hosting(action=None):
 @login_required
 def finance_logs():
     return redirect(url_for('usersuite.index', _anchor='transaction-log'))
+
+
+@bp_usersuite.route("/terminate-membership", methods=['GET', 'POST'])
+@login_required
+def terminate_membership():
+    """
+    As member, cancel your membership to a given date
+    :return:
+    """
+    form = TerminateMembershipForm()
+
+    if form.validate_on_submit():
+        end_date = form.end_date.data
+
+        return redirect(url_for('.terminate_membership_confirm',
+                                end_date=end_date))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    form_args = {
+        'form': form,
+        'cancel_to': url_for('.index'),
+        'submit_text': gettext('Weiter')
+    }
+
+    return render_template('generic_form.html',
+                           page_title=gettext("Mitgliedschaft beenden"),
+                           form_args=form_args)
+
+
+@bp_usersuite.route("/terminate-membership/confirm", methods=['GET', 'POST'])
+@login_required
+def terminate_membership_confirm():
+    """
+    As member, cancel your membership to a given date
+    :return:
+    """
+
+    end_date = request.args.get("end_date", None, lambda x: datetime.strptime(x, '%Y-%m-%d').date())
+
+    form = TerminateMembershipConfirmForm()
+
+    if end_date is not None:
+        try:
+            form.estimated_balance.default = current_user.estimate_balance(
+                end_date)
+
+        except UnkownError:
+            flash(gettext("Unbekannter Fehler!"), "error")
+        else:
+            form.end_date.default = end_date
+    else:
+        return redirect(url_for('.terminate_membership'))
+
+    if form.validate_on_submit():
+        try:
+            current_user.terminate_membership(form.end_date.data)
+        except TerminationNotPossible:
+            flash(gettext("Beendigung der Mitgliedschaft nicht möglich!"), "error")
+        except MacAlreadyExists:
+            flash(gettext("Unbekannter Fehler!"), "error")
+        else:
+            logger.info('Successfully scheduled membership termination',
+                        extra={'data': {'end_date': form.end_date.data},
+                               'tags': {'rate_critical': True}})
+
+            flash(gettext("Deine Mitgliedschaft wird zum angegebenen Datum beendet."), 'success')
+
+        return redirect(url_for('.index'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    form_args = {
+        'form': form,
+        'cancel_to': url_for('.terminate_membership')
+    }
+
+    return render_template('generic_form.html',
+                           page_title=gettext("Mitgliedschaft beenden - Bestätigen"),
+                           form_args=form_args)
+
+
+@bp_usersuite.route("/continue-membership", methods=['GET', 'POST'])
+@login_required
+def continue_membership():
+    """
+    Cancel termination of membership
+    :return:
+    """
+    form = ContinueMembershipForm()
+
+    if form.validate_on_submit():
+        try:
+            current_user.continue_membership()
+        except ContinuationNotPossible:
+            flash(gettext("Fortsetzung der Mitgliedschaft nicht möglich!"), "error")
+        except UnkownError:
+            flash(gettext("Unbekannter Fehler!"), "error")
+        else:
+            logger.info('Successfully cancelled membership termination',
+                        extra={'tags': {'rate_critical': True}})
+
+            flash(gettext("Deine Mitgliedschaft wird fortgesetzt."), 'success')
+
+        return redirect(url_for('.index'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    form_args = {
+        'form': form,
+        'cancel_to': url_for('.index')
+    }
+
+    return render_template('generic_form.html',
+                           page_title=gettext("Mitgliedschaft fortsetzen"),
+                           form_args=form_args)

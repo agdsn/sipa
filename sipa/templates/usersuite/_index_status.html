@@ -37,6 +37,19 @@
         {{ _("Webmailer") }}
     </a>
     {% endif %}
+    {% if current_user.is_member %}
+        {% if current_user.membership_end_date == None %}
+            <a href="{{ terminate_membership_url }}" class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove-circle"></span>
+                {{ _("Mitgliedschaft beenden") }}
+            </a>
+        {% else %}
+            <a href="{{ continue_membership_url }}" class="btn btn-success">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                {{ _("Mitgliedschaft fortsetzen") }}
+            </a>
+        {% endif %}
+    {% endif %}
 </div>
 
 <h2 id="status-information">{{ _("Statusinformationen") }}</h2>
