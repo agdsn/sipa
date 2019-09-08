@@ -51,12 +51,28 @@ class PycroftApi():
                          data={'password': password, 'mac': mac,
                                'birthdate': birthdate, 'host_name': host_name})
 
+    def estimate_balance_at_end_of_membership(self, user_id, end_date):
+        return self.get("user/{}/terminate-membership".format(user_id),
+                        params={'end_date': end_date})
+
+    def terminate_membership(self, user_id, end_date):
+        return self.post("user/{}/terminate-membership".format(user_id),
+                         data={'end_date': end_date,
+                               'comment': 'Move-out by SIPA'})
+
+    def continue_membership(self, user_id):
+        return self.delete("user/{}/terminate-membership".format(user_id))
+
     def get(self, url, params=None):
         request_function = partial(requests.get, params=params or {})
         return self._do_api_call(request_function, url)
 
     def post(self, url, data=None):
         request_function = partial(requests.post, data=data or {})
+        return self._do_api_call(request_function, url)
+
+    def delete(self, url, data=None):
+        request_function = partial(requests.delete, data=data or {})
         return self._do_api_call(request_function, url)
 
     def _do_api_call(self, request_function: Callable, url: str) -> Tuple[int, Any]:
@@ -70,7 +86,7 @@ class PycroftApi():
                          extra={'data': {'endpoint': self._endpoint + url}})
             raise PycroftBackendError("Pycroft API unreachable") from e
 
-        if response.status_code not in [200, 400, 401, 403, 404]:
+        if response.status_code not in [200, 400, 401, 403, 404, 412]:
             try:
                 response.raise_for_status()
             except HTTPError as e:

@@ -7,7 +7,8 @@ from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop, ActiveProperty, UnsupportedProperty, Capabilities
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
-    MacAlreadyExists, NetworkAccessAlreadyActive
+    MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnkownError, \
+    ContinuationNotPossible
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -124,6 +125,31 @@ class User(BaseUser):
             raise MacAlreadyExists
         elif status == 412:
             raise NetworkAccessAlreadyActive
+
+    def terminate_membership(self, end_date):
+        status, result = api.terminate_membership(self.user_data.id, end_date)
+
+        if status == 400:
+            raise TerminationNotPossible
+        elif status != 200:
+            raise UnkownError
+
+    def estimate_balance(self, end_date):
+        status, result = api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
+
+        if status == 200:
+            return result['estimated_balance']
+        else:
+            raise UnkownError
+
+    def continue_membership(self):
+        status, result = api.continue_membership(self.user_data.id)
+
+        if status == 400:
+            raise ContinuationNotPossible
+        elif status != 200:
+            raise UnkownError
+
 
     @mac.setter
     def mac(self, new_mac):
@@ -260,6 +286,9 @@ class User(BaseUser):
     def has_property(self, property):
         return property in self.user_data.properties
 
+    @property
+    def membership_end_date(self):
+        return parse_date(self.user_data.membership_end_date)
 
     @property
     def is_member(self):
