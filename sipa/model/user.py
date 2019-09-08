@@ -285,6 +285,33 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         return False
 
     @property
+    def membership_end_date(self):
+        """Date when the membership ends"""
+        return None
+
+    @active_prop
+    @abstractmethod
+    def network_access_active(self):
+        """Whether or not the network access is active"""
+        pass
+
+    def activate_network_access(self, password, mac, birthdate, host_name):
+        """Method to activate network access"""
+        raise NotImplementedError
+
+    def terminate_membership(self, end_date):
+        """Method to terminate membership"""
+        raise NotImplementedError
+
+    def continue_membership(self):
+        """Calculate balance at a given end_date"""
+        raise NotImplementedError
+
+    def estimate_balance(self, end_date):
+        """Calculate balance at a given end_date"""
+        raise NotImplementedError
+
+    @property
     @abstractmethod
     def is_member(self):
         pass
