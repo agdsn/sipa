@@ -284,6 +284,11 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """Method to check if a user has a property"""
         return False
 
+    @property
+    @abstractmethod
+    def is_member(self):
+        pass
+
 
 class BaseUserDB(metaclass=ABCMeta):
     """An abstract base class defining an interface for a user's

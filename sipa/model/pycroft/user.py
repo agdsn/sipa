@@ -261,6 +261,11 @@ class User(BaseUser):
         return property in self.user_data.properties
 
 
+    @property
+    def is_member(self):
+        return self.has_property('member')
+
+
 def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
 

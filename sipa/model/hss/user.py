@@ -284,6 +284,10 @@ class User(BaseUser):
         db.session.add(account)
         db.session.commit()
 
+    @property
+    def is_member(self):
+        return True
+
 
 class FinanceInformation(BaseFinanceInformation):
     has_to_pay = True
