@@ -27,9 +27,21 @@ class NetworkAccessAlreadyActive(Exception):
     pass
 
 
+class TerminationNotPossible(Exception):
+    pass
+
+
+class ContinuationNotPossible(Exception):
+    pass
+
+
 class DBQueryEmpty(Exception):
     pass
 
 
 class LDAPConnectionError(Exception):
+    pass
+
+
+class UnkownError(Exception):
     pass
