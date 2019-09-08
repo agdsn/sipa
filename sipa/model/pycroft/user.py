@@ -195,7 +195,7 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        value, style = evaluate_status(self.user_data.status)
+        value, style = evaluate_status(self.user_data.status, self)
         return {'value': value, 'style': style}
 
     @active_prop
@@ -299,7 +299,7 @@ def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
 
 
-def evaluate_status(status: UserStatus):
+def evaluate_status(status: UserStatus, user: User):
     message = None
     style = None
     if status.violation:
@@ -310,6 +310,11 @@ def evaluate_status(status: UserStatus):
         message, style = gettext('Trafficlimit überschritten'), 'danger'
     elif not status.member:
         message, style = gettext('Kein Mitglied'), 'muted'
+    elif status.member and user.membership_end_date:
+        message, style = "{} {}".format(gettext('Mitglied bis '), user.membership_end_date), \
+                         'warning'
+    elif status.member:
+        message, style = gettext('Mitglied'), 'success'
 
     if status.member and not status.network_access:
         if message is not None:
@@ -318,7 +323,7 @@ def evaluate_status(status: UserStatus):
             message, style = gettext('Netzzugang gesperrt'), 'danger'
 
     if message is None:
-        message, style = gettext('ok'), 'success'
+        message, style = gettext('Ok'), 'success'
 
     return (message, style)
 
