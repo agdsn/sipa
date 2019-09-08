@@ -170,13 +170,6 @@ class User(BaseUser):
     def network_access_active(self):
         raise NotImplementedError
 
-    @network_access_active.setter
-    def network_access_active(self, value):
-        raise NotImplementedError
-
-    def activate_network_access(self, password, mac, birthdate, host_name):
-        raise NotImplementedError
-
     @active_prop
     def mac(self):
         return {'value': ", ".join(mac.mac.lower() for mac in self._pg_account.macs),
