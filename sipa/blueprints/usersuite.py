@@ -44,7 +44,7 @@ def index():
         ('id', gettext("Nutzer-ID")),
         ('realname', gettext("Voller Name")),
         ('login', gettext("Accountname")),
-        ('status', gettext("Mitgliedsschaftsstatus")),
+        ('status', gettext("Mitgliedschaftsstatus")),
         ('address', gettext("Aktuelles Zimmer")),
         ('ips', gettext("Aktuelle IP-Adresse")),
         ('mac', gettext("Aktuelle MAC-Adresse")),
