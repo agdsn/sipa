@@ -311,7 +311,7 @@ def evaluate_status(status: UserStatus, user: User):
     elif not status.member:
         message, style = gettext('Kein Mitglied'), 'muted'
     elif status.member and user.membership_end_date:
-        message, style = "{} {}".format(gettext('Mitglied bis '), user.membership_end_date), \
+        message, style = "{} {}".format(gettext('Mitglied bis'), user.membership_end_date), \
                          'warning'
     elif status.member:
         message, style = gettext('Mitglied'), 'success'
