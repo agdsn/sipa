@@ -39,6 +39,7 @@ class DegenerateUser(BaseUser):
     userdb_status = None
     use_cache = None
     payment_details = None
+    is_member = None
 
 
 class DegenerateUserTestCase(TestCase):

@@ -204,6 +204,10 @@ class User(BaseUser):
             purpose=self.id.value,
         )
 
+    @property
+    def is_member(self):
+        return True
+
     userdb = None
 
     finance_information = SampleFinanceInformation()
