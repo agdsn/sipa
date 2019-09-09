@@ -285,9 +285,14 @@ class User(BaseUser):
     def has_property(self, property):
         return property in self.user_data.properties
 
-    @property
+    @active_prop
     def membership_end_date(self):
-        return parse_date(self.user_data.membership_end_date)
+        return {'value': parse_date(self.user_data.membership_end_date)}
+
+    # Empty setter for "edit" capability
+    @membership_end_date.setter
+    def membership_end_date(self, end_date):
+        pass
 
     @property
     def is_member(self):
@@ -309,8 +314,8 @@ def evaluate_status(status: UserStatus, user: User):
         message, style = gettext('Trafficlimit überschritten'), 'danger'
     elif not status.member:
         message, style = gettext('Kein Mitglied'), 'muted'
-    elif status.member and user.membership_end_date:
-        message, style = "{} {}".format(gettext('Mitglied bis'), user.membership_end_date), \
+    elif status.member and user.membership_end_date.value:
+        message, style = "{} {}".format(gettext('Mitglied bis'), user.membership_end_date.value), \
                          'warning'
     elif status.member:
         message, style = gettext('Mitglied'), 'success'
