@@ -104,6 +104,24 @@ class User(BaseUser):
         return {'value': ", ".join(i.mac for i in self.user_data.interfaces),
                 'tmp_readonly': len(self.user_data.interfaces) != 1}
 
+    # Empty setter for "edit" capability
+    @mac.setter
+    def mac(self, new_mac):
+        pass
+
+    def change_mac_address(self, new_mac, host_name):
+        # if this has been reached despite `tmp_readonly`, this is a bug.
+        assert len(self.user_data.interfaces) == 1
+
+        status, result = api.change_mac(self.user_data.id, self._tmp_password,
+                                        self.user_data.interfaces[0].id,
+                                        new_mac, host_name)
+
+        if status == 401:
+            raise PasswordInvalid
+        elif status == 400:
+            raise MacAlreadyExists
+
     @active_prop
     @connection_dependent
     def network_access_active(self):
@@ -149,24 +167,6 @@ class User(BaseUser):
             raise ContinuationNotPossible
         elif status != 200:
             raise UnkownError
-
-
-    @mac.setter
-    def mac(self, new_mac):
-        pass
-
-    def change_mac_address(self, new_mac, host_name):
-        # if this has been reached despite `tmp_readonly`, this is a bug.
-        assert len(self.user_data.interfaces) == 1
-
-        status, result = api.change_mac(self.user_data.id, self._tmp_password,
-                                        self.user_data.interfaces[0].id,
-                                        new_mac, host_name)
-
-        if status == 401:
-            raise PasswordInvalid
-        elif status == 400:
-            raise MacAlreadyExists
 
     @active_prop
     def mail(self):
@@ -251,7 +251,6 @@ class User(BaseUser):
                                   value=gettext("Nicht aktiviert"),
                                   empty=True,
                                   capabilities=capabilities)
-
 
     @property
     def userdb(self):
