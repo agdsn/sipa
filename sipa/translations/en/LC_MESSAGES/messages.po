@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-08-22 21:57+0200\n"
-"PO-Revision-Date: 2019-08-22 21:58+0200\n"
+"POT-Creation-Date: 2019-09-08 15:54+0000\n"
+"PO-Revision-Date: 2019-09-09 15:07+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -37,9 +37,8 @@ msgid ""
 "{min_classes} verschiedene Klassen von Zeichen enthalten. Zeichen von Klassen "
 "sind: {classes}."
 msgstr ""
-"Your password must be at least {min_length} characters long and contain at "
-"least {min_classes} different characters classes. Character classes are: "
-"{classes}."
+"Your password must be at least {min_length} characters long and contain at least "
+"{min_classes} different characters classes. Character classes are: {classes}."
 
 msgid "Deine E-Mail-Adresse"
 msgstr "Your e-mail address"
@@ -158,6 +157,53 @@ msgstr "YYYY-MM-DD (e.g. 1995-10-23)"
 msgid "Gerätename (Optional)"
 msgstr "Device name (Optional)"
 
+msgid "Austrittsdatum"
+msgstr "Exit date"
+
+msgid "Austrittsdatum nicht angegeben!"
+msgstr "No exit date given!"
+
+msgid "YYYY-MM-DD (z.B. 2018-10-01)"
+msgstr "YYYY-MM-DD (f.e. 2018-10-01)"
+
+msgid "Das Austrittsdatum darf nicht in der Vergangenheit liegen!"
+msgstr "The exit date must not be in the past!"
+
+msgid "Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"
+msgstr "Estimated balance (in EUR) at the end of the membership"
+
+msgid ""
+"Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden "
+"möchte"
+msgstr "I confirm that I wish to terminate my membership on the above date"
+
+msgid "Bitte bestätige die Beendigung der Mitgliedschaft"
+msgstr "Please confirm the termination of the membership"
+
+msgid "Ich bestätige, dass ich ggf. ausstehende Beiträge baldmöglichst bezahle"
+msgstr ""
+"I confirm that I will pay any outstanding contributions as soon as possible"
+
+msgid "Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."
+msgstr "Please confirm the earliest possible payment of outstanding contributions."
+
+msgid ""
+"Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht "
+"innerhalb von 31 Tagen nach Mitgliedschaftsende einen Rückerüberweisungsantrag "
+"stelle"
+msgstr ""
+"I confirm that I will donate overpaid credit unless I submit a repayment request "
+"within 31 days of the end of the membership"
+
+msgid "Bitte bestätige die Spendeneinwilligung."
+msgstr "Please confirm the donation consent."
+
+msgid "Ich bestätige, dass ich die Kündigung meiner Mitgliedschaft zurückziehe"
+msgstr "I confirm that I withdraw the termination of my membership"
+
+msgid "Bitte bestätige die Aufhebung der Kündigung"
+msgstr "Please confirm the cancellation of the termination"
+
 msgid "Cache-Nutzung"
 msgstr "Caching Service"
 
@@ -247,8 +293,8 @@ msgid ""
 "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
 "willst."
 msgstr ""
-"Are you sure you want to use the anonymous contact form? This is necessary "
-"only if you wish to contact administrators of a different dormitory."
+"Are you sure you want to use the anonymous contact form? This is necessary only "
+"if you wish to contact administrators of a different dormitory."
 
 msgid "Stand"
 msgstr "Last update"
@@ -262,8 +308,8 @@ msgstr "Full name"
 msgid "Accountname"
 msgstr "Account name"
 
-msgid "Mitgliedsschaftsstatus"
-msgstr "Membership status"
+msgid "Mitgliedschaftsstatus"
+msgstr "membership status"
 
 msgid "Aktuelles Zimmer"
 msgstr "Current room"
@@ -293,8 +339,8 @@ msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr "Database query could not be processed!"
 
 msgid ""
-"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt "
-"eine E-Mail an {}"
+"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine "
+"E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
 
 msgid "Zahlungsempfänger"
@@ -366,6 +412,33 @@ msgstr "Your database has been deleted."
 msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
+msgid "Weiter"
+msgstr "Continue"
+
+msgid "Mitgliedschaft beenden"
+msgstr "Terminate membership"
+
+msgid "Unbekannter Fehler!"
+msgstr "Unknown error!"
+
+msgid "Beendigung der Mitgliedschaft nicht möglich!"
+msgstr "Termination of membership not possible!"
+
+msgid "Deine Mitgliedschaft wird zum angegebenen Datum beendet."
+msgstr "Your membership will be terminated on the given date."
+
+msgid "Mitgliedschaft beenden - Bestätigen"
+msgstr "Terminate membership - confirm"
+
+msgid "Fortsetzung der Mitgliedschaft nicht möglich!"
+msgstr "Continuation of membership not possible!"
+
+msgid "Deine Mitgliedschaft wird fortgesetzt."
+msgstr "Your membership will continue."
+
+msgid "Mitgliedschaft fortsetzen"
+msgstr "Continue membership"
+
 msgid "Nicht unterstützt"
 msgstr "Not supported"
 
@@ -402,11 +475,17 @@ msgstr "Traffic limit exceeded"
 msgid "Kein Mitglied"
 msgstr "Not a member"
 
+msgid "Mitglied bis"
+msgstr "Member until"
+
+msgid "Mitglied"
+msgstr "Member"
+
 msgid "Netzzugang gesperrt"
 msgstr "Network access blocked"
 
-msgid "ok"
-msgstr "ok"
+msgid "Ok"
+msgstr "Ok"
 
 msgid "Dein Traffic"
 msgstr "Your traffic"
@@ -578,11 +657,11 @@ msgstr "Author"
 msgid "Abschicken"
 msgstr "Send"
 
-msgid "Zurücksetzen"
-msgstr "Reset"
-
 msgid "Abbrechen"
 msgstr "Abort"
+
+msgid "Zurücksetzen"
+msgstr "Reset"
 
 msgid "Häufige Aktionen"
 msgstr "Often Used Actions"
@@ -633,8 +712,8 @@ msgid "GiroCode"
 msgstr "GiroCode"
 
 msgid ""
-"Nutze den GiroCode, um die Überweisungsdaten automatisch in deine Banking-App "
-"zu übernehmen."
+"Nutze den GiroCode, um die Überweisungsdaten automatisch in deine Banking-App zu "
+"übernehmen."
 msgstr "Scan this QR-Code to import the payment details into your banking app."
 
 msgid "Buchungen"
@@ -666,8 +745,8 @@ msgid ""
 "Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle "
 "Aktivitäten des Accounts!"
 msgstr ""
-"If you share your account with someone else (share login, enter someone "
-"else's MAC address) you are still liable for all activities of this account!"
+"If you share your account with someone else (share login, enter someone else's "
+"MAC address) you are still liable for all activities of this account!"
 
 msgid "E-Mail ändern"
 msgstr "Change email address"
@@ -676,19 +755,18 @@ msgid "Cache-Nutzung ändern"
 msgstr "Change cache service"
 
 msgid ""
-"Infos zu den unterstützten Services und zur Funktionsweise des Caches findest "
-"Du hier."
+"Infos zu den unterstützten Services und zur Funktionsweise des Caches findest Du "
+"hier."
 msgstr ""
-"Information about supported services and how the cache works can be found "
-"here."
+"Information about supported services and how the cache works can be found here."
 
 msgid ""
-"Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. "
-"Sollten Probleme auftreten, kontaktiere uns, der Hersteller-Support wird dir "
-"nicht helfen können."
+"Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. Sollten "
+"Probleme auftreten, kontaktiere uns, der Hersteller-Support wird dir nicht "
+"helfen können."
 msgstr ""
-"Please note: This might cause problems with your clients. If there are any, "
-"get in touch with us, the service providers won't be able to help."
+"Please note: This might cause problems with your clients. If there are any, get "
+"in touch with us, the service providers won't be able to help."
 
 msgid "Nachricht an die Sektionsadmins"
 msgstr "Message to the admins"
@@ -750,27 +828,25 @@ msgid "Ausgehend"
 msgstr "Outgoing"
 
 #~ msgid ""
-#~ "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen "
-#~ "kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird "
-#~ "dir nicht helfen können."
+#~ "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. "
+#~ "Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht "
+#~ "helfen können."
 #~ msgstr ""
-#~ "Please note, that this might cause problems with your clients. If there "
-#~ "are problems, get in touch with us, the service providers won't be able to "
-#~ "help."
+#~ "Please note, that this might cause problems with your clients. If there are "
+#~ "problems, get in touch with us, the service providers won't be able to help."
 
 #~ msgid "Zahlungsdetails für "
 #~ msgstr "Payment details for "
 
 #~ msgid ""
-#~ "Außerdem kannst Du in Deinen Einstellungen bereits einige Daten wie z.B. "
-#~ "die MAC-Adresse selbstständig ändern."
+#~ "Außerdem kannst Du in Deinen Einstellungen bereits einige Daten wie z.B. die "
+#~ "MAC-Adresse selbstständig ändern."
 #~ msgstr ""
-#~ "Also, on the settings page you can change certain data like the MAC "
-#~ "address by yourself."
+#~ "Also, on the settings page you can change certain data like the MAC address "
+#~ "by yourself."
 
 #~ msgid ""
-#~ "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch "
-#~ "mal."
+#~ "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch mal."
 #~ msgstr "There has been an internal error. Please try again in a few minutes."
 
 #~ msgid "Raumnummer"
@@ -796,3 +872,9 @@ msgstr "Outgoing"
 
 #~ msgid "Fehler bei der Abfrage der Daten"
 #~ msgstr "An error occurred"
+
+#~ msgid "Mitgliedsschaftsstatus"
+#~ msgstr "Membership status"
+
+#~ msgid "ok"
+#~ msgstr "ok"
