@@ -102,7 +102,7 @@ class User(BaseUser):
     @connection_dependent
     def mac(self):
         return {'value': ", ".join(i.mac for i in self.user_data.interfaces),
-                'tmp_readonly': len(self.user_data.interfaces) != 1}
+                'tmp_readonly': len(self.user_data.interfaces) != 1  or not self.has_property('network_access')}
 
     # Empty setter for "edit" capability
     @mac.setter
@@ -127,7 +127,7 @@ class User(BaseUser):
     def network_access_active(self):
         return {'value': (gettext("Aktiviert") if len(self.user_data.interfaces) > 0
                           else gettext("Nicht aktiviert")),
-                'tmp_readonly': len(self.user_data.interfaces) > 0}
+                'tmp_readonly': len(self.user_data.interfaces) > 0 or not self.has_property('network_access')}
 
     @network_access_active.setter
     def network_access_active(self, value):
@@ -170,7 +170,8 @@ class User(BaseUser):
 
     @active_prop
     def mail(self):
-        return self.user_data.mail
+        return {'value': self.user_data.mail,
+                'tmp_readonly': not self.has_property('mail')}
 
     @mail.setter
     def mail(self, new_mail):
@@ -204,15 +205,19 @@ class User(BaseUser):
 
     @active_prop
     def use_cache(self):
+        tmp_readonly = not self.has_property('network_access')
+
         if self.user_data.cache:
             return {'value': gettext("Aktiviert"),
                     'raw_value': True,
                     'style': 'success',
                     'empty': False,
+                    'tmp_readonly': tmp_readonly,
                     }
         return {'value': gettext("Nicht aktiviert"),
                 'raw_value': False,
-                'empty': True}
+                'empty': True,
+                'tmp_readonly': tmp_readonly}
 
     @use_cache.setter
     def use_cache(self, new_use_cache):
@@ -287,7 +292,8 @@ class User(BaseUser):
 
     @active_prop
     def membership_end_date(self):
-        return {'value': parse_date(self.user_data.membership_end_date)}
+        return {'value': parse_date(self.user_data.membership_end_date),
+                'tmp_readonly': not self.is_member}
 
     # Empty setter for "edit" capability
     @membership_end_date.setter
@@ -314,7 +320,7 @@ def evaluate_status(status: UserStatus, user: User):
         message, style = gettext('Trafficlimit überschritten'), 'danger'
     elif not status.member:
         message, style = gettext('Kein Mitglied'), 'muted'
-    elif status.member and user.membership_end_date.value:
+    elif status.member and user.membership_end_date.raw_value is not None:
         message, style = "{} {}".format(gettext('Mitglied bis'), user.membership_end_date.value), \
                          'warning'
     elif status.member:

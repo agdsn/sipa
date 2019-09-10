@@ -28,6 +28,11 @@ logger = logging.getLogger(__name__)
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
 
+def capability_or_403(active_property, capability):
+    if not getattr(getattr(current_user, active_property).capabilities, capability):
+        abort(403)
+
+
 @bp_usersuite.route("/", methods=['GET', 'POST'])
 @login_required
 def index():
@@ -222,6 +227,8 @@ def change_password():
 def change_mail():
     """Frontend page to change the user's mail address"""
 
+    capability_or_403('mail', 'edit')
+
     form = ChangeMailForm()
 
     if form.validate_on_submit():
@@ -252,6 +259,9 @@ def delete_mail():
     """Resets the users forwarding mail attribute
     in his LDAP entry.
     """
+
+    capability_or_403('mail', 'delete')
+
     form = DeleteMailForm()
 
     if form.validate_on_submit():
@@ -280,6 +290,9 @@ def delete_mail():
 def change_mac():
     """As user, change the MAC address of your device.
     """
+
+    capability_or_403('mac', 'edit')
+
     form = ChangeMACForm()
 
     if form.validate_on_submit():
@@ -318,6 +331,9 @@ def change_mac():
 def activate_network_access():
     """As user, activate your network access
     """
+
+    capability_or_403('network_access_active', 'edit')
+
     form = ActivateNetworkAccessForm()
 
     if form.validate_on_submit():
@@ -355,6 +371,9 @@ def activate_network_access():
 def change_use_cache():
     """As user, change your usage of the cache.
     """
+
+    capability_or_403('use_cache', 'edit')
+
     form = ChangeUseCacheForm()
 
     if form.validate_on_submit():
@@ -421,6 +440,9 @@ def terminate_membership():
     As member, cancel your membership to a given date
     :return:
     """
+
+    capability_or_403('membership_end_date', 'edit')
+
     form = TerminateMembershipForm()
 
     if form.validate_on_submit():
@@ -449,6 +471,8 @@ def terminate_membership_confirm():
     As member, cancel your membership to a given date
     :return:
     """
+
+    capability_or_403('membership_end_date', 'edit')
 
     end_date = request.args.get("end_date", None, lambda x: datetime.strptime(x, '%Y-%m-%d').date())
 
@@ -501,6 +525,9 @@ def continue_membership():
     Cancel termination of membership
     :return:
     """
+
+    capability_or_403('membership_end_date', 'edit')
+
     form = ContinueMembershipForm()
 
     if form.validate_on_submit():
