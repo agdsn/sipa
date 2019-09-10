@@ -127,7 +127,9 @@ class User(BaseUser):
     def network_access_active(self):
         return {'value': (gettext("Aktiviert") if len(self.user_data.interfaces) > 0
                           else gettext("Nicht aktiviert")),
-                'tmp_readonly': len(self.user_data.interfaces) > 0 or not self.has_property('network_access')}
+                'tmp_readonly': len(self.user_data.interfaces) > 0
+                                or not self.has_property('network_access')
+                                or self.user_data.room is None}
 
     @network_access_active.setter
     def network_access_active(self, value):
