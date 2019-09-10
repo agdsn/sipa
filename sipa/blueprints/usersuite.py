@@ -443,6 +443,9 @@ def terminate_membership():
 
     capability_or_403('membership_end_date', 'edit')
 
+    if current_user.membership_end_date.raw_value is not None:
+        abort(403)
+
     form = TerminateMembershipForm()
 
     if form.validate_on_submit():
@@ -473,6 +476,9 @@ def terminate_membership_confirm():
     """
 
     capability_or_403('membership_end_date', 'edit')
+
+    if current_user.membership_end_date.raw_value is not None:
+        abort(403)
 
     end_date = request.args.get("end_date", None, lambda x: datetime.strptime(x, '%Y-%m-%d').date())
 
@@ -527,6 +533,9 @@ def continue_membership():
     """
 
     capability_or_403('membership_end_date', 'edit')
+
+    if current_user.membership_end_date.raw_value is None:
+        abort(403)
 
     form = ContinueMembershipForm()
 
