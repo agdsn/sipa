@@ -7,8 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-08-22 21:57+0200\n"
-"PO-Revision-Date: 2019-09-08 17:58+0200\n"
+"POT-Creation-Date: 2019-09-10 13:02+0000\n"
+"PO-Revision-Date: 2019-09-10 15:06+0200\n"
+"Last-Translator: \n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -16,7 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
-"Last-Translator: \n"
 "X-Generator: Poedit 2.2.1\n"
 
 msgid "Kleinbuchstaben (a-z)"
@@ -151,6 +151,45 @@ msgstr ""
 msgid "Gerätename (Optional)"
 msgstr ""
 
+msgid "Austrittsdatum"
+msgstr ""
+
+msgid "Austrittsdatum nicht angegeben!"
+msgstr ""
+
+msgid "YYYY-MM-DD (z.B. 2018-10-01)"
+msgstr ""
+
+msgid "Das Austrittsdatum darf nicht in der Vergangenheit liegen!"
+msgstr ""
+
+msgid "Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"
+msgstr ""
+
+msgid "Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden möchte"
+msgstr ""
+
+msgid "Bitte bestätige die Beendigung der Mitgliedschaft"
+msgstr ""
+
+msgid "Ich bestätige, dass ich ggf. ausstehende Beiträge baldmöglichst bezahle"
+msgstr ""
+
+msgid "Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."
+msgstr ""
+
+msgid "Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht innerhalb von 31 Tagen nach Mitgliedschaftsende einen Rückerüberweisungsantrag stelle"
+msgstr ""
+
+msgid "Bitte bestätige die Spendeneinwilligung."
+msgstr ""
+
+msgid "Ich bestätige, dass ich die Kündigung meiner Mitgliedschaft zurückziehe"
+msgstr ""
+
+msgid "Bitte bestätige die Aufhebung der Kündigung"
+msgstr ""
+
 msgid "Cache-Nutzung"
 msgstr ""
 
@@ -187,7 +226,7 @@ msgstr ""
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
-msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
+msgid "Diese Funktion steht dir derzeit nicht zur Verfügung."
 msgstr ""
 
 msgid "Das von Dir angeforderte Dokument gibt es nicht."
@@ -245,7 +284,7 @@ msgstr ""
 msgid "Accountname"
 msgstr ""
 
-msgid "Mitgliedsschaftsstatus"
+msgid "Mitgliedschaftsstatus"
 msgstr ""
 
 msgid "Aktuelles Zimmer"
@@ -347,6 +386,33 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
+msgid "Weiter"
+msgstr ""
+
+msgid "Mitgliedschaft beenden"
+msgstr ""
+
+msgid "Unbekannter Fehler!"
+msgstr ""
+
+msgid "Beendigung der Mitgliedschaft nicht möglich!"
+msgstr ""
+
+msgid "Deine Mitgliedschaft wird zum angegebenen Datum beendet."
+msgstr ""
+
+msgid "Mitgliedschaft beenden - Bestätigen"
+msgstr ""
+
+msgid "Fortsetzung der Mitgliedschaft nicht möglich!"
+msgstr ""
+
+msgid "Deine Mitgliedschaft wird fortgesetzt."
+msgstr ""
+
+msgid "Mitgliedschaft fortsetzen"
+msgstr ""
+
 msgid "Nicht unterstützt"
 msgstr ""
 
@@ -383,10 +449,16 @@ msgstr ""
 msgid "Kein Mitglied"
 msgstr ""
 
+msgid "Mitglied bis"
+msgstr ""
+
+msgid "Mitglied"
+msgstr ""
+
 msgid "Netzzugang gesperrt"
 msgstr ""
 
-msgid "ok"
+msgid "Ok"
 msgstr ""
 
 msgid "Dein Traffic"
@@ -551,10 +623,10 @@ msgstr ""
 msgid "Abschicken"
 msgstr ""
 
-msgid "Zurücksetzen"
+msgid "Abbrechen"
 msgstr ""
 
-msgid "Abbrechen"
+msgid "Zurücksetzen"
 msgstr ""
 
 msgid "Häufige Aktionen"
@@ -1398,4 +1470,13 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Fehler bei der Abfrage der Daten"
+#~ msgstr ""
+
+#~ msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
+#~ msgstr ""
+
+#~ msgid "Mitgliedsschaftsstatus"
+#~ msgstr ""
+
+#~ msgid "ok"
 #~ msgstr ""
