@@ -141,7 +141,7 @@ def unserializer(cls: type) -> type:
 
         for attrname, constructor in constructor_map.items():
             val = dict_like[attrname]
-            if not constructor:
+            if not constructor or val is None:
                 converted = val
             else:
                 try:
