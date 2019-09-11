@@ -7,7 +7,7 @@ from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop, ActiveProperty, UnsupportedProperty, Capabilities
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
-    MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnkownError, \
+    MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
     ContinuationNotPossible
 from .api import PycroftApi
 from .exc import PycroftBackendError
@@ -152,7 +152,7 @@ class User(BaseUser):
         if status == 400:
             raise TerminationNotPossible
         elif status != 200:
-            raise UnkownError
+            raise UnknownError
 
     def estimate_balance(self, end_date):
         status, result = api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
@@ -160,7 +160,7 @@ class User(BaseUser):
         if status == 200:
             return result['estimated_balance']
         else:
-            raise UnkownError
+            raise UnknownError
 
     def continue_membership(self):
         status, result = api.continue_membership(self.user_data.id)
@@ -168,7 +168,7 @@ class User(BaseUser):
         if status == 400:
             raise ContinuationNotPossible
         elif status != 200:
-            raise UnkownError
+            raise UnknownError
 
     @active_prop
     def mail(self):

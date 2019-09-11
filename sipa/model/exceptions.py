@@ -43,5 +43,5 @@ class LDAPConnectionError(Exception):
     pass
 
 
-class UnkownError(Exception):
+class UnknownError(Exception):
     pass

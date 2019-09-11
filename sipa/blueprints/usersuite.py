@@ -19,7 +19,7 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
 from sipa.mail import send_usersuite_contact_mail
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
-    PasswordInvalid, UserNotFound, MacAlreadyExists, TerminationNotPossible, UnkownError, \
+    PasswordInvalid, UserNotFound, MacAlreadyExists, TerminationNotPossible, UnknownError, \
     ContinuationNotPossible
 from sipa.model.misc import PaymentDetails
 
@@ -489,7 +489,7 @@ def terminate_membership_confirm():
             form.estimated_balance.default = current_user.estimate_balance(
                 end_date)
 
-        except UnkownError:
+        except UnknownError:
             flash(gettext("Unbekannter Fehler!"), "error")
         else:
             form.end_date.default = end_date
@@ -544,7 +544,7 @@ def continue_membership():
             current_user.continue_membership()
         except ContinuationNotPossible:
             flash(gettext("Fortsetzung der Mitgliedschaft nicht möglich!"), "error")
-        except UnkownError:
+        except UnknownError:
             flash(gettext("Unbekannter Fehler!"), "error")
         else:
             logger.info('Successfully cancelled membership termination',
