@@ -198,7 +198,7 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        value, style = evaluate_status(self.user_data.status, self)
+        value, style = self.evaluate_status(self.user_data.status)
         return {'value': value, 'style': style}
 
     @active_prop
@@ -306,38 +306,38 @@ class User(BaseUser):
     def is_member(self):
         return self.has_property('member')
 
+    def evaluate_status(self, status: UserStatus):
+        message = None
+        style = None
+        if status.violation:
+            message, style = gettext('Verstoß gegen Netzordnung'), 'danger'
+        elif not status.account_balanced:
+            message, style = gettext('Nicht bezahlt'), 'warning'
+        elif status.traffic_exceeded:
+            message, style = gettext('Trafficlimit überschritten'), 'danger'
+        elif not status.member:
+            message, style = gettext('Kein Mitglied'), 'muted'
+        elif status.member and self.membership_end_date.raw_value is not None:
+            message, style = "{} {}".format(gettext('Mitglied bis'),
+                                            self.membership_end_date.value), \
+                             'warning'
+        elif status.member:
+            message, style = gettext('Mitglied'), 'success'
+
+        if status.member and not status.network_access:
+            if message is not None:
+                message += ', {}'.format(gettext('Netzzugang gesperrt'))
+            else:
+                message, style = gettext('Netzzugang gesperrt'), 'danger'
+
+        if message is None:
+            message, style = gettext('Ok'), 'success'
+
+        return message, style
+
 
 def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
-
-
-def evaluate_status(status: UserStatus, user: User):
-    message = None
-    style = None
-    if status.violation:
-        message, style = gettext('Verstoß gegen Netzordnung'), 'danger'
-    elif not status.account_balanced:
-        message, style = gettext('Nicht bezahlt'), 'warning'
-    elif status.traffic_exceeded:
-        message, style = gettext('Trafficlimit überschritten'), 'danger'
-    elif not status.member:
-        message, style = gettext('Kein Mitglied'), 'muted'
-    elif status.member and user.membership_end_date.raw_value is not None:
-        message, style = "{} {}".format(gettext('Mitglied bis'), user.membership_end_date.value), \
-                         'warning'
-    elif status.member:
-        message, style = gettext('Mitglied'), 'success'
-
-    if status.member and not status.network_access:
-        if message is not None:
-            message += ', {}'.format(gettext('Netzzugang gesperrt'))
-        else:
-            message, style = gettext('Netzzugang gesperrt'), 'danger'
-
-    if message is None:
-        message, style = gettext('Ok'), 'success'
-
-    return (message, style)
 
 
 class FinanceInformation(BaseFinanceInformation):
