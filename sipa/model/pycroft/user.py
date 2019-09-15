@@ -294,6 +294,7 @@ class User(BaseUser):
 
     @active_prop
     def membership_end_date(self):
+        """Implicitly used in :py:meth:`evaluate_status`"""
         return {'value': parse_date(self.user_data.membership_end_date),
                 'tmp_readonly': not self.is_member}
 
