@@ -30,6 +30,8 @@ def init_context(app):
             'hostname': 'My_Server',
             'hostalias': 'leethax0r',
             'use_cache': False,
+            'membership_end_date': None,
+            'is_member': True,
         }
     }
 
@@ -159,7 +161,10 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        return self.config[self.uid]['status']
+        status_str = self.config[self.uid]['status']
+        return (status_str
+                if not self.membership_end_date
+                else f"{status_str} (ends at {self.membership_end_date.value})")
 
     has_connection = True
 
@@ -204,9 +209,31 @@ class User(BaseUser):
             purpose=self.id.value,
         )
 
+    @active_prop
+    def membership_end_date(self):
+        print(self.config[self.uid])
+        return {'value': self.config[self.uid]['membership_end_date'],
+                # we cannot edit it if we are not a member
+                'tmp_readonly': not self.is_member}
+
+    # Empty setter for "edit" capability
+    @membership_end_date.setter
+    def membership_end_date(self, end_date):
+        pass
+
     @property
     def is_member(self):
-        return True
+        return self.config[self.uid]['is_member']
+
+    def estimate_balance(self, end_date):
+        return random() * 10 - 5
+
+    def terminate_membership(self, end_date):
+        self.config[self.uid]['membership_end_date'] = end_date
+        print(self.config[self.uid])
+
+    def continue_membership(self):
+        self.config[self.uid]['membership_end_date'] = None
 
     userdb = None
 
