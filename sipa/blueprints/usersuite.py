@@ -17,6 +17,7 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangeUseCacheForm, PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
     TerminateMembershipConfirmForm, ContinueMembershipForm
 from sipa.mail import send_usersuite_contact_mail
+from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
     PasswordInvalid, UserNotFound, MacAlreadyExists, TerminationNotPossible, UnknownError, \
@@ -29,7 +30,8 @@ bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
 
 
 def capability_or_403(active_property, capability):
-    if not getattr(getattr(current_user, active_property).capabilities, capability):
+    prop: ActiveProperty = getattr(current_user, active_property)
+    if not getattr(prop.capabilities, capability):
         abort(403)
 
 
