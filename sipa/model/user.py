@@ -7,7 +7,8 @@ from collections import namedtuple
 from contextlib import contextmanager
 from typing import TypeVar, Type, List, Dict, Optional
 
-from sipa.model.fancy_property import active_prop, UnsupportedProperty, PropertyBase
+from sipa.model.fancy_property import active_prop, UnsupportedProperty, PropertyBase, \
+    unsupported_prop
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
 
@@ -283,6 +284,32 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def has_property(self, property):
         """Method to check if a user has a property"""
         return False
+
+    @unsupported_prop
+    def membership_end_date(self):
+        """Date when the membership ends"""
+        raise NotImplementedError
+
+    @unsupported_prop
+    def network_access_active(self):
+        """Whether or not the network access is active"""
+        raise NotImplementedError
+
+    def activate_network_access(self, password, mac, birthdate, host_name):
+        """Method to activate network access"""
+        raise NotImplementedError
+
+    def terminate_membership(self, end_date):
+        """Method to terminate membership"""
+        raise NotImplementedError
+
+    def continue_membership(self):
+        """Calculate balance at a given end_date"""
+        raise NotImplementedError
+
+    def estimate_balance(self, end_date):
+        """Calculate balance at a given end_date"""
+        raise NotImplementedError
 
     @property
     @abstractmethod

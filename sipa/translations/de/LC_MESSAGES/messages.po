@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-08-22 21:57+0200\n"
-"PO-Revision-Date: 2014-08-01 19:22+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2019-09-10 13:02+0000\n"
+"PO-Revision-Date: 2019-09-10 15:06+0200\n"
+"Last-Translator: \n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
+"X-Generator: Poedit 2.2.1\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -30,10 +31,7 @@ msgstr ""
 msgid "andere Zeichen"
 msgstr ""
 
-msgid ""
-"Dein Passwort muss mindestens {min_length} Zeichen lang sein und "
-"mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. "
-"Zeichen von Klassen sind: {classes}."
+msgid "Dein Passwort muss mindestens {min_length} Zeichen lang sein und mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. Zeichen von Klassen sind: {classes}."
 msgstr ""
 
 msgid "Deine E-Mail-Adresse"
@@ -153,6 +151,45 @@ msgstr ""
 msgid "Gerätename (Optional)"
 msgstr ""
 
+msgid "Austrittsdatum"
+msgstr ""
+
+msgid "Austrittsdatum nicht angegeben!"
+msgstr ""
+
+msgid "YYYY-MM-DD (z.B. 2018-10-01)"
+msgstr ""
+
+msgid "Das Austrittsdatum darf nicht in der Vergangenheit liegen!"
+msgstr ""
+
+msgid "Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"
+msgstr ""
+
+msgid "Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden möchte"
+msgstr ""
+
+msgid "Bitte bestätige die Beendigung der Mitgliedschaft"
+msgstr ""
+
+msgid "Ich bestätige, dass ich ggf. ausstehende Beiträge baldmöglichst bezahle"
+msgstr ""
+
+msgid "Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."
+msgstr ""
+
+msgid "Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht innerhalb von 31 Tagen nach Mitgliedschaftsende einen Rückerüberweisungsantrag stelle"
+msgstr ""
+
+msgid "Bitte bestätige die Spendeneinwilligung."
+msgstr ""
+
+msgid "Ich bestätige, dass ich die Kündigung meiner Mitgliedschaft zurückziehe"
+msgstr ""
+
+msgid "Bitte bestätige die Aufhebung der Kündigung"
+msgstr ""
+
 msgid "Cache-Nutzung"
 msgstr ""
 
@@ -189,7 +226,7 @@ msgstr ""
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
-msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
+msgid "Diese Funktion steht dir derzeit nicht zur Verfügung."
 msgstr ""
 
 msgid "Das von Dir angeforderte Dokument gibt es nicht."
@@ -198,9 +235,7 @@ msgstr ""
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-msgid ""
-"Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein "
-"paar Minuten noch mal."
+msgid "Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein paar Minuten noch mal."
 msgstr ""
 
 msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
@@ -222,9 +257,7 @@ msgstr ""
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-msgid ""
-"Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
-"angemeldet!"
+msgid "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr ""
 
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
@@ -236,10 +269,7 @@ msgstr ""
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-msgid ""
-"Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
-"erforderlich, wenn Du Administratoren eines anderen Wohnheims "
-"kontaktieren willst."
+msgid "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren willst."
 msgstr ""
 
 msgid "Stand"
@@ -254,7 +284,7 @@ msgstr ""
 msgid "Accountname"
 msgstr ""
 
-msgid "Mitgliedsschaftsstatus"
+msgid "Mitgliedschaftsstatus"
 msgstr ""
 
 msgid "Aktuelles Zimmer"
@@ -284,9 +314,7 @@ msgstr ""
 msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 msgstr ""
 
-msgid ""
-"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
-"direkt eine E-Mail an {}"
+msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an {}"
 msgstr ""
 
 msgid "Zahlungsempfänger"
@@ -358,6 +386,33 @@ msgstr ""
 msgid "Deine Datenbank wurde erstellt."
 msgstr ""
 
+msgid "Weiter"
+msgstr ""
+
+msgid "Mitgliedschaft beenden"
+msgstr ""
+
+msgid "Unbekannter Fehler!"
+msgstr ""
+
+msgid "Beendigung der Mitgliedschaft nicht möglich!"
+msgstr ""
+
+msgid "Deine Mitgliedschaft wird zum angegebenen Datum beendet."
+msgstr ""
+
+msgid "Mitgliedschaft beenden - Bestätigen"
+msgstr ""
+
+msgid "Fortsetzung der Mitgliedschaft nicht möglich!"
+msgstr ""
+
+msgid "Deine Mitgliedschaft wird fortgesetzt."
+msgstr ""
+
+msgid "Mitgliedschaft fortsetzen"
+msgstr ""
+
 msgid "Nicht unterstützt"
 msgstr ""
 
@@ -394,10 +449,16 @@ msgstr ""
 msgid "Kein Mitglied"
 msgstr ""
 
+msgid "Mitglied bis"
+msgstr ""
+
+msgid "Mitglied"
+msgstr ""
+
 msgid "Netzzugang gesperrt"
 msgstr ""
 
-msgid "ok"
+msgid "Ok"
 msgstr ""
 
 msgid "Dein Traffic"
@@ -427,9 +488,7 @@ msgstr ""
 msgid "Hinweis:"
 msgstr ""
 
-msgid ""
-"Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
-"identifizieren und Deine Anfrage schneller bearbeiten!"
+msgid "Wenn du uns angemeldet schreibst, können wir Dich als Mitglied identifizieren und Deine Anfrage schneller bearbeiten!"
 msgstr ""
 
 msgid "Zum Kontaktformular für angemeldete Nutzer"
@@ -487,7 +546,7 @@ msgid "Haltestelle"
 msgstr ""
 
 msgid "Fehler bei der Abfrage!"
-msgstr ""
+msgstr " "
 
 msgid "Linie"
 msgstr ""
@@ -528,8 +587,7 @@ msgstr ""
 msgid "Achtung:"
 msgstr ""
 
-msgid ""
-"Hier wird dir\n"
+msgid "Hier wird dir\n"
 "            nicht mit deinem Anschluss geholfen!  Dieses Formular ist\n"
 "            nur für die Kommunikation mit unseren Partnern gedacht.  Bei\n"
 "            Missbrauch kann dein Account gesperrt werden."
@@ -565,10 +623,10 @@ msgstr ""
 msgid "Abschicken"
 msgstr ""
 
-msgid "Zurücksetzen"
+msgid "Abbrechen"
 msgstr ""
 
-msgid "Abbrechen"
+msgid "Zurücksetzen"
 msgstr ""
 
 msgid "Häufige Aktionen"
@@ -619,9 +677,7 @@ msgstr ""
 msgid "GiroCode"
 msgstr ""
 
-msgid ""
-"Nutze den GiroCode, um die Überweisungsdaten automatisch in deine "
-"Banking-App zu übernehmen."
+msgid "Nutze den GiroCode, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
 msgstr ""
 
 msgid "Buchungen"
@@ -636,20 +692,13 @@ msgstr ""
 msgid "Summe"
 msgstr ""
 
-msgid ""
-"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
-"Benachrichtigungsmail an uns gesandt."
+msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
 msgstr ""
 
-msgid ""
-"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es"
-" ist nicht zulässig, den eigenen Account weiterzugeben."
+msgid "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben."
 msgstr ""
 
-msgid ""
-"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
-"MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
-"alle Aktivitäten des Accounts!"
+msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
 msgstr ""
 
 msgid "E-Mail ändern"
@@ -658,15 +707,10 @@ msgstr ""
 msgid "Cache-Nutzung ändern"
 msgstr ""
 
-msgid ""
-"Infos zu den unterstützten Services und zur Funktionsweise des Caches "
-"findest Du hier."
+msgid "Infos zu den unterstützten Services und zur Funktionsweise des Caches findest Du hier."
 msgstr ""
 
-msgid ""
-"Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. "
-"Sollten Probleme auftreten, kontaktiere uns, der Hersteller-Support wird "
-"dir nicht helfen können."
+msgid "Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. Sollten Probleme auftreten, kontaktiere uns, der Hersteller-Support wird dir nicht helfen können."
 msgstr ""
 
 msgid "Nachricht an die Sektionsadmins"
@@ -681,9 +725,7 @@ msgstr ""
 msgid "Die Antwort erhältst Du per Mail."
 msgstr ""
 
-msgid ""
-"Du kannst eine Weiterleitung deiner AGDSN-Mails in den "
-"Benutzereinstellungen einrichten."
+msgid "Du kannst eine Weiterleitung deiner AGDSN-Mails in den Benutzereinstellungen einrichten."
 msgstr ""
 
 msgid "Willst Du deine Datenbank wirklich löschen?"
@@ -924,6 +966,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Field must be at least %(min)d character long."
+
 #~ msgid_plural "Field must be at least %(min)d characters long."
 #~ msgstr[0] ""
 #~ msgstr[1] ""
@@ -1429,3 +1472,11 @@ msgstr ""
 #~ msgid "Fehler bei der Abfrage der Daten"
 #~ msgstr ""
 
+#~ msgid "Diese Funktion wird in deinem Wohnheim nicht unterstützt."
+#~ msgstr ""
+
+#~ msgid "Mitgliedsschaftsstatus"
+#~ msgstr ""
+
+#~ msgid "ok"
+#~ msgstr ""

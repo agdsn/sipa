@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% import "macros/forms.html" as forms %}
+
+{% block content %}
+    {% call forms.render(**form_args) -%}
+    {%-endcall %}
+{% endblock %}

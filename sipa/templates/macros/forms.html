@@ -4,7 +4,7 @@
     {{ field(class="form-control", value=default, placeholder=description, autofocus=first) }}
 {%- endmacro %}
 
-{% macro render(form, form_id, reset_button=False, cancel_to=None) -%}
+{% macro render(form, form_id, reset_button=False, cancel_to=None, submit_text=_("Abschicken"), cancel_text=_("Abbrechen")) -%}
     <div id="{{ form_id }}" class="container col-sm-10">
         <form action="" method="post" class="form form-horizontal">
             {{ form.csrf_token }}
@@ -15,7 +15,7 @@
                         <div class="{{ form_input_offset_class }} {{ form_input_width_class }}">
                             <div class="checkbox">
                             <label>
-                                <input type="checkbox"> {{ field.default }}
+                                <input type="checkbox" name="{{ field.name }}"> {{ field.default }}
                             </label></div>
                         </div>
                     {% elif field.type == "RadioField" %}
@@ -46,12 +46,12 @@
 
             <div class="form-group">
                 <div class="{{ form_input_offset_class }} {{ form_input_width_class }}">
-                    <button type="submit" class="btn btn-primary">{{ _('Abschicken') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ submit_text }}</button>
                     {% if reset_button -%}
                         <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
                     {%- endif %}
                     {% if cancel_to -%}
-                        <a href="{{ cancel_to }}" class="btn btn-default">{{ _("Abbrechen") }}</a>
+                        <a href="{{ cancel_to }}" class="btn btn-default">{{ cancel_text }}</a>
                     {%- endif %}
                 </div>
             </div>

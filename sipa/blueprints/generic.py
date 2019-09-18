@@ -52,8 +52,7 @@ def error_handler_redirection(e):
     if e.code == 401:
         message = gettext("Bitte melde Dich an, um die Seite zu sehen.")
     elif e.code == 403:
-        message = gettext("Diese Funktion wird in deinem Wohnheim "
-                          "nicht unterstützt.")
+        message = gettext("Diese Funktion steht dir derzeit nicht zur Verfügung.")
     elif e.code == 404:
         message = gettext("Das von Dir angeforderte Dokument gibt es nicht.")
     else:

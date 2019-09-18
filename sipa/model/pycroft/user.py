@@ -7,7 +7,8 @@ from sipa.model.fancy_property import active_prop, connection_dependent, \
     unsupported_prop, ActiveProperty, UnsupportedProperty, Capabilities
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
-    MacAlreadyExists, NetworkAccessAlreadyActive
+    MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
+    ContinuationNotPossible
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -101,30 +102,9 @@ class User(BaseUser):
     @connection_dependent
     def mac(self):
         return {'value': ", ".join(i.mac for i in self.user_data.interfaces),
-                'tmp_readonly': len(self.user_data.interfaces) != 1}
+                'tmp_readonly': len(self.user_data.interfaces) != 1  or not self.has_property('network_access')}
 
-    @active_prop
-    @connection_dependent
-    def network_access_active(self):
-        return {'value': (gettext("Aktiviert") if len(self.user_data.interfaces) > 0
-                          else gettext("Nicht aktiviert")),
-                'tmp_readonly': len(self.user_data.interfaces) > 0}
-
-    @network_access_active.setter
-    def network_access_active(self, value):
-        pass
-
-    def activate_network_access(self, password, mac, birthdate, host_name):
-        status, result = api.activate_network_access(self.user_data.id, password, mac,
-                                                     birthdate, host_name)
-
-        if status == 401:
-            raise PasswordInvalid
-        elif status == 400:
-            raise MacAlreadyExists
-        elif status == 412:
-            raise NetworkAccessAlreadyActive
-
+    # Empty setter for "edit" capability
     @mac.setter
     def mac(self, new_mac):
         pass
@@ -143,8 +123,57 @@ class User(BaseUser):
             raise MacAlreadyExists
 
     @active_prop
+    @connection_dependent
+    def network_access_active(self):
+        return {'value': (gettext("Aktiviert") if len(self.user_data.interfaces) > 0
+                          else gettext("Nicht aktiviert")),
+                'tmp_readonly': len(self.user_data.interfaces) > 0
+                                or not self.has_property('network_access')
+                                or self.user_data.room is None}
+
+    @network_access_active.setter
+    def network_access_active(self, value):
+        pass
+
+    def activate_network_access(self, password, mac, birthdate, host_name):
+        status, result = api.activate_network_access(self.user_data.id, password, mac,
+                                                     birthdate, host_name)
+
+        if status == 401:
+            raise PasswordInvalid
+        elif status == 400:
+            raise MacAlreadyExists
+        elif status == 412:
+            raise NetworkAccessAlreadyActive
+
+    def terminate_membership(self, end_date):
+        status, result = api.terminate_membership(self.user_data.id, end_date)
+
+        if status == 400:
+            raise TerminationNotPossible
+        elif status != 200:
+            raise UnknownError
+
+    def estimate_balance(self, end_date):
+        status, result = api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
+
+        if status == 200:
+            return result['estimated_balance']
+        else:
+            raise UnknownError
+
+    def continue_membership(self):
+        status, result = api.continue_membership(self.user_data.id)
+
+        if status == 400:
+            raise ContinuationNotPossible
+        elif status != 200:
+            raise UnknownError
+
+    @active_prop
     def mail(self):
-        return self.user_data.mail
+        return {'value': self.user_data.mail,
+                'tmp_readonly': not self.has_property('mail')}
 
     @mail.setter
     def mail(self, new_mail):
@@ -169,7 +198,7 @@ class User(BaseUser):
 
     @active_prop
     def status(self):
-        value, style = evaluate_status(self.user_data.status)
+        value, style = self.evaluate_status(self.user_data.status)
         return {'value': value, 'style': style}
 
     @active_prop
@@ -178,15 +207,19 @@ class User(BaseUser):
 
     @active_prop
     def use_cache(self):
+        tmp_readonly = not self.has_property('network_access')
+
         if self.user_data.cache:
             return {'value': gettext("Aktiviert"),
                     'raw_value': True,
                     'style': 'success',
                     'empty': False,
+                    'tmp_readonly': tmp_readonly,
                     }
         return {'value': gettext("Nicht aktiviert"),
                 'raw_value': False,
-                'empty': True}
+                'empty': True,
+                'tmp_readonly': tmp_readonly}
 
     @use_cache.setter
     def use_cache(self, new_use_cache):
@@ -226,7 +259,6 @@ class User(BaseUser):
                                   empty=True,
                                   capabilities=capabilities)
 
-
     @property
     def userdb(self):
         return self._userdb
@@ -260,38 +292,53 @@ class User(BaseUser):
     def has_property(self, property):
         return property in self.user_data.properties
 
+    @active_prop
+    def membership_end_date(self):
+        """Implicitly used in :py:meth:`evaluate_status`"""
+        return {'value': parse_date(self.user_data.membership_end_date),
+                'tmp_readonly': not self.is_member}
+
+    # Empty setter for "edit" capability
+    @membership_end_date.setter
+    def membership_end_date(self, end_date):
+        pass
 
     @property
     def is_member(self):
         return self.has_property('member')
 
+    def evaluate_status(self, status: UserStatus):
+        message = None
+        style = None
+        if status.violation:
+            message, style = gettext('Verstoß gegen Netzordnung'), 'danger'
+        elif not status.account_balanced:
+            message, style = gettext('Nicht bezahlt'), 'warning'
+        elif status.traffic_exceeded:
+            message, style = gettext('Trafficlimit überschritten'), 'danger'
+        elif not status.member:
+            message, style = gettext('Kein Mitglied'), 'muted'
+        elif status.member and self.membership_end_date.raw_value is not None:
+            message, style = "{} {}".format(gettext('Mitglied bis'),
+                                            self.membership_end_date.value), \
+                             'warning'
+        elif status.member:
+            message, style = gettext('Mitglied'), 'success'
+
+        if status.member and not status.network_access:
+            if message is not None:
+                message += ', {}'.format(gettext('Netzzugang gesperrt'))
+            else:
+                message, style = gettext('Netzzugang gesperrt'), 'danger'
+
+        if message is None:
+            message, style = gettext('Ok'), 'success'
+
+        return message, style
+
 
 def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
-
-
-def evaluate_status(status: UserStatus):
-    message = None
-    style = None
-    if status.violation:
-        message, style = gettext('Verstoß gegen Netzordnung'), 'danger'
-    elif not status.account_balanced:
-        message, style = gettext('Nicht bezahlt'), 'warning'
-    elif status.traffic_exceeded:
-        message, style = gettext('Trafficlimit überschritten'), 'danger'
-    elif not status.member:
-        message, style = gettext('Kein Mitglied'), 'muted'
-
-    if status.member and not status.network_access:
-        if message is not None:
-            message += ', {}'.format(gettext('Netzzugang gesperrt'))
-        else:
-            message, style = gettext('Netzzugang gesperrt'), 'danger'
-
-    if message is None:
-        message, style = gettext('ok'), 'success'
-
-    return (message, style)
 
 
 class FinanceInformation(BaseFinanceInformation):

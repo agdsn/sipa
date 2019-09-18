@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+from datetime import date
 from decimal import Decimal
 from typing import List, Optional
 
@@ -26,6 +27,8 @@ class UserData:
     last_finance_update: str
 
     # TODO introduce properties once they can be excluded
+
+    membership_end_date: str
 
 
 @unserializer
