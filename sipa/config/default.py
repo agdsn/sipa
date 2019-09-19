@@ -17,7 +17,7 @@ LOCALE_COOKIE_MAX_AGE = 86400 * 31
 # Maximum number of reverse proxies
 NUM_PROXIES = 1
 
-BACKENDS = ['sample']
+BACKENDS = ['pycroft']
 
 FLATPAGES_ROOT = None
 FLATPAGES_EXTENSION = '.md'
@@ -67,3 +67,31 @@ BUSSTOPS = [
 # Membership contribution
 # Amount of membership contribution in cents
 MEMBERSHIP_CONTRIBUTION = 500
+
+# Pycroft backend
+PYCROFT_ENDPOINT = "http://pycroft_dev-app_1:5000/api/v0/"
+PYCROFT_API_KEY = "secret"
+
+DB_HELIOS_URI = "mysql+pymysql://verwaltung:{}@userdb.agdsn.network:3306/".format("secret")
+DB_HELIOS_IP_MASK = "10.0.7.%"
+
+# Contact addresses
+CONTACT_ADDRESSES = [
+    {
+        'name': "Wundtstraße 5",
+        'doorbell': '0100',
+        'floor': 0,
+        'city': '01217 Dresden',
+    },
+    {
+        'name': "Hochschulstraße 50",
+        'doorbell': '0103',
+        'floor': 0,
+        'city': '01069 Dresden',
+    },
+    {
+        'name': "Borsbergstraße 34",
+        'floor': 7,
+        'city': '01309 Dresden',
+    },
+]
