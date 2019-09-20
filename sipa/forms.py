@@ -8,7 +8,7 @@ from flask import flash
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField, RadioField, IntegerField, DateField, FloatField)
+                     StringField, TextAreaField, RadioField, IntegerField, DateField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
                                 MacAddress, Regexp, ValidationError, NumberRange, Optional, Length)
 
@@ -247,9 +247,10 @@ class TerminateMembershipConfirmForm(FlaskForm):
                          render_kw={'readonly': True},
                          validators=[DataRequired("invalid end date")])
 
-    estimated_balance = FloatField(label=lazy_gettext("Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"),
-                                   render_kw={'readonly': True},
-                                   validators=[DataRequired("invalid balance")])
+    estimated_balance = StringField(
+        label=lazy_gettext("Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"),
+        render_kw={'readonly': True},
+        validators=[DataRequired("invalid balance")])
 
     confirm_termination = BooleanField(default=lazy_gettext(
         "Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden möchte"),
