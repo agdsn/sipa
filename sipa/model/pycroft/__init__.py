@@ -86,7 +86,7 @@ datasource = DataSource(
         ('mar', "Marschnerstraße", [
             IPv4Network('141.30.221.0/24'),  # Mar31
         ]),
-        ('mar', "Güntzstraße", [
+        ('gue', "Güntzstraße", [
             IPv4Network('141.30.225.0/24'),  # Gue29
         ]),
     ]
