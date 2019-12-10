@@ -1,3 +1,5 @@
+{% import "macros/services-status.html" as services_status %}
+
 {%- macro user_nav_items() -%}
     {% if current_user.is_anonymous -%}
         <li>
@@ -218,6 +220,12 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 <div id="center" class="container">
     <div class="row">
         <main class="col-sm-9">
+            <div class="visible-xs">
+                <br/>
+                {{ services_status.widget() }}
+                <hr/>
+            </div>
+
             {%- with messages = get_flashed_messages(with_categories=True) -%}
                 {%- if messages -%}
                     {% for cat, msg in messages %}
@@ -241,23 +249,14 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
         <div id="sidebar" class="col-sm-3">
             {% block sidebar %}
                 <div>
-                    <div class="module">
+                    <div class="module hidden-xs">
                         <h2>
                             {{ _("Status") }}
                         </h2>
 
                         <hr class="full">
 
-                        <span id="services-status">
-                            <div class="row">
-                                <div class="col-xs-2">
-                                    <span style="font-size: 2.5em;" class="glyphicon glyphicon-question-sign"></span>
-                                </div>
-                                <div class="col-xs-10 text-center">
-                                    <a href="https://status.agdsn.net">Status</a>
-                                </div>
-                            </div>
-                        </span>
+                        {{ services_status.widget() }}
                     </div>
 
                     {% if should_display_traffic_data() -%}
