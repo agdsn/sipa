@@ -241,6 +241,25 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
         <div id="sidebar" class="col-sm-3">
             {% block sidebar %}
                 <div>
+                    <div class="module">
+                        <h2>
+                            {{ _("Status") }}
+                        </h2>
+
+                        <hr class="full">
+
+                        <span id="services-status">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <span style="font-size: 2.5em;" class="glyphicon glyphicon-question-sign"></span>
+                                </div>
+                                <div class="col-xs-10 text-center">
+                                    <a href="https://status.agdsn.net">Status</a>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+
                     {% if should_display_traffic_data() -%}
                         <div class="module"><h2>
                             <a href="{{ url_for('generic.usertraffic') }}"><span
@@ -385,6 +404,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 <script src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
 <script src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
 <script src="{{ url_for("static", filename="js/raphael.2.1.0.min.js") }}"></script>
+<script src="{{ url_for("static", filename="js/cachet-status.js") }}"></script>
 <script src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
 {% block custom_script %}{% endblock %}
 </body>
