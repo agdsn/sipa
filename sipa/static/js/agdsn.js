@@ -58,9 +58,9 @@ var initStatus = function (components) {
     }
   }
 
-  let status = $('#services-status'),
-      icon = $('#services-status .glyphicon'),
-      link = $('#services-status a');
+  let status = $('.services-status'),
+      icon = $('.services-status .glyphicon'),
+      link = $('.services-status a');
 
   if (fullOutage){
       icon.removeClass('glyphicon-question-sign')
