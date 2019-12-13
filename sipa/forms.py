@@ -98,9 +98,8 @@ class ContactForm(SpamProtectedForm):
                                        "Format!"))],
     )
     type = SelectField(label=lazy_gettext("Kategorie"), choices=[
-        ("frage", lazy_gettext("Allgemeine Frage an die Administratoren")),
-        ("stoerung",
-         lazy_gettext("Störungen im Netzwerk Wundtstraße/Zellescher Weg")),
+        ("frage", lazy_gettext("Allgemeine Fragen")),
+        ("stoerung", lazy_gettext("Störung im Netzwerk")),
         ("finanzen", lazy_gettext("Finanzfragen (Beiträge, Gebühren)")),
         ("eigene-technik", lazy_gettext("Probleme mit privater Technik"))
     ])
