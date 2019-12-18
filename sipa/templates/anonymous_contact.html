@@ -23,3 +23,7 @@
         </div>
     {% endcall %}
 {% endblock %}
+
+{% block custom_script %}
+    <script src="{{ url_for("static", filename="js/contact-hints.js") }}"></script>
+{% endblock %}

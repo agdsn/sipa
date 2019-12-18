@@ -8,6 +8,7 @@
       "reset.{0,10}password",
       "passwort.{0,10}vergessen",
       "kann.{0,10}nicht.{0,10}einloggen",
+      "kann.{0,10}nicht.{0,10}anmelden",
       "passwort.{0,10}zurücksetzen"
     ],
     "hint": {
@@ -16,7 +17,7 @@
     }
   },
   {
-    "not_in_dorm": ["hss", "ger"],
+    "not_in_dorm": [],
     "patterns": [
       "change.{0,10}mac",
       "mac.{0,10}address",
@@ -24,12 +25,12 @@
       "mac.{0,10}adresse"
     ],
     "hint": {
-      "de": "Du kannst deine MAC-Adresse auch selbst ändern wenn du <a href='login'>dich einloggst.</a>",
+      "de": "Du kannst deine MAC-Adresse auch selbst ändern wenn du <a href='login'>dich anmeldest.</a>",
       "en": "You can change your MAC address yourself if you are <a href='login'>logged in.</a>"
     }
   },
   {
-    "not_in_dorm": ["ger"],
+    "not_in_dorm": [],
     "patterns": [
       "balance",
       "transfer",
@@ -37,8 +38,39 @@
       "überwies"
     ],
     "hint": {
-      "de": "Wenn du wissen möchtest für wie viele Monate du deinen Mitgliedschaftsbeitrag noch bezahlt hast kannst du das <a href='login'>eingeloggt</a> selbst tun. Beachte aber, dass Banküberweisungen einige Tage dauern können.",
+      "de": "Wenn du wissen möchtest für wie viele Monate du deinen Mitgliedschaftsbeitrag noch bezahlt hast kannst du das <a href='login'>angemeldet</a> selbst tun. Beachte aber, dass Banküberweisungen einige Tage dauern können.",
       "en": "If you want to know your balance you can check it yourself after <a href='login'>logging in</a>. Please be aware that bank transfers can take some days."
+    }
+  },
+  {
+    "not_in_dorm": [],
+    "patterns": [
+      "kündig",
+      "cancel",
+      "terminate",
+      "contract",
+      "vertrag",
+      "beenden",
+      "abmeld"
+    ],
+    "hint": {
+      "de": "Du kannst deine Mitgliedschaft direkt Online zu einem gewünschten Datum kündigen, wenn du <a href='login'>angemeldet</a> bist.",
+      "en": "You can cancel your membership directly online on a desired date if you are <a href='login'>logged in</a>."
+    }
+    },
+    {
+    "not_in_dorm": [],
+    "patterns": [
+      "störung",
+      "outage",
+      "funktioniert.{0-10}nicht",
+      "kein.{0-10}internet",
+      "no.{0-10}internet",
+      "does.{0-10}not.{0-10}work"
+    ],
+    "hint": {
+      "de": "Ob es derzeit eine bekannte Störung gibt, kannst du auf unserer <a href='https://status.agdsn.net'>Statusseite</a> sehen. Falls dies der Fall sein sollte, sei bitte geduldig und verzichte ggf. auf eine Kontaktaufnahme.",
+      "en": "You can see whether there is currently a known problem on our <a href='https://status.agdsn.net'>status page</a>. If this should be the case, please be patient and refrain from contacting us."
     }
   }
 ]

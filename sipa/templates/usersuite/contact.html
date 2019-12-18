@@ -1,18 +1,24 @@
 {% extends "base.html" %}#
 {% import "macros/forms.html" as forms %}
-{% set page_title = _("Nachricht an die Sektionsadmins") %}
+{% set page_title = _("Kontakt für Mitglieder") %}
 
 {% block content %}
-{% call forms.render(form=form, form_id="contact-form",
-                     reset_button=True, cancel_to=url_for('.index')) -%}
-    <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
-        <strong>{{ _("Hinweise:")}}</strong>
-        <ul>
-            <li>{{ _("Dein Username wird an die Nachricht angehängt.") }}</li>
-            <li>{{ _("Die Antwort erhältst Du per Mail.") }}</li>
-            <li>{{ _("Du kannst eine Weiterleitung deiner AGDSN-Mails "
-                     "in den Benutzereinstellungen einrichten.") }}</li>
-        </ul>
-    </div>
-{%- endcall %}
+    {% call forms.render(form=form, form_id="contact-form",
+                         reset_button=True, cancel_to=url_for('.index')) -%}
+        <div id="hints" class="{{ form_input_offset_class }} {{ form_input_width_class }}"></div>
+
+        <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info">
+            <strong>{{ _("Hinweise:")}}</strong>
+            <ul>
+                <li>{{ _("Dein Username wird an die Nachricht angehängt.") }}</li>
+                <li>{{ _("Die Antwort erhältst Du per Mail.") }}</li>
+                <li>{{ _("Du kannst eine Weiterleitung deiner AGDSN-Mails "
+                         "in den Benutzereinstellungen einrichten.") }}</li>
+            </ul>
+        </div>
+    {%- endcall %}
+{% endblock %}
+
+{% block custom_script %}
+    <script src="{{ url_for("static", filename="js/contact-hints.js") }}"></script>
 {% endblock %}
