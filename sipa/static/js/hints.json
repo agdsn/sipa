@@ -61,6 +61,7 @@
     {
     "not_in_dorm": [],
     "patterns": [
+      "ausfall",
       "störung",
       "outage",
       "funktioniert.{0-10}nicht",
