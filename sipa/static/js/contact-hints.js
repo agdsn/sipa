@@ -9,8 +9,6 @@ $.getJSON("/sipa/static/js/hints.json", function (raw_hints) {
             hint: hint.hint
         };
     });
-
-    console.log(hints);
 });
 $("#message").on("input", function () {
     var applicable = hints.filter(function (hint) {
