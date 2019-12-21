@@ -2,11 +2,28 @@ function get_language() {
     return JSON.parse(document.getElementById('locale').innerHTML);
 }
 
+let statusMessages = {
+    'okay': {
+        'de': 'Derzeit sind keine Probleme bekannt.',
+        'en': 'There are currently no known issues.',
+        'classes': 'glyphicon-ok-sign text-success',
+    },
+    'partialOutage': {
+        'de': 'Es gibt derzeit einen teilweisen Ausfall.',
+        'en': 'There is currently a partial outage.',
+        'classes': 'glyphicon-exclamation-sign text-warning',
+    },
+    'fullOutage':{
+        'de': 'Es gibt derzeit einen schweren Ausfall',
+        'en': 'There is currently a critical outage.',
+        'classes': 'glyphicon-exclamation-sign text-danger',
+    }
+}
+
 //Status widget
 var initStatus = function (components) {
     var content = '',
-        partialOutage = false,
-        fullOutage = false;
+        statusCode = 'okay';
 
     for (var i = 0; i < components.length; i++) {
         content += '<div>';
@@ -14,10 +31,13 @@ var initStatus = function (components) {
             content += '<span class="glyphicon glyphicon-ok-sign text-success"></span>';
         } else if (components[i].status === 'teilweiser ausfall' || components[i].status === 'leistungsprobleme') {
             content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-            partialOutage = true;
+
+            if(statusCode === 'okay'){
+                statusCode = 'partialOutage';
+            }
         } else {
             content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
-            fullOutage = true;
+            statusCode = 'fullOutage';
         }
         content += ' ' + components[i].name;
         content += '</div>';
@@ -31,21 +51,10 @@ var initStatus = function (components) {
         icon = $('.services-status .glyphicon'),
         link = $('.services-status a');
 
-    if (fullOutage) {
-        icon.removeClass('glyphicon-question-sign')
-            .addClass('glyphicon-exclamation-sign text-danger');
+    icon.removeClass('glyphicon-question-sign')
+            .addClass(statusMessages[statusCode]['classes']);
 
-        link.html("Es gibt derzeit einen schweren Ausfall");
-    } else if (partialOutage) {
-        icon.removeClass('glyphicon-question-sign')
-            .addClass('glyphicon-exclamation-sign text-warning');
-
-        link.html("Es gibt derzeit einen teilweisen Ausfall");
-    } else {
-        icon.removeClass('glyphicon-question-sign')
-            .addClass('glyphicon-ok-sign text-success');
-        link.html("Derzeit sind alle Systeme funktionsfähig");
-    }
+    link.html(statusMessages[statusCode][get_language()]);
 
     // Set content of the popover window and activate it
     status.data('content', content)
