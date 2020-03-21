@@ -548,6 +548,9 @@ msgstr ""
 msgid "Kontaktformular für Geschäftspartner"
 msgstr ""
 
+msgid "Vorläufig, Montag und Donnerstag 19:00-20:00"
+msgstr ""
+
 msgid "Klingel"
 msgstr ""
 

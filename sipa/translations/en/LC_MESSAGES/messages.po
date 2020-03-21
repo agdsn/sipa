@@ -560,6 +560,9 @@ msgstr "Contact form for members"
 msgid "Kontaktformular für Geschäftspartner"
 msgstr "Contact form for affiliates"
 
+msgid "Vorläufig, Montag und Donnerstag 19:00-20:00"
+msgstr "tentative, Monday and Thursday 7pm to 8pm"
+
 msgid "Klingel"
 msgstr "Doorbell"
 
