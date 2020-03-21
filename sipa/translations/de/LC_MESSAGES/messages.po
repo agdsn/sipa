@@ -1,13 +1,13 @@
 # German translations for sipa.
-# Copyright (C) 2019 AG DSN
+# Copyright (C) 2020 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-12-10 14:43+0100\n"
+"POT-Creation-Date: 2020-03-21 14:54+0100\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.7.0\n"
+"Generated-By: Babel 2.8.0\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -45,10 +45,10 @@ msgstr ""
 msgid "Kategorie"
 msgstr ""
 
-msgid "Allgemeine Frage an die Administratoren"
+msgid "Allgemeine Fragen"
 msgstr ""
 
-msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
+msgid "Störung im Netzwerk"
 msgstr ""
 
 msgid "Finanzfragen (Beiträge, Gebühren)"
@@ -755,7 +755,7 @@ msgid ""
 "dir nicht helfen können."
 msgstr ""
 
-msgid "Nachricht an die Sektionsadmins"
+msgid "Kontakt für Mitglieder"
 msgstr ""
 
 msgid "Hinweise:"
@@ -812,6 +812,132 @@ msgid "Eingehend"
 msgstr ""
 
 msgid "Ausgehend"
+msgstr ""
+
+msgid "show this help message and exit"
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
+msgid "File does not have an approved extension: {extensions}"
+msgstr ""
+
+msgid "File does not have an approved extension."
+msgstr ""
+
+#, python-format
+msgid "Invalid field name '%s'."
+msgstr ""
+
+#, python-format
+msgid "Field must be equal to %(other_name)s."
+msgstr ""
+
+#, python-format
+msgid "Field must be at least %(min)d character long."
+msgid_plural "Field must be at least %(min)d characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Field cannot be longer than %(max)d character."
+msgid_plural "Field cannot be longer than %(max)d characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Field must be between %(min)d and %(max)d characters long."
+msgstr ""
+
+#, python-format
+msgid "Number must be at least %(min)s."
+msgstr ""
+
+#, python-format
+msgid "Number must be at most %(max)s."
+msgstr ""
+
+#, python-format
+msgid "Number must be between %(min)s and %(max)s."
+msgstr ""
+
+msgid "Invalid input."
+msgstr ""
+
+msgid "Invalid email address."
+msgstr ""
+
+msgid "Invalid IP address."
+msgstr ""
+
+msgid "Invalid Mac address."
+msgstr ""
+
+msgid "Invalid URL."
+msgstr ""
+
+msgid "Invalid UUID."
+msgstr ""
+
+#, python-format
+msgid "Invalid value, must be one of: %(values)s."
+msgstr ""
+
+#, python-format
+msgid "Invalid value, can't be any of: %(values)s."
+msgstr ""
+
+msgid "Invalid CSRF Token"
+msgstr ""
+
+msgid "CSRF token missing"
+msgstr ""
+
+msgid "CSRF failed"
+msgstr ""
+
+msgid "CSRF token expired"
+msgstr ""
+
+msgid "Not a valid choice"
+msgstr ""
+
+msgid "Not a valid list"
+msgstr ""
+
+msgid "Not a valid integer list"
+msgstr ""
+
+msgid "Please input a date/time value"
+msgstr ""
+
+msgid "Invalid date/time input"
+msgstr ""
+
+msgid "Invalid Choice: could not coerce"
+msgstr ""
+
+msgid "Invalid choice(s): one or more data inputs could not be coerced"
+msgstr ""
+
+#, python-format
+msgid "'%(value)s' is not a valid choice for this field"
+msgstr ""
+
+msgid "Not a valid integer value"
+msgstr ""
+
+msgid "Not a valid decimal value"
+msgstr ""
+
+msgid "Not a valid float value"
+msgstr ""
+
+msgid "Not a valid datetime value"
+msgstr ""
+
+msgid "Not a valid date value"
 msgstr ""
 
 #~ msgid "Bezahlt, verbunden"
@@ -1525,5 +1651,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "7. Etage"
+#~ msgstr ""
+
+#~ msgid "Allgemeine Frage an die Administratoren"
+#~ msgstr ""
+
+#~ msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
+#~ msgstr ""
+
+#~ msgid "Nachricht an die Sektionsadmins"
 #~ msgstr ""
 

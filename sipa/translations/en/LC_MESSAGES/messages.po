@@ -1,14 +1,14 @@
 # English translations for sipa.
-# Copyright (C) 2019 AG DSN
+# Copyright (C) 2020 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-12-10 14:43+0100\n"
-"PO-Revision-Date: 2019-12-10 14:44+0100\n"
+"POT-Creation-Date: 2020-03-21 14:54+0100\n"
+"PO-Revision-Date: 2020-03-21 14:55+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -16,9 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.7.0\n"
+"Generated-By: Babel 2.8.0\n"
 "X-Source-Language: de\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
@@ -49,11 +49,11 @@ msgstr "E-Mail is invalid!"
 msgid "Kategorie"
 msgstr "Category"
 
-msgid "Allgemeine Frage an die Administratoren"
-msgstr "General question for the administrators"
+msgid "Allgemeine Fragen"
+msgstr ""
 
-msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
-msgstr "Disorders in the Wundtstraße/Zellescher Weg network"
+msgid "Störung im Netzwerk"
+msgstr ""
 
 msgid "Finanzfragen (Beiträge, Gebühren)"
 msgstr "Financial concerns (contributions, fees)"
@@ -561,7 +561,7 @@ msgid "Kontaktformular für Geschäftspartner"
 msgstr "Contact form for affiliates"
 
 msgid "Vorläufig, Montag und Donnerstag 19:00-20:00"
-msgstr "tentative, Monday and Thursday 7pm to 8pm"
+msgstr "tentative, Monday and Thursday 7pm to 8pm "
 
 msgid "Klingel"
 msgstr "Doorbell"
@@ -777,8 +777,8 @@ msgstr ""
 "Please note: This might cause problems with your clients. If there are any, get "
 "in touch with us, the service providers won't be able to help."
 
-msgid "Nachricht an die Sektionsadmins"
-msgstr "Message to the admins"
+msgid "Kontakt für Mitglieder"
+msgstr ""
 
 msgid "Hinweise:"
 msgstr "Notes:"
@@ -835,6 +835,132 @@ msgstr "Incoming"
 
 msgid "Ausgehend"
 msgstr "Outgoing"
+
+msgid "show this help message and exit"
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
+msgid "File does not have an approved extension: {extensions}"
+msgstr ""
+
+msgid "File does not have an approved extension."
+msgstr ""
+
+#, python-format
+msgid "Invalid field name '%s'."
+msgstr ""
+
+#, python-format
+msgid "Field must be equal to %(other_name)s."
+msgstr ""
+
+#, python-format
+msgid "Field must be at least %(min)d character long."
+msgid_plural "Field must be at least %(min)d characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Field cannot be longer than %(max)d character."
+msgid_plural "Field cannot be longer than %(max)d characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Field must be between %(min)d and %(max)d characters long."
+msgstr ""
+
+#, python-format
+msgid "Number must be at least %(min)s."
+msgstr ""
+
+#, python-format
+msgid "Number must be at most %(max)s."
+msgstr ""
+
+#, python-format
+msgid "Number must be between %(min)s and %(max)s."
+msgstr ""
+
+msgid "Invalid input."
+msgstr ""
+
+msgid "Invalid email address."
+msgstr ""
+
+msgid "Invalid IP address."
+msgstr ""
+
+msgid "Invalid Mac address."
+msgstr ""
+
+msgid "Invalid URL."
+msgstr ""
+
+msgid "Invalid UUID."
+msgstr ""
+
+#, python-format
+msgid "Invalid value, must be one of: %(values)s."
+msgstr ""
+
+#, python-format
+msgid "Invalid value, can't be any of: %(values)s."
+msgstr ""
+
+msgid "Invalid CSRF Token"
+msgstr ""
+
+msgid "CSRF token missing"
+msgstr ""
+
+msgid "CSRF failed"
+msgstr ""
+
+msgid "CSRF token expired"
+msgstr ""
+
+msgid "Not a valid choice"
+msgstr ""
+
+msgid "Not a valid list"
+msgstr ""
+
+msgid "Not a valid integer list"
+msgstr ""
+
+msgid "Please input a date/time value"
+msgstr ""
+
+msgid "Invalid date/time input"
+msgstr ""
+
+msgid "Invalid Choice: could not coerce"
+msgstr ""
+
+msgid "Invalid choice(s): one or more data inputs could not be coerced"
+msgstr ""
+
+#, python-format
+msgid "'%(value)s' is not a valid choice for this field"
+msgstr ""
+
+msgid "Not a valid integer value"
+msgstr ""
+
+msgid "Not a valid decimal value"
+msgstr ""
+
+msgid "Not a valid float value"
+msgstr ""
+
+msgid "Not a valid datetime value"
+msgstr ""
+
+msgid "Not a valid date value"
+msgstr ""
 
 #~ msgid ""
 #~ "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. "
@@ -893,3 +1019,12 @@ msgstr "Outgoing"
 
 #~ msgid "7. Etage"
 #~ msgstr "7th floor"
+
+#~ msgid "Allgemeine Frage an die Administratoren"
+#~ msgstr "General question for the administrators"
+
+#~ msgid "Störungen im Netzwerk Wundtstraße/Zellescher Weg"
+#~ msgstr "Disorders in the Wundtstraße/Zellescher Weg network"
+
+#~ msgid "Nachricht an die Sektionsadmins"
+#~ msgstr "Message to the admins"
