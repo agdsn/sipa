@@ -62,13 +62,15 @@ def support_hotline_available():
 
     :return: True if the hotline is available
     """
-
-    [avail, time] = session.get('PBX_available', [False,datetime.fromtimestamp(0)])
+    [avail, time] = session.get('PBX_available', [False, datetime.fromtimestamp(0)])
 
     if datetime.now() - time > timedelta(minutes=2):
         # refresh availability from pbx
-        avail = urllib.request.urlopen(PBX_URI, timeout=0.5).read()
-        session['PBX_available'] = [avail, datetime.now()]
+        try:
+            avail = urllib.request.urlopen(PBX_URI, timeout=0.5).read()
+            session['PBX_available'] = [avail, datetime.now()]
+        except urllib.error.URLError:
+            avail = False
 
     if avail == b'AVAILABLE':
         return True
