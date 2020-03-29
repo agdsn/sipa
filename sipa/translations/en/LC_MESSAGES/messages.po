@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-29 15:23+0200\n"
+"POT-Creation-Date: 2020-03-30 00:06+0200\n"
 "PO-Revision-Date: 2020-03-21 14:55+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
@@ -562,6 +562,9 @@ msgstr "Contact form for members"
 
 msgid "Kontaktformular für Geschäftspartner"
 msgstr "Contact form for affiliates"
+
+msgid "Aktuell erreichbar"
+msgstr "Currently available"
 
 msgid "Montag und Donnerstag 19:00-20:00"
 msgstr "Monday and Thursday 7pm to 8pm "
