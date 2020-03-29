@@ -317,8 +317,12 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                     <div class="col-xs-10">
                                         <a href="tel:004935121715530">
                                             0351 21715530
-					</a><br>
-					<small>{{ _("Vorläufig, Montag und Donnerstag 19:00-20:00") }}</small>
+					                    </a><br>
+                                        {% if support_hotline_available %}
+                                            <span style="color: #3c763d;">&#x25cf;</span> <small>Aktuell erreichbar</small>
+                                        {% else %}
+					                        <small>{{ _("Montag und Donnerstag 19:00-20:00") }}</small>
+                                        {% endif %}
                                     </div>
                                 </div>
 				<hr>

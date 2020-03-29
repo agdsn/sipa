@@ -8,12 +8,17 @@ import http.client
 import json
 import socket
 import time
+import urllib
 from functools import wraps
 from itertools import chain
 from typing import Iterable
 
-from flask import flash, redirect, request, url_for
+from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
+
+from datetime import datetime, timedelta
+
+from sipa.config.default import PBX_URI
 
 
 def timetag_today():
@@ -49,6 +54,26 @@ def get_bustimes(stopname, count=10):
         'minutes_left': int(i[2]) if i[2] else 0,
     } for i in response_data)
 # TODO: check whether this is the correct format
+
+
+def support_hotline_available():
+    """Asks the PBX if there are agents logged in to anwser calls to our
+    support hotline.
+
+    :return: True if the hotline is available
+    """
+
+    [avail, time] = session.get('PBX_available', [False,datetime.fromtimestamp(0)])
+
+    if datetime.now() - time > timedelta(minutes=2):
+        # refresh availability from pbx
+        avail = urllib.request.urlopen(PBX_URI, timeout=0.5).read()
+        session['PBX_available'] = [avail, datetime.now()]
+
+    if avail == b'AVAILABLE':
+        return True
+    else:
+        return False
 
 
 def password_changeable(user):

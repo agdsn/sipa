@@ -75,6 +75,9 @@ PYCROFT_API_KEY = "secret"
 DB_HELIOS_URI = "mysql+pymysql://verwaltung:{}@userdb.agdsn.network:3306/".format("secret")
 DB_HELIOS_IP_MASK = "10.0.7.%"
 
+# PBX Endpoint
+PBX_URI = "http://10.32.36.10:8000"
+
 # Contact addresses
 CONTACT_ADDRESSES = [
     {
