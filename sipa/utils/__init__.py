@@ -6,9 +6,9 @@ General utilities
 
 import http.client
 import json
+import requests
 import socket
 import time
-import urllib
 from functools import wraps
 from itertools import chain
 from typing import Iterable
@@ -67,9 +67,11 @@ def support_hotline_available():
     if datetime.now() - time > timedelta(minutes=2):
         # refresh availability from pbx
         try:
-            avail = urllib.request.urlopen(PBX_URI, timeout=0.5).read()
+            r = requests.get(PBX_URI, timeout=0.5)
+            r.raise_for_status()
+            avail = r.text
             session['PBX_available'] = [avail, datetime.now()]
-        except urllib.error.URLError:
+        except requests.exceptions.RequestException:
             avail = False
 
     if avail == b'AVAILABLE':
