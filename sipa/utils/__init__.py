@@ -74,7 +74,7 @@ def support_hotline_available():
         except requests.exceptions.RequestException:
             avail = False
 
-    if avail == b'AVAILABLE':
+    if avail == 'AVAILABLE':
         return True
     else:
         return False
