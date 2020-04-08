@@ -63,6 +63,9 @@ class PycroftApi():
     def continue_membership(self, user_id):
         return self.delete("user/{}/terminate-membership".format(user_id))
 
+    def reset_wifi_password(self, user_id):
+        return self.patch("user/{}/reset-wifi-password".format(user_id))
+
     def get(self, url, params=None):
         request_function = partial(requests.get, params=params or {})
         return self._do_api_call(request_function, url)
@@ -73,6 +76,10 @@ class PycroftApi():
 
     def delete(self, url, data=None):
         request_function = partial(requests.delete, data=data or {})
+        return self._do_api_call(request_function, url)
+
+    def patch(self, url, data=None):
+        request_function = partial(requests.patch, data=data or {})
         return self._do_api_call(request_function, url)
 
     def _do_api_call(self, request_function: Callable, url: str) -> Tuple[int, Any]:

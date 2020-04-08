@@ -316,6 +316,10 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def is_member(self):
         pass
 
+    @unsupported_prop
+    def wifi_password(self):
+        pass
+
 
 class BaseUserDB(metaclass=ABCMeta):
     """An abstract base class defining an interface for a user's

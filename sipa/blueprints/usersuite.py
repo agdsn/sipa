@@ -10,6 +10,8 @@ from babel.numbers import format_currency
 from flask import Blueprint, render_template, url_for, redirect, flash, abort, request
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
+from flask_wtf import FlaskForm
+from markupsafe import Markup
 
 from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
@@ -565,4 +567,41 @@ def continue_membership():
 
     return render_template('generic_form.html',
                            page_title=gettext("Mitgliedschaft fortsetzen"),
+                           form_args=form_args)
+
+
+@bp_usersuite.route("/reset-wifi-password", methods=['GET', 'POST'])
+@login_required
+def reset_wifi_password():
+    """
+    Reset the wifi password
+    """
+
+    form = FlaskForm()
+
+    capability_or_403('wifi_password', 'edit')
+
+    if form.validate_on_submit():
+        try:
+            new_password = current_user.reset_wifi_password()
+        except UnknownError:
+            flash(gettext("Unbekannter Fehler!"), "error")
+        else:
+            logger.info('Successfully reset wifi password',
+                        extra={'tags': {'rate_critical': True}})
+
+            flash(Markup("{}:<pre>{}</pre>{}".format(gettext("Es wurde ein neues WLAN Passwort generiert"), new_password, gettext("Das Passwort wird nur einmalig angezeigt."))), 'success')
+
+        return redirect(url_for('.index'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    form_args = {
+        'form': form,
+        'cancel_to': url_for('.index'),
+        'submit_text': gettext('Neues WLAN Passwort generieren')
+    }
+
+    return render_template('generic_form.html',
+                           page_title=gettext("Neues WLAN Passwort"),
                            form_args=form_args)

@@ -336,6 +336,22 @@ class User(BaseUser):
 
         return message, style
 
+    @active_prop
+    def wifi_password(self):
+        return {'value': None}
+
+    @wifi_password.setter
+    def wifi_password(self, val):
+        raise NotImplementedError
+
+    def reset_wifi_password(self):
+        status, result = api.reset_wifi_password(self.user_data.id)
+
+        if status != 200:
+            raise UnknownError
+
+        return result
+
 
 def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
