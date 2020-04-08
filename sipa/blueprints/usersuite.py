@@ -193,6 +193,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
 
         attribute_mappings = {
             'mail': 'delete_mail',
+            'userdb_status': 'hosting',
         }
 
         assert attribute in attribute_mappings.keys(), \
