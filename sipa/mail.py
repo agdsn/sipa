@@ -15,6 +15,7 @@ prepending optional information to the title and body
 
 import logging
 import smtplib
+import ssl
 import textwrap
 
 from email.utils import formatdate, make_msgid
@@ -79,11 +80,46 @@ def send_mail(author: str, recipient: str, subject: str, message: str) -> bool:
 
     mailserver_host = current_app.config['MAILSERVER_HOST']
     mailserver_port = current_app.config['MAILSERVER_PORT']
+    mailserver_user = current_app.config['MAILSERVER_USER']
+    mailserver_password = current_app.config['MAILSERVER_PASSWORD']
+
+    mailserver_ssl = current_app.config['MAILSERVER_SSL']
+    use_ssl = mailserver_ssl == mailserver_ssl == 'ssl'
+    use_starttls = mailserver_ssl == mailserver_ssl == 'starttls'
+
+    if use_ssl or use_starttls:
+        try:
+            ssl_context = ssl.create_default_context(
+                cafile=current_app.config['MAILSERVER_SSL_CA_FILE'],
+                cadata=current_app.config['MAILSERVER_SSL_CA_DATA'])
+
+            if current_app.config['MAILSERVER_SSL_VERIFY']:
+                ssl_context.verify_mode = ssl.VerifyMode.CERT_REQUIRED
+                ssl_context.check_hostname = True
+            else:
+                ssl_context.check_hostname = False
+                ssl_context.verify_mode = ssl.VerifyMode.CERT_NONE
+        except ssl.SSLError as e:
+            # smtp.connect failed to connect
+            logger.critical('Unable to create ssl context', extra={
+                'trace': True,
+                'data': {'exception_arguments': e.args}
+            })
+            return False
 
     try:
-        smtp = smtplib.SMTP()
-        smtp.connect(host=mailserver_host,
-                     port=mailserver_port)
+        if use_ssl:
+            smtp = smtplib.SMTP_SSL(host=mailserver_host, port=mailserver_port,
+                                    context=ssl_context)
+        else:
+            smtp = smtplib.SMTP(host=mailserver_host, port=mailserver_port)
+
+        if use_starttls:
+            smtp.starttls(context=ssl_context)
+
+        if mailserver_user:
+            smtp.login(mailserver_user, mailserver_password)
+
         smtp.sendmail(from_addr=sender, to_addrs=recipient, msg=mail.as_string())
         smtp.close()
     except IOError as e:

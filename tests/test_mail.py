@@ -91,17 +91,31 @@ class SMTPTestBase(TestCase):
     def setUp(self):
         self.app_mock = MagicMock()
         self.smtp_mock = MagicMock()
-        self.app_mock.config = {
+        self.app_mock.config = self._get_app_config()
+
+    def _get_app_config(self):
+        return {
             'MAILSERVER_HOST': 'some-mailserver.agdsn.network',
             'MAILSERVER_PORT': 25,
+            'MAILSERVER_SSL': None,
+            'MAILSERVER_SSL_VERIFY': False,
+            'MAILSERVER_SSL_CA_DATA': None,
+            'MAILSERVER_SSL_CA_FILE': None,
+            'MAILSERVER_USER': None,
+            'MAILSERVER_PASSWORD': None,
             'CONTACT_SENDER_MAIL': 'noreply@agdsn.de',
         }
 
+    def _patch_smtp(self):
+        if self.app_mock.config['MAILSERVER_SSL'] == 'ssl':
+            return patch('sipa.mail.smtplib.SMTP_SSL', self.smtp_mock)
+        else:
+            return patch('sipa.mail.smtplib.SMTP', self.smtp_mock)
 
-class SendMailTestCase(SMTPTestBase):
+
+class SendMailTestBase(SMTPTestBase):
     def setUp(self):
         super().setUp()
-        self.smtp_mock = MagicMock()
 
         def dont_wrap_message(msg):
             return msg
@@ -114,7 +128,7 @@ class SendMailTestCase(SMTPTestBase):
             'message': "Fix it!!!",
         }
 
-        with patch('sipa.mail.smtplib.SMTP', self.smtp_mock), \
+        with self._patch_smtp(), \
                 patch('sipa.mail.current_app', self.app_mock), \
                 patch('sipa.mail.wrap_message', self.wrap_mock), \
                 self.assertLogs('sipa.mail', level='INFO') as log:
@@ -134,6 +148,8 @@ class SendMailTestCase(SMTPTestBase):
         call_args = self.smtp_mock().sendmail.call_args
         self.observed_call_args = SendmailSig(*call_args[0], **call_args[1])
 
+
+class SendMailCommonTests(object):
     def test_wrap_message_called(self):
         self.assertEqual(self.wrap_mock.call_count, 1)
         self.assertEqual(self.wrap_mock.call_args[0], (self.args['message'],))
@@ -184,6 +200,44 @@ class SendMailTestCase(SMTPTestBase):
         self.assertFalse(self.log.output)
 
 
+class SendMailNoAuthTestCase(SendMailTestBase, SendMailCommonTests):
+    def test_smtp_login_not_called(self):
+        self.assertFalse(self.smtp_mock().login.called)
+
+
+class SendMailAuthTestCase(SendMailTestBase, SendMailCommonTests):
+    def test_smtp_login_called(self):
+        self.assertTrue(self.smtp_mock().login.called)
+
+    def _get_app_config(self):
+        return {
+            **super(SendMailTestBase, self)._get_app_config(),
+            'MAILSERVER_USER': 'test',
+            'MAILSERVER_PASSWORD': 'secure',
+        }
+
+
+class SendMailTestSslCase(SendMailTestBase, SendMailCommonTests):
+    def _get_app_config(self):
+        return {
+            **super(SendMailTestBase, self)._get_app_config(),
+            'MAILSERVER_PORT': 465,
+            'MAILSERVER_SSL': 'ssl',
+        }
+
+
+class SendMailTestStarttlsCase(SendMailTestBase, SendMailCommonTests):
+    def test_smtp_starttls_called(self):
+        self.assertTrue(self.smtp_mock().starttls.called)
+
+    def _get_app_config(self):
+        return {
+            **super(SendMailTestBase, self)._get_app_config(),
+            'MAILSERVER_PORT': 587,
+            'MAILSERVER_SSL': 'starttls',
+        }
+
+
 class SendMailFailingTestCase(SMTPTestBase):
     def setUp(self):
         super().setUp()
@@ -192,7 +246,7 @@ class SendMailFailingTestCase(SMTPTestBase):
             raise IOError()
         self.smtp_mock().sendmail.side_effect = bad_sendmail
 
-        with patch('sipa.mail.smtplib.SMTP', self.smtp_mock), \
+        with self._patch_smtp(), \
                 patch('sipa.mail.current_app', self.app_mock) as app, \
                 self.assertLogs('sipa.mail', level='ERROR') as log:
             self.success = send_mail('', '', '', '')

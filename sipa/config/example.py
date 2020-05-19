@@ -47,6 +47,18 @@
 # Mail configuration
 # MAILSERVER_HOST = "atlantis.agdsn"
 # MAILSERVER_PORT = 25
+# None, 'ssl' or 'starttls'
+# MAILSERVER_SSL = None
+# Verify certificate and host name of mail server
+# MAILSERVER_SSL_VERIFY = False
+# The cadata object, if present, is an ASCII string
+# of one or more PEM-encoded certificates.
+# MAILSERVER_SSL_CA_DATA = None
+# The cafile string, if present, is the path to a file
+# of concatenated CA certificates in PEM format.
+# MAILSERVER_SSL_CA_FILE = None
+# MAILSERVER_USER = None
+# MAILSERVER_PASSWORD = None
 # CONTACT_SENDER_MAIL = None  # Must be set
 
 # Pycroft backend
