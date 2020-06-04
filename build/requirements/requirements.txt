@@ -20,3 +20,4 @@ psycopg2~=2.8.4
 Flask-QRcode~=2.0.2
 typing-extensions~=3.7.2
 email_validator~=1.1.1
+Werkzeug~=0.16.1
