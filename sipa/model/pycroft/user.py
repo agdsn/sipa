@@ -258,7 +258,7 @@ class User(BaseUser):
 
     def payment_details(self) -> PaymentDetails:
         return PaymentDetails(
-            recipient="Studentenrat TUD - AG DSN",
+            recipient="StuRa der TUD - AG DSN",
             bank="Ostsächsische Sparkasse Dresden",
             iban="DE61 8505 0300 3120 2195 40",
             bic="OSDD DE 81 XXX",
