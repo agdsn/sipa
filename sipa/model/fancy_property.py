@@ -88,10 +88,11 @@ class ActiveProperty(PropertyBase):
 
     def __init__(self, name, value=None, raw_value=None, capabilities=NO_CAPABILITIES,
                  style=None, empty=False):
-        # Enforce bootstrap css classes: getbootstrap.com/css/#helper-classes
+
+        # Enforce css classes
         assert style in {None, 'muted', 'primary', 'success',
-                         'info', 'warning', 'danger'}, \
-                         "Style must be a bootstrap class string"
+                         'info', 'warning', 'danger', 'password'}, \
+                         "Style must be a valid text-class string"
 
         super().__init__(
             name=name,

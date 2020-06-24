@@ -60,7 +60,7 @@ def index():
         ('ips', gettext("Aktuelle IP-Adresse")),
         ('mac', gettext("Aktuelle MAC-Adresse")),
         ('mail', gettext("E-Mail-Weiterleitung")),
-        ('use_cache', gettext("Cache-Nutzung")),
+        ('wifi_password', gettext("WLAN Passwort")),
         ('hostname', gettext("Hostname")),
         ('hostalias', gettext("Hostalias")),
         ('userdb_status', gettext("MySQL Datenbank")),
@@ -182,7 +182,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mac': 'change_mac',
             'userdb_status': 'hosting',
             'mail': 'change_mail',
-            'use_cache': 'change_use_cache',
+            'wifi_password': 'reset_wifi_password',
             'finance_balance': 'finance_logs',
         }
 
@@ -564,7 +564,7 @@ def reset_wifi_password():
             logger.info('Successfully reset wifi password',
                         extra={'tags': {'rate_critical': True}})
 
-            flash(Markup("{}:<pre>{}</pre>{}".format(gettext("Es wurde ein neues WLAN Passwort generiert"), new_password, gettext("Das Passwort wird nur einmalig angezeigt."))), 'success')
+            flash(Markup("{}:<pre>{}</pre>".format(gettext("Es wurde ein neues WLAN Passwort generiert"), new_password)), 'success')
 
         return redirect(url_for('.index'))
     elif form.is_submitted():

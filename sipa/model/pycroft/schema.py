@@ -28,6 +28,7 @@ class UserData:
     # TODO introduce properties once they can be excluded
 
     membership_end_date: str
+    wifi_password: Optional[str]
 
 
 @unserializer

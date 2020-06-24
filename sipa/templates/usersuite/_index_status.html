@@ -37,12 +37,6 @@
         {{ _("Webmailer") }}
     </a>
     {% endif %}
-    {% if current_user.wifi_password.capabilities.edit %}
-    <a href="{{ url_for('.reset_wifi_password') }}" class="btn btn-default">
-        <span class="glyphicon glyphicon-signal"></span>
-        {{ _("Neues WLAN Passwort") }}
-    </a>
-    {% endif %}
     {% if current_user.membership_end_date.capabilities.edit  %}
         {% if current_user.membership_end_date == None %}
             <a href="{{ terminate_membership_url }}" class="btn btn-danger">

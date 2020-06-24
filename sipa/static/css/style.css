@@ -158,3 +158,13 @@ img[alt=software_logo] {
 .honey {
 	display: none;
 }
+
+
+.text-password {
+	filter: blur(2px);
+	font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+
+.text-password:hover {
+	filter: none;
+}
