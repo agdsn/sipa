@@ -165,6 +165,6 @@ img[alt=software_logo] {
 	font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 
-.text-password:hover {
+tr:hover .text-password {
 	filter: none;
 }

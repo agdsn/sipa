@@ -319,7 +319,7 @@ class User(BaseUser):
     @active_prop
     def wifi_password(self):
         return {'value': self.user_data.wifi_password,
-                'style': 'password'}
+                'style': 'password' if self.user_data.wifi_password is not None else None}
 
     @wifi_password.setter
     def wifi_password(self, val):
