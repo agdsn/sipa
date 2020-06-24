@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-08 22:56+0200\n"
+"POT-Creation-Date: 2020-06-24 13:51+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -197,15 +197,6 @@ msgstr ""
 msgid "Bitte bestätige die Aufhebung der Kündigung"
 msgstr ""
 
-msgid "Cache-Nutzung"
-msgstr ""
-
-msgid "Deaktiviert"
-msgstr ""
-
-msgid "Aktiviert"
-msgstr ""
-
 msgid "Kein gültiges Wohnheim!"
 msgstr ""
 
@@ -313,6 +304,9 @@ msgstr ""
 msgid "E-Mail-Weiterleitung"
 msgstr ""
 
+msgid "WLAN Passwort"
+msgstr ""
+
 msgid "Hostname"
 msgstr ""
 
@@ -387,15 +381,6 @@ msgstr ""
 msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
 msgstr ""
 
-msgid "Cache-Nutzung wurde aktiviert!"
-msgstr ""
-
-msgid "Cache-Nutzung wurde deaktiviert!"
-msgstr ""
-
-msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
-msgstr ""
-
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
 
@@ -432,9 +417,6 @@ msgstr ""
 msgid "Es wurde ein neues WLAN Passwort generiert"
 msgstr ""
 
-msgid "Das Passwort wird nur einmalig angezeigt."
-msgstr ""
-
 msgid "Neues WLAN Passwort generieren"
 msgstr ""
 
@@ -457,6 +439,9 @@ msgid "Aktiv"
 msgstr ""
 
 msgid "Passiv"
+msgstr ""
+
+msgid "Aktiviert"
 msgstr ""
 
 msgid "Nicht aktiviert"
@@ -754,20 +739,6 @@ msgid ""
 msgstr ""
 
 msgid "E-Mail ändern"
-msgstr ""
-
-msgid "Cache-Nutzung ändern"
-msgstr ""
-
-msgid ""
-"Infos zu den unterstützten Services und zur Funktionsweise des Caches "
-"findest Du hier."
-msgstr ""
-
-msgid ""
-"Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. "
-"Sollten Probleme auftreten, kontaktiere uns, der Hersteller-Support wird "
-"dir nicht helfen können."
 msgstr ""
 
 msgid "Kontakt für Mitglieder"
@@ -1562,8 +1533,38 @@ msgstr ""
 #~ msgid "File does not have an approved extension."
 #~ msgstr ""
 
-#~ msgid "Field must be at least %(min)d character long."
-#~ msgid_plural "Field must be at least %(min)d characters long."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
+#~ msgid "Cache-Nutzung"
+#~ msgstr ""
+
+#~ msgid "Deaktiviert"
+#~ msgstr ""
+
+#~ msgid "Cache-Nutzung wurde aktiviert!"
+#~ msgstr ""
+
+#~ msgid "Cache-Nutzung wurde deaktiviert!"
+#~ msgstr ""
+
+#~ msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
+#~ msgstr ""
+
+#~ msgid "Das Passwort wird nur einmalig angezeigt."
+#~ msgstr ""
+
+#~ msgid "Cache-Nutzung ändern"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Infos zu den unterstützten Services und"
+#~ " zur Funktionsweise des Caches findest "
+#~ "Du hier."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Bitte beachte, dass diese Funktion deine"
+#~ " Clients beeinträchtigen kann. Sollten "
+#~ "Probleme auftreten, kontaktiere uns, der "
+#~ "Hersteller-Support wird dir nicht helfen"
+#~ " können."
+#~ msgstr ""
 

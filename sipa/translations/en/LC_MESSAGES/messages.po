@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-08 22:56+0200\n"
-"PO-Revision-Date: 2020-04-08 23:00+0200\n"
+"POT-Creation-Date: 2020-06-24 13:51+0200\n"
+"PO-Revision-Date: 2020-06-24 13:51+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -204,15 +204,6 @@ msgstr "I confirm that I withdraw the termination of my membership"
 msgid "Bitte bestätige die Aufhebung der Kündigung"
 msgstr "Please confirm the cancellation of the termination"
 
-msgid "Cache-Nutzung"
-msgstr "Caching Service"
-
-msgid "Deaktiviert"
-msgstr "Disabled"
-
-msgid "Aktiviert"
-msgstr "Enabled"
-
 msgid "Kein gültiges Wohnheim!"
 msgstr "Not a valid dormitory!"
 
@@ -323,6 +314,9 @@ msgstr "Current MAC address"
 msgid "E-Mail-Weiterleitung"
 msgstr "E-Mail forwarding address"
 
+msgid "WLAN Passwort"
+msgstr "WiFi Password"
+
 msgid "Hostname"
 msgstr "Hostname"
 
@@ -397,15 +391,6 @@ msgstr "Network access has been activated!"
 msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
 msgstr "It can take up to 10 Minutes until the changes apply."
 
-msgid "Cache-Nutzung wurde aktiviert!"
-msgstr "The cache service has been enabled."
-
-msgid "Cache-Nutzung wurde deaktiviert!"
-msgstr "The cache service has been disabled."
-
-msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
-msgstr "It can take up to 10 minutes until the changes apply."
-
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
 
@@ -442,9 +427,6 @@ msgstr "Continue membership"
 msgid "Es wurde ein neues WLAN Passwort generiert"
 msgstr "A new WiFi password was generated"
 
-msgid "Das Passwort wird nur einmalig angezeigt."
-msgstr "The password is only displayed once."
-
 msgid "Neues WLAN Passwort generieren"
 msgstr "Generate new WiFi password"
 
@@ -468,6 +450,9 @@ msgstr "Active"
 
 msgid "Passiv"
 msgstr "Passive"
+
+msgid "Aktiviert"
+msgstr "Enabled"
 
 msgid "Nicht aktiviert"
 msgstr "Not activated"
@@ -775,23 +760,6 @@ msgstr ""
 msgid "E-Mail ändern"
 msgstr "Change email address"
 
-msgid "Cache-Nutzung ändern"
-msgstr "Change cache service"
-
-msgid ""
-"Infos zu den unterstützten Services und zur Funktionsweise des Caches findest Du "
-"hier."
-msgstr ""
-"Information about supported services and how the cache works can be found here."
-
-msgid ""
-"Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. Sollten "
-"Probleme auftreten, kontaktiere uns, der Hersteller-Support wird dir nicht "
-"helfen können."
-msgstr ""
-"Please note: This might cause problems with your clients. If there are any, get "
-"in touch with us, the service providers won't be able to help."
-
 msgid "Kontakt für Mitglieder"
 msgstr "Contact for members"
 
@@ -917,3 +885,39 @@ msgstr "Outgoing"
 
 #~ msgid "Nachricht an die Sektionsadmins"
 #~ msgstr "Message to the admins"
+
+#~ msgid "Cache-Nutzung"
+#~ msgstr "Caching Service"
+
+#~ msgid "Deaktiviert"
+#~ msgstr "Disabled"
+
+#~ msgid "Cache-Nutzung wurde aktiviert!"
+#~ msgstr "The cache service has been enabled."
+
+#~ msgid "Cache-Nutzung wurde deaktiviert!"
+#~ msgstr "The cache service has been disabled."
+
+#~ msgid "Es kann bis zu 10 Minuten dauern, bis die Änderung wirksam ist."
+#~ msgstr "It can take up to 10 minutes until the changes apply."
+
+#~ msgid "Das Passwort wird nur einmalig angezeigt."
+#~ msgstr "The password is only displayed once."
+
+#~ msgid "Cache-Nutzung ändern"
+#~ msgstr "Change cache service"
+
+#~ msgid ""
+#~ "Infos zu den unterstützten Services und zur Funktionsweise des Caches findest "
+#~ "Du hier."
+#~ msgstr ""
+#~ "Information about supported services and how the cache works can be found "
+#~ "here."
+
+#~ msgid ""
+#~ "Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. "
+#~ "Sollten Probleme auftreten, kontaktiere uns, der Hersteller-Support wird dir "
+#~ "nicht helfen können."
+#~ msgstr ""
+#~ "Please note: This might cause problems with your clients. If there are any, "
+#~ "get in touch with us, the service providers won't be able to help."
