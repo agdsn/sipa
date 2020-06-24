@@ -23,7 +23,7 @@ class PycroftApi():
         return self.get('user/{}'.format(username))
 
     def get_user_from_ip(self, ip):
-        return self.get('user/from-ip', params={'ip': ip})
+        return self.get('user/from-ip', params={'ip': ip}, no_raise=True)
 
     def authenticate(self, username, password):
         return self.post('user/authenticate',
@@ -62,34 +62,37 @@ class PycroftApi():
     def reset_wifi_password(self, user_id):
         return self.patch("user/{}/reset-wifi-password".format(user_id))
 
-    def get(self, url, params=None):
+    def get(self, url, params=None, no_raise=False):
         request_function = partial(requests.get, params=params or {})
         return self._do_api_call(request_function, url)
 
-    def post(self, url, data=None):
+    def post(self, url, data=None, no_raise=False):
         request_function = partial(requests.post, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def delete(self, url, data=None):
+    def delete(self, url, data=None, no_raise=False):
         request_function = partial(requests.delete, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def patch(self, url, data=None):
+    def patch(self, url, data=None, no_raise=False):
         request_function = partial(requests.patch, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def _do_api_call(self, request_function: Callable, url: str) -> Tuple[int, Any]:
+    def _do_api_call(self, request_function: Callable, url: str, no_raise: bool = False) -> Tuple[int, Any]:
         try:
             response = request_function(
                 self._endpoint + url,
                 headers={'Authorization': 'ApiKey {}'.format(self._api_key)},
             )
         except ConnectionError as e:
+            if no_raise:
+                return 0, None
+
             logger.error("Caught a ConnectionError when accessing Pycroft API",
                          extra={'data': {'endpoint': self._endpoint + url}})
             raise PycroftBackendError("Pycroft API unreachable") from e
 
-        if response.status_code not in [200, 400, 401, 403, 404, 412]:
+        if response.status_code not in [200, 400, 401, 403, 404, 412] and not no_raise:
             try:
                 response.raise_for_status()
             except HTTPError as e:
