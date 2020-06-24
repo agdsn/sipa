@@ -57,5 +57,5 @@ class TrafficHistoryEntry:
 @unserializer
 class FinanceHistoryEntry:
     valid_on: str
-    amount: int
+    amount: Decimal
     description: str
