@@ -37,7 +37,6 @@ class DegenerateUser(BaseUser):
     traffic_history = None
     userdb = None
     userdb_status = None
-    use_cache = None
     payment_details = None
     is_member = None
 

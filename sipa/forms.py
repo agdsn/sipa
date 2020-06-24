@@ -275,16 +275,6 @@ class ContinueMembershipForm(FlaskForm):
             DataRequired(lazy_gettext("Bitte bestätige die Aufhebung der Kündigung"))])
 
 
-class ChangeUseCacheForm(FlaskForm):
-    use_cache = RadioField(
-        label=lazy_gettext("Cache-Nutzung"),
-        coerce=int,
-        choices=[(0, lazy_gettext('Deaktiviert')),
-                 (1, lazy_gettext('Aktiviert')),
-                 ]
-    )
-
-
 class LoginForm(FlaskForm):
     dormitory = SelectField(
         lazy_gettext("Wohnheim"),

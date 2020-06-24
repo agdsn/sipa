@@ -205,26 +205,6 @@ class User(BaseUser):
     def id(self):
         return self.user_data.user_id
 
-    @active_prop
-    def use_cache(self):
-        tmp_readonly = not self.has_property('network_access')
-
-        if self.user_data.cache:
-            return {'value': gettext("Aktiviert"),
-                    'raw_value': True,
-                    'style': 'success',
-                    'empty': False,
-                    'tmp_readonly': tmp_readonly,
-                    }
-        return {'value': gettext("Nicht aktiviert"),
-                'raw_value': False,
-                'empty': True,
-                'tmp_readonly': tmp_readonly}
-
-    @use_cache.setter
-    def use_cache(self, new_use_cache):
-        api.change_cache_usage(self.user_data.id, new_use_cache)
-
     @unsupported_prop
     def hostname(self):
         raise NotImplementedError

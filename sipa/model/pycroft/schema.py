@@ -17,7 +17,6 @@ class UserData:
     status: UserStatus
     room: str
     mail: str
-    cache: bool
     properties: List[str]
     traffic_history: List[TrafficHistoryEntry]
     interfaces: List[Interface]

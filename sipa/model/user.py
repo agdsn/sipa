@@ -214,12 +214,6 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @active_prop
     @abstractmethod
-    def use_cache(self) -> PropertyBase:
-        """**[Abstract]** Flag indicating cache usage."""
-        pass
-
-    @active_prop
-    @abstractmethod
     def hostname(self) -> PropertyBase:
         """**[Abstract]** The hostname.
 

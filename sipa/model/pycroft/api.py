@@ -38,10 +38,6 @@ class PycroftApi():
         return self.post('user/{}/change-email'.format(user_id),
                          data={'password': password, 'new_email': new_mail})
 
-    def change_cache_usage(self, user_id, use_cache):
-        return self.post('user/{}/change-cache-usage'.format(user_id),
-                         data={'use_cache': use_cache})
-
     def change_mac(self, user_id, password, interface_id, new_mac, host_name):
         return self.post('user/{}/change-mac/{}'.format(user_id, interface_id),
                          data={'password': password, 'mac': new_mac, 'host_name': host_name})

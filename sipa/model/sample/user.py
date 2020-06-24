@@ -29,7 +29,6 @@ def init_context(app):
             'status': "OK",
             'hostname': 'My_Server',
             'hostalias': 'leethax0r',
-            'use_cache': False,
             'membership_end_date': None,
             'is_member': True,
         }
@@ -171,22 +170,6 @@ class User(BaseUser):
     @active_prop
     def id(self):
         return self.config[self.uid]['id']
-
-    @active_prop
-    def use_cache(self):
-        if self.config[self.uid]['use_cache']:
-            return {'value': gettext("Aktiviert"),
-                    'raw_value': True,
-                    'style': 'success',
-                    'empty': False,
-                    }
-        return {'value': gettext("Nicht aktiviert"),
-                'raw_value': False,
-                'empty': True}
-
-    @use_cache.setter
-    def use_cache(self, value):
-        config[self.uid]['use_cache'] = value
 
     @active_prop
     def hostname(self):

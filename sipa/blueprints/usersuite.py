@@ -16,7 +16,7 @@ from markupsafe import Markup
 from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
-    ChangeUseCacheForm, PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
+    PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
     TerminateMembershipConfirmForm, ContinueMembershipForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
@@ -369,33 +369,6 @@ def activate_network_access():
         flash_formerrors(form)
 
     return render_template('usersuite/activate_network_access.html', form=form)
-
-
-@bp_usersuite.route("/change_use_cache", methods=['GET', 'POST'])
-@login_required
-def change_use_cache():
-    """As user, change your usage of the cache.
-    """
-
-    capability_or_403('use_cache', 'edit')
-
-    form = ChangeUseCacheForm()
-
-    if form.validate_on_submit():
-        use_cache = bool(form.use_cache.data)
-        current_user.use_cache = use_cache
-        if use_cache:
-            flash(gettext("Cache-Nutzung wurde aktiviert!"), 'success')
-        else:
-            flash(gettext("Cache-Nutzung wurde deaktiviert!"), 'success')
-        flash(gettext("Es kann bis zu 10 Minuten dauern, "
-                      "bis die Änderung wirksam ist."), 'info')
-
-        return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
-
-    return render_template('usersuite/change_use_cache.html', form=form)
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])

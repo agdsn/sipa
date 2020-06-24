@@ -213,10 +213,6 @@ class User(BaseUser):
         raise NotImplementedError
 
     @unsupported_prop
-    def use_cache(self):
-        raise NotImplementedError
-
-    @unsupported_prop
     def hostname(self):
         raise NotImplementedError
 
@@ -252,26 +248,6 @@ class User(BaseUser):
                 address=self.address.value,
             ),
         )
-
-    @active_prop
-    def use_cache(self):
-        if self._pg_account.use_cache:
-            return {'value': gettext("Aktiviert"),
-                    'raw_value': True,
-                    'style': 'success',
-                    'empty': False,
-                    }
-        return {'value': gettext("Nicht aktiviert"),
-                'raw_value': False,
-                'empty': True}
-
-    @use_cache.setter
-    def use_cache(self, new_use_cache):
-        account = self._pg_account
-        account.use_cache = new_use_cache
-
-        db.session.add(account)
-        db.session.commit()
 
     @property
     def is_member(self):
