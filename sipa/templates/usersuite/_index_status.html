@@ -59,30 +59,30 @@
             {% for description, property in rows %}
             <tr>
                 <td class="col-md-3">{{ description }}</td>
-                {%- set style = ("text-{}".format(property.style) if property.style else '') %}
-                <td class="col-md-3 {{ style }}">
-                    {{ property.value }}
+                {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
+                <td class="col-md-3">
+                    <span class="{{ style }}">{{ property.value }}</span>
 
-                    {% if property.capabilities.edit and property.empty %}
+                    {%- if property.capabilities.edit and property.empty -%}
                         <a href="{{ url_for(get_attribute_endpoint(property.name)) }}"
                            aria-label="{{ _("Hinzufügen") }}">
                             <span class="glyphicon glyphicon-plus pull-right"></span>
                         </a>
-                    {% endif %}
+                    {%- endif -%}
 
-                    {% if property.capabilities.edit and not property.empty %}
+                    {%- if property.capabilities.edit and not property.empty -%}
                         <a href="{{ url_for(get_attribute_endpoint(property.name)) }}"
                            aria-label="{{ _("Bearbeiten") }}">
                             <span class="glyphicon glyphicon-pencil pull-right"></span>
                         </a>
-                    {% endif %}
+                    {%- endif -%}
 
-                    {% if property.capabilities.delete and not property.empty %}
+                    {%- if property.capabilities.delete and not property.empty -%}
                         <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}"
                            aria-label="{{ _("Löschen") }}">
                             <span class="glyphicon glyphicon-remove pull-right"></span>
                         </a>
-                    {% endif %}
+                    {%- endif -%}
                 </td>
             </tr>
             {% endfor %}
