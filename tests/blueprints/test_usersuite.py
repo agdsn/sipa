@@ -59,7 +59,7 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
         with patch('sipa.blueprints.usersuite.current_user'):
             urls = [
                 *(url_for(get_attribute_endpoint(attr))
-                  for attr in ['mail', 'mac', 'wifi_password']),
+                  for attr in ['mail', 'mac']),
                 *(url_for(get_attribute_endpoint(attr, capability='delete'))
                   for attr in ['mail']),
                 url_for('usersuite.change_password'),

@@ -13,16 +13,11 @@ services:
     environment:
       - CONNETION_TIMEOUT=60
       - SIPA_TEST_DB_USERMAN_URI=postgresql://sipa:password@postgres:5432/userman
-      - SIPA_TEST_HSS_CONNECTION_STRING=postgresql://sipa:password@postgres:5432/
-      - SIPA_TEST_LDAP_URI=ldap://ldap_hss
-      - SIPA_TEST_LDAP_ADMIN_PASSWORD=password
-
 
   sipa_testing_no_volumes:
     extends: sipa_testing_base
     links:
       - postgres
-      - ldap_hss
 
   sipa_testing:
     extends: sipa_testing_base
@@ -32,7 +27,6 @@ services:
       - ../..:/home/sipa/sipa
     links:
       - postgres
-      - ldap_hss
 
   postgres:
     build:
@@ -40,8 +34,3 @@ services:
     environment:
       - POSTGRES_USER=sipa
       - POSTGRES_PASSWORD=password
-  ldap_hss:
-    image: dinkel/openldap
-    environment:
-      - SLAPD_PASSWORD=password
-      - SLAPD_DOMAIN=wh12.tu-dresden.de

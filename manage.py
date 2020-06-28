@@ -83,7 +83,7 @@ def test(force_unittest):
 
     timeout = os.getenv('CONNETION_TIMEOUT')
     if os.getenv('CONNETION_TIMEOUT'):
-        connections = [('postgres', 5432), ('ldap_hss', 389)]
+        connections = [('postgres', 5432)]
         if not wait_until_ready(connections):
             exit(254)
 

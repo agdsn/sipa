@@ -136,9 +136,6 @@ class SampleFrontendTestBase(dynamic_frontend_base('sample')):
         )
 
 
-HssFrontendTestBase = dynamic_frontend_base('hss')
-
-
 class FormTemplateTestMixin:
     """A Mixin for conveniently testing forms.
 
