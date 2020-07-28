@@ -190,7 +190,8 @@ def send_official_contact_mail(author: str, subject: str, message: str,
 
 
 def send_usersuite_contact_mail(subject: str, message: str, category: str,
-                                user: BaseUser = current_user) -> bool:
+                                user: BaseUser = current_user,
+                                author: str = None) -> bool:
     """Compose a mail for contacting from the usersuite
 
     Call :py:func:`send_complex_mail` setting a tag and the category
@@ -203,11 +204,12 @@ def send_usersuite_contact_mail(subject: str, message: str, category: str,
     :param message:
     :param category: The Category as to be included in the title
     :param user:
+    :param author: Alternative e-mail address
 
     :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
-        author=f"{user.login.value}@{user.datasource.mail_server}",
+        author=author if author is not None else f"{user.login.value}@{user.datasource.mail_server}",
         recipient=user.datasource.support_mail,
         subject=subject,
         message=message,

@@ -113,7 +113,7 @@ def index():
 @login_required
 def contact():
     """Contact form for logged in users.
-    Currently sends an e-mail to the support mailing list as
+    Currently sends an e-mail to the support e-mail address
     '[Usersuite] Category: Subject' with userid and message.
     """
     form = ContactForm()
@@ -126,6 +126,7 @@ def contact():
         }
 
         success = send_usersuite_contact_mail(
+            author=form.email.data,
             category=types.get(form.type.data, "Allgemein"),
             subject=form.subject.data,
             message=form.message.data
@@ -142,10 +143,7 @@ def contact():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    form.email.default = "{login}@{server}".format(
-        login=current_user.login.value,
-        server=current_user.datasource.mail_server
-    )
+    form.email.default = current_user.mail.raw_value
 
     return render_template("usersuite/contact.html", form=form)
 

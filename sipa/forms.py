@@ -92,7 +92,7 @@ class SpamProtectedForm(FlaskForm):
 
 
 class ContactForm(SpamProtectedForm):
-    email = ReadonlyStringField(
+    email = StrippedStringField(
         label=lazy_gettext("Deine E-Mail-Adresse"),
         validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem "
                                        "Format!"))],
