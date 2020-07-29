@@ -50,7 +50,7 @@ def wrap_message(message: str, chars_in_line: int = 80) -> str:
 
 
 def send_mail(author: str, recipient: str, subject: str, message: str,
-              otrs_customer_id: str = None) -> bool:
+              reply_to: str = None) -> bool:
     """Send a MIME text mail
 
     Send a mail from ``author`` to ``receipient`` with ``subject`` and
@@ -64,7 +64,7 @@ def send_mail(author: str, recipient: str, subject: str, message: str,
     :param recipient: The mail address of the recipient
     :param subject:
     :param message:
-    :param otrs_customer_id: Alternative otrs customer id
+    :param reply_to:
 
     :returns: Whether the transmission succeeded
     """
@@ -74,8 +74,8 @@ def send_mail(author: str, recipient: str, subject: str, message: str,
 
     mail['Message-Id'] = make_msgid()
     mail['From'] = author
-    mail['Reply-To'] = author
-    mail['X-OTRS-CustomerId'] = author if otrs_customer_id is None else otrs_customer_id
+    mail['Reply-To'] = author if reply_to is None else reply_to
+    mail['X-OTRS-CustomerId'] = author
     mail['To'] = recipient
     mail['Subject'] = subject
     mail['Date'] = formatdate(localtime=True)
@@ -142,8 +142,7 @@ def send_mail(author: str, recipient: str, subject: str, message: str,
 
 
 def send_contact_mail(author: str, subject: str, message: str,
-                      name: str, dormitory_name: str,
-                      otrs_customer_id: str = None) -> bool:
+                      name: str, dormitory_name: str) -> bool:
     """Compose a mail for anonymous contacting.
 
     Call :py:func:`send_complex_mail` setting a tag plus name and
@@ -154,7 +153,6 @@ def send_contact_mail(author: str, subject: str, message: str,
     :param message:
     :param name: The author's real-life name
     :param dormitory_name: The string identifier of the chosen dormitory
-    :param otrs_customer_id:
 
     :returns: see :py:func:`send_complex_mail`
     """
@@ -167,7 +165,6 @@ def send_contact_mail(author: str, subject: str, message: str,
         message=message,
         tag="Kontakt",
         header={'Name': name, 'Dormitory': dormitory.display_name},
-        otrs_customer_id=otrs_customer_id,
     )
 
 
@@ -214,14 +211,14 @@ def send_usersuite_contact_mail(subject: str, message: str, category: str,
     :returns: see :py:func:`send_complex_mail`
     """
     return send_complex_mail(
-        author=author if author is not None else f"{user.login.value}@{user.datasource.mail_server}",
+        author=f"{user.login.value}@{user.datasource.mail_server}",
         recipient=user.datasource.support_mail,
         subject=subject,
         message=message,
         tag="Usersuite",
         category=category,
         header={'Login': user.login.value},
-        otrs_customer_id=user.id.raw_value,
+        reply_to=author,
     )
 
 
