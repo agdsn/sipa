@@ -203,7 +203,7 @@ class User(BaseUser):
 
     @active_prop
     def id(self):
-        return self.user_data.user_id
+        return {'value': self.user_data.user_id}
 
     @unsupported_prop
     def hostname(self):

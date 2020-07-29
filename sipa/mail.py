@@ -221,7 +221,7 @@ def send_usersuite_contact_mail(subject: str, message: str, category: str,
         tag="Usersuite",
         category=category,
         header={'Login': user.login.value},
-        otrs_customer_id=user.id,
+        otrs_customer_id=user.id.raw_value,
     )
 
 
