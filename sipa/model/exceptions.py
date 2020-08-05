@@ -19,10 +19,6 @@ class PasswordInvalid(InvalidCredentials):
     pass
 
 
-class LoginNotAllowed(InvalidCredentials):
-    pass
-
-
 class MacAlreadyExists(Exception):
     pass
 
