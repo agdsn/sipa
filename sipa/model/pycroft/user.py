@@ -8,7 +8,7 @@ from sipa.model.fancy_property import active_prop, connection_dependent, \
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible
+    ContinuationNotPossible, LoginNotAllowed
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -65,7 +65,12 @@ class User(BaseUser):
         if status != 200:
             raise PasswordInvalid
 
-        return cls.get(result['id'])
+        user = cls.get(result['id'])
+
+        if not user.has_property('sipa_login'):
+            raise LoginNotAllowed
+
+        return user
 
     can_change_password = True
 
