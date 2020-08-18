@@ -73,6 +73,19 @@ class ReadonlyStringField(StrippedStringField):
             *args, readonly=True, **kwargs)
 
 
+class EmailField(StrippedStringField):
+    def __init__(self, *args, **kwargs):
+        validators = [
+            DataRequired(lazy_gettext("E-Mail ist nicht in gültigem Format!")),
+            Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))
+        ]
+        if 'validators' in kwargs:
+            kwargs['validators'].extend(validators)
+        else:
+            kwargs['validators'] = validators
+        super().__init__(*args, **kwargs)
+
+
 class SpamCheckField(StringField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -92,11 +105,7 @@ class SpamProtectedForm(FlaskForm):
 
 
 class ContactForm(SpamProtectedForm):
-    email = StrippedStringField(
-        label=lazy_gettext("Deine E-Mail-Adresse"),
-        validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem "
-                                       "Format!"))],
-    )
+    email = EmailField(label=lazy_gettext("Deine E-Mail-Adresse"))
     type = SelectField(label=lazy_gettext("Kategorie"), choices=[
         ("frage", lazy_gettext("Allgemeine Fragen")),
         ("stoerung", lazy_gettext("Störung im Netzwerk")),
@@ -111,11 +120,7 @@ class ContactForm(SpamProtectedForm):
 
 
 class AnonymousContactForm(SpamProtectedForm):
-    email = StrippedStringField(
-        label=lazy_gettext("Deine E-Mail-Adresse"),
-        validators=[Email(lazy_gettext("E-Mail ist nicht "
-                                       "in gültigem Format!"))],
-    )
+    email = EmailField(label=lazy_gettext("Deine E-Mail-Adresse"))
     name = StringField(
         label=lazy_gettext("Dein Name"),
         validators=[DataRequired(lazy_gettext("Bitte gib einen Namen an!"))],
@@ -133,11 +138,7 @@ class AnonymousContactForm(SpamProtectedForm):
 
 
 class OfficialContactForm(SpamProtectedForm):
-    email = StrippedStringField(
-        label=lazy_gettext("E-Mail-Adresse"),
-        validators=[Email(lazy_gettext("E-Mail ist nicht "
-                                       "in gültigem Format!"))],
-    )
+    email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
     name = StringField(
         label=lazy_gettext("Name / Organisation"),
         validators=[DataRequired(lazy_gettext("Bitte gib einen Namen an!"))],
@@ -167,9 +168,7 @@ class ChangeMailForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
-    email = StrippedStringField(
-        label=lazy_gettext("Neue Mail"),
-        validators=[Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))])
+    email = EmailField(label=lazy_gettext("Neue Mail"))
 
 
 class DeleteMailForm(FlaskForm):
