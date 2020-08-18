@@ -1,7 +1,7 @@
 {% macro render_field(field, focus=false) -%}
-    {% if field.default %}{% set default = field.default %}{% endif %}
+    {% set value = field.data | default(field.default) %}
     {% if field.description %}{% set description = field.description %}{% endif %}
-    {{ field(class="form-control", value=default, placeholder=description, autofocus=first) }}
+    {{ field(class="form-control", value=value, placeholder=description, autofocus=first) }}
 {%- endmacro %}
 
 {% macro render(form, form_id, reset_button=False, cancel_to=None, submit_text=_("Abschicken"), cancel_text=_("Abbrechen")) -%}
@@ -15,7 +15,9 @@
                         <div class="{{ form_input_offset_class }} {{ form_input_width_class }}">
                             <div class="checkbox">
                             <label>
-                                <input type="checkbox" name="{{ field.name }}"> {{ field.label }}
+                                <input type="checkbox" name="{{ field.name }}"
+                                        {{ 'checked' if field.data | default(field.default) }}>
+                                {{ field.label }}
                             </label></div>
                         </div>
                     {% elif field.type == "RadioField" %}
