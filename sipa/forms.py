@@ -250,17 +250,17 @@ class TerminateMembershipConfirmForm(FlaskForm):
         render_kw={'readonly': True},
         validators=[DataRequired("invalid balance")])
 
-    confirm_termination = BooleanField(default=lazy_gettext(
+    confirm_termination = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden möchte"),
         validators=[
             DataRequired(lazy_gettext("Bitte bestätige die Beendigung der Mitgliedschaft"))])
 
-    confirm_settlement = BooleanField(default=lazy_gettext(
+    confirm_settlement = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich ggf. ausstehende Beiträge baldmöglichst bezahle"),
         validators=[
             DataRequired(lazy_gettext("Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."))])
 
-    confirm_donation = BooleanField(default=lazy_gettext(
+    confirm_donation = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht innerhalb "
         "von 31 Tagen nach Mitgliedschaftsende einen Rückerüberweisungsantrag stelle"),
         validators=[
@@ -268,7 +268,7 @@ class TerminateMembershipConfirmForm(FlaskForm):
 
 
 class ContinueMembershipForm(FlaskForm):
-    confirm_continuation = BooleanField(default=lazy_gettext(
+    confirm_continuation = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich die Kündigung meiner Mitgliedschaft zurückziehe"),
         validators=[
             DataRequired(lazy_gettext("Bitte bestätige die Aufhebung der Kündigung"))])
@@ -296,7 +296,7 @@ class LoginForm(FlaskForm):
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Kein Passwort eingegeben!"))]
     )
-    remember = BooleanField(default=lazy_gettext("Anmeldung merken"))
+    remember = BooleanField(label=lazy_gettext("Anmeldung merken"))
 
 
 class HostingForm(FlaskForm):
