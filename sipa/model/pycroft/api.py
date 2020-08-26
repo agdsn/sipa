@@ -64,24 +64,23 @@ class PycroftApi():
         return self.patch("user/{}/reset-wifi-password".format(user_id))
 
     def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int):
-        return 200, {
-            'building': 'Zw 41',
-            'room': 'Room 407',
-            'room_id': 1337,
-            'begin': 'Thu, 01 Oct 2020 00:00:00 GMT',
-        }
         if first_name == 's':
-            pass
+            return 200, {
+                'building': 'Zw 41',
+                'room': 'Room 407',
+                'room_id': 1337,
+                'begin': 'Thu, 01 Oct 2020 00:00:00 GMT',
+            }
         else:
             return 404, {}
 
-        return self.get("registration",
+        return self.get("register",
                         params={'first_name': first_name, 'last_name': last_name,
                                 'birthdate': birthdate, 'person_id': tenant_number})
 
     def member_request(self, email: str, login: str, password: str,
                        first_name: str, last_name: str, birthdate: date,
-                       tenant_number: str, room_id: int):
+                       move_in_date: date, tenant_number: str, room_id: int):
         if login == 's':
             return 200, {}
         else:
@@ -100,7 +99,7 @@ class PycroftApi():
         if room_id is not None:
             data['room_id'] = room_id
 
-        return self.post("registration", data=data)
+        return self.post("register", data=data)
 
     def confirm_email(self, token: str):
         if token == 's':
@@ -108,6 +107,7 @@ class PycroftApi():
         else:
             return 404, {}
 
+        return self.post("register/confirm", data={'key': token})
 
     def get(self, url, params=None, no_raise=False):
         request_function = partial(requests.get, params=params or {})

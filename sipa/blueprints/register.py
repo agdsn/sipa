@@ -29,23 +29,22 @@ def register_redirect(func):
     def wrapper_decorator(*args, **kwargs):
         endpoint = None
         if 'user_identity' in session:
-            user_identity = session['user_identity']
-            if user_identity.get('finished'):
-                endpoint = '.finish'
-            elif 'room_wrong' in user_identity or user_identity.get('skipped_verification'):
-                endpoint = '.data'
-            else:
-                endpoint = '.room'
+            endpoint = session.get('state')
         else:
-            endpoint = '.identify'
+            endpoint = 'identify'
 
-        if endpoint and f'register{endpoint}' != request.endpoint:
-            return redirect(url_for(endpoint))
+        if endpoint and f'register.{endpoint}' != request.endpoint:
+            return redirect(url_for(f'.{endpoint}'))
 
         return func(*args, **kwargs)
 
     return wrapper_decorator
 
+
+def goto_state(state):
+    session['user_identity']['state'] = state
+    session.modified = True
+    return redirect(url_for(f'.{state}'))
 
 
 @bp_register.route("/identify", methods=['GET', 'POST'])
@@ -68,7 +67,7 @@ def identify():
         if form.no_swdd_tenant.data or 'skip_verification' in request.form:
             user_identity['skipped_verification'] = True
             session['user_identity'] = user_identity
-            return redirect(url_for('.data'))
+            return goto_state('data')
 
         status, user_data = api.match_person(form.first_name.data, form.last_name.data,
                                              form.birthdate.data, form.tenant_number.data)
@@ -77,9 +76,8 @@ def identify():
             user_identity['room_id'] = user_data['room_id']
             user_identity['building'] = user_data['building']
             user_identity['room'] = user_data['room']
-
             session['user_identity'] = user_identity
-            return redirect(url_for('.room'))
+            return goto_state('room')
         else:
             flash(gettext(
                 'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte überprüfe, dass du die exakt selben Daten wie beim SWDD angegeben hast. Um die Verifizierung zu überspringen, kannst du den entsprechenden Button klicken, die Verifizierung wird dann später manuell durchgeführt.'),
@@ -100,7 +98,7 @@ def room():
     form = RegisterRoomForm()
     if form.validate_on_submit():
         user_identity['room_wrong'] = form.wrong_room.data
-        return redirect(url_for('.data'))
+        return goto_state('data')
     elif form.is_submitted():
         flash_formerrors(form)
     else:
@@ -119,19 +117,14 @@ def data():
     form = RegisterFinishForm()
     form.member_begin_date.min = date.today()
     if form.validate_on_submit():
-        move_in_date = parse_date(user_identity.get('move_in_date'))
-
         status, result = api.member_request(
-            form.email.data, form.login.data, form.password.data, form.start_on_move_in_date.data,
-            user_identity['first_name'], user_identity['last_name'],
-            parse_date(user_identity['birthdate']),
-            user_identity['no_swdd_tenant'], user_identity.get('tenant_number'),
-            user_identity.get('skipped_verification', False))
+            form.email.data, form.login.data, form.password.data, user_identity['first_name'],
+            user_identity['last_name'], parse_date(user_identity['birthdate']),
+            form.member_begin_date.data, user_identity.get('tenant_number'), user_identity.get('room_id'))
 
         if status == 200:
             user_identity['finished'] = True
-            session.modified = True
-            return redirect(url_for('.finish'))
+            return goto_state('finish')
         else:
             flash(gettext('Abschluss der Registrierung fehlgeschlagen'), category='error')
 
