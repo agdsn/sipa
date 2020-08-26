@@ -1,0 +1,23 @@
+{% extends "register/base.html" %}#
+
+{% macro skip_btn() %}
+{% if skip_verification %}
+    <button type="submit" class="btn btn-danger" name="skip_verification">{{ _("Verifizierung überspringen") }}</button>
+{% endif %}
+{% endmacro %}
+
+{% block register_content %}
+    {{ forms.render_simple(form=form, form_id="register-form", submit_text=_("Weiter"), extra_btn=skip_btn) }}
+{% endblock %}
+
+{% block custom_script -%}
+    <script type="text/javascript">
+        function updateState() {
+            var swdd_tenant = !$("#no_swdd_tenant").prop("checked");
+            $("#tenant_number,[for=tenant_number]").toggle(swdd_tenant);
+            $("#tenant_number").prop("required", swdd_tenant);
+        }
+        $("#no_swdd_tenant").change(updateState);
+        updateState();
+    </script>
+{% endblock %}

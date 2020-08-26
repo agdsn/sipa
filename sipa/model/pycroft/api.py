@@ -1,5 +1,6 @@
 import logging
 
+from datetime import date
 from functools import partial
 from typing import Callable, Tuple, Any
 
@@ -61,6 +62,49 @@ class PycroftApi():
 
     def reset_wifi_password(self, user_id):
         return self.patch("user/{}/reset-wifi-password".format(user_id))
+
+    def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int):
+        if first_name == 's':
+            return 200, {
+                'room': 'Room 407',
+                'move_in_date': date(2020, 10, 1),
+            }
+        elif False:
+            return 404, {}
+
+        return self.get("registration",
+                        params={'first_name': first_name, 'last_name': last_name,
+                                'birthdate': birthdate, 'person_id': tenant_number})
+
+    def member_request(self, email: str, login: str, password: str,
+                       first_name: str, last_name: str, birthdate: date,
+                       tenant_number: str, room_id: int):
+        if login == 's':
+            return 200, {}
+        elif False:
+            return 404, {}
+
+        data = {
+            'first_name': first_name, 'last_name': last_name, 'birthdate': birthdate,
+            'email': email, 'login': login, 'password': password,
+        }
+
+        # Verification was not skipped
+        if tenant_number is not None:
+            data['person_id'] = tenant_number
+
+        # Room was not rejected
+        if room_id is not None:
+            data['room_id'] = room_id
+
+        return self.post("registration", data=data)
+
+    def confirm_email(self, token: str):
+        if token == 's':
+            return 200, {}
+        else:
+            return 404, {}
+
 
     def get(self, url, params=None, no_raise=False):
         request_function = partial(requests.get, params=params or {})

@@ -1,0 +1,8 @@
+{% extends "register/base.html" %}#
+
+{% block register_content %}
+    {{ result }}
+    <p>
+    Sofern du als Mitgeschliedschaftsbeginn sofort ausgewählt hast,
+    kannst du dich nun auf der <a href="{{ url_for('generic.login') }}">{{ _("Loginseite") }}</a> mit den von dir gewählten Zugangsdaten einloggen.
+{% endblock %}

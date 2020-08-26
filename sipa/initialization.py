@@ -57,7 +57,7 @@ def init_app(app, **kwargs):
     app.url_map.converters['int'] = IntegerConverter
 
     from sipa.blueprints import bp_features, bp_usersuite, \
-        bp_pages, bp_documents, bp_news, bp_generic, bp_hooks
+        bp_pages, bp_documents, bp_news, bp_generic, bp_hooks, bp_register
 
     logger.debug('Registering blueprints')
     app.register_blueprint(bp_generic)
@@ -67,6 +67,7 @@ def init_app(app, **kwargs):
     app.register_blueprint(bp_documents)
     app.register_blueprint(bp_news)
     app.register_blueprint(bp_hooks)
+    app.register_blueprint(bp_register)
 
     logger.debug('Registering Jinja globals')
     form_label_width = 3

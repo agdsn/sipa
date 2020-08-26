@@ -1,0 +1,12 @@
+{% extends "base.html" %}#
+{% import "macros/forms.html" as forms %}
+{% set page_title = _("Onlineanmeldung") %}
+
+{% block content %}
+    <h2>{{ _("Onlineanmeldung") }}</h2>
+    <h4>{{ title }}</h4>
+    <hr><br>
+
+    {% block register_content %}
+    {% endblock %}
+{% endblock %}

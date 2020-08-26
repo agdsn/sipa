@@ -8,8 +8,8 @@ from flask import flash
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField, RadioField, IntegerField, DateField)
-from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
+                     StringField, TextAreaField, RadioField, IntegerField, DateField, SubmitField)
+from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo, InputRequired,
                                 MacAddress, Regexp, ValidationError, NumberRange, Optional, Length)
 
 from sipa.backends.extension import backends
@@ -54,6 +54,21 @@ class PasswordComplexity(object):
                                              classes=classes))
 
 
+class OptionalIf(Optional):
+    # makes a field optional if some other data is supplied or is not supplied
+    def __init__(self, deciding_field, invert=False, *args, **kwargs):
+        self.deciding_field = deciding_field
+        self.invert = invert
+        super(OptionalIf, self).__init__(*args, **kwargs)
+
+    def __call__(self, form, field):
+        deciding_field = form._fields.get(self.deciding_field)
+        deciding_has_data = deciding_field is not None and bool(
+            deciding_field.data) and deciding_field.data != 'None'
+        if deciding_has_data ^ self.invert:
+            super(OptionalIf, self).__call__(form, field)
+
+
 def strip_filter(string):
     return string.strip() if string else None
 
@@ -80,7 +95,7 @@ class EmailField(StrippedStringField):
             Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))
         ]
         if 'validators' in kwargs:
-            kwargs['validators'].extend(validators)
+            kwargs['validators'] = validators + kwargs['validators']
         else:
             kwargs['validators'] = validators
         super().__init__(*args, **kwargs)
@@ -258,7 +273,8 @@ class TerminateMembershipConfirmForm(FlaskForm):
     confirm_settlement = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich ggf. ausstehende Beiträge baldmöglichst bezahle"),
         validators=[
-            DataRequired(lazy_gettext("Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."))])
+            DataRequired(lazy_gettext(
+                "Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."))])
 
     confirm_donation = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht innerhalb "
@@ -316,6 +332,89 @@ class PaymentForm(FlaskForm):
     months = IntegerField(lazy_gettext("Monate"), default=1,
                           validators=[NumberRange(min=1, message=lazy_gettext(
                               "Muss mindestens 1 Monat sein."))])
+
+
+class RegisterIdentifyForm(FlaskForm):
+    first_name = StringField(
+        label=lazy_gettext("Vorname"),
+        validators=[DataRequired(lazy_gettext("Bitte gib deinen Vornamen ein."))]
+    )
+
+    last_name = StringField(
+        label=lazy_gettext("Nachname"),
+        validators=[DataRequired(lazy_gettext("Bitte gib deinen Nachnamen ein."))]
+    )
+
+    birthdate = DateField(
+        label=lazy_gettext("Geburtsdatum"),
+        validators=[DataRequired(lazy_gettext("Bitte gib dein Geburtsdatum an."))],
+        description=lazy_gettext("YYYY-MM-DD (z.B. 1995-10-23)")
+    )
+
+    no_swdd_tenant = BooleanField(
+        label=lazy_gettext(
+            "Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom Studierendenwerk Dresden."),
+    )
+
+    tenant_number = IntegerField(
+        label=lazy_gettext("Debitorennummer (siehe Mietvertrag)"),
+        validators=[
+            OptionalIf("no_swdd_tenant"),
+            OptionalIf("skip_verification"),
+            InputRequired(lazy_gettext("Bitte gib deine Debitorennummer ein.")),
+            NumberRange(min=0,
+                        message=lazy_gettext("Debitorennummer muss eine positive Zahl sein.")),
+        ]
+    )
+
+
+class RegisterRoomForm(FlaskForm):
+    room = ReadonlyStringField(label=lazy_gettext("Raum"))
+
+    move_in_date = DateField(
+        label=lazy_gettext("Einzugsdatum"),
+        render_kw={'readonly': True}
+    )
+
+    wrong_room = BooleanField(
+        label=lazy_gettext("Raumzuordnung ist nicht korrekt")
+    )
+
+
+class RegisterFinishForm(FlaskForm):
+    # Pre-verify username in Sipa?
+    login = StringField(
+        label=lazy_gettext("Gewünschter Nutzername"),
+        validators=[DataRequired(lazy_gettext("Nutzername muss angegeben werden!"))]
+    )
+    password = PasswordField(
+        label=lazy_gettext("Passwort"),
+        validators=[DataRequired(lazy_gettext("Passwort muss angegeben werden!"))]
+    )
+    password_repeat = PasswordField(
+        label=lazy_gettext("Passwort erneut eingeben"),
+        validators=[
+            DataRequired(lazy_gettext("Passwort muss angegeben werden!")),
+            EqualTo("password", lazy_gettext("Passwörter stimmen nicht überein!")),
+        ]
+    )
+    email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
+    email_repeat = EmailField(
+        label=lazy_gettext("E-Mail-Adresse erneut eingeben"),
+        validators=[EqualTo("email", lazy_gettext("E-Mail-Adressen stimmen nicht überein!")),]
+    )
+
+    start_on_move_in_date = BooleanField(
+        label=lazy_gettext("Beginn der Mitgliedschaft zum Einzugstag")
+    )
+
+    confirm_legal = BooleanField(
+        label=lazy_gettext("Ich stimme Netzordnung, Datenschutzbelehrung und Satzung zu."),
+        validators=[
+            DataRequired(lazy_gettext(
+                "Bitte bestätige deine Zustimmung zu Netzordnung, Datenschutzbelehrung und Satzung."))
+        ]
+    )
 
 
 def flash_formerrors(form):
