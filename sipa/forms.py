@@ -101,6 +101,22 @@ class EmailField(StrippedStringField):
         super().__init__(*args, **kwargs)
 
 
+class NativeDateField(DateField):
+    min: date = None
+    max: date = None
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('render_kw', {})['type'] = 'date'
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        if self.min is not None:
+            kwargs['min'] = self.min.strftime(self.format)
+        if self.max is not None:
+            kwargs['max'] = self.max.strftime(self.format)
+        return super().__call__(*args, **kwargs)
+
+
 class SpamCheckField(StringField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -345,7 +361,7 @@ class RegisterIdentifyForm(FlaskForm):
         validators=[DataRequired(lazy_gettext("Bitte gib deinen Nachnamen ein."))]
     )
 
-    birthdate = DateField(
+    birthdate = NativeDateField(
         label=lazy_gettext("Geburtsdatum"),
         validators=[DataRequired(lazy_gettext("Bitte gib dein Geburtsdatum an."))],
         description=lazy_gettext("YYYY-MM-DD (z.B. 1995-10-23)")
@@ -369,17 +385,19 @@ class RegisterIdentifyForm(FlaskForm):
 
 
 class RegisterRoomForm(FlaskForm):
+    building = ReadonlyStringField(label=lazy_gettext("Wohnheim"))
     room = ReadonlyStringField(label=lazy_gettext("Raum"))
 
-    move_in_date = DateField(
+    move_in_date = NativeDateField(
         label=lazy_gettext("Einzugsdatum"),
-        render_kw={'readonly': True}
+        render_kw={'readonly': True, 'required': True}
     )
 
     wrong_room = BooleanField(
         label=lazy_gettext("Raumzuordnung ist nicht korrekt")
     )
 
+    # TODO: Mitgliedschaftsbeginn
 
 class RegisterFinishForm(FlaskForm):
     # Pre-verify username in Sipa?
@@ -389,7 +407,10 @@ class RegisterFinishForm(FlaskForm):
     )
     password = PasswordField(
         label=lazy_gettext("Passwort"),
-        validators=[DataRequired(lazy_gettext("Passwort muss angegeben werden!"))]
+        validators=[
+            DataRequired(lazy_gettext("Passwort muss angegeben werden!")),
+            PasswordComplexity(),
+        ]
     )
     password_repeat = PasswordField(
         label=lazy_gettext("Passwort erneut eingeben"),
@@ -404,8 +425,11 @@ class RegisterFinishForm(FlaskForm):
         validators=[EqualTo("email", lazy_gettext("E-Mail-Adressen stimmen nicht überein!")),]
     )
 
-    start_on_move_in_date = BooleanField(
-        label=lazy_gettext("Beginn der Mitgliedschaft zum Einzugstag")
+    member_begin_date = NativeDateField(
+        label=lazy_gettext("Gewünschter Mitgliedschaftsbeginn"),
+        validators=[
+            DataRequired(lazy_gettext("Mitgliedschaftsbeginn muss angegeben werden!")),
+        ]
     )
 
     confirm_legal = BooleanField(

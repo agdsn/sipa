@@ -64,12 +64,15 @@ class PycroftApi():
         return self.patch("user/{}/reset-wifi-password".format(user_id))
 
     def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int):
+        return 200, {
+            'building': 'Zw 41',
+            'room': 'Room 407',
+            'room_id': 1337,
+            'begin': 'Thu, 01 Oct 2020 00:00:00 GMT',
+        }
         if first_name == 's':
-            return 200, {
-                'room': 'Room 407',
-                'move_in_date': date(2020, 10, 1),
-            }
-        elif False:
+            pass
+        else:
             return 404, {}
 
         return self.get("registration",
@@ -81,7 +84,7 @@ class PycroftApi():
                        tenant_number: str, room_id: int):
         if login == 's':
             return 200, {}
-        elif False:
+        else:
             return 404, {}
 
         data = {

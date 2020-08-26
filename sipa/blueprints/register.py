@@ -3,7 +3,9 @@
 """Blueprint for the online registration.
 """
 
+from datetime import date
 from functools import wraps
+from typing import Optional
 
 from sipa.model.pycroft.api import PycroftApi
 from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
@@ -11,14 +13,17 @@ from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm,
 from flask import Blueprint, session, url_for, redirect, render_template, flash, request
 from flask.globals import current_app
 from flask_babel import gettext
-from werkzeug import parse_date
+from werkzeug import parse_date as parse_datetime
 from werkzeug.local import LocalProxy
 
 api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
 
 bp_register = Blueprint('register', __name__, url_prefix='/register')
 
+def parse_date(date: Optional[str]) -> Optional[date]:
+    return parse_datetime(date).date() if date is not None else None
 
+# TODO: Use state session member
 def register_redirect(func):
     @wraps(func)
     def wrapper_decorator(*args, **kwargs):
@@ -42,12 +47,15 @@ def register_redirect(func):
     return wrapper_decorator
 
 
+
 @bp_register.route("/identify", methods=['GET', 'POST'])
 @register_redirect
 def identify():
     # Genau wie auf dem Mietvertrag
     form = RegisterIdentifyForm()
 
+    # TODO: Error handling
+    #  -
     suggest_skip = False
     if form.validate_on_submit():
         user_identity = {
@@ -65,7 +73,11 @@ def identify():
         status, user_data = api.match_person(form.first_name.data, form.last_name.data,
                                              form.birthdate.data, form.tenant_number.data)
         if status == 200:
-            user_identity.update(user_data)
+            user_identity['move_in_date'] = parse_date(user_data['begin'])
+            user_identity['room_id'] = user_data['room_id']
+            user_identity['building'] = user_data['building']
+            user_identity['room'] = user_data['room']
+
             session['user_identity'] = user_identity
             return redirect(url_for('.room'))
         else:
@@ -84,14 +96,15 @@ def identify():
 @register_redirect
 def room():
     user_identity = session['user_identity']
-    form = RegisterRoomForm()
 
+    form = RegisterRoomForm()
     if form.validate_on_submit():
         user_identity['room_wrong'] = form.wrong_room.data
         return redirect(url_for('.data'))
     elif form.is_submitted():
         flash_formerrors(form)
     else:
+        form.building.data = user_identity['building']
         form.room.data = user_identity['room']
         form.move_in_date.data = parse_date(user_identity['move_in_date'])
 
@@ -101,9 +114,12 @@ def room():
 @bp_register.route("/data", methods=['GET', 'POST'])
 @register_redirect
 def data():
+    user_identity = session['user_identity']
+
     form = RegisterFinishForm()
+    form.member_begin_date.min = date.today()
     if form.validate_on_submit():
-        user_identity = session['user_identity']
+        move_in_date = parse_date(user_identity.get('move_in_date'))
 
         status, result = api.member_request(
             form.email.data, form.login.data, form.password.data, form.start_on_move_in_date.data,
@@ -121,6 +137,8 @@ def data():
 
     elif form.is_submitted():
         flash_formerrors(form)
+    else:
+        form.member_begin_date.data = parse_date(user_identity.get('move_in_date'))
 
     return render_template('register/form.html', title=gettext('Account erstellen'), form=form)
 
