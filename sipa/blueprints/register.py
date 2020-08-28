@@ -61,7 +61,8 @@ def identify():
         user_identity = {
             'first_name': form.first_name.data,
             'last_name': form.last_name.data,
-            'birthdate': form.birthdate.data,
+            'tenant_number': form.tenant_number.data,
+            'birthdate': form.birthdate.data.isoformat(),
             'no_swdd_tenant': form.no_swdd_tenant.data,
         }
 
