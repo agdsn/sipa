@@ -88,7 +88,7 @@ class PycroftApi():
 
         data = {
             'first_name': first_name, 'last_name': last_name, 'birthdate': birthdate,
-            'email': email, 'login': login, 'password': password,
+            'email': email, 'login': login, 'password': password, 'move_in_date': move_in_date
         }
 
         # Verification was not skipped
