@@ -80,7 +80,7 @@ class PycroftApi():
 
     def member_request(self, email: str, login: str, password: str,
                        first_name: str, last_name: str, birthdate: date,
-                       move_in_date: date, tenant_number: str, room_id: int):
+                       move_in_date: date, tenant_number: int, room_id: int):
         if login == 's':
             return 200, {}
         else:
@@ -88,7 +88,8 @@ class PycroftApi():
 
         data = {
             'first_name': first_name, 'last_name': last_name, 'birthdate': birthdate,
-            'email': email, 'login': login, 'password': password, 'move_in_date': move_in_date
+            'email': email, 'login': login, 'password': password,
+            'move_in_date': move_in_date.isoformat()
         }
 
         # Verification was not skipped
