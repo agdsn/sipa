@@ -8,22 +8,18 @@ from datetime import date
 from functools import wraps
 from typing import Optional
 
-from sipa.model.pycroft.api import PycroftApi
+from sipa.model.pycroft.api import PycroftApi, PycroftApiError
 from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
+from sipa.utils import parse_date
 
 from flask import Blueprint, g, session, url_for, redirect, render_template, flash, request
 from flask.globals import current_app
 from flask_babel import gettext
-from werkzeug import parse_date as parse_datetime
 from werkzeug.local import LocalProxy
 
 api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
 
 bp_register = Blueprint('register', __name__, url_prefix='/register')
-
-
-def parse_date(date: Optional[str]) -> Optional[date]:
-    return parse_datetime(date).date() if date is not None else None
 
 
 @dataclass
@@ -99,11 +95,8 @@ def goto_step(step):
 @bp_register.route("/identify", methods=['GET', 'POST'])
 @register_redirect
 def identify(reg_state: RegisterState):
-    # Genau wie auf dem Mietvertrag
     form = RegisterIdentifyForm()
 
-    # TODO: Error handling
-    #  -
     suggest_skip = False
     if form.validate_on_submit():
         reg_state.first_name = form.first_name.data
@@ -116,19 +109,28 @@ def identify(reg_state: RegisterState):
             reg_state.skipped_verification = True
             return goto_step('data')
 
-        status, user_data = api.match_person(form.first_name.data, form.last_name.data,
-                                             form.birthdate.data, form.tenant_number.data)
-        if status == 200:
-            reg_state.move_in_date = parse_date(user_data['begin'])
-            reg_state.room_id = user_data['room_id']
-            reg_state.building = user_data['building']
-            reg_state.room = user_data['room']
+        try:
+            match = api.match_person(form.first_name.data, form.last_name.data,
+                                     form.birthdate.data, form.tenant_number.data)
+            reg_state.move_in_date = match.begin
+            reg_state.room_id = match.room_id
+            reg_state.building = match.building
+            reg_state.room = match.room
             return goto_step('room')
-        else:
-            flash(gettext(
-                'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte überprüfe, dass du die exakt selben Daten wie beim SWDD angegeben hast. Um die Verifizierung zu überspringen, kannst du den entsprechenden Button klicken, die Verifizierung wird dann später manuell durchgeführt.'),
-                category='error')
-            suggest_skip = True
+        except PycroftApiError as e:
+            if e.code == 'user_exists':
+                flash(gettext(
+                    'Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft.'),
+                    category='error')
+            elif e.code == 'similar_user_exists':
+                flash(gettext('Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft.'),
+                      category='error')
+            else:
+                flash(gettext(
+                    'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte überprüfe, dass du die exakt selben Daten wie beim SWDD angegeben hast. Um die Verifizierung zu überspringen, kannst du den entsprechenden Button klicken, die Verifizierung wird dann später manuell durchgeführt.'),
+                    category='error')
+                suggest_skip = True
+
     elif form.is_submitted():
         flash_formerrors(form)
 
@@ -159,15 +161,34 @@ def data(reg_state: RegisterState):
     form = RegisterFinishForm()
     form.member_begin_date.min = date.today()
     if form.validate_on_submit():
-        status, result = api.member_request(
-            form.email.data, form.login.data, form.password.data, reg_state.first_name,
-            reg_state.last_name, reg_state.birthdate,
-            form.member_begin_date.data, reg_state.tenant_number, reg_state.confirmed_room_id())
+        try:
+            api.member_request(
+                form.email.data, form.login.data, form.password.data, reg_state.first_name,
+                reg_state.last_name, reg_state.birthdate,
+                form.member_begin_date.data, reg_state.tenant_number, reg_state.confirmed_room_id())
 
-        if status == 200:
             return goto_step('finish')
-        else:
-            flash(gettext('Abschluss der Registrierung fehlgeschlagen'), category='error')
+        except PycroftApiError as e:
+            if e.code == 'user_exists':
+                flash(gettext(
+                    'Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft.'),
+                      category='error')
+            elif e.code == 'similar_user_exists':
+                flash(gettext('Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft.'),
+                      category='error')
+            elif e.code == 'email_taken':
+                flash(gettext('E-Mail-Adresse ist bereits in Verwendung.'), category='error')
+            elif e.code == 'login_taken':
+                flash(gettext('Login ist bereits vergeben.'), category='error')
+            elif e.code == 'email_illegal':
+                flash(gettext("E-Mail ist nicht in gültigem Format!"), category='error')
+            elif e.code == 'login_illegal':
+                flash(gettext("Login ist nicht in gültigem Format!"), category='error')
+            elif e.code == 'move_in_date_invalid':
+                flash(gettext("Das Einzugsdatum ist ungültig."), category='error')
+            else:
+                flash(gettext('Registrierung aus unbekanntem Grund fehlgeschlagen.'),
+                      category='error')
 
     elif form.is_submitted():
         flash_formerrors(form)
@@ -185,12 +206,12 @@ def finish(reg_state: RegisterState):
 
 @bp_register.route("/confirm/<token>")
 def confirm(token: str):
-    status, result = api.confirm_email(token)
     # TODO: Maybe just redirect to one of two sipa content pages...
-    if status == 200:
+    try:
+        api.confirm_email(token)
         # Mark state as finished! -> Always redirect to successful content page.
         result = 'Bestätigung erfolgreich.'
-    else:
+    except PycroftApiError:
         result = 'Bestätigung fehlgeschlagen.'
 
     return render_template('register/confirm.html', title=gettext("Bestätigung"), result=result)

@@ -9,14 +9,16 @@ import json
 import requests
 import socket
 import time
+import dataclasses
 from functools import wraps
 from itertools import chain
-from typing import Iterable
+from typing import Iterable, Optional
 
 from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
+from werkzeug import parse_date as parse_datetime
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 from sipa.config.default import PBX_URI
 
@@ -216,3 +218,13 @@ def xor_hashes(*elements: object) -> int:
         _hash ^= hash(element)
 
     return _hash
+
+
+def parse_date(date: Optional[str]) -> Optional[date]:
+    return parse_datetime(date).date() if date is not None else None
+
+
+def dataclass_from_dict(cls, raw: dict):
+    fields = {field.name for field in dataclasses.fields(cls)}
+    kwargs = {key: value for key, value in raw.items() if key in fields}
+    return cls(**kwargs)
