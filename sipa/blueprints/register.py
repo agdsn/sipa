@@ -3,7 +3,7 @@
 """Blueprint for the online registration.
 """
 
-from datetime import date
+from datetime import date, datetime
 from functools import wraps
 from typing import Optional
 
@@ -13,15 +13,16 @@ from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm,
 from flask import Blueprint, session, url_for, redirect, render_template, flash, request
 from flask.globals import current_app
 from flask_babel import gettext
-from werkzeug import parse_date as parse_datetime
 from werkzeug.local import LocalProxy
 
 api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
 
 bp_register = Blueprint('register', __name__, url_prefix='/register')
 
+
 def parse_date(date: Optional[str]) -> Optional[date]:
-    return parse_datetime(date).date() if date is not None else None
+    return datetime.fromisoformat(date).date() if date is not None else None
+
 
 # TODO: Use state session member
 def register_redirect(func):
@@ -72,7 +73,7 @@ def identify():
         status, user_data = api.match_person(form.first_name.data, form.last_name.data,
                                              form.birthdate.data, form.tenant_number.data)
         if status == 200:
-            user_identity['move_in_date'] = parse_date(user_data['begin'])
+            user_identity['move_in_date'] = user_data['begin']
             user_identity['room_id'] = user_data['room_id']
             user_identity['building'] = user_data['building']
             user_identity['room'] = user_data['room']
@@ -119,7 +120,7 @@ def data():
     if form.validate_on_submit():
         status, result = api.member_request(
             form.email.data, form.login.data, form.password.data, user_identity['first_name'],
-            user_identity['last_name'], parse_date(user_identity['birthdate']),
+            user_identity['last_name'], user_identity['birthdate'],
             form.member_begin_date.data, user_identity.get('tenant_number'), user_identity.get('room_id'))
 
         if status == 200:
