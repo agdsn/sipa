@@ -369,7 +369,7 @@ class RegisterIdentifyForm(FlaskForm):
 
     no_swdd_tenant = BooleanField(
         label=lazy_gettext(
-            "Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom Studierendenwerk Dresden."),
+            "Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom Studentenwerk Dresden."),
     )
 
     tenant_number = IntegerField(
