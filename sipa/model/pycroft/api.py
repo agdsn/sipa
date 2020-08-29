@@ -92,7 +92,6 @@ class PycroftApi():
     def reset_wifi_password(self, user_id):
         return self.patch("user/{}/reset-wifi-password".format(user_id))
 
-
     def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int) -> MatchPersonResult:
         """
         Get the newest tenancy for the supplied user data.
@@ -105,8 +104,8 @@ class PycroftApi():
                 'building': 'Zw 41',
                 'room': 'Room 407',
                 'room_id': 1337,
-                'begin': 'Thu, 01 Oct 2020 00:00:00 GMT',
-                'end': 'Thu, 01 Oct 2020 00:00:00 GMT',
+                'begin': '2020-10-01',
+                'end': '2021-10-01',
             }
         else:
             status, result = 404, {
@@ -122,7 +121,6 @@ class PycroftApi():
             raise PycroftApiError(result['code'], result['message'])
 
         return MatchPersonResult.from_json(result)
-
 
     def member_request(self, email: str, login: str, password: str,
                        first_name: str, last_name: str, birthdate: date,
