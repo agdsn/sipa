@@ -385,7 +385,7 @@ class RegisterIdentifyForm(FlaskForm):
 
     agdsn_history = BooleanField(
         label=lazy_gettext(
-            "Ich habe schon einmal in einem Wohnheim mit AG\u00a0DSN Präsenz gewohnt."),
+            "Ich hatte schon einmal einen Internetanschluss durch die AG\u00a0DSN."),
     )
 
     previous_dorm = SelectField(
