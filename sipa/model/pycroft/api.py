@@ -11,7 +11,7 @@ from requests import ConnectionError, HTTPError
 from sipa.backends.exceptions import InvalidConfiguration
 from .exc import PycroftBackendError
 
-from sipa.utils import parse_date, dataclass_from_dict
+from sipa.utils import dataclass_from_dict
 
 logger = logging.getLogger(__name__)
 
@@ -33,9 +33,9 @@ class MatchPersonResult:
 
     def __post_init__(self):
         if isinstance(self.begin, str):
-            self.begin = parse_date(self.begin)
+            self.begin = date.fromisoformat(self.begin)
         if isinstance(self.end, str):
-            self.end = parse_date(self.end)
+            self.end = date.fromisoformat(self.end)
 
     @classmethod
     def from_json(cls, json: dict):
