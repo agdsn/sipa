@@ -3,6 +3,10 @@
 {% block register_content %}
     {{ result }}
     <p>
-    Sofern du als Mitgeschliedschaftsbeginn sofort ausgewählt hast,
-    kannst du dich nun auf der <a href="{{ url_for('generic.login') }}">{{ _("Loginseite") }}</a> mit den von dir gewählten Zugangsdaten einloggen.
+    Wenn du die Verifizierung übersprungen hast, schick uns bitte eine Kopie deines Mietvertrages
+    als Antwort auf die E-Mail die du von uns erhalten hast.
+
+    Sobald deine Anfrage von uns angenommen wurde, wirst du per E-Mail Benachrichtigt und kannst
+    dich dann auf der <a href="{{ url_for('generic.login') }}">{{ _("Loginseite") }}</a> mit den
+    von dir gewählten Zugangsdaten anmelden.
 {% endblock %}
