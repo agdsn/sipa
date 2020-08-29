@@ -32,7 +32,6 @@ class RegisterState:
     tenant_number: Optional[int] = None
     birthdate: date = None
     no_swdd_tenant: bool = None
-    identity_confirmed: bool = False
 
     move_in_date: Optional[date] = None
     room_id: Optional[int] = None
@@ -51,10 +50,6 @@ class RegisterState:
     @property
     def confirmed_room_id(self):
         return self.room_id if self.room_confirmed else None
-
-    @property
-    def confirmed_tenant_number(self):
-        return self.tenant_number if self.identity_confirmed else None
 
     def to_json(self) -> dict:
         return asdict(self)
@@ -107,7 +102,6 @@ def identify(reg_state: RegisterState):
     if form.validate_on_submit():
         reg_state.first_name = form.first_name.data
         reg_state.last_name = form.last_name.data
-        reg_state.tenant_number = form.tenant_number.data
         reg_state.birthdate = form.birthdate.data
         reg_state.no_swdd_tenant = form.no_swdd_tenant.data
 
@@ -122,7 +116,7 @@ def identify(reg_state: RegisterState):
             reg_state.room_id = match.room_id
             reg_state.building = match.building
             reg_state.room = match.room
-            reg_state.identity_confirmed = True
+            reg_state.tenant_number = form.tenant_number.data
             return goto_step('room')
         except PycroftApiError as e:
             # TODO: Inform user about further steps
@@ -181,7 +175,7 @@ def data(reg_state: RegisterState):
                 last_name=reg_state.last_name,
                 birthdate=reg_state.birthdate,
                 move_in_date=form.member_begin_date.data,
-                tenant_number=reg_state.confirmed_tenant_number,
+                tenant_number=reg_state.tenant_number,
                 room_id=reg_state.confirmed_room_id)
 
             return goto_step('finish')
