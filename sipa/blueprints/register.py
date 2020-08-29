@@ -8,6 +8,7 @@ from datetime import date
 from functools import wraps
 from typing import Optional
 
+from sipa.backends.extension import backends
 from sipa.model.pycroft.api import PycroftApi, PycroftApiError
 from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
 from sipa.utils import parse_date
@@ -32,6 +33,7 @@ class RegisterState:
     tenant_number: Optional[int] = None
     birthdate: date = None
     no_swdd_tenant: bool = None
+    previous_dorm: Optional[str] = None
 
     move_in_date: Optional[date] = None
     room_id: Optional[int] = None
@@ -104,6 +106,8 @@ def identify(reg_state: RegisterState):
         reg_state.last_name = form.last_name.data
         reg_state.birthdate = form.birthdate.data
         reg_state.no_swdd_tenant = form.no_swdd_tenant.data
+        previous_dorm = backends.get_dormitory(form.previous_dorm.data)
+        reg_state.previous_dorm = previous_dorm.display_name if previous_dorm else None
 
         if form.no_swdd_tenant.data or 'skip_verification' in request.form:
             reg_state.skipped_verification = True
@@ -176,7 +180,8 @@ def data(reg_state: RegisterState):
                 birthdate=reg_state.birthdate,
                 move_in_date=form.member_begin_date.data,
                 tenant_number=reg_state.tenant_number,
-                room_id=reg_state.confirmed_room_id)
+                room_id=reg_state.confirmed_room_id,
+                previous_dorm=reg_state.previous_dorm)
 
             return goto_step('finish')
         except PycroftApiError as e:

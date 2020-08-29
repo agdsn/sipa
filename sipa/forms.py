@@ -12,7 +12,7 @@ from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo, InputRequired,
                                 MacAddress, Regexp, ValidationError, NumberRange, Optional, Length)
 
-from sipa.backends.extension import backends
+from sipa.backends.extension import backends, _dorm_summary
 
 
 class PasswordComplexity(object):
@@ -381,6 +381,17 @@ class RegisterIdentifyForm(FlaskForm):
             NumberRange(min=0,
                         message=lazy_gettext("Debitorennummer muss eine positive Zahl sein.")),
         ]
+    )
+
+    agdsn_history = BooleanField(
+        label=lazy_gettext(
+            "Ich habe schon einmal in einem Wohnheim mit AG\u00a0DSN Präsenz gewohnt."),
+    )
+
+    previous_dorm = SelectField(
+        label=lazy_gettext("Vorheriges Wohnheim"),
+        choices=LocalProxy(lambda: [_dorm_summary('', '- Nicht vorhanden -')] + backends.dormitories_short),
+        default='',
     )
 
 

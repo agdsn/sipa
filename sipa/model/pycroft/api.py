@@ -3,7 +3,7 @@ import logging
 from dataclasses import dataclass
 from datetime import date
 from functools import partial
-from typing import Callable, Tuple, Any
+from typing import Callable, Tuple, Any, Optional
 
 import requests
 from requests import ConnectionError, HTTPError
@@ -124,7 +124,8 @@ class PycroftApi():
 
     def member_request(self, email: str, login: str, password: str,
                        first_name: str, last_name: str, birthdate: date,
-                       move_in_date: date, tenant_number: int, room_id: int) -> None:
+                       move_in_date: date, tenant_number: Optional[int],
+                       room_id: Optional[int], previous_dorm: Optional[str]) -> None:
         """
         Creates a member request in pycroft.
 
@@ -151,6 +152,9 @@ class PycroftApi():
         # Room was not rejected
         if room_id is not None:
             data['room_id'] = room_id
+
+        if previous_dorm is not None:
+            data['previous_dorm'] = previous_dorm
 
         # status, result = self.post("register", data=data)
 
