@@ -9,4 +9,19 @@
 
     {% block register_content %}
     {% endblock %}
+
+    {% if show_legal %}
+        <div class="row">
+            <div class="col-sm-12">
+                <hr/>
+                <b>
+                    <span style="color:  #d9534f;">Dokumente: </span>
+                    <a target="_blank" href="../documents/legal/constitution.pdf">Satzung</a> |
+                    <a target="_blank" href="../documents/legal/datenschutzhinweise.pdf">Datenschutzhinweise</a> |
+                    <a target="_blank" href="../documents/legal/beitragsordnung.pdf">Beitragsordnung</a> |
+                    <a target="_blank" href="../pages/legal/network_constitution">Netzordnungen</a>
+                </b>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
