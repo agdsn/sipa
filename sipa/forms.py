@@ -399,6 +399,7 @@ class RegisterRoomForm(FlaskForm):
 
     # TODO: Mitgliedschaftsbeginn
 
+
 class RegisterFinishForm(FlaskForm):
     # Pre-verify username in Sipa?
     login = StringField(
@@ -432,11 +433,31 @@ class RegisterFinishForm(FlaskForm):
         ]
     )
 
-    confirm_legal = BooleanField(
-        label=lazy_gettext("Ich stimme Netzordnung, Datenschutzbelehrung und Satzung zu."),
+    confirm_legal_1 = BooleanField(
+        label=lazy_gettext("Ich bestätige, dass meine Angaben korrekt und vollständig sind und ich "
+                           "die Vorraussetzungen für die Mitgliedschaft (Student oder Bewohner "
+                           "eines Studentenwohnheimes) erfülle."),
         validators=[
             DataRequired(lazy_gettext(
-                "Bitte bestätige deine Zustimmung zu Netzordnung, Datenschutzbelehrung und Satzung."))
+                "Bitte bestätige, dass deine Angaben korrekt sind."))
+        ]
+    )
+
+    confirm_legal_2 = BooleanField(
+        label=lazy_gettext("Ich bestätige, dass ich die Satzung und Ordnungen der AG DSN in ihrer "
+                           "jeweils aktuellen Fassung anerkenne, insbesondere die "
+                           "Netzordnungen und die Beitragsordnung."),
+        validators=[
+            DataRequired(lazy_gettext(
+                "Bitte bestätige deine Zustimmung zur Satzung und weiteren Ordnungen."))
+        ]
+    )
+
+    confirm_legal_3 = BooleanField(
+        label=lazy_gettext("Ich habe die Datenschutzbestimmungen verstanden und stimme diesen zu."),
+        validators=[
+            DataRequired(lazy_gettext(
+                "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."))
         ]
     )
 

@@ -32,6 +32,7 @@ class RegisterState:
     tenant_number: Optional[int] = None
     birthdate: date = None
     no_swdd_tenant: bool = None
+    identity_confirmed: bool = False
 
     move_in_date: Optional[date] = None
     room_id: Optional[int] = None
@@ -47,8 +48,13 @@ class RegisterState:
         if isinstance(self.move_in_date, str):
             self.move_in_date = parse_date(self.move_in_date)
 
+    @property
     def confirmed_room_id(self):
         return self.room_id if self.room_confirmed else None
+
+    @property
+    def confirmed_tenant_number(self):
+        return self.tenant_number if self.identity_confirmed else None
 
     def to_json(self) -> dict:
         return asdict(self)
@@ -116,8 +122,10 @@ def identify(reg_state: RegisterState):
             reg_state.room_id = match.room_id
             reg_state.building = match.building
             reg_state.room = match.room
+            reg_state.identity_confirmed = True
             return goto_step('room')
         except PycroftApiError as e:
+            # TODO: Inform user about further steps
             if e.code == 'user_exists':
                 flash(gettext(
                     'Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft.'),
@@ -127,7 +135,10 @@ def identify(reg_state: RegisterState):
                       category='error')
             else:
                 flash(gettext(
-                    'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte überprüfe, dass du die exakt selben Daten wie beim SWDD angegeben hast. Um die Verifizierung zu überspringen, kannst du den entsprechenden Button klicken, die Verifizierung wird dann später manuell durchgeführt.'),
+                    'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte '
+                    'überprüfe, dass du die exakt selben Daten wie beim SWDD angegeben hast. '
+                    'Um die Verifizierung zu überspringen, kannst du den entsprechenden Button '
+                    'klicken, die Verifizierung wird dann später manuell durchgeführt.'),
                     category='error')
                 suggest_skip = True
 
@@ -163,9 +174,15 @@ def data(reg_state: RegisterState):
     if form.validate_on_submit():
         try:
             api.member_request(
-                form.email.data, form.login.data, form.password.data, reg_state.first_name,
-                reg_state.last_name, reg_state.birthdate,
-                form.member_begin_date.data, reg_state.tenant_number, reg_state.confirmed_room_id())
+                email=form.email.data,
+                login=form.login.data,
+                password=form.password.data,
+                first_name=reg_state.first_name,
+                last_name=reg_state.last_name,
+                birthdate=reg_state.birthdate,
+                move_in_date=form.member_begin_date.data,
+                tenant_number=reg_state.confirmed_tenant_number,
+                room_id=reg_state.confirmed_room_id)
 
             return goto_step('finish')
         except PycroftApiError as e:
@@ -195,7 +212,8 @@ def data(reg_state: RegisterState):
     else:
         form.member_begin_date.data = reg_state.move_in_date
 
-    return render_template('register/form.html', title=gettext('Account erstellen'), form=form)
+    return render_template('register/form.html', title=gettext('Konto erstellen'), form=form,
+                           show_legal=True)
 
 
 @bp_register.route("/finish")
