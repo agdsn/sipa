@@ -390,7 +390,11 @@ class RegisterIdentifyForm(FlaskForm):
 
     previous_dorm = SelectField(
         label=lazy_gettext("Vorheriges Wohnheim"),
-        choices=LocalProxy(lambda: [_dorm_summary('', '- Nicht vorhanden -')] + backends.dormitories_short),
+        choices=LocalProxy(lambda: [_dorm_summary('', '')] + backends.dormitories_short),
+        validators=[
+            OptionalIf("agdsn_history", invert=True),
+            DataRequired("Bitte vorheriges Wohnheim auswählen."),
+        ],
         default='',
     )
 
