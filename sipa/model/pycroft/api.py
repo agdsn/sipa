@@ -92,30 +92,35 @@ class PycroftApi():
     def reset_wifi_password(self, user_id):
         return self.patch("user/{}/reset-wifi-password".format(user_id))
 
-    def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int) -> MatchPersonResult:
+    def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int,
+                     previous_dorm: Optional[str]) -> MatchPersonResult:
         """
         Get the newest tenancy for the supplied user data.
 
         :raises PycroftApiError: if the matching was unsuccessful
         :return: the match result
         """
-        if first_name == 's':
-            status, result = 200, {
-                'building': 'Zw 41',
-                'room': 'Room 407',
-                'room_id': 1337,
-                'begin': '2020-10-01',
-                'end': '2021-10-01',
-            }
-        else:
-            status, result = 404, {
-                'code': 'user_exists',
-                'message': 'No tenancies found for this data',
-            }
+        # if first_name == 's':
+        #     status, result = 200, {
+        #         'building': 'Zw 41',
+        #         'room': 'Room 407',
+        #         'room_id': 1337,
+        #         'begin': '2020-10-01',
+        #         'end': '2021-10-01',
+        #     }
+        # else:
+        #     status, result = 404, {
+        #         'code': 'user_exists',
+        #         'message': 'No tenancies found for this data',
+        #     }
 
-        # status, data = self.get("register",
-        #                 params={'first_name': first_name, 'last_name': last_name,
-        #                         'birthdate': birthdate, 'person_id': tenant_number})
+        params = {'first_name': first_name, 'last_name': last_name,
+                  'birthdate': birthdate, 'person_id': tenant_number}
+
+        if previous_dorm is not None:
+            params['previous_dorm'] = previous_dorm
+
+        status, result = self.get("register", params)
 
         if status != 200:
             raise PycroftApiError(result['code'], result['message'])
@@ -131,13 +136,13 @@ class PycroftApi():
 
         :raises PycroftApiError: if the member request was unsuccessful
         """
-        if login == 's':
-            status, result = 200, None
-        else:
-            status, result = 404, {
-                'code': 'user_exists',
-                'message': 'User already exists',
-            }
+        # if login == 's':
+        #     status, result = 200, None
+        # else:
+        #     status, result = 404, {
+        #         'code': 'user_exists',
+        #         'message': 'User already exists',
+        #     }
 
         data = {
             'first_name': first_name, 'last_name': last_name, 'birthdate': birthdate,
@@ -156,7 +161,7 @@ class PycroftApi():
         if previous_dorm is not None:
             data['previous_dorm'] = previous_dorm
 
-        # status, result = self.post("register", data=data)
+        status, result = self.post("register", data=data)
 
         if status != 200:
             raise PycroftApiError(result['code'], result['message'])
@@ -170,15 +175,15 @@ class PycroftApi():
         :raises PycroftApiError: if the confirmation was unsuccessful
         """
 
-        if token == 's':
-            status, result = 200, None
-        else:
-            status, result = 404, {
-                'code': 'bad_key',
-                'message': 'Bad key',
-            }
+        # if token == 's':
+        #     status, result = 200, None
+        # else:
+        #     status, result = 404, {
+        #         'code': 'bad_key',
+        #         'message': 'Bad key',
+        #     }
 
-        # status, result = self.post("register/confirm", data={'key': token})
+        status, result = self.post("register/confirm", data={'key': token})
 
         if status != 200:
             raise PycroftApiError(result['code'], result['message'])

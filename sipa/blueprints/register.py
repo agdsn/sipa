@@ -115,7 +115,8 @@ def identify(reg_state: RegisterState):
 
         try:
             match = api.match_person(form.first_name.data, form.last_name.data,
-                                     form.birthdate.data, form.tenant_number.data)
+                                     form.birthdate.data, form.tenant_number.data,
+                                     reg_state.previous_dorm)
             reg_state.move_in_date = match.begin
             reg_state.room_id = match.room_id
             reg_state.building = match.building
@@ -123,20 +124,24 @@ def identify(reg_state: RegisterState):
             reg_state.tenant_number = form.tenant_number.data
             return goto_step('room')
         except PycroftApiError as e:
-            # TODO: Inform user about further steps
             if e.code == 'user_exists':
                 flash(gettext(
-                    'Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft.'),
+                    'Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft. '
+                    'Bitte wähle aus, in welchem Wohnheim du vorher gewohnt hast.'),
                     category='error')
             elif e.code == 'similar_user_exists':
-                flash(gettext('Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft.'),
+                flash(gettext('Für den dir zugeordneten Raum gibt es bereits ein Konto.'
+                              'Fall du denkst, dass es sich dabei um einen Fehler handelt,'
+                              'kannst du den entsprechenden Button klicken. Die Verifizierung wird '
+                              'dann später manuell durchgeführt.'),
                       category='error')
+                suggest_skip = True
             else:
                 flash(gettext(
                     'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte '
                     'überprüfe, dass du die exakt selben Daten wie beim SWDD angegeben hast. '
                     'Um die Verifizierung zu überspringen, kannst du den entsprechenden Button '
-                    'klicken, die Verifizierung wird dann später manuell durchgeführt.'),
+                    'klicken. Die Verifizierung wird dann später manuell durchgeführt.'),
                     category='error')
                 suggest_skip = True
 
