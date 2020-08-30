@@ -6,10 +6,12 @@
 from dataclasses import dataclass, asdict
 from datetime import date
 from functools import wraps
+import logging
 from typing import Optional
 
 from sipa.backends.extension import backends
 from sipa.model.pycroft.api import PycroftApi, PycroftApiError
+from sipa.model.pycroft.exc import PycroftBackendError
 from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
 from sipa.utils import parse_date
 
@@ -18,6 +20,7 @@ from flask.globals import current_app
 from flask_babel import gettext
 from werkzeug.local import LocalProxy
 
+logger = logging.getLogger(__name__)
 api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
 
 bp_register = Blueprint('register', __name__, url_prefix='/register')
@@ -95,6 +98,15 @@ def goto_step(step):
     return redirect(url_for(f'.{step}'))
 
 
+def handle_backend_error(ex: PycroftBackendError):
+    flash(gettext('Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es erneut.'), 'error')
+    logger.critical(
+        'Backend error: %s', ex.backend_name,
+        extra={'data': {'exception_args': ex.args}},
+        exc_info=True,
+    )
+
+
 @bp_register.route("/identify", methods=['GET', 'POST'])
 @register_redirect
 def identify(reg_state: RegisterState):
@@ -144,6 +156,8 @@ def identify(reg_state: RegisterState):
                     'klicken. Die Verifizierung wird dann später manuell durchgeführt.'),
                     category='error')
                 suggest_skip = True
+        except PycroftBackendError as e:
+            handle_backend_error(e)
 
     elif form.is_submitted():
         flash_formerrors(form)
@@ -210,6 +224,8 @@ def data(reg_state: RegisterState):
             else:
                 flash(gettext('Registrierung aus unbekanntem Grund fehlgeschlagen.'),
                       category='error')
+        except PycroftBackendError as e:
+            handle_backend_error(e)
 
     elif form.is_submitted():
         flash_formerrors(form)
@@ -240,5 +256,8 @@ def confirm(token: str):
         result = 'Bestätigung erfolgreich.'
     except PycroftApiError:
         result = 'Bestätigung fehlgeschlagen.'
+    except PycroftBackendError as e:
+        result = 'Bestätigung fehlgeschlagen.'
+        handle_backend_error(e)
 
     return render_template('register/confirm.html', title=gettext("Bestätigung"), result=result)
