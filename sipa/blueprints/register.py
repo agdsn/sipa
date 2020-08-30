@@ -99,7 +99,8 @@ def goto_step(step):
 
 
 def handle_backend_error(ex: PycroftBackendError):
-    flash(gettext('Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es erneut.'), 'error')
+    flash(gettext('Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es erneut.'),
+          'error')
     logger.critical(
         'Backend error: %s', ex.backend_name,
         extra={'data': {'exception_args': ex.args}},

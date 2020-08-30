@@ -369,7 +369,8 @@ class RegisterIdentifyForm(FlaskForm):
 
     no_swdd_tenant = BooleanField(
         label=lazy_gettext(
-            "Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom Studentenwerk Dresden."),
+            "Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt "
+            "vom Studentenwerk Dresden."),
     )
 
     tenant_number = IntegerField(
@@ -438,7 +439,7 @@ class RegisterFinishForm(FlaskForm):
     email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
     email_repeat = EmailField(
         label=lazy_gettext("E-Mail-Adresse erneut eingeben"),
-        validators=[EqualTo("email", lazy_gettext("E-Mail-Adressen stimmen nicht überein!")),]
+        validators=[EqualTo("email", lazy_gettext("E-Mail-Adressen stimmen nicht überein!"))]
     )
 
     member_begin_date = NativeDateField(
@@ -489,7 +490,9 @@ def flash_formerrors(form):
             flash(e, "error")
 
 
-LINK_PLACEHOLDER = re.compile(r'\[(?P<text>[^\]]+)\]\((?P<link>[^)]+)\)')
+_LINK_PLACEHOLDER = re.compile(r'\[(?P<text>[^\]]+)\]\((?P<link>[^)]+)\)')
+
+
 def render_links(raw: str, links: dict):
     """
     Replace link placeholders in label of BooleanFields.
@@ -504,4 +507,4 @@ def render_links(raw: str, links: dict):
         else:
             return match.group(0)
 
-    return LINK_PLACEHOLDER.sub(render_link, raw)
+    return _LINK_PLACEHOLDER.sub(render_link, raw)
