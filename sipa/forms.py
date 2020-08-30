@@ -459,9 +459,10 @@ class RegisterFinishForm(FlaskForm):
     )
 
     confirm_legal_2 = BooleanField(
-        label=lazy_gettext("Ich bestätige, dass ich die Satzung und Ordnungen der AG DSN in ihrer "
-                           "jeweils aktuellen Fassung anerkenne, insbesondere die "
-                           "Netzordnungen und die Beitragsordnung."),
+        label=lazy_gettext("Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen "
+                           "der AG DSN in ihrer jeweils aktuellen Fassung anerkenne, "
+                           "insbesondere die [Netzordnungen](network_constitution) "
+                           "und die [Beitragsordnung](fee_regulation)."),
         validators=[
             DataRequired(lazy_gettext(
                 "Bitte bestätige deine Zustimmung zur Satzung und weiteren Ordnungen."))
@@ -469,7 +470,8 @@ class RegisterFinishForm(FlaskForm):
     )
 
     confirm_legal_3 = BooleanField(
-        label=lazy_gettext("Ich habe die Datenschutzbestimmungen verstanden und stimme diesen zu."),
+        label=lazy_gettext("Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden "
+                           "und stimme diesen zu."),
         validators=[
             DataRequired(lazy_gettext(
                 "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."))

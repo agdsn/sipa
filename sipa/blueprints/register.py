@@ -217,7 +217,12 @@ def data(reg_state: RegisterState):
         form.member_begin_date.data = reg_state.move_in_date
 
     return render_template('register/form.html', title=gettext('Konto erstellen'), form=form,
-                           show_legal=True)
+                           links={
+                               'constitution': '/pages/legal/agdsn_constitution',
+                               'fee_regulation': '/pages/legal/finance_constitution',
+                               'network_constitution': '/pages/legal/network_constitution',
+                               'privacy_policy': '/pages/legal/agdsn_dataprotection',
+                           })
 
 
 @bp_register.route("/finish")
