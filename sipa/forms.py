@@ -485,3 +485,21 @@ def flash_formerrors(form):
     for field, errors in list(form.errors.items()):
         for e in errors:
             flash(e, "error")
+
+
+LINK_PLACEHOLDER = re.compile(r'\[(?P<text>[^\]]+)\]\((?P<link>[^)]+)\)')
+def render_links(raw: str, links: dict):
+    """
+    Replace link placeholders in label of BooleanFields.
+
+    :param raw: Text that contains the link placeholders.
+    :param links: Link placeholder to url mapping.
+    """
+    def render_link(match: re.Match) -> str:
+        link = match.group('link')
+        if link in links:
+            return f'<a target="_blank" href="{links[link]}">{match.group("text")}</a>'
+        else:
+            return match.group(0)
+
+    return LINK_PLACEHOLDER.sub(render_link, raw)

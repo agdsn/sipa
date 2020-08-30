@@ -3,7 +3,7 @@
     {{ field(class="form-control", placeholder=description, autofocus=first) }}
 {%- endmacro %}
 
-{% macro render(form, form_id, reset_button=False, cancel_to=None, submit_text=_("Abschicken"), cancel_text=_("Abbrechen"), extra_btn=None) -%}
+{% macro render(form, form_id, reset_button=False, cancel_to=None, submit_text=_("Abschicken"), cancel_text=_("Abbrechen"), extra_btn=None, links=None) -%}
     <div id="{{ form_id }}" class="container col-sm-10">
         <form action="" method="post" class="form form-horizontal">
             {{ form.csrf_token }}
@@ -16,7 +16,8 @@
                             <label>
                                 <input id="{{ field.name }}" type="checkbox" name="{{ field.name }}"
                                         {{ 'checked' if field.data | default(field.default) }}>
-                                {{ field.label }}
+                                {% if links %}{{ field.label | string | render_links(links) | safe }}
+                                {% else %}{{ field.label }}{% endif %}
                             </label></div>
                         </div>
                     {% elif field.type == "RadioField" %}
