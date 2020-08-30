@@ -130,8 +130,8 @@ def identify(reg_state: RegisterState):
                     'Bitte wähle aus, in welchem Wohnheim du vorher gewohnt hast.'),
                     category='error')
             elif e.code == 'similar_user_exists':
-                flash(gettext('Für den dir zugeordneten Raum gibt es bereits ein Konto.'
-                              'Fall du denkst, dass es sich dabei um einen Fehler handelt,'
+                flash(gettext('Für den dir zugeordneten Raum gibt es bereits ein Konto. '
+                              'Falls du denkst, dass es sich dabei um einen Fehler handelt, '
                               'kannst du den entsprechenden Button klicken. Die Verifizierung wird '
                               'dann später manuell durchgeführt.'),
                       category='error')
