@@ -32,6 +32,8 @@ class DegenerateUser(BaseUser):
     login = None
     mac = None
     mail = None
+    mail_forwarded = None
+    mail_confirmed = None
     realname = None
     status = None
     traffic_history = None

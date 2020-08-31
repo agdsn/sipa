@@ -11,7 +11,7 @@ class TestSampleUserCase(SampleFrontendTestBase):
         'realname': ('name', NO_CAPABILITIES),
         'login': ('uid', NO_CAPABILITIES),
         'mac': ('mac', Capabilities(edit=True, delete=False)),
-        'mail': ('mail', Capabilities(edit=True, delete=True)),
+        'mail': ('mail', Capabilities(edit=True, delete=False)),
         'address': ('address', NO_CAPABILITIES),
         'ips': ('ip', NO_CAPABILITIES),
         'status': ('status', NO_CAPABILITIES),

@@ -17,6 +17,8 @@ class UserData:
     status: UserStatus
     room: str
     mail: str
+    mail_forwarded: bool
+    mail_confirmed: bool
     properties: List[str]
     traffic_history: List[TrafficHistoryEntry]
     interfaces: List[Interface]

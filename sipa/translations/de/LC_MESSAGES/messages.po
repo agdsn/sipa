@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-31 22:18+0200\n"
+"POT-Creation-Date: 2020-08-31 23:17+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -109,9 +109,6 @@ msgid "Passwort"
 msgstr ""
 
 msgid "Passwort nicht angegeben!"
-msgstr ""
-
-msgid "Neue Mail"
 msgstr ""
 
 msgid "MAC muss unicast-Adresse sein!"
@@ -462,6 +459,9 @@ msgstr ""
 msgid "Aktuelle MAC-Adresse"
 msgstr ""
 
+msgid "Status deiner E-Mail-Adresse"
+msgstr ""
+
 msgid "E-Mail-Weiterleitung"
 msgstr ""
 
@@ -512,6 +512,9 @@ msgstr ""
 msgid "Passwort wurde geändert"
 msgstr ""
 
+msgid "Passwort ändern"
+msgstr ""
+
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
@@ -521,7 +524,7 @@ msgstr ""
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-msgid "E-Mail-Adresse wurde zurückgesetzt"
+msgid "E-Mail-Adresse ändern"
 msgstr ""
 
 msgid "MAC-Adresse ist bereits in Verwendung!"
@@ -542,6 +545,9 @@ msgid "Netzwerkzugang wurde aktiviert!"
 msgstr ""
 
 msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
+msgstr ""
+
+msgid "Netzwerkanschluss aktivieren"
 msgstr ""
 
 msgid "Deine Datenbank wurde gelöscht."
@@ -602,6 +608,12 @@ msgid "Aktiviert"
 msgstr ""
 
 msgid "Nicht aktiviert"
+msgstr ""
+
+msgid "Bestätigt"
+msgstr ""
+
+msgid "Nicht bestätigt"
 msgstr ""
 
 msgid "Datenbank nicht erreichbar"
@@ -829,13 +841,7 @@ msgstr ""
 msgid "Häufige Aktionen"
 msgstr ""
 
-msgid "Passwort ändern"
-msgstr ""
-
 msgid "MAC-Adresse ändern"
-msgstr ""
-
-msgid "Netzwerkanschluss aktivieren"
 msgstr ""
 
 msgid "Kontaktformular"
@@ -905,9 +911,6 @@ msgid ""
 "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
 "MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
 "alle Aktivitäten des Accounts!"
-msgstr ""
-
-msgid "E-Mail ändern"
 msgstr ""
 
 msgid "Kontakt für Mitglieder"

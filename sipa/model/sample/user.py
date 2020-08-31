@@ -24,6 +24,8 @@ def init_context(app):
             'password': 'test',
             'address': "Keller, Wundtstr. 5",
             'mail': 'test@agdsn.de',
+            'mail_forwarded': True,
+            'mail_confirmed': True,
             'mac': 'aa:bb:cc:dd:ee:ff',
             'ip': '141.30.228.39',
             'status': "OK",
@@ -142,13 +144,17 @@ class User(BaseUser):
     def mail(self):
         return config[self.uid]['mail']
 
+    @active_prop
+    def mail_forwarded(self):
+        return config[self.uid]['mail_forwarded']
+
+    @active_prop
+    def mail_confirmed(self):
+        return config[self.uid]['mail_confirmed']
+
     @mail.setter
     def mail(self, value):
         config[self.uid]['mail'] = value
-
-    @mail.deleter
-    def mail(self):
-        self.config[self.uid]['mail'] = ""
 
     @active_prop
     def address(self):

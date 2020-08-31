@@ -15,7 +15,7 @@ from markupsafe import Markup
 
 from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
-    ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
+    ChangePasswordForm, flash_formerrors, HostingForm, \
     PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
     TerminateMembershipConfirmForm, ContinueMembershipForm
 from sipa.mail import send_usersuite_contact_mail
@@ -58,7 +58,9 @@ def index():
         ('address', gettext("Aktuelles Zimmer")),
         ('ips', gettext("Aktuelle IP-Adresse")),
         ('mac', gettext("Aktuelle MAC-Adresse")),
-        ('mail', gettext("E-Mail-Weiterleitung")),
+        ('mail', gettext("E-Mail-Adresse")),
+        ('mail_confirmed', gettext("Status deiner E-Mail-Adresse")),
+        ('mail_forwarded', gettext("E-Mail-Weiterleitung")),
         ('wifi_password', gettext("WLAN Passwort")),
         ('hostname', gettext("Hostname")),
         ('hostalias', gettext("Hostalias")),
@@ -180,6 +182,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mac': 'change_mac',
             'userdb_status': 'hosting',
             'mail': 'change_mail',
+            'mail_forwarded': 'change_mail',
             'wifi_password': 'reset_wifi_password',
             'finance_balance': 'finance_logs',
         }
@@ -190,7 +193,6 @@ def get_attribute_endpoint(attribute, capability='edit'):
         assert capability == 'delete', "capability must be 'delete' or 'edit'"
 
         attribute_mappings = {
-            'mail': 'delete_mail',
             'userdb_status': 'hosting',
         }
 
@@ -241,6 +243,7 @@ def change_mail():
 
         try:
             with current_user.tmp_authentication(password):
+                current_user.mail_forwarded = form.forwarded.data
                 current_user.mail = email
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
@@ -251,37 +254,13 @@ def change_mail():
             return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
+    else:
+        form.email.data = current_user.mail.raw_value
+        form.forwarded.data = current_user.mail_forwarded.raw_value
 
-    return render_template('usersuite/change_mail.html', form=form)
-
-
-@bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
-@login_required
-def delete_mail():
-    """Resets the users forwarding mail attribute.
-    """
-
-    capability_or_403('mail', 'delete')
-
-    form = DeleteMailForm()
-
-    if form.validate_on_submit():
-        password = form.password.data
-
-        try:
-            with current_user.tmp_authentication(password):
-                del current_user.mail
-        except UserNotFound:
-            flash(gettext("Nutzer nicht gefunden!"), "error")
-        except PasswordInvalid:
-            flash(gettext("Passwort war inkorrekt!"), "error")
-        else:
-            flash(gettext("E-Mail-Adresse wurde zurückgesetzt"), "success")
-            return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
-
-    return render_template('usersuite/delete_mail.html', form=form)
+    return render_template('generic_form.html',
+                           page_title=gettext("E-Mail-Adresse ändern"), form=form,
+                           form_args={'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])

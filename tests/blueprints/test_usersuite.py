@@ -61,7 +61,7 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
                 *(url_for(get_attribute_endpoint(attr))
                   for attr in ['mail', 'mac']),
                 *(url_for(get_attribute_endpoint(attr, capability='delete'))
-                  for attr in ['mail']),
+                  for attr in []),
                 url_for('usersuite.change_password'),
                 url_for('generic.contact'),
             ]

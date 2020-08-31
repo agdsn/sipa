@@ -5,6 +5,7 @@ from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
 from flask import flash
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
@@ -203,12 +204,11 @@ class ChangeMailForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
-    email = EmailField(label=lazy_gettext("Neue Mail"))
-
-
-class DeleteMailForm(FlaskForm):
-    password = PasswordField(
-        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
+    email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
+    forwarded = BooleanField(
+        label=lazy_gettext(LocalProxy(lambda:
+            "Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private E-Mail-Adresse weiterleiten"
+            .format(agdsn_email=f'{current_user.login.value}@agdsn.me'))))
 
 
 def require_unicast_mac(form, field):

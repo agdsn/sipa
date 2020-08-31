@@ -64,9 +64,9 @@ class PycroftApi():
                          data={'password': old_password,
                                'new_password': new_password})
 
-    def change_mail(self, user_id, password, new_mail):
+    def change_mail(self, user_id, password, new_mail, forwarded):
         return self.post('user/{}/change-email'.format(user_id),
-                         data={'password': password, 'new_email': new_mail})
+                         data={'password': password, 'new_email': new_mail, 'forwarded': forwarded})
 
     def change_mac(self, user_id, password, interface_id, new_mac, host_name):
         return self.post('user/{}/change-mac/{}'.format(user_id, interface_id),
@@ -167,6 +167,10 @@ class PycroftApi():
             raise PycroftApiError(result['code'], result['message'])
         else:
             return
+
+    def resend_confirm_email(self, user_id: int) -> bool:
+        status, _ = self.get("register/confirm", params={'user_id': user_id})
+        return status == 200
 
     def confirm_email(self, token: str):
         """

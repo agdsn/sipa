@@ -179,20 +179,30 @@ class User(BaseUser):
 
     @mail.setter
     def mail(self, new_mail):
-        status, result = api.change_mail(self.user_data.id, self._tmp_password, new_mail)
+        status, result = api.change_mail(self.user_data.id, self._tmp_password, new_mail,
+                                         self.user_data.mail_forwarded)
 
         if status == 401:
             raise PasswordInvalid
         elif status == 404:
             raise UserNotFound
 
-    @mail.deleter
-    def mail(self):
-        status, result = api.change_mail(self.user_data.id, self._tmp_password, new_mail=None)
-        if status == 401:
-            raise PasswordInvalid
-        elif status == 404:
-            raise UserNotFound
+    @active_prop
+    def mail_forwarded(self):
+        value = self.user_data.mail_forwarded
+        return {'raw_value': value,
+                'value': gettext('Aktiviert') if value else gettext('Nicht aktiviert')}
+
+    @mail_forwarded.setter
+    def mail_forwarded(self, value):
+        self.user_data.mail_forwarded = value
+
+    @active_prop
+    def mail_confirmed(self):
+        value = self.user_data.mail_confirmed
+        return {'raw_value': value,
+                'value': gettext('Bestätigt') if value else gettext('Nicht bestätigt'),
+                'style': 'success' if value else 'danger'}
 
     @active_prop
     def address(self):
