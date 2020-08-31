@@ -254,11 +254,11 @@ def finish(reg_state: RegisterState):
 @bp_register.route("/confirm/<token>")
 def confirm(token: str):
     try:
-        type = api.confirm_email(token)
-        if type == 'pre_member':
+        api_result = api.confirm_email(token)
+        if api_result['type'] == 'pre_member':
             # Email confirmation as part of the registration process
             reg_state = g.setdefault('reg_state', RegisterState())
-            reg_state.result = 'account_created'
+            reg_state.result = api_result['reg_result']
             return goto_step('success')
         else:
             # Regular email confirmation

@@ -193,7 +193,7 @@ class PycroftApi():
         if status != 200:
             raise PycroftApiError(result['code'], result['message'])
 
-        return result['type']
+        return result
 
     def get(self, url, params=None, no_raise=False):
         request_function = partial(requests.get, params=params or {})
