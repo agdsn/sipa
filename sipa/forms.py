@@ -413,10 +413,6 @@ class RegisterRoomForm(FlaskForm):
         render_kw={'readonly': True, 'required': True}
     )
 
-    wrong_room = BooleanField(
-        label=lazy_gettext("Raumzuordnung ist nicht korrekt")
-    )
-
 
 class RegisterFinishForm(FlaskForm):
     _LOGIN_REGEX = re.compile(r"""

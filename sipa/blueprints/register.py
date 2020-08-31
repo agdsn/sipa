@@ -178,7 +178,7 @@ def identify(reg_state: RegisterState):
 def room(reg_state: RegisterState):
     form = RegisterRoomForm()
     if form.validate_on_submit():
-        reg_state.room_confirmed = not form.wrong_room.data
+        reg_state.room_confirmed = 'wrong_room' not in request.form
         return goto_step('data')
     elif form.is_submitted():
         flash_formerrors(form)
@@ -187,7 +187,7 @@ def room(reg_state: RegisterState):
         form.room.data = reg_state.room
         form.move_in_date.data = reg_state.move_in_date
 
-    return render_template('register/form.html', title=gettext('Raumbestätigung'), form=form)
+    return render_template('register/room.html', title=gettext('Raumbestätigung'), form=form)
 
 
 @bp_register.route("/data", methods=['GET', 'POST'])
