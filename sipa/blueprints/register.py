@@ -257,10 +257,16 @@ def finish(reg_state: RegisterState):
 @bp_register.route("/confirm/<token>")
 def confirm(token: str):
     try:
-        api.confirm_email(token)
-        reg_state = g.setdefault('reg_state', RegisterState())
-        reg_state.result = 'account_created'
-        return goto_step('success')
+        type = api.confirm_email(token)
+        if type == 'pre_member':
+            # Email confirmation as part of the registration process
+            reg_state = g.setdefault('reg_state', RegisterState())
+            reg_state.result = 'account_created'
+            return goto_step('success')
+        else:
+            # Regular email confirmation
+            flash(gettext('Bestätigung erfolgreich.'))
+            return redirect(url_for('generic.index'))
     except PycroftApiError:
         flash(gettext('Bestätigung fehlgeschlagen.'), category='error')
         result = gettext(

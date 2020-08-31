@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-31 17:46+0200\n"
+"POT-Creation-Date: 2020-08-31 18:10+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -425,6 +425,9 @@ msgid "Registrierung aus unbekanntem Grund fehlgeschlagen."
 msgstr ""
 
 msgid "Konto erstellen"
+msgstr ""
+
+msgid "Bestätigung erfolgreich."
 msgstr ""
 
 msgid "Bestätigung fehlgeschlagen."

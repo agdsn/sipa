@@ -173,6 +173,7 @@ class PycroftApi():
         Confirms a member request.
 
         :raises PycroftApiError: if the confirmation was unsuccessful
+        :return: the confirmation type, either `user` or `pre_member`
         """
 
         # if token == 's':
@@ -187,6 +188,8 @@ class PycroftApi():
 
         if status != 200:
             raise PycroftApiError(result['code'], result['message'])
+
+        return result['type']
 
     def get(self, url, params=None, no_raise=False):
         request_function = partial(requests.get, params=params or {})
