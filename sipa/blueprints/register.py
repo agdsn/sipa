@@ -156,8 +156,9 @@ def identify(reg_state: RegisterState):
                 return goto_step('data')
             else:
                 flash(gettext(
-                    'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte '
-                    'überprüfe, dass du die exakt selben Daten wie beim SWDD angegeben hast. '
+                    'Die Verifizierung deiner Daten mit dem Studentenwerk Dresden ist fehlgeschlagen. '
+                    'Bitte überprüfe, dass du die exakt selben Daten, wie beim Studentenwerk Dresden '
+                    'bzw. wie auf deinem Mietvertrag, angegeben hast. '
                     'Um die Verifizierung zu überspringen, kannst du den entsprechenden Button '
                     'klicken. Die Verifizierung wird dann später manuell durchgeführt.'),
                     category='error')
@@ -222,9 +223,9 @@ def data(reg_state: RegisterState):
             elif e.code == 'login_taken':
                 flash(gettext('Login ist bereits vergeben.'), category='error')
             elif e.code == 'email_illegal':
-                flash(gettext("E-Mail ist nicht in gültigem Format!"), category='error')
+                flash(gettext("E-Mail-Adresse hat ein ungültiges Format!"), category='error')
             elif e.code == 'login_illegal':
-                flash(gettext("Login ist nicht in gültigem Format!"), category='error')
+                flash(gettext("Nutzername hat ein ungültiges Format!"), category='error')
             elif e.code == 'move_in_date_invalid':
                 flash(gettext("Das Einzugsdatum ist ungültig."), category='error')
             else:
@@ -264,7 +265,7 @@ def confirm(token: str):
         flash(gettext('Bestätigung fehlgeschlagen.'), category='error')
         result = gettext(
             'Der Bestätigungslink ist nicht gültig. '
-            'Möglicherweise hast du deinen Account bereits bestätigt, '
+            'Möglicherweise hast du dein Konto bereits bestätigt, '
             'oder der Bestätigungszeitraum ist verstrichen.')
     except PycroftBackendError as e:
         result = gettext('Bestätigung fehlgeschlagen.')

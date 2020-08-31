@@ -91,8 +91,8 @@ class ReadonlyStringField(StrippedStringField):
 class EmailField(StrippedStringField):
     def __init__(self, *args, **kwargs):
         validators = [
-            DataRequired(lazy_gettext("E-Mail ist nicht in gültigem Format!")),
-            Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))
+            DataRequired(lazy_gettext("E-Mail-Adresse hat ein ungültiges Format!")),
+            Email(lazy_gettext("E-Mail-Adresse hat ein ungültiges Format!"))
         ]
         if 'validators' in kwargs:
             kwargs['validators'] = validators + kwargs['validators']
