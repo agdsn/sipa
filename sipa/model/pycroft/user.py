@@ -296,6 +296,10 @@ class User(BaseUser):
             message, style = gettext('Nicht bezahlt'), 'warning'
         elif status.traffic_exceeded:
             message, style = gettext('Trafficlimit überschritten'), 'danger'
+        elif not status.member and self.user_data.membership_begin_date is not None:
+            message, style = "{} {}".format(gettext('Mitglied ab'),
+                                            self.user_data.membership_begin_date), \
+                             'warning'
         elif not status.member:
             message, style = gettext('Kein Mitglied'), 'muted'
         elif status.member and self.membership_end_date.raw_value is not None:
