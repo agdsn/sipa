@@ -8,7 +8,7 @@ import os.path
 from logging import getLogger
 import json
 
-from flask import Blueprint, render_template, current_app
+from flask import Blueprint, render_template, redirect, current_app
 from flask_login import current_user
 
 from sipa.backends.extension import backends
@@ -34,6 +34,9 @@ def show(category_id, article_id):
         restricted = False
     if restricted and not current_user.is_authenticated:
         return current_app.login_manager.unauthorized()
+
+    if article.link:
+        return redirect(article.link)
 
     box_filename = os.path.join(
         os.path.abspath(current_app.config['FLATPAGES_ROOT']),

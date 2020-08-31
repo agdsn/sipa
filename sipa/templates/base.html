@@ -125,16 +125,8 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             <ul class="dropdown-menu" role="menu">
                                 {%- for article in c.articles -%}
                                     {%- if not article.id == 'index' and article.title and not article.hidden -%}
-                                        {% if not article.link -%}
-                                            {% set href = url_for(
-                                                    'pages.show',
-                                                    category_id=c.id,
-                                                    article_id=article.id) %}
-                                        {%- else -%}
-                                            {% set href = article.link %}
-                                        {%- endif %}
                                         <li>
-                                            <a href="{{ href }}">
+                                            <a href="{{ url_for('pages.show', category_id=c.id, article_id=article.id) }}">
                                                 <span class="glyphicon {{ article.glyphicon }}"></span>
                                                 &nbsp; {{ article.title }}
                                             </a>

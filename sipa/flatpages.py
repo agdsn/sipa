@@ -117,7 +117,7 @@ class Article(Node):
         :raises: :py:obj:`AttributeError` if :py:attr:`localized_page`
                  doesn't have a link in the meta section.
         """
-        raw_link = self.__getattr__('link')
+        raw_link = self.localized_page.meta.get('link', None)
         if raw_link and raw_link[0] == "/":
             return dirname(request.url_root) + raw_link
 
