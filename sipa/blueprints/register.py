@@ -46,6 +46,8 @@ class RegisterState:
     skipped_verification: bool = False
     room_confirmed: bool = False
 
+    result: str = None
+
     def __post_init__(self):
         if isinstance(self.birthdate, str):
             self.birthdate = parse_date(self.birthdate)
@@ -250,15 +252,25 @@ def finish(reg_state: RegisterState):
 
 @bp_register.route("/confirm/<token>")
 def confirm(token: str):
-    # TODO: Maybe just redirect to one of two sipa content pages...
     try:
         api.confirm_email(token)
-        # Mark state as finished! -> Always redirect to successful content page.
-        result = 'Bestätigung erfolgreich.'
+        reg_state = g.setdefault('reg_state', RegisterState())
+        reg_state.result = 'account_created'
+        return goto_step('success')
     except PycroftApiError:
-        result = 'Bestätigung fehlgeschlagen.'
+        flash(gettext('Bestätigung fehlgeschlagen.'), category='error')
+        result = gettext(
+            'Der Bestätigungslink ist nicht gültig. '
+            'Möglicherweise hast du deinen Account bereits bestätigt, '
+            'oder der Bestätigungszeitraum ist verstrichen.')
     except PycroftBackendError as e:
-        result = 'Bestätigung fehlgeschlagen.'
+        result = gettext('Bestätigung fehlgeschlagen.')
         handle_backend_error(e)
 
     return render_template('register/confirm.html', title=gettext("Bestätigung"), result=result)
+
+
+@bp_register.route("/success")
+@register_redirect
+def success(reg_state: RegisterState):
+    return redirect(f'/pages/membership/registration_{reg_state.result}')
