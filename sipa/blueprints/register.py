@@ -151,6 +151,9 @@ def identify(reg_state: RegisterState):
                               'dann später manuell durchgeführt.'),
                       category='error')
                 suggest_skip = True
+            elif e.code == 'no_room_for_tenancies':
+                reg_state.tenant_number = form.tenant_number.data
+                return goto_step('data')
             else:
                 flash(gettext(
                     'Die Verifizierung deiner Daten mit dem SWDD ist fehlgeschlagen. Bitte '
