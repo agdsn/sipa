@@ -69,6 +69,10 @@ class OptionalIf(Optional):
             super(OptionalIf, self).__call__(form, field)
 
 
+def lower_filter(string):
+    return string.lower() if string else None
+
+
 def strip_filter(string):
     return string.strip() if string else None
 
@@ -413,15 +417,30 @@ class RegisterRoomForm(FlaskForm):
         label=lazy_gettext("Raumzuordnung ist nicht korrekt")
     )
 
-    # TODO: Mitgliedschaftsbeginn
-
 
 class RegisterFinishForm(FlaskForm):
-    # Pre-verify username in Sipa?
+    _LOGIN_REGEX = re.compile(r"""
+            ^
+            # Must begin with a lowercase character
+            [a-z]
+            # Can continue with lowercase characters, numbers and some punctuation
+            # but between punctuation characters must be characters or numbers
+            (?:[.-]?[a-z0-9])+$
+            """, re.VERBOSE)
+
     login = StringField(
         label=lazy_gettext("Gewünschter Nutzername"),
-        validators=[DataRequired(lazy_gettext("Nutzername muss angegeben werden!"))]
+        validators=[
+            DataRequired(lazy_gettext("Nutzername muss angegeben werden!")),
+            Regexp(regex=_LOGIN_REGEX, message=lazy_gettext(
+                "Dein Nutzername muss mit einem Kleinbuchstaben beginnen und kann mit "
+                "Kleinbuchstaben, Zahlen und Interpunktionszeichen (Punkt und Bindestrich) "
+                "fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen "
+                "den Interpunktionszeichen stehen.")),
+        ],
+        filters=[lower_filter]
     )
+
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[
