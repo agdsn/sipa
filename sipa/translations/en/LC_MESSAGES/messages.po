@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-06-24 13:51+0200\n"
-"PO-Revision-Date: 2020-06-24 13:51+0200\n"
+"POT-Creation-Date: 2020-08-31 11:05+0200\n"
+"PO-Revision-Date: 2020-08-31 11:05+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -247,9 +247,6 @@ msgstr ""
 "Something went wrong with the database connection. Please try again in a few "
 "minutes."
 
-msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
-msgstr "Connection to LDAP server could not be established!"
-
 #, python-format
 msgid "Fehler bei der Kommunikation mit unserem Server (Backend '%(name)s')"
 msgstr "Error during communication with the backend server ('%(name)s')"
@@ -366,9 +363,6 @@ msgstr "User not found!"
 
 msgid "Passwort war inkorrekt!"
 msgstr "Wrong password submitted!"
-
-msgid "Nicht genügend LDAP-Rechte!"
-msgstr "Insufficient rights!"
 
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"

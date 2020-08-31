@@ -21,9 +21,8 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable
-from sipa.model.exceptions import DBQueryEmpty, LDAPConnectionError, \
-    PasswordInvalid, UserNotFound, MacAlreadyExists, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible
+from sipa.model.exceptions import DBQueryEmpty, PasswordInvalid, UserNotFound, MacAlreadyExists, \
+    TerminationNotPossible, UnknownError, ContinuationNotPossible
 from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
@@ -245,8 +244,6 @@ def change_mail():
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
-        except LDAPConnectionError:
-            flash(gettext("Nicht genügend LDAP-Rechte!"), "error")
         else:
             flash(gettext("E-Mail-Adresse wurde geändert"), "success")
             return redirect(url_for('.index'))
@@ -259,8 +256,7 @@ def change_mail():
 @bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
 @login_required
 def delete_mail():
-    """Resets the users forwarding mail attribute
-    in his LDAP entry.
+    """Resets the users forwarding mail attribute.
     """
 
     capability_or_403('mail', 'delete')
@@ -277,8 +273,6 @@ def delete_mail():
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
-        except LDAPConnectionError:
-            flash(gettext("Nicht genügend LDAP-Rechte!"), "error")
         else:
             flash(gettext("E-Mail-Adresse wurde zurückgesetzt"), "success")
             return redirect(url_for('.index'))

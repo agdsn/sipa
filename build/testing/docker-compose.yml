@@ -8,7 +8,7 @@ services:
         additional_requirements: requirements_testing.txt
     image: sipa_testing
     # Run `test` (doing nothing) because the tests should be triggered manually
-    # Running them on startup won't work because the LDAP won't be ready yet
+    # Running them on startup won't work because the postgres database won't be ready yet
     command: test
     environment:
       - CONNETION_TIMEOUT=60

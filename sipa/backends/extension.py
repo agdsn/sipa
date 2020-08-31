@@ -181,7 +181,7 @@ class Backends:
         calls each :py:class:`DataSource`s `init_context` function.
 
         In there, things like setting up a pg session or registering
-        an ldap object to the app might be done.
+        backend specific flask extensions to the app might be done.
         """
         self._pre_backends_init_hook(self.app)
 

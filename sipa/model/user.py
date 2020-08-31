@@ -125,12 +125,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @abstractmethod
     def change_password(self, old, new):
-        """Change the user's password from old to new.
-
-        Although the password has been checked using
-        :meth:`re_authenticate()`, some data sources like those which have to
-        perform an LDAP bind need it anyways.
-        """
+        """Change the user's password from old to new."""
         pass
 
     @property

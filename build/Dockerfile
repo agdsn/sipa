@@ -6,7 +6,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
 	LC_ALL=C
 
 RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
-	libldap2-dev \
 	libsasl2-dev \
 	default-libmysqlclient-dev \
 	libxml2-dev \

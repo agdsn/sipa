@@ -2,8 +2,6 @@
 
 """
 Custom exceptions for sipa
-
-OperationalError for MySQL and SERVER_DOWN for LDAP are global app handlers!
 """
 
 
@@ -36,10 +34,6 @@ class ContinuationNotPossible(Exception):
 
 
 class DBQueryEmpty(Exception):
-    pass
-
-
-class LDAPConnectionError(Exception):
     pass
 
 

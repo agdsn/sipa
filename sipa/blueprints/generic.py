@@ -9,7 +9,6 @@ from flask_babel import gettext, format_date
 from flask_login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import DatabaseError
-from ldap3.core.exceptions import LDAPCommunicationError
 
 from sipa.backends.exceptions import BackendError
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
@@ -76,29 +75,6 @@ def exceptionhandler_sql(ex):
     logger.critical('DatabaseError caught',
                     extra={'data': {'exception_args': ex.args}},
                     exc_info=True)
-    return redirect(url_for('generic.index'))
-
-
-@bp_generic.app_errorhandler(LDAPCommunicationError)
-def exceptionhandler_ldap(ex):
-    """Handles global LDAPCommunicationError exceptions.
-
-    The session must be reset, because if the user is logged in and
-    the server fails during his session, it would cause a redirect
-    loop.  This also resets the language choice, btw.
-
-    The alternative would be a try-except catch block in load_user,
-    but login also needs a handler.
-    """
-    session.clear()
-    flash(gettext("Verbindung zum LDAP-Server "
-                  "konnte nicht hergestellt werden!"),
-          'error')
-    logger.critical(
-        'Unable to connect to LDAP server',
-        extra={'data': {'exception_args': ex.args}},
-        exc_info=True,
-    )
     return redirect(url_for('generic.index'))
 
 

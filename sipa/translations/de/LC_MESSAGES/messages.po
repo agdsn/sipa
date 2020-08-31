@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-06-24 13:51+0200\n"
+"POT-Creation-Date: 2020-08-31 11:05+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -238,9 +238,6 @@ msgid ""
 "paar Minuten noch mal."
 msgstr ""
 
-msgid "Verbindung zum LDAP-Server konnte nicht hergestellt werden!"
-msgstr ""
-
 #, python-format
 msgid "Fehler bei der Kommunikation mit unserem Server (Backend '%(name)s')"
 msgstr ""
@@ -355,9 +352,6 @@ msgid "Nutzer nicht gefunden!"
 msgstr ""
 
 msgid "Passwort war inkorrekt!"
-msgstr ""
-
-msgid "Nicht genügend LDAP-Rechte!"
 msgstr ""
 
 msgid "E-Mail-Adresse wurde geändert"
