@@ -237,7 +237,8 @@ def data(reg_state: RegisterState):
     elif form.is_submitted():
         flash_formerrors(form)
     else:
-        form.member_begin_date.data = max(reg_state.move_in_date, date.today())
+        form.member_begin_date.data = max(reg_state.move_in_date, date.today()) \
+            if reg_state.move_in_date is not None else date.today()
 
     return render_template('register/form.html', title=gettext('Konto erstellen'), form=form,
                            links={

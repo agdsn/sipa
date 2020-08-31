@@ -22,7 +22,7 @@ from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, PasswordInvalid, UserNotFound, MacAlreadyExists, \
-    TerminationNotPossible, UnknownError, ContinuationNotPossible
+    TerminationNotPossible, UnknownError, ContinuationNotPossible, SubnetFull
 from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
@@ -346,6 +346,8 @@ def activate_network_access():
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
             flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
+        except SubnetFull:
+            flash(gettext("Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."),  "error")
         else:
             logger.info('Successfully activated network access',
                         extra={'data': {'mac': mac, 'birthdate': birthdate, 'host_name': host_name},

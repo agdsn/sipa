@@ -8,7 +8,7 @@ from sipa.model.fancy_property import active_prop, connection_dependent, \
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible
+    ContinuationNotPossible, SubnetFull
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -145,6 +145,8 @@ class User(BaseUser):
             raise MacAlreadyExists
         elif status == 412:
             raise NetworkAccessAlreadyActive
+        elif status == 422:
+            raise SubnetFull
 
     def terminate_membership(self, end_date):
         status, result = api.terminate_membership(self.user_data.id, end_date)
