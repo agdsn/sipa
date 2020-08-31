@@ -86,8 +86,8 @@ def send_mail(author: str, recipient: str, subject: str, message: str,
     mailserver_password = current_app.config['MAILSERVER_PASSWORD']
 
     mailserver_ssl = current_app.config['MAILSERVER_SSL']
-    use_ssl = mailserver_ssl == mailserver_ssl == 'ssl'
-    use_starttls = mailserver_ssl == mailserver_ssl == 'starttls'
+    use_ssl = mailserver_ssl == 'ssl'
+    use_starttls = mailserver_ssl == 'starttls'
 
     if use_ssl or use_starttls:
         try:
