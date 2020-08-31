@@ -123,6 +123,16 @@ class Article(Node):
 
         return None
 
+    @property
+    def hidden(self) -> bool:
+        """The hidden state of the :py:attr:`localized_page`
+
+        This controls whether the page should be displayed in listings.
+
+        :returns: The :py:attr:`localized_page` s hidden state
+        """
+        return self.localized_page.meta.get('hidden', False)
+
     def __getattr__(self, attr: str) -> str:
         """Return the meta attribute of the localized page
 

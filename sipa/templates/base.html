@@ -124,7 +124,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 {%- for article in c.articles -%}
-                                    {%- if not article.id == 'index' and article.title -%}
+                                    {%- if not article.id == 'index' and article.title and not article.hidden -%}
                                         {% if not article.link -%}
                                             {% set href = url_for(
                                                     'pages.show',
