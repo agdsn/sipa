@@ -144,7 +144,8 @@ def contact():
 
     form.email.default = current_user.mail.raw_value
 
-    return render_template("usersuite/contact.html", form=form)
+    return render_template("usersuite/contact.html", form=form,
+                           form_args={'reset_button': True, 'cancel_to': url_for('.index')})
 
 
 def render_payment_details(details: PaymentDetails, months):
@@ -221,7 +222,8 @@ def change_password():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    return render_template("usersuite/change_password.html", form=form)
+    return render_template("generic_form.html", page_title=gettext("Passwort ändern"), form=form,
+                           form_args={'reset_button': True, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
@@ -320,7 +322,8 @@ def change_mac():
 
     form.mac.default = current_user.mac.value
 
-    return render_template('usersuite/change_mac.html', form=form)
+    return render_template('usersuite/change_mac.html',
+                           form=form, form_args={'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
@@ -362,7 +365,8 @@ def activate_network_access():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    return render_template('usersuite/activate_network_access.html', form=form)
+    return render_template('generic_form.html', page_title=gettext("Netzwerkanschluss aktivieren"),
+                           form=form, form_args={'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])

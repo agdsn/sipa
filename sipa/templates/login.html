@@ -3,6 +3,7 @@
 {% set page_title = "Login" %}
 
 {% block content %}
+{% include "heading.html" %}
 {% call forms.render(form=form, form_id="loginform", cancel_to=url_for('.index')) %}
         <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info hidden" id="extern">
             {{ _('Dieses Wohnheim erreichst du hier:') }} <a id="link" href="#"></a>
