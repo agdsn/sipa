@@ -251,7 +251,7 @@ class ActivateNetworkAccessForm(FlaskForm):
                     MacAddress(lazy_gettext("MAC ist nicht in gültigem Format!")),
                     require_unicast_mac],
         description="XX:XX:XX:XX:XX:XX")
-    birthdate = DateField(label=lazy_gettext("Geburtsdatum"),
+    birthdate = NativeDateField(label=lazy_gettext("Geburtsdatum"),
                           validators=[DataRequired(lazy_gettext("Geburtsdatum nicht angegeben!"))],
                           description=lazy_gettext("YYYY-MM-DD (z.B. 1995-10-23)"))
     host_name = StringField(
@@ -265,7 +265,7 @@ class ActivateNetworkAccessForm(FlaskForm):
 
 
 class TerminateMembershipForm(FlaskForm):
-    end_date = DateField(label=lazy_gettext("Austrittsdatum"),
+    end_date = NativeDateField(label=lazy_gettext("Austrittsdatum"),
                          validators=[DataRequired(lazy_gettext("Austrittsdatum nicht angegeben!"))],
                          description=lazy_gettext("YYYY-MM-DD (z.B. 2018-10-01)"))
 
@@ -276,7 +276,7 @@ class TerminateMembershipForm(FlaskForm):
 
 
 class TerminateMembershipConfirmForm(FlaskForm):
-    end_date = DateField(label=lazy_gettext("Austrittsdatum"),
+    end_date = NativeDateField(label=lazy_gettext("Austrittsdatum"),
                          render_kw={'readonly': True},
                          validators=[DataRequired("invalid end date")])
 
