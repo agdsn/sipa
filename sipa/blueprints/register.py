@@ -142,14 +142,12 @@ def identify(reg_state: RegisterState):
             if e.code == 'user_exists':
                 flash(gettext(
                     'Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft. '
-                    'Bitte wähle aus, in welchem Wohnheim du vorher gewohnt hast.'),
-                    category='error')
+                    'Bitte wähle aus, in welchem Wohnheim du vorher gewohnt hast.'), 'error')
             elif e.code == 'similar_user_exists':
                 flash(gettext('Für den dir zugeordneten Raum gibt es bereits ein Konto. '
                               'Falls du denkst, dass es sich dabei um einen Fehler handelt, '
                               'kannst du den entsprechenden Button klicken. Die Verifizierung wird '
-                              'dann später manuell durchgeführt.'),
-                      category='error')
+                              'dann später manuell durchgeführt.'), 'error')
                 suggest_skip = True
             elif e.code == 'no_room_for_tenancies':
                 reg_state.tenant_number = form.tenant_number.data
@@ -160,8 +158,7 @@ def identify(reg_state: RegisterState):
                     'Bitte überprüfe, dass du die exakt selben Daten, wie beim Studentenwerk Dresden '
                     'bzw. wie auf deinem Mietvertrag, angegeben hast. '
                     'Um die Verifizierung zu überspringen, kannst du den entsprechenden Button '
-                    'klicken. Die Verifizierung wird dann später manuell durchgeführt.'),
-                    category='error')
+                    'klicken. Die Verifizierung wird dann später manuell durchgeführt.'), 'error')
                 suggest_skip = True
         except PycroftBackendError as e:
             handle_backend_error(e)
@@ -214,23 +211,22 @@ def data(reg_state: RegisterState):
             if e.code == 'user_exists':
                 flash(gettext(
                     'Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft.'),
-                      category='error')
+                      'error')
             elif e.code == 'similar_user_exists':
                 flash(gettext('Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft.'),
-                      category='error')
+                      'error')
             elif e.code == 'email_taken':
-                flash(gettext('E-Mail-Adresse ist bereits in Verwendung.'), category='error')
+                flash(gettext('E-Mail-Adresse ist bereits in Verwendung.'), 'error')
             elif e.code == 'login_taken':
-                flash(gettext('Login ist bereits vergeben.'), category='error')
+                flash(gettext('Login ist bereits vergeben.'), 'error')
             elif e.code == 'email_illegal':
-                flash(gettext("E-Mail-Adresse hat ein ungültiges Format!"), category='error')
+                flash(gettext("E-Mail-Adresse hat ein ungültiges Format!"), 'error')
             elif e.code == 'login_illegal':
-                flash(gettext("Nutzername hat ein ungültiges Format!"), category='error')
+                flash(gettext("Nutzername hat ein ungültiges Format!"), 'error')
             elif e.code == 'move_in_date_invalid':
-                flash(gettext("Das Einzugsdatum ist ungültig."), category='error')
+                flash(gettext("Das Einzugsdatum ist ungültig."), 'error')
             else:
-                flash(gettext('Registrierung aus unbekanntem Grund fehlgeschlagen.'),
-                      category='error')
+                flash(gettext('Registrierung aus unbekanntem Grund fehlgeschlagen.'), 'error')
         except PycroftBackendError as e:
             handle_backend_error(e)
 
@@ -266,10 +262,10 @@ def confirm(token: str):
             return goto_step('success')
         else:
             # Regular email confirmation
-            flash(gettext('Bestätigung erfolgreich.'))
+            flash(gettext('Bestätigung erfolgreich.'), 'success')
             return redirect(url_for('generic.index'))
     except PycroftApiError:
-        flash(gettext('Bestätigung fehlgeschlagen.'), category='error')
+        flash(gettext('Bestätigung fehlgeschlagen.'), 'error')
         result = gettext(
             'Der Bestätigungslink ist nicht gültig. '
             'Möglicherweise hast du dein Konto bereits bestätigt, '
