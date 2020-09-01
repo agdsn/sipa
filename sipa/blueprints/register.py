@@ -29,7 +29,7 @@ bp_register = Blueprint('register', __name__, url_prefix='/register')
 @dataclass
 class RegisterState:
     # Current step of the registration process
-    step: str = None
+    step: str = 'identify'
 
     first_name: str = None
     last_name: str = None
@@ -84,7 +84,7 @@ def register_redirect(func):
     @wraps(func)
     def wrapper_decorator(*args, **kwargs):
         if 'reg_state' not in g:
-            g.reg_state = RegisterState(step='identify')
+            g.reg_state = RegisterState()
 
         endpoint = f'register.{g.reg_state.step}'
         if endpoint != request.endpoint:
@@ -285,5 +285,5 @@ def success(reg_state: RegisterState):
 
 @bp_register.route("/cancel")
 def cancel():
-    g.reg_state = RegisterState(step='identify')
+    g.reg_state = RegisterState()
     return redirect(url_for('generic.index'))
