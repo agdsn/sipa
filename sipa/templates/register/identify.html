@@ -10,7 +10,7 @@
     {{ forms.render_simple(form=form, form_id="register-form", submit_text=_("Erneut versuchen") if skip_verification else _("Weiter"), extra_btn=skip_btn) }}
 {% endblock %}
 
-{% block custom_script -%}
+{% block register_custom_script -%}
     <script type="text/javascript">
         function updateState() {
             var swdd_tenant = !$("#no_swdd_tenant").prop("checked");
