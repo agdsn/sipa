@@ -47,7 +47,7 @@
             {{ caller() }}
 
             <div class="form-group">
-                <div class="{{ form_input_offset_class }} {{ form_input_width_class }}">
+                <div class="{{ form_input_offset_class }} {{ form_input_width_class }} text-nowrap">
                     <button type="submit" class="btn btn-primary">{{ submit_text }}</button>
                     {% if reset_button -%}
                         <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
