@@ -280,7 +280,7 @@ def confirm(token: str):
 @bp_register.route("/success")
 @register_redirect
 def success(reg_state: RegisterState):
-    return redirect(f'/pages/membership/registration_{reg_state.result}')
+    return redirect(f'../pages/membership/registration_{reg_state.result}')
 
 
 @bp_register.route("/cancel")
