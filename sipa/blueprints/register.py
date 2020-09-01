@@ -18,6 +18,7 @@ from sipa.utils import parse_date
 from flask import Blueprint, g, session, url_for, redirect, render_template, flash, request
 from flask.globals import current_app
 from flask_babel import gettext
+from flask_login import current_user
 from werkzeug.local import LocalProxy
 
 logger = logging.getLogger(__name__)
@@ -263,7 +264,10 @@ def confirm(token: str):
         else:
             # Regular email confirmation
             flash(gettext('Bestätigung erfolgreich.'), 'success')
-            return redirect(url_for('generic.index'))
+            if current_user.is_authenticated:
+                return redirect(url_for('usersuite.index'))
+            else:
+                return redirect(url_for('generic.index'))
     except PycroftApiError:
         flash(gettext('Bestätigung fehlgeschlagen.'), 'error')
         result = gettext(
