@@ -238,10 +238,10 @@ def data(reg_state: RegisterState):
 
     return render_template('register/form.html', title=gettext('Konto erstellen'), form=form,
                            links={
-                               'constitution': '/pages/legal/agdsn_constitution',
-                               'fee_regulation': '/pages/legal/finance_constitution',
-                               'network_constitution': '/pages/legal/network_constitution',
-                               'privacy_policy': '/pages/legal/agdsn_dataprotection',
+                               'constitution': '../pages/legal/agdsn_constitution',
+                               'fee_regulation': '../pages/legal/finance_constitution',
+                               'network_constitution': '../pages/legal/network_constitution',
+                               'privacy_policy': '../pages/legal/agdsn_dataprotection',
                            })
 
 
