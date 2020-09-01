@@ -291,3 +291,9 @@ def success(reg_state: RegisterState):
 def cancel():
     g.reg_state = RegisterState()
     return redirect(url_for('generic.index'))
+
+
+@bp_register.route("/restart")
+def restart():
+    g.reg_state = RegisterState()
+    return goto_step('identify')
