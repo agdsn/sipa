@@ -281,3 +281,9 @@ def confirm(token: str):
 @register_redirect
 def success(reg_state: RegisterState):
     return redirect(f'/pages/membership/registration_{reg_state.result}')
+
+
+@bp_register.route("/cancel")
+def cancel():
+    g.reg_state = RegisterState(step='identify')
+    return redirect(url_for('generic.index'))

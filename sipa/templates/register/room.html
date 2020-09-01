@@ -5,5 +5,6 @@
 {% endmacro %}
 
 {% block register_content %}
-    {{  forms.render_simple(form=form, form_id="register-form", submit_text=_("Weiter"), extra_btn=skip_btn) }}
+    {{  forms.render_simple(form=form, form_id="register-form", submit_text=_("Weiter"),
+                            cancel_to=url_for('.cancel'), extra_btn=skip_btn) }}
 {% endblock %}
