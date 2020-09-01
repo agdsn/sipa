@@ -355,12 +355,12 @@ class PaymentForm(FlaskForm):
 
 
 class RegisterIdentifyForm(FlaskForm):
-    first_name = StringField(
+    first_name = StrippedStringField(
         label=lazy_gettext("Vorname"),
         validators=[DataRequired(lazy_gettext("Bitte gib deinen Vornamen ein."))]
     )
 
-    last_name = StringField(
+    last_name = StrippedStringField(
         label=lazy_gettext("Nachname"),
         validators=[DataRequired(lazy_gettext("Bitte gib deinen Nachnamen ein."))]
     )
