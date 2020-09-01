@@ -236,7 +236,7 @@ def data(reg_state: RegisterState):
         form.member_begin_date.data = max(reg_state.move_in_date, date.today()) \
             if reg_state.move_in_date is not None else date.today()
 
-    return render_template('register/form.html', title=gettext('Konto erstellen'), form=form,
+    return render_template('register/data.html', title=gettext('Konto erstellen'), form=form,
                            links={
                                'constitution': '../pages/legal/agdsn_constitution',
                                'fee_regulation': '../pages/legal/finance_constitution',
