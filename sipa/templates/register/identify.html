@@ -7,7 +7,7 @@
 {% endmacro %}
 
 {% block register_content %}
-    {{ forms.render_simple(form=form, form_id="register-form", submit_text=_("Weiter"), extra_btn=skip_btn) }}
+    {{ forms.render_simple(form=form, form_id="register-form", submit_text=_("Erneut versuchen") if skip_verification else _("Weiter"), extra_btn=skip_btn) }}
 {% endblock %}
 
 {% block custom_script -%}
