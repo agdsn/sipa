@@ -224,8 +224,8 @@ def change_password():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    return render_template("generic_form.html", page_title=gettext("Passwort ändern"), form=form,
-                           form_args={'reset_button': True, 'cancel_to': url_for('.index')})
+    return render_template("generic_form.html", page_title=gettext("Passwort ändern"),
+                           form_args={'form': form, 'reset_button': True, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
@@ -259,8 +259,8 @@ def change_mail():
         form.forwarded.data = current_user.mail_forwarded.raw_value
 
     return render_template('generic_form.html',
-                           page_title=gettext("E-Mail-Adresse ändern"), form=form,
-                           form_args={'cancel_to': url_for('.index')})
+                           page_title=gettext("E-Mail-Adresse ändern"),
+                           form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
@@ -302,7 +302,7 @@ def change_mac():
     form.mac.default = current_user.mac.value
 
     return render_template('usersuite/change_mac.html',
-                           form=form, form_args={'cancel_to': url_for('.index')})
+                           form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
@@ -345,7 +345,7 @@ def activate_network_access():
         flash_formerrors(form)
 
     return render_template('generic_form.html', page_title=gettext("Netzwerkanschluss aktivieren"),
-                           form=form, form_args={'cancel_to': url_for('.index')})
+                           form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])

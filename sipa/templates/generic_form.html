@@ -4,7 +4,7 @@
 
 {% block content %}
     {% include "heading.html" %}
-    {% call forms.render(form=form, **form_args) %}
+    {% call forms.render(**form_args) %}
         {% block form_content %}
         {% endblock %}
     {% endcall %}
