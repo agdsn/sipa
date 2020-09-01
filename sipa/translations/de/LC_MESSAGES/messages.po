@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-02 15:57+0200\n"
+"POT-Creation-Date: 2020-09-20 21:26+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -525,6 +525,18 @@ msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
 msgid "E-Mail-Adresse ändern"
+msgstr ""
+
+msgid "Wir haben dir eine E-Mail mit einem Bestätigungslink geschickt."
+msgstr ""
+
+msgid "Versenden der Bestätigungs-E-Mail ist fehlgeschlagen!"
+msgstr ""
+
+msgid "E-Mail mit Bestätigungslink erneut senden"
+msgstr ""
+
+msgid "Bestätigung deiner E-Mail-Adresse"
 msgstr ""
 
 msgid "MAC-Adresse ist bereits in Verwendung!"

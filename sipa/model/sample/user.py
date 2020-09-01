@@ -148,7 +148,7 @@ class User(BaseUser):
     def mail_forwarded(self):
         return config[self.uid]['mail_forwarded']
 
-    @active_prop
+    @property
     def mail_confirmed(self):
         return config[self.uid]['mail_confirmed']
 

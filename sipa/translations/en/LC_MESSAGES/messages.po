@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-02 15:57+0200\n"
-"PO-Revision-Date: 2020-09-02 15:57+0200\n"
+"POT-Creation-Date: 2020-09-20 21:26+0200\n"
+"PO-Revision-Date: 2020-09-20 21:26+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -556,6 +556,18 @@ msgstr "Email address has been changed"
 
 msgid "E-Mail-Adresse ändern"
 msgstr "Change email address"
+
+msgid "Wir haben dir eine E-Mail mit einem Bestätigungslink geschickt."
+msgstr "We have sent you an email with a confirmation link."
+
+msgid "Versenden der Bestätigungs-E-Mail ist fehlgeschlagen!"
+msgstr "Sending the confirmation email failed!"
+
+msgid "E-Mail mit Bestätigungslink erneut senden"
+msgstr "Resend e-mail with confirmation link"
+
+msgid "Bestätigung deiner E-Mail-Adresse"
+msgstr "Confirmation of your e-mail address"
 
 msgid "MAC-Adresse ist bereits in Verwendung!"
 msgstr "MAC address is already in use!"

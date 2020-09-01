@@ -185,6 +185,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'userdb_status': 'hosting',
             'mail': 'change_mail',
             'mail_forwarded': 'change_mail',
+            'mail_confirmed': 'resend_confirm_mail',
             'wifi_password': 'reset_wifi_password',
             'finance_balance': 'finance_logs',
         }
@@ -263,6 +264,38 @@ def change_mail():
     return render_template('generic_form.html',
                            page_title=gettext("E-Mail-Adresse ändern"),
                            form_args={'form': form, 'cancel_to': url_for('.index')})
+
+
+@bp_usersuite.route("/resend-confirm-mail", methods=['GET', 'POST'])
+@login_required
+def resend_confirm_mail():
+    """Frontend page to resend confirmation mail"""
+
+    capability_or_403('mail', 'edit')
+
+    form = FlaskForm()
+
+    if form.validate_on_submit():
+        if current_user.resend_confirm_mail():
+            logger.info('Successfully resent confirmation mail',
+                        extra={'tags': {'rate_critical': True}})
+            flash(gettext('Wir haben dir eine E-Mail mit einem Bestätigungslink geschickt.'), 'success')
+        else:
+            flash(gettext('Versenden der Bestätigungs-E-Mail ist fehlgeschlagen!'), 'error')
+
+        return redirect(url_for('.index'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    form_args = {
+        'form': form,
+        'cancel_to': url_for('.index'),
+        'submit_text': gettext('E-Mail mit Bestätigungslink erneut senden')
+    }
+
+    return render_template('generic_form.html',
+                           page_title=gettext("Bestätigung deiner E-Mail-Adresse"),
+                           form_args=form_args)
 
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])

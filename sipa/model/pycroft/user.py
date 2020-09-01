@@ -191,18 +191,25 @@ class User(BaseUser):
     def mail_forwarded(self):
         value = self.user_data.mail_forwarded
         return {'raw_value': value,
-                'value': gettext('Aktiviert') if value else gettext('Nicht aktiviert')}
+                'value': gettext('Aktiviert') if value else gettext('Nicht aktiviert'),
+                'tmp_readonly': not self.has_property('mail')}
 
     @mail_forwarded.setter
     def mail_forwarded(self, value):
         self.user_data.mail_forwarded = value
 
-    @active_prop
+    @property
     def mail_confirmed(self):
-        value = self.user_data.mail_confirmed
-        return {'raw_value': value,
-                'value': gettext('Bestätigt') if value else gettext('Nicht bestätigt'),
-                'style': 'success' if value else 'danger'}
+        confirmed = self.user_data.mail_confirmed
+        editable = self.has_property('mail') and self.user_data.mail and not confirmed
+        return ActiveProperty(
+                name='mail_confirmed',
+                value=gettext('Bestätigt') if confirmed else gettext('Nicht bestätigt'),
+                style='success' if confirmed else 'danger',
+                capabilities=Capabilities(edit=editable, delete=False))
+
+    def resend_confirm_mail(self) -> bool:
+        return api.resend_confirm_email(self.user_data.id)
 
     @active_prop
     def address(self):

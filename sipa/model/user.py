@@ -187,10 +187,15 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """**[Abstract]** Whether mail forwarding is enabled."""
         pass
 
-    @active_prop
+    @property
     @abstractmethod
     def mail_confirmed(self) -> PropertyBase:
         """**[Abstract]** Whether mail is confirmed."""
+        pass
+
+    @abstractmethod
+    def resend_confirm_mail(self) -> bool:
+        """**[Abstract]** Resend the confirmation mail."""
         pass
 
     @active_prop
