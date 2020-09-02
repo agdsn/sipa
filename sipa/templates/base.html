@@ -343,11 +343,12 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                                     <br/>
                                                 {% endif %}
 
-                                                {% if address.detail %}
-                                                    {{ address.detail }}<br>
-                                                {% endif %}
-
                                                 {{ address.city }}
+
+                                                {% if address.only_residents %}
+                                                    <br/>
+                                                    <u>{{ _('Nur für Bewohner des Hauses!') }}</u>
+                                                {% endif %}
                                             </address>
                                         </div>
                                     </div>
