@@ -441,13 +441,13 @@ def terminate_membership_confirm():
 
     if end_date is not None:
         try:
-            form.estimated_balance.default = str(current_user.estimate_balance(
+            form.estimated_balance.data = str(current_user.estimate_balance(
                 end_date))
 
         except UnknownError:
             flash(gettext("Unbekannter Fehler!"), "error")
         else:
-            form.end_date.default = end_date
+            form.end_date.data = end_date
     else:
         return redirect(url_for('.terminate_membership'))
 
