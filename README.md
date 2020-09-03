@@ -26,13 +26,13 @@ How can I run Sipa?
 -------------------
 
 As a general note, you should have `docker` and `docker-compose`
-installed.  Just using python and e.g. a virtualenv is possible, but
-discouraged.
+installed (or similar software like `podman` and `podman-compose`).  
+Just using python and e.g. a virtualenv is possible, but discouraged.
 
-The simplest method is to run `docker-compose -f build/dev/docker-compose.yml
-up -d`.
+The simplest method is to run `docker-compose up -d`.
+For systems with Podman, use `podman-compose -p sipa-dev up -d`.
 
-This should automatically set up an nginx container on port 80
+This should automatically set up an nginx container on port 8080
 providing `/sipa` and `/sipa_debug`, which are two containers of sipa,
 the first running on uwsgi, and the second directly using `sipa.py`.
 
@@ -69,8 +69,14 @@ docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing python 
 execute a single test case using `nosetests -v
 tests.integration.test_hss_ldap:HssLdapPasswordTestCase`
 
+For Podman systems, just replace `docker-compose` with 
+`podman-compose -p sipa-testing` here.
+
 Running on Docker
 -----------------
+
+Note for Podman systems: Just replace every `docker` call with `podman`. Or set
+an alias.
 
 To build the image, `cd` into your instance of sipa (which contains the
 `Dockerfile`) and run
