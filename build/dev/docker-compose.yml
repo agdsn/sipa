@@ -12,7 +12,6 @@ services:
     image: nginx
     volumes:
       - ../../example/nginx.conf:/etc/nginx/nginx.conf:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
     ports:
       - "8080:80"
     links:
