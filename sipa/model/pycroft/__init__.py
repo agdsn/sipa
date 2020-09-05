@@ -96,7 +96,10 @@ datasource = DataSource(
             IPv4Network('141.30.215.128/25'),
             IPv4Network('141.30.219.0/24'),
             IPv4Network('141.30.234.224/27'),
-        ])
+        ]),
+        ('bla', "Blasewitzer Straße", [
+            IPv4Network('141.30.29.0/24'),  # Bla84
+        ]),
     ]
 ]
 
