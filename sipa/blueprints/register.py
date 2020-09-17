@@ -111,6 +111,11 @@ def handle_backend_error(ex: PycroftBackendError):
     )
 
 
+@bp_register.route("/")
+def landing():
+    return redirect("../pages/membership/registration")
+
+
 @bp_register.route("/identify", methods=['GET', 'POST'])
 @register_redirect
 def identify(reg_state: RegisterState):
