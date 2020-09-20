@@ -15,14 +15,14 @@ from markupsafe import Markup
 
 from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
-    ChangePasswordForm, flash_formerrors, HostingForm, DeleteMailForm, \
+    ChangePasswordForm, flash_formerrors, HostingForm, \
     PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
     TerminateMembershipConfirmForm, ContinueMembershipForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable
 from sipa.model.exceptions import DBQueryEmpty, PasswordInvalid, UserNotFound, MacAlreadyExists, \
-    TerminationNotPossible, UnknownError, ContinuationNotPossible
+    TerminationNotPossible, UnknownError, ContinuationNotPossible, SubnetFull
 from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
@@ -58,7 +58,9 @@ def index():
         ('address', gettext("Aktuelles Zimmer")),
         ('ips', gettext("Aktuelle IP-Adresse")),
         ('mac', gettext("Aktuelle MAC-Adresse")),
-        ('mail', gettext("E-Mail-Weiterleitung")),
+        ('mail', gettext("E-Mail-Adresse")),
+        ('mail_confirmed', gettext("Status deiner E-Mail-Adresse")),
+        ('mail_forwarded', gettext("E-Mail-Weiterleitung")),
         ('wifi_password', gettext("WLAN Passwort")),
         ('hostname', gettext("Hostname")),
         ('hostalias', gettext("Hostalias")),
@@ -144,7 +146,10 @@ def contact():
 
     form.email.default = current_user.mail.raw_value
 
-    return render_template("usersuite/contact.html", form=form)
+    return render_template("usersuite/contact.html",
+                           form_args={'form': form,
+                                      'reset_button': True,
+                                      'cancel_to': url_for('.index')})
 
 
 def render_payment_details(details: PaymentDetails, months):
@@ -179,6 +184,8 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mac': 'change_mac',
             'userdb_status': 'hosting',
             'mail': 'change_mail',
+            'mail_forwarded': 'change_mail',
+            'mail_confirmed': 'resend_confirm_mail',
             'wifi_password': 'reset_wifi_password',
             'finance_balance': 'finance_logs',
         }
@@ -189,7 +196,6 @@ def get_attribute_endpoint(attribute, capability='edit'):
         assert capability == 'delete', "capability must be 'delete' or 'edit'"
 
         attribute_mappings = {
-            'mail': 'delete_mail',
             'userdb_status': 'hosting',
         }
 
@@ -221,7 +227,8 @@ def change_password():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    return render_template("usersuite/change_password.html", form=form)
+    return render_template("generic_form.html", page_title=gettext("Passwort ändern"),
+                           form_args={'form': form, 'reset_button': True, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
@@ -239,6 +246,7 @@ def change_mail():
 
         try:
             with current_user.tmp_authentication(password):
+                current_user.mail_forwarded = form.forwarded.data
                 current_user.mail = email
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
@@ -249,37 +257,45 @@ def change_mail():
             return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
+    else:
+        form.email.data = current_user.mail.raw_value
+        form.forwarded.data = current_user.mail_forwarded.raw_value
 
-    return render_template('usersuite/change_mail.html', form=form)
+    return render_template('generic_form.html',
+                           page_title=gettext("E-Mail-Adresse ändern"),
+                           form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
-@bp_usersuite.route("/delete-mail", methods=['GET', 'POST'])
+@bp_usersuite.route("/resend-confirm-mail", methods=['GET', 'POST'])
 @login_required
-def delete_mail():
-    """Resets the users forwarding mail attribute.
-    """
+def resend_confirm_mail():
+    """Frontend page to resend confirmation mail"""
 
-    capability_or_403('mail', 'delete')
+    capability_or_403('mail', 'edit')
 
-    form = DeleteMailForm()
+    form = FlaskForm()
 
     if form.validate_on_submit():
-        password = form.password.data
-
-        try:
-            with current_user.tmp_authentication(password):
-                del current_user.mail
-        except UserNotFound:
-            flash(gettext("Nutzer nicht gefunden!"), "error")
-        except PasswordInvalid:
-            flash(gettext("Passwort war inkorrekt!"), "error")
+        if current_user.resend_confirm_mail():
+            logger.info('Successfully resent confirmation mail',
+                        extra={'tags': {'rate_critical': True}})
+            flash(gettext('Wir haben dir eine E-Mail mit einem Bestätigungslink geschickt.'), 'success')
         else:
-            flash(gettext("E-Mail-Adresse wurde zurückgesetzt"), "success")
-            return redirect(url_for('.index'))
+            flash(gettext('Versenden der Bestätigungs-E-Mail ist fehlgeschlagen!'), 'error')
+
+        return redirect(url_for('.index'))
     elif form.is_submitted():
         flash_formerrors(form)
 
-    return render_template('usersuite/delete_mail.html', form=form)
+    form_args = {
+        'form': form,
+        'cancel_to': url_for('.index'),
+        'submit_text': gettext('E-Mail mit Bestätigungslink erneut senden')
+    }
+
+    return render_template('generic_form.html',
+                           page_title=gettext("Bestätigung deiner E-Mail-Adresse"),
+                           form_args=form_args)
 
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
@@ -320,7 +336,8 @@ def change_mac():
 
     form.mac.default = current_user.mac.value
 
-    return render_template('usersuite/change_mac.html', form=form)
+    return render_template('usersuite/change_mac.html',
+                           form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
@@ -346,6 +363,8 @@ def activate_network_access():
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
             flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
+        except SubnetFull:
+            flash(gettext("Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."),  "error")
         else:
             logger.info('Successfully activated network access',
                         extra={'data': {'mac': mac, 'birthdate': birthdate, 'host_name': host_name},
@@ -360,7 +379,8 @@ def activate_network_access():
     elif form.is_submitted():
         flash_formerrors(form)
 
-    return render_template('usersuite/activate_network_access.html', form=form)
+    return render_template('generic_form.html', page_title=gettext("Netzwerkanschluss aktivieren"),
+                           form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])
@@ -456,13 +476,13 @@ def terminate_membership_confirm():
 
     if end_date is not None:
         try:
-            form.estimated_balance.default = str(current_user.estimate_balance(
+            form.estimated_balance.data = str(current_user.estimate_balance(
                 end_date))
 
         except UnknownError:
             flash(gettext("Unbekannter Fehler!"), "error")
         else:
-            form.end_date.default = end_date
+            form.end_date.data = end_date
     else:
         return redirect(url_for('.terminate_membership'))
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-31 11:05+0200\n"
+"POT-Creation-Date: 2020-09-20 21:26+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -36,10 +36,10 @@ msgid ""
 "Zeichen von Klassen sind: {classes}."
 msgstr ""
 
-msgid "Deine E-Mail-Adresse"
+msgid "E-Mail-Adresse hat ein ungültiges Format!"
 msgstr ""
 
-msgid "E-Mail ist nicht in gültigem Format!"
+msgid "Deine E-Mail-Adresse"
 msgstr ""
 
 msgid "Kategorie"
@@ -109,9 +109,6 @@ msgid "Passwort"
 msgstr ""
 
 msgid "Passwort nicht angegeben!"
-msgstr ""
-
-msgid "Neue Mail"
 msgstr ""
 
 msgid "MAC muss unicast-Adresse sein!"
@@ -221,6 +218,105 @@ msgstr ""
 msgid "Muss mindestens 1 Monat sein."
 msgstr ""
 
+msgid "Vorname"
+msgstr ""
+
+msgid "Bitte gib deinen Vornamen ein."
+msgstr ""
+
+msgid "Nachname"
+msgstr ""
+
+msgid "Bitte gib deinen Nachnamen ein."
+msgstr ""
+
+msgid "Bitte gib dein Geburtsdatum an."
+msgstr ""
+
+msgid ""
+"Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom "
+"Studentenwerk Dresden."
+msgstr ""
+
+msgid "Debitorennummer (siehe Mietvertrag)"
+msgstr ""
+
+msgid "Bitte gib deine Debitorennummer ein."
+msgstr ""
+
+msgid "Debitorennummer muss eine positive Zahl sein."
+msgstr ""
+
+msgid "Ich hatte schon einmal einen Internetanschluss durch die AG DSN."
+msgstr ""
+
+msgid "Vorheriges Wohnheim"
+msgstr ""
+
+msgid "Raum"
+msgstr ""
+
+msgid "Einzugsdatum"
+msgstr ""
+
+msgid "Gewünschter Nutzername"
+msgstr ""
+
+msgid ""
+"Dein Nutzername muss mit einem Kleinbuchstaben beginnen und kann mit "
+"Kleinbuchstaben, Zahlen und Interpunktionszeichen (Punkt und Bindestrich)"
+" fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen "
+"den Interpunktionszeichen stehen."
+msgstr ""
+
+msgid "Passwort muss angegeben werden!"
+msgstr ""
+
+msgid "Passwort erneut eingeben"
+msgstr ""
+
+msgid "Passwörter stimmen nicht überein!"
+msgstr ""
+
+msgid "E-Mail-Adresse erneut eingeben"
+msgstr ""
+
+msgid "E-Mail-Adressen stimmen nicht überein!"
+msgstr ""
+
+msgid "Gewünschter Mitgliedschaftsbeginn"
+msgstr ""
+
+msgid "Mitgliedschaftsbeginn muss angegeben werden!"
+msgstr ""
+
+msgid ""
+"Ich bestätige, dass meine Angaben korrekt und vollständig sind und ich "
+"die Vorraussetzungen für die Mitgliedschaft (Student oder Bewohner eines "
+"Studentenwohnheimes) erfülle."
+msgstr ""
+
+msgid "Bitte bestätige, dass deine Angaben korrekt sind."
+msgstr ""
+
+msgid ""
+"Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen der AG "
+"DSN in ihrer jeweils aktuellen Fassung anerkenne, insbesondere die "
+"[Netzordnungen](network_constitution) und die "
+"[Beitragsordnung](fee_regulation)."
+msgstr ""
+
+msgid "Bitte bestätige deine Zustimmung zur Satzung und weiteren Ordnungen."
+msgstr ""
+
+msgid ""
+"Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden und "
+"stimme diesen zu."
+msgstr ""
+
+msgid "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."
+msgstr ""
+
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr ""
 
@@ -274,6 +370,71 @@ msgid ""
 "kontaktieren willst."
 msgstr ""
 
+msgid ""
+"Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es "
+"erneut."
+msgstr ""
+
+msgid ""
+"Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft. "
+"Bitte wähle aus, in welchem Wohnheim du vorher gewohnt hast."
+msgstr ""
+
+msgid ""
+"Für den dir zugeordneten Raum gibt es bereits ein Konto. Falls du denkst,"
+" dass es sich dabei um einen Fehler handelt, kannst du den entsprechenden"
+" Button klicken. Die Verifizierung wird dann später manuell durchgeführt."
+msgstr ""
+
+msgid ""
+"Die Verifizierung deiner Daten mit dem Studentenwerk Dresden ist "
+"fehlgeschlagen. Bitte überprüfe, dass du die exakt selben Daten, wie beim"
+" Studentenwerk Dresden bzw. wie auf deinem Mietvertrag, angegeben hast. "
+"Um die Verifizierung zu überspringen, kannst du den entsprechenden Button"
+" klicken. Die Verifizierung wird dann später manuell durchgeführt."
+msgstr ""
+
+msgid "Identifizierung"
+msgstr ""
+
+msgid "Raumbestätigung"
+msgstr ""
+
+msgid "Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft."
+msgstr ""
+
+msgid "Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft."
+msgstr ""
+
+msgid "E-Mail-Adresse ist bereits in Verwendung."
+msgstr ""
+
+msgid "Login ist bereits vergeben."
+msgstr ""
+
+msgid "Nutzername hat ein ungültiges Format!"
+msgstr ""
+
+msgid "Das Einzugsdatum ist ungültig."
+msgstr ""
+
+msgid "Registrierung aus unbekanntem Grund fehlgeschlagen."
+msgstr ""
+
+msgid "Konto erstellen"
+msgstr ""
+
+msgid "Bestätigung erfolgreich."
+msgstr ""
+
+msgid "Bestätigung fehlgeschlagen."
+msgstr ""
+
+msgid ""
+"Der Bestätigungslink ist nicht gültig. Möglicherweise hast du dein Konto "
+"bereits bestätigt, oder der Bestätigungszeitraum ist verstrichen."
+msgstr ""
+
 msgid "Stand"
 msgstr ""
 
@@ -296,6 +457,9 @@ msgid "Aktuelle IP-Adresse"
 msgstr ""
 
 msgid "Aktuelle MAC-Adresse"
+msgstr ""
+
+msgid "Status deiner E-Mail-Adresse"
 msgstr ""
 
 msgid "E-Mail-Weiterleitung"
@@ -348,6 +512,9 @@ msgstr ""
 msgid "Passwort wurde geändert"
 msgstr ""
 
+msgid "Passwort ändern"
+msgstr ""
+
 msgid "Nutzer nicht gefunden!"
 msgstr ""
 
@@ -357,7 +524,19 @@ msgstr ""
 msgid "E-Mail-Adresse wurde geändert"
 msgstr ""
 
-msgid "E-Mail-Adresse wurde zurückgesetzt"
+msgid "E-Mail-Adresse ändern"
+msgstr ""
+
+msgid "Wir haben dir eine E-Mail mit einem Bestätigungslink geschickt."
+msgstr ""
+
+msgid "Versenden der Bestätigungs-E-Mail ist fehlgeschlagen!"
+msgstr ""
+
+msgid "E-Mail mit Bestätigungslink erneut senden"
+msgstr ""
+
+msgid "Bestätigung deiner E-Mail-Adresse"
 msgstr ""
 
 msgid "MAC-Adresse ist bereits in Verwendung!"
@@ -369,10 +548,18 @@ msgstr ""
 msgid "Es kann bis zu 24 Stunden (!) dauern, bis die Änderung wirksam ist."
 msgstr ""
 
+msgid ""
+"Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere"
+" den Support."
+msgstr ""
+
 msgid "Netzwerkzugang wurde aktiviert!"
 msgstr ""
 
 msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
+msgstr ""
+
+msgid "Netzwerkanschluss aktivieren"
 msgstr ""
 
 msgid "Deine Datenbank wurde gelöscht."
@@ -429,16 +616,16 @@ msgstr ""
 msgid "Beitrag in Miete inbegriffen"
 msgstr ""
 
-msgid "Aktiv"
-msgstr ""
-
-msgid "Passiv"
-msgstr ""
-
 msgid "Aktiviert"
 msgstr ""
 
 msgid "Nicht aktiviert"
+msgstr ""
+
+msgid "Bestätigt"
+msgstr ""
+
+msgid "Nicht bestätigt"
 msgstr ""
 
 msgid "Datenbank nicht erreichbar"
@@ -451,6 +638,9 @@ msgid "Nicht bezahlt"
 msgstr ""
 
 msgid "Trafficlimit überschritten"
+msgstr ""
+
+msgid "Mitglied ab"
 msgstr ""
 
 msgid "Kein Mitglied"
@@ -557,6 +747,9 @@ msgstr ""
 msgid "Etage"
 msgstr ""
 
+msgid "Nur für Bewohner des Hauses!"
+msgstr ""
+
 msgid "Informationen zur Version"
 msgstr ""
 
@@ -651,16 +844,25 @@ msgstr ""
 msgid "Zurücksetzen"
 msgstr ""
 
+msgid "Onlineanmeldung"
+msgstr ""
+
+msgid "Kostenpflichtig Mitglied werden"
+msgstr ""
+
+msgid "Verifizierung überspringen"
+msgstr ""
+
+msgid "Erneut versuchen"
+msgstr ""
+
+msgid "Raumzuordnung ist nicht korrekt"
+msgstr ""
+
 msgid "Häufige Aktionen"
 msgstr ""
 
-msgid "Passwort ändern"
-msgstr ""
-
 msgid "MAC-Adresse ändern"
-msgstr ""
-
-msgid "Netzwerkanschluss aktivieren"
 msgstr ""
 
 msgid "Kontaktformular"
@@ -730,9 +932,6 @@ msgid ""
 "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
 "MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
 "alle Aktivitäten des Accounts!"
-msgstr ""
-
-msgid "E-Mail ändern"
 msgstr ""
 
 msgid "Kontakt für Mitglieder"

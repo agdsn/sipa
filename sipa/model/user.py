@@ -177,9 +177,25 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def mail(self) -> PropertyBase:
         """**[Abstract]** The mail address.
 
-        This can either be the forward or the internal adress
         (``"{login}@{server}"``)
         """
+        pass
+
+    @active_prop
+    @abstractmethod
+    def mail_forwarded(self) -> PropertyBase:
+        """**[Abstract]** Whether mail forwarding is enabled."""
+        pass
+
+    @property
+    @abstractmethod
+    def mail_confirmed(self) -> PropertyBase:
+        """**[Abstract]** Whether mail is confirmed."""
+        pass
+
+    @abstractmethod
+    def resend_confirm_mail(self) -> bool:
+        """**[Abstract]** Resend the confirmation mail."""
         pass
 
     @active_prop

@@ -8,7 +8,7 @@ from sipa.model.fancy_property import active_prop, connection_dependent, \
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible
+    ContinuationNotPossible, SubnetFull
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -145,6 +145,8 @@ class User(BaseUser):
             raise MacAlreadyExists
         elif status == 412:
             raise NetworkAccessAlreadyActive
+        elif status == 422:
+            raise SubnetFull
 
     def terminate_membership(self, end_date):
         status, result = api.terminate_membership(self.user_data.id, end_date)
@@ -177,20 +179,37 @@ class User(BaseUser):
 
     @mail.setter
     def mail(self, new_mail):
-        status, result = api.change_mail(self.user_data.id, self._tmp_password, new_mail)
+        status, result = api.change_mail(self.user_data.id, self._tmp_password, new_mail,
+                                         self.user_data.mail_forwarded)
 
         if status == 401:
             raise PasswordInvalid
         elif status == 404:
             raise UserNotFound
 
-    @mail.deleter
-    def mail(self):
-        status, result = api.change_mail(self.user_data.id, self._tmp_password, new_mail=None)
-        if status == 401:
-            raise PasswordInvalid
-        elif status == 404:
-            raise UserNotFound
+    @active_prop
+    def mail_forwarded(self):
+        value = self.user_data.mail_forwarded
+        return {'raw_value': value,
+                'value': gettext('Aktiviert') if value else gettext('Nicht aktiviert'),
+                'tmp_readonly': not self.has_property('mail')}
+
+    @mail_forwarded.setter
+    def mail_forwarded(self, value):
+        self.user_data.mail_forwarded = value
+
+    @property
+    def mail_confirmed(self):
+        confirmed = self.user_data.mail_confirmed
+        editable = self.has_property('mail') and self.user_data.mail and not confirmed
+        return ActiveProperty(
+                name='mail_confirmed',
+                value=gettext('Bestätigt') if confirmed else gettext('Nicht bestätigt'),
+                style='success' if confirmed else 'danger',
+                capabilities=Capabilities(edit=editable, delete=False))
+
+    def resend_confirm_mail(self) -> bool:
+        return api.resend_confirm_email(self.user_data.id)
 
     @active_prop
     def address(self):
@@ -296,6 +315,10 @@ class User(BaseUser):
             message, style = gettext('Nicht bezahlt'), 'warning'
         elif status.traffic_exceeded:
             message, style = gettext('Trafficlimit überschritten'), 'danger'
+        elif not status.member and self.user_data.membership_begin_date is not None:
+            message, style = "{} {}".format(gettext('Mitglied ab'),
+                                            self.user_data.membership_begin_date), \
+                             'warning'
         elif not status.member:
             message, style = gettext('Kein Mitglied'), 'muted'
         elif status.member and self.membership_end_date.raw_value is not None:

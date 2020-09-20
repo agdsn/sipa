@@ -17,6 +17,8 @@ class UserData:
     status: UserStatus
     room: str
     mail: str
+    mail_forwarded: bool
+    mail_confirmed: bool
     properties: List[str]
     traffic_history: List[TrafficHistoryEntry]
     interfaces: List[Interface]
@@ -28,6 +30,7 @@ class UserData:
     # TODO introduce properties once they can be excluded
 
     membership_end_date: str
+    membership_begin_date: str
     wifi_password: Optional[str]
 
 

@@ -33,6 +33,10 @@ class ContinuationNotPossible(Exception):
     pass
 
 
+class SubnetFull(Exception):
+    pass
+
+
 class DBQueryEmpty(Exception):
     pass
 

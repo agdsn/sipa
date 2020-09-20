@@ -5,14 +5,15 @@ from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
 from flask import flash
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField, RadioField, IntegerField, DateField)
-from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo,
+                     StringField, TextAreaField, RadioField, IntegerField, DateField, SubmitField)
+from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo, InputRequired,
                                 MacAddress, Regexp, ValidationError, NumberRange, Optional, Length)
 
-from sipa.backends.extension import backends
+from sipa.backends.extension import backends, _dorm_summary
 
 
 class PasswordComplexity(object):
@@ -54,6 +55,25 @@ class PasswordComplexity(object):
                                              classes=classes))
 
 
+class OptionalIf(Optional):
+    # makes a field optional if some other data is supplied or is not supplied
+    def __init__(self, deciding_field, invert=False, *args, **kwargs):
+        self.deciding_field = deciding_field
+        self.invert = invert
+        super(OptionalIf, self).__init__(*args, **kwargs)
+
+    def __call__(self, form, field):
+        deciding_field = form._fields.get(self.deciding_field)
+        deciding_has_data = deciding_field is not None and bool(
+            deciding_field.data) and deciding_field.data != 'None'
+        if deciding_has_data ^ self.invert:
+            super(OptionalIf, self).__call__(form, field)
+
+
+def lower_filter(string):
+    return string.lower() if string else None
+
+
 def strip_filter(string):
     return string.strip() if string else None
 
@@ -76,14 +96,30 @@ class ReadonlyStringField(StrippedStringField):
 class EmailField(StrippedStringField):
     def __init__(self, *args, **kwargs):
         validators = [
-            DataRequired(lazy_gettext("E-Mail ist nicht in gültigem Format!")),
-            Email(lazy_gettext("E-Mail ist nicht in gültigem Format!"))
+            DataRequired(lazy_gettext("E-Mail-Adresse hat ein ungültiges Format!")),
+            Email(lazy_gettext("E-Mail-Adresse hat ein ungültiges Format!"))
         ]
         if 'validators' in kwargs:
-            kwargs['validators'].extend(validators)
+            kwargs['validators'] = validators + kwargs['validators']
         else:
             kwargs['validators'] = validators
         super().__init__(*args, **kwargs)
+
+
+class NativeDateField(DateField):
+    min: date = None
+    max: date = None
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('render_kw', {})['type'] = 'date'
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        if self.min is not None:
+            kwargs['min'] = self.min.strftime(self.format)
+        if self.max is not None:
+            kwargs['max'] = self.max.strftime(self.format)
+        return super().__call__(*args, **kwargs)
 
 
 class SpamCheckField(StringField):
@@ -168,12 +204,11 @@ class ChangeMailForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
-    email = EmailField(label=lazy_gettext("Neue Mail"))
-
-
-class DeleteMailForm(FlaskForm):
-    password = PasswordField(
-        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
+    email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
+    forwarded = BooleanField(
+        label=lazy_gettext(LocalProxy(lambda:
+            "Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private E-Mail-Adresse weiterleiten"
+            .format(agdsn_email=f'{current_user.login.value}@agdsn.me'))))
 
 
 def require_unicast_mac(form, field):
@@ -216,7 +251,7 @@ class ActivateNetworkAccessForm(FlaskForm):
                     MacAddress(lazy_gettext("MAC ist nicht in gültigem Format!")),
                     require_unicast_mac],
         description="XX:XX:XX:XX:XX:XX")
-    birthdate = DateField(label=lazy_gettext("Geburtsdatum"),
+    birthdate = NativeDateField(label=lazy_gettext("Geburtsdatum"),
                           validators=[DataRequired(lazy_gettext("Geburtsdatum nicht angegeben!"))],
                           description=lazy_gettext("YYYY-MM-DD (z.B. 1995-10-23)"))
     host_name = StringField(
@@ -230,7 +265,7 @@ class ActivateNetworkAccessForm(FlaskForm):
 
 
 class TerminateMembershipForm(FlaskForm):
-    end_date = DateField(label=lazy_gettext("Austrittsdatum"),
+    end_date = NativeDateField(label=lazy_gettext("Austrittsdatum"),
                          validators=[DataRequired(lazy_gettext("Austrittsdatum nicht angegeben!"))],
                          description=lazy_gettext("YYYY-MM-DD (z.B. 2018-10-01)"))
 
@@ -241,7 +276,7 @@ class TerminateMembershipForm(FlaskForm):
 
 
 class TerminateMembershipConfirmForm(FlaskForm):
-    end_date = DateField(label=lazy_gettext("Austrittsdatum"),
+    end_date = NativeDateField(label=lazy_gettext("Austrittsdatum"),
                          render_kw={'readonly': True},
                          validators=[DataRequired("invalid end date")])
 
@@ -258,7 +293,8 @@ class TerminateMembershipConfirmForm(FlaskForm):
     confirm_settlement = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich ggf. ausstehende Beiträge baldmöglichst bezahle"),
         validators=[
-            DataRequired(lazy_gettext("Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."))])
+            DataRequired(lazy_gettext(
+                "Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."))])
 
     confirm_donation = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht innerhalb "
@@ -318,6 +354,147 @@ class PaymentForm(FlaskForm):
                               "Muss mindestens 1 Monat sein."))])
 
 
+class RegisterIdentifyForm(FlaskForm):
+    first_name = StrippedStringField(
+        label=lazy_gettext("Vorname"),
+        validators=[DataRequired(lazy_gettext("Bitte gib deinen Vornamen ein."))]
+    )
+
+    last_name = StrippedStringField(
+        label=lazy_gettext("Nachname"),
+        validators=[DataRequired(lazy_gettext("Bitte gib deinen Nachnamen ein."))]
+    )
+
+    birthdate = NativeDateField(
+        label=lazy_gettext("Geburtsdatum"),
+        validators=[DataRequired(lazy_gettext("Bitte gib dein Geburtsdatum an."))],
+        description=lazy_gettext("YYYY-MM-DD (z.B. 1995-10-23)")
+    )
+
+    no_swdd_tenant = BooleanField(
+        label=lazy_gettext(
+            "Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt "
+            "vom Studentenwerk Dresden."),
+    )
+
+    tenant_number = IntegerField(
+        label=lazy_gettext("Debitorennummer (siehe Mietvertrag)"),
+        validators=[
+            OptionalIf("no_swdd_tenant"),
+            OptionalIf("skip_verification"),
+            InputRequired(lazy_gettext("Bitte gib deine Debitorennummer ein.")),
+            NumberRange(min=0,
+                        message=lazy_gettext("Debitorennummer muss eine positive Zahl sein.")),
+        ]
+    )
+
+    agdsn_history = BooleanField(
+        label=lazy_gettext(
+            "Ich hatte schon einmal einen Internetanschluss durch die AG\u00a0DSN."),
+    )
+
+    previous_dorm = SelectField(
+        label=lazy_gettext("Vorheriges Wohnheim"),
+        choices=LocalProxy(lambda: [_dorm_summary('', '')] + backends.dormitories_short),
+        validators=[
+            OptionalIf("agdsn_history", invert=True),
+            DataRequired("Bitte vorheriges Wohnheim auswählen."),
+        ],
+        default='',
+    )
+
+
+class RegisterRoomForm(FlaskForm):
+    building = ReadonlyStringField(label=lazy_gettext("Wohnheim"))
+    room = ReadonlyStringField(label=lazy_gettext("Raum"))
+
+    move_in_date = NativeDateField(
+        label=lazy_gettext("Einzugsdatum"),
+        render_kw={'readonly': True, 'required': True}
+    )
+
+
+class RegisterFinishForm(FlaskForm):
+    _LOGIN_REGEX = re.compile(r"""
+            ^
+            # Must begin with a lowercase character
+            [a-z]
+            # Can continue with lowercase characters, numbers and some punctuation
+            # but between punctuation characters must be characters or numbers
+            (?:[.-]?[a-z0-9])+$
+            """, re.VERBOSE)
+
+    login = StringField(
+        label=lazy_gettext("Gewünschter Nutzername"),
+        validators=[
+            DataRequired(lazy_gettext("Nutzername muss angegeben werden!")),
+            Regexp(regex=_LOGIN_REGEX, message=lazy_gettext(
+                "Dein Nutzername muss mit einem Kleinbuchstaben beginnen und kann mit "
+                "Kleinbuchstaben, Zahlen und Interpunktionszeichen (Punkt und Bindestrich) "
+                "fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen "
+                "den Interpunktionszeichen stehen.")),
+        ],
+        filters=[lower_filter]
+    )
+
+    password = PasswordField(
+        label=lazy_gettext("Passwort"),
+        validators=[
+            DataRequired(lazy_gettext("Passwort muss angegeben werden!")),
+            PasswordComplexity(),
+        ]
+    )
+    password_repeat = PasswordField(
+        label=lazy_gettext("Passwort erneut eingeben"),
+        validators=[
+            DataRequired(lazy_gettext("Passwort muss angegeben werden!")),
+            EqualTo("password", lazy_gettext("Passwörter stimmen nicht überein!")),
+        ]
+    )
+    email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
+    email_repeat = EmailField(
+        label=lazy_gettext("E-Mail-Adresse erneut eingeben"),
+        validators=[EqualTo("email", lazy_gettext("E-Mail-Adressen stimmen nicht überein!"))]
+    )
+
+    member_begin_date = NativeDateField(
+        label=lazy_gettext("Gewünschter Mitgliedschaftsbeginn"),
+        validators=[
+            DataRequired(lazy_gettext("Mitgliedschaftsbeginn muss angegeben werden!")),
+        ]
+    )
+
+    confirm_legal_1 = BooleanField(
+        label=lazy_gettext("Ich bestätige, dass meine Angaben korrekt und vollständig sind und ich "
+                           "die Vorraussetzungen für die Mitgliedschaft (Student oder Bewohner "
+                           "eines Studentenwohnheimes) erfülle."),
+        validators=[
+            DataRequired(lazy_gettext(
+                "Bitte bestätige, dass deine Angaben korrekt sind."))
+        ]
+    )
+
+    confirm_legal_2 = BooleanField(
+        label=lazy_gettext("Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen "
+                           "der AG DSN in ihrer jeweils aktuellen Fassung anerkenne, "
+                           "insbesondere die [Netzordnungen](network_constitution) "
+                           "und die [Beitragsordnung](fee_regulation)."),
+        validators=[
+            DataRequired(lazy_gettext(
+                "Bitte bestätige deine Zustimmung zur Satzung und weiteren Ordnungen."))
+        ]
+    )
+
+    confirm_legal_3 = BooleanField(
+        label=lazy_gettext("Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden "
+                           "und stimme diesen zu."),
+        validators=[
+            DataRequired(lazy_gettext(
+                "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."))
+        ]
+    )
+
+
 def flash_formerrors(form):
     """If a form is submitted but could not be validated, the routing passes
     the form and this method returns all form errors (form.errors)
@@ -326,3 +503,23 @@ def flash_formerrors(form):
     for field, errors in list(form.errors.items()):
         for e in errors:
             flash(e, "error")
+
+
+_LINK_PLACEHOLDER = re.compile(r'\[(?P<text>[^\]]+)\]\((?P<link>[^)]+)\)')
+
+
+def render_links(raw: str, links: dict):
+    """
+    Replace link placeholders in label of BooleanFields.
+
+    :param raw: Text that contains the link placeholders.
+    :param links: Link placeholder to url mapping.
+    """
+    def render_link(match: re.Match) -> str:
+        link = match.group('link')
+        if link in links:
+            return f'<a target="_blank" href="{links[link]}">{match.group("text")}</a>'
+        else:
+            return match.group(0)
+
+    return _LINK_PLACEHOLDER.sub(render_link, raw)

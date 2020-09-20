@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-31 11:05+0200\n"
-"PO-Revision-Date: 2020-08-31 11:05+0200\n"
+"POT-Creation-Date: 2020-09-20 21:26+0200\n"
+"PO-Revision-Date: 2020-09-20 21:26+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 "X-Source-Language: de\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
@@ -40,11 +40,11 @@ msgstr ""
 "Your password must be at least {min_length} characters long and contain at least "
 "{min_classes} different characters classes. Character classes are: {classes}."
 
+msgid "E-Mail-Adresse hat ein ungültiges Format!"
+msgstr "Email address has an invalid format!"
+
 msgid "Deine E-Mail-Adresse"
 msgstr "Your e-mail address"
-
-msgid "E-Mail ist nicht in gültigem Format!"
-msgstr "E-Mail is invalid!"
 
 msgid "Kategorie"
 msgstr "Category"
@@ -83,7 +83,7 @@ msgid "Wohnheim"
 msgstr "Dormitory"
 
 msgid "E-Mail-Adresse"
-msgstr "Mail address"
+msgstr "Email address"
 
 msgid "Name / Organisation"
 msgstr "Name / Organization"
@@ -114,9 +114,6 @@ msgstr "Password"
 
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
-
-msgid "Neue Mail"
-msgstr "New mail"
 
 msgid "MAC muss unicast-Adresse sein!"
 msgstr "MAC has to be a unicast adress!"
@@ -228,6 +225,114 @@ msgstr "Months"
 msgid "Muss mindestens 1 Monat sein."
 msgstr "Has to be at least 1 month."
 
+msgid "Vorname"
+msgstr "First name"
+
+msgid "Bitte gib deinen Vornamen ein."
+msgstr "Please enter your first name."
+
+msgid "Nachname"
+msgstr "Last name"
+
+msgid "Bitte gib deinen Nachnamen ein."
+msgstr "Please enter your last name."
+
+msgid "Bitte gib dein Geburtsdatum an."
+msgstr "Please enter your date of birth."
+
+msgid ""
+"Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom Studentenwerk "
+"Dresden."
+msgstr ""
+"I am a subtenant or do not have my rental contract directly from the "
+"Studentenwerk Dresden."
+
+msgid "Debitorennummer (siehe Mietvertrag)"
+msgstr "Debitorennummer (see rental agreement)"
+
+msgid "Bitte gib deine Debitorennummer ein."
+msgstr "Please enter your Debitorennummer."
+
+msgid "Debitorennummer muss eine positive Zahl sein."
+msgstr "Debitorennummer must be a positive number."
+
+msgid "Ich hatte schon einmal einen Internetanschluss durch die AG DSN."
+msgstr "I already had an internet connection through the AG DSN."
+
+msgid "Vorheriges Wohnheim"
+msgstr "Previous dormitory"
+
+msgid "Raum"
+msgstr "Room"
+
+msgid "Einzugsdatum"
+msgstr "Move-in date"
+
+msgid "Gewünschter Nutzername"
+msgstr "Your desired username"
+
+msgid ""
+"Dein Nutzername muss mit einem Kleinbuchstaben beginnen und kann mit "
+"Kleinbuchstaben, Zahlen und Interpunktionszeichen (Punkt und Bindestrich) "
+"fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen den "
+"Interpunktionszeichen stehen."
+msgstr ""
+"Your username must start with a lowercase letter and can be continued with "
+"lowercase letters, numbers and punctuation marks (dot and hyphen), but there "
+"must be lowercase letters or numbers between the punctuation marks."
+
+msgid "Passwort muss angegeben werden!"
+msgstr "Password must be entered!"
+
+msgid "Passwort erneut eingeben"
+msgstr "Re-enter password"
+
+msgid "Passwörter stimmen nicht überein!"
+msgstr "Passwords do not match!"
+
+msgid "E-Mail-Adresse erneut eingeben"
+msgstr "Re-enter email address"
+
+msgid "E-Mail-Adressen stimmen nicht überein!"
+msgstr "Email addresses do not match!"
+
+msgid "Gewünschter Mitgliedschaftsbeginn"
+msgstr "Desired membership start date"
+
+msgid "Mitgliedschaftsbeginn muss angegeben werden!"
+msgstr "Membership start date must be specified!"
+
+msgid ""
+"Ich bestätige, dass meine Angaben korrekt und vollständig sind und ich die "
+"Vorraussetzungen für die Mitgliedschaft (Student oder Bewohner eines "
+"Studentenwohnheimes) erfülle."
+msgstr ""
+"I confirm that my details are correct and complete and that I meet the "
+"requirements for membership (student or resident of a student dormitory)."
+
+msgid "Bitte bestätige, dass deine Angaben korrekt sind."
+msgstr "Please confirm that your information is correct."
+
+msgid ""
+"Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen der AG DSN in "
+"ihrer jeweils aktuellen Fassung anerkenne, insbesondere die [Netzordnungen]"
+"(network_constitution) und die [Beitragsordnung](fee_regulation)."
+msgstr ""
+"I confirm that I accept the [statutes](constitution) and regulations of the AG "
+"DSN in their current version, in particular the [network constitutions]"
+"(network_constitution) and the [finance constitutions](fee_regulation)."
+
+msgid "Bitte bestätige deine Zustimmung zur Satzung und weiteren Ordnungen."
+msgstr "Please confirm your agreement with the statutes and further regulations."
+
+msgid ""
+"Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden und stimme "
+"diesen zu."
+msgstr "I have understood and agree to the [privacy policy](privacy_policy)."
+
+msgid "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."
+msgstr "Please confirm your agreement to the privacy policy."
+
 msgid "Bitte melde Dich an, um die Seite zu sehen."
 msgstr "Please log in to view this site."
 
@@ -284,6 +389,82 @@ msgstr ""
 "Are you sure you want to use the anonymous contact form? This is necessary only "
 "if you wish to contact administrators of a different dormitory."
 
+msgid ""
+"Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es erneut."
+msgstr "Error in communication with the backend server. Please try again."
+
+msgid ""
+"Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft. Bitte "
+"wähle aus, in welchem Wohnheim du vorher gewohnt hast."
+msgstr ""
+"A membership already exists for the data you entered. Please select the "
+"dormitory where you have lived before."
+
+msgid ""
+"Für den dir zugeordneten Raum gibt es bereits ein Konto. Falls du denkst, dass "
+"es sich dabei um einen Fehler handelt, kannst du den entsprechenden Button "
+"klicken. Die Verifizierung wird dann später manuell durchgeführt."
+msgstr ""
+"There is already an account for the room assigned to you. If you think that this "
+"is a mistake, you can click the corresponding button. The verification will then "
+"be done manually later."
+
+msgid ""
+"Die Verifizierung deiner Daten mit dem Studentenwerk Dresden ist fehlgeschlagen. "
+"Bitte überprüfe, dass du die exakt selben Daten, wie beim Studentenwerk Dresden "
+"bzw. wie auf deinem Mietvertrag, angegeben hast. Um die Verifizierung zu "
+"überspringen, kannst du den entsprechenden Button klicken. Die Verifizierung "
+"wird dann später manuell durchgeführt."
+msgstr ""
+"The verification of your data with the Studentenwerk Dresden failed. Please "
+"check that you have entered the exact same data as you gave to the Studentenwerk "
+"Dresden or as stated on your rental agreement. To skip the verification process, "
+"you can click the corresponding button. The verification will be done manually "
+"later."
+
+msgid "Identifizierung"
+msgstr "Identification"
+
+msgid "Raumbestätigung"
+msgstr "Room confirmation"
+
+msgid "Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft."
+msgstr "A membership already exists for the data you entered."
+
+msgid "Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft."
+msgstr "Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft."
+
+msgid "E-Mail-Adresse ist bereits in Verwendung."
+msgstr "Email address is already in use."
+
+msgid "Login ist bereits vergeben."
+msgstr "Login is already assigned."
+
+msgid "Nutzername hat ein ungültiges Format!"
+msgstr "Username has an invalid format!"
+
+msgid "Das Einzugsdatum ist ungültig."
+msgstr "The move-in date is invalid."
+
+msgid "Registrierung aus unbekanntem Grund fehlgeschlagen."
+msgstr "Registration failed for unknown reason."
+
+msgid "Konto erstellen"
+msgstr "Create account"
+
+msgid "Bestätigung erfolgreich."
+msgstr "Confirmation successful."
+
+msgid "Bestätigung fehlgeschlagen."
+msgstr "Confirmation failed."
+
+msgid ""
+"Der Bestätigungslink ist nicht gültig. Möglicherweise hast du dein Konto bereits "
+"bestätigt, oder der Bestätigungszeitraum ist verstrichen."
+msgstr ""
+"The confirmation link is not valid. Maybe you have already confirmed your "
+"account, or the confirmation period has expired."
+
 msgid "Stand"
 msgstr "Last update"
 
@@ -307,6 +488,9 @@ msgstr "Current IP address"
 
 msgid "Aktuelle MAC-Adresse"
 msgstr "Current MAC address"
+
+msgid "Status deiner E-Mail-Adresse"
+msgstr "Status of your email address"
 
 msgid "E-Mail-Weiterleitung"
 msgstr "E-Mail forwarding address"
@@ -358,6 +542,9 @@ msgstr "Old password was incorrect!"
 msgid "Passwort wurde geändert"
 msgstr "Password has been changed"
 
+msgid "Passwort ändern"
+msgstr "Change password"
+
 msgid "Nutzer nicht gefunden!"
 msgstr "User not found!"
 
@@ -367,8 +554,20 @@ msgstr "Wrong password submitted!"
 msgid "E-Mail-Adresse wurde geändert"
 msgstr "Email address has been changed"
 
-msgid "E-Mail-Adresse wurde zurückgesetzt"
-msgstr "Email address has been reset"
+msgid "E-Mail-Adresse ändern"
+msgstr "Change email address"
+
+msgid "Wir haben dir eine E-Mail mit einem Bestätigungslink geschickt."
+msgstr "We have sent you an email with a confirmation link."
+
+msgid "Versenden der Bestätigungs-E-Mail ist fehlgeschlagen!"
+msgstr "Sending the confirmation email failed!"
+
+msgid "E-Mail mit Bestätigungslink erneut senden"
+msgstr "Resend e-mail with confirmation link"
+
+msgid "Bestätigung deiner E-Mail-Adresse"
+msgstr "Confirmation of your e-mail address"
 
 msgid "MAC-Adresse ist bereits in Verwendung!"
 msgstr "MAC address is already in use!"
@@ -379,11 +578,20 @@ msgstr "MAC address has been changed"
 msgid "Es kann bis zu 24 Stunden (!) dauern, bis die Änderung wirksam ist."
 msgstr "It can take up to 24 (!) hours until the changes apply."
 
+msgid ""
+"Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den "
+"Support."
+msgstr ""
+"There are not enough free IPv4 addresses available. Please contact the support."
+
 msgid "Netzwerkzugang wurde aktiviert!"
 msgstr "Network access has been activated!"
 
 msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
 msgstr "It can take up to 10 Minutes until the changes apply."
+
+msgid "Netzwerkanschluss aktivieren"
+msgstr "Activate network access"
 
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."
@@ -439,17 +647,17 @@ msgstr "Unavailable"
 msgid "Beitrag in Miete inbegriffen"
 msgstr "Payment included in rental agreement"
 
-msgid "Aktiv"
-msgstr "Active"
-
-msgid "Passiv"
-msgstr "Passive"
-
 msgid "Aktiviert"
 msgstr "Enabled"
 
 msgid "Nicht aktiviert"
 msgstr "Not activated"
+
+msgid "Bestätigt"
+msgstr "Confirmed"
+
+msgid "Nicht bestätigt"
+msgstr "Not confirmed"
 
 msgid "Datenbank nicht erreichbar"
 msgstr "Database is unreachable"
@@ -462,6 +670,9 @@ msgstr "Not payed"
 
 msgid "Trafficlimit überschritten"
 msgstr "Traffic limit exceeded"
+
+msgid "Mitglied ab"
+msgstr "Member from"
 
 msgid "Kein Mitglied"
 msgstr "Not a member"
@@ -569,6 +780,9 @@ msgstr "Basement"
 msgid "Etage"
 msgstr "Floor"
 
+msgid "Nur für Bewohner des Hauses!"
+msgstr "Only for residents of the dorm!"
+
 msgid "Informationen zur Version"
 msgstr "Version info"
 
@@ -666,17 +880,26 @@ msgstr "Abort"
 msgid "Zurücksetzen"
 msgstr "Reset"
 
+msgid "Onlineanmeldung"
+msgstr "Online registration"
+
+msgid "Kostenpflichtig Mitglied werden"
+msgstr "Become a member (fee required)"
+
+msgid "Verifizierung überspringen"
+msgstr "Skip verification"
+
+msgid "Erneut versuchen"
+msgstr "Retry"
+
+msgid "Raumzuordnung ist nicht korrekt"
+msgstr "Assigned room is not correct"
+
 msgid "Häufige Aktionen"
 msgstr "Often Used Actions"
 
-msgid "Passwort ändern"
-msgstr "Change password"
-
 msgid "MAC-Adresse ändern"
 msgstr "Change MAC address"
-
-msgid "Netzwerkanschluss aktivieren"
-msgstr "Activate network access"
 
 msgid "Kontaktformular"
 msgstr "Contact form"
@@ -750,9 +973,6 @@ msgid ""
 msgstr ""
 "If you share your account with someone else (share login, enter someone else's "
 "MAC address) you are still liable for all activities of this account!"
-
-msgid "E-Mail ändern"
-msgstr "Change email address"
 
 msgid "Kontakt für Mitglieder"
 msgstr "Contact for members"
@@ -915,3 +1135,6 @@ msgstr "Outgoing"
 #~ msgstr ""
 #~ "Please note: This might cause problems with your clients. If there are any, "
 #~ "get in touch with us, the service providers won't be able to help."
+
+#~ msgid "Büro nur für Bewohner der Borsbergstraße"
+#~ msgstr "Office only for residents of Borsbergstraße"

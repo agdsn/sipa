@@ -5,8 +5,7 @@ Basically, this is everything that is to specific to appear in the generic.py
 and does not fit into any other blueprint such as “documents”.
 """
 
-from flask import Blueprint, current_app
-from flask.templating import render_template
+from flask import Blueprint, current_app, render_template
 from sipa.utils import get_bustimes
 
 bp_features = Blueprint('features', __name__)

@@ -17,6 +17,7 @@ from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
+from sipa.forms import render_links
 from sipa.model import build_backends_ext
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
@@ -57,7 +58,7 @@ def init_app(app, **kwargs):
     app.url_map.converters['int'] = IntegerConverter
 
     from sipa.blueprints import bp_features, bp_usersuite, \
-        bp_pages, bp_documents, bp_news, bp_generic, bp_hooks
+        bp_pages, bp_documents, bp_news, bp_generic, bp_hooks, bp_register
 
     logger.debug('Registering blueprints')
     app.register_blueprint(bp_generic)
@@ -67,6 +68,7 @@ def init_app(app, **kwargs):
     app.register_blueprint(bp_documents)
     app.register_blueprint(bp_news)
     app.register_blueprint(bp_hooks)
+    app.register_blueprint(bp_register)
 
     logger.debug('Registering Jinja globals')
     form_label_width = 3
@@ -86,6 +88,7 @@ def init_app(app, **kwargs):
         url_self=url_self,
         now=datetime.utcnow()
     )
+    app.add_template_filter(render_links)
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
 

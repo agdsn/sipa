@@ -7,3 +7,4 @@ from .documents import bp_documents
 from .features import bp_features
 from .news import bp_news
 from .hooks import bp_hooks
+from .register import bp_register

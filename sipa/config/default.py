@@ -102,5 +102,6 @@ CONTACT_ADDRESSES = [
         'name': "Borsbergstraße 34",
         'floor': 7,
         'city': '01309 Dresden',
+        'only_residents': True,
     },
 ]

@@ -1,8 +1,9 @@
+{% extends "base.html" %}
 {% import "macros/forms.html" as forms %}
-{% extends "base.html" %}#
 {% set page_title = _("MySQL Datenbank") %}
 
 {% block content %}
+    {% include "heading.html" %}
     {% if action == 'delete' %}
         <div class="alert alert-warning">
             {{ _('Willst Du deine Datenbank wirklich löschen?') }}

@@ -1,0 +1,10 @@
+{% extends "register/base.html" %}#
+
+{% macro skip_btn() %}
+    <button type="submit" class="btn btn-danger" name="wrong_room">{{ _("Raumzuordnung ist nicht korrekt") }}</button>
+{% endmacro %}
+
+{% block register_content %}
+    {{  forms.render_simple(form=form, form_id="register-form", submit_text=_("Weiter"),
+                            cancel_to=url_for('.cancel'), extra_btn=skip_btn) }}
+{% endblock %}
