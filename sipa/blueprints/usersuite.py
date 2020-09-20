@@ -146,8 +146,10 @@ def contact():
 
     form.email.default = current_user.mail.raw_value
 
-    return render_template("usersuite/contact.html", form=form,
-                           form_args={'reset_button': True, 'cancel_to': url_for('.index')})
+    return render_template("usersuite/contact.html",
+                           form_args={'form': form,
+                                      'reset_button': True,
+                                      'cancel_to': url_for('.index')})
 
 
 def render_payment_details(details: PaymentDetails, months):
