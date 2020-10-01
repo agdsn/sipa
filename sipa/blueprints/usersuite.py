@@ -62,8 +62,8 @@ def index():
         ('mail_confirmed', gettext("Status deiner E-Mail-Adresse")),
         ('mail_forwarded', gettext("E-Mail-Weiterleitung")),
         ('wifi_password', gettext("WLAN Passwort")),
-        ('hostname', gettext("Hostname")),
-        ('hostalias', gettext("Hostalias")),
+        # ('hostname', gettext("Hostname")),
+        # ('hostalias', gettext("Hostalias")),
         ('userdb_status', gettext("MySQL Datenbank")),
         ('finance_balance', gettext("Kontostand") + finance_update_string),
     ])
