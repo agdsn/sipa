@@ -58,7 +58,17 @@
         <tbody>
             {% for description, property in rows %}
             <tr>
-                <td class="col-md-3">{{ description }}</td>
+                {% if property.description_url %}
+                    <td class="col-md-3">
+                        <a href="{{ property.description_url }}" target="_blank">
+                            {{ description }}
+
+                            <span class="glyphicon glyphicon-new-window"></span>
+                        </a>
+                    </td>
+                {% else %}
+                    <td class="col-md-3">{{ description }}</td>
+                {% endif %}
                 {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
                 <td class="col-md-3">
                     <span class="{{ style }}">{{ property.value }}</span>

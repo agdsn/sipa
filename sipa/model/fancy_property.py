@@ -13,13 +13,14 @@ NO_CAPABILITIES = Capabilities(edit=False, delete=False)
 
 class PropertyBase(metaclass=ABCMeta):
     def __init__(self, name, value, raw_value, capabilities=NO_CAPABILITIES,
-                 style=None, empty=False):
+                 style=None, empty=False, description_url=None):
         self.name = name
         self.value = value
         self.raw_value = raw_value
         self.capabilities = capabilities
         self.style = style
         self.empty = empty or not value
+        self.description_url = description_url
 
     def __repr__(self):
         return "{}.{}({})".format(__name__, type(self).__name__, argstr(
@@ -29,6 +30,7 @@ class PropertyBase(metaclass=ABCMeta):
             capabilities=self.capabilities,
             style=self.style,
             empty=self.empty,
+            description_url=self.description_url
         ))
 
     @property
@@ -87,7 +89,7 @@ class ActiveProperty(PropertyBase):
     supported = True
 
     def __init__(self, name, value=None, raw_value=None, capabilities=NO_CAPABILITIES,
-                 style=None, empty=False):
+                 style=None, empty=False, description_url=None):
 
         # Enforce css classes
         assert style in {None, 'muted', 'primary', 'success',
@@ -103,6 +105,7 @@ class ActiveProperty(PropertyBase):
                    else 'muted' if empty or not value
                    else None),
             empty=empty or not value,
+            description_url=description_url,
         )
 
     def __repr__(self):
@@ -182,12 +185,14 @@ class active_prop(property):
                 value = result
                 raw_value = value
                 style = None
+                description_url = None
                 empty = None
                 tmp_readonly = False
             else:
                 name = result.get('name', fget.__name__)
                 raw_value = result.get('raw_value', value)
                 style = result.get('style', None)
+                description_url = result.get('description_url', None)
                 empty = result.get('empty', None)
                 tmp_readonly = result.get('tmp_readonly', False)
 
@@ -200,6 +205,7 @@ class active_prop(property):
                     delete=(fdel is not None),
                 ) if not tmp_readonly else NO_CAPABILITIES,
                 style=style,
+                description_url=description_url,
                 empty=empty,
             )
 
