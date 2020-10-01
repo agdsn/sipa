@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import inspect
 import sys
+from datetime import date
 from typing import Callable, Optional, Any, List, Union
 
 
@@ -99,7 +100,10 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
 
     # cases 2, 3: Is an unserializer or something builtin
     elif inspect.isclass(type_):
-        constructor = type_
+        if type_ == date:
+            constructor = date.fromisoformat
+        else:
+            constructor = type_
 
     if not constructor:
         raise UnserializationError(f"Could not find constructor for type {type_!r}")

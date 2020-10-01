@@ -297,7 +297,7 @@ class User(BaseUser):
     @active_prop
     def membership_end_date(self):
         """Implicitly used in :py:meth:`evaluate_status`"""
-        return {'value': parse_date(self.user_data.membership_end_date),
+        return {'value': self.user_data.membership_end_date,
                 'tmp_readonly': not self.is_member}
 
     # Empty setter for "edit" capability
@@ -320,13 +320,13 @@ class User(BaseUser):
             message, style = gettext('Trafficlimit überschritten'), 'danger'
         elif not status.member and self.user_data.membership_begin_date is not None:
             message, style = "{} {}".format(gettext('Mitglied ab'),
-                                            self.user_data.membership_begin_date), \
+                                            self.user_data.membership_begin_date.isoformat()), \
                              'warning'
         elif not status.member:
             message, style = gettext('Kein Mitglied'), 'muted'
         elif status.member and self.membership_end_date.raw_value is not None:
             message, style = "{} {}".format(gettext('Mitglied bis'),
-                                            self.membership_end_date.value), \
+                                            self.membership_end_date.value.isoformat()), \
                              'warning'
         elif status.member:
             message, style = gettext('Mitglied'), 'success'
