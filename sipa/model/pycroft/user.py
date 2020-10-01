@@ -102,7 +102,7 @@ class User(BaseUser):
     @connection_dependent
     def mac(self):
         return {'value': ", ".join(i.mac for i in self.user_data.interfaces),
-                'tmp_readonly': len(self.user_data.interfaces) != 1  or not self.has_property('network_access')}
+                'tmp_readonly': len(self.user_data.interfaces) > 1 or not self.has_property('network_access')}
 
     # Empty setter for "edit" capability
     @mac.setter
@@ -125,8 +125,7 @@ class User(BaseUser):
     @active_prop
     @connection_dependent
     def network_access_active(self):
-        return {'value': (gettext("Aktiviert") if len(self.user_data.interfaces) > 0
-                          else gettext("Nicht aktiviert")),
+        return {'value': len(self.user_data.interfaces) > 0,
                 'tmp_readonly': len(self.user_data.interfaces) > 0
                                 or not self.has_property('network_access')
                                 or self.user_data.room is None}

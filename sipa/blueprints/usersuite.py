@@ -181,7 +181,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
     """Try to determine the flask endpoint for the according property."""
     if capability == 'edit':
         attribute_mappings = {
-            'mac': 'change_mac',
+            'mac': 'change_mac' if current_user.network_access_active.raw_value else 'activate_network_access',
             'userdb_status': 'hosting',
             'mail': 'change_mail',
             'mail_forwarded': 'change_mail',
