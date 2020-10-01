@@ -189,6 +189,10 @@ class User(BaseUser):
     def userdb_status(self):
         pass
 
+    @unsupported_prop
+    def birthdate(self):
+        pass
+
     def payment_details(self):
         return PaymentDetails(
             recipient="Donald Duck",

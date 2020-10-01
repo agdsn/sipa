@@ -348,7 +348,7 @@ def activate_network_access():
 
     capability_or_403('network_access_active', 'edit')
 
-    form = ActivateNetworkAccessForm()
+    form = ActivateNetworkAccessForm(birthdate=current_user.birthdate.raw_value)
 
     if form.validate_on_submit():
         password = form.password.data

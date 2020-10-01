@@ -29,8 +29,9 @@ class UserData:
 
     # TODO introduce properties once they can be excluded
 
-    membership_end_date: str
-    membership_begin_date: str
+    birthdate: Optional[date]
+    membership_end_date: Optional[date]
+    membership_begin_date: Optional[date]
     wifi_password: Optional[str]
 
 

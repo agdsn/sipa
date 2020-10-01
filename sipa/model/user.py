@@ -183,6 +183,12 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @active_prop
     @abstractmethod
+    def birthdate(self) -> PropertyBase:
+        """**[Abstract]** Date of birth"""
+        pass
+
+    @active_prop
+    @abstractmethod
     def mail_forwarded(self) -> PropertyBase:
         """**[Abstract]** Whether mail forwarding is enabled."""
         pass

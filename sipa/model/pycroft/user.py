@@ -89,6 +89,10 @@ class User(BaseUser):
         return self.user_data.name
 
     @active_prop
+    def birthdate(self):
+        return self.user_data.birthdate
+
+    @active_prop
     def login(self):
         return self.user_data.login
 
