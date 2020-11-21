@@ -8,6 +8,11 @@ let statusMessages = {
         'en': 'There are currently no known issues.',
         'classes': 'glyphicon-ok-sign text-success',
     },
+    'performanceIssues': {
+        'de': 'Es gibt derzeit Leistungsprobleme.',
+        'en': 'There are currently performance issues.',
+        'classes': 'glyphicon-exclamation-sign text-primary',
+    },
     'partialOutage': {
         'de': 'Es gibt derzeit einen teilweisen Ausfall.',
         'en': 'There is currently a partial outage.',
@@ -22,25 +27,43 @@ let statusMessages = {
 
 //Status widget
 var initStatus = function (components) {
-    var content = '',
+    let content = '',
         statusCode = 'okay';
 
     for (var i = 0; i < components.length; i++) {
-        content += '<div>';
-        if (components[i].status === 'funktionsfähig') {
-            content += '<span class="glyphicon glyphicon-ok-sign text-success"></span>';
-        } else if (components[i].status === 'teilweiser ausfall' || components[i].status === 'leistungsprobleme') {
-            content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+        let listComponent = false;
+        let new_content = '<div>';
 
-            if(statusCode === 'okay'){
+        if (components[i].status === 'leistungsprobleme') {
+            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
+
+            if(statusCode === 'okay') {
+                statusCode = 'performanceIssues';
+            }
+
+            listComponent = true
+        } else if (components[i].status === 'teilweiser ausfall') {
+            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+
+            if(statusCode === 'okay' || statusCode === 'performanceIssues'){
                 statusCode = 'partialOutage';
             }
-        } else {
-            content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
+
+            listComponent = true
+        }else if (components[i].status === 'schwerer ausfall') {
+            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
+
             statusCode = 'fullOutage';
+
+            listComponent = true
         }
-        content += ' ' + components[i].name;
-        content += '</div>';
+
+        new_content += ' ' + components[i].name;
+        new_content += '</div>';
+
+        if (listComponent){
+            content += new_content
+        }
 
         if (components[i].status !== 'operational') {
             allGood = false;
@@ -57,8 +80,10 @@ var initStatus = function (components) {
     link.html(statusMessages[statusCode][get_language()]);
 
     // Set content of the popover window and activate it
-    status.data('content', content)
+    if(!allGood){
+        status.data('content', content)
         .popover({trigger: 'hover focus', html: true, placement: 'bottom'});
+    }
 };
 
 new CachetStatus('https://status.agdsn.net', initStatus);
