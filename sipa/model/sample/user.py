@@ -152,6 +152,10 @@ class User(BaseUser):
     def mail_confirmed(self):
         return config[self.uid]['mail_confirmed']
 
+    def resend_confirm_mail(self) -> bool:
+        """ Resend the confirmation mail."""
+        pass
+
     @mail.setter
     def mail(self, value):
         config[self.uid]['mail'] = value
@@ -227,6 +231,26 @@ class User(BaseUser):
 
     def continue_membership(self):
         self.config[self.uid]['membership_end_date'] = None
+
+    def estimate_balance(self, end_date):
+        """Calculate balance at a given end_date"""
+        raise NotImplementedError
+
+    @property
+    def is_member(self):
+        return True
+
+    @active_prop
+    def wifi_password(self):
+        return {'value:': 'password'}
+
+    @classmethod
+    def request_password_reset(cls, user_ident, email):
+        raise NotImplementedError
+
+    @classmethod
+    def password_reset(cls, token, new_password):
+        raise NotImplementedError
 
     userdb = None
 
