@@ -43,3 +43,11 @@ class DBQueryEmpty(Exception):
 
 class UnknownError(Exception):
     pass
+
+
+class UserNotContactableError(Exception):
+    pass
+
+
+class TokenNotFound(InvalidCredentials):
+    pass

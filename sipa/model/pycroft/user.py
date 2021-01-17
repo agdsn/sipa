@@ -8,7 +8,7 @@ from sipa.model.fancy_property import active_prop, connection_dependent, \
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible, SubnetFull
+    ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -356,6 +356,30 @@ class User(BaseUser):
         status, result = api.reset_wifi_password(self.user_data.id)
 
         if status != 200:
+            raise UnknownError
+
+        return result
+
+    @classmethod
+    def request_password_reset(cls, user_ident, email):
+        status, result = api.request_password_reset(user_ident, email.lower())
+
+        if status == 404:
+            raise UserNotFound
+        elif status == 412:
+            raise UserNotContactableError
+        elif status != 200:
+            raise UnknownError
+
+        return result
+
+    @classmethod
+    def password_reset(cls, token, new_password):
+        status, result = api.reset_password(token, new_password)
+
+        if status == 403:
+            raise TokenNotFound
+        elif status != 200:
             raise UnknownError
 
         return result

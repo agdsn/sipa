@@ -92,6 +92,18 @@ class PycroftApi():
     def reset_wifi_password(self, user_id):
         return self.patch("user/{}/reset-wifi-password".format(user_id))
 
+    def request_password_reset(self, user_ident: str, email: str):
+        return self.post("user/reset-password", data={
+            'ident': user_ident,
+            'email': email,
+        })
+
+    def reset_password(self, token, new_password):
+        return self.patch("user/reset-password", data={
+            'token':  token,
+            'password': new_password,
+        })
+
     def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int,
                      previous_dorm: Optional[str]) -> MatchPersonResult:
         """

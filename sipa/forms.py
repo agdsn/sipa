@@ -335,6 +335,37 @@ class LoginForm(FlaskForm):
     remember = BooleanField(label=lazy_gettext("Anmeldung merken"))
 
 
+class PasswordRequestResetForm(FlaskForm):
+    ident = StrippedStringField(
+        label=lazy_gettext("Nutzername oder Nutzer-ID"),
+        description='XXXXX-YY',
+        validators=[
+            DataRequired(lazy_gettext("Nutzername muss angegeben werden!")),
+            Regexp("^[^,+\"\\<>;#]+$", message=lazy_gettext(
+                "Identifizierung enthält ungültige Zeichen!")),
+        ],
+    )
+
+    email = EmailField(label=lazy_gettext("Hinterlegte E-Mail-Adresse"))
+
+
+class PasswordResetForm(FlaskForm):
+    password = PasswordField(
+        label=lazy_gettext("Neues Passwort"),
+        validators=[
+            DataRequired(lazy_gettext("Passwort muss angegeben werden!")),
+            PasswordComplexity(),
+        ]
+    )
+    password_repeat = PasswordField(
+        label=lazy_gettext("Passwort erneut eingeben"),
+        validators=[
+            DataRequired(lazy_gettext("Passwort muss angegeben werden!")),
+            EqualTo("password", lazy_gettext("Passwörter stimmen nicht überein!")),
+        ]
+    )
+
+
 class HostingForm(FlaskForm):
     password = PasswordField(lazy_gettext("Passwort"), validators=[
         DataRequired(lazy_gettext("Kein Passwort eingegeben!")),

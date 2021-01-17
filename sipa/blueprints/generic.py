@@ -5,19 +5,21 @@ import os
 from flask import render_template, request, redirect, \
     url_for, flash, session, abort, current_app, jsonify
 from flask.blueprints import Blueprint
-from flask_babel import gettext, format_date
+from flask_babel import gettext, format_date, _
 from flask_login import current_user, login_user, logout_user, \
     login_required
 from sqlalchemy.exc import DatabaseError
 
 from sipa.backends.exceptions import BackendError
 from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
-    OfficialContactForm
+    OfficialContactForm, PasswordRequestResetForm, PasswordResetForm
 from sipa.mail import send_official_contact_mail, send_contact_mail
 from sipa.backends.extension import backends
+from sipa.model import pycroft
 from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
-from sipa.model.exceptions import UserNotFound, InvalidCredentials
+from sipa.model.exceptions import UserNotFound, InvalidCredentials, UnknownError, \
+    UserNotContactableError, TokenNotFound, PasswordInvalid
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
 
 logger = logging.getLogger(__name__)
@@ -150,6 +152,63 @@ def logout():
     logout_user()
     flash(gettext("Abmeldung erfolgreich!"), 'success')
     return redirect(url_for('.index'))
+
+
+@bp_generic.route('/reset-password', methods=['GET', 'POST'])
+def request_password_reset():
+    user_id = None
+
+    ip_user = backends.user_from_ip(request.remote_addr)
+    if ip_user.is_authenticated:
+        user_id = ip_user.id.raw_value
+
+    form = PasswordRequestResetForm(ident=user_id)
+
+    if form.validate_on_submit():
+        try:
+            pycroft.user.User.request_password_reset(form.ident.data, form.email.data)
+        except UserNotFound:
+            flash(_("Für die angegebenen Daten konnte kein Benutzer gefunden werden."), "error")
+        except UserNotContactableError:
+            flash(_("Für das angegebene Nutzerkonto ist keine Kontakt E-Mail Adresse hinterlegt. "
+                    "{}".format(_("Bitte kontaktiere den Support."))), "error")
+        except UnknownError:
+            flash(_("Es ist ein unbekannter Fehler aufgetreten. "
+                    "{}".format(_("Bitte kontaktiere den Support."))), "error")
+        else:
+            flash(gettext("Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. "
+                          "Falls du die Nachricht nicht erhälst, wende dich an den Support."), "success")
+
+            return redirect(url_for('.login'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template('generic_form.html', page_title=gettext("Passwort zurücksetzen"),
+                           form_args={'form': form, 'cancel_to': url_for('.login')})
+
+
+@bp_generic.route('/reset-password/<string:token>', methods=['GET', 'POST'])
+def reset_password(token):
+    form = PasswordResetForm()
+
+    if form.validate_on_submit():
+        try:
+            pycroft.user.User.password_reset(token, form.password.data)
+        except TokenNotFound:
+            flash(_("Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."), "error")
+            return redirect(url_for('.request_password_reset'))
+        except UnknownError:
+            flash(_("Es ist ein unbekannter Fehler aufgetreten. "
+                    "{}".format(_("Bitte kontaktiere den Support."))), "error")
+        else:
+            flash(gettext("Dein Passwort wurde geändert."), "success")
+
+            return redirect(url_for('.login'))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    return render_template('generic_form.html', page_title=gettext("Passwort zurücksetzen"),
+                           form_args={'form': form, 'cancel_to': url_for('.login')})
 
 
 bp_generic.add_app_template_filter(dynamic_unit, name='unit')

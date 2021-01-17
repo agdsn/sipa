@@ -331,6 +331,14 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def wifi_password(self):
         pass
 
+    @classmethod
+    def request_password_reset(cls, user_ident, email):
+        raise NotImplementedError
+
+    @classmethod
+    def password_reset(cls, token, new_password):
+        raise NotImplementedError
+
 
 class BaseUserDB(metaclass=ABCMeta):
     """An abstract base class defining an interface for a user's
