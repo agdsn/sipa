@@ -148,7 +148,7 @@ class User(BaseUser):
     def mail_forwarded(self):
         return config[self.uid]['mail_forwarded']
 
-    @property
+    @active_prop
     def mail_confirmed(self):
         return config[self.uid]['mail_confirmed']
 
@@ -242,7 +242,7 @@ class User(BaseUser):
 
     @active_prop
     def wifi_password(self):
-        return {'value:': 'password'}
+        return {'value': 'password'}
 
     @classmethod
     def request_password_reset(cls, user_ident, email):
