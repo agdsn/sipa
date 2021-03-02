@@ -154,9 +154,6 @@ class SendMailCommonTests(object):
         self.assertEqual(self.wrap_mock.call_count, 1)
         self.assertEqual(self.wrap_mock.call_args[0], (self.args['message'],))
 
-    def test_smtp_connect_called(self):
-        self.assertTrue(self.smtp_mock().connect.called)
-
     def test_smtp_close_called(self):
         self.assertTrue(self.smtp_mock().close.called)
 
