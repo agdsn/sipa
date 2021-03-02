@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.9
 MAINTAINER Lukas Juhrich der Große <lukasjuhrich@wh2.tu-dresden.de>
 
 
