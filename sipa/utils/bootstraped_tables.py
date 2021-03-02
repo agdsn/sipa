@@ -15,16 +15,17 @@ All changes Copyright 2008-2014 The Python Markdown Project
 License: [BSD](http://www.opensource.org/licenses/bsd-license.php)
 
 """
-from markdown.extensions import Extension
+from markdown import Markdown
+from markdown.blockparser import BlockParser
 from markdown.blockprocessors import BlockProcessor
+from markdown.extensions import Extension
 from markdown.util import etree
 
 
 class BootstrapedTableProcessor(BlockProcessor):
     """ Process Tables. """
 
-    @staticmethod
-    def test(parent, block):
+    def test(self, parent, block):
         rows = block.split('\n')
         return (len(rows) > 2 and '|' in rows[0] and
                 '|' in rows[1] and '-' in rows[1] and
@@ -91,12 +92,14 @@ class BootstrapedTableProcessor(BlockProcessor):
 class BootstrapedTableExtension(Extension):
     """ Add tables to Markdown. """
 
-    @staticmethod
-    def extendMarkdown(md, md_globals):
+    def extendMarkdown(self, md: Markdown):
         """ Add an instance of TableProcessor to BlockParser. """
-        md.parser.blockprocessors.add('bootstraped-tables',
-                                      BootstrapedTableProcessor(md.parser),
-                                      '<hashheader')
+        parser: BlockParser = md.parser
+        parser.blockprocessors.register(
+            BootstrapedTableProcessor(parser),
+            'bootstraped-tables',
+            75,
+        )
 
 
 def makeExtension(*args, **kwargs):

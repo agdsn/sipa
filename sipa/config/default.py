@@ -29,6 +29,13 @@ FLATPAGES_MARKDOWN_EXTENSIONS = [
     'meta',
     'attr_list'
 ]
+FLATPAGES_EXTENSION_CONFIGS = {
+    'sane_lists': {},
+    'sipa.utils.bootstraped_tables': {},
+    'sipa.utils.link_patch': {},
+    'meta': {},
+    'attr_list': {},
+}
 
 # Mail configuration
 MAILSERVER_HOST = ""

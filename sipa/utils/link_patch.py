@@ -1,6 +1,7 @@
 import re
 
 from flask import request
+from markdown import Markdown
 from markdown.extensions import Extension
 from markdown.postprocessors import Postprocessor
 
@@ -20,8 +21,7 @@ def absolute_path_replacer(match):
 
 
 class LinkPostprocessor(Postprocessor):
-    @staticmethod
-    def run(text):
+    def run(self, text):
         return re.sub(
             '(href|src)="(/[^"]*)"',
             absolute_path_replacer,
@@ -33,10 +33,13 @@ class LinkPostprocessor(Postprocessor):
 class AbsoluteLinkExtension(Extension):
     """ Add the absolute link patch to Markdown. """
 
-    @staticmethod
-    def extendMarkdown(md, md_globals):
+    def extendMarkdown(self, md: Markdown):
         """ Add an instance of TableProcessor to BlockParser. """
-        md.postprocessors['link_patch'] = LinkPostprocessor(md)
+        md.postprocessors.register(
+            LinkPostprocessor(md),
+            'link_patch',
+            50,
+        )
 
 
 def makeExtension(*args, **kwargs):
