@@ -353,3 +353,9 @@ def version():
         active_branch=get_repo_active_branch(sipa_dir),
         commits=get_latest_commits(sipa_dir, 20),
     )
+
+
+@bp_generic.route('/debug-sentry')
+def trigger_error():
+    """An endpoint intentionally triggering an error to test reporting"""
+    division_by_zero = 1 / 0
