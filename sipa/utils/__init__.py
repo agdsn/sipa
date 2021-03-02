@@ -16,7 +16,7 @@ from typing import Iterable, Optional
 
 from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
-from werkzeug import parse_date as parse_datetime
+from werkzeug.http import parse_date as parse_datetime
 
 from datetime import datetime, timedelta, date
 

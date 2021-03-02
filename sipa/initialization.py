@@ -7,7 +7,7 @@ from datetime import datetime
 
 import sentry_sdk
 from flask_babel import Babel, get_locale
-from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_qrcode import QRcode
 from sentry_sdk.integrations.flask import FlaskIntegration
 
@@ -38,7 +38,7 @@ def init_app(app, **kwargs):
     * registering the Jinja global variables
     """
     load_config_file(app, config=kwargs.pop('config', None))
-    app.wsgi_app = ProxyFix(app.wsgi_app, app.config['NUM_PROXIES'])
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=app.config['NUM_PROXIES'])
     init_logging(app)
     init_env_and_config(app)
     logger.debug('Initializing app')
