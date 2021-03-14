@@ -8,6 +8,11 @@ let statusMessages = {
         'en': 'There are currently no known issues.',
         'classes': 'glyphicon-ok-sign text-success',
     },
+    'maintenance': {
+        'de': 'Derzeit findet eine Wartung statt.',
+        'en': 'There is an ongoing maintenance.',
+        'classes': 'glyphicon-info-sign text-primary',
+    },
     'performanceIssues': {
         'de': 'Es gibt derzeit Leistungsprobleme.',
         'en': 'There are currently performance issues.',
@@ -28,13 +33,14 @@ let statusMessages = {
 //Status widget
 var initStatus = function (components) {
     let content = '',
-        statusCode = 'okay';
+        statusCode = 'okay'
+        allGood = true;
 
     for (var i = 0; i < components.length; i++) {
         let listComponent = false;
         let new_content = '<div>';
 
-        if (components[i].status === 'leistungsprobleme') {
+        if (components[i].status === 'degraded performance') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
 
             if(statusCode === 'okay') {
@@ -42,7 +48,15 @@ var initStatus = function (components) {
             }
 
             listComponent = true
-        } else if (components[i].status === 'teilweiser ausfall') {
+        } else if (components[i].status === 'maintenance') {
+            new_content += '<span class="glyphicon glyphicon-info-sign text-primary"></span>';
+
+            if(statusCode === 'okay'){
+                statusCode = 'maintenance';
+            }
+
+            listComponent = true
+        } else if (components[i].status === 'partial outage') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
 
             if(statusCode === 'okay' || statusCode === 'performanceIssues'){
@@ -50,7 +64,7 @@ var initStatus = function (components) {
             }
 
             listComponent = true
-        }else if (components[i].status === 'schwerer ausfall') {
+        }else if (components[i].status === 'major outage') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
 
             statusCode = 'fullOutage';
@@ -86,4 +100,4 @@ var initStatus = function (components) {
     }
 };
 
-new CachetStatus('https://status.agdsn.net', initStatus);
+new Statuspage('https://status.agdsn.net', initStatus);

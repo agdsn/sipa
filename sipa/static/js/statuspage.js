@@ -1,14 +1,14 @@
 (function () {
-    let CachetStatus = function (url, callback) {
+    let Statuspage = function (url, callback) {
         this.init(url, callback);
     };
 
-    CachetStatus.DEFAULTS = {
-        endpointPath: '/api/v1/components?per_page=100'
+    Statuspage.DEFAULTS = {
+        endpointPath: '/pubapi/services/all'
     };
 
-    CachetStatus.prototype.init = function (url, callback) {
-        this.url = url.concat(CachetStatus.DEFAULTS.endpointPath);
+    Statuspage.prototype.init = function (url, callback) {
+        this.url = url.concat(Statuspage.DEFAULTS.endpointPath);
         this.callback = callback || function () {
         };
 
@@ -23,25 +23,15 @@
                 for (let i = 0; i < data.length; i++) {
                     components.push({
                         name: data[i].name,
-                        status: data[i].status_name.toLowerCase(),
-                        group_id: data[i].group_id,
+                        status: data[i].status.name.toLowerCase(),
+                        position: data[i].position,
                     });
                 }
 
                 components.sort(function (f, s) {
-                    if (f.name > s.name) {
+                    if (f.position > s.position) {
                         return 1;
-                    } else if (f.name < s.name) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-
-                components.sort(function (f, s) {
-                    if (f.group_id > s.group_id) {
-                        return 1;
-                    } else if (f.group_id < s.group_id) {
+                    } else if (f.position < s.position) {
                         return -1;
                     } else {
                         return 0;
@@ -67,10 +57,10 @@
         this.async = true;
 
         if (typeof (Storage) !== "undefined") {
-            if (sessionStorage.cachetCacheExpires && parseInt(sessionStorage.cachetCacheExpires) > Date.now()
-                && sessionStorage.cachetCache !== null && sessionStorage.cachetCache[this.url] !== null) {
+            if (sessionStorage.statuspageCacheExpires && parseInt(sessionStorage.statuspageCacheExpires) > Date.now()
+                && sessionStorage.statuspageCache !== null && sessionStorage.statuspageCache[this.url] !== null) {
 
-                let response = JSON.parse(sessionStorage.cachetCache)[this.url];
+                let response = JSON.parse(sessionStorage.statuspageCache)[this.url];
 
                 if (response) {
                     this.success.call(null, response);
@@ -102,16 +92,16 @@
 
         if (xhr.status === 200) {
             if (typeof (Storage) !== "undefined") {
-                if (typeof (sessionStorage.cachetCache) !== 'string') {
-                    sessionStorage.cachetCache = '{}';
+                if (typeof (sessionStorage.statuspageCache) !== 'string') {
+                    sessionStorage.statuspageCache = '{}';
                 }
 
-                let cache = JSON.parse(sessionStorage.cachetCache);
+                let cache = JSON.parse(sessionStorage.statuspageCache);
 
                 cache[this.url] = response;
 
-                sessionStorage.cachetCache = JSON.stringify(cache);
-                sessionStorage.cachetCacheExpires = Date.now() + (120 * 1000)
+                sessionStorage.statuspageCache = JSON.stringify(cache);
+                sessionStorage.statuspageCacheExpires = Date.now() + (120 * 1000)
             }
 
             this.success.call(null, response);
@@ -127,5 +117,5 @@
         this.error.call(null, response);
     };
 
-    window.CachetStatus = CachetStatus;
+    window.Statuspage = Statuspage;
 })();
