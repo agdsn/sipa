@@ -21,6 +21,15 @@ def absolute_path_replacer(match):
 
 
 class LinkPostprocessor(Postprocessor):
+    """A postprocessor fixing absolute links in the HTML result of a markdown render.
+
+    This needs to be a postprocessor compared to a treeprocessor, because
+    the link may be in a pure HTML block.  Those blocks however are processed by means
+    of the [`MarkdownInHtmlExtension`](https://python-markdown.github.io/extensions/md_in_html/),
+    which replaces HTML by a tag in a preprocessing step and replaces this tag by the HTML
+    in a postprocessing step.
+    Therefore, the only way to catch these links is with a postprocessor and a regex.
+    """
     def run(self, text):
         return re.sub(
             '(href|src)="(/[^"]*)"',
@@ -35,10 +44,12 @@ class AbsoluteLinkExtension(Extension):
 
     def extendMarkdown(self, md: Markdown):
         """ Add an instance of TableProcessor to BlockParser. """
+        # see https://python-markdown.github.io/extensions/api/#registries for what's happening here
         md.postprocessors.register(
             LinkPostprocessor(md),
             'link_patch',
-            50,
+            # we need to run after `raw_html` (prio=30).  See `LinkPostprocessor` docstring.
+            20,
         )
 
 
