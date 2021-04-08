@@ -35,9 +35,12 @@ class UserDB(BaseUserDB):
                              "more than one consecutive '%' sign".format(mask))
 
     @staticmethod
-    def sql_query(query, args=()):
+    def sql_query(query: str, args=()):
         """Prepare and execute a raw sql query.
-        'args' is a tuple needed for string replacement.
+
+        :param query: See :py:meth:`pymysql.cursors.Cursor.execute`.
+        :param args: is a tuple needed for string replacement.
+            See :py:meth:`pymysql.cursors.Cursor.execute`.
         """
         database = current_app.extensions['db_helios']
         # Connection.__enter__ returns Cursor, Cursor.__enter__ returns itself
