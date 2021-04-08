@@ -120,7 +120,8 @@ def register_userdb_extension(app):
     try:
         app.extensions['db_helios'] = create_engine(
             app.config['DB_HELIOS_URI'],
-            echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']}
+            echo=False, connect_args={'connect_timeout': app.config['SQL_TIMEOUT']},
+            pool_recycle=app.config['SQL_CONNECTION_RECYCLE'],
         )
     except KeyError as exception:
         raise InvalidConfiguration(*exception.args)
