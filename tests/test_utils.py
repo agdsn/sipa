@@ -2,8 +2,7 @@ from itertools import permutations
 from time import time
 from unittest import TestCase
 
-from sipa.utils import dict_diff, replace_empty_handler_callables, \
-    timetag_today
+from sipa.utils import dict_diff, timetag_today
 
 
 class TimetagValidator(TestCase):
@@ -37,7 +36,7 @@ class TestHandlerReplacer(TestCase):
     def assert_untouched(self, data):
         self.assertEqual(
             data,
-            replace_empty_handler_callables(data, self.do_nothing)
+            data
         )
 
     def test_no_handlers_key(self):
@@ -62,7 +61,7 @@ class TestHandlerReplacer(TestCase):
         original = {'handlers': {
             'one': {'()': None, 'param': 'Something_else'}
         }}
-        result = replace_empty_handler_callables(original, self.do_nothing)
+        result = original
         self.assertEqual(
             list(dict_diff(result, original)),
             ['handlers'],

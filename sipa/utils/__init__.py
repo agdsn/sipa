@@ -150,40 +150,6 @@ def argstr(*args, **kwargs):
     ))
 
 
-def replace_empty_handler_callables(config: dict, func) -> dict:
-    """Register func as specific handler's callable in a dict logging config.
-
-    This method looks at the elements of the 'handlers' section of the
-    `config`.
-
-    If an element has an unassigned handler callable, which is a dict line
-    `'()': None`, `None` is replaced by func.
-
-    This function is kind of a hack, but necessary, because else the
-    choice of the handler callable is limited to some static,
-    predefined method.
-
-    The specific example that lead to this: Because the callable to
-    create a SentryHandler can only be defined *after* the import of
-    the default config dict, but *before* the knowledge whether a
-    `SENTRY_DSN` is given, it has to be dynamically created.
-
-    :param config: A dict as used for logging.dictConfig()
-    :return: The new, modified dict
-    """
-
-    if 'handlers' not in config:
-        return config
-
-    ret = config.copy()
-    ret['handlers'] = {
-        h_name: {param: (func
-                         if val is None and param == '()'
-                         else val)
-                 for param, val in h_conf.items()}
-        for h_name, h_conf in ret['handlers'].items()
-    }
-    return ret
 
 
 def dict_diff(d1, d2):

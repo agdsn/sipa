@@ -22,13 +22,6 @@ DEFAULT_CONFIG = {
             'level': 'DEBUG',
             'formatter': 'verbose',
         },
-        'sentry': {
-            # None will be replaced by the locally defined callable.
-            # (see sipa.initialization.init_logging)
-            '()': None,
-            'level': 'NOTSET',
-            'formatter': 'medium',
-        },
     },
     'loggers': {
         'root': {
@@ -37,7 +30,7 @@ DEFAULT_CONFIG = {
         },
         'sipa': {
             'level': 'DEBUG',
-            'handlers': ['stdout', 'sentry'],
+            'handlers': ['stdout'],
             'propagate': True,  # Important for `sipa.*` loggers
         },
     }

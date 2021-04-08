@@ -20,7 +20,7 @@ from sipa.forms import render_links
 from sipa.model import build_backends_ext
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
-from sipa.utils import replace_empty_handler_callables, url_self
+from sipa.utils import url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.graph_utils import generate_traffic_chart, provide_render_function
@@ -179,8 +179,6 @@ def init_logging(app):
     - If given and existent, apply the additional config file
     """
 
-    # TODO simplify this, by a lot.
-
     if not (dsn := app.config['SENTRY_DSN']):
         logger.debug("No sentry DSN specified")
     # Configure Sentry SDK
@@ -193,18 +191,11 @@ def init_logging(app):
             # release="myapp@1.0.0",
         )
 
-    def register_sentry_handler():
-        return logging.NullHandler()
-
     # Apply default config dict
-    config = replace_empty_handler_callables(DEFAULT_CONFIG,
-                                             register_sentry_handler)
-    logging.config.dictConfig(config)
+    logging.config.dictConfig(DEFAULT_CONFIG)
 
     if app.config.get('LOG_CONFIG') is not None:
-        config = replace_empty_handler_callables(app.config['LOG_CONFIG'],
-                                                 register_sentry_handler)
-        logging.config.dictConfig(config)
+        logging.config.dictConfig(app.config['LOG_CONFIG'])
 
     logger.debug('Initialized logging', extra={'data': {
         'DEFAULT_CONFIG': DEFAULT_CONFIG,
