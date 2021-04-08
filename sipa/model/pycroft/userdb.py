@@ -57,7 +57,8 @@ class UserDB(BaseUserDB):
 
             return userdb is not None
         except OperationalError:
-            logger.critical("User db of user %s unreachable", self.db_name())
+            logger.critical("User db of user %s unreachable", self.db_name(),
+                            exc_info=True)
             return None
 
     def create(self, password):
