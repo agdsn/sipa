@@ -26,7 +26,7 @@ def show():
         key=attrgetter('date'),
         reverse=True,
     )
-    if len(news) is 0:
+    if len(news) == 0:
         return render_template("index.html", articles=None,
                                previous_range=0, next_range=0)
 
