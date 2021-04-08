@@ -371,7 +371,7 @@ class HostingForm(FlaskForm):
         DataRequired(lazy_gettext("Kein Passwort eingegeben!")),
         PasswordComplexity(),
     ])
-    confirm = PasswordField(lazy_gettext("Bestätigung"), validators=[
+    password_confirmation = PasswordField(lazy_gettext("Bestätigung"), validators=[
         DataRequired(lazy_gettext("Bestätigung des neuen Passworts fehlt!")),
         EqualTo('password',
                 message=lazy_gettext("Neue Passwörter stimmen nicht überein!"))
