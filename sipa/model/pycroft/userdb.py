@@ -40,9 +40,10 @@ class UserDB(BaseUserDB):
         'args' is a tuple needed for string replacement.
         """
         database = current_app.extensions['db_helios']
-        conn = database.connect()
-        result = conn.execute(query, args)
-        conn.close()
+        # Connection.__enter__ returns Cursor, Cursor.__enter__ returns itself
+        # and we need both things for their `__exit__` commands
+        with database.connect() as cursor, cursor:
+            result = cursor.execute(query, args)
         return result
 
     @property
