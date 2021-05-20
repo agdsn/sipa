@@ -1,13 +1,13 @@
 # German translations for sipa.
-# Copyright (C) 2020 AG DSN
+# Copyright (C) 2021 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-20 21:26+0200\n"
+"POT-Creation-Date: 2021-05-20 15:58+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -212,6 +212,24 @@ msgstr ""
 msgid "Anmeldung merken"
 msgstr ""
 
+msgid "Nutzername oder Nutzer-ID"
+msgstr ""
+
+msgid "Identifizierung enthält ungültige Zeichen!"
+msgstr ""
+
+msgid "Hinterlegte E-Mail-Adresse"
+msgstr ""
+
+msgid "Passwort muss angegeben werden!"
+msgstr ""
+
+msgid "Passwort erneut eingeben"
+msgstr ""
+
+msgid "Passwörter stimmen nicht überein!"
+msgstr ""
+
 msgid "Monate"
 msgstr ""
 
@@ -267,15 +285,6 @@ msgid ""
 "Kleinbuchstaben, Zahlen und Interpunktionszeichen (Punkt und Bindestrich)"
 " fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen "
 "den Interpunktionszeichen stehen."
-msgstr ""
-
-msgid "Passwort muss angegeben werden!"
-msgstr ""
-
-msgid "Passwort erneut eingeben"
-msgstr ""
-
-msgid "Passwörter stimmen nicht überein!"
 msgstr ""
 
 msgid "E-Mail-Adresse erneut eingeben"
@@ -347,6 +356,31 @@ msgstr ""
 msgid "Abmeldung erfolgreich!"
 msgstr ""
 
+msgid "Für die angegebenen Daten konnte kein Benutzer gefunden werden."
+msgstr ""
+
+msgid "Es ist ein unbekannter Fehler aufgetreten."
+msgstr ""
+
+msgid "Bitte kontaktiere den Support."
+msgstr ""
+
+msgid ""
+"Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. Falls"
+" du die Nachricht nicht erhälst, wende dich an den Support."
+msgstr ""
+
+msgid "Passwort zurücksetzen"
+msgstr ""
+
+msgid ""
+"Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen "
+"Link an."
+msgstr ""
+
+msgid "Dein Passwort wurde geändert."
+msgstr ""
+
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
@@ -362,12 +396,6 @@ msgid "Nachricht wurde versandt."
 msgstr ""
 
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
-msgstr ""
-
-msgid ""
-"Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
-"erforderlich, wenn Du Administratoren eines anderen Wohnheims "
-"kontaktieren willst."
 msgstr ""
 
 msgid ""
@@ -466,12 +494,6 @@ msgid "E-Mail-Weiterleitung"
 msgstr ""
 
 msgid "WLAN Passwort"
-msgstr ""
-
-msgid "Hostname"
-msgstr ""
-
-msgid "Hostalias"
 msgstr ""
 
 msgid "MySQL Datenbank"
@@ -793,6 +815,9 @@ msgid "Neuer"
 msgstr ""
 
 msgid "Älter"
+msgstr ""
+
+msgid "Passwort vergessen?"
 msgstr ""
 
 msgid "Dieses Wohnheim erreichst du hier:"
@@ -1759,5 +1784,26 @@ msgstr ""
 #~ "Probleme auftreten, kontaktiere uns, der "
 #~ "Hersteller-Support wird dir nicht helfen"
 #~ " können."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Sicher, dass Du das anonyme Formular "
+#~ "benutzen möchtest? Dies ist nur "
+#~ "erforderlich, wenn Du Administratoren eines"
+#~ " anderen Wohnheims kontaktieren willst."
+#~ msgstr ""
+
+#~ msgid "Hostname"
+#~ msgstr ""
+
+#~ msgid "Hostalias"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Für das angegebene Nutzerkonto ist keine"
+#~ " Kontakt E-Mail Adresse hinterlegt. {}"
+#~ msgstr ""
+
+#~ msgid "Es ist ein unbekannter Fehler aufgetreten. {}"
 #~ msgstr ""
 

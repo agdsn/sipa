@@ -1,14 +1,14 @@
 # English translations for sipa.
-# Copyright (C) 2020 AG DSN
+# Copyright (C) 2021 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-20 21:26+0200\n"
-"PO-Revision-Date: 2020-09-20 21:26+0200\n"
+"POT-Creation-Date: 2021-05-20 15:58+0200\n"
+"PO-Revision-Date: 2021-05-20 16:00+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
 "Language: en\n"
 "Language-Team: \n"
@@ -16,9 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.9.1\n"
 "X-Source-Language: de\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.3\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
@@ -219,6 +219,25 @@ msgstr "No password submitted!"
 msgid "Anmeldung merken"
 msgstr "Remember me"
 
+msgid "Nutzername oder Nutzer-ID"
+msgstr "Username or User-ID"
+
+#, fuzzy
+msgid "Identifizierung enthält ungültige Zeichen!"
+msgstr "Username contains invalid characters!"
+
+msgid "Hinterlegte E-Mail-Adresse"
+msgstr "Your e-mail address"
+
+msgid "Passwort muss angegeben werden!"
+msgstr "Password must be entered!"
+
+msgid "Passwort erneut eingeben"
+msgstr "Re-enter password"
+
+msgid "Passwörter stimmen nicht überein!"
+msgstr "Passwords do not match!"
+
 msgid "Monate"
 msgstr "Months"
 
@@ -280,15 +299,6 @@ msgstr ""
 "Your username must start with a lowercase letter and can be continued with "
 "lowercase letters, numbers and punctuation marks (dot and hyphen), but there "
 "must be lowercase letters or numbers between the punctuation marks."
-
-msgid "Passwort muss angegeben werden!"
-msgstr "Password must be entered!"
-
-msgid "Passwort erneut eingeben"
-msgstr "Re-enter password"
-
-msgid "Passwörter stimmen nicht überein!"
-msgstr "Passwords do not match!"
 
 msgid "E-Mail-Adresse erneut eingeben"
 msgstr "Re-enter email address"
@@ -365,6 +375,33 @@ msgstr "Authentication successful!"
 msgid "Abmeldung erfolgreich!"
 msgstr "Logout successful!"
 
+msgid "Für die angegebenen Daten konnte kein Benutzer gefunden werden."
+msgstr "No user could be found for the given data."
+
+#, fuzzy
+msgid "Es ist ein unbekannter Fehler aufgetreten."
+msgstr "An error occured!"
+
+msgid "Bitte kontaktiere den Support."
+msgstr "Please contact our support team."
+
+msgid ""
+"Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. Falls du die "
+"Nachricht nicht erhälst, wende dich an den Support."
+msgstr ""
+"A message was sent to the email address you entered. If you do not receive the "
+"message, contact our support team."
+
+msgid "Passwort zurücksetzen"
+msgstr "Reset Password"
+
+msgid ""
+"Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."
+msgstr "The used password-reset token is invalid. Please request a new link."
+
+msgid "Dein Passwort wurde geändert."
+msgstr "Password has been changed."
+
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr "You can't see traffic data because of your account status."
 
@@ -380,14 +417,6 @@ msgstr "Message was sent."
 
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr "There was an error sending your message."
-
-msgid ""
-"Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
-"erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
-"willst."
-msgstr ""
-"Are you sure you want to use the anonymous contact form? This is necessary only "
-"if you wish to contact administrators of a different dormitory."
 
 msgid ""
 "Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es erneut."
@@ -497,12 +526,6 @@ msgstr "E-Mail forwarding address"
 
 msgid "WLAN Passwort"
 msgstr "WiFi Password"
-
-msgid "Hostname"
-msgstr "Hostname"
-
-msgid "Hostalias"
-msgstr "Host alias"
 
 msgid "MySQL Datenbank"
 msgstr "MySQL database"
@@ -828,6 +851,9 @@ msgstr "Newer"
 msgid "Älter"
 msgstr "Older"
 
+msgid "Passwort vergessen?"
+msgstr "Forgot password?"
+
 msgid "Dieses Wohnheim erreichst du hier:"
 msgstr "You can reach this dormitory over here:"
 
@@ -1138,3 +1164,17 @@ msgstr "Outgoing"
 
 #~ msgid "Büro nur für Bewohner der Borsbergstraße"
 #~ msgstr "Office only for residents of Borsbergstraße"
+
+#~ msgid ""
+#~ "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur "
+#~ "erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren "
+#~ "willst."
+#~ msgstr ""
+#~ "Are you sure you want to use the anonymous contact form? This is necessary "
+#~ "only if you wish to contact administrators of a different dormitory."
+
+#~ msgid "Hostname"
+#~ msgstr "Hostname"
+
+#~ msgid "Hostalias"
+#~ msgstr "Host alias"

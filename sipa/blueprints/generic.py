@@ -173,14 +173,11 @@ def request_password_reset():
     if form.validate_on_submit():
         try:
             pycroft.user.User.request_password_reset(form.ident.data, form.email.data)
-        except UserNotFound:
+        except (UserNotContactableError, UserNotFound):
             flash(_("Für die angegebenen Daten konnte kein Benutzer gefunden werden."), "error")
-        except UserNotContactableError:
-            flash(_("Für das angegebene Nutzerkonto ist keine Kontakt E-Mail Adresse hinterlegt. "
-                    "{}".format(_("Bitte kontaktiere den Support."))), "error")
         except UnknownError:
-            flash(_("Es ist ein unbekannter Fehler aufgetreten. "
-                    "{}".format(_("Bitte kontaktiere den Support."))), "error")
+            flash("{} {}".format(_("Es ist ein unbekannter Fehler aufgetreten."),
+                                 _("Bitte kontaktiere den Support.")), "error")
         else:
             flash(gettext("Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. "
                           "Falls du die Nachricht nicht erhälst, wende dich an den Support."), "success")
@@ -204,8 +201,8 @@ def reset_password(token):
             flash(_("Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."), "error")
             return redirect(url_for('.request_password_reset'))
         except UnknownError:
-            flash(_("Es ist ein unbekannter Fehler aufgetreten. "
-                    "{}".format(_("Bitte kontaktiere den Support."))), "error")
+            flash("{} {}".format(_("Es ist ein unbekannter Fehler aufgetreten."),
+                                 _("Bitte kontaktiere den Support.")), "error")
         else:
             flash(gettext("Dein Passwort wurde geändert."), "success")
 
