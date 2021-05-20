@@ -11,15 +11,18 @@
     <table class="panel-body table table-hover">
         <thead>
             <tr>
-                <th>{{ _("Datum") }}</th> <th>{{ _("Wert") }}</th>
+                <th>{{ _("Datum") }}</th>
+                <th>{{ _("Referenz") }}</th>
+                <th>{{ _("Wert") }}</th>
             </tr>
         </thead>
 
         <tbody>
-            {% for date, value in logs %}
-                <tr class="{{ value_context(value) }}">
-                    <td>{{ date | date }}</td>
-                    <td>{{ value | money }}</td>
+            {% for log in logs %}
+                <tr class="{{ value_context(log[1]) }}">
+                    <td>{{ log[0] | date }}</td>
+                    <td>{{ log[2] }}</td>
+                    <td>{{ log[1] | money }}</td>
                 </tr>
             {% endfor %}
         </tbody>

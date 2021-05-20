@@ -278,7 +278,7 @@ class User(BaseUser):
     def finance_information(self):
         return FinanceInformation(
             balance=self.user_data.finance_balance,
-            transactions=((parse_date(t.valid_on), t.amount) for t in
+            transactions=((parse_date(t.valid_on), t.amount, t.description) for t in
                           self.user_data.finance_history),
             last_update=parse_date(self.user_data.last_finance_update)
         )

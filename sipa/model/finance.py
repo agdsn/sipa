@@ -58,7 +58,7 @@ class BaseFinanceInformation(metaclass=ABCMeta):
     def history(self):
         """**[Abstract]** History of payments
 
-        This method should return an iterable of a (datetime, int)
+        This method should return an iterable of a (datetime, int, description)
         tuple.
         """
         pass

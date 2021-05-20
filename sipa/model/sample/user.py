@@ -51,9 +51,9 @@ class SampleFinanceInformation(BaseFinanceInformation):
     @property
     def history(self):
         return [
-            (datetime(2016, 4, 1), 21),
-            (datetime(2016, 4, 30), -3.5),
-            (datetime(2016, 5, 30), -3.5),
+            (datetime(2016, 4, 1), 21, "Desc 1"),
+            (datetime(2016, 4, 30), -3.5, "Desc 2"),
+            (datetime(2016, 5, 30), -3.5, "Desc 3"),
         ]
 
     @property
