@@ -19,7 +19,7 @@ from sipa.model import pycroft
 from sipa.units import dynamic_unit, format_money
 from sipa.utils import get_user_name, redirect_url
 from sipa.model.exceptions import UserNotFound, InvalidCredentials, UnknownError, \
-    UserNotContactableError, TokenNotFound, PasswordInvalid
+    UserNotContactableError, TokenNotFound, PasswordInvalid, LoginNotAllowed
 from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
 
 logger = logging.getLogger(__name__)
@@ -120,7 +120,13 @@ def login():
         try:
             user = User.authenticate(username, password)
         except InvalidCredentials as e:
-            cause = "username" if isinstance(e, UserNotFound) else "password"
+            if isinstance(e, UserNotFound):
+                cause = "username"
+            elif isinstance(e, LoginNotAllowed):
+                cause = "login permission"
+            else:
+                cause = "password"
+
             logger.info("Authentication failed: Wrong %s", cause, extra={
                 'tags': {'user': username, 'rate_critical': True}
             })
