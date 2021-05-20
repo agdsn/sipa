@@ -24,8 +24,7 @@ class UserData:
     interfaces: List[Interface]
     finance_balance: Decimal
     finance_history: List[FinanceHistoryEntry]
-    # TODO implement `cls.Meta.custom_constructors`, use `parse_date` for this
-    last_finance_update: str
+    last_finance_update: date
 
     # TODO introduce properties once they can be excluded
 
