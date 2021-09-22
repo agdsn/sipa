@@ -12,7 +12,7 @@
     </a>
     {% endif %}
     {% if current_user.network_access_active.capabilities.edit %}
-    <a href="{{ url_for('.activate_network_access') }}" class="btn btn-default">
+    <a href="{{ url_for('.activate_network_access') }}" class="btn btn-info">
         <span class="glyphicon glyphicon-off"></span>
         {{ _("Netzwerkanschluss aktivieren") }}
     </a>
