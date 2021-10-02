@@ -16,7 +16,7 @@ from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo, InputRequir
 from sipa.backends.extension import backends, _dorm_summary
 
 
-mac_regex = re.compile(r"^[a-f0-9]{2}((:|-)[a-f0-9]{2}){5}$")
+mac_regex = re.compile(r"^[a-f0-9]{2}((:|-|)[a-f0-9]{2}){5}$")
 
 class MacAddress(Regexp):
     def __init__(self, message=None):
