@@ -65,11 +65,17 @@ class LoginTestCase(FormTemplateTestMixin, SampleFrontendTestBase):
             'password': "test",
             'remember': "1",
         }]
+        #self.invalid_data = [
+        #    {**self.valid_data[0], 'dormitory': ''},
+        #    {**self.valid_data[0], 'dormitory': 'not_'+self.dormitory},
+        #    {**self.valid_data[0], 'username': ''},
+        #    {**self.valid_data[0], 'username': 'not_test'},
+        #]
         self.invalid_data = [
-            {**self.valid_data[0], 'dormitory': ''},
-            {**self.valid_data[0], 'dormitory': 'not_'+self.dormitory},
-            {**self.valid_data[0], 'username': ''},
-            {**self.valid_data[0], 'username': 'not_test'},
+            {'dormitory': ''},
+            {'dormitory': 'not_' + self.dormitory},
+            {'username': ''},
+            {'username': 'not_test'},
         ]
 
 
@@ -102,13 +108,21 @@ class AnonymousContactTestCase(FormTemplateTestMixin, ContactFormTestBase):
             'subject': "Test",
             'message': "Test message!",
         }]
+        #self.invalid_data = [
+        #    {**self.valid_data[0], 'email': ''},
+        #    {**self.valid_data[0], 'email': 'foo@bar'},
+        #    {**self.valid_data[0], 'name': ''},
+        #    {**self.valid_data[0], 'dormitory': 'not_'+self.dormitory},
+        #    {**self.valid_data[0], 'subject': ''},
+        #    {**self.valid_data[0], 'message': ''},
+        #]
         self.invalid_data = [
-            {**self.valid_data[0], 'email': ''},
-            {**self.valid_data[0], 'email': 'foo@bar'},
-            {**self.valid_data[0], 'name': ''},
-            {**self.valid_data[0], 'dormitory': 'not_'+self.dormitory},
-            {**self.valid_data[0], 'subject': ''},
-            {**self.valid_data[0], 'message': ''},
+            {'email': ''},
+            {'email': 'foo@bar'},
+            {'name': ''},
+            {'dormitory': 'not_' + self.dormitory},
+            {'subject': ''},
+            {'message': ''},
         ]
 
 
@@ -124,12 +138,20 @@ class OfficialContactTestCase(FormTemplateTestMixin, ContactFormTestBase):
             'subject': "Test",
             'message': "Test message!",
         }]
+        #self.invalid_data = [
+        #    {**self.valid_data[0], 'email': ''},
+        #    {**self.valid_data[0], 'email': 'foo@bar'},
+        #    {**self.valid_data[0], 'name': ''},
+        #    {**self.valid_data[0], 'subject': ''},
+        #    {**self.valid_data[0], 'message': ''},
+        #]
+
         self.invalid_data = [
-            {**self.valid_data[0], 'email': ''},
-            {**self.valid_data[0], 'email': 'foo@bar'},
-            {**self.valid_data[0], 'name': ''},
-            {**self.valid_data[0], 'subject': ''},
-            {**self.valid_data[0], 'message': ''},
+            {'email': ''},
+            {'email': 'foo@bar'},
+            {'name': ''},
+            {'subject': ''},
+            {'message': ''},
         ]
 
 
