@@ -63,6 +63,9 @@ datasource = DataSource(
         ]),
         ('fl', "Fritz-Löffler-Straße", [
             IPv4Network('141.30.28.0/24'),  # FL16
+            IPv4Network('141.30.220.0/24'),  # FL12
+            IPv4Network('141.30.229.0/24'),  # FL12
+            IPv4Network('141.30.230.0/24'),  # FL12
         ]),
         ('gps', "Gret-Palucca-Straße", [
             IPv4Network('141.30.207.0/24'),  # GPS11
