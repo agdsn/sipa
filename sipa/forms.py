@@ -11,9 +11,16 @@ from werkzeug.local import LocalProxy
 from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
                      StringField, TextAreaField, RadioField, IntegerField, DateField, SubmitField)
 from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo, InputRequired,
-                                MacAddress, Regexp, ValidationError, NumberRange, Optional, Length)
+                                Regexp, ValidationError, NumberRange, Optional, Length)
 
 from sipa.backends.extension import backends, _dorm_summary
+
+
+mac_regex = re.compile(r"^[a-f0-9]{2}((:|-)[a-f0-9]{2}){5}$")
+
+class MacAddress(Regexp):
+    def __init__(self, message=None):
+        super(MacAddress, self).__init__(mac_regex, message=message)
 
 
 class PasswordComplexity(object):
