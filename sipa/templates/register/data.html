@@ -1,6 +1,7 @@
 {% extends "register/base.html" %}#
 
 {% block register_content %}
-    {{  forms.render_simple(form=form, form_id="register-form", submit_text=_("Kostenpflichtig Mitglied werden"),
+    {{  forms.render_simple(form=form, form_id="register-form",
+                            submit_text=_("Kostenpflichtig Mitglied werden (5€/Mo.)"),
                             cancel_to=url_for('.cancel'), links=links) }}
 {% endblock %}
