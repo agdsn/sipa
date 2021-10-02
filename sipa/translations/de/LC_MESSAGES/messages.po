@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-05-20 16:18+0200\n"
+"POT-Creation-Date: 2021-10-02 12:00+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -449,6 +449,12 @@ msgstr ""
 msgid "Registrierung aus unbekanntem Grund fehlgeschlagen."
 msgstr ""
 
+msgid ""
+"Du hast die Verifikation übersprungen oder dein Zimmer nicht bestätigt. "
+"Dadurch kann dein Antrag nicht automatisch bearbeitet werden. Eine "
+"manuelle Bearbeitung kann mehrere Tage dauern."
+msgstr ""
+
 msgid "Konto erstellen"
 msgstr ""
 
@@ -872,7 +878,7 @@ msgstr ""
 msgid "Onlineanmeldung"
 msgstr ""
 
-msgid "Kostenpflichtig Mitglied werden"
+msgid "Kostenpflichtig Mitglied werden (5€/Mo.)"
 msgstr ""
 
 msgid "Verifizierung überspringen"
@@ -1019,6 +1025,141 @@ msgid "Eingehend"
 msgstr ""
 
 msgid "Ausgehend"
+msgstr ""
+
+msgid "show this help message and exit"
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
+msgid "File does not have an approved extension: {extensions}"
+msgstr ""
+
+msgid "File does not have an approved extension."
+msgstr ""
+
+#, python-format
+msgid "Invalid field name '%s'."
+msgstr ""
+
+#, python-format
+msgid "Field must be equal to %(other_name)s."
+msgstr ""
+
+#, python-format
+msgid "Field must be at least %(min)d character long."
+msgid_plural "Field must be at least %(min)d characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Field cannot be longer than %(max)d character."
+msgid_plural "Field cannot be longer than %(max)d characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Field must be exactly %(max)d character long."
+msgid_plural "Field must be exactly %(max)d characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Field must be between %(min)d and %(max)d characters long."
+msgstr ""
+
+#, python-format
+msgid "Number must be at least %(min)s."
+msgstr ""
+
+#, python-format
+msgid "Number must be at most %(max)s."
+msgstr ""
+
+#, python-format
+msgid "Number must be between %(min)s and %(max)s."
+msgstr ""
+
+msgid "Invalid input."
+msgstr ""
+
+msgid "Invalid email address."
+msgstr ""
+
+msgid "Invalid IP address."
+msgstr ""
+
+msgid "Invalid Mac address."
+msgstr ""
+
+msgid "Invalid URL."
+msgstr ""
+
+msgid "Invalid UUID."
+msgstr ""
+
+#, python-format
+msgid "Invalid value, must be one of: %(values)s."
+msgstr ""
+
+#, python-format
+msgid "Invalid value, can't be any of: %(values)s."
+msgstr ""
+
+msgid "Invalid CSRF Token"
+msgstr ""
+
+msgid "CSRF token missing"
+msgstr ""
+
+msgid "CSRF failed"
+msgstr ""
+
+msgid "CSRF token expired"
+msgstr ""
+
+msgid "Not a valid choice"
+msgstr ""
+
+msgid "Not a valid list"
+msgstr ""
+
+msgid "Not a valid integer list"
+msgstr ""
+
+msgid "Please input a date/time value"
+msgstr ""
+
+msgid "Invalid date/time input"
+msgstr ""
+
+msgid "Invalid Choice: could not coerce"
+msgstr ""
+
+msgid "Invalid choice(s): one or more data inputs could not be coerced"
+msgstr ""
+
+#, python-format
+msgid "'%(value)s' is not a valid choice for this field"
+msgstr ""
+
+msgid "Not a valid integer value"
+msgstr ""
+
+msgid "Not a valid decimal value"
+msgstr ""
+
+msgid "Not a valid float value"
+msgstr ""
+
+msgid "Not a valid datetime value"
+msgstr ""
+
+msgid "Not a valid date value"
+msgstr ""
+
+msgid "Not a valid time value"
 msgstr ""
 
 #~ msgid "Bezahlt, verbunden"
@@ -1808,5 +1949,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Es ist ein unbekannter Fehler aufgetreten. {}"
+#~ msgstr ""
+
+#~ msgid "Kostenpflichtig Mitglied werden"
 #~ msgstr ""
 
