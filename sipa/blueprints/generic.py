@@ -106,7 +106,9 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        dormitory = backends.get_dormitory(form.dormitory.data)
+        # dormitory = backends.get_dormitory(form.dormitory.data)
+        # Quick fix function to remove dorm selector on login.
+        dormitory = backends.get_first_dormitory()
         username = form.username.data
         password = form.password.data
         remember = form.remember.data

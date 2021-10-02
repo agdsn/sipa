@@ -247,6 +247,17 @@ class Backends:
                 return dormitory
         return None
 
+    def get_first_dormitory(self) -> Optional[Dormitory]:
+        """Quick fix function to remove dorm selector on login.
+
+        :return: The dormitory object
+        """
+        for dormitory in self.all_dormitories:
+            return dormitory
+
+        return None
+
+
     def get_datasource(self, name: str) -> Optional[DataSource]:
         """Lookup the datasource with name ``name``.
 

@@ -318,15 +318,15 @@ class ContinueMembershipForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    dormitory = SelectField(
-        lazy_gettext("Wohnheim"),
-        choices=LocalProxy(lambda: backends.dormitories_short),
-        default=LocalProxy(lambda: backends.preferred_dormitory_name()),
-        validators=[LocalProxy(
-            lambda: AnyOf([dorm.name for dorm in backends.dormitories],
-                          message=lazy_gettext("Kein gültiges Wohnheim!"))
-        )]
-    )
+    #dormitory = SelectField(
+    #    lazy_gettext("Wohnheim"),
+    #    choices=LocalProxy(lambda: backends.dormitories_short),
+    #    default=LocalProxy(lambda: backends.preferred_dormitory_name()),
+    #    validators=[LocalProxy(
+    #        lambda: AnyOf([dorm.name for dorm in backends.dormitories],
+    #                      message=lazy_gettext("Kein gültiges Wohnheim!"))
+    #    )]
+    #)
     username = StrippedStringField(
         label=lazy_gettext("Nutzername"),
         validators=[
