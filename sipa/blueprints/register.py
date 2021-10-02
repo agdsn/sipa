@@ -242,6 +242,13 @@ def data(reg_state: RegisterState):
         form.member_begin_date.data = max(reg_state.move_in_date, date.today()) \
             if reg_state.move_in_date is not None else date.today()
 
+    skipped_verification = reg_state.skipped_verification or (reg_state.room_id is not None and not reg_state.room_confirmed)
+
+    if skipped_verification:
+        flash(gettext("Du hast die Verifikation übersprungen oder dein Zimmer nicht bestätigt. "
+                      "Dadurch kann dein Antrag nicht automatisch bearbeitet werden. "
+                      "Eine manuelle Bearbeitung kann mehrere Tage dauern."), 'warning')
+
     return render_template('register/data.html', title=gettext('Konto erstellen'), form=form,
                            links={
                                'constitution': '../pages/legal/agdsn_constitution',
