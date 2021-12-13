@@ -232,6 +232,8 @@ def data(reg_state: RegisterState):
             elif e.code == 'move_in_date_invalid':
                 flash(gettext("Das Einzugsdatum ist ungültig."), 'error')
             else:
+                logger.exception(e)
+                logger.error(f"Got unexpected error ({e.code}) from Pycroft: {e.message}")
                 flash(gettext('Registrierung aus unbekanntem Grund fehlgeschlagen.'), 'error')
         except PycroftBackendError as e:
             handle_backend_error(e)
