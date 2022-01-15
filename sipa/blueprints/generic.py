@@ -29,12 +29,6 @@ bp_generic = Blueprint('generic', __name__)
 
 @bp_generic.before_app_request
 def log_request():
-    if 'sentry' in current_app.extensions:
-        current_app.extensions['sentry'].client.extra_context({
-            'current_user': get_user_name(current_user),
-            'ip_user': get_user_name(backends.user_from_ip(request.remote_addr))
-        })
-
     logging.getLogger(__name__ + '.http').debug(
         'Incoming request: %s %s', request.method, request.path,
         extra={'tags': {'user': get_user_name(current_user),
