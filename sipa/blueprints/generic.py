@@ -294,6 +294,7 @@ def traffic_api():
 @bp_generic.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = AnonymousContactForm()
+    form.dormitory.choices = backends.dormitories_short
 
     if form.validate_on_submit():
         success = send_contact_mail(

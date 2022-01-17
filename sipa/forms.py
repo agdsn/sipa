@@ -171,7 +171,8 @@ class AnonymousContactForm(SpamProtectedForm):
     )
     dormitory = SelectField(
         label=lazy_gettext("Wohnheim"),
-        choices=LocalProxy(lambda: backends.dormitories_short),
+        # TODO set dormitory.choices in view function
+        # choices=LocalProxy(lambda: backends.dormitories_short),
         default=LocalProxy(lambda: backends.preferred_dormitory_name()),
     )
     subject = StrippedStringField(label=lazy_gettext("Betreff"), validators=[
@@ -321,6 +322,8 @@ class ContinueMembershipForm(FlaskForm):
 class LoginForm(FlaskForm):
     #dormitory = SelectField(
     #    lazy_gettext("Wohnheim"),
+    # # choices=LocalProxy(lambda: backends.dormitories_short),
+    # # TODO set this at instantiation time
     #    choices=LocalProxy(lambda: backends.dormitories_short),
     #    default=LocalProxy(lambda: backends.preferred_dormitory_name()),
     #    validators=[LocalProxy(
@@ -434,7 +437,7 @@ class RegisterIdentifyForm(FlaskForm):
 
     previous_dorm = SelectField(
         label=lazy_gettext("Vorheriges Wohnheim"),
-        choices=LocalProxy(lambda: [_dorm_summary('', '')] + backends.dormitories_short),
+        # choices=LocalProxy(lambda: [_dorm_summary('', '')] + backends.dormitories_short),
         validators=[
             OptionalIf("agdsn_history", invert=True),
             DataRequired("Bitte vorheriges Wohnheim auswählen."),

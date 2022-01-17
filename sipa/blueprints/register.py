@@ -9,7 +9,7 @@ from functools import wraps
 import logging
 from typing import Optional
 
-from sipa.backends.extension import backends
+from sipa.backends.extension import backends, _dorm_summary
 from sipa.model.pycroft.api import PycroftApi, PycroftApiError
 from sipa.model.pycroft.exc import PycroftBackendError
 from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
@@ -120,6 +120,7 @@ def landing():
 @register_redirect
 def identify(reg_state: RegisterState):
     form = RegisterIdentifyForm()
+    form.previous_dorm.choices = [_dorm_summary('', '')] + backends.dormitories_short
 
     suggest_skip = False
     if form.validate_on_submit():
