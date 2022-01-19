@@ -123,10 +123,12 @@ class NativeDateField(DateField):
         super().__init__(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
+        assert isinstance(self.format, list)
+        format = self.format[0]
         if self.min is not None:
-            kwargs['min'] = self.min.strftime(self.format)
+            kwargs['min'] = self.min.strftime(format)
         if self.max is not None:
-            kwargs['max'] = self.max.strftime(self.format)
+            kwargs['max'] = self.max.strftime(format)
         return super().__call__(*args, **kwargs)
 
 
