@@ -1,0 +1,16 @@
+{% extends "base.html" %}#
+{% set page_title = "Network Weathermap" %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/next.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/weathermap.css') }}"/>
+{% endblock %}
+
+{% block content %}
+    <div id="topology-container"></div>
+{% endblock %}
+
+{% block custom_script %}
+    <script type="text/javascript" src="{{ url_for("static", filename="js/next.min.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename="js/weathermap.js") }}"></script>
+{% endblock %}

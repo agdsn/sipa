@@ -359,3 +359,7 @@ def version():
 def trigger_error():
     """An endpoint intentionally triggering an error to test reporting"""
     division_by_zero = 1 / 0
+
+@bp_generic.route('/weathermap')
+def weathermap():
+    return render_template('weathermap.html')
