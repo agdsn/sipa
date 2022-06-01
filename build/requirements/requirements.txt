@@ -1,5 +1,5 @@
-flask~=1.1.1
-Flask-Login~=0.4.0
+flask~=2.1.2
+Flask-Login~=0.6.1
 Babel~=2.9.0
 Flask-Babel~=2.0.0
 Flask-Script~=2.0.3
@@ -10,7 +10,7 @@ requests~=2.21.0
 Flask-FlatPages~=0.7.2
 pygal~=2.4.0
 GitPython~=2.1.7
-Flask-WTF~=0.14.2
+Flask-WTF~=0.15.1
 PyMySQL~=0.7.11
 blinker~=1.4.0
 factory-boy~=2.9.2
@@ -18,7 +18,7 @@ psycopg2~=2.8.4
 Flask-QRcode~=2.0.2
 typing-extensions~=3.7.2
 email_validator~=1.1.1
-Werkzeug~=1.0.0
+Werkzeug==2.0.3
 sentry-sdk[flask]~=0.20.3
 # Pin to avoid incompatibility
 MarkupSafe~=1.1.1
