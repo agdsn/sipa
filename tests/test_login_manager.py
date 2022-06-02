@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, Blueprint, url_for, session, request
 from flask_login import current_user, login_user
-from flask_testing import TestCase
 
 from sipa.login_manager import SipaLoginManager
+
+from .base import TestCase
 
 
 class AuthenticatedUser:

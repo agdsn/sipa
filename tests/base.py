@@ -1,13 +1,27 @@
 import logging
 import os
+from abc import ABC
 from contextlib import contextmanager
 
 from flask import Flask, url_for
-from flask_testing import TestCase
+from flask_testing import TestCase as FlaskTestCase
 
 from sipa import create_app, model
 from sipa.defaults import WARNINGS_ONLY_CONFIG
 from sipa.model.sample.user import User as SampleUser
+
+
+class TestCase(FlaskTestCase, ABC):
+    def assertRedirects(self, response, location, message=None):
+        # Dirty hack to cincumvent a bug in Flask-Testing (jarus/flask-testing#154)
+        # The modern solution is outlined in
+        # https://flask.palletsprojects.com/en/2.1.x/testing/#following-redirects
+        # and should be implemented when switching to pytest (see #431)
+        if response.location.startswith('/'):
+            response.location = f"http://localhost{response.location}"
+        super().assertRedirects(response, location, message)
+
+    assert_redirects = assertRedirects
 
 
 class AppInitialized(TestCase):
