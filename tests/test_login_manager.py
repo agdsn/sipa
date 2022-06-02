@@ -75,6 +75,7 @@ class AppLevelUserLoadingDisabledTest(SipaLoginManagerTest):
         return app
 
     def test_login_manager(self):
+        assert self.mgr.ignored_endpoints == {'show_images'}
         self.login()
         response = self.client.get(url_for('show_images'))
         self.assertEqual(response.data.decode('utf-8'), "Images :-)")

@@ -40,11 +40,11 @@ class SipaLoginManager(LoginManager):
         return decorate
 
     @property
-    def user_callback(self):
+    def _user_callback(self):
         return self._wrapped_user_callback
 
-    @user_callback.setter
-    def user_callback(self, f):
+    @_user_callback.setter
+    def _user_callback(self, f):
         @wraps(f)
         def wrapped_user_callback(user_id):
             if request.endpoint in self.ignored_endpoints:
