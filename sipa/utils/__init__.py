@@ -10,9 +10,10 @@ import requests
 import socket
 import time
 import dataclasses
+from collections.abc import Iterable
 from functools import wraps
 from itertools import chain
-from typing import Iterable, Optional
+from typing import Optional
 
 from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
