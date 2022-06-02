@@ -62,7 +62,7 @@ For testing, there exists the docker-compose file `build/testing/docker-compose.
 
 ```shell
 docker-compose -f build/testing/docker-compose.yml up -d
-docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing python manage.py test
+docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing pytest -v
 ```
 
 …ore choose any other testing command you wish.  For example, you can

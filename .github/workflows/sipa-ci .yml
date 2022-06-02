@@ -38,5 +38,5 @@ jobs:
       - name: Start
         run: docker-compose -f build/testing/docker-compose.yml up -d
       - name: Run tests
-        run: docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing python manage.py test
+        run: docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing pytest -v
 
