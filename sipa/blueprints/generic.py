@@ -29,10 +29,22 @@ bp_generic = Blueprint('generic', __name__)
 
 @bp_generic.before_app_request
 def log_request():
+    method = request.method
+    path = request.path
+    if path.startswith('/static'):
+        # We don't need extra information for troubleshooting in this case.
+        extra = {}
+    else:
+        extra = {'tags': {
+            # don't use `current_user` here, as this triggers the user loader,
+            # and consequently a call to the pycroft API.
+            # this is mostly unnecessary.
+            'user': session.get('_user_id', '<anonymous>'),
+            'ip': request.remote_addr
+        }}
+
     logging.getLogger(__name__ + '.http').debug(
-        'Incoming request: %s %s', request.method, request.path,
-        extra={'tags': {'user': get_user_name(current_user),
-                        'ip': request.remote_addr}}
+        'Incoming request: %s %s', method, path, extra=extra,
     )
 
 
