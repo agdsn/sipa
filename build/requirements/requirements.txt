@@ -20,3 +20,5 @@ typing-extensions~=3.7.2
 email_validator~=1.1.1
 Werkzeug~=1.0.0
 sentry-sdk[flask]~=0.20.3
+# Pin to avoid incompatibility
+MarkupSafe~=1.1.1
