@@ -98,7 +98,7 @@ def meetingcal():
     events = recurring_ical_events.of(calendar).between(datetime.now(), datetime.now() + relativedelta(months=1))
 
     next_meetings = []
-    for event in events[:4]:
+    for event in events:
         next_meetings.append({
             "title": event["SUMMARY"],
             "datetime": event["DTSTART"].dt,
@@ -107,6 +107,7 @@ def meetingcal():
         })
 
     next_meetings = sorted(next_meetings, key=lambda x: x["datetime"])
+    next_meetings = next_meetings[:4]
 
     return next_meetings
 
