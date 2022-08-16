@@ -12,7 +12,7 @@ import argparse
 import logging
 
 from sipa import create_app
-from sipa.utils import support_hotline_available
+from sipa.utils import support_hotline_available, meetingcal
 
 logger = logging.getLogger(__name__)
 logger.info('Starting sipa...')
@@ -51,3 +51,7 @@ else:
 @app.context_processor
 def inject_hotline_status():
     return dict(support_hotline_available=support_hotline_available())
+
+@app.context_processor
+def inject_meetingcal():
+    return dict(meetingcal=meetingcal())

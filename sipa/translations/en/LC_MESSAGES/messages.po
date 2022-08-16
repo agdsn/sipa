@@ -1324,3 +1324,12 @@ msgstr ""
 
 #~ msgid "Hostalias"
 #~ msgstr "Host alias"
+
+msgid "Teamsitzungen"
+msgstr "Team meetings"
+
+msgid "Team"
+msgstr ""
+
+msgid "Ort"
+msgstr "Location"

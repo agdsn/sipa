@@ -5,13 +5,18 @@ General utilities
 import dataclasses
 import http.client
 import json
+import re
 import time
 from collections.abc import Iterable
 from datetime import datetime, timedelta, date
 from functools import wraps
 from itertools import chain
 
+import icalendar
+import markdown
+import recurring_ical_events
 import requests
+from dateutil.relativedelta import relativedelta
 from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
 from werkzeug.http import parse_date as parse_datetime
@@ -77,6 +82,33 @@ def support_hotline_available():
     else:
         return False
 
+
+def make_link(text):
+    pat_url = re.compile(  r'''(?x)((http|https)://(\S+))''')
+
+    for url in re.findall(pat_url, text):
+       text = text.replace(url[0], '<a href="%(url)s">%(url)s</a>' % {"url" : url[0]})
+
+    return text
+
+def meetingcal():
+    url = "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
+
+    calendar = icalendar.Calendar.from_ical(requests.get(url).text)
+    events = recurring_ical_events.of(calendar).between(datetime.now(), datetime.now() + relativedelta(months=1))
+
+    next_meetings = []
+    for event in events[:4]:
+        next_meetings.append({
+            "title": event["SUMMARY"],
+            "datetime": event["DTSTART"].dt,
+            "location": event["LOCATION"] if "LOCATION" in event else "-",
+            "location_link": markdown.markdown(event["LOCATION"]) if "LOCATION" in event else "-"
+        })
+
+    next_meetings = sorted(next_meetings, key=lambda x: x["datetime"])
+
+    return next_meetings
 
 def password_changeable(user):
     """A decorator used to disable functions (routes) if a certain feature

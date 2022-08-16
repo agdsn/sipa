@@ -391,6 +391,21 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                         </div>
                     </div>
+
+                    <div class="module hidden-xs">
+                        <h2>
+                            {{ _("Teamsitzungen") }}
+                        </h2>
+
+                        <hr class="full">
+                        <ul>
+                            {% for meeting in meetingcal %}
+                            <li><b>{{ meeting["title"] }}</b><br>am {{ meeting["datetime"].strftime('%d.%m. um %H:%M') }} Uhr<br>im {{ meeting["location_link"]|safe }}</li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </div>
                 </div>
             {% endblock %}
         </div>

@@ -1954,3 +1954,11 @@ msgstr ""
 #~ msgid "Kostenpflichtig Mitglied werden"
 #~ msgstr ""
 
+msgid "Teamsitzungen"
+msgstr ""
+
+msgid "Team"
+msgstr ""
+
+msgid "Ort"
+msgstr ""
