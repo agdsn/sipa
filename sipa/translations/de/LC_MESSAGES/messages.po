@@ -1962,3 +1962,6 @@ msgstr ""
 
 msgid "Ort"
 msgstr ""
+
+msgid "Mehr anzeigen"
+msgstr ""

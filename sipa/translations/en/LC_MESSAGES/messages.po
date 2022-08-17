@@ -1333,3 +1333,6 @@ msgstr ""
 
 msgid "Ort"
 msgstr "Location"
+
+msgid "Mehr anzeigen"
+msgstr "show more"

@@ -4,28 +4,24 @@
 {% block content %}
     {% include "heading.html" %}
     {% if meetings %}
-        <div class="row">
-            <div class="col-md-5">
-                <table id="timetable" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="col-md-1">{{ _('Team') }}</th>
-                            <th class="col-md-3">{{ _('Datum') }}</th>
-                            <th class="col-md-1">{{ _('Ort') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for meeting in meetings %}
-                            <tr>
-                                <td>{{ meeting["title"] }}</td>
-                                <td>{{ meeting["datetime"] }}</td>
-                                <td>{{ meeting["location"] }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <table id="timetable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>{{ _('Team') }}</th>
+                    <th>{{ _('Datum') }}</th>
+                    <th>{{ _('Ort') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for meeting in meetings %}
+                    <tr>
+                        <td>{{ meeting["title"] }}</td>
+                        <td>am {{ meeting["datetime"].strftime('%d.%m. um %H:%M') }} Uhr</td>
+                        <td>{{ meeting["location_link"]|safe }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <div style="color: red;">{{ _('Fehler bei der Abfrage!') }}</div>
     {% endif %}

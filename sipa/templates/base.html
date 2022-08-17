@@ -399,9 +399,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                         <hr class="full">
                         <ul>
-                            {% for meeting in meetingcal %}
-                            <li><b>{{ meeting["title"] }}</b><br>am {{ meeting["datetime"].strftime('%d.%m. um %H:%M') }} Uhr<br>im {{ meeting["location_link"]|safe }}</li>
+                            {% for meeting in meetingcal[:4] %}
+                            <li><b>{{ meeting["title"] }}</b><br>am {{ meeting["datetime"].strftime('%d.%m. um %H:%M') }} Uhr im {{ meeting["location_link"]|safe }}</li>
                             {% endfor %}
+                            <li><a href="{{ url_for('features.render_meetingcal') }}">{{ _("Mehr anzeigen") }}</a></li>
                         </ul>
 
 

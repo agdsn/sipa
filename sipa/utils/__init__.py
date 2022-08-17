@@ -83,18 +83,22 @@ def support_hotline_available():
         return False
 
 
-def make_link(text):
-    pat_url = re.compile(  r'''(?x)((http|https)://(\S+))''')
-
-    for url in re.findall(pat_url, text):
-       text = text.replace(url[0], '<a href="%(url)s">%(url)s</a>' % {"url" : url[0]})
-
-    return text
-
 def meetingcal():
     url = "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
 
-    calendar = icalendar.Calendar.from_ical(requests.get(url).text)
+    try:
+        response = requests.get(url, timeout=1)
+    except requests.exceptions.RequestException:
+        return []
+        
+    if response.status_code != 200:
+        return []
+    
+    try:
+        calendar = icalendar.Calendar.from_ical(response.text)
+    except ValueError:
+        return []
+
     events = recurring_ical_events.of(calendar).between(datetime.now(), datetime.now() + relativedelta(months=1))
 
     next_meetings = []
@@ -107,7 +111,6 @@ def meetingcal():
         })
 
     next_meetings = sorted(next_meetings, key=lambda x: x["datetime"])
-    next_meetings = next_meetings[:4]
 
     return next_meetings
 
