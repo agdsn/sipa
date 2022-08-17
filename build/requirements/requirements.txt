@@ -22,3 +22,4 @@ sentry-sdk[flask]~=1.9.5
 jinja2~=3.1.2
 MarkupSafe~=2.1.1
 recurring_ical_events~=1.0.2b0
+cachetools~=5.2.0

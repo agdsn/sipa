@@ -5,7 +5,6 @@ General utilities
 import dataclasses
 import http.client
 import json
-import re
 import time
 from collections.abc import Iterable
 from datetime import datetime, timedelta, date
@@ -16,6 +15,7 @@ import icalendar
 import markdown
 import recurring_ical_events
 import requests
+from cachetools import cached, TTLCache
 from dateutil.relativedelta import relativedelta
 from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
@@ -83,6 +83,7 @@ def support_hotline_available():
         return False
 
 
+@cached(cache=TTLCache(maxsize=1, ttl=300))
 def meetingcal():
     url = "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
 
