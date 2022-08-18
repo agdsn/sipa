@@ -1,24 +1,24 @@
 # English translations for sipa.
-# Copyright (C) 2021 AG DSN
+# Copyright (C) 2022 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-10-02 12:00+0200\n"
-"PO-Revision-Date: 2021-10-02 12:03+0200\n"
+"POT-Creation-Date: 2022-08-18 15:42+0200\n"
+"PO-Revision-Date: 2022-08-18 15:44+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
-"Language: en\n"
 "Language-Team: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.9.1\n"
 "X-Source-Language: de\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
@@ -201,9 +201,6 @@ msgstr "I confirm that I withdraw the termination of my membership"
 msgid "Bitte bestätige die Aufhebung der Kündigung"
 msgstr "Please confirm the cancellation of the termination"
 
-msgid "Kein gültiges Wohnheim!"
-msgstr "Not a valid dormitory!"
-
 msgid "Nutzername"
 msgstr "Username"
 
@@ -378,9 +375,8 @@ msgstr "Logout successful!"
 msgid "Für die angegebenen Daten konnte kein Benutzer gefunden werden."
 msgstr "No user could be found for the given data."
 
-#, fuzzy
 msgid "Es ist ein unbekannter Fehler aufgetreten."
-msgstr "An error occured!"
+msgstr "An error occured."
 
 msgid "Bitte kontaktiere den Support."
 msgstr "Please contact our support team."
@@ -814,6 +810,16 @@ msgstr "Floor"
 msgid "Nur für Bewohner des Hauses!"
 msgstr "Only for residents of the dorm!"
 
+msgid "Teamsitzungen"
+msgstr "Team meetings"
+
+#, python-format
+msgid "Am %(date)s im %(loc)s"
+msgstr "On %(date)s at %(loc)s"
+
+msgid "Mehr anzeigen"
+msgstr "show more"
+
 msgid "Informationen zur Version"
 msgstr "Version info"
 
@@ -864,6 +870,19 @@ msgstr "Forgot password?"
 
 msgid "Dieses Wohnheim erreichst du hier:"
 msgstr "You can reach this dormitory over here:"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Ort"
+msgstr "Location"
+
+#, python-format
+msgid "Am %(meeting_time)s"
+msgstr "On %(meeting_time)s"
 
 msgid "Achtung:"
 msgstr "Attention:"
@@ -979,9 +998,6 @@ msgstr "Scan this QR-Code to import the payment details into your banking app."
 msgid "Buchungen"
 msgstr "Transactions"
 
-msgid "Datum"
-msgstr "Date"
-
 msgid "Referenz"
 msgstr "Reference"
 
@@ -1069,141 +1085,6 @@ msgstr "Incoming"
 
 msgid "Ausgehend"
 msgstr "Outgoing"
-
-msgid "show this help message and exit"
-msgstr ""
-
-msgid "This field is required."
-msgstr ""
-
-msgid "File does not have an approved extension: {extensions}"
-msgstr ""
-
-msgid "File does not have an approved extension."
-msgstr ""
-
-#, python-format
-msgid "Invalid field name '%s'."
-msgstr ""
-
-#, python-format
-msgid "Field must be equal to %(other_name)s."
-msgstr ""
-
-#, python-format
-msgid "Field must be at least %(min)d character long."
-msgid_plural "Field must be at least %(min)d characters long."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "Field cannot be longer than %(max)d character."
-msgid_plural "Field cannot be longer than %(max)d characters."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "Field must be exactly %(max)d character long."
-msgid_plural "Field must be exactly %(max)d characters long."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "Field must be between %(min)d and %(max)d characters long."
-msgstr ""
-
-#, python-format
-msgid "Number must be at least %(min)s."
-msgstr ""
-
-#, python-format
-msgid "Number must be at most %(max)s."
-msgstr ""
-
-#, python-format
-msgid "Number must be between %(min)s and %(max)s."
-msgstr ""
-
-msgid "Invalid input."
-msgstr ""
-
-msgid "Invalid email address."
-msgstr ""
-
-msgid "Invalid IP address."
-msgstr ""
-
-msgid "Invalid Mac address."
-msgstr ""
-
-msgid "Invalid URL."
-msgstr ""
-
-msgid "Invalid UUID."
-msgstr ""
-
-#, python-format
-msgid "Invalid value, must be one of: %(values)s."
-msgstr ""
-
-#, python-format
-msgid "Invalid value, can't be any of: %(values)s."
-msgstr ""
-
-msgid "Invalid CSRF Token"
-msgstr ""
-
-msgid "CSRF token missing"
-msgstr ""
-
-msgid "CSRF failed"
-msgstr ""
-
-msgid "CSRF token expired"
-msgstr ""
-
-msgid "Not a valid choice"
-msgstr ""
-
-msgid "Not a valid list"
-msgstr ""
-
-msgid "Not a valid integer list"
-msgstr ""
-
-msgid "Please input a date/time value"
-msgstr ""
-
-msgid "Invalid date/time input"
-msgstr ""
-
-msgid "Invalid Choice: could not coerce"
-msgstr ""
-
-msgid "Invalid choice(s): one or more data inputs could not be coerced"
-msgstr ""
-
-#, python-format
-msgid "'%(value)s' is not a valid choice for this field"
-msgstr ""
-
-msgid "Not a valid integer value"
-msgstr ""
-
-msgid "Not a valid decimal value"
-msgstr ""
-
-msgid "Not a valid float value"
-msgstr ""
-
-msgid "Not a valid datetime value"
-msgstr ""
-
-msgid "Not a valid date value"
-msgstr ""
-
-msgid "Not a valid time value"
-msgstr ""
 
 #~ msgid ""
 #~ "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. "
@@ -1325,14 +1206,5 @@ msgstr ""
 #~ msgid "Hostalias"
 #~ msgstr "Host alias"
 
-msgid "Teamsitzungen"
-msgstr "Team meetings"
-
-msgid "Team"
-msgstr ""
-
-msgid "Ort"
-msgstr "Location"
-
-msgid "Mehr anzeigen"
-msgstr "show more"
+#~ msgid "Kein gültiges Wohnheim!"
+#~ msgstr "Not a valid dormitory!"
