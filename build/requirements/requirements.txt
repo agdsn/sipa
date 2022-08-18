@@ -19,4 +19,5 @@ email_validator~=1.1.1
 Werkzeug~=2.0.3
 sentry-sdk[flask]~=0.20.3
 # Pin to avoid incompatibility
-MarkupSafe~=1.1.1
+jinja2~=3.1.2
+MarkupSafe~=2.1.1
