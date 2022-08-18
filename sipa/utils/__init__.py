@@ -12,6 +12,7 @@ from datetime import date, datetime, timedelta
 from functools import wraps
 from itertools import chain
 from operator import itemgetter
+from zoneinfo import ZoneInfo
 
 import icalendar
 import markdown
@@ -70,15 +71,21 @@ def support_hotline_available():
 
     :return: True if the hotline is available
     """
-    [avail, time] = session.get('PBX_available', [False, datetime.fromtimestamp(0)])
+    UTC = ZoneInfo("UTC")
+    [avail, time] = session.get(
+        'PBX_available',
+        [False, datetime.fromtimestamp(0).replace(tzinfo=UTC)]
+    )
+    now = datetime.utcnow().replace(tzinfo=ZoneInfo("UTC"))
 
-    if datetime.now() - time > timedelta(minutes=2):
+    assert (now.tzinfo is None) == (time.tzinfo is None)
+    if now - time > timedelta(minutes=2):
         # refresh availability from pbx
         try:
             r = requests.get(PBX_URI, timeout=0.5)
             r.raise_for_status()
             avail = r.text
-            session['PBX_available'] = [avail, datetime.now()]
+            session['PBX_available'] = [avail, now]
         except requests.exceptions.RequestException:
             avail = False
 
