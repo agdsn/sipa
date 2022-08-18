@@ -4,7 +4,7 @@ from __future__ import annotations
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 from contextlib import contextmanager
-from typing import TypeVar, Type, List, Dict, Optional
+from typing import TypeVar
 
 from sipa.model.fancy_property import active_prop, UnsupportedProperty, PropertyBase, \
     unsupported_prop

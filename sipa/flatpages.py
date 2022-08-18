@@ -1,7 +1,7 @@
 import logging
 from operator import attrgetter
 from os.path import basename, dirname, splitext
-from typing import Optional, Dict, Any
+from typing import Any
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, request

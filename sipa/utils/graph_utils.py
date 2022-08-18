@@ -1,5 +1,3 @@
-from typing import List
-
 import pygal
 from flask_babel import gettext
 from pygal import Graph

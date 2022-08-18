@@ -1,10 +1,8 @@
 import logging
-from typing import List, Optional
 
 from babel import Locale, UnknownLocaleError, negotiate_locale
 from flask import request, session
 from werkzeug.exceptions import BadRequest
-
 
 logger = logging.getLogger(__name__)
 

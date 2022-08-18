@@ -1,17 +1,17 @@
 from __future__ import annotations
+
 import operator
-from collections.__init__ import namedtuple
-from ipaddress import IPv4Address, AddressValueError
-from typing import List, Optional, NamedTuple, cast
 from collections.abc import Callable
+from ipaddress import IPv4Address, AddressValueError
+from typing import NamedTuple, cast
 
 from flask import request, session, current_app, Flask
 from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 
 from .datasource import DataSource, Dormitory
-from .logging import logger
 from .exceptions import InvalidConfiguration
+from .logging import logger
 from .types import UserLike
 
 

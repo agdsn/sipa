@@ -1,14 +1,13 @@
 from __future__ import annotations
-from ipaddress import IPv4Network, IPv4Address
-from typing import Dict, List, Type
+
 from collections.abc import Callable
+from ipaddress import IPv4Network, IPv4Address
 
 from flask import Flask
 
 from sipa.utils import argstr, compare_all_attributes, xor_hashes
 from .logging import logger
 from .types import UserLike
-
 
 InitContextCallable = Callable[[Flask], None]
 

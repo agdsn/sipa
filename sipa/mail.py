@@ -15,10 +15,9 @@ import logging
 import smtplib
 import ssl
 import textwrap
-
-from email.utils import formatdate, make_msgid
 from email.mime.text import MIMEText
-from typing import Optional, Dict, Any
+from email.utils import formatdate, make_msgid
+from typing import Any
 
 from flask import current_app
 from flask_login import current_user

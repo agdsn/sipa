@@ -1,7 +1,6 @@
 from datetime import datetime
 from logging import getLogger
 from subprocess import call
-from typing import List
 
 import git
 from flask_babel import format_datetime

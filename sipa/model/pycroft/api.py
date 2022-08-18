@@ -1,18 +1,16 @@
 import logging
-
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date
 from functools import partial
-from typing import Tuple, Any, Optional
-from collections.abc import Callable
+from typing import Any
 
 import requests
 from requests import ConnectionError, HTTPError
 
 from sipa.backends.exceptions import InvalidConfiguration
-from .exc import PycroftBackendError
-
 from sipa.utils import dataclass_from_dict
+from .exc import PycroftBackendError
 
 logger = logging.getLogger(__name__)
 

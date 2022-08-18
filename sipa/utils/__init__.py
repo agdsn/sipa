@@ -2,22 +2,19 @@
 General utilities
 """
 
+import dataclasses
 import http.client
 import json
-import requests
-import socket
 import time
-import dataclasses
 from collections.abc import Iterable
+from datetime import datetime, timedelta, date
 from functools import wraps
 from itertools import chain
-from typing import Optional
 
+import requests
 from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
 from werkzeug.http import parse_date as parse_datetime
-
-from datetime import datetime, timedelta, date
 
 from sipa.config.default import PBX_URI
 

@@ -1,23 +1,22 @@
 """Blueprint for the online registration.
 """
 
+import logging
 from dataclasses import dataclass, asdict
 from datetime import date
 from functools import wraps
-import logging
-from typing import Optional
-
-from sipa.backends.extension import backends, _dorm_summary
-from sipa.model.pycroft.api import PycroftApi, PycroftApiError
-from sipa.model.pycroft.exc import PycroftBackendError
-from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
-from sipa.utils import parse_date
 
 from flask import Blueprint, g, session, url_for, redirect, render_template, flash, request
 from flask.globals import current_app
 from flask_babel import gettext
 from flask_login import current_user
 from werkzeug.local import LocalProxy
+
+from sipa.backends.extension import backends, _dorm_summary
+from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
+from sipa.model.pycroft.api import PycroftApi, PycroftApiError
+from sipa.model.pycroft.exc import PycroftBackendError
+from sipa.utils import parse_date
 
 logger = logging.getLogger(__name__)
 api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
