@@ -295,6 +295,7 @@ class CategorizedFlatPages:
 
     def init_app(self, app):
         assert self.app is None, "Already initialized with an app"
+        app.config.setdefault('FLATPAGES_LEGACY_META_PARSER', True)
         self.app = app
         app.cf_pages = self
         self.flat_pages.init_app(app)
