@@ -5,6 +5,7 @@ General utilities
 import dataclasses
 import http.client
 import json
+import logging
 import time
 from collections.abc import Iterable
 from datetime import date, datetime, timedelta
@@ -23,6 +24,8 @@ from flask_login import current_user
 from werkzeug.http import parse_date as parse_datetime
 
 from sipa.config.default import PBX_URI
+
+logger = logging.getLogger(__name__)
 
 
 def timetag_today():
@@ -91,14 +94,17 @@ def meetingcal():
     try:
         response = requests.get(url, timeout=1)
     except requests.exceptions.RequestException:
+        logger.exception("Error when fetching calendar at %s", url)
         return []
 
     if response.status_code != 200:
+        logger.error("Got unknown status code %s", response.status_code)
         return []
 
     try:
         calendar = icalendar.Calendar.from_ical(response.text)
     except ValueError:
+        logger.exception("Could not parse calendar response %s", response.text)
         return []
 
     events = recurring_ical_events.of(calendar).between(datetime.now(), datetime.now() + relativedelta(months=1))
