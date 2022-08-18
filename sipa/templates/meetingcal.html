@@ -16,9 +16,10 @@
                 {% for meeting in meetings %}
                     <tr>
                         <td>{{ meeting["title"] }}</td>
+                        {# Use time zone given in event #}
                         <td>{{ _(
                             "Am %(meeting_time)s",
-                            meeting_time=meeting["datetime"]|datetimeformat(format="medium")
+                            meeting_time=meeting["datetime"]|datetimeformat(format="medium", rebase=False)
                         ) }}</td>
                         <td>{{ meeting["location_link"]|safe }}</td>
                     </tr>
