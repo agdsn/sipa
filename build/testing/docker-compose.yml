@@ -7,17 +7,11 @@ services:
       args:
         additional_requirements: requirements_testing.txt
     image: sipa_testing
-    # Run `test` (doing nothing) because the tests should be triggered manually
-    # Running them on startup won't work because the postgres database won't be ready yet
+    # Run `test` (doing nothing) because tests are triggered manually
     command: test
-    environment:
-      - CONNETION_TIMEOUT=60
-      - SIPA_TEST_DB_USERMAN_URI=postgresql://sipa:password@postgres:5432/userman
 
   sipa_testing_no_volumes:
     extends: sipa_testing_base
-    links:
-      - postgres
 
   sipa_testing:
     extends: sipa_testing_base
@@ -25,12 +19,3 @@ services:
       # Note: ../ is relative to the path of the .yml
       # Thus: be careful with symlinks!
       - ../..:/home/sipa/sipa
-    links:
-      - postgres
-
-  postgres:
-    build:
-      context: postgres
-    environment:
-      - POSTGRES_USER=sipa
-      - POSTGRES_PASSWORD=password
