@@ -7,7 +7,7 @@ import http.client
 import json
 import time
 from collections.abc import Iterable
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 from functools import wraps
 from itertools import chain
 
@@ -15,9 +15,9 @@ import icalendar
 import markdown
 import recurring_ical_events
 import requests
-from cachetools import cached, TTLCache
+from cachetools import TTLCache, cached
 from dateutil.relativedelta import relativedelta
-from flask import flash, redirect, request, url_for, session
+from flask import flash, redirect, request, session, url_for
 from flask_login import current_user
 from werkzeug.http import parse_date as parse_datetime
 
