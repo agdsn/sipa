@@ -99,10 +99,14 @@ def init_app(app, **kwargs):
 
 
 def inject_hotline_status():
+    """Adds :func:`support_hotline_available <sipa.utils.support_hotline_available>`
+    to the :class:`jinja context <jinja2.runtime.Context>`"""
     return dict(support_hotline_available=support_hotline_available())
 
 
 def inject_meetingcal():
+    """Adds :func:`meetingcal <sipa.utils.meetingcal>`
+    to the :class:`jinja context <jinja2.runtime.Context>`"""
     return dict(meetingcal=meetingcal())
 
 
