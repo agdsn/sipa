@@ -4,7 +4,7 @@ and does not fit into any other blueprint such as “documents”.
 """
 
 from flask import Blueprint, current_app, render_template
-from sipa.utils import get_bustimes
+from sipa.utils import get_bustimes, meetingcal
 
 bp_features = Blueprint('features', __name__)
 
@@ -27,3 +27,9 @@ def bustimes(stopname=None):
             data[stop] = get_bustimes(stop, 4)
 
     return render_template('bustimes.html', stops=data, stopname=stopname)
+
+
+@bp_features.route("/meetingcal")
+def render_meetingcal():
+    meetings = meetingcal()
+    return render_template('meetingcal.html', meetings=meetings)

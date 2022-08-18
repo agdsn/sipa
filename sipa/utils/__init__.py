@@ -5,18 +5,29 @@ General utilities
 import dataclasses
 import http.client
 import json
+import logging
 import time
-from collections.abc import Iterable
-from datetime import datetime, timedelta, date
+import typing
+from datetime import date, datetime, timedelta
 from functools import wraps
 from itertools import chain
+from operator import itemgetter
+from zoneinfo import ZoneInfo
 
+import icalendar
+import markdown
+import recurring_ical_events
 import requests
-from flask import flash, redirect, request, url_for, session
+from cachetools import TTLCache, cached
+from dateutil.relativedelta import relativedelta
+from flask import flash, redirect, request, session, url_for
 from flask_login import current_user
+from icalendar import Calendar
 from werkzeug.http import parse_date as parse_datetime
 
 from sipa.config.default import PBX_URI
+
+logger = logging.getLogger(__name__)
 
 
 def timetag_today():
@@ -60,15 +71,21 @@ def support_hotline_available():
 
     :return: True if the hotline is available
     """
-    [avail, time] = session.get('PBX_available', [False, datetime.fromtimestamp(0)])
+    UTC = ZoneInfo("UTC")
+    [avail, time] = session.get(
+        'PBX_available',
+        [False, datetime.fromtimestamp(0).replace(tzinfo=UTC)]
+    )
+    now = datetime.utcnow().replace(tzinfo=ZoneInfo("UTC"))
 
-    if datetime.now() - time > timedelta(minutes=2):
+    assert (now.tzinfo is None) == (time.tzinfo is None)
+    if now - time > timedelta(minutes=2):
         # refresh availability from pbx
         try:
             r = requests.get(PBX_URI, timeout=0.5)
             r.raise_for_status()
             avail = r.text
-            session['PBX_available'] = [avail, datetime.now()]
+            session['PBX_available'] = [avail, now]
         except requests.exceptions.RequestException:
             avail = False
 
@@ -76,6 +93,80 @@ def support_hotline_available():
         return True
     else:
         return False
+
+
+@cached(cache=TTLCache(maxsize=1, ttl=300))
+def try_fetch_calendar(url: str) -> typing.Optional[Calendar]:
+    """Fetch an ICAL calendar from a given URL."""
+    try:
+        response = requests.get(url, timeout=1)
+    except requests.exceptions.RequestException:
+        logger.exception("Error when fetching calendar at %s", url)
+        return
+    if response.status_code != 200:
+        logger.error("Got unknown status code %s", response.status_code)
+        return
+
+    try:
+        return icalendar.Calendar.from_ical(response.text)
+    except ValueError:
+        logger.exception("Could not parse calendar response %s", response.text)
+        return
+
+
+Event = typing.TypedDict(
+    "Event",
+    {
+        "CREATED": icalendar.prop.vDDDTypes,
+        "LAST-MODIFIED": icalendar.prop.vDDDTypes,
+        "DTSTAMP": icalendar.prop.vDDDTypes,
+        "SUMMARY": icalendar.prop.vText,
+        "PRIORITY": int,
+        "RELATED-TO": icalendar.prop.vText,
+        "X-MOZ-LASTACK": icalendar.prop.vText,
+        "DTSTART": icalendar.prop.vDDDTypes,
+        "DTEND": icalendar.prop.vDDDTypes,
+        "CLASS": icalendar.prop.vText,
+        "LOCATION": icalendar.prop.vText,
+        "SEQUENCE": int,
+        "TRANSP": icalendar.prop.vText,
+        "X-APPLE-TRAVEL-ADVISORY-BEHAVIOR": icalendar.prop.vText,
+        "X-MICROSOFT-CDO-BUSYSTATUS": icalendar.prop.vText,
+        "X-MOZ-GENERATION": icalendar.prop.vText,
+    }
+)
+
+
+def events_from_calendar(calendar: icalendar.Calendar) -> typing.List[Event]:
+    """Given a calendar, extract the events up until one month in the future."""
+    return recurring_ical_events.of(calendar).between(
+        datetime.now(), datetime.now() + relativedelta(months=1)
+    )
+
+
+MEETINGS_ICAL_URL = (
+    "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
+)
+
+
+def meetingcal():
+    if not (calendar := try_fetch_calendar(MEETINGS_ICAL_URL)):
+        return []
+
+    events = events_from_calendar(calendar)
+    next_meetings = [
+        {
+            "title": event["SUMMARY"],
+            "datetime": event["DTSTART"].dt,
+            "location": event["LOCATION"] if "LOCATION" in event else "-",
+            "location_link": markdown.markdown(event["LOCATION"])
+            if "LOCATION" in event
+            else "-",
+        }
+        for event in events
+    ]
+    next_meetings = sorted(next_meetings, key=itemgetter("datetime"))
+    return next_meetings
 
 
 def password_changeable(user):
@@ -155,7 +246,7 @@ def dict_diff(d1, d2):
             yield key
 
 
-def compare_all_attributes(one: object, other: object, attr_list: Iterable[str]) -> bool:
+def compare_all_attributes(one: object, other: object, attr_list: typing.Iterable[str]) -> bool:
     """Safely compare whether two ojbect's attributes are equal.
 
     :param one: The first object

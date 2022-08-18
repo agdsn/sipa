@@ -391,6 +391,31 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                         </div>
                     </div>
+
+                    <div class="module hidden-xs">
+                        <h2>
+                            {{ _("Teamsitzungen") }}
+                        </h2>
+
+                        <hr class="full">
+                        <ul>
+                            {% if meetingcal %}
+                                {% for meeting in meetingcal[:4] %}
+                                <li><b>{{ meeting["title"] }}</b><br>
+                                    {# Use time zone given in event #}
+                                    {{ _(
+                                        "Am %(date)s im %(loc)s",
+                                        date=meeting["datetime"] | datetimeformat(format="short", rebase=False),
+                                        loc=meeting["location_link"] | safe
+                                    ) }}
+                                </li>
+                                {% endfor %}
+                                <li><a href="{{ url_for('features.render_meetingcal') }}">{{ _("Mehr anzeigen") }}</a></li>
+                            {% endif %}
+                        </ul>
+
+
+                    </div>
                 </div>
             {% endblock %}
         </div>

@@ -361,4 +361,5 @@ intersphinx_mapping = {
     'flask': ('http://flask.pocoo.org/docs/1.0/', None),
     'ffp': ('https://flask-flatpages.readthedocs.io/en/latest/', None),
     'sqla': ('https://docs.sqlalchemy.org/en/latest/', None),
+    'jinja2': ("https://jinja.palletsprojects.com/en/2.11.x/", None),
 }
