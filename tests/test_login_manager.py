@@ -45,6 +45,8 @@ class SipaLoginManagerTest(TestCase):
     def login(self):
         response = self.client.get(url_for('login'))
         self.assertEqual(response.data.decode('utf-8'), "OK")
+        from flask import g
+        del g._login_user  # cached for this request context
 
 
 class SipaLoginManagerAuthenticationTest(SipaLoginManagerTest):
