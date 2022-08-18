@@ -1,5 +1,3 @@
-# -*- coding: utf-8; -*-
-
 import os
 from shutil import rmtree
 from subprocess import call
@@ -18,7 +16,7 @@ AUTHOR_MAIL = "test@user.nonexistent.onion"
 
 
 def set_author_config_locally(path=None):
-    custom_git_options = (["--git-dir={}".format(path)]
+    custom_git_options = ([f"--git-dir={path}"]
                           if path is not None
                           else [])
     git_command_head = ["git", *custom_git_options, "config"]
@@ -49,7 +47,7 @@ def init_sample_git_repo(path, name):
         call(["git", "add", SAMPLE_FILE_NAME])
         call(["git", "commit", "-m", "'initial commit'", "-q"])
 
-        bare_path = os.path.join(path, "{}.git".format(name))
+        bare_path = os.path.join(path, f"{name}.git")
         # `git clone --bare` Creates a new bare repo from the existing one.
         # signature: git clone --bare {src} {bare_dest}
         call(["git", "clone", "--bare", tmp_git_dir, bare_path, "-q"])
@@ -85,13 +83,13 @@ class SampleBareRepoInitializedBase(TestCase):
 class TestSampleGitRepository(SampleBareRepoInitializedBase):
     """Tests concerning the result of `init_sample_git_repo`"""
     def test_repo_path_correctly_joined(self):
-        path = "{}/{}.git".format(self.workdir, self.repo_name)
+        path = f"{self.workdir}/{self.repo_name}.git"
         self.assertEqual(self.repo_path, path)
 
     def test_repo_path_exists(self):
         """Test that `self.workdir` only contains the bare repo directory"""
         self.assertEqual(os.listdir(self.workdir),
-                         ["{}.git".format(self.repo_name)])
+                         [f"{self.repo_name}.git"])
         self.assertTrue(os.path.isdir(self.repo_path))
 
     def test_cloned_git_repo_correct_files(self):

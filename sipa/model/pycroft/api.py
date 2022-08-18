@@ -1,17 +1,16 @@
 import logging
-
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date
 from functools import partial
-from typing import Callable, Tuple, Any, Optional
+from typing import Any
 
 import requests
 from requests import ConnectionError, HTTPError
 
 from sipa.backends.exceptions import InvalidConfiguration
-from .exc import PycroftBackendError
-
 from sipa.utils import dataclass_from_dict
+from .exc import PycroftBackendError
 
 logger = logging.getLogger(__name__)
 
@@ -49,8 +48,8 @@ class PycroftApi():
         self._endpoint = endpoint
         self._api_key = api_key
 
-    def get_user(self, username: str) -> Tuple[int, dict]:
-        return self.get('user/{}'.format(username))
+    def get_user(self, username: str) -> tuple[int, dict]:
+        return self.get(f'user/{username}')
 
     def get_user_from_ip(self, ip):
         return self.get('user/from-ip', params={'ip': ip}, no_raise=True)
@@ -60,37 +59,37 @@ class PycroftApi():
                          data={'login': username, 'password': password})
 
     def change_password(self, user_id, old_password, new_password):
-        return self.post('user/{}/change-password'.format(user_id),
+        return self.post(f'user/{user_id}/change-password',
                          data={'password': old_password,
                                'new_password': new_password})
 
     def change_mail(self, user_id, password, new_mail, forwarded):
-        return self.post('user/{}/change-email'.format(user_id),
+        return self.post(f'user/{user_id}/change-email',
                          data={'password': password, 'new_email': new_mail, 'forwarded': forwarded})
 
     def change_mac(self, user_id, password, interface_id, new_mac, host_name):
-        return self.post('user/{}/change-mac/{}'.format(user_id, interface_id),
+        return self.post(f'user/{user_id}/change-mac/{interface_id}',
                          data={'password': password, 'mac': new_mac, 'host_name': host_name})
 
     def activate_network_access(self, user_id, password, mac, birthdate, host_name):
-        return self.post('user/{}/activate-network-access'.format(user_id),
+        return self.post(f'user/{user_id}/activate-network-access',
                          data={'password': password, 'mac': mac,
                                'birthdate': birthdate, 'host_name': host_name})
 
     def estimate_balance_at_end_of_membership(self, user_id, end_date):
-        return self.get("user/{}/terminate-membership".format(user_id),
+        return self.get(f"user/{user_id}/terminate-membership",
                         params={'end_date': end_date})
 
     def terminate_membership(self, user_id, end_date):
-        return self.post("user/{}/terminate-membership".format(user_id),
+        return self.post(f"user/{user_id}/terminate-membership",
                          data={'end_date': end_date,
                                'comment': 'Move-out by SIPA'})
 
     def continue_membership(self, user_id):
-        return self.delete("user/{}/terminate-membership".format(user_id))
+        return self.delete(f"user/{user_id}/terminate-membership")
 
     def reset_wifi_password(self, user_id):
-        return self.patch("user/{}/reset-wifi-password".format(user_id))
+        return self.patch(f"user/{user_id}/reset-wifi-password")
 
     def request_password_reset(self, user_ident: str, email: str):
         return self.post("user/reset-password", data={
@@ -105,7 +104,7 @@ class PycroftApi():
         })
 
     def match_person(self, first_name: str, last_name: str, birthdate: date, tenant_number: int,
-                     previous_dorm: Optional[str]) -> MatchPersonResult:
+                     previous_dorm: str | None) -> MatchPersonResult:
         """
         Get the newest tenancy for the supplied user data.
 
@@ -141,8 +140,8 @@ class PycroftApi():
 
     def member_request(self, email: str, login: str, password: str,
                        first_name: str, last_name: str, birthdate: date,
-                       move_in_date: date, tenant_number: Optional[int],
-                       room_id: Optional[int], previous_dorm: Optional[str]) -> None:
+                       move_in_date: date, tenant_number: int | None,
+                       room_id: int | None, previous_dorm: str | None) -> None:
         """
         Creates a member request in pycroft.
 
@@ -223,11 +222,11 @@ class PycroftApi():
         request_function = partial(requests.patch, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def _do_api_call(self, request_function: Callable, url: str, no_raise: bool = False) -> Tuple[int, Any]:
+    def _do_api_call(self, request_function: Callable, url: str, no_raise: bool = False) -> tuple[int, Any]:
         try:
             response = request_function(
                 self._endpoint + url,
-                headers={'Authorization': 'ApiKey {}'.format(self._api_key)},
+                headers={'Authorization': f'ApiKey {self._api_key}'},
             )
         except ConnectionError as e:
             if no_raise:

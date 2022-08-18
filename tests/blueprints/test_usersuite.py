@@ -69,5 +69,5 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
         for url in urls:
             with self.subTest(url=url):
                 self.assertRegex(usersuite_response.data.decode('utf-8'),
-                                 'href="[^"]*{}[^"]*"'.format(url))
+                                 f'href="[^"]*{url}[^"]*"')
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Blueprint providing features regarding the news entries.
 """

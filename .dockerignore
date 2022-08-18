@@ -9,6 +9,7 @@ documents
 *~
 *.log
 .idea
+docs/build
 
 messages.pot
 

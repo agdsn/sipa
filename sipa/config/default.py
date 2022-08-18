@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 all configuration options and dicts of external
 information (dormitory mapping etc.)

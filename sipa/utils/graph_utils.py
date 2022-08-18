@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from typing import List
-
 import pygal
 from flask_babel import gettext
 from pygal import Graph
@@ -13,7 +10,7 @@ from sipa.utils.babel_utils import get_weekday
 
 
 def rgb_string(r, g, b):
-    return "#{:02X}{:02X}{:02X}".format(int(r), int(g), int(b))
+    return f"#{int(r):02X}{int(g):02X}{int(b):02X}"
 
 
 def hsl(h, s, l):
@@ -46,7 +43,7 @@ def default_chart(chart_type, title, inline=True, **kwargs):
     )
 
 
-def generate_traffic_chart(traffic_data: List[dict], inline: bool = True) -> Graph:
+def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Graph:
     """Create a graph object from the input traffic data with pygal.
      If inline is set, the chart is being passed the option to not add an xml
      declaration header to the beginning of the `render()` output, so it can

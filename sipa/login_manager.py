@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from functools import wraps
 
 from flask import request, Blueprint
@@ -32,7 +31,7 @@ class SipaLoginManager(LoginManager):
                                 " with instance of `Blueprint`")
 
             def endpoint_name(f):
-                return "{}.{}".format(bp.name, f.__name__)
+                return f"{bp.name}.{f.__name__}"
 
         def decorate(f):
             self.ignore_endpoint(endpoint_name(f))
@@ -40,11 +39,11 @@ class SipaLoginManager(LoginManager):
         return decorate
 
     @property
-    def user_callback(self):
+    def _user_callback(self):
         return self._wrapped_user_callback
 
-    @user_callback.setter
-    def user_callback(self, f):
+    @_user_callback.setter
+    def _user_callback(self, f):
         @wraps(f)
         def wrapped_user_callback(user_id):
             if request.endpoint in self.ignored_endpoints:

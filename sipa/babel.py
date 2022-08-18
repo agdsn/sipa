@@ -1,21 +1,18 @@
-# -*- coding: utf-8 -*-
 import logging
-from typing import List, Optional
 
 from babel import Locale, UnknownLocaleError, negotiate_locale
 from flask import request, session
 from werkzeug.exceptions import BadRequest
 
-
 logger = logging.getLogger(__name__)
 
 
-def possible_locales() -> List[Locale]:
+def possible_locales() -> list[Locale]:
     """Return the locales usable for sipa."""
     return [Locale('de'), Locale('en')]
 
 
-def get_user_locale_setting() -> Optional[Locale]:
+def get_user_locale_setting() -> Locale | None:
     """Get a user's explicit locale setting, if available."""
     locale_identifier = session.get('locale')
     if locale_identifier is None:
@@ -50,9 +47,9 @@ def save_user_locale_setting():
     try:
         locale = Locale.parse(locale_identifier, sep='-')
     except (UnknownLocaleError, ValueError):
-        raise BadRequest("Unknown locale {!r}".format(locale_identifier))
+        raise BadRequest(f"Unknown locale {locale_identifier!r}")
     if locale not in possible_locales():
-        raise BadRequest("Locale {!r} not available".format(locale_identifier))
+        raise BadRequest(f"Locale {locale_identifier!r} not available")
     session['locale'] = str(locale)
 
 

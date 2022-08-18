@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # Sipa documentation build configuration file, created by
 # sphinx-quickstart on Wed Aug  3 16:01:06 2016.

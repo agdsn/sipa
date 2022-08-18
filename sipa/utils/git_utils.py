@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from logging import getLogger
 from subprocess import call
-from typing import List
 
 import git
 from flask_babel import format_datetime
@@ -34,7 +32,7 @@ def init_repo(repo_dir, repo_url):
     try:
         master = repo.refs['master']
     except IndexError:
-        raise OSError("Git directory {} doesn't have a master!".format(repo_dir))
+        raise OSError(f"Git directory {repo_dir} doesn't have a master!")
 
     repo.head.set_reference(master)
 
@@ -73,10 +71,10 @@ def get_repo_active_branch(repo_dir: str) -> str:
     except GitCommandError:
         return "Unknown"
     except TypeError:  # detatched HEAD
-        return "@{}".format(sipa_repo.head.commit.hexsha[:8])
+        return f"@{sipa_repo.head.commit.hexsha[:8]}"
 
 
-def get_latest_commits(repo_dir: str, commit_count: int) -> List[dict]:
+def get_latest_commits(repo_dir: str, commit_count: int) -> list[dict]:
     """Get a given number of latest commits.
 
     :param repo_dir: path of repo

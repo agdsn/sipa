@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tables Extension for Python-Markdown
 ====================================
@@ -19,7 +18,7 @@ from markdown import Markdown
 from markdown.blockparser import BlockParser
 from markdown.blockprocessors import BlockProcessor
 from markdown.extensions import Extension
-from markdown.util import etree
+from xml.etree import ElementTree as etree
 
 
 class BootstrapedTableProcessor(BlockProcessor):

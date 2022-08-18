@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 from flask import Flask, Blueprint, url_for, session, request
 from flask_login import current_user, login_user
-from flask_testing import TestCase
 
 from sipa.login_manager import SipaLoginManager
+
+from .base import TestCase
 
 
 class AuthenticatedUser:
@@ -44,6 +44,8 @@ class SipaLoginManagerTest(TestCase):
     def login(self):
         response = self.client.get(url_for('login'))
         self.assertEqual(response.data.decode('utf-8'), "OK")
+        from flask import g
+        del g._login_user  # cached for this request context
 
 
 class SipaLoginManagerAuthenticationTest(SipaLoginManagerTest):
@@ -74,6 +76,7 @@ class AppLevelUserLoadingDisabledTest(SipaLoginManagerTest):
         return app
 
     def test_login_manager(self):
+        assert self.mgr.ignored_endpoints == {'show_images'}
         self.login()
         response = self.client.get(url_for('show_images'))
         self.assertEqual(response.data.decode('utf-8'), "Images :-)")

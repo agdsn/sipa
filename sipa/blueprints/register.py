@@ -1,25 +1,22 @@
-# -*- coding: utf-8 -*-
-
 """Blueprint for the online registration.
 """
 
+import logging
 from dataclasses import dataclass, asdict
 from datetime import date
 from functools import wraps
-import logging
-from typing import Optional
-
-from sipa.backends.extension import backends, _dorm_summary
-from sipa.model.pycroft.api import PycroftApi, PycroftApiError
-from sipa.model.pycroft.exc import PycroftBackendError
-from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
-from sipa.utils import parse_date
 
 from flask import Blueprint, g, session, url_for, redirect, render_template, flash, request
 from flask.globals import current_app
 from flask_babel import gettext
 from flask_login import current_user
 from werkzeug.local import LocalProxy
+
+from sipa.backends.extension import backends, _dorm_summary
+from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
+from sipa.model.pycroft.api import PycroftApi, PycroftApiError
+from sipa.model.pycroft.exc import PycroftBackendError
+from sipa.utils import parse_date
 
 logger = logging.getLogger(__name__)
 api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
@@ -34,15 +31,15 @@ class RegisterState:
 
     first_name: str = None
     last_name: str = None
-    tenant_number: Optional[int] = None
+    tenant_number: int | None = None
     birthdate: date = None
     no_swdd_tenant: bool = None
-    previous_dorm: Optional[str] = None
+    previous_dorm: str | None = None
 
-    move_in_date: Optional[date] = None
-    room_id: Optional[int] = None
-    building: Optional[str] = None
-    room: Optional[str] = None
+    move_in_date: date | None = None
+    room_id: int | None = None
+    building: str | None = None
+    room: str | None = None
 
     skipped_verification: bool = False
     room_confirmed: bool = False

@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 import inspect
 import sys
 from datetime import date
-from typing import Callable, Optional, Any, List, Union
+from typing import Callable, Optional, Any, Union, List
 
 
 class UnserializationError(Exception):
@@ -38,8 +37,11 @@ def _is_optional(t):
 MAXDEPTH = 100
 
 
-def constructor_from_generic(name: str, args: tuple, *a, **kw) -> Optional[Callable]:
-    """
+def constructor_from_generic(name: str, args: tuple, *a, **kw) -> Callable | None:
+    """Get a constructor rom a given
+
+    Does not support PEP604-style unions.
+
     :param name:  Something like 'List' (like from `List[int]._name`)
     :param args: Something like `(int,)` from (`List[int].__args__`)
     :return: A constructor callable or None
@@ -88,7 +90,7 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
             raise UnserializationError(f"Unable to look up type {type_!r}"
                                        f" in module {module.__name__!r}")
 
-    constructor: Optional[Callable] = None
+    constructor: Callable | None = None
 
     # Case 1: known generic
     if hasattr(type_, '_name'):
@@ -112,7 +114,12 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
 
 
 def unserializer(cls: type) -> type:
-    """A class decorator providing a magic __init__ method"""
+    """A class decorator providing a magic __init__ method.
+
+    .. warning::
+        don't use PEP604 unions and PEP585 builtin generics!
+        These are not supported.
+    """
     annotations = {canonicalize_key(key): val
                    for key, val in getattr(cls, '__annotations__', {}).items()}
     setattr(cls, '__annotations__', annotations)

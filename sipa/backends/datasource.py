@@ -1,13 +1,13 @@
 from __future__ import annotations
+
+from collections.abc import Callable
 from ipaddress import IPv4Network, IPv4Address
-from typing import Callable, Dict, List, Type
 
 from flask import Flask
 
 from sipa.utils import argstr, compare_all_attributes, xor_hashes
 from .logging import logger
 from .types import UserLike
-
 
 InitContextCallable = Callable[[Flask], None]
 
@@ -18,7 +18,7 @@ class DataSource:
     This class provides information about the backend you defined, for
     instance the user class.
     """
-    def __init__(self, name: str, user_class: Type[UserLike], mail_server: str,
+    def __init__(self, name: str, user_class: type[UserLike], mail_server: str,
                  webmailer_url: str = None,
                  support_mail: str = None,
                  init_context: InitContextCallable = None) -> None:
@@ -31,16 +31,16 @@ class DataSource:
         class _user_class(user_class):  # type: ignore
             datasource = self
         #: the user_class used in the sense of ``flask_login``.
-        self.user_class: Type[UserLike] = _user_class
+        self.user_class: type[UserLike] = _user_class
 
         #: The mail server to be appended to a user's login in order
         #: to construct the mail address.
         self.mail_server = mail_server
         self.webmailer_url = webmailer_url
         self.support_mail = (support_mail if support_mail
-                             else "support@{}".format(mail_server))
+                             else f"support@{mail_server}")
         self._init_context = init_context
-        self._dormitories: Dict[str, Dormitory] = {}
+        self._dormitories: dict[str, Dormitory] = {}
 
     def __eq__(self, other):
         return compare_all_attributes(self, other, ['name'])
@@ -61,7 +61,7 @@ class DataSource:
         self._dormitories[name] = dormitory
 
     @property
-    def dormitories(self) -> List[Dormitory]:
+    def dormitories(self) -> list[Dormitory]:
         """A list of all registered dormitories."""
         return list(self._dormitories.values())
 
@@ -104,7 +104,7 @@ class SubnetCollection:
     Provides __contains__ functionality for IPv4Addresses.
     """
 
-    def __init__(self, subnets: List[IPv4Network]) -> None:
+    def __init__(self, subnets: list[IPv4Network]) -> None:
         if isinstance(subnets, list):
             for subnet in subnets:
                 if not isinstance(subnet, IPv4Network):

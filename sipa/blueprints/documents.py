@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 
 from flask import Blueprint, send_from_directory, current_app

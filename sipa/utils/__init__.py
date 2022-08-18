@@ -1,24 +1,20 @@
-# -*- coding: utf-8 -*-
-
 """
 General utilities
 """
 
+import dataclasses
 import http.client
 import json
-import requests
-import socket
 import time
-import dataclasses
+from collections.abc import Iterable
+from datetime import datetime, timedelta, date
 from functools import wraps
 from itertools import chain
-from typing import Iterable, Optional
 
+import requests
 from flask import flash, redirect, request, url_for, session
 from flask_login import current_user
 from werkzeug.http import parse_date as parse_datetime
-
-from datetime import datetime, timedelta, date
 
 from sipa.config.default import PBX_URI
 
@@ -42,10 +38,10 @@ def get_bustimes(stopname, count=10):
     try:
         conn.request(
             'GET',
-            '/abfahrtsmonitor/Abfahrten.do?ort=Dresden&hst={}'.format(stopname)
+            f'/abfahrtsmonitor/Abfahrten.do?ort=Dresden&hst={stopname}'
         )
         response = conn.getresponse()
-    except socket.error:
+    except OSError:
         return None
 
     response_data = json.loads(response.read().decode())
@@ -145,8 +141,8 @@ def redirect_url(default='generic.index'):
 
 def argstr(*args, **kwargs):
     return ", ".join(chain(
-        ("{}".format(arg) for arg in args),
-        ("{}={!r}".format(key, val) for key, val in kwargs.items()),
+        (f"{arg}" for arg in args),
+        (f"{key}={val!r}" for key, val in kwargs.items()),
     ))
 
 
@@ -186,7 +182,7 @@ def xor_hashes(*elements: object) -> int:
     return _hash
 
 
-def parse_date(date: Optional[str]) -> Optional[date]:
+def parse_date(date: str | None) -> date | None:
     return parse_datetime(date).date() if date is not None else None
 
 

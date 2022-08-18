@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Blueprint for the flatpages
 """
@@ -40,7 +38,7 @@ def show(category_id, article_id):
 
     box_filename = os.path.join(
         os.path.abspath(current_app.config['FLATPAGES_ROOT']),
-        "{}.json".format(article.localized_page.path)
+        f"{article.localized_page.path}.json"
     )
 
     dynamic_data = load_dynamic_json(box_filename)

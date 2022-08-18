@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 import logging
 from operator import attrgetter
 from os.path import basename, dirname, splitext
-from typing import Optional, Dict, Any
+from typing import Any
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, request
@@ -44,7 +43,7 @@ class Article(Node):
     def __init__(self, extension, parent, article_id):
         super().__init__(extension, parent, article_id)
         #: The dict containing the localized pages of this article
-        self.localized_pages: Dict[Any, Page] = {}
+        self.localized_pages: dict[Any, Page] = {}
         #: The default page
         self.default_page: Page = None
 
@@ -109,7 +108,7 @@ class Article(Node):
         return self.localized_page.html
 
     @property
-    def link(self) -> Optional[str]:
+    def link(self) -> str | None:
         """A valid link to this article
 
         :returns: The URL or ``None`` if the link starts with ``"/"``
@@ -295,6 +294,7 @@ class CategorizedFlatPages:
 
     def init_app(self, app):
         assert self.app is None, "Already initialized with an app"
+        app.config.setdefault('FLATPAGES_LEGACY_META_PARSER', True)
         self.app = app
         app.cf_pages = self
         self.flat_pages.init_app(app)

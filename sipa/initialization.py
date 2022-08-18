@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 import logging.config
 import os
@@ -81,9 +80,9 @@ def init_app(app, **kwargs):
         should_display_traffic_data=should_display_traffic_data,
         traffic_chart=provide_render_function(generate_traffic_chart),
         current_datasource=backends.current_datasource,
-        form_label_width_class="col-sm-{}".format(form_label_width),
-        form_input_width_class="col-sm-{}".format(form_input_width),
-        form_input_offset_class="col-sm-offset-{}".format(form_label_width),
+        form_label_width_class=f"col-sm-{form_label_width}",
+        form_input_width_class=f"col-sm-{form_input_width}",
+        form_input_offset_class=f"col-sm-offset-{form_label_width}",
         url_self=url_self,
         now=datetime.utcnow()
     )
@@ -106,7 +105,7 @@ def load_config_file(app, config=None):
     if 'SIPA_CONFIG_FILE' in os.environ:
         try:
             app.config.from_envvar('SIPA_CONFIG_FILE')
-        except IOError:
+        except OSError:
             logger.warning("SIPA_CONFIG_FILE not readable: %s",
                            os.environ['SIPA_CONFIG_FILE'])
         else:
@@ -119,7 +118,7 @@ def load_config_file(app, config=None):
 def init_env_and_config(app):
     if not app.config['FLATPAGES_ROOT']:
         app.config['FLATPAGES_ROOT'] = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
+            os.path.dirname(__file__),
             '../content')
     if app.config['CONTENT_URL']:
         init_repo(app.config["FLATPAGES_ROOT"], app.config['CONTENT_URL'])

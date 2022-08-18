@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 from datetime import date
 from operator import itemgetter
@@ -20,11 +19,11 @@ mac_regex = re.compile(r"^[a-f0-9]{2}((:|-|lo)[a-f0-9]{2}){5}$", re.IGNORECASE)
 
 class MacAddress(Regexp):
     def __init__(self, message=None):
-        super(MacAddress, self).__init__(mac_regex, message=message)
+        super().__init__(mac_regex, message=message)
 
 
 
-class PasswordComplexity(object):
+class PasswordComplexity:
     character_classes = ((re.compile(r'[a-z]'), lazy_gettext("Kleinbuchstaben (a-z)")),
                          (re.compile(r'[A-Z]'), lazy_gettext("Großbuchstaben (A-Z)")),
                          (re.compile(r'[0-9]'), lazy_gettext("Ziffern (0-9)")),
@@ -68,14 +67,14 @@ class OptionalIf(Optional):
     def __init__(self, deciding_field, invert=False, *args, **kwargs):
         self.deciding_field = deciding_field
         self.invert = invert
-        super(OptionalIf, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __call__(self, form, field):
         deciding_field = form._fields.get(self.deciding_field)
         deciding_has_data = deciding_field is not None and bool(
             deciding_field.data) and deciding_field.data != 'None'
         if deciding_has_data ^ self.invert:
-            super(OptionalIf, self).__call__(form, field)
+            super().__call__(form, field)
 
 
 def lower_filter(string):
@@ -138,7 +137,7 @@ class SpamCheckField(StringField):
 
     def __call__(self, *args, **kwargs):
         c = kwargs.pop('class', '') or kwargs.pop('class_', '')
-        kwargs['class'] = u'%s %s' % ('honey', c)
+        kwargs['class'] = '{} {}'.format('honey', c)
         kwargs['autocomplete'] = 'off'
         return super().__call__(*args, **kwargs)
 

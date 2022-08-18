@@ -17,8 +17,8 @@ class TestErrorhandlersCase(SampleFrontendTestBase):
 
         for code in self.used_codes:
             test_app.add_url_rule(
-                rule='/aborting-{}'.format(code),
-                endpoint='aborting-with-{}'.format(code),
+                rule=f'/aborting-{code}',
+                endpoint=f'aborting-with-{code}',
                 view_func=partial(failing, code=code),
             )
 
@@ -26,7 +26,7 @@ class TestErrorhandlersCase(SampleFrontendTestBase):
 
     def test_error_handler_redirection(self):
         for code in self.used_codes:
-            self.client.get('/aborting-{}'.format(code))
+            self.client.get(f'/aborting-{code}')
             self.assertTemplateUsed('error.html')
 
 

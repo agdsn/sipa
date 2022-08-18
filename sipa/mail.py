@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Functions concerned with mail composition and transmission
 
@@ -17,10 +15,9 @@ import logging
 import smtplib
 import ssl
 import textwrap
-
-from email.utils import formatdate, make_msgid
 from email.mime.text import MIMEText
-from typing import Optional, Dict, Any
+from email.utils import formatdate, make_msgid
+from typing import Any
 
 from flask import current_app
 from flask_login import current_user
@@ -124,7 +121,7 @@ def send_mail(author: str, recipient: str, subject: str, message: str,
 
         smtp.sendmail(from_addr=sender, to_addrs=recipient, msg=mail.as_string())
         smtp.close()
-    except IOError as e:
+    except OSError as e:
         # smtp.connect failed to connect
         logger.critical('Unable to connect to SMTP server', extra={
             'trace': True,
@@ -223,7 +220,7 @@ def send_usersuite_contact_mail(subject: str, message: str, category: str,
 
 
 def send_complex_mail(subject: str, message: str, tag: str = "",
-                      category: str = "", header: Optional[Dict[str, Any]] = None,
+                      category: str = "", header: dict[str, Any] | None = None,
                       **kwargs) -> bool:
     """Send a mail with context information in subject and body.
 
@@ -269,7 +266,7 @@ def compose_subject(raw_subject: str, tag: str = "", category: str = "") -> str:
     return subject
 
 
-def compose_body(message: str, header: Optional[Dict[str, Any]] = None):
+def compose_body(message: str, header: dict[str, Any] | None = None):
     """Prepend additional information to a message.
 
     :param message:
