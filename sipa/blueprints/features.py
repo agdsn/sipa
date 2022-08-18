@@ -28,6 +28,7 @@ def bustimes(stopname=None):
 
     return render_template('bustimes.html', stops=data, stopname=stopname)
 
+
 @bp_features.route("/meetingcal")
 def render_meetingcal():
     meetings = meetingcal()

@@ -10,6 +10,7 @@ from collections.abc import Iterable
 from datetime import date, datetime, timedelta
 from functools import wraps
 from itertools import chain
+from operator import itemgetter
 
 import icalendar
 import markdown
@@ -91,10 +92,10 @@ def meetingcal():
         response = requests.get(url, timeout=1)
     except requests.exceptions.RequestException:
         return []
-        
+
     if response.status_code != 200:
         return []
-    
+
     try:
         calendar = icalendar.Calendar.from_ical(response.text)
     except ValueError:
@@ -102,16 +103,19 @@ def meetingcal():
 
     events = recurring_ical_events.of(calendar).between(datetime.now(), datetime.now() + relativedelta(months=1))
 
-    next_meetings = []
-    for event in events:
-        next_meetings.append({
+    next_meetings = [
+        {
             "title": event["SUMMARY"],
             "datetime": event["DTSTART"].dt,
             "location": event["LOCATION"] if "LOCATION" in event else "-",
-            "location_link": markdown.markdown(event["LOCATION"]) if "LOCATION" in event else "-"
-        })
+            "location_link": markdown.markdown(event["LOCATION"])
+            if "LOCATION" in event
+            else "-",
+        }
+        for event in events
+    ]
 
-    next_meetings = sorted(next_meetings, key=lambda x: x["datetime"])
+    next_meetings = sorted(next_meetings, key=itemgetter("datetime"))
 
     return next_meetings
 
