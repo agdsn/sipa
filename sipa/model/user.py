@@ -156,25 +156,25 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @active_prop
     @abstractmethod
     def realname(self) -> PropertyBase:
-        """**[Abstract]** The real-life name"""
+        """The real-life name"""
         pass
 
     @active_prop
     @abstractmethod
     def login(self) -> PropertyBase:
-        """**[Abstract]** The login"""
+        """The login"""
         pass
 
     @active_prop
     @abstractmethod
     def mac(self) -> PropertyBase:
-        """**[Abstract]** The MAC Address"""
+        """The MAC Address"""
         pass
 
     @active_prop
     @abstractmethod
     def mail(self) -> PropertyBase:
-        """**[Abstract]** The mail address.
+        """The mail address.
 
         (``"{login}@{server}"``)
         """
@@ -183,36 +183,36 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @active_prop
     @abstractmethod
     def birthdate(self) -> PropertyBase:
-        """**[Abstract]** Date of birth"""
+        """Date of birth"""
         pass
 
     @active_prop
     @abstractmethod
     def mail_forwarded(self) -> PropertyBase:
-        """**[Abstract]** Whether mail forwarding is enabled."""
+        """Whether mail forwarding is enabled."""
         pass
 
     @property
     @abstractmethod
     def mail_confirmed(self) -> PropertyBase:
-        """**[Abstract]** Whether mail is confirmed."""
+        """Whether mail is confirmed."""
         pass
 
     @abstractmethod
     def resend_confirm_mail(self) -> bool:
-        """**[Abstract]** Resend the confirmation mail."""
+        """Resend the confirmation mail."""
         pass
 
     @active_prop
     @abstractmethod
     def address(self) -> PropertyBase:
-        """**[Abstract]** Where the user lives"""
+        """Where the user lives"""
         pass
 
     @active_prop
     @abstractmethod
     def status(self) -> PropertyBase:
-        """**[Abstract]** The current membership status in the sense of
+        """The current membership status in the sense of
         the AG DSN constitution.
 
         This mostly means active, ex-active or passive.
@@ -222,7 +222,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @active_prop
     @abstractmethod
     def id(self) -> PropertyBase:
-        """**[Abstract]** The “user-id”.
+        """The “user-id”.
 
         Some Backends provide a secondary id besides the login.
         """
@@ -231,7 +231,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @active_prop
     @abstractmethod
     def hostname(self) -> PropertyBase:
-        """**[Abstract]** The hostname.
+        """The hostname.
 
         This usually is an alias consisting of the last digits of the
         mac/ip.
@@ -241,7 +241,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @active_prop
     @abstractmethod
     def hostalias(self) -> PropertyBase:
-        """**[Abstract]** The hostalias.
+        """The hostalias.
 
         An optionally configurable alias for the device.
         """
@@ -256,7 +256,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @property
     @abstractmethod
     def userdb(self) -> BaseUserDB:
-        """**[Abstract]** The :class:`BaseUserDB` object, if available.
+        """The :class:`BaseUserDB` object, if available.
 
         If :data:`userdb_status` is non-empty, it is assumed to exist.
         """
@@ -265,13 +265,13 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @property
     @abstractmethod
     def has_connection(self) -> PropertyBase:
-        """**[Abstract]** Whether the user has a connection"""
+        """Whether the user has a connection"""
         pass
 
     @property
     @abstractmethod
     def finance_information(self) -> BaseFinanceInformation | None:
-        """**[Abstract]** Finance information about the User.
+        """Finance information about the User.
 
         If not supported, set to None.
         """
@@ -288,7 +288,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @abstractmethod
     def payment_details(self) -> PaymentDetails:
-        """**[Abstract]** Payment details for the User."""
+        """Payment details for the User."""
         pass
 
     def has_property(self, property):
@@ -355,7 +355,7 @@ class BaseUserDB(metaclass=ABCMeta):
     @property
     @abstractmethod
     def has_db(self) -> bool | None:
-        """**[Abstract]** Whether the database is enabled
+        """Whether the database is enabled
 
         Returns None, if the user database is unreachable.
         """
@@ -363,15 +363,15 @@ class BaseUserDB(metaclass=ABCMeta):
 
     @abstractmethod
     def create(self, password: str):
-        """**[Abstract]** Create the database"""
+        """Create the database"""
         pass
 
     @abstractmethod
     def drop(self):
-        """**[Abstract]** Drop the database"""
+        """Drop the database"""
         pass
 
     @abstractmethod
     def change_password(self, password: str):
-        """**[Abstract]** Change the password of the database"""
+        """Change the password of the database"""
         pass

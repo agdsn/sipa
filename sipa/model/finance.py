@@ -40,7 +40,7 @@ class BaseFinanceInformation(metaclass=ABCMeta):
     @property
     @abstractmethod
     def raw_balance(self) -> float:
-        """**[Abstract]** The current balance
+        """The current balance
 
         If :py:meth:`has_to_pay` is False, this method will not be
         used implicitly.
@@ -50,13 +50,13 @@ class BaseFinanceInformation(metaclass=ABCMeta):
     @property
     @abstractmethod
     def has_to_pay(self) -> bool:
-        """**[Abstract]** Whether the user is obliged to pay."""
+        """Whether the user is obliged to pay."""
         pass
 
     @property
     @abstractmethod
     def history(self):
-        """**[Abstract]** History of payments
+        """History of payments
 
         This method should return an iterable of a (datetime, int, description)
         tuple.
@@ -66,7 +66,7 @@ class BaseFinanceInformation(metaclass=ABCMeta):
     @property
     @abstractmethod
     def last_update(self):
-        """**[Abstract]** The time of the last update."""
+        """The time of the last update."""
         pass
 
     def __eq__(self, other):
