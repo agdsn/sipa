@@ -16,7 +16,10 @@
                 {% for meeting in meetings %}
                     <tr>
                         <td>{{ meeting["title"] }}</td>
-                        <td>am {{ meeting["datetime"].strftime('%d.%m. um %H:%M') }} Uhr</td>
+                        <td>{{ _(
+                            "Am %(meeting_time)s",
+                            meeting_time=meeting["datetime"]|datetimeformat(format="medium")
+                        ) }}</td>
                         <td>{{ meeting["location_link"]|safe }}</td>
                     </tr>
                 {% endfor %}
