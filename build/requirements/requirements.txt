@@ -16,7 +16,7 @@ factory-boy~=2.9.2
 psycopg2~=2.8.4
 Flask-QRcode~=2.0.2
 email_validator~=1.1.1
-Werkzeug==2.0.3
+Werkzeug~=2.0.3
 sentry-sdk[flask]~=0.20.3
 # Pin to avoid incompatibility
 MarkupSafe~=1.1.1
