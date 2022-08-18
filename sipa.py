@@ -12,7 +12,6 @@ import argparse
 import logging
 
 from sipa import create_app
-from sipa.utils import support_hotline_available, meetingcal
 
 logger = logging.getLogger(__name__)
 logger.info('Starting sipa...')
@@ -47,11 +46,3 @@ else:
         from werkzeug.debug import DebuggedApplication
         app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
     # app will now be used by `uwsgi`
-
-@app.context_processor
-def inject_hotline_status():
-    return dict(support_hotline_available=support_hotline_available())
-
-@app.context_processor
-def inject_meetingcal():
-    return dict(meetingcal=meetingcal())
