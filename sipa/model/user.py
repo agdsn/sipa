@@ -1,5 +1,4 @@
 from __future__ import annotations
-# -*- coding: utf-8 -*-
 
 # noinspection PyMethodMayBeStatic
 from abc import ABCMeta, abstractmethod
@@ -68,7 +67,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
-    def get(cls: Type[T], username: str) -> T:
+    def get(cls: type[T], username: str) -> T:
         """Fetch a user given his username.
 
         :param username: the username
@@ -78,7 +77,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
-    def from_ip(cls: Type[T], ip: str) -> T:
+    def from_ip(cls: type[T], ip: str) -> T:
         """Return a user based on an ip.
 
         If there is no user associated with this ip, return
@@ -130,7 +129,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def traffic_history(self) -> List[Dict]:
+    def traffic_history(self) -> list[dict]:
         """Return the current traffic history as a dict.
 
         The history should cover one week. The assumed unit is KiB.
@@ -150,7 +149,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
-    def generate_rows(self, description_dict: Dict):
+    def generate_rows(self, description_dict: dict):
         for key, val in description_dict.items():
             yield Row(description=val, property=getattr(self, key))
 
@@ -271,7 +270,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def finance_information(self) -> Optional[BaseFinanceInformation]:
+    def finance_information(self) -> BaseFinanceInformation | None:
         """**[Abstract]** Finance information about the User.
 
         If not supported, set to None.
@@ -355,7 +354,7 @@ class BaseUserDB(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def has_db(self) -> Optional[bool]:
+    def has_db(self) -> bool | None:
         """**[Abstract]** Whether the database is enabled
 
         Returns None, if the user database is unreachable.

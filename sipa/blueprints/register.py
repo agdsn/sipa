@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Blueprint for the online registration.
 """
 
@@ -34,15 +32,15 @@ class RegisterState:
 
     first_name: str = None
     last_name: str = None
-    tenant_number: Optional[int] = None
+    tenant_number: int | None = None
     birthdate: date = None
     no_swdd_tenant: bool = None
-    previous_dorm: Optional[str] = None
+    previous_dorm: str | None = None
 
-    move_in_date: Optional[date] = None
-    room_id: Optional[int] = None
-    building: Optional[str] = None
-    room: Optional[str] = None
+    move_in_date: date | None = None
+    room_id: int | None = None
+    building: str | None = None
+    room: str | None = None
 
     skipped_verification: bool = False
     room_confirmed: bool = False

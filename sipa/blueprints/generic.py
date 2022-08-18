@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 import os
 
@@ -120,7 +119,7 @@ def login():
         remember = form.remember.data
         User = dormitory.datasource.user_class
 
-        valid_suffix = "@{}".format(dormitory.datasource.mail_server)
+        valid_suffix = f"@{dormitory.datasource.mail_server}"
 
         if username.endswith(valid_suffix):
             username = username[:-len(valid_suffix)]

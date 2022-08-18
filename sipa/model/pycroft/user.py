@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 
 from sipa.model.user import BaseUser

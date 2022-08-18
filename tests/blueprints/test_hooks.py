@@ -1,4 +1,3 @@
-# -*- coding: utf-8; -*-
 import logging
 from unittest.mock import patch
 
@@ -17,7 +16,7 @@ class GitHookTestBase(AppInitialized):
     def assert_hook_status(self, status, token=None):
         url = GIT_HOOK_URL
         if token is not None:
-            url = "{base}?token={token}".format(base=url, token=token)
+            url = f"{url}?token={token}"
 
         self.assertEqual(self.client.post(url).status_code, status)
 

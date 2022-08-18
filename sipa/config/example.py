@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """config.example
 
     This is an example configuration file for SIPA, suggesting

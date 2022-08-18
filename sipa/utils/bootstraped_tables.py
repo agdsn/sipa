@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tables Extension for Python-Markdown
 ====================================

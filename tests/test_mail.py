@@ -140,16 +140,16 @@ class SendMailTestBase(SMTPTestBase):
         class SendmailSig:
             """Signature of SMTP().sendmail()"""
             from_addr: str
-            to_addrs: List[str]
+            to_addrs: list[str]
             msg: str
-            mail_options: List = field(default_factory=lambda: [])
-            rcpt_options: List = field(default_factory=lambda: [])
+            mail_options: list = field(default_factory=lambda: [])
+            rcpt_options: list = field(default_factory=lambda: [])
 
         call_args = self.smtp_mock().sendmail.call_args
         self.observed_call_args = SendmailSig(*call_args[0], **call_args[1])
 
 
-class SendMailCommonTests(object):
+class SendMailCommonTests:
     def test_wrap_message_called(self):
         self.assertEqual(self.wrap_mock.call_count, 1)
         self.assertEqual(self.wrap_mock.call_args[0], (self.args['message'],))
@@ -240,7 +240,7 @@ class SendMailFailingTestCase(SMTPTestBase):
         super().setUp()
 
         def bad_sendmail(*_, **__):
-            raise IOError()
+            raise OSError()
         self.smtp_mock().sendmail.side_effect = bad_sendmail
 
         with self._patch_smtp(), \

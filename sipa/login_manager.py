@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from functools import wraps
 
 from flask import request, Blueprint
@@ -32,7 +31,7 @@ class SipaLoginManager(LoginManager):
                                 " with instance of `Blueprint`")
 
             def endpoint_name(f):
-                return "{}.{}".format(bp.name, f.__name__)
+                return f"{bp.name}.{f.__name__}"
 
         def decorate(f):
             self.ignore_endpoint(endpoint_name(f))

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Blueprint for Usersuite components
 """
 from collections import OrderedDict
@@ -191,7 +189,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
         }
 
         assert attribute in attribute_mappings.keys(), \
-            "No edit endpoint for attribute `{}`".format(attribute)
+            f"No edit endpoint for attribute `{attribute}`"
     else:
         assert capability == 'delete', "capability must be 'delete' or 'edit'"
 
@@ -200,9 +198,9 @@ def get_attribute_endpoint(attribute, capability='edit'):
         }
 
         assert attribute in attribute_mappings.keys(), \
-            "No delete endpoint for attribute `{}`".format(attribute)
+            f"No delete endpoint for attribute `{attribute}`"
 
-    return "{}.{}".format(bp_usersuite.name, attribute_mappings[attribute])
+    return f"{bp_usersuite.name}.{attribute_mappings[attribute]}"
 
 
 @bp_usersuite.route("/change-password", methods=['GET', 'POST'])

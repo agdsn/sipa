@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ipaddress import IPv4Network
 
 from sipa.backends import DataSource, Dormitory

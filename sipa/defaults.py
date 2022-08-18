@@ -1,5 +1,3 @@
-# -*- coding: utf-8; -*-
-
 DEFAULT_CONFIG = {
     'version': 1,
     'disable_existing_loggers': False,

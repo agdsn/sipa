@@ -97,7 +97,7 @@ class AppInitialized(TestCase):
         :param str level: the flash level, i.e. one of ['info',
             'success', 'warning', 'danger']
         """
-        string_to_find = "sipa_flash alert alert-{}".format(level)
+        string_to_find = f"sipa_flash alert alert-{level}"
 
         with self.temp_short_log():
             self.assertIn(string_to_find.encode('utf-8'), data,

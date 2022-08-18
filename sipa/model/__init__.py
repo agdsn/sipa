@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 
 from sipa.backends import Backends
