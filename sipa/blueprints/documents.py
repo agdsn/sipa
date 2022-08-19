@@ -27,9 +27,11 @@ class StaticFiles(View):
             directory = self.directory
         else:
             directory = os.path.join(current_app.root_path, self.directory)
-        cache_timeout = current_app.get_send_file_max_age(filename)
-        return send_from_directory(directory, filename,
-                                   cache_timeout=cache_timeout)
+        return send_from_directory(
+            directory,
+            filename,
+            max_age=current_app.get_send_file_max_age(filename),
+        )
 
 
 bp_documents.add_url_rule('/images/<path:filename>',
