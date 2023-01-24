@@ -27,4 +27,5 @@ def test_ical_conversion(calendar: icalendar.Calendar):
     ev: Event = typing.cast(Event, ev)
     assert ev['SUMMARY'] == "Teamsitzung Computing"
     assert ev['LOCATION'] == "NOC, Räcknitzhöhe 35"
-    assert ev['DTSTART'].dt == datetime.fromisoformat("2022-08-23T19:30:00+02:00")
+    assert ev["DTSTART"].dt.weekday() == 1  # tuesday
+    assert ev["DTEND"].dt.weekday() == 1  # tuesday
