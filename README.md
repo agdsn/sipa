@@ -26,8 +26,7 @@ How can I run Sipa?
 -------------------
 
 As a general note, you should have `docker` and `docker-compose`
-installed.  Just using python and e.g. a virtualenv is possible, but
-discouraged.
+installed.
 
 The simplest method is to run `docker-compose -f build/dev/docker-compose.yml
 up -d`.
@@ -38,6 +37,23 @@ the first running on uwsgi, and the second directly using `sipa.py`.
 
 If this does not work for you see “Running on Docker” below for a
 manual (i.e. not docker-compose-based) container setup.
+
+To run SIPA wihout Docker you can do the following:
+
+```shell
+# Create an venv
+python -m venv venv
+
+# Activate the venv
+. venv/bin/activate[.fish|.csh]
+
+# Install the dependencies
+sudo apt install libpq-dev  # For Debian based distributions
+pip install -r requirements.txt
+
+# Run SIPA with flask
+flask run
+```
 
 
 ## Is there any more documentation?
