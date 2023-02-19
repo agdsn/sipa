@@ -111,3 +111,6 @@ CONTACT_ADDRESSES = [
         'only_residents': True,
     },
 ]
+
+# link to clandar
+MEETINGS_ICAL_URL = "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
