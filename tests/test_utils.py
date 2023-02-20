@@ -3,6 +3,7 @@ from time import time
 from unittest import TestCase
 
 from sipa.utils import dict_diff, timetag_today, meetingcal
+from base import AppInitialized
 
 
 class TimetagValidator(TestCase):
@@ -26,5 +27,7 @@ class TestDictDiff(TestCase):
             merged = d1.copy()
             merged.update(d2)
             self.assertEqual(set(dict_diff(d1, merged)), set(d2.keys()))
+
     def test_meetingcal(self):
-        self.assertNotEqual(meetingcal(), [])
+        with AppInitialized.create_app().app_context():
+            self.assertNotEqual(meetingcal(), [])
