@@ -2,7 +2,7 @@ from itertools import permutations
 from time import time
 from unittest import TestCase
 
-from sipa.utils import dict_diff, timetag_today
+from sipa.utils import dict_diff, timetag_today, meetingcal
 
 
 class TimetagValidator(TestCase):
@@ -26,3 +26,5 @@ class TestDictDiff(TestCase):
             merged = d1.copy()
             merged.update(d2)
             self.assertEqual(set(dict_diff(d1, merged)), set(d2.keys()))
+    def test_meetingcal(self):
+        self.assertNotEqual(meetingcal(), [])
