@@ -82,11 +82,10 @@ def support_hotline_available():
     if now - time > timedelta(minutes=2):
         # refresh availability from pbx
         try:
-            with current_app.app_context():
-                r = requests.get(current_app.config['PBX_URI'], timeout=0.5)
-                r.raise_for_status()
-                avail = r.text
-                session['PBX_available'] = [avail, now]
+            r = requests.get(current_app.config['PBX_URI'], timeout=0.5)
+            r.raise_for_status()
+            avail = r.text
+            session['PBX_available'] = [avail, now]
         except requests.exceptions.RequestException:
             avail = False
 
@@ -146,24 +145,24 @@ def events_from_calendar(calendar: icalendar.Calendar) -> typing.List[Event]:
 
 
 def meetingcal():
-    with current_app.app_context():
-        if not (calendar := try_fetch_calendar(current_app.config['MEETINGS_ICAL_URL'])):
-            return []
+    """Returns the calendar events got form the url in the config"""
+    if not (calendar := try_fetch_calendar(current_app.config['MEETINGS_ICAL_URL'])):
+        return []
 
-        events = events_from_calendar(calendar)
-        next_meetings = [
-            {
-                "title": event["SUMMARY"],
-                "datetime": event["DTSTART"].dt,
-                "location": event["LOCATION"] if "LOCATION" in event else "-",
-                "location_link": markdown.markdown(event["LOCATION"])
-                if "LOCATION" in event
-                else "-",
-            }
-            for event in events
-        ]
-        next_meetings = sorted(next_meetings, key=itemgetter("datetime"))
-        return next_meetings
+    events = events_from_calendar(calendar)
+    next_meetings = [
+        {
+            "title": event["SUMMARY"],
+            "datetime": event["DTSTART"].dt,
+            "location": event["LOCATION"] if "LOCATION" in event else "-",
+            "location_link": markdown.markdown(event["LOCATION"])
+            if "LOCATION" in event
+            else "-",
+        }
+        for event in events
+    ]
+    next_meetings = sorted(next_meetings, key=itemgetter("datetime"))
+    return next_meetings
 
 
 def password_changeable(user):

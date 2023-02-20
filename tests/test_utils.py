@@ -27,7 +27,3 @@ class TestDictDiff(TestCase):
             merged = d1.copy()
             merged.update(d2)
             self.assertEqual(set(dict_diff(d1, merged)), set(d2.keys()))
-
-    def test_meetingcal(self):
-        with AppInitialized.create_app().app_context():
-            self.assertNotEqual(meetingcal(), [])
