@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 
 from babel.numbers import format_currency
-from flask import Blueprint, render_template, url_for, redirect, flash, abort, request
+from flask import Blueprint, render_template, url_for, redirect, flash, abort, request, current_app
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
@@ -157,7 +157,7 @@ def render_payment_details(details: PaymentDetails, months):
         gettext("IBAN"): details.iban,
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): format_currency(months * MEMBERSHIP_CONTRIBUTION / 100, 'EUR',
+        gettext("Betrag"): format_currency(months * current_app.config['MEMBERSHIP_CONTRIBUTION'] / 100, 'EUR',
                                            locale='de_DE')
     }
 
@@ -171,7 +171,7 @@ def generate_epc_qr_code(details: PaymentDetails, months):
         bic=details.bic.replace(' ', ''),
         recipient=details.recipient,
         iban=details.iban.replace(' ', ''),
-        amount=months * MEMBERSHIP_CONTRIBUTION / 100,
+        amount=months * current_app.config['MEMBERSHIP_CONTRIBUTION'] / 100,
         purpose=details.purpose)
 
 

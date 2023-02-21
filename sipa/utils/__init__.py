@@ -25,7 +25,7 @@ from flask_login import current_user
 from icalendar import Calendar
 from werkzeug.http import parse_date as parse_datetime
 
-from sipa.config.default import PBX_URI
+from flask.globals import current_app
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ def support_hotline_available():
     if now - time > timedelta(minutes=2):
         # refresh availability from pbx
         try:
-            r = requests.get(PBX_URI, timeout=0.5)
+            r = requests.get(current_app.config['PBX_URI'], timeout=0.5)
             r.raise_for_status()
             avail = r.text
             session['PBX_available'] = [avail, now]
@@ -144,13 +144,9 @@ def events_from_calendar(calendar: icalendar.Calendar) -> typing.List[Event]:
     )
 
 
-MEETINGS_ICAL_URL = (
-    "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
-)
-
-
 def meetingcal():
-    if not (calendar := try_fetch_calendar(MEETINGS_ICAL_URL)):
+    """Returns the calendar events got form the url in the config"""
+    if not (calendar := try_fetch_calendar(current_app.config['MEETINGS_ICAL_URL'])):
         return []
 
     events = events_from_calendar(calendar)
