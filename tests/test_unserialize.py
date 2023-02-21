@@ -127,7 +127,7 @@ class NestedUnserializationTest(TestCase):
             self.fail(f"Unserialization failed: {e}")
 
     def test(self):
-        self.assertIsInstance(self.baz.inner, self._bar_cls)
+        assert isinstance(self.baz.inner, self._bar_cls)
         assert self.baz.inner.description == "Beschreibung"
         notes = self.baz.inner.notes
         assert len(notes) == 2

@@ -57,10 +57,10 @@ class ThingsWithBasesTestCase(TestCase):
         # on the other hand, basically reprogramming the
         # method.  Therefore, it is only tested that the
         # correct unit is appended.
-        self.assertIn(UNIT_LIST[divisions], formatted)
+        assert UNIT_LIST[divisions] in formatted
 
     def test_dynamic_unit_contains_unit(self):
-        self.assertIn(UNIT_LIST[1], dynamic_unit(1024))
+        assert UNIT_LIST[1] in dynamic_unit(1024)
 
 
 class MoneyStyleMixin:
@@ -106,8 +106,8 @@ class MoneyDecoratorTestCase(MoneyStyleMixin, TestCase):
         value, style, raw_value = self.prepare_dict(self.dummy_func(3.5))
 
         assert raw_value == +3.5
-        self.assertTrue(value.startswith('+3.50'))
-        self.assertTrue(value.endswith("€"))
+        assert value.startswith("+3.50")
+        assert value.endswith("€")
 
         assert style == self.STYLE_POS
 
@@ -115,8 +115,8 @@ class MoneyDecoratorTestCase(MoneyStyleMixin, TestCase):
         value, style, raw_value = self.prepare_dict(self.dummy_func(-3.5))
 
         assert raw_value == -3.5
-        self.assertTrue(value.startswith('-3.50'))
-        self.assertTrue(value.endswith("€"))
+        assert value.startswith("-3.50")
+        assert value.endswith("€")
 
         assert style == self.STYLE_NEG
 
@@ -124,25 +124,25 @@ class MoneyDecoratorTestCase(MoneyStyleMixin, TestCase):
         value, style, raw_value = self.prepare_dict(self.dummy_func(0))
 
         assert raw_value == 0
-        self.assertTrue(value.startswith('+0.00'))
-        self.assertTrue(style, self.STYLE_POS)
+        assert value.startswith("+0.00")
+        assert style, self.STYLE_POS
 
     def test_whole_number_has_cent_digits(self):
-        self.assertIn("3.00", self.dummy_func(3)['value'])
+        assert "3.00" in self.dummy_func(3)["value"]
 
 
 class MoneyTestCase(TestCase):
     def test_positive_float(self):
         value = format_money(+3.5)
 
-        self.assertTrue(value.startswith('+3.50'))
-        self.assertTrue(value.endswith("€"))
+        assert value.startswith("+3.50")
+        assert value.endswith("€")
 
     def test_negative_float(self):
         value = format_money(-3.5)
-        self.assertTrue(value.startswith('-3.50'))
-        self.assertTrue(value.endswith("€"))
+        assert value.startswith("-3.50")
+        assert value.endswith("€")
 
     def test_zero_is_positive(self):
         value = format_money(0)
-        self.assertTrue(value.startswith('+0.00'))
+        assert value.startswith("+0.00")

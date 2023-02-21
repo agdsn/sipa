@@ -63,4 +63,4 @@ class GitHookExistent(GitHookTestBase):
         # git-related in this TestCase
         with patch('sipa.blueprints.hooks.update_repo') as mock:
             self.assert_hook_status(204, token=self.token)
-            self.assertTrue(mock.called)
+            assert mock.called

@@ -43,7 +43,7 @@ class MailSendingTestBase(TestCase):
         return {}
 
     def assert_arg_in_call_arg(self, arg, call_arg):
-        self.assertIn(self.args[arg], self.send_mail_mock.call_args[1][call_arg])
+        assert self.args[arg] in self.send_mail_mock.call_args[1][call_arg]
 
     def assert_arg_equals_call_arg(self, arg, call_arg):
         assert self.args[arg] == self.send_mail_mock.call_args[1][call_arg]
@@ -80,9 +80,9 @@ class ComposeBodyTestCase(TestCase):
         composed = compose_body(self.message, header=info)
 
         for key, val in info.items():
-            self.assertIn(f"{key}: {val}", composed)
+            assert f"{key}: {val}" in composed
 
-        self.assertIn(self.message, composed)
+        assert self.message in composed
 
 
 class SMTPTestBase(TestCase):
@@ -154,7 +154,7 @@ class SendMailCommonTests:
         assert self.wrap_mock.call_args[0] == (self.args["message"],)
 
     def test_smtp_close_called(self):
-        self.assertTrue(self.smtp_mock().close.called)
+        assert self.smtp_mock().close.called
 
     def test_sendmail_envelope_sender(self):
         assert (
@@ -168,43 +168,43 @@ class SendMailCommonTests:
                       "Wrong From: header!")
 
     def test_sendmail_otrs_header(self):
-        self.assertIn(f"X-OTRS-CustomerId: {self.args['author']}\n",
-                      self.observed_call_args.msg,
-                      "X-OTRS-CustumerId incorrect!")
+        assert (
+            f"X-OTRS-CustomerId: {self.args['author']}\n" in self.observed_call_args.msg
+        ), "X-OTRS-CustumerId incorrect!"
 
     def test_sendmail_reply_to(self):
-        self.assertIn(f"Reply-To: {self.args['author']}\n",
-                      self.observed_call_args.msg,
-                      "Wrong Reply-To: header!")
+        assert (
+            f"Reply-To: {self.args['author']}\n" in self.observed_call_args.msg
+        ), "Wrong Reply-To: header!"
 
     def test_sendmail_recipient_passed(self):
         recipient = self.observed_call_args.to_addrs
         assert recipient == self.args["recipient"]
         message = self.observed_call_args.msg
-        self.assertIn(f"To: {recipient}", message)
+        assert f"To: {recipient}" in message
 
     def test_sendmail_subject_passed(self):
         message = self.observed_call_args.msg
-        self.assertIn(f"Subject: {self.args['subject']}", message)
+        assert f"Subject: {self.args['subject']}" in message
 
     def test_returned_true(self):
         assert self.success
 
     def test_info_logged(self):
         log_message = self.log.output.pop()
-        self.assertIn("Successfully sent mail", log_message)
+        assert "Successfully sent mail" in log_message
         # nothing else there
-        self.assertFalse(self.log.output)
+        assert not self.log.output
 
 
 class SendMailNoAuthTestCase(SendMailTestBase, SendMailCommonTests):
     def test_smtp_login_not_called(self):
-        self.assertFalse(self.smtp_mock().login.called)
+        assert not self.smtp_mock().login.called
 
 
 class SendMailAuthTestCase(SendMailTestBase, SendMailCommonTests):
     def test_smtp_login_called(self):
-        self.assertTrue(self.smtp_mock().login.called)
+        assert self.smtp_mock().login.called
 
     def _get_app_config(self):
         return {
@@ -225,7 +225,7 @@ class SendMailTestSslCase(SendMailTestBase, SendMailCommonTests):
 
 class SendMailTestStarttlsCase(SendMailTestBase, SendMailCommonTests):
     def test_smtp_starttls_called(self):
-        self.assertTrue(self.smtp_mock().starttls.called)
+        assert self.smtp_mock().starttls.called
 
     def _get_app_config(self):
         return {
@@ -253,12 +253,12 @@ class SendMailFailingTestCase(SMTPTestBase):
     def test_send_mail_logs_on_success(self):
 
         log_message = self.log.output.pop()
-        self.assertIn("Unable to connect", log_message)
+        assert "Unable to connect" in log_message
         # nothing else there
-        self.assertFalse(self.log.output)
+        assert not self.log.output
 
     def test_failing_returns_false(self):
-        self.assertFalse(self.success)
+        assert not self.success
 
 
 class ComplexMailContentTestCase(MailSendingTestBase):
@@ -276,26 +276,26 @@ class ComplexMailContentTestCase(MailSendingTestBase):
         }
 
     def test_success_passed(self):
-        self.assertTrue(self.success)
+        assert self.success
 
     def test_keyword_args_used(self):
-        self.assertFalse(self.send_mail_mock.call_args[0])
+        assert not self.send_mail_mock.call_args[0]
 
     def test_subject_complete_passed(self):
         subject_passed = self.send_mail_mock.call_args[1]['subject']
 
-        self.assertIn(self.args['subject'], subject_passed)
-        self.assertIn(self.args['tag'], subject_passed)
-        self.assertIn(self.args['category'], subject_passed)
+        assert self.args["subject"] in subject_passed
+        assert self.args["tag"] in subject_passed
+        assert self.args["category"] in subject_passed
 
     def test_message_complete_passed(self):
         message_passed = self.send_mail_mock.call_args[1]['message']
 
-        self.assertIn(self.args['message'], message_passed)
+        assert self.args["message"] in message_passed
 
         for key, value in self.args['header'].items():
-            self.assertIn(key, message_passed)
-            self.assertIn(value, message_passed)
+            assert key in message_passed
+            assert value in message_passed
 
 
 class ComplexMailArgumentsTestCase(TestCase):
@@ -323,7 +323,7 @@ class OfficialContactMailTestCase(MailSendingTestBase):
         }
 
     def test_success_passed(self):
-        self.assertTrue(self.success)
+        assert self.success
 
     def test_sender_mail_passed(self):
         self.assert_arg_equals_call_arg('author', 'author')
@@ -364,12 +364,12 @@ class ContactMailTestCase(MailSendingTestBase):
             return send_contact_mail(**self.args)
 
     def test_success_passed(self):
-        self.assertTrue(self.success)
+        assert self.success
 
     def test_message_complete(self):
-        self.assert_arg_in_call_arg('message', 'message')
-        self.assert_arg_in_call_arg('name', 'message')
-        self.assertIn(self.dorm_display_name, self.send_mail_mock.call_args[1]['message'])
+        self.assert_arg_in_call_arg("message", "message")
+        self.assert_arg_in_call_arg("name", "message")
+        assert self.dorm_display_name in self.send_mail_mock.call_args[1]["message"]
 
     def test_subject_complete(self):
         self.assert_arg_in_call_arg('subject', 'subject')
@@ -407,14 +407,16 @@ class UsersuiteContactMailTestCase(MailSendingTestBase):
         }
 
     def test_success_passed(self):
-        self.assertTrue(self.success)
+        assert self.success
 
     def test_sender_composed_correctly(self):
-        sender = self.send_mail_mock.call_args[1]['author']
-        self.assertTrue(sender.endswith(self.user_mock.datasource.mail_server),
-                        msg="Sender does not end with mail_server")
-        self.assertTrue(sender.startswith(self.user_mock.login.value),
-                        msg="Sender does not start with login")
+        sender = self.send_mail_mock.call_args[1]["author"]
+        assert sender.endswith(
+            self.user_mock.datasource.mail_server
+        ), "Sender does not end with mail_server"
+        assert sender.startswith(
+            self.user_mock.login.value
+        ), "Sender does not start with login"
 
     def test_recipient_passed(self):
         expected_recipient = self.user_mock.datasource.support_mail
@@ -425,5 +427,5 @@ class UsersuiteContactMailTestCase(MailSendingTestBase):
         self.assert_arg_in_call_arg('category', 'subject')
 
     def test_message_complete(self):
-        self.assert_arg_in_call_arg('message', 'message')
-        self.assertIn(self.user_mock.login.value, self.send_mail_mock.call_args[1]['message'])
+        self.assert_arg_in_call_arg("message", "message")
+        assert self.user_mock.login.value in self.send_mail_mock.call_args[1]["message"]

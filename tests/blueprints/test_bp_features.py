@@ -13,4 +13,4 @@ class BpFeaturesTestCase(SampleFrontendTestBase):
 
         self.assert200(resp)
         self.assertTemplateUsed("bustimes.html")
-        self.assertTrue(mock.called)
+        assert mock.called

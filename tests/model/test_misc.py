@@ -25,7 +25,7 @@ class CompareAllAttributesTestCase(TestCase):
             (self.A, self.C, ['a', 'c']),
         ]
         for args in arglist:
-            self.assertTrue(compare_all_attributes(*args))
+            assert compare_all_attributes(*args)
 
     def test_false_comparisons(self):
         arglist = [
@@ -35,12 +35,12 @@ class CompareAllAttributesTestCase(TestCase):
             (self.A, self.C, ['a', 'b', 'c']),
         ]
         for args in arglist:
-            self.assertFalse(compare_all_attributes(*args))
+            assert not compare_all_attributes(*args)
 
     def test_attributes_missing_false(self):
         """Comparing to an object without these attrs should be `False`"""
         try:
-            self.assertFalse(compare_all_attributes(self.A, "", ['a']))
+            assert not compare_all_attributes(self.A, "", ["a"])
         except AttributeError:
             self.fail("AttributeError raised instead of returning `False`")
 

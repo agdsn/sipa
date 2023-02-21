@@ -24,8 +24,8 @@ class NoNeedToPayTestCase(TestCase):
 
     def test_has_correct_balance(self):
         balance = self.DisabledFinanceInformation().balance
-        self.assertTrue(balance.empty)
-        self.assertIn("inbegriffen", balance.value.lower())
+        assert balance.empty
+        assert "inbegriffen" in balance.value.lower()
 
 
 class StaticBalanceTestCase(TestCase):
@@ -40,12 +40,12 @@ class StaticBalanceTestCase(TestCase):
         self.balance = self.StaticFinanceInformation().balance
 
     def test_has_correct_balance(self):
-        self.assertFalse(self.balance.empty)
-        self.assertIn('30', self.balance.value)
+        assert not self.balance.empty
+        assert "30" in self.balance.value
         assert self.balance.raw_value == 30
 
     def test_balance_not_editable(self):
-        self.assertFalse(self.balance.capabilities.edit)
+        assert not self.balance.capabilities.edit
 
     def test_balance_not_deletable(self):
-        self.assertFalse(self.balance.capabilities.delete)
+        assert not self.balance.capabilities.delete

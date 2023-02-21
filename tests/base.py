@@ -101,15 +101,16 @@ class AppInitialized(TestCase):
         string_to_find = f"sipa_flash alert alert-{level}"
 
         with self.temp_short_log():
-            self.assertIn(string_to_find.encode('utf-8'), data,
-                          msg="Unexpectedly found no flash message"
-                          "with level {}!".format(level))
+            assert (
+                string_to_find.encode("utf-8") in data
+            ), f"Unexpectedly found no flash messagewith level {level}!"
 
     def assert_nothing_flashed(self, data):
         string_not_to_find = "sipa_flash alert"
         with self.temp_short_log():
-            self.assertNotIn(string_not_to_find.encode('utf-8'), data,
-                             msg="Flash message found unexpectedly")
+            assert (
+                string_not_to_find.encode("utf-8") not in data
+            ), "Flash message found unexpectedly"
 
 
 def dynamic_frontend_base(backend):

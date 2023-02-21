@@ -10,9 +10,9 @@ class TestBaseUserCase(TestCase):
             BaseUser('')  # pylint: disable=abstract-class-instantiated
 
     def test_BaseUser_has_flask_login_properties(self):
-        self.assertTrue(BaseUser.is_authenticated)
-        self.assertTrue(BaseUser.is_active)
-        self.assertFalse(BaseUser.is_anonymous)
+        assert BaseUser.is_authenticated
+        assert BaseUser.is_active
+        assert not BaseUser.is_anonymous
 
     # more can't be done here, we need some instances.
 
@@ -64,7 +64,7 @@ class DegenerateUserTestCase(TestCase):
         assert self.user != self.User(uid=self.uid + "invalid")
 
     def test_finance_balance_unsupported(self):
-        self.assertFalse(self.user.finance_balance.supported)
+        assert not self.user.finance_balance.supported
 
 
 class DegenerateFinanceInformation(BaseFinanceInformation):
@@ -82,8 +82,8 @@ class UserWithFinancesTestCase(TestCase):
         self.bal = self.User(uid='').finance_balance
 
     def test_balance_row_supported(self):
-        self.assertTrue(self.bal.supported)
-        self.assertTrue(self.bal.empty)
+        assert self.bal.supported
+        assert self.bal.empty
 
     def test_balance_correct_name(self):
         assert self.bal.name == "finance_balance"

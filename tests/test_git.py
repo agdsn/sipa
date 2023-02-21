@@ -104,7 +104,7 @@ class TestSampleGitRepository(SampleBareRepoInitializedBase):
 
     def test_repo_is_bare(self):
         """Test the repo is bare"""
-        self.assertTrue(self.repo.bare)
+        assert self.repo.bare
 
     def test_repo_only_master(self):
         """Test the repo only has a `master` ref"""
@@ -120,7 +120,7 @@ class CorrectlyClonedTesterMixin:
     """
 
     def test_cloned_repo_not_bare(self):
-        self.assertFalse(self.cloned_repo.bare)
+        assert not self.cloned_repo.bare
 
     def test_cloned_repo_one_branch(self):
         """Test only a `master` exists to which the head points to."""

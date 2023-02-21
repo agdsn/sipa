@@ -142,8 +142,7 @@ class DatasourceTestCase(TestCase):
             datasource.init_context(self.app)
 
         for log in context.output:
-            self.assertRegex(log, re.compile("ignoring.*unknown",
-                                             flags=re.IGNORECASE))
-            self.assertTrue(any(key in log for key in bad_keys),
-                            msg="Log warning raised not containing any "
-                            "of the given invalid keys")
+            self.assertRegex(log, re.compile("ignoring.*unknown", flags=re.IGNORECASE))
+            assert any(
+                key in log for key in bad_keys
+            ), "Log warning raised not containing any of the given invalid keys"
