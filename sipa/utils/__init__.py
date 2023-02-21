@@ -96,7 +96,7 @@ def support_hotline_available():
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
-def try_fetch_calendar(url: str) -> typing.Optional[Calendar]:
+def try_fetch_calendar(url: str) -> Calendar | None:
     """Fetch an ICAL calendar from a given URL."""
     try:
         response = requests.get(url, timeout=1)
@@ -137,7 +137,7 @@ Event = typing.TypedDict(
 )
 
 
-def events_from_calendar(calendar: icalendar.Calendar) -> typing.List[Event]:
+def events_from_calendar(calendar: icalendar.Calendar) -> list[Event]:
     """Given a calendar, extract the events up until one month in the future."""
     return recurring_ical_events.of(calendar).between(
         datetime.now(), datetime.now() + relativedelta(months=1)
