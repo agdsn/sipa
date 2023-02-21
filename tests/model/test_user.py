@@ -52,16 +52,16 @@ class DegenerateUserTestCase(TestCase):
         self.user = self.User(uid=self.uid)
 
     def test_uid_passed(self):
-        self.assertEqual(self.user.uid, self.uid)
+        assert self.user.uid == self.uid
 
     def test_get_id_implemented(self):
-        self.assertEqual(self.user.get_id(), self.uid)
+        assert self.user.get_id() == self.uid
 
     def test_equality_when_same_uid(self):
-        self.assertEqual(self.user, self.User(uid=self.uid))
+        assert self.user == self.User(uid=self.uid)
 
     def test_inequality_when_other_uid(self):
-        self.assertNotEqual(self.user, self.User(uid=self.uid + 'invalid'))
+        assert self.user != self.User(uid=self.uid + "invalid")
 
     def test_finance_balance_unsupported(self):
         self.assertFalse(self.user.finance_balance.supported)
@@ -86,4 +86,4 @@ class UserWithFinancesTestCase(TestCase):
         self.assertTrue(self.bal.empty)
 
     def test_balance_correct_name(self):
-        self.assertEqual(self.bal.name, 'finance_balance')
+        assert self.bal.name == "finance_balance"

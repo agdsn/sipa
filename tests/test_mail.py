@@ -46,25 +46,25 @@ class MailSendingTestBase(TestCase):
         self.assertIn(self.args[arg], self.send_mail_mock.call_args[1][call_arg])
 
     def assert_arg_equals_call_arg(self, arg, call_arg):
-        self.assertEqual(self.args[arg], self.send_mail_mock.call_args[1][call_arg])
+        assert self.args[arg] == self.send_mail_mock.call_args[1][call_arg]
 
 
 class ComposeSubjectTestCase(TestCase):
     def test_tag_and_category(self):
         composed = compose_subject("Subject!", tag="foo", category="bar")
-        self.assertEqual(composed, "[foo] bar: Subject!")
+        assert composed == "[foo] bar: Subject!"
 
     def test_tag_missing(self):
         composed = compose_subject("Subject!", category="bar")
-        self.assertEqual(composed, "bar: Subject!")
+        assert composed == "bar: Subject!"
 
     def test_category_missing(self):
         composed = compose_subject("Subject!", tag="foo")
-        self.assertEqual(composed, "[foo] Subject!")
+        assert composed == "[foo] Subject!"
 
     def test_both_missing(self):
         composed = compose_subject("subject")
-        self.assertEqual(composed, "subject")
+        assert composed == "subject"
 
 
 class ComposeBodyTestCase(TestCase):
@@ -73,7 +73,7 @@ class ComposeBodyTestCase(TestCase):
         self.message = "Lorem ipsum Dolor sit amet.\ngaudeamus igitur!"
 
     def test_without_dict_is_identity(self):
-        self.assertEqual(compose_body(self.message), self.message)
+        assert compose_body(self.message) == self.message
 
     def test_correct_header_with_full_dict(self):
         info = {'Name': "Foo Bar", 'Social status': "Knows Python"}
@@ -150,16 +150,17 @@ class SendMailTestBase(SMTPTestBase):
 
 class SendMailCommonTests:
     def test_wrap_message_called(self):
-        self.assertEqual(self.wrap_mock.call_count, 1)
-        self.assertEqual(self.wrap_mock.call_args[0], (self.args['message'],))
+        assert self.wrap_mock.call_count == 1
+        assert self.wrap_mock.call_args[0] == (self.args["message"],)
 
     def test_smtp_close_called(self):
         self.assertTrue(self.smtp_mock().close.called)
 
     def test_sendmail_envelope_sender(self):
-        self.assertEqual(self.observed_call_args.from_addr,
-                         self.app_mock.config['CONTACT_SENDER_MAIL'],
-                         "Wrong envelope sender set!")
+        assert (
+            self.observed_call_args.from_addr
+            == self.app_mock.config["CONTACT_SENDER_MAIL"]
+        ), "Wrong envelope sender set!"
 
     def test_sendmail_from_header(self):
         self.assertIn(f"From: {self.args['author']}\n",
@@ -178,7 +179,7 @@ class SendMailCommonTests:
 
     def test_sendmail_recipient_passed(self):
         recipient = self.observed_call_args.to_addrs
-        self.assertEqual(recipient, self.args['recipient'])
+        assert recipient == self.args["recipient"]
         message = self.observed_call_args.msg
         self.assertIn(f"To: {recipient}", message)
 
@@ -187,7 +188,7 @@ class SendMailCommonTests:
         self.assertIn(f"Subject: {self.args['subject']}", message)
 
     def test_returned_true(self):
-        self.assertEqual(self.success, True)
+        assert self.success
 
     def test_info_logged(self):
         log_message = self.log.output.pop()
@@ -378,7 +379,7 @@ class ContactMailTestCase(MailSendingTestBase):
 
     def test_recipient_passed(self):
         recipient = self.send_mail_mock.call_args[1]['recipient']
-        self.assertEqual(recipient, self.dorm_mail)
+        assert recipient == self.dorm_mail
 
 
 class UsersuiteContactMailTestCase(MailSendingTestBase):
@@ -417,8 +418,7 @@ class UsersuiteContactMailTestCase(MailSendingTestBase):
 
     def test_recipient_passed(self):
         expected_recipient = self.user_mock.datasource.support_mail
-        self.assertEqual(expected_recipient,
-                         self.send_mail_mock.call_args[1]['recipient'])
+        assert expected_recipient == self.send_mail_mock.call_args[1]["recipient"]
 
     def test_subject_completeg(self):
         self.assert_arg_in_call_arg('subject', 'subject')

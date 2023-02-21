@@ -54,4 +54,4 @@ class XorHashesTestCase(TestCase):
         e = True
         f = None
         expected = hash(a) ^ hash(b) ^ hash(c) ^ hash(d) ^ hash(e) ^ hash(f)
-        self.assertEqual(xor_hashes(a, b, c, d, e, f), expected)
+        assert xor_hashes(a, b, c, d, e, f) == expected

@@ -42,7 +42,7 @@ class StaticBalanceTestCase(TestCase):
     def test_has_correct_balance(self):
         self.assertFalse(self.balance.empty)
         self.assertIn('30', self.balance.value)
-        self.assertEqual(self.balance.raw_value, 30)
+        assert self.balance.raw_value == 30
 
     def test_balance_not_editable(self):
         self.assertFalse(self.balance.capabilities.edit)

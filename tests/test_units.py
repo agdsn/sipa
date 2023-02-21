@@ -32,7 +32,7 @@ class ThingsWithBasesTestCase(TestCase):
                            (-base / 2, 0), (-base, 1), (-2 * base, 1), (-(base**2), 2)]
                 for num, expected_division in example:
                     with self.subTest(num=num):
-                        self.assertEqual(max_divisions(num, base=base), expected_division)
+                        assert max_divisions(num, base=base) == expected_division
 
     def test_number_reduced_correctly(self):
         """Test `reduce_by_base()` for basic cases"""
@@ -43,9 +43,8 @@ class ThingsWithBasesTestCase(TestCase):
                             (-base, -1), (-(base**2), -base)]
                 for num, result in examples:
                     with self.subTest(num=num):
-                        self.assertEqual(
-                            reduce_by_base(number=num, base=base, divisions=1),
-                            result,
+                        assert (
+                            reduce_by_base(number=num, base=base, divisions=1) == result
                         )
 
     def test_unit_in_formatted_string(self):
@@ -77,7 +76,7 @@ class MoneyStylePositiveTestCase(MoneyStyleMixin, TestCase):
     def test_positive_style_returned(self):
         for num in self.nums:
             with self.subTest(num=num):
-                self.assertEqual(money_style(num), self.STYLE_POS)
+                assert money_style(num) == self.STYLE_POS
 
 
 class MoneyStyleNegativeTestCase(MoneyStyleMixin, TestCase):
@@ -88,7 +87,7 @@ class MoneyStyleNegativeTestCase(MoneyStyleMixin, TestCase):
     def test_positive_style_returned(self):
         for num in self.nums:
             with self.subTest(num=num):
-                self.assertEqual(money_style(num), self.STYLE_NEG)
+                assert money_style(num) == self.STYLE_NEG
 
 
 class MoneyDecoratorTestCase(MoneyStyleMixin, TestCase):
@@ -100,31 +99,31 @@ class MoneyDecoratorTestCase(MoneyStyleMixin, TestCase):
         value = d.pop('value')
         style = d.pop('style')
         raw_value = d.pop('raw_value')
-        self.assertEqual(d, {})
+        assert d == {}
         return value, style, raw_value
 
     def test_positive_float(self):
         value, style, raw_value = self.prepare_dict(self.dummy_func(3.5))
 
-        self.assertEqual(raw_value, +3.5)
+        assert raw_value == +3.5
         self.assertTrue(value.startswith('+3.50'))
         self.assertTrue(value.endswith("€"))
 
-        self.assertEqual(style, self.STYLE_POS)
+        assert style == self.STYLE_POS
 
     def test_negative_float(self):
         value, style, raw_value = self.prepare_dict(self.dummy_func(-3.5))
 
-        self.assertEqual(raw_value, -3.5)
+        assert raw_value == -3.5
         self.assertTrue(value.startswith('-3.50'))
         self.assertTrue(value.endswith("€"))
 
-        self.assertEqual(style, self.STYLE_NEG)
+        assert style == self.STYLE_NEG
 
     def test_zero_is_positive(self):
         value, style, raw_value = self.prepare_dict(self.dummy_func(0))
 
-        self.assertEqual(raw_value, 0)
+        assert raw_value == 0
         self.assertTrue(value.startswith('+0.00'))
         self.assertTrue(style, self.STYLE_POS)
 

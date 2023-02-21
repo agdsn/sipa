@@ -39,15 +39,15 @@ class TestBackendInitializationCase(TestCase):
 
     def test_datasource_names_unique(self):
         names = [dsrc.name for dsrc in self.backends.datasources]
-        self.assertEqual(len(names), len(set(names)))
+        assert len(names) == len(set(names))
 
     def test_dormitory_names_unique(self):
         names = [dorm.name for dorm in self.backends.dormitories]
-        self.assertEqual(len(names), len(set(names)))
+        assert len(names) == len(set(names))
 
     def test_all_dormitories_names_unique(self):
         names = [dorm.name for dorm in self.backends.all_dormitories]
-        self.assertEqual(len(names), len(set(names)))
+        assert len(names) == len(set(names))
 
     def test_all_dormitories_greater(self):
         assert (set(self.backends.all_dormitories) >=
@@ -58,7 +58,7 @@ class TestBackendInitializationCase(TestCase):
 
         …and has the correct length
         """
-        self.assertEqual(len(list), len(base))
+        assert len(list) == len(base)
         for name, display_name in list:
             assert isinstance(name, str)
             assert isinstance(display_name, str)
@@ -77,8 +77,7 @@ class TestBackendInitializationCase(TestCase):
 
     def test_get_dormitory(self):
         for dormitory in self.backends.dormitories:
-            self.assertEqual(self.backends.get_dormitory(dormitory.name),
-                             dormitory)
+            assert self.backends.get_dormitory(dormitory.name) == dormitory
 
         possible_names = [
             dorm.name for dorm in self.backends.dormitories
@@ -95,7 +94,7 @@ class TestBackendInitializationCase(TestCase):
         for dorm in self.backends.dormitories:
             first_ip = next(dorm.subnets.subnets[0].hosts())
 
-            self.assertEqual(self.backends.dormitory_from_ip(first_ip), dorm)
+            assert self.backends.dormitory_from_ip(first_ip) == dorm
 
         # TODO: Find an ip not in any dormitory
 
@@ -119,8 +118,7 @@ class DatasourceTestCase(TestCase):
         )
 
         datasource.init_context(self.app)
-
-        self.assertEqual(init_mock.call_args[0], (self.app,))
+        assert init_mock.call_args[0] == (self.app,)
 
     def test_init_context_reads_mail(self):
         datasource = DataSource(**self.default_args)
@@ -131,7 +129,7 @@ class DatasourceTestCase(TestCase):
 
         datasource.init_context(self.app)
 
-        self.assertEqual(datasource.support_mail, config['support_mail'])
+        assert datasource.support_mail == config["support_mail"]
 
     def test_init_context_warns_on_unknown_keys(self):
         bad_keys = ['unknown', 'foo', 'bar', 'mail']

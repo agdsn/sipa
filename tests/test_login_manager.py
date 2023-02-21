@@ -42,8 +42,8 @@ class SipaLoginManagerTest(TestCase):
         return app
 
     def login(self):
-        response = self.client.get(url_for('login'))
-        self.assertEqual(response.data.decode('utf-8'), "OK")
+        response = self.client.get(url_for("login"))
+        assert response.data.decode("utf-8") == "OK"
         from flask import g
         del g._login_user  # cached for this request context
 
@@ -51,8 +51,8 @@ class SipaLoginManagerTest(TestCase):
 class SipaLoginManagerAuthenticationTest(SipaLoginManagerTest):
     def test_authentication_works(self):
         self.login()
-        response = self.client.get(url_for('restricted'))
-        self.assertEqual(response.data.decode('utf-8'), "test_user")
+        response = self.client.get(url_for("restricted"))
+        assert response.data.decode("utf-8") == "test_user"
 
     def test_decorator_called_without_parameter(self):
         with self.assertRaises(TypeError):
@@ -78,9 +78,9 @@ class AppLevelUserLoadingDisabledTest(SipaLoginManagerTest):
     def test_login_manager(self):
         assert self.mgr.ignored_endpoints == {'show_images'}
         self.login()
-        response = self.client.get(url_for('show_images'))
-        self.assertEqual(response.data.decode('utf-8'), "Images :-)")
-        self.assertIn('show_images', self.mgr.ignored_endpoints)
+        response = self.client.get(url_for("show_images"))
+        assert response.data.decode("utf-8") == "Images :-)"
+        self.assertIn("show_images", self.mgr.ignored_endpoints)
 
 
 class BlueprintLevelUserLoadingDisabledTest(SipaLoginManagerTest):
@@ -105,12 +105,12 @@ class BlueprintLevelUserLoadingDisabledTest(SipaLoginManagerTest):
 
     def test_documents_no_user(self):
         self.login()
-        response = self.client.get(url_for('documents.show_documents'))
-        self.assertEqual(response.data.decode('utf-8'), "Documents :-)")
-        self.assertIn('documents.show_documents', self.mgr.ignored_endpoints)
+        response = self.client.get(url_for("documents.show_documents"))
+        assert response.data.decode("utf-8") == "Documents :-)"
+        self.assertIn("documents.show_documents", self.mgr.ignored_endpoints)
 
     def test_images_no_user(self):
         self.login()
-        response = self.client.get(url_for('documents.show_images_as_well'))
-        self.assertEqual(response.data.decode('utf-8'), "Images :-)")
-        self.assertIn('documents.show_images_as_well', self.mgr.ignored_endpoints)
+        response = self.client.get(url_for("documents.show_images_as_well"))
+        assert response.data.decode("utf-8") == "Images :-)"
+        self.assertIn("documents.show_images_as_well", self.mgr.ignored_endpoints)

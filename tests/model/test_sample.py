@@ -30,7 +30,7 @@ class TestSampleUserCase(SampleFrontendTestBase):
             self.User(0)
 
     def test_uid_correct(self):
-        self.assertEqual(self.user.uid, self.sample_users['test']['uid'])
+        assert self.user.uid == self.sample_users["test"]["uid"]
 
     def test_row_getters(self):
         """Test if the basic properties have been implemented accordingly.
@@ -38,22 +38,15 @@ class TestSampleUserCase(SampleFrontendTestBase):
 
         for key, val in self.expected_result.items():
             if val:
-                self.assertEqual(
-                    getattr(self.user, key),
-                    ActiveProperty(
-                        name=key,
-                        value=self.sample_users['test'][val[0]],
-                        capabilities=val[1],
-                    ),
+                assert getattr(self.user, key) == ActiveProperty(
+                    name=key,
+                    value=self.sample_users["test"][val[0]],
+                    capabilities=val[1],
                 )
             else:
-                self.assertEqual(
-                    getattr(self.user, key),
-                    UnsupportedProperty(key),
-                )
+                assert getattr(self.user, key) == UnsupportedProperty(key)
 
-        self.assertEqual(self.user.userdb_status,
-                         UnsupportedProperty('userdb_status'))
+        assert self.user.userdb_status == UnsupportedProperty("userdb_status")
 
     def test_row_setters(self):
         for attr in self.rows:
@@ -62,7 +55,7 @@ class TestSampleUserCase(SampleFrontendTestBase):
             if class_attr.fset:
                 value = "given_value"
                 setattr(self.user, attr, value)
-                self.assertEqual(getattr(self.user, attr), value)
+                assert getattr(self.user, attr) == value
             elif not getattr(self.user, attr).capabilities.edit:
                 assert not class_attr.fset
 
@@ -87,7 +80,7 @@ class TestSampleUserCase(SampleFrontendTestBase):
 
     def test_traffic_history(self):
         for day in self.user.traffic_history:
-            assert 0 <= day['day'] <= 6
-            assert 0 <= day['input']
-            assert 0 <= day['output']
-            self.assertEqual(day['throughput'], day['input'] + day['output'])
+            assert 0 <= day["day"] <= 6
+            assert 0 <= day["input"]
+            assert 0 <= day["output"]
+            assert day["throughput"] == day["input"] + day["output"]

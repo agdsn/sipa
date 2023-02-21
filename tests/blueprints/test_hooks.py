@@ -18,7 +18,7 @@ class GitHookTestBase(AppInitialized):
         if token is not None:
             url = f"{url}?token={token}"
 
-        self.assertEqual(self.client.post(url).status_code, status)
+        assert self.client.post(url).status_code == status
 
 
 class GitHookNoToken(GitHookTestBase):
@@ -27,7 +27,7 @@ class GitHookNoToken(GitHookTestBase):
         for method in HTTP_METHODS - {'POST'}:
             with self.subTest(method=method):
                 response = self.client.open(GIT_HOOK_URL, method=method)
-                self.assertEqual(response.status_code, 405)
+                assert response.status_code == 405
 
     def test_git_hook_not_existent(self):
         """Test that HTTP 404 is returned if no token is configured"""

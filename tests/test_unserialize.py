@@ -16,7 +16,7 @@ class UnserializerTest(TestCase):
             f = Foo({'bar': "value"})
         except TypeError:
             self.fail("TypeError raised")
-        self.assertEqual(f.bar, "value")
+        assert f.bar == "value"
 
         with self.assertRaises(MissingKeysError):
             Foo({'baz': "something"})
@@ -33,7 +33,7 @@ class UnserializerTest(TestCase):
             f = Foo({'type': "value"})
         except TypeError:
             self.fail("TypeError raised")
-        self.assertEqual(f.type, "value")
+        assert f.type == "value"
 
     def test_type_conversion(self):
         @unserializer
@@ -53,7 +53,7 @@ class UnserializerTest(TestCase):
         except ConversionError:
             self.fail()
         else:
-            self.assertEqual(f.items, ["bar", "baz"])
+            assert f.items, ["bar" == "baz"]
 
     def test_optional_can_convert(self):
         @unserializer
@@ -62,13 +62,13 @@ class UnserializerTest(TestCase):
 
         try:
             f = Foo({'opt': "bar"})
-            self.assertEqual(f.opt, "bar")
+            assert f.opt == "bar"
         except ConversionError:
             self.fail()
 
         try:
             f = Foo({'opt': None})
-            self.assertEqual(f.opt, None)
+            assert f.opt is None
         except ConversionError:
             self.fail()
 
@@ -80,9 +80,9 @@ class UnserializerTest(TestCase):
             items: Any
 
         f = Foo({'name': "Hans", 'id': "555", 'items': ["one", "two"]})
-        self.assertEqual(f.name, "Hans")
-        self.assertEqual(f.id, 555)
-        self.assertEqual(f.items, ["one", "two"])
+        assert f.name == "Hans"
+        assert f.id == 555
+        assert f.items, ["one" == "two"]
 
 
 class EmptyArgumentsTest(TestCase):
@@ -128,10 +128,10 @@ class NestedUnserializationTest(TestCase):
 
     def test(self):
         self.assertIsInstance(self.baz.inner, self._bar_cls)
-        self.assertEqual(self.baz.inner.description, "Beschreibung")
+        assert self.baz.inner.description == "Beschreibung"
         notes = self.baz.inner.notes
-        self.assertEqual(len(notes), 2)
-        self.assertEqual(notes[0].name, "a")
-        self.assertEqual(notes[0].id, 1)
-        self.assertEqual(notes[1].name, "b")
-        self.assertEqual(notes[1].id, 2)
+        assert len(notes) == 2
+        assert notes[0].name == "a"
+        assert notes[0].id == 1
+        assert notes[1].name == "b"
+        assert notes[1].id == 2
