@@ -27,16 +27,31 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Check out sipa and submodules
+        uses: actions/checkout@v3
         with:
-           submodules: 'true'
-      - name: Fix permissions
-        run: sudo chmod -R a+rw .
-      - name: Build
-        run: docker-compose -f build/testing/docker-compose.yml build
-      - name: Start
-        run: docker-compose -f build/testing/docker-compose.yml up -d
+          submodules: recursive
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - name: print information about pip cache
+        run: pip cache info && pip cache list
+      - name: ensure presence of `wheel`
+        run: pip install wheel
+      - name: install pip dependencies
+        run: >
+          pip install
+          -r build/requirements/requirements.txt
+          -r build/requirements/requirements_testing.txt
+        id: pip-install
+      # now come the tests
       - name: Run tests
-        run: docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing pytest -v
-
+        run: >
+          pytest
+          --junitxml=junit/test-results.xml
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: 'junit/test-*.xml'
