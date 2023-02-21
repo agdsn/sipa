@@ -1,3 +1,5 @@
+import logging
+import typing as t
 import re
 from base64 import urlsafe_b64encode
 from os import urandom
@@ -6,6 +8,8 @@ from unittest import TestCase
 from unittest.mock import MagicMock
 
 from ipaddress import IPv4Network
+
+import pytest
 from flask import Flask
 
 from sipa.backends import Backends, DataSource, Dormitory, InitContextCallable
@@ -99,50 +103,56 @@ class TestBackendInitializationCase(TestCase):
         # TODO: Find an ip not in any dormitory
 
 
-class DatasourceTestCase(TestCase):
-    def setUp(self):
-        super().setUp()
-        self.default_args = {
+class TestDataSource:
+    @pytest.fixture(scope="class")
+    def app(self):
+        app = MagicMock()
+        app.config = {}
+        return app
+
+    @pytest.fixture(scope="class")
+    def default_args(self) -> dict[str, t.Any]:
+        return {
             'name': 'test',
             'user_class': object,
             'mail_server': "",
         }
-        self.app = MagicMock()
-        self.app.config = {}
 
-    def test_init_context_gets_called_correctly(self):
+    def test_init_context_gets_called_correctly(self, default_args, app):
         init_mock = cast(InitContextCallable, MagicMock())
         datasource = DataSource(
-            **self.default_args,
+            **default_args,
             init_context=init_mock,
         )
 
-        datasource.init_context(self.app)
-        assert init_mock.call_args[0] == (self.app,)
+        datasource.init_context(app)
+        assert init_mock.call_args[0] == (app,)
 
-    def test_init_context_reads_mail(self):
-        datasource = DataSource(**self.default_args)
-        config = {
-            'support_mail': 'bazingle.foo@shizzle.xxx'
-        }
-        self.app.config['BACKENDS_CONFIG'] = {datasource.name: config}
+    @pytest.fixture(scope="function")
+    def datasource(self, default_args) -> DataSource:
+        return DataSource(**default_args)
 
-        datasource.init_context(self.app)
+    def test_init_context_reads_mail(self, datasource, app):
+        config = {"support_mail": "bazingle.foo@shizzle.xxx"}
+        app.config["BACKENDS_CONFIG"] = {datasource.name: config}
+
+        datasource.init_context(app)
 
         assert datasource.support_mail == config["support_mail"]
 
-    def test_init_context_warns_on_unknown_keys(self):
+    def test_init_context_warns_on_unknown_keys(
+        self, datasource, app, caplog: pytest.LogCaptureFixture
+    ):
+        RE_UNKNOWN_KEY = re.compile("ignoring unknown key", flags=re.IGNORECASE)
         bad_keys = ['unknown', 'foo', 'bar', 'mail']
-
-        datasource = DataSource(**self.default_args)
         bad_config = {key: None for key in bad_keys}
-        self.app.config['BACKENDS_CONFIG'] = {datasource.name: bad_config}
+        app.config["BACKENDS_CONFIG"] = {datasource.name: bad_config}
 
-        with self.assertLogs('sipa.backends', level='WARNING') as context:
-            datasource.init_context(self.app)
+        caplog.set_level(logging.WARNING, logger="sipa.backend")
+        datasource.init_context(app)
 
-        for log in context.output:
-            self.assertRegex(log, re.compile("ignoring.*unknown", flags=re.IGNORECASE))
+        for record in caplog.records:
+            assert re.match(RE_UNKNOWN_KEY, record.message)
             assert any(
-                key in log for key in bad_keys
+                key in record.message for key in bad_keys
             ), "Log warning raised not containing any of the given invalid keys"
