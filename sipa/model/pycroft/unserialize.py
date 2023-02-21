@@ -1,7 +1,8 @@
+import types
+import typing as t
 import inspect
 import sys
 from datetime import date
-from typing import Callable, Optional, Any, Union, List
 
 
 class UnserializationError(Exception):
@@ -29,28 +30,23 @@ def _maybe_setattr(cls, attrname, attr):
 NoneType = type(None)
 
 
-def _is_optional(t):
-    return getattr(t, '__origin__', None) is Union and \
-           len(t.__args__) == 2 and t.__args__[1] is NoneType
+def _is_optional(origin: type, args: tuple) -> bool:
+    return (origin is t.Union or origin is types.UnionType) and NoneType in args
 
 
 MAXDEPTH = 100
 
 
-def constructor_from_generic(name: str, args: tuple, *a, **kw) -> Callable | None:
+def constructor_from_generic(origin: type, args: tuple, *a, **kw) -> t.Callable:
     """Get a constructor rom a given
 
     Does not support PEP604-style unions.
 
-    :param name:  Something like 'List' (like from `List[int]._name`)
+    :param: the origin of our genenric type annotation, as returned from `typing.get_origin`
     :param args: Something like `(int,)` from (`List[int].__args__`)
-    :return: A constructor callable or None
+    :return: A constructor callable
     """
-    if name == Any._name:
-        def constructor(val):
-            return val
-
-    elif name == List._name:
+    if origin is list:
         if len(args) == 1:
             item_constructor = constructor_from_annotation(args[0], *a, **kw)
 
@@ -59,22 +55,25 @@ def constructor_from_generic(name: str, args: tuple, *a, **kw) -> Callable | Non
         else:
             raise UnserializationError("Cannot find constructor for List[A, ...]"
                                        " with more than one argument.")
-    elif name == Optional._name:
-        if len(args) >= 1:
-            item_constructor = constructor_from_annotation(args[0], *a, **kw)
+    elif _is_optional(origin, args):
+        arg, *rest = set(args) - {type(None)}
+        if rest:
+            raise UnserializationError("Unions beside `| None` are not supported")
+        assert not rest
 
-            def constructor(val):
-                return item_constructor(val) if val is not None else None
-        else:
-            raise UnserializationError("Cannot find constructor for Optional[...]"
-                                       " with less than one argument.")
+        item_constructor = constructor_from_annotation(args[0], *a, **kw)
+
+        def constructor(val):
+            return item_constructor(val) if val is not None else None
     else:
-        raise UnserializationError(f"Generic type '{name}' not supported")
+        raise UnserializationError(
+            f"Generic type {origin!r} (args: {args!r}) not supported"
+        )
 
     return constructor
 
 
-def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
+def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> t.Callable:
     """Use the value of an annotation to return an appropriate constructor"""
     if maxdepth <= 0:
         raise UnserializationError(
@@ -90,15 +89,17 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
             raise UnserializationError(f"Unable to look up type {type_!r}"
                                        f" in module {module.__name__!r}")
 
-    constructor: Callable | None = None
+    constructor: t.Callable | None = None
 
     # Case 1: known generic
-    if hasattr(type_, '_name'):
-        type_name = type_._name
-        if _is_optional(type_):
-            type_name = Optional._name
-        constructor = constructor_from_generic(type_name, getattr(type_, '__args__', ()),
-                                               module=module, maxdepth=maxdepth-1)
+    if generic := t.get_origin(type_):
+        args = t.get_args(type_)
+        constructor = constructor_from_generic(
+            generic,
+            args,
+            module=module,
+            maxdepth=maxdepth - 1,
+        )
 
     # cases 2, 3: Is an unserializer or something builtin
     elif inspect.isclass(type_):
@@ -107,6 +108,10 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
         else:
             constructor = type_
 
+    elif type_ is t.Any:
+        def constructor(value):
+            return value
+
     if not constructor:
         raise UnserializationError(f"Could not find constructor for type {type_!r}")
 
@@ -114,15 +119,12 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> Callable:
 
 
 def unserializer(cls: type) -> type:
-    """A class decorator providing a magic __init__ method.
-
-    .. warning::
-        don't use PEP604 unions and PEP585 builtin generics!
-        These are not supported.
-    """
-    annotations = {canonicalize_key(key): val
-                   for key, val in getattr(cls, '__annotations__', {}).items()}
-    setattr(cls, '__annotations__', annotations)
+    """A class decorator providing a magic __init__ method."""
+    annotations = {
+        canonicalize_key(key): val
+        for key, val in getattr(cls, "__annotations__", {}).items()
+    }
+    cls.__annotations__ = annotations
 
     # noinspection Mypy
     @property

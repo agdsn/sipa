@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, List, Optional
+from typing import Any
 from unittest import TestCase
 
 from sipa.model.pycroft.unserialize import unserializer, MissingKeysError, ConversionError, \
@@ -46,7 +46,7 @@ class UnserializerTest(TestCase):
     def test_list_can_convert(self):
         @unserializer
         class Foo:
-            items: List[str]
+            items: list[str]
 
         try:
             f = Foo({'items': ["bar", "baz"]})
@@ -58,7 +58,7 @@ class UnserializerTest(TestCase):
     def test_optional_can_convert(self):
         @unserializer
         class Foo:
-            opt: Optional[str]
+            opt: str | None
 
         try:
             f = Foo({'opt': "bar"})
@@ -108,7 +108,7 @@ class Note:
 @unserializer
 class Bar:  # We need to dofine this at module level so the lookup works
     description: str
-    notes: List[Note]
+    notes: list[Note]
 
 
 @unserializer
