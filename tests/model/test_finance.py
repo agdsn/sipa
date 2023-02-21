@@ -1,51 +1,53 @@
-from unittest import TestCase
+import pytest
 
+from sipa.model.fancy_property import ActiveProperty
 from sipa.model.finance import BaseFinanceInformation
 
 
-class EverythingMissingTestCase(TestCase):
+def test_baseinfo_abc_instantiation():
+    # noinspection PyAbstractClass
     class InvalidInfo(BaseFinanceInformation):  # pylint: disable=abstract-method
         pass
 
-    def test_cannot_inherit_base(self):
-        with self.assertRaises(TypeError):
-            self.InvalidInfo()  # pylint: disable=abstract-class-instantiated
+    with pytest.raises(TypeError):
+        InvalidInfo()  # pylint: disable=abstract-class-instantiated
 
 
-class NoNeedToPayTestCase(TestCase):
+class TestNoNeedToPay:
     class DisabledFinanceInformation(BaseFinanceInformation):
         has_to_pay = False
         raw_balance = 0
         history = []
         last_update = None
 
-    def test_instanciation_works(self):
-        self.DisabledFinanceInformation()
+    @pytest.fixture(scope="class")
+    def finance_info(self) -> BaseFinanceInformation:
+        return self.DisabledFinanceInformation()
 
-    def test_has_correct_balance(self):
-        balance = self.DisabledFinanceInformation().balance
-        self.assertTrue(balance.empty)
-        self.assertIn("inbegriffen", balance.value.lower())
+    def test_has_correct_balance(self, finance_info):
+        balance = finance_info.balance
+        assert balance.empty
+        assert "inbegriffen" in balance.value.lower()
 
 
-class StaticBalanceTestCase(TestCase):
+class TestStaticBalance:
     class StaticFinanceInformation(BaseFinanceInformation):
         has_to_pay = True
         raw_balance = 30
         history = []
         last_update = None
 
-    def setUp(self):
-        super().setUp()
-        self.balance = self.StaticFinanceInformation().balance
+    @pytest.fixture(scope="class")
+    def balance(self) -> ActiveProperty:
+        return self.StaticFinanceInformation().balance
 
-    def test_has_correct_balance(self):
-        self.assertFalse(self.balance.empty)
-        self.assertIn('30', self.balance.value)
-        self.assertEqual(self.balance.raw_value, 30)
+    def test_has_correct_balance(self, balance):
+        assert not balance.empty
+        assert "30" in balance.value
+        assert balance.raw_value == 30
 
-    def test_balance_not_editable(self):
-        self.assertFalse(self.balance.capabilities.edit)
+    def test_balance_not_editable(self, balance):
+        assert not balance.capabilities.edit
 
-    def test_balance_not_deletable(self):
-        self.assertFalse(self.balance.capabilities.delete)
+    def test_balance_not_deletable(self, balance):
+        assert not balance.capabilities.delete

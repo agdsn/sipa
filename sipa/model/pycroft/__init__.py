@@ -12,7 +12,7 @@ def init_pycroft_api(app):
             api_key=app.config['PYCROFT_API_KEY'],
         )
     except KeyError as exception:
-        raise InvalidConfiguration(*exception.args)
+        raise InvalidConfiguration(*exception.args) from exception
 
 
 def init_userdb(app):

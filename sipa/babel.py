@@ -47,7 +47,7 @@ def save_user_locale_setting():
     try:
         locale = Locale.parse(locale_identifier, sep='-')
     except (UnknownLocaleError, ValueError):
-        raise BadRequest(f"Unknown locale {locale_identifier!r}")
+        raise BadRequest(f"Unknown locale {locale_identifier!r}") from None
     if locale not in possible_locales():
         raise BadRequest(f"Locale {locale_identifier!r} not available")
     session['locale'] = str(locale)

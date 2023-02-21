@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from datetime import date
 from decimal import Decimal
-from typing import List, Optional
 
 from sipa.model.pycroft.unserialize import unserializer
 
@@ -18,19 +17,19 @@ class UserData:
     mail: str
     mail_forwarded: bool
     mail_confirmed: bool
-    properties: List[str]
-    traffic_history: List[TrafficHistoryEntry]
-    interfaces: List[Interface]
+    properties: list[str]
+    traffic_history: list[TrafficHistoryEntry]
+    interfaces: list[Interface]
     finance_balance: Decimal
-    finance_history: List[FinanceHistoryEntry]
+    finance_history: list[FinanceHistoryEntry]
     last_finance_update: date
 
     # TODO introduce properties once they can be excluded
 
-    birthdate: Optional[date]
-    membership_end_date: Optional[date]
-    membership_begin_date: Optional[date]
-    wifi_password: Optional[str]
+    birthdate: date | None
+    membership_end_date: date | None
+    membership_begin_date: date | None
+    wifi_password: str | None
 
 
 @unserializer
@@ -46,14 +45,14 @@ class UserStatus:
 class Interface:
     id: int
     mac: str
-    ips: List[str]
+    ips: list[str]
 
 
 @unserializer
 class TrafficHistoryEntry:
     timestamp: str
-    ingress: Optional[int]
-    egress: Optional[int]
+    ingress: int | None
+    egress: int | None
 
 
 @unserializer

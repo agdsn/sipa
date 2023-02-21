@@ -12,7 +12,8 @@ class SampleAuthenticationTestCase(SampleFrontendTestBase):
         rv = self.login()
         print("rv:", rv)
         from pprint import pprint
-        pprint(rv.data.decode('utf-8'))
+
+        pprint(rv.data.decode())
         self.assertRedirects(rv, url_for('usersuite.index'))
 
     def test_logout_successful(self):
@@ -68,6 +69,6 @@ class UsersuiteReachableTestCase(SampleAuthenticatedTestBase):
 
         for url in urls:
             with self.subTest(url=url):
-                self.assertRegex(usersuite_response.data.decode('utf-8'),
-                                 f'href="[^"]*{url}[^"]*"')
-
+                self.assertRegex(
+                    usersuite_response.data.decode(), f'href="[^"]*{url}[^"]*"'
+                )

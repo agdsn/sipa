@@ -11,7 +11,6 @@ from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from markupsafe import Markup
 
-from sipa.config.default import MEMBERSHIP_CONTRIBUTION
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, \
     PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \

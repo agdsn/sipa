@@ -2,7 +2,6 @@ from datetime import datetime
 from random import random
 
 from flask import current_app
-from flask_babel import gettext
 from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 
@@ -230,14 +229,6 @@ class User(BaseUser):
 
     def continue_membership(self):
         self.config[self.uid]['membership_end_date'] = None
-
-    def estimate_balance(self, end_date):
-        """Calculate balance at a given end_date"""
-        raise NotImplementedError
-
-    @property
-    def is_member(self):
-        return True
 
     @active_prop
     def wifi_password(self):

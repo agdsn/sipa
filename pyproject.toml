@@ -1,0 +1,21 @@
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [
+]
+# to look up the meaning of specific rule IDs, use `ruff rule $id`
+select = [
+    "E",
+    "F",
+    "B",  # flake8-bugbear
+]
+ignore = [
+    "E741",  # ambiguous variable names
+    "E501",  # line length violations (for now)
+]
+unfixable = [
+    "B",  # fixing bug hazards requires knowledge about the intention
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["E402", "F401"]

@@ -4,7 +4,7 @@ Basic utilities for the Flask app
 These are basic utilities necessary for the Flask app which are
 disjoint from any blueprint.
 """
-from flask import request, session
+from flask import session
 from flask_login import AnonymousUserMixin
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 

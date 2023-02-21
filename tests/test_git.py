@@ -84,13 +84,12 @@ class TestSampleGitRepository(SampleBareRepoInitializedBase):
     """Tests concerning the result of `init_sample_git_repo`"""
     def test_repo_path_correctly_joined(self):
         path = f"{self.workdir}/{self.repo_name}.git"
-        self.assertEqual(self.repo_path, path)
+        assert self.repo_path == path
 
     def test_repo_path_exists(self):
         """Test that `self.workdir` only contains the bare repo directory"""
-        self.assertEqual(os.listdir(self.workdir),
-                         [f"{self.repo_name}.git"])
-        self.assertTrue(os.path.isdir(self.repo_path))
+        assert os.listdir(self.workdir) == [f"{self.repo_name}.git"]
+        assert os.path.isdir(self.repo_path)
 
     def test_cloned_git_repo_correct_files(self):
         """Test that a clone from the bare repo contains the correct files"""
@@ -101,16 +100,16 @@ class TestSampleGitRepository(SampleBareRepoInitializedBase):
         # isn't a requirement for this test that it exists, whereas
         # the check _cares_ about whether `.git` exists.
         found_files = set(os.listdir(cloned_git_path)) - {"config"}
-        self.assertEqual(found_files, {".git", SAMPLE_FILE_NAME})
+        assert found_files, {".git" == SAMPLE_FILE_NAME}
 
     def test_repo_is_bare(self):
         """Test the repo is bare"""
-        self.assertTrue(self.repo.bare)
+        assert self.repo.bare
 
     def test_repo_only_master(self):
         """Test the repo only has a `master` ref"""
-        self.assertEqual(len(self.repo.refs), 1)
-        self.assertEqual(self.repo.head.ref.name, 'master')
+        assert len(self.repo.refs) == 1
+        assert self.repo.head.ref.name == "master"
 
 
 class CorrectlyClonedTesterMixin:
@@ -121,17 +120,17 @@ class CorrectlyClonedTesterMixin:
     """
 
     def test_cloned_repo_not_bare(self):
-        self.assertFalse(self.cloned_repo.bare)
+        assert not self.cloned_repo.bare
 
     def test_cloned_repo_one_branch(self):
         """Test only a `master` exists to which the head points to."""
-        self.assertEqual(len(self.cloned_repo.branches), 1)
-        self.assertEqual(self.cloned_repo.branches[0].name, 'master')
-        self.assertEqual(self.cloned_repo.branches[0], self.cloned_repo.head.ref)
+        assert len(self.cloned_repo.branches) == 1
+        assert self.cloned_repo.branches[0].name == "master"
+        assert self.cloned_repo.branches[0] == self.cloned_repo.head.ref
 
     def test_cloned_repo_correct_refs(self):
         # Expected: master(current HEAD), origin/HEAD, origin/master
-        self.assertEqual(len(self.cloned_repo.refs), 3)
+        assert len(self.cloned_repo.refs) == 3
 
 
 class ExplicitlyClonedSampleRepoTestBase(SampleBareRepoInitializedBase):
@@ -190,8 +189,8 @@ class TestUpdateRepo(ExplicitlyClonedSampleRepoTestBase):
         update_repo(self.cloned_repo_path)
 
     def test_commitsha_different_before_update(self):
-        self.assertNotEqual(self.repo.commit().hexsha, self.cloned_repo.commit().hexsha)
+        assert self.repo.commit().hexsha != self.cloned_repo.commit().hexsha
 
     def test_same_commit_after_update(self):
         self.update_repo()
-        self.assertEqual(self.repo.commit().hexsha, self.cloned_repo.commit().hexsha)
+        assert self.repo.commit().hexsha == self.cloned_repo.commit().hexsha

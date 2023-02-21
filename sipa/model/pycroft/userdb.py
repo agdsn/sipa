@@ -30,9 +30,11 @@ class UserDB(BaseUserDB):
         """
         try:
             IPv4Address(mask.replace("%", "255"))
-        except AddressValueError:
-            raise ValueError("Mask {} is not a valid IP address or contains "
-                             "more than one consecutive '%' sign".format(mask))
+        except AddressValueError as e:
+            raise ValueError(
+                f"Mask {mask!r} is not a valid IP address or contains "
+                "more than one consecutive '%' sign"
+            ) from e
 
     @staticmethod
     def sql_query(query: str, args=()):
@@ -124,4 +126,4 @@ def register_userdb_extension(app):
             pool_recycle=app.config['SQL_CONNECTION_RECYCLE'],
         )
     except KeyError as exception:
-        raise InvalidConfiguration(*exception.args)
+        raise InvalidConfiguration(*exception.args) from None
