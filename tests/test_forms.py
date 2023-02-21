@@ -1,35 +1,70 @@
+from abc import abstractmethod
 from itertools import permutations
-from unittest import TestCase
+
+import pytest
 
 from sipa import forms
 from wtforms import Form, PasswordField, ValidationError
 
 
-class PasswordComplexityValidatorTest(TestCase):
-    class TestForm(Form):
-        password = PasswordField()
+class TestForm(Form):
+    password = PasswordField()
 
-    def validate(self, validator, password):
-        form = self.TestForm(data={'password': password})
-        field = form.password
-        validator(form, field)
 
-    def test_min_length(self):
-        min_length = 4
-        assert min_length > 1
-        validator = forms.PasswordComplexity(min_length=min_length,
-                                             min_classes=1)
-        for length in range(min_length):
-            with self.assertRaises(ValidationError):
-                self.validate(validator, 'a' * length)
-        for length in range(min_length, 2 * min_length):
-            self.validate(validator, 'a' * length)
+class TestPasswordComplexityValidation:
+    __abstract__ = True
 
-    def test_min_classes(self):
-        validator = forms.PasswordComplexity(min_length=1, min_classes=2)
-        class_representatives = ('a', 'A', '0', '~')
-        for representative in class_representatives:
-            with self.assertRaises(ValidationError):
-                self.validate(validator, representative)
-        for permutation in permutations(class_representatives, 2):
-            self.validate(validator, ''.join(permutation))
+    @pytest.fixture(scope="class")
+    def validate(self, validator):
+        def validate_(password):
+            form = TestForm(data={"password": password})
+            field = form.password
+            validator(form, field)
+
+        return validate_
+
+    @abstractmethod
+    def validator(self):
+        ...
+
+
+class TestMinLength(TestPasswordComplexityValidation):
+    MIN_LENGTH = 4
+
+    @pytest.fixture(scope="class")
+    def validator(self):
+        return forms.PasswordComplexity(min_length=self.MIN_LENGTH, min_classes=1)
+
+    @pytest.mark.parametrize("pw", ["a" * i for i in range(MIN_LENGTH)])
+    def test_min_length_reject(self, pw, validate):
+        with pytest.raises(ValidationError):
+            validate(pw)
+
+    @pytest.mark.parametrize("pw", ["a" * i for i in range(MIN_LENGTH, 2 * MIN_LENGTH)])
+    def test_min_length_accept(self, pw, validate):
+        try:
+            validate(pw)
+        except ValidationError:
+            pytest.fail()
+
+
+class TestMinClasses(TestPasswordComplexityValidation):
+    REPRESENTATIVES = ("a", "A", "0", "~")
+
+    @pytest.fixture(scope="class")
+    def validator(self):
+        return forms.PasswordComplexity(min_length=1, min_classes=2)
+
+    @pytest.mark.parametrize("pw", REPRESENTATIVES)
+    def test_min_classes_reject(self, pw, validate):
+        with pytest.raises(ValidationError):
+            validate(pw)
+
+    @pytest.mark.parametrize(
+        "pw", ["".join(p) for p in permutations(REPRESENTATIVES, 2)]
+    )
+    def test_min_classes_accept(self, pw, validate):
+        try:
+            validate(pw)
+        except ValidationError:
+            pytest.fail()
