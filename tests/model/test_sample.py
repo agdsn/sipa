@@ -1,4 +1,3 @@
-import sipa.model.sample
 from sipa.model.fancy_property import (ActiveProperty, Capabilities,
                                        UnsupportedProperty, NO_CAPABILITIES)
 

@@ -2,7 +2,6 @@ from datetime import datetime
 from random import random
 
 from flask import current_app
-from flask_babel import gettext
 from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 

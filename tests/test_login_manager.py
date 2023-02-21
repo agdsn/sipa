@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, url_for, session, request
+from flask import Flask, Blueprint, url_for
 from flask_login import current_user, login_user
 
 from sipa.login_manager import SipaLoginManager

@@ -1,6 +1,5 @@
 import pkgutil
 import typing
-from datetime import datetime
 
 import icalendar
 import pytest

@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 
 from flask_babel import gettext
 
-from sipa.model.fancy_property import ActiveProperty, Capabilities
+from sipa.model.fancy_property import ActiveProperty
 from sipa.units import format_money
 from sipa.utils import compare_all_attributes
 

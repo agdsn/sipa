@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from flask import Flask, url_for
 from flask_testing import TestCase as FlaskTestCase
 
-from sipa import create_app, model
+from sipa import create_app
 from sipa.defaults import WARNINGS_ONLY_CONFIG
 from sipa.model.sample.user import User as SampleUser
 

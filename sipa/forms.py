@@ -7,12 +7,29 @@ from flask import flash
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from werkzeug.local import LocalProxy
-from wtforms import (BooleanField, HiddenField, PasswordField, SelectField,
-                     StringField, TextAreaField, RadioField, IntegerField, DateField, SubmitField)
-from wtforms.validators import (AnyOf, DataRequired, Email, EqualTo, InputRequired,
-                                Regexp, ValidationError, NumberRange, Optional, Length)
+from wtforms import (
+    BooleanField,
+    HiddenField,
+    PasswordField,
+    SelectField,
+    StringField,
+    TextAreaField,
+    IntegerField,
+    DateField,
+)
+from wtforms.validators import (
+    DataRequired,
+    Email,
+    EqualTo,
+    InputRequired,
+    Regexp,
+    ValidationError,
+    NumberRange,
+    Optional,
+    Length,
+)
 
-from sipa.backends.extension import backends, _dorm_summary
+from sipa.backends.extension import backends
 
 
 mac_regex = re.compile(r"^[a-f0-9]{2}((:|-|lo)[a-f0-9]{2}){5}$", re.IGNORECASE)

@@ -242,10 +242,10 @@ class SendMailFailingTestCase(SMTPTestBase):
             raise OSError()
         self.smtp_mock().sendmail.side_effect = bad_sendmail
 
-        with self._patch_smtp(), \
-                patch('sipa.mail.current_app', self.app_mock) as app, \
-                self.assertLogs('sipa.mail', level='ERROR') as log:
-            self.success = send_mail('', '', '', '')
+        with self._patch_smtp(), patch(
+            "sipa.mail.current_app", self.app_mock
+        ), self.assertLogs("sipa.mail", level="ERROR") as log:
+            self.success = send_mail("", "", "", "")
 
         self.log = log
 

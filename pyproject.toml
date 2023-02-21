@@ -17,3 +17,5 @@ unfixable = [
     "B",  # fixing bug hazards requires knowledge about the intention
 ]
 
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["E402", "F401"]
