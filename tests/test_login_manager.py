@@ -43,7 +43,7 @@ class SipaLoginManagerTest(TestCase):
 
     def login(self):
         response = self.client.get(url_for("login"))
-        assert response.data.decode("utf-8") == "OK"
+        assert response.data.decode() == "OK"
         from flask import g
         del g._login_user  # cached for this request context
 
@@ -52,7 +52,7 @@ class SipaLoginManagerAuthenticationTest(SipaLoginManagerTest):
     def test_authentication_works(self):
         self.login()
         response = self.client.get(url_for("restricted"))
-        assert response.data.decode("utf-8") == "test_user"
+        assert response.data.decode() == "test_user"
 
     def test_decorator_called_without_parameter(self):
         with self.assertRaises(TypeError):
@@ -79,7 +79,7 @@ class AppLevelUserLoadingDisabledTest(SipaLoginManagerTest):
         assert self.mgr.ignored_endpoints == {'show_images'}
         self.login()
         response = self.client.get(url_for("show_images"))
-        assert response.data.decode("utf-8") == "Images :-)"
+        assert response.data.decode() == "Images :-)"
         self.assertIn("show_images", self.mgr.ignored_endpoints)
 
 
@@ -106,11 +106,11 @@ class BlueprintLevelUserLoadingDisabledTest(SipaLoginManagerTest):
     def test_documents_no_user(self):
         self.login()
         response = self.client.get(url_for("documents.show_documents"))
-        assert response.data.decode("utf-8") == "Documents :-)"
+        assert response.data.decode() == "Documents :-)"
         self.assertIn("documents.show_documents", self.mgr.ignored_endpoints)
 
     def test_images_no_user(self):
         self.login()
         response = self.client.get(url_for("documents.show_images_as_well"))
-        assert response.data.decode("utf-8") == "Images :-)"
+        assert response.data.decode() == "Images :-)"
         self.assertIn("documents.show_images_as_well", self.mgr.ignored_endpoints)
