@@ -2,8 +2,7 @@ from itertools import permutations
 from time import time
 from unittest import TestCase
 
-from sipa.utils import dict_diff, timetag_today, meetingcal
-from base import AppInitialized
+from sipa.utils import dict_diff, timetag_today
 
 
 class TimetagValidator(TestCase):
