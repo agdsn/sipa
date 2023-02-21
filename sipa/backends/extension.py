@@ -142,7 +142,9 @@ class Backends:
         try:
             new_datasource = self.available_datasources[name]
         except KeyError:
-            raise InvalidConfiguration(f"{name} is not an available datasource")
+            raise InvalidConfiguration(
+                f"{name} is not an available datasource"
+            ) from None
 
         self._datasources[name] = new_datasource
 

@@ -560,7 +560,7 @@ def flash_formerrors(form):
     the form and this method returns all form errors (form.errors)
     as flash messages.
     """
-    for field, errors in list(form.errors.items()):
+    for _field, errors in list(form.errors.items()):
         for e in errors:
             flash(e, "error")
 

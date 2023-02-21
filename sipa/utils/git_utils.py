@@ -32,7 +32,7 @@ def init_repo(repo_dir, repo_url):
     try:
         master = repo.refs['master']
     except IndexError:
-        raise OSError(f"Git directory {repo_dir} doesn't have a master!")
+        raise OSError(f"Git directory {repo_dir} doesn't have a master!") from None
 
     repo.head.set_reference(master)
 

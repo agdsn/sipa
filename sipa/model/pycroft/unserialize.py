@@ -31,7 +31,9 @@ NoneType = type(None)
 
 
 def _is_optional(origin: type, args: tuple) -> bool:
-    return (origin is t.Union or origin is types.UnionType) and NoneType in args
+    return (
+        origin is t.Union or origin is types.UnionType  # noqa: E721
+    ) and NoneType in args
 
 
 MAXDEPTH = 100
@@ -86,8 +88,9 @@ def constructor_from_annotation(type_, module, maxdepth=MAXDEPTH) -> t.Callable:
         try:
             type_ = eval(type_, module.__dict__, None)
         except NameError:
-            raise UnserializationError(f"Unable to look up type {type_!r}"
-                                       f" in module {module.__name__!r}")
+            raise UnserializationError(
+                f"Unable to look up type {type_!r}" f" in module {module.__name__!r}"
+            ) from None
 
     constructor: t.Callable | None = None
 
