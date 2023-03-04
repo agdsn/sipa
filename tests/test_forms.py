@@ -4,7 +4,7 @@ from itertools import permutations
 import pytest
 
 from sipa import forms
-from wtforms import Form, PasswordField, ValidationError
+from wtforms import Form, PasswordField, ValidationError, StringField
 
 
 class TestForm(Form):
@@ -66,5 +66,48 @@ class TestMinClasses(TestPasswordComplexityValidation):
     def test_min_classes_accept(self, pw, validate):
         try:
             validate(pw)
+        except ValidationError:
+            pytest.fail()
+
+
+class TestFormMAC(Form):
+    mac = StringField()
+    hostname = StringField()
+
+
+class TestMacUnicastVadator:
+    @pytest.fixture(scope="class")
+    def validatemac(self):
+        def validatemac_(mac):
+            form = TestFormMAC(data={"mac": mac, "hostname": "hostname"})
+            filemac = form.mac
+            forms.require_unicast_mac(form, filemac)
+
+        return validatemac_
+
+    @pytest.mark.parametrize(
+        "mac",
+        [
+            "tt:tt:tt:tt:tt:tt",
+            "0z:80:41:ae:fd:7e",
+            "0+:80:41:ae:fd:7e",
+            "awda ssfsfwa",
+            "a",
+            "ab",
+            "0d-80-41-ae-fd-7e",
+            "0f-80-41-ae-fd-7e"
+        ],
+    )
+    def test_bad_macs(self, mac, validatemac):
+        with pytest.raises(ValidationError):
+            validatemac(mac)
+
+    @pytest.mark.parametrize(
+        "mac",
+        ["00:80:41:ae:fd:7e", "00-80-41-ae-fd-7e", "008041-aefd7e", "0080.41ae.fd7e"],
+    )
+    def test_good_macs(self, mac, validatemac):
+        try:
+            validatemac(mac)
         except ValidationError:
             pytest.fail()
