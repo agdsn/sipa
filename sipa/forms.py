@@ -33,6 +33,7 @@ from sipa.backends.extension import backends
 
 
 mac_regex = re.compile(r"^[a-f0-9]{2}((:|-|lo)[a-f0-9]{2}){5}$", re.IGNORECASE)
+hex_value = re.compile(r"^[a-fA-F0-9]+$")
 
 class MacAddress(Regexp):
     def __init__(self, message=None):
@@ -244,8 +245,13 @@ def require_unicast_mac(form, field):
     A MAC-adress is defined to be “broadcast” if the least significant bit
     of the first octet is 1. Therefore, it has to be 0 to be valid.
     """
-    if int(field.data[1], 16) % 2:
-        raise ValidationError(gettext("MAC muss unicast-Adresse sein!"))
+    try:
+        if int(field.data[1], 16) % 2:
+            raise ValidationError(gettext("MAC muss unicast-Adresse sein!"))
+    except ValueError:
+        raise ValidationError(gettext("keine gültige MAC adresse ")) from None
+    except IndexError:
+        raise ValidationError(gettext("Mac zu kurz!")) from None
 
 
 class ChangeMACForm(FlaskForm):
