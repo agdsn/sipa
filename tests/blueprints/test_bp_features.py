@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from .assertions import TestClient
+from tests.assertions import TestClient
 
 
 @pytest.fixture(scope="module")

@@ -11,7 +11,7 @@ import typing as t
 from flask import url_for, Flask
 from sipa import create_app
 from sipa.defaults import WARNINGS_ONLY_CONFIG
-from .blueprints.assertions import TestClient
+from .assertions import TestClient
 
 
 @contextlib.contextmanager

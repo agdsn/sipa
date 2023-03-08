@@ -6,7 +6,7 @@ import pytest
 from flask import Flask
 
 from .assertions import TestClient
-from ..fixture_helpers import (
+from .fixture_helpers import (
     login_context,
     _test_client,
     make_testing_app,

@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from .assertions import TestClient
+from tests.assertions import TestClient
 from ..base import disable_logs
 from ..fixture_helpers import make_testing_app, DEFAULT_TESTING_CONFIG
 

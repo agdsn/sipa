@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 import pytest
 from flask import abort, url_for, Flask
 
-from .assertions import TestClient
+from tests.assertions import TestClient
 
 
 @pytest.fixture(scope="module")

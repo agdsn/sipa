@@ -1,6 +1,6 @@
 from flask import url_for
 
-from ..assertions import TestClient
+from tests.assertions import TestClient
 
 
 def test_login_logout(module_test_client: TestClient):

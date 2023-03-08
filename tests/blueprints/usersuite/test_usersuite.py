@@ -9,7 +9,7 @@ from werkzeug import Response
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.model.fancy_property import PropertyBase
 from sipa.model.user import Row
-from ..assertions import TestClient, RenderedTemplate
+from tests.assertions import TestClient, RenderedTemplate
 
 
 pytestmark = pytest.mark.usefixtures("user_logged_in")

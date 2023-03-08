@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # This file contains parts of the module `tests.frontend.fixture_helpers`
 # (pycroft@ded11d489de02e8c670990abc46f07beaea064f7)
 #  Copyright (c) 2022. The Pycroft Authors. See the AUTHORS file.
