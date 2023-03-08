@@ -75,7 +75,9 @@ class TestClient(flask.testing.FlaskClient):
             300 <= resp.status_code < 400
         ), f"Expected {url!r} to redirect, got status {resp.status}"
         if expected_location is not None:
-            assert resp.location == self.fully_qualify_location(expected_location)
+            assert self.fully_qualify_location(
+                resp.location
+            ) == self.fully_qualify_location(expected_location)
         return resp
 
     def assert_redirects(
@@ -90,7 +92,9 @@ class TestClient(flask.testing.FlaskClient):
             300 <= resp.status_code < 400
         ), f"Expected endpoint {endpoint} to redirect, got status {resp.status}"
         if expected_location is not None:
-            assert resp.location == self.fully_qualify_location(expected_location)
+            assert self.fully_qualify_location(
+                resp.location
+            ) == self.fully_qualify_location(expected_location)
         return resp
 
     def assert_url_forbidden(self, url: str, method: str = "GET", **kw) -> Response:
