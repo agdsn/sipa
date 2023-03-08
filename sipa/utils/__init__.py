@@ -6,7 +6,6 @@ import dataclasses
 import http.client
 import json
 import logging
-import time
 import typing
 from datetime import date, datetime, timedelta
 from functools import wraps
@@ -28,11 +27,6 @@ from werkzeug.http import parse_date as parse_datetime
 from flask.globals import current_app
 
 logger = logging.getLogger(__name__)
-
-
-def timetag_today():
-    """Return the timetag for today"""
-    return int(time.time() // 86400)
 
 
 def get_bustimes(stopname, count=10):

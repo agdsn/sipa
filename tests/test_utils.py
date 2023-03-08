@@ -1,13 +1,8 @@
 from itertools import permutations
-from time import time
 
 import pytest
 
-from sipa.utils import dict_diff, timetag_today
-
-
-def test_timetag_today():
-    assert timetag_today() == time() // 86400
+from sipa.utils import dict_diff
 
 
 class TestDictDiff:
