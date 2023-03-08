@@ -1,16 +1,25 @@
 from unittest.mock import patch, MagicMock
 
-from flask import url_for
+import pytest
 
-from tests.base import SampleFrontendTestBase
+from .assertions import TestClient
 
 
-class BpFeaturesTestCase(SampleFrontendTestBase):
-    def test_bustimes_reachable(self):
-        mock = MagicMock()
-        with patch('sipa.blueprints.features.get_bustimes', mock):
-            resp = self.client.get(url_for('features.bustimes'))
+@pytest.fixture(scope="module")
+def client(module_test_client):
+    return module_test_client
 
-        self.assert200(resp)
-        self.assertTemplateUsed("bustimes.html")
-        assert mock.called
+
+def test_bustimes(client: TestClient):
+    # TODO test this properly: refactor external API access into service, test parsing
+    with client.renders_template("bustimes.html"), patch(
+        "sipa.blueprints.features.get_bustimes", mock := MagicMock()
+    ):
+        client.assert_ok("features.bustimes")
+    assert mock.called
+
+
+def test_meetingcal(client: TestClient):
+    with client.renders_template("meetingcal.html"):
+        resp = client.assert_ok("features.render_meetingcal")
+    assert "Teamsitzung" in resp.data.decode()
