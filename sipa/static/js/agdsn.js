@@ -40,7 +40,7 @@ var initStatus = function (components) {
         let listComponent = false;
         let new_content = '<div>';
 
-        if (components[i].status === 'degraded performance') {
+        if (components[i].status === 'degraded_performance') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
 
             if(statusCode === 'okay') {
@@ -56,7 +56,7 @@ var initStatus = function (components) {
             }
 
             listComponent = true
-        } else if (components[i].status === 'partial outage') {
+        } else if (components[i].status === 'partial_outage') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
 
             if(statusCode === 'okay' || statusCode === 'performanceIssues'){
@@ -64,7 +64,7 @@ var initStatus = function (components) {
             }
 
             listComponent = true
-        }else if (components[i].status === 'major outage') {
+        }else if (components[i].status === 'major_outage') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
 
             statusCode = 'fullOutage';

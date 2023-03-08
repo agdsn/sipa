@@ -23,15 +23,15 @@
                 for (let i = 0; i < data.length; i++) {
                     components.push({
                         name: data[i].name,
-                        status: data[i].status.name.toLowerCase(),
-                        position: data[i].position,
+                        status: data[i].status.toLowerCase(),
+                        order: data[i].order,
                     });
                 }
 
                 components.sort(function (f, s) {
-                    if (f.position > s.position) {
+                    if (f.order > s.order) {
                         return 1;
-                    } else if (f.position < s.position) {
+                    } else if (f.order < s.order) {
                         return -1;
                     } else {
                         return 0;
