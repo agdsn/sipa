@@ -159,6 +159,14 @@ class User(BaseUser):
         config[self.uid]['mail'] = value
 
     @active_prop
+    def network_access_active(self):
+        return True
+
+    @network_access_active.setter
+    def network_access_active(self, value):
+        pass
+
+    @active_prop
     def address(self):
         return self.config[self.uid]['address']
 
