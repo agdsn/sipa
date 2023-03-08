@@ -9,7 +9,7 @@ from werkzeug import Response
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.model.fancy_property import PropertyBase
 from sipa.model.user import Row
-from .assertions import TestClient, RenderedTemplate
+from ..assertions import TestClient, RenderedTemplate
 
 
 def test_login_logout(module_test_client: TestClient):
@@ -95,14 +95,15 @@ class TestUsersuite:
         # We have to patch `current_user` since it is not defined due
         # to the wrong app context, but the code runs some asserts
         # against it checking capabilities.
-        with patch('sipa.blueprints.usersuite.current_user'):
+        with patch("sipa.blueprints.usersuite.current_user"):
             urls = [
-                *(url_for(get_attribute_endpoint(attr))
-                  for attr in ['mail', 'mac']),
-                *(url_for(get_attribute_endpoint(attr, capability='delete'))
-                  for attr in []),
-                url_for('usersuite.change_password'),
-                url_for('generic.contact'),
+                *(url_for(get_attribute_endpoint(attr)) for attr in ["mail", "mac"]),
+                *(
+                    url_for(get_attribute_endpoint(attr, capability="delete"))
+                    for attr in []
+                ),
+                url_for("usersuite.change_password"),
+                url_for("generic.contact"),
             ]
 
         for url in urls:
