@@ -43,17 +43,19 @@ def default_config() -> dict[str, t.Any]:
     }
 
 
+def make_bare_app(config: dict[str, t.Any]) -> Flask:
+    """app without backends"""
+    test_app = Flask("sipa")
+    return prepare_app_for_testing(create_app(app=test_app, config=config))
+
+
 @pytest.fixture(scope="session")
 def bare_app(default_config) -> Flask:
     """app without backends"""
-    test_app = Flask("sipa")
-    return prepare_app_for_testing(create_app(app=test_app, config=default_config))
+    return make_bare_app(config=default_config)
 
 
 @pytest.fixture(scope="session")
 def app(default_config) -> Flask:
     """App with `sample` backend"""
-    test_app = Flask("sipa")
-    return prepare_app_for_testing(
-        create_app(app=test_app, config=default_config | {"BACKENDS": ["sample"]})
-    )
+    return make_bare_app(default_config | {"BACKENDS": ["sample"]})
