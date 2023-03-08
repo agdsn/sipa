@@ -1,3 +1,4 @@
+from __future__ import annotations
 # This file contains parts of the module `tests.frontend.fixture_helpers`
 # (pycroft@ded11d489de02e8c670990abc46f07beaea064f7)
 #  Copyright (c) 2022. The Pycroft Authors. See the AUTHORS file.
@@ -138,19 +139,24 @@ class TestClient(flask.testing.FlaskClient):
             ], f"Expected template {template} to be rendered (exclusively), got {template_names!r}"
 
     @contextlib.contextmanager
-    def flashes_message(self, match: str, category: str):
+    def capture_flashes(self) -> t.Iterable[list[FlashedMessage]]:
         app = self.application
-        recorded: list = []
+        recorded: list[FlashedMessage] = []
 
         def record(sender, message, category, **extra):
-            recorded.append((message, category))
+            recorded.append(FlashedMessage(str(message), category))
 
         message_flashed.connect(record, app)
 
         try:
-            yield
+            yield recorded
         finally:
             template_rendered.disconnect(record, app)
+
+    @contextlib.contextmanager
+    def flashes_message(self, match: str, category: str):
+        with self.capture_flashes() as recorded:
+            yield recorded
 
         if not recorded:
             pytest.fail("No messages flashed")
@@ -161,6 +167,16 @@ class TestClient(flask.testing.FlaskClient):
                 for message, cat in recorded
             )
         ):
+            rec = "\n".join(repr(m) for m in recorded)
             pytest.fail(
-                f"No message matching pattern {match!r} was flashed in category {category}."
+                f"No message matching pattern {match!r} was flashed in category {category}.\n"
+                f"flashed messages:\n{rec}"
             )
+
+
+class FlashedMessage(t.NamedTuple):
+    message: str
+    category: str
+
+    def __repr__(self):
+        return f"<{self.category} {self.message}>"
