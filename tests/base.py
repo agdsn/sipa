@@ -152,46 +152,6 @@ class SampleFrontendTestBase(dynamic_frontend_base('sample')):
         )
 
 
-class FormTemplateTestMixin:
-    """A Mixin for conveniently testing forms.
-
-    Requires the class to inherit from
-    :py:cls:`flask_testing.TestCase` in order to access the assert
-    methods.
-
-    Requires the following attributes:
-
-        - client: The flask test client
-
-        - url: The url of the endpoint to test
-
-        - template: The location of the template file, relative to the
-          template root
-    """
-    def submit_form(self, data):
-        return self.client.post(self.url, data=data)
-
-    def test_endpoint_reachable(self):
-        self.assert200(self.client.get(self.url))
-        self.assertTemplateUsed(self.template)
-
-    def test_empty_request_flashes(self):
-        resp = self.client.post(self.url)
-        self.assert_something_flashed(resp.data)
-
-    def test_invalid_data_flashes(self):
-        for data in self.invalid_data:
-            with self.subTest(data=data):
-                resp = self.submit_form(data=data)
-                self.assert_something_flashed(resp.data)
-
-    def test_valid_data_passes(self):
-        for data in self.valid_data:
-            with self.subTest(data=data):
-                resp = self.submit_form(data=data)
-                self.assert_nothing_flashed(resp.data)
-
-
 @contextmanager
 def disable_logs(loglevel):
     logging.disable(loglevel)
