@@ -1,3 +1,4 @@
+import typing as t
 from datetime import datetime
 from random import random
 
@@ -5,12 +6,30 @@ from flask import current_app
 from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 
-from sipa.model.user import BaseUser
+from sipa.model.exceptions import PasswordInvalid, UserNotFound
 from sipa.model.fancy_property import active_prop, unsupported_prop
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
+from sipa.model.user import BaseUser
 from sipa.utils import argstr
-from sipa.model.exceptions import PasswordInvalid, UserNotFound
+
+
+class SampleUserData(t.TypedDict):
+    name: str
+    id: str
+    uid: str
+    password: str
+    address: str
+    mail: str
+    mail_forwarded: bool
+    mail_confirmed: bool
+    mac: str
+    ip: str
+    status: str
+    hostname: str
+    hostalias: str
+    membership_end_date: str | None
+    is_member: bool
 
 
 def init_context(app):

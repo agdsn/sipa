@@ -3,12 +3,11 @@ import os
 from abc import ABC
 from contextlib import contextmanager
 
-from flask import Flask, url_for
+from flask import Flask
 from flask_testing import TestCase as FlaskTestCase
 
 from sipa import create_app
 from sipa.defaults import WARNINGS_ONLY_CONFIG
-from sipa.model.sample.user import User as SampleUser
 
 
 class TestCase(FlaskTestCase, ABC):
@@ -111,45 +110,6 @@ class AppInitialized(TestCase):
             assert (
                 string_not_to_find.encode("utf-8") not in data
             ), "Flash message found unexpectedly"
-
-
-def dynamic_frontend_base(backend):
-    """Create a test base in which `backend` is enabled
-
-    This returns a subclass of :py:cls:`AppInitialized` with the only
-    change that ``'BACKENDS': [backend]`` is added to the config.
-    """
-    class cls(AppInitialized):
-        @property
-        def app_config(self):
-            return {
-                **super().app_config,
-                'BACKENDS': [backend],
-            }
-
-    return cls
-
-
-class SampleFrontendTestBase(dynamic_frontend_base('sample')):
-    User = SampleUser
-
-    def login(self):
-        # raise ValueError("login")
-        return self.client.post(
-            url_for('generic.login'),
-            data={'dormitory': 'localhost',
-                  'username': 'test',
-                  'password': 'test'},
-        )
-
-    @property
-    def current_user(self):
-        return self.User.get('test')
-
-    def logout(self):
-        return self.client.get(
-            url_for('generic.logout')
-        )
 
 
 @contextmanager
