@@ -110,16 +110,18 @@ class TestClient(flask.testing.FlaskClient):
         return self.assert_url_forbidden(url_for(endpoint), method=method, **kw)
 
     @contextlib.contextmanager
-    def renders_template(self, template: str, allow_others: bool = False):
+    def renders_template(
+        self, template: str, allow_others: bool = False
+    ) -> t.Iterator[list[tuple[j.Template, t.Any]]]:
         app = self.application
-        recorded: list[tuple[j.Template, t.Any]] = []
+        recorded: list[RenderedTemplate] = []
 
         def record(sender, template, context, **extra):
-            recorded.append((template, context))
+            recorded.append(RenderedTemplate(template=template, context=context))
 
         template_rendered.connect(record, app)
         try:
-            yield
+            yield recorded
         finally:
             template_rendered.disconnect(record, app)
 
@@ -172,6 +174,11 @@ class TestClient(flask.testing.FlaskClient):
                 f"No message matching pattern {match!r} was flashed in category {category}.\n"
                 f"flashed messages:\n{rec}"
             )
+
+
+class RenderedTemplate(t.NamedTuple):
+    template: j.Template
+    context: dict[str, t.Any]
 
 
 class FlashedMessage(t.NamedTuple):
