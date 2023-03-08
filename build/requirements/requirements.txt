@@ -3,7 +3,6 @@ Flask-Login~=0.6.1
 Babel~=2.10.3
 Flask-Babel~=2.0.0
 SQLAlchemy~=1.4.40
-Flask-SQLAlchemy~=2.5.1
 Markdown~=3.4.1
 requests~=2.28.1
 Flask-FlatPages~=0.8.1
