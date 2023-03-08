@@ -30,6 +30,13 @@ def user_logged_in(module_test_client: TestClient) -> None:
         yield
 
 
+@pytest.fixture(scope="class")
+def class_user_logged_in(class_test_client: TestClient) -> None:
+    """A class-scoped convenience fixture to log in an admin"""
+    with login_context(class_test_client, login="test", password="test"):
+        yield
+
+
 @pytest.fixture(scope="session")
 def default_config() -> dict[str, t.Any]:
     return {
