@@ -13,37 +13,30 @@
         };
 
         let self = this;
-
-        new Request(
-            this.url,
-            function (response) {
-                let data = response.data,
-                    components = [];
-
-                for (let i = 0; i < data.length; i++) {
-                    components.push({
-                        name: data[i].name,
-                        status: data[i].status.name.toLowerCase(),
-                        position: data[i].position,
+        fetch(this.url)
+            .then(resp => resp.json()
+                .then(data => {
+                    let components = Array.from(data.results.map((comp) => ({
+                        name: comp.name,
+                        status: comp.status.toLowerCase(),
+                        order: comp.order,
+                    })));
+                    components.sort(function (f, s) {
+                        if (f.order > s.order) {
+                            return 1;
+                        } else if (f.order < s.order) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
                     });
-                }
-
-                components.sort(function (f, s) {
-                    if (f.position > s.position) {
-                        return 1;
-                    } else if (f.position < s.position) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-
-                self.callback.call(null, components);
-            },
-            function (response) {
-                throw new Error(response);
-            }
-        );
+                    self.callback.call(null, components);
+                })
+                .catch(err => {console.log(err)})
+            )
+            .catch(err => {
+                throw new Error(err)
+            });
     };
 
     let Request = function (url, success, error) {

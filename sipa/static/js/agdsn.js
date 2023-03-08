@@ -36,11 +36,11 @@ var initStatus = function (components) {
         statusCode = 'okay'
         allGood = true;
 
-    for (var i = 0; i < components.length; i++) {
+    for (const component of components) {
         let listComponent = false;
         let new_content = '<div>';
 
-        if (components[i].status === 'degraded performance') {
+        if (component.status === 'degraded_performance') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
 
             if(statusCode === 'okay') {
@@ -48,7 +48,7 @@ var initStatus = function (components) {
             }
 
             listComponent = true
-        } else if (components[i].status === 'maintenance') {
+        } else if (component.status === 'maintenance') {
             new_content += '<span class="glyphicon glyphicon-info-sign text-primary"></span>';
 
             if(statusCode === 'okay'){
@@ -56,7 +56,7 @@ var initStatus = function (components) {
             }
 
             listComponent = true
-        } else if (components[i].status === 'partial outage') {
+        } else if (component.status === 'partial_outage') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
 
             if(statusCode === 'okay' || statusCode === 'performanceIssues'){
@@ -64,7 +64,7 @@ var initStatus = function (components) {
             }
 
             listComponent = true
-        }else if (components[i].status === 'major outage') {
+        }else if (component.status === 'major_outage') {
             new_content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
 
             statusCode = 'fullOutage';
@@ -72,14 +72,14 @@ var initStatus = function (components) {
             listComponent = true
         }
 
-        new_content += ' ' + components[i].name;
+        new_content += ' ' + component.name;
         new_content += '</div>';
 
         if (listComponent){
             content += new_content
         }
 
-        if (components[i].status !== 'operational') {
+        if (component.status !== 'operational') {
             allGood = false;
         }
     }
@@ -100,4 +100,6 @@ var initStatus = function (components) {
     }
 };
 
-new Statuspage('https://status.agdsn.net', initStatus);
+document.addEventListener('DOMContentLoaded', () => {
+    new Statuspage('https://status.agdsn.net', initStatus);
+});
