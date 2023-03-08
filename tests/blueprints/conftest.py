@@ -5,10 +5,13 @@ import typing as t
 import pytest
 from flask import Flask
 
-from sipa import create_app
-from sipa.defaults import WARNINGS_ONLY_CONFIG
 from .assertions import TestClient
-from .fixture_helpers import login_context, prepare_app_for_testing, _test_client
+from ..fixture_helpers import (
+    login_context,
+    _test_client,
+    make_testing_app,
+    DEFAULT_TESTING_CONFIG,
+)
 
 
 @pytest.fixture(scope="module")
@@ -31,31 +34,12 @@ def user_logged_in(module_test_client: TestClient) -> None:
 
 
 @pytest.fixture(scope="session")
-def default_config() -> dict[str, t.Any]:
-    return {
-        "SECRET_KEY": "secret",
-        "TESTING": True,
-        "LOG_CONFIG": WARNINGS_ONLY_CONFIG,
-        "WTF_CSRF_ENABLED": False,
-        "PRESERVE_CONTEXT_ON_EXCEPTION": False,
-        "CONTACT_SENDER_MAIL": "test@foo.de",
-        "MEETINGS_ICAL_URL": "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export",
-    }
-
-
-def make_bare_app(config: dict[str, t.Any]) -> Flask:
+def bare_app() -> Flask:
     """app without backends"""
-    test_app = Flask("sipa")
-    return prepare_app_for_testing(create_app(app=test_app, config=config))
+    return make_testing_app(config=DEFAULT_TESTING_CONFIG)
 
 
 @pytest.fixture(scope="session")
-def bare_app(default_config) -> Flask:
-    """app without backends"""
-    return make_bare_app(config=default_config)
-
-
-@pytest.fixture(scope="session")
-def app(default_config) -> Flask:
+def app() -> Flask:
     """App with `sample` backend"""
-    return make_bare_app(default_config | {"BACKENDS": ["sample"]})
+    return make_testing_app(DEFAULT_TESTING_CONFIG | {"BACKENDS": ["sample"]})

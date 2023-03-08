@@ -9,7 +9,9 @@ import string
 import typing as t
 
 from flask import url_for, Flask
-from .assertions import TestClient
+from sipa import create_app
+from sipa.defaults import WARNINGS_ONLY_CONFIG
+from .blueprints.assertions import TestClient
 
 
 @contextlib.contextmanager
@@ -45,3 +47,21 @@ def _test_client(app: Flask) -> t.Iterator[TestClient]:
     app.test_client_class = TestClient
     with app.app_context(), app.test_client() as c:
         yield c
+
+
+def make_testing_app(config: dict[str, t.Any] | None = None) -> Flask:
+    """app without backends"""
+    test_app = Flask("sipa")
+    config = config or DEFAULT_TESTING_CONFIG
+    return prepare_app_for_testing(create_app(app=test_app, config=config))
+
+
+DEFAULT_TESTING_CONFIG = {
+    "SECRET_KEY": "secret",
+    "TESTING": True,
+    "LOG_CONFIG": WARNINGS_ONLY_CONFIG,
+    "WTF_CSRF_ENABLED": False,
+    "PRESERVE_CONTEXT_ON_EXCEPTION": False,
+    "CONTACT_SENDER_MAIL": "test@foo.de",
+    "MEETINGS_ICAL_URL": "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export",
+}

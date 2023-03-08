@@ -4,8 +4,8 @@ from unittest.mock import patch
 import pytest
 
 from .assertions import TestClient
-from .conftest import make_bare_app
 from ..base import disable_logs
+from ..fixture_helpers import make_testing_app, DEFAULT_TESTING_CONFIG
 
 GIT_HOOK_URL = '/hooks/update-content'
 
@@ -48,8 +48,10 @@ class TestAppWithGitHook:
         return "SuperDUPERsecret!!1"
 
     @pytest.fixture(scope="class")
-    def app(self, default_config, token):
-        return make_bare_app(config=(default_config | {"GIT_UPDATE_HOOK_TOKEN": token}))
+    def app(self, token):
+        return make_testing_app(
+            config=(DEFAULT_TESTING_CONFIG | {"GIT_UPDATE_HOOK_TOKEN": token})
+        )
 
     @pytest.fixture(scope="class")
     def client(self, class_test_client) -> TestClient:
