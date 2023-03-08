@@ -7,7 +7,7 @@ from sipa import forms
 from wtforms import Form, PasswordField, ValidationError, StringField
 
 
-class TestForm(Form):
+class FormTestBase(Form):
     password = PasswordField()
 
 
@@ -17,7 +17,7 @@ class TestPasswordComplexityValidation:
     @pytest.fixture(scope="class")
     def validate(self, validator):
         def validate_(password):
-            form = TestForm(data={"password": password})
+            form = FormTestBase(data={"password": password})
             field = form.password
             validator(form, field)
 
@@ -70,7 +70,7 @@ class TestMinClasses(TestPasswordComplexityValidation):
             pytest.fail()
 
 
-class TestFormMAC(Form):
+class MACTestForm(Form):
     mac = StringField()
     hostname = StringField()
 
@@ -79,7 +79,7 @@ class TestMacUnicastVadator:
     @pytest.fixture(scope="class")
     def validatemac(self):
         def validatemac_(mac):
-            form = TestFormMAC(data={"mac": mac, "hostname": "hostname"})
+            form = MACTestForm(data={"mac": mac, "hostname": "hostname"})
             filemac = form.mac
             forms.require_unicast_mac(form, filemac)
 
