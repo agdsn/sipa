@@ -36,6 +36,8 @@ def init_app(app, **kwargs):
     * registering the Blueprints
     * registering the Jinja global variables
     """
+    # this is horribly confusing: if an app is given, we completely ignore the `app`s config,
+    # and overwrite it with the `default` one.
     load_config_file(app, config=kwargs.pop('config', None))
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=app.config['NUM_PROXIES'])
     init_logging(app)
@@ -113,7 +115,9 @@ def inject_meetingcal():
 def load_config_file(app, config=None):
     """Just load the config file, do nothing else"""
     # default configuration
-    app.config.from_pyfile(os.path.realpath("sipa/config/default.py"))
+    from .config import default
+
+    app.config.from_pyfile(default.__file__)
 
     if config:
         app.config.update(config)
