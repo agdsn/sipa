@@ -100,4 +100,6 @@ var initStatus = function (components) {
     }
 };
 
-new Statuspage('https://status.agdsn.net', initStatus);
+document.addEventListener('DOMContentLoaded', () => {
+    new Statuspage('https://status.agdsn.net', initStatus);
+});
