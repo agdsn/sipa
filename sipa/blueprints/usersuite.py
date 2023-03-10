@@ -66,7 +66,7 @@ def index():
     ])
 
     try:
-        rows = current_user.generate_rows(descriptions)
+        rows = list(current_user.generate_rows(descriptions))
     except DBQueryEmpty as e:
         logger.error('Userinfo DB query could not be finished',
                      extra={'data': {'exception_args': e.args}, 'stack': True})
