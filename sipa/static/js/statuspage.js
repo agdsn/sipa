@@ -42,7 +42,6 @@ class Request {
         this.url = url;
         this.success = success;
         this.error = error;
-        this.async = true;
 
         const cached = getResponseCache(this.url);
         if (cached !== null) {
@@ -50,41 +49,18 @@ class Request {
             return;
         }
 
-        let self = this;
-        let xhr = typeof XMLHttpRequest != undefined
-            ? new XMLHttpRequest()
-            : new ActiveXObject('Microsoft.XMLHTTP');
-
-        xhr.onload = function (event) {
-            self.onLoad.call(self, event);
-        }
-        xhr.onerror = function (event) {
-            self.onError.call(self, event);
-        }
-
-        xhr.open('get', this.url, this.async);
-        xhr.send();
+        fetch(this.url)
+            .then(r => r.ok ? Promise.resolve(r) : Promise.reject(r))
+            .then(r => r.json())
+            .then(d => {
+                setResponseCache(this.url, d, CACHE_RETENTION_MS);
+                this.success.call(null, d);
+            })
+            // NOTE: this catches all the possible errors in the above pipeline:
+            // network, json parsing, etc.;
+            // so `e` can be either a response or a network error etc.
+            .catch(e => this.error.call(null, e));
     }
-
-    onLoad(event) {
-        let xhr = event.currentTarget,
-            response = JSON.parse(xhr.response);
-
-        if (xhr.status === 200) {
-            setResponseCache(this.url, response, CACHE_RETENTION_MS);
-            this.success.call(null, response);
-        } else {
-            this.error.call(null, response);
-        }
-    }
-
-    onError(event) {
-        let xhr = event.currentTarget,
-            response = JSON.parse(xhr.response);
-
-        this.error.call(null, response);
-    }
-
 }
 
 
