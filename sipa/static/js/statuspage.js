@@ -18,16 +18,10 @@ function parse_statuspage_data(data) {
     return components;
 }
 
-(function () {
-    let Statuspage = function (url, callback) {
-        this.init(url, callback);
-    };
+class Statuspage {
+    static DEFAULTS = {endpointPath: '/pubapi/services/all'};
 
-    Statuspage.DEFAULTS = {
-        endpointPath: '/pubapi/services/all'
-    };
-
-    Statuspage.prototype.init = function (url, callback) {
+    constructor(url, callback) {
         this.url = url.concat(Statuspage.DEFAULTS.endpointPath);
         this.callback = callback || function () {
         };
@@ -38,13 +32,17 @@ function parse_statuspage_data(data) {
                 .then(data => {
                     self.callback.call(null, parse_statuspage_data(data));
                 })
-                .catch(err => {console.log(err)})
+                .catch(err => {
+                    console.log(err)
+                })
             )
             .catch(err => {
                 throw new Error(err)
             });
-    };
+    }
+}
 
+(function () {
     let Request = function (url, success, error) {
         this.init(url, success, error);
     };
