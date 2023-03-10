@@ -44,18 +44,10 @@ class Request {
         this.error = error;
         this.async = true;
 
-        if (typeof (Storage) !== "undefined") {
-            if (sessionStorage.statuspageCacheExpires && parseInt(sessionStorage.statuspageCacheExpires) > Date.now()
-                && sessionStorage.statuspageCache !== null && sessionStorage.statuspageCache[this.url] !== null) {
-
-                let response = JSON.parse(sessionStorage.statuspageCache)[this.url];
-
-                if (response) {
-                    this.success.call(null, response);
-
-                    return
-                }
-            }
+        const cached = getResponseCache(this.url);
+        if (cached !== null) {
+            this.success.call(null, cached);
+            return;
         }
 
         let self = this;
@@ -79,19 +71,7 @@ class Request {
             response = JSON.parse(xhr.response);
 
         if (xhr.status === 200) {
-            if (typeof (Storage) !== "undefined") {
-                if (typeof (sessionStorage.statuspageCache) !== 'string') {
-                    sessionStorage.statuspageCache = '{}';
-                }
-
-                let cache = JSON.parse(sessionStorage.statuspageCache);
-
-                cache[this.url] = response;
-
-                sessionStorage.statuspageCache = JSON.stringify(cache);
-                sessionStorage.statuspageCacheExpires = Date.now() + (120 * 1000)
-            }
-
+            setResponseCache(this.url, response, CACHE_RETENTION_MS);
             this.success.call(null, response);
         } else {
             this.error.call(null, response);
@@ -104,5 +84,46 @@ class Request {
 
         this.error.call(null, response);
     }
+
 }
+
+
+/** Return a (non-expired) cached response object for the desired url, or `null`.
+ *
+ * @param url
+ * @returns {null|*}
+ */
+function getResponseCache(url) {
+    const expires = sessionStorage.statuspageCacheExpires;
+    if (expires === undefined || expires < Date.now()) {
+        return null;
+    }
+    const content = sessionStorage.statuspageCache;
+    if (content === undefined) {
+        console.warn('Corrupt cache: statuspageCacheExpires is set, but statuspageCache is not');
+        return null;
+    }
+    const cache = JSON.parse(sessionStorage.statuspageCache);
+    if (!cache.hasOwnProperty(url)) {
+        console.debug(`Cache miss for ${url}`)
+        return null;
+    }
+    console.debug(`Cache hit for ${url}`);
+    return cache[url]
+}
+
+
+function setResponseCache(url, response, retention_ms) {
+    if (typeof (sessionStorage.statuspageCache) !== 'string') {
+        sessionStorage.statuspageCache = '{}';
+
+    }
+    let cache = JSON.parse(sessionStorage.statuspageCache);
+    cache[url] = response;
+    sessionStorage.statuspageCache = JSON.stringify(cache);
+    sessionStorage.statuspageCacheExpires = Date.now() + retention_ms
+}
+
+const CACHE_RETENTION_MS = 120 * 1000;
+
 window.Statuspage = Statuspage;
