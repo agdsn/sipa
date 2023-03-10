@@ -39,10 +39,6 @@ class SubnetFull(Exception):
     pass
 
 
-class DBQueryEmpty(Exception):
-    pass
-
-
 class UnknownError(Exception):
     pass
 
