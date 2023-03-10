@@ -37,12 +37,8 @@ class Statuspage {
     }
 }
 
-(function () {
-    let Request = function (url, success, error) {
-        this.init(url, success, error);
-    };
-
-    Request.prototype.init = function (url, success, error) {
+class Request {
+    constructor(url, success, error) {
         this.url = url;
         this.success = success;
         this.error = error;
@@ -63,7 +59,7 @@ class Statuspage {
         }
 
         let self = this;
-        xhr = typeof XMLHttpRequest != undefined
+        let xhr = typeof XMLHttpRequest != undefined
             ? new XMLHttpRequest()
             : new ActiveXObject('Microsoft.XMLHTTP');
 
@@ -76,9 +72,9 @@ class Statuspage {
 
         xhr.open('get', this.url, this.async);
         xhr.send();
-    };
+    }
 
-    Request.prototype.onLoad = function (event) {
+    onLoad(event) {
         let xhr = event.currentTarget,
             response = JSON.parse(xhr.response);
 
@@ -100,14 +96,13 @@ class Statuspage {
         } else {
             this.error.call(null, response);
         }
-    };
+    }
 
-    Request.prototype.onError = function (event) {
+    onError(event) {
         let xhr = event.currentTarget,
             response = JSON.parse(xhr.response);
 
         this.error.call(null, response);
-    };
-
-    window.Statuspage = Statuspage;
-})();
+    }
+}
+window.Statuspage = Statuspage;
