@@ -18,8 +18,15 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable
-from sipa.model.exceptions import DBQueryEmpty, PasswordInvalid, UserNotFound, MacAlreadyExists, \
-    TerminationNotPossible, UnknownError, ContinuationNotPossible, SubnetFull
+from sipa.model.exceptions import (
+    PasswordInvalid,
+    UserNotFound,
+    MacAlreadyExists,
+    TerminationNotPossible,
+    UnknownError,
+    ContinuationNotPossible,
+    SubnetFull,
+)
 from sipa.model.misc import PaymentDetails
 
 logger = logging.getLogger(__name__)
@@ -65,15 +72,7 @@ def index():
         ('finance_balance', gettext("Kontostand") + finance_update_string),
     ])
 
-    try:
-        rows = list(current_user.generate_rows(descriptions))
-    except DBQueryEmpty as e:
-        logger.error('Userinfo DB query could not be finished',
-                     extra={'data': {'exception_args': e.args}, 'stack': True})
-        flash(gettext("Es gab einen Fehler bei der Datenbankanfrage!"),
-              "error")
-        return redirect(url_for('generic.index'))
-
+    rows = list(current_user.generate_rows(descriptions))
     payment_form = PaymentForm()
     if payment_form.validate_on_submit():
         months = payment_form.months.data
