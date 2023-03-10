@@ -38,10 +38,10 @@ class Statuspage {
 }
 
 class Request {
-    constructor(url, success, error) {
+    constructor(url, onSuccess, onError) {
         this.url = url;
-        this.success = success;
-        this.error = error;
+        this.success = onSuccess;
+        this.error = onError;
 
         const cached = getResponseCache(this.url);
         if (cached !== null) {
