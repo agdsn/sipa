@@ -27,7 +27,7 @@ class Statuspage {
         };
 
         let self = this;
-        new Request(
+        issueCachedRequest(
             this.url,
             data => self.callback.call(null, parse_statuspage_data(data)),
             err => {
@@ -37,26 +37,24 @@ class Statuspage {
     }
 }
 
-class Request {
-    constructor(url, onSuccess, onError) {
-        const cached = getResponseCache(url);
-        if (cached !== null) {
-            onSuccess(cached);
-            return;
-        }
-
-        fetch(url)
-            .then(r => r.ok ? Promise.resolve(r) : Promise.reject(r))
-            .then(r => r.json())
-            .then(d => {
-                setResponseCache(url, d, CACHE_RETENTION_MS);
-                onSuccess(d);
-            })
-            // NOTE: this catches all the possible errors in the above pipeline:
-            // network, json parsing, etc.;
-            // so `e` can be either a response or a network error etc.
-            .catch(e => onError.call(null, e));
+function issueCachedRequest(url, onSuccess, onError) {
+    const cached = getResponseCache(url);
+    if (cached !== null) {
+        onSuccess(cached);
+        return;
     }
+
+    fetch(url)
+        .then(r => r.ok ? Promise.resolve(r) : Promise.reject(r))
+        .then(r => r.json())
+        .then(d => {
+            setResponseCache(url, d, CACHE_RETENTION_MS);
+            onSuccess(d);
+        })
+        // NOTE: this catches all the possible errors in the above pipeline:
+        // network, json parsing, etc.;
+        // so `e` can be either a response or a network error etc.
+        .catch(e => onError.call(null, e));
 }
 
 
