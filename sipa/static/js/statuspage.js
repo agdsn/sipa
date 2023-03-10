@@ -27,18 +27,13 @@ class Statuspage {
         };
 
         let self = this;
-        fetch(this.url)
-            .then(resp => resp.json()
-                .then(data => {
-                    self.callback.call(null, parse_statuspage_data(data));
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            )
-            .catch(err => {
-                throw new Error(err)
-            });
+        new Request(
+            this.url,
+            data => self.callback.call(null, parse_statuspage_data(data)),
+            err => {
+                throw new Error(err);
+            },
+        );
     }
 }
 
