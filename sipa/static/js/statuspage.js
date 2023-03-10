@@ -1,3 +1,23 @@
+/** Extract components (services) from statuspage API response sorted by priority
+ *
+ * @param data the JSON response from `/services/all`
+ * @returns Array
+ */
+function parse_statuspage_data(data) {
+    let {results} = data;
+    if (results === undefined) {
+        throw new Error('Invalid statuspage response (`results` key missing)');
+    }
+
+    let components = Array.from(results.map((comp) => ({
+        name: comp.name,
+        status: comp.status.toLowerCase(),
+        order: comp.order,
+    })));
+    components.sort((f, s) => f.order - s.order);
+    return components;
+}
+
 (function () {
     let Statuspage = function (url, callback) {
         this.init(url, callback);
@@ -16,13 +36,7 @@
         fetch(this.url)
             .then(resp => resp.json()
                 .then(data => {
-                    let components = Array.from(data.results.map((comp) => ({
-                        name: comp.name,
-                        status: comp.status.toLowerCase(),
-                        order: comp.order,
-                    })));
-                    components.sort((f, s) => f.order - s.order);
-                    self.callback.call(null, components);
+                    self.callback.call(null, parse_statuspage_data(data));
                 })
                 .catch(err => {console.log(err)})
             )
