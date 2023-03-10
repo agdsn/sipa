@@ -39,27 +39,23 @@ class Statuspage {
 
 class Request {
     constructor(url, onSuccess, onError) {
-        this.url = url;
-        this.success = onSuccess;
-        this.error = onError;
-
-        const cached = getResponseCache(this.url);
+        const cached = getResponseCache(url);
         if (cached !== null) {
-            this.success.call(null, cached);
+            onSuccess(cached);
             return;
         }
 
-        fetch(this.url)
+        fetch(url)
             .then(r => r.ok ? Promise.resolve(r) : Promise.reject(r))
             .then(r => r.json())
             .then(d => {
-                setResponseCache(this.url, d, CACHE_RETENTION_MS);
-                this.success.call(null, d);
+                setResponseCache(url, d, CACHE_RETENTION_MS);
+                onSuccess(d);
             })
             // NOTE: this catches all the possible errors in the above pipeline:
             // network, json parsing, etc.;
             // so `e` can be either a response or a network error etc.
-            .catch(e => this.error.call(null, e));
+            .catch(e => onError.call(null, e));
     }
 }
 
