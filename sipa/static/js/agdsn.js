@@ -31,7 +31,7 @@ let statusMessages = {
 }
 
 //Status widget
-var initStatus = function (components) {
+function initStatus (components) {
     let content = '',
         statusCode = 'okay'
         allGood = true;
@@ -98,7 +98,7 @@ var initStatus = function (components) {
         status.data('content', content)
         .popover({trigger: 'hover focus', html: true, placement: 'bottom'});
     }
-};
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     new Statuspage('https://status.agdsn.net', initStatus);
