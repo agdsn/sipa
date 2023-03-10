@@ -74,7 +74,7 @@ function getResponseCache(url) {
         return null;
     }
     const cache = JSON.parse(sessionStorage.statuspageCache);
-    if (!cache.hasOwnProperty(url)) {
+    if (cache[url] === undefined) {
         console.debug(`Cache miss for ${url}`)
         return null;
     }
