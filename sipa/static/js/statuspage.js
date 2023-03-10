@@ -21,15 +21,7 @@
                         status: comp.status.toLowerCase(),
                         order: comp.order,
                     })));
-                    components.sort(function (f, s) {
-                        if (f.order > s.order) {
-                            return 1;
-                        } else if (f.order < s.order) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    });
+                    components.sort((f, s) => f.order - s.order);
                     self.callback.call(null, components);
                 })
                 .catch(err => {console.log(err)})
