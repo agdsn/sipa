@@ -9,7 +9,7 @@
                 {% for stop in stops %}
                     <h3>{{ _('Haltestelle') }} {{ stop }}</h3>
                     {% if not stops[stop] %}
-                        <div style="color: red;">{{ _('Fehler bei der Abfrage!') }}</div>
+                        <div class="red">{{ _('Fehler bei der Abfrage!') }}</div>
                     {% else %}
                         <table id="timetable" class="table table-bordered table-striped">
                             <thead>
@@ -35,7 +35,7 @@
             </div>
         </div>
     {% else %}
-        <div style="color: red;">{{ _('Fehler bei der Abfrage!') }}</div>
+        <div class="red">{{ _('Fehler bei der Abfrage!') }}</div>
     {% endif %}
 
 {% endblock %}

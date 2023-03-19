@@ -168,3 +168,10 @@ img[alt=software_logo] {
 tr:hover .text-password {
 	filter: none;
 }
+
+.red{
+	color: red;
+}
+.login_form{
+	padding: 5px 10px;
+}

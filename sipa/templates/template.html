@@ -69,12 +69,5 @@
 {% endblock %}
 
 {% block custom_script -%}
-<script type="text/javascript">
-    $("#dorm-select").change(function(){
-        selected = $("select#dorm-select").find(":selected").prop("value");
-        $(".dynamic-content").hide();
-        $("#dynamic-" + selected).show();
-    });
-    $("#dorm-select").on("load", function() {}).triggerHandler("change")
-</script>
+<script type="text/javascript" src="{{ url_for("static", filename="js/dormitory.js") }}"></script>
 {%- endblock %}
