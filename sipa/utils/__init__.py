@@ -159,6 +159,25 @@ def meetingcal():
     return next_meetings
 
 
+def subscribeStatusPage(url: str, email: str) -> bool | None:
+    try:
+        response = requests.post(url, timeout=1,
+                                 headers={
+                                     "Authorization": "Token " + current_app.config['STATUS_PAGE_AUTH'],
+                                     "Content-Type": "application/json; charset=utf8"
+                                 },
+                                 json={"email": email})
+    except requests.exceptions.RequestException:
+        logger.exception("Error when sending request to %s", url)
+        return None
+    if response.status_code == 400:
+        return False
+    if response.status_code == 201:
+        return True
+
+    return None
+
+
 def password_changeable(user):
     """A decorator used to disable functions (routes) if a certain feature
     is not provided by the User class.

@@ -1044,6 +1044,15 @@ msgstr ""
 msgid "Ausgehend"
 msgstr ""
 
+msgid "Status-Page abonnieren"
+msgstr ""
+
+msgid "Du wurdest zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
+msgstr ""
+
+msgid "Du hast die Statuspage bereits abonniert."
+msgstr ""
+
 #~ msgid "Bezahlt, verbunden"
 #~ msgstr ""
 

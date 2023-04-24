@@ -1086,6 +1086,15 @@ msgstr "Incoming"
 msgid "Ausgehend"
 msgstr "Outgoing"
 
+msgid "Status-Page abonnieren"
+msgstr "Subscribe to Status-Page"
+
+msgid "Du wurdest zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
+msgstr "You have been added to the status page. You will receive an email with more details."
+
+msgid "Du hast die Statuspage bereits abonniert."
+msgstr "You have already subscribed to the status page."
+
 #~ msgid ""
 #~ "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. "
 #~ "Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht "

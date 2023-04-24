@@ -28,10 +28,6 @@
     </a>
     {% endif %}
 
-    <a href="{{ url_for('.contact') }}" class="btn btn-default">
-        <span class="glyphicon glyphicon-question-sign"></span>
-        {{ _("Kontaktformular") }}
-    </a>
     {% if webmailer_url %}
     <a href="{{ webmailer_url }}" class="btn btn-default">
         <span class="glyphicon glyphicon-envelope"></span>
@@ -51,6 +47,16 @@
             </a>
         {% endif %}
     {% endif %}
+</div>
+<div class="btn-group">
+    <a href="{{ url_for('.contact') }}" class="btn btn-default">
+        <span class="glyphicon glyphicon-question-sign"></span>
+        {{ _("Kontaktformular") }}
+    </a>
+    <a href="{{ url_for('.subscribe') }}" class="btn btn-default">
+        <span class="glyphicon glyphicon-bullhorn"></span>
+        {{ _("Status-Page abonnieren") }}
+    </a>
 </div>
 
 <h2 id="status-information">{{ _("Statusinformationen") }}</h2>
