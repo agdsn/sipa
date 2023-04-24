@@ -152,7 +152,7 @@ def contact():
 @login_required
 def subscribe():
     result = subscribe_to_status_page(
-        current_app.config['STATUS_PAGE_API_ENDPOINT'],
+        current_app.config['STATUS_PAGE_API_SUBSCRIBE_ENDPOINT'],
         current_app.config['STATUS_PAGE_API_TOKEN'],
         current_app.config['STATUS_PAGE_REQUEST_TIMEOUT'],
         current_user.mail.raw_value,
