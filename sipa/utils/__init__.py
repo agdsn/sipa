@@ -161,12 +161,15 @@ def meetingcal():
 
 def subscribeStatusPage(url: str, email: str) -> bool | None:
     try:
-        response = requests.post(url, timeout=1,
-                                 headers={
-                                     "Authorization": "Token " + current_app.config['STATUS_PAGE_AUTH'],
-                                     "Content-Type": "application/json; charset=utf8"
-                                 },
-                                 json={"email": email})
+        response = requests.post(
+            url,
+            timeout=1,
+            headers={
+                "Authorization": "Token " + current_app.config['STATUS_PAGE_AUTH'],
+                "Content-Type": "application/json; charset=utf8"
+            },
+            json={"email": email}
+        )
     except requests.exceptions.RequestException:
         logger.exception("Error when sending request to %s", url)
         return None
