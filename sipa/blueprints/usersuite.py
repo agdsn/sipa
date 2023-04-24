@@ -154,7 +154,8 @@ def subscribe():
     result = subscribe_to_status_page(
         current_app.config['STATUS_PAGE_API_ENDPOINT'],
         current_app.config['STATUS_PAGE_API_TOKEN'],
-        current_user.mail.raw_value
+        current_app.config['STATUS_PAGE_REQUEST_TIMEOUT'],
+        current_user.mail.raw_value,
     )
     if result is None:
         flash(gettext("Es ist ein Fehler aufgetreten!"), "error")

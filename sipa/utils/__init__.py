@@ -159,11 +159,11 @@ def meetingcal():
     return next_meetings
 
 
-def subscribe_to_status_page(url: str, token: str, email: str) -> bool | None:
+def subscribe_to_status_page(url: str, token: str, request_timeout: int, email: str) -> bool | None:
     try:
         response = requests.post(
             url,
-            timeout=1,
+            timeout=request_timeout,
             headers={
                 "Authorization": "Token " + token
             },

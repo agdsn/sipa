@@ -118,3 +118,4 @@ MEETINGS_ICAL_URL = "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQ
 # statuspage
 STATUS_PAGE_API_ENDPOINT = "https://status.agdsn.net/api/subscribers/subscribers/"
 STATUS_PAGE_API_TOKEN = ""
+STATUS_PAGE_REQUEST_TIMEOUT = 1
