@@ -151,6 +151,7 @@ def contact():
 @bp_usersuite.route("/subscribe", methods=['GET'])
 @login_required
 def subscribe():
+    """Route to subscribe to statuspage"""
     result = subscribe_to_status_page(
         current_app.config['STATUS_PAGE_API_SUBSCRIBE_ENDPOINT'],
         current_app.config['STATUS_PAGE_API_TOKEN'],

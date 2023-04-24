@@ -160,6 +160,11 @@ def meetingcal():
 
 
 def subscribe_to_status_page(url: str, token: str, request_timeout: int, email: str) -> bool | None:
+    """Send subscription request to status page API endpoint
+
+    Returns:
+        bool or None: Result whether subscribing to the status page worked
+    """
     try:
         response = requests.post(
             url,
@@ -173,10 +178,14 @@ def subscribe_to_status_page(url: str, token: str, request_timeout: int, email: 
         logger.exception("Error when sending request to %s", url)
         return None
     if response.status_code == 400:
+        # bad request usually means that the person has already subscribed to the status page
         return False
     if response.status_code == 201:
+        # Subscribing to the status page worked
         return True
 
+    # unexpected response from the status page
+    logger.exception("Unexpected response when sending request to %s: %s", url, response.reason)
     return None
 
 
