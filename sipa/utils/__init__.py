@@ -159,13 +159,13 @@ def meetingcal():
     return next_meetings
 
 
-def subscribeStatusPage(url: str, email: str) -> bool | None:
+def subscribe_to_status_page(url: str, token: str, email: str) -> bool | None:
     try:
         response = requests.post(
             url,
             timeout=1,
             headers={
-                "Authorization": "Token " + current_app.config['STATUS_PAGE_AUTH'],
+                "Authorization": "Token " + token,
                 "Content-Type": "application/json; charset=utf8"
             },
             json={"email": email}

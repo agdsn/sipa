@@ -17,7 +17,7 @@ from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     TerminateMembershipConfirmForm, ContinueMembershipForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
-from sipa.utils import password_changeable, subscribeStatusPage
+from sipa.utils import password_changeable, subscribe_to_status_page
 from sipa.model.exceptions import (
     PasswordInvalid,
     UserNotFound,
@@ -151,8 +151,11 @@ def contact():
 @bp_usersuite.route("/subscribe", methods=['GET'])
 @login_required
 def subscribe():
-    result = subscribeStatusPage(current_app.config['STATUS_PAGE_ENDPOINT'],
-                                 current_user.mail.raw_value)
+    result = subscribe_to_status_page(
+        current_app.config['STATUS_PAGE_API_ENDPOINT'],
+        current_app.config['STATUS_PAGE_API_TOKEN'],
+        current_user.mail.raw_value
+    )
     if result is None:
         flash(gettext("Es ist ein Fehler aufgetreten!"), "error")
     elif result:
