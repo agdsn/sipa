@@ -165,8 +165,7 @@ def subscribe_to_status_page(url: str, token: str, email: str) -> bool | None:
             url,
             timeout=1,
             headers={
-                "Authorization": "Token " + token,
-                "Content-Type": "application/json; charset=utf8"
+                "Authorization": "Token " + token
             },
             json={"email": email}
         )
