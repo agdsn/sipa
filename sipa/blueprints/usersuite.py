@@ -152,17 +152,22 @@ def contact():
 @login_required
 def subscribe():
     """Route to subscribe to statuspage"""
+
+    email = current_user.mail.raw_value
+    if email == "":
+        email = f"{current_user.login.raw_value}@agdsn.me"
+
     result = subscribe_to_status_page(
         current_app.config['STATUS_PAGE_API_SUBSCRIBE_ENDPOINT'],
         current_app.config['STATUS_PAGE_API_TOKEN'],
         current_app.config['STATUS_PAGE_REQUEST_TIMEOUT'],
-        current_user.mail.raw_value,
+        email,
     )
     if result is None:
         flash(gettext("Es ist ein Fehler aufgetreten!"), "error")
     elif result:
-        flash(gettext("Du wurdest zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit "
-                      "weiteren Details."), "success")
+        flash(gettext("Deine E-Mail Adresse {} wurde zur Status-Page hinzugefügt. Du bekommst "
+                      "eine E-Mail mit weiteren Details.".format(email)), "success")
     else:
         flash(gettext("Du hast die Statuspage bereits abonniert."), "warning")
 

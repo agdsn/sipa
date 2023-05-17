@@ -1047,7 +1047,7 @@ msgstr ""
 msgid "Status-Page abonnieren"
 msgstr ""
 
-msgid "Du wurdest zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
+msgid "Deine E-Mail Adresse {} wurde zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
 msgstr ""
 
 msgid "Du hast die Statuspage bereits abonniert."
