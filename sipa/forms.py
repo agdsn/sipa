@@ -234,9 +234,10 @@ class ChangeMailForm(FlaskForm):
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
     forwarded = BooleanField(
-        label=lazy_gettext(LocalProxy(lambda:
-            "Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private E-Mail-Adresse weiterleiten"
-            .format(agdsn_email=f'{current_user.login.value}@agdsn.me'))))
+        label=LocalProxy(lambda:
+            lazy_gettext("Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private "
+                         "E-Mail-Adresse weiterleiten")
+            .format(agdsn_email=f'{current_user.login.value}@agdsn.me')))
 
 
 def require_unicast_mac(form, field):

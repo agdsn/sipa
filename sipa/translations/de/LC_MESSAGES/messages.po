@@ -1,22 +1,22 @@
 # German translations for sipa.
-# Copyright (C) 2022 AG DSN
+# Copyright (C) 2023 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-18 15:42+0200\n"
+"POT-Creation-Date: 2023-05-23 09:55+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -111,7 +111,16 @@ msgstr ""
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
+msgid "Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private E-Mail-Adresse weiterleiten"
+msgstr ""
+
 msgid "MAC muss unicast-Adresse sein!"
+msgstr ""
+
+msgid "keine gültige MAC adresse "
+msgstr ""
+
+msgid "Mac zu kurz!"
 msgstr ""
 
 msgid "Neue MAC"
@@ -505,12 +514,15 @@ msgstr ""
 msgid "Kontostand"
 msgstr ""
 
-msgid "Es gab einen Fehler bei der Datenbankanfrage!"
-msgstr ""
-
 msgid ""
 "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
 "direkt eine E-Mail an {}"
+msgstr ""
+
+msgid "Deine E-Mail Adresse ({}) wurde zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
+msgstr ""
+
+msgid "Du hast die Statuspage bereits abonniert."
 msgstr ""
 
 msgid "Zahlungsempfänger"
@@ -916,10 +928,13 @@ msgstr ""
 msgid "MAC-Adresse ändern"
 msgstr ""
 
+msgid "Webmailer"
+msgstr ""
+
 msgid "Kontaktformular"
 msgstr ""
 
-msgid "Webmailer"
+msgid "Status-Page abonnieren"
 msgstr ""
 
 msgid "Statusinformationen"
@@ -1042,15 +1057,6 @@ msgid "Eingehend"
 msgstr ""
 
 msgid "Ausgehend"
-msgstr ""
-
-msgid "Status-Page abonnieren"
-msgstr ""
-
-msgid "Deine E-Mail Adresse {} wurde zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
-msgstr ""
-
-msgid "Du hast die Statuspage bereits abonniert."
 msgstr ""
 
 #~ msgid "Bezahlt, verbunden"
@@ -1854,5 +1860,8 @@ msgstr ""
 #~ msgstr[1] ""
 
 #~ msgid "Not a valid time value"
+#~ msgstr ""
+
+#~ msgid "Es gab einen Fehler bei der Datenbankanfrage!"
 #~ msgstr ""
 

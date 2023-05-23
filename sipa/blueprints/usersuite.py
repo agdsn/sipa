@@ -133,8 +133,8 @@ def contact():
             flash(gettext("Nachricht wurde versandt."), "success")
         else:
             flash(gettext("Es gab einen Fehler beim Versenden der Nachricht. "
-                          "Bitte schicke uns direkt eine E-Mail an {}"
-                          .format(current_user.datasource.support_mail)),
+                          "Bitte schicke uns direkt eine E-Mail an {}")
+                          .format(current_user.datasource.support_mail),
                   'error')
         return redirect(url_for('.index'))
     elif form.is_submitted():
@@ -166,8 +166,8 @@ def subscribe():
     if result is None:
         flash(gettext("Es ist ein Fehler aufgetreten!"), "error")
     elif result:
-        flash(gettext("Deine E-Mail Adresse {} wurde zur Status-Page hinzugefügt. Du bekommst "
-                      "eine E-Mail mit weiteren Details.".format(email)), "success")
+        flash(gettext("Deine E-Mail Adresse ({}) wurde zur Status-Page hinzugefügt. Du bekommst "
+                      "eine E-Mail mit weiteren Details.").format(email), "success")
     else:
         flash(gettext("Du hast die Statuspage bereits abonniert."), "warning")
 
