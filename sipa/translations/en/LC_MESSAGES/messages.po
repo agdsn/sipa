@@ -972,9 +972,6 @@ msgstr "Contact form"
 msgid "Webmailer"
 msgstr "Webmailer"
 
-msgid "Kontaktformular"
-msgstr "Contact form"
-
 msgid "Status-Page abonnieren"
 msgstr "Subscribe to Status-Page"
 
