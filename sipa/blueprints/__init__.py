@@ -6,3 +6,4 @@ from .features import bp_features
 from .news import bp_news
 from .hooks import bp_hooks
 from .register import bp_register
+from .control import bp_control

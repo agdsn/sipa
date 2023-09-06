@@ -20,6 +20,7 @@ from sipa.babel import (
 )
 from sipa.backends import Backends
 from sipa.base import IntegerConverter, login_manager
+from sipa.blueprints import bp_control
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
@@ -79,6 +80,7 @@ def init_app(app, **kwargs):
     app.register_blueprint(bp_news)
     app.register_blueprint(bp_hooks)
     app.register_blueprint(bp_register)
+    app.register_blueprint(bp_control)
 
     logger.debug('Registering Jinja globals')
     form_label_width = 4
