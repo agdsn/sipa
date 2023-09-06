@@ -1,0 +1,30 @@
+<h2 id="port-forwardings">fffffffff</h2>
+<div class="panel panel-default">
+    <table class="panel-body table table-striped table-hover">
+        <thead>
+            <tr>
+            <th>{{ _("source port") }}</th>
+            <th>{{ _("destination port") }}</th>
+            <th>{{ _("source ip") }}</th>
+            <th>{{ _("protokoll") }}</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>
+                <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="#error_sorc_port" hx-swap="innerHTML">
+                <label id="error_sorc_port" class='error-message' for="source_port"></label>
+            </td>
+            <td>
+                <input type="number" min="1" id="dest_port" hx-post="/control/port" hx-indicator="#ind" hx-target="#error_dest" hx-swap="innerHTML">
+                <label id="error_dest" class='error-message' for="dest_port"></label>
+            </td>
+            <td><input type="text" id="source ip" placeholder="source ip" hx-post="/control/ip"></td>
+            <td>
+                <label for="udp">UDP</label>
+                <input type="radio" name="prot" id="udp">
+                <label for="tcp">TCP</label>
+                <input type="radio" name="prot" id="tcp">
+            </td>
+        </tr>
+    </table>
+</div>
