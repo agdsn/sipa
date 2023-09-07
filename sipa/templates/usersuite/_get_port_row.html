@@ -1,0 +1,43 @@
+{% if port_forwarding is not none %}
+<tr>
+
+    <td>
+        <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="next .error" hx-swap="innerHTML" value="{{ port_forwarding[0] }}">
+        <label id="error_sorc_port" class='error' for="source_port"></label>
+    </td>
+         <td>
+             <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error" hx-swap="innerHTML" value="{{ port_forwarding[1] }}">
+             <label id="error_dest" class='error' for="dest_port"></label>
+    </td>
+     <td><input type="text" id="source ip" placeholder="source ip" hx-post="/control/ip" value="{{ port_forwarding[2] }}"></td>
+    <td>
+         <label for="udp">UDP</label>
+         <input type="radio" name="prot" id="udp" {% if port_forwarding[3] =="UDP" %}selected{% endif %}>
+         <label for="tcp">TCP</label>
+         <input type="radio" name="prot" id="tcp" {% if port_forwarding[3] =="TCP" %}selected{% endif %}>
+    </td>
+    <td><button type="submit">apply</button></td>
+</tr >
+{% else %}
+<tr>
+
+    <td>
+        <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="next .error" hx-swap="innerHTML">
+        <label id="error_sorc_port" class='error' for="source_port"></label>
+    </td>
+         <td>
+             <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error" hx-swap="innerHTML">
+             <label id="error_dest" class='error' for="dest_port"></label>
+    </td>
+     <td><input type="text" id="source ip" placeholder="source ip" hx-post="/control/ip"></td>
+    <td>
+        <fieldset>
+         <label for="udp">UDP</label>
+         <input type="radio" name="prot" id="udp" checked>
+         <label for="tcp">TCP</label>
+         <input type="radio" name="prot" id="tcp">
+        </fieldset>
+    </td>
+    <td><button type="submit">apply</button></td>
+</tr >
+{% endif %}

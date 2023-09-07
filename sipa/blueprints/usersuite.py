@@ -622,3 +622,19 @@ def reset_wifi_password():
     return render_template('generic_form.html',
                            page_title=gettext("Neues WLAN Passwort"),
                            form_args=form_args)
+
+@bp_usersuite.route("/show-port-forwardings", methods=['GET', 'POST'])
+@login_required
+def show_port_forwardings():
+    print(request.args)
+    if request.args.get("show"):
+        table = True
+    else:
+        table = False
+    port_forwad = [[12,12, "192.168.10.1", "UDP"]]
+    return render_template("usersuite/_port_forwardings.html", table=table, port_forwardings=port_forwad)
+
+@bp_usersuite.route("/get_row", methods=['GET', 'POST'])
+@login_required
+def get_edit():
+    return render_template("usersuite/_get_port_row.html", port_forwarding=None)
