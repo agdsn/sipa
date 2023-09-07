@@ -1,4 +1,6 @@
-<h2 id="port-forwardings">fffffffff</h2>
+<div id="port_forward">
+<h2 id="port-forwardings">port forwardings</h2>
+{% if table %}
 <div class="panel panel-default">
     <table class="panel-body table table-striped table-hover">
         <thead>
@@ -7,24 +9,64 @@
             <th>{{ _("destination port") }}</th>
             <th>{{ _("source ip") }}</th>
             <th>{{ _("protokoll") }}</th>
+            <th>{{ _("option") }}</th>
             </tr>
         </thead>
-        <tr>
+        {% if  port_forwadings is none %}
+        <from hx-post="">
+            <tr>
+
             <td>
-                <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="#error_sorc_port" hx-swap="innerHTML">
-                <label id="error_sorc_port" class='error-message' for="source_port"></label>
+                <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="next .error" hx-swap="innerHTML">
+                <label id="error_sorc_port" class='error' for="source_port"></label>
             </td>
             <td>
-                <input type="number" min="1" id="dest_port" hx-post="/control/port" hx-indicator="#ind" hx-target="#error_dest" hx-swap="innerHTML">
-                <label id="error_dest" class='error-message' for="dest_port"></label>
+                <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error" hx-swap="innerHTML">
+                <label id="error_dest" class='error' for="dest_port"></label>
             </td>
             <td><input type="text" id="source ip" placeholder="source ip" hx-post="/control/ip"></td>
             <td>
+                <fieldset>
                 <label for="udp">UDP</label>
-                <input type="radio" name="prot" id="udp">
+                <input type="radio" name="prot" id="udp" checked>
                 <label for="tcp">TCP</label>
                 <input type="radio" name="prot" id="tcp">
+                </fieldset>
+            </td>
+            <td><button type="submit">apply</button></td>
+        </tr >
+        </from>
+            <tr>
+            <td><button hx-post="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" hx-params="hide">hide</button></td>
+        </tr>
+        {% else %}
+            {% for port_forwad in port_forwardings %}
+        <tr hx-get="/usersuite/get_row" hx-trigger="" hx-target="this" hx-swap="outerHTML">
+            <td>
+                <label>{{ port_forwad[0] }}</label>
+            </td>
+            <td>
+                <label >{{ port_forwad[1] }}</label>
+            </td>
+            <td><label >{{ port_forwad[2] }}</label></td>
+            <td>
+                <label>{{ port_forwad[3] }}</label>
+            </td>
+            <td>
+                <button aria-label="edit">
+                <span class="glyphicon glyphicon-pencil pull-right"></span>
+                </button>
             </td>
         </tr>
+        <tr hx-get="/usersuite/get_row" hx-swap="beforebegin">
+            <td colspan="3"><button type="submit">add new port forwardings</button></td>
+            <td colspan="2"><button hx-post="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" hx-params="hide">hide</button></td>
+        </tr>
+            {% endfor %}
+        {% endif %}
     </table>
+</div>
+{% else %}
+    <button hx-get="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" hx-params="show">show table</button>
+{% endif %}
 </div>
