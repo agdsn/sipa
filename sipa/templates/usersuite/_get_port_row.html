@@ -2,12 +2,12 @@
 <tr>
 
     <td>
-        <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="next .error" hx-swap="innerHTML" value="{{ port_forwarding[0] }}">
-        <label id="error_sorc_port" class='error' for="source_port"></label>
+        <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[0] }}">
+        <label class='error-label' for="source_port"></label>
     </td>
          <td>
-             <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error" hx-swap="innerHTML" value="{{ port_forwarding[1] }}">
-             <label id="error_dest" class='error' for="dest_port"></label>
+             <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[1] }}">
+             <label class='error-label' for="dest_port"></label>
     </td>
      <td><input type="text" id="source ip" placeholder="source ip" hx-post="/control/ip" value="{{ port_forwarding[2] }}"></td>
     <td>
@@ -22,14 +22,17 @@
 <tr>
 
     <td>
-        <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="next .error" hx-swap="innerHTML">
-        <label id="error_sorc_port" class='error' for="source_port"></label>
+        <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="keyup delay:500ms" hx-target="next .error-label" hx-swap="innerHTML">
+        <label class='error-label' for="source_port"></label>
     </td>
          <td>
-             <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error" hx-swap="innerHTML">
-             <label id="error_dest" class='error' for="dest_port"></label>
+             <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-trigger="keyup delay:500ms" hx-indicator="#ind" hx-target="next .error-label" hx-swap="innerHTML">
+             <label class='error-label' for="dest_port"></label>
     </td>
-     <td><input type="text" id="source ip" placeholder="source ip" hx-post="/control/ip"></td>
+     <td>
+         <input type="text" name="source_ip" placeholder="source ip" hx-post="/control/ip" hx-trigger="keyup delay:500ms" hx-target="next .error-label" hx-swap="innerHTML">
+        <label class='error-label'></label>
+     </td>
     <td>
         <fieldset>
          <label for="udp">UDP</label>

@@ -2,7 +2,7 @@
 <h2 id="port-forwardings">port forwardings</h2>
 {% if table %}
 <div class="panel panel-default">
-    <table class="panel-body table table-striped table-hover">
+    <table class="panel-body table table-striped">
         <thead>
             <tr>
             <th>{{ _("source port") }}</th>
@@ -12,34 +12,7 @@
             <th>{{ _("option") }}</th>
             </tr>
         </thead>
-        {% if  port_forwadings is none %}
-        <from hx-post="">
-            <tr>
-
-            <td>
-                <input type="number" min="1" id="source_port" name="port" hx-post="/control/port" hx-trigger="change" hx-target="next .error" hx-swap="innerHTML">
-                <label id="error_sorc_port" class='error' for="source_port"></label>
-            </td>
-            <td>
-                <input type="number" min="1" id="dest_port" name="port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error" hx-swap="innerHTML">
-                <label id="error_dest" class='error' for="dest_port"></label>
-            </td>
-            <td><input type="text" id="source ip" placeholder="source ip" hx-post="/control/ip"></td>
-            <td>
-                <fieldset>
-                <label for="udp">UDP</label>
-                <input type="radio" name="prot" id="udp" checked>
-                <label for="tcp">TCP</label>
-                <input type="radio" name="prot" id="tcp">
-                </fieldset>
-            </td>
-            <td><button type="submit">apply</button></td>
-        </tr >
-        </from>
-            <tr>
-            <td><button hx-post="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" hx-params="hide">hide</button></td>
-        </tr>
-        {% else %}
+        {% if  port_forwadings  is not none %}
             {% for port_forwad in port_forwardings %}
         <tr hx-get="/usersuite/get_row" hx-trigger="" hx-target="this" hx-swap="outerHTML">
             <td>
@@ -53,17 +26,18 @@
                 <label>{{ port_forwad[3] }}</label>
             </td>
             <td>
-                <button aria-label="edit">
+                <button class="edit-button" aria-label="edit">
                 <span class="glyphicon glyphicon-pencil pull-right"></span>
                 </button>
             </td>
         </tr>
+
+            {% endfor %}
+        {% endif %}
         <tr hx-get="/usersuite/get_row" hx-swap="beforebegin">
             <td colspan="3"><button type="submit">add new port forwardings</button></td>
             <td colspan="2"><button hx-post="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" hx-params="hide">hide</button></td>
         </tr>
-            {% endfor %}
-        {% endif %}
     </table>
 </div>
 {% else %}
