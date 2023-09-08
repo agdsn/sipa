@@ -2,6 +2,7 @@
 from collections import OrderedDict
 import logging
 from datetime import datetime
+import ipaddress
 
 from babel.numbers import format_currency
 from flask import Blueprint, render_template, url_for, redirect, flash, abort, request, current_app
@@ -31,4 +32,14 @@ def checks_ip_address():
     """
     checks rather the given ip address is valid
     """
-    pass
+
+    if not request.form.get("source_ip"):
+        return "das Feld muss eine ip addresse enthalten"
+    try:
+        ip = ipaddress.ip_address(request.form.get("source_ip"))
+    except ValueError:
+        return "die IP scheint keine valide IP Adresse zu sein"
+    network = ipaddress.ip_network("192.168.10.0/24")
+    if ip not in network:
+        return "die angegebene IP gehört nicht zu deinem Subnetz"
+    return ""
