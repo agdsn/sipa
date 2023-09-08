@@ -147,3 +147,16 @@ tr:hover .text-password {
 .bus_few_minutes_left {
 	font-weight: bold;
 }
+
+.error-label{
+	color:red;
+}
+
+.edit-button{
+	background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
