@@ -1,6 +1,7 @@
 from __future__ import annotations
 import logging
 from datetime import date
+from decimal import Decimal
 
 from pydantic import ValidationError
 
@@ -394,6 +395,23 @@ class User(BaseUser):
         if status == 403:
             raise TokenNotFound
         elif status != 200:
+            raise UnknownError
+
+        return result
+
+    def get_request_repayment(self):
+        status, result = api.get_request_repayment(self.user_data.id)
+
+        if status != 200:
+            raise UnknownError
+
+        return result
+
+
+    def post_request_repayment(self, beneficiary: str, iban: IBAN, amount: Decimal):
+        status, result = api.post_request_repayment(self.user_data.id, beneficiary, iban, amount)
+
+        if status != 200:
             raise UnknownError
 
         return result

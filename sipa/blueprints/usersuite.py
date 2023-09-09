@@ -3,7 +3,10 @@
 from collections import OrderedDict
 import logging
 from datetime import datetime
+from decimal import Decimal
+from functools import partial
 from io import BytesIO
+from schwifty import IBAN
 
 from babel.numbers import format_currency
 from flask import (
@@ -25,7 +28,8 @@ from markupsafe import Markup
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, \
     PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
-    TerminateMembershipConfirmForm, ContinueMembershipForm
+    TerminateMembershipConfirmForm, ContinueMembershipForm, \
+    RequestRepaymentForm, RequestRepaymentConfirmForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable, subscribe_to_status_page
@@ -207,13 +211,16 @@ def subscribe():
 
 def render_payment_details(details: PaymentDetails, months):
     return {
-        gettext("Zahlungsempfänger"): details.recipient,
-        gettext("Bank"): details.bank,
-        gettext("IBAN"): details.iban,
-        gettext("BIC"): details.bic,
-        gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): format_currency(months * current_app.config['MEMBERSHIP_CONTRIBUTION'] / 100, 'EUR',
-                                           locale='de_DE')
+        "Zahlungsempfänger": details.recipient,
+        "Bank": details.iban.bank_name,
+        "IBAN": details.iban.formatted,
+        "BIC": details.iban.bic.formatted,
+        "Verwendungszweck": details.purpose,
+        "Betrag": format_currency(
+            months * current_app.config["MEMBERSHIP_CONTRIBUTION"] / 100,
+            "EUR",
+            locale="de_DE",
+        ),
     }
 
 
@@ -671,4 +678,93 @@ def get_apple_wlan_mobileconfig():
         ),
         as_attachment=True,
         download_name="agdsn.mobileconfig",
+    )
+
+
+@bp_usersuite.route("/request-repayment", methods=["GET", "POST"])
+@login_required
+def request_repayment():
+    """
+    Request a repayment of excess membership contributions
+    """
+    # Check whether there is a repayment request already
+    if current_user.get_request_repayment():
+        flash(gettext("Du hast bereits einen Rücküberweisungsantrag abgesendet, der sich noch in Bearbeitung befindet."), "warning")
+        return redirect(url_for(".index"))
+
+    form = RequestRepaymentForm()
+
+    if form.validate_on_submit():
+        return redirect(
+            url_for(
+                ".request_repayment_confirm",
+                beneficiary=form.beneficiary.data,
+                iban=form.iban.data,
+                amount=form.amount.data,
+            )
+        )
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    form_args = {
+        "form": form,
+        "cancel_to": url_for(".index"),
+        "submit_text": gettext("Weiter"),
+    }
+
+    return render_template(
+        "generic_form.html",
+        page_title=gettext("Rücküberweisung beantragen"),
+        form_args=form_args,
+    )
+
+
+@bp_usersuite.route("/request-repayment/confirm", methods=["GET", "POST"])
+@login_required
+def request_repayment_confirm():
+    """
+    Request a repayment of excess membership contributions
+    """
+    # Check whether there is a repayment request already
+    if current_user.get_request_repayment():
+        flash(gettext("Du hast bereits einen Rücküberweisungsantrag abgesendet, der sich noch in Bearbeitung befindet."), "warning")
+        return redirect(url_for(".index"))
+
+    beneficiary = request.args.get("beneficiary", None)
+    iban = request.args.get("iban", None, partial(IBAN, validate_bban=True))
+    amount = request.args.get("amount", None, Decimal)
+
+    form = RequestRepaymentConfirmForm()
+
+    if None in (beneficiary, iban, amount):
+        return redirect(url_for(".request_repayment"))
+
+    balance = current_user.finance_information.balance.raw_value
+
+    form.beneficiary.data = beneficiary
+    form.iban.data = iban.formatted
+    form.bic.data = iban.bic.formatted
+    form.bank.data = iban.bank_name
+    form.amount.data = amount
+    form.estimated_balance.data = balance - amount
+
+    if form.validate_on_submit():
+        # Send request to Pycroft
+        current_user.post_request_repayment(beneficiary, iban, amount)
+
+        flash(gettext("Rücküberweisungsantrag erfolgreich abgesendet."), "success")
+        return redirect(url_for(".index"))
+    elif form.is_submitted():
+        flash_formerrors(form)
+
+    form_args = {
+        "form": form,
+        "cancel_text": gettext("Zurück"),
+        "cancel_to": url_for(".request_repayment"),
+    }
+
+    return render_template(
+        "generic_form.html",
+        page_title=gettext("Rücküberweisung beantragen - Bestätigen"),
+        form_args=form_args,
     )
