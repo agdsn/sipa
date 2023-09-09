@@ -152,6 +152,14 @@ tr:hover .text-password {
 	color:red;
 }
 
+.success{
+	color: green;
+}
+
+.edit-pen{
+	color: #337ab7;
+}
+
 .edit-button{
 	background-color: transparent;
     background-repeat: no-repeat;
@@ -159,4 +167,10 @@ tr:hover .text-password {
     cursor: pointer;
     overflow: hidden;
     outline: none;
+}
+
+tr.htmx-swapping td {
+	opacity: 0;
+	transition: opacity 1s ease-out;
+
 }
