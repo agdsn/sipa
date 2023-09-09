@@ -1,3 +1,4 @@
+import ipaddress
 import re
 from datetime import date
 from operator import itemgetter
@@ -484,6 +485,22 @@ class RegisterRoomForm(FlaskForm):
         label=lazy_gettext("Einzugsdatum"),
         render_kw={'readonly': True, 'required': True}
     )
+
+class AddPortForwardForm(FlaskForm):
+    def ip_validatior(self, ip: str):
+        print(ip.data)
+        ip = ipaddress.ip_address(ip.data)
+    def check_prot(self, prot):
+        if not prot.data =="udp" and not prot.data == "tcp":
+            raise ValueError
+
+    source_port = IntegerField(label="source_port", validators=[NumberRange(min=1, max=65535)])
+    dest_port = IntegerField(label="dest_port", validators=[NumberRange(min=1, max=65535)])
+    ip_address = StringField(label="ip_address", validators=[ip_validatior])
+    prot = StringField(label="port", validators=[check_prot])
+
+    def get_list(self) -> list:
+        return [self.source_port.data, self.dest_port.data, self.ip_address.data, self.prot.data]
 
 
 class RegisterFinishForm(FlaskForm):
