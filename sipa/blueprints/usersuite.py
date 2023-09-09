@@ -23,7 +23,7 @@ from markupsafe import Markup
 from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
     ChangePasswordForm, flash_formerrors, HostingForm, \
     PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
-    TerminateMembershipConfirmForm, ContinueMembershipForm
+    TerminateMembershipConfirmForm, ContinueMembershipForm, AddPortForwardForm
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable, subscribe_to_status_page
@@ -622,6 +622,7 @@ def reset_wifi_password():
     return render_template('generic_form.html',
                            page_title=gettext("Neues WLAN Passwort"),
                            form_args=form_args)
+#TODO: Remove debugging shit and adding pycroft integration
 test_list = [[12,12, "192.168.10.1", "UDP"]]
 @bp_usersuite.route("/show-port-forwardings", methods=['GET', 'POST'])
 @login_required
@@ -645,17 +646,32 @@ def get_edit(port_forward: int):
 
     if port_forward < len(test_list):
         port_forwarding = test_list[port_forward]
-    return render_template("usersuite/_get_port_row.html", port_index=port_forward, port_forwarding=port_forwarding)
+    return render_template("usersuite/_get_port_row.html", edit=True, port_index=port_forward, port_forwarding=port_forwarding,form=AddPortForwardForm)
 
 @bp_usersuite.route("/get_row", methods=['GET'])
 @login_required
 def get_new_portforward():
 
     port_forwarding = None
-    return render_template("usersuite/_get_port_row.html", port_forwarding=port_forwarding)
+    return render_template("usersuite/_get_port_row.html", port_forwarding=port_forwarding, form=AddPortForwardForm())
 
 @bp_usersuite.route("/port-forward-edit/<int:port_index>", methods=['PUT', 'POST'])
 @login_required
 def save_portforward(port_index: int):
+    form = AddPortForwardForm(request.form)
+    edit = True
+    if form.validate():
+        test_list[port_index] = form.get_list()
+        edit = False
 
+    return render_template("usersuite/_get_port_row.html", port_index=port_index, port_forwarding=form.get_list(), edit=edit, form=AddPortForwardForm)
+
+@bp_usersuite.route("/add-port-forward", methods=["POST"])
+@login_required
+def add_port_forwarding():
+
+    form = AddPortForwardForm(request.form)
+    if form.validate():
+        test_list.append(form.get_list())
+        return render_template("usersuite/_get_port_row.html", port_forwarding=form.get_list())
     return ""
