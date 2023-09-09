@@ -622,19 +622,40 @@ def reset_wifi_password():
     return render_template('generic_form.html',
                            page_title=gettext("Neues WLAN Passwort"),
                            form_args=form_args)
-
+test_list = [[12,12, "192.168.10.1", "UDP"]]
 @bp_usersuite.route("/show-port-forwardings", methods=['GET', 'POST'])
 @login_required
 def show_port_forwardings():
-    print(request.args)
+    """
+    returns the table if with the fetched user port forwardings
+    if not has param show it will just added the overline and a button to show the
+    """
     if request.args.get("show"):
         table = True
     else:
         table = False
-    port_forwad = [[12,12, "192.168.10.1", "UDP"]]
+    port_forwad = test_list
     return render_template("usersuite/_port_forwardings.html", table=table, port_forwardings=port_forwad)
 
-@bp_usersuite.route("/get_row", methods=['GET', 'POST'])
+@bp_usersuite.route("/get_row/<int:port_forward>", methods=['GET'])
 @login_required
-def get_edit():
-    return render_template("usersuite/_get_port_row.html", port_forwarding=None)
+def get_edit(port_forward: int):
+
+    port_forwarding = None
+
+    if port_forward < len(test_list):
+        port_forwarding = test_list[port_forward]
+    return render_template("usersuite/_get_port_row.html", port_index=port_forward, port_forwarding=port_forwarding)
+
+@bp_usersuite.route("/get_row", methods=['GET'])
+@login_required
+def get_new_portforward():
+
+    port_forwarding = None
+    return render_template("usersuite/_get_port_row.html", port_forwarding=port_forwarding)
+
+@bp_usersuite.route("/port-forward-edit/<int:port_index>", methods=['PUT', 'POST'])
+@login_required
+def save_portforward(port_index: int):
+
+    return ""

@@ -43,3 +43,7 @@ def checks_ip_address():
     if ip not in network:
         return "die angegebene IP gehört nicht zu deinem Subnetz"
     return ""
+
+@bp_control.route('/delete', methods=['DELETE'])
+def delete():
+    return ""
