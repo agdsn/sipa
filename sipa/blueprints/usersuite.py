@@ -646,7 +646,7 @@ def get_edit(port_forward: int):
 
     if port_forward < len(test_list):
         port_forwarding = test_list[port_forward]
-    return render_template("usersuite/_get_port_row.html", edit=True, port_index=port_forward, port_forwarding=port_forwarding,form=AddPortForwardForm)
+    return render_template("usersuite/_get_port_row.html", edit=True, port_index=port_forward, port_forwarding=port_forwarding, form=AddPortForwardForm())
 
 @bp_usersuite.route("/get_row", methods=['GET'])
 @login_required
@@ -658,20 +658,26 @@ def get_new_portforward():
 @bp_usersuite.route("/port-forward-edit/<int:port_index>", methods=['PUT', 'POST'])
 @login_required
 def save_portforward(port_index: int):
+    print(request.form)
     form = AddPortForwardForm(request.form)
     edit = True
     if form.validate():
         test_list[port_index] = form.get_list()
         edit = False
 
-    return render_template("usersuite/_get_port_row.html", port_index=port_index, port_forwarding=form.get_list(), edit=edit, form=AddPortForwardForm)
+    return render_template("usersuite/_get_port_row.html", port_index=port_index, port_forwarding=test_list[port_index], edit=edit, form=AddPortForwardForm())
 
 @bp_usersuite.route("/add-port-forward", methods=["POST"])
 @login_required
 def add_port_forwarding():
-
     form = AddPortForwardForm(request.form)
     if form.validate():
         test_list.append(form.get_list())
         return render_template("usersuite/_get_port_row.html", port_forwarding=form.get_list())
+    return ""
+
+@bp_usersuite.route("/port-forward/<int:id>", methods=["DELETE"])
+@login_required
+def delete_forward(id: int):
+    test_list.remove(id)
     return ""
