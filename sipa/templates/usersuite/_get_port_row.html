@@ -2,33 +2,35 @@
 {% if port_forwarding is not none %}
     {% if edit %}
 <tr>
+<form>
     {{ form.csrf_token }}
     <td>
         <input type="number" min="1" name="source_port" hx-post="/control/port" hx-trigger="change" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[0] }}">
         <label class='error-label' for="source_port"></label>
     </td>
          <td>
-             <input type="number" min="1" name="dest_port" hx-post="/control/port" hx-indicator="#ind" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[1] }}">
+             <input type="number" min="1" name="dest_port" hx-post="/control/port" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[1] }}">
              <label class='error-label' for="dest_port"></label>
     </td>
      <td><input type="text" name="ip_address" placeholder="source ip" hx-post="/control/ip" value="{{ port_forwarding[2] }}"></td>
     <td>
          <label for="udp">UDP</label>
-         <input type="radio" name="port" value="udp" {% if port_forwarding[3] =="UDP" %}checked{% endif %}>
+         <input type="radio" name="prot" value="udp" {% if port_forwarding[3] =="UDP" %}checked{% endif %}>
          <label for="tcp">TCP</label>
-         <input type="radio" name="port" value="tcp" {% if port_forwarding[3] =="TCP" %}checked{% endif %}>
+         <input type="radio" name="prot" value="tcp" {% if port_forwarding[3] =="TCP" %}checked{% endif %}>
     </td>
-    <td><button class="edit-button success" hx-put="/usersuite/port-forward-edit/{{ port_index }}" hx-include="closest tr" hx-swap="outerHTML swap:1s">
+</form>
+    <td><button class="edit-button success" hx-post="/usersuite/port-forward-edit/{{ port_index }}" hx-target="closest tr" hx-include="closest tr"  hx-swap="outerHTML swap:500ms">
         <span class="glyphicon glyphicon-floppy-disk"></span>
     </button>
     <button class="edit-button error-label" type="submit">
         <span class=" glyphicon glyphicon-remove"></span>
     </button>
     </td>
+
 </tr >
 {% else %}
         <tr >
-
             <td>
                 <label>{{ port_forwarding[0] }}</label>
             </td>
@@ -40,7 +42,7 @@
                 <label>{{ port_forwarding[3] }}</label>
             </td>
             <td>
-                <button class="edit-button edit-pen" aria-label="edit" hx-get="/usersuite/get_row/{{ port_index }}" hx-target="closest tr" >
+                <button class="edit-button edit-pen" aria-label="edit" hx-get="/usersuite/get_row/{{ port_index }}" hx-target="closest tr" hx-swap="outerHTML swap:500ms">
                 <span class="glyphicon glyphicon-pencil pull-left"></span>
                 </button>
                 <button class="edit-button error-label" hx-confirm="{{ _("wollen sie die port Weiterleitung wirklich löschen?") }}" hx-delete="/usersuite/port_forward/{{ port_index }}" hx-target="closest tr">
@@ -52,14 +54,14 @@
 {% else %}
 
 <tr>
-<form >
+<form name="radio_form">
     {{ form.csrf_token }}
     <td>
         <input type="number" min="1" name="source_port" hx-post="/control/port" hx-trigger="keyup delay:500ms" hx-target="next .error-label" hx-swap="innerHTML">
         <label class='error-label'></label>
     </td>
          <td>
-             <input type="number" min="1" id="dest_port" name="dest_port" hx-post="/control/port" hx-trigger="keyup delay:500ms" hx-indicator="#ind" hx-target="next .error-label" hx-swap="innerHTML">
+             <input type="number" min="1" id="dest_port" name="dest_port" hx-post="/control/port" hx-trigger="keyup delay:500ms" hx-target="next .error-label" hx-swap="innerHTML">
              <label class='error-label' for="dest_port"></label>
     </td>
      <td>
@@ -79,11 +81,10 @@
         <button class="edit-button success" type="submit" hx-post="/usersuite/add-port-forward" hx-traget="closest tr" hx-include="closest tr" hx-trigger="click, next name=save_button" hx-swap="outerHTML swap:500ms">
             <span class="glyphicon glyphicon-floppy-disk"></span>
         </button>
-        <button class="edit-button error-label" type="submit" hx-delete="/control/delete" hx-traget="closest tr" hx-swap="outerHTML swap:500ms">
+        <button class="edit-button error-label" hx-delete="/control/delete"  hx-swap="outerHTML swap:500ms" hx-target="closest tr" hx-swap="outerHTML swap:500ms">
             <span class=" glyphicon glyphicon-remove"></span>
         </button>
     </td>
-
 </tr >
 
 {% endif %}

@@ -486,21 +486,25 @@ class RegisterRoomForm(FlaskForm):
         render_kw={'readonly': True, 'required': True}
     )
 
-class AddPortForwardForm(FlaskForm):
-    def ip_validatior(self, ip: str):
-        print(ip.data)
-        ip = ipaddress.ip_address(ip.data)
-    def check_prot(self, prot):
-        if not prot.data =="udp" and not prot.data == "tcp":
-            raise ValueError
 
+def ip_validatior(form, field: str):
+    print(field.data)
+    ip = ipaddress.ip_address(field.data)
+
+
+def check_prot(form, field):
+    if not field.data == "udp" and not field.data == "tcp":
+        raise ValueError
+
+
+class AddPortForwardForm(FlaskForm):
     source_port = IntegerField(label="source_port", validators=[NumberRange(min=1, max=65535)])
     dest_port = IntegerField(label="dest_port", validators=[NumberRange(min=1, max=65535)])
     ip_address = StringField(label="ip_address", validators=[ip_validatior])
     prot = StringField(label="port", validators=[check_prot])
 
     def get_list(self) -> list:
-        return [self.source_port.data, self.dest_port.data, self.ip_address.data, self.prot.data]
+        return [self.source_port.data, self.dest_port.data, self.ip_address.data, self.prot.data.upper()]
 
 
 class RegisterFinishForm(FlaskForm):

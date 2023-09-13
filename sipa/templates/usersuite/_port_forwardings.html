@@ -12,7 +12,7 @@
             <th>{{ _("option") }}</th>
             </tr>
         </thead>
-    <tbody hx-target="closest tr" hx-swap="outerHTML swap:500ms">
+    <tbody>
         {% if  port_forwadings  is not none %}
             {% set port_index = 0 %}
             {% for port_forwarding in port_forwardings %}
@@ -20,11 +20,15 @@
                 {% set port_index = port_index + 1 %}
             {% endfor %}
         {% endif %}
-        <tr hx-get="/usersuite/get_row" hx-swap="beforebegin">
-            <td colspan="3"><button class="btn btn-default" type="submit">
-                <span class="glyphicon glyphicon-plus"></span>
+        <tr id="port_forward_footer">
+            <td colspan="3">
+                <button class="btn btn-default" hx-get="/usersuite/get_row" hx-target="#port_forward_footer" hx-swap="beforebegin swap:500ms">
+                <span class="glyphicon glyphicon-plus">
+
+                </span>
                 add new port forwardings
-            </button></td>
+            </button>
+            </td>
             <td colspan="2"><button class="btn btn-default" hx-post="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" hx-params="hide">hide</button></td>
         </tr>
     </tbody>
