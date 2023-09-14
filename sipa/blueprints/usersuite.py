@@ -679,5 +679,5 @@ def add_port_forwarding():
 @bp_usersuite.route("/port-forward/<int:id>", methods=["DELETE"])
 @login_required
 def delete_forward(id: int):
-    test_list.remove(id)
+    test_list.remove(test_list[id])
     return ""

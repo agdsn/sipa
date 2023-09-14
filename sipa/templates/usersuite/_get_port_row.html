@@ -45,7 +45,7 @@
                 <button class="edit-button edit-pen" aria-label="edit" hx-get="/usersuite/get_row/{{ port_index }}" hx-target="closest tr" hx-swap="outerHTML swap:500ms">
                 <span class="glyphicon glyphicon-pencil pull-left"></span>
                 </button>
-                <button class="edit-button error-label" hx-confirm="{{ _("wollen sie die port Weiterleitung wirklich löschen?") }}" hx-delete="/usersuite/port_forward/{{ port_index }}" hx-target="closest tr">
+                <button class="edit-button error-label" hx-confirm="{{ _("wollen sie die port Weiterleitung wirklich löschen?") }}" hx-delete="/usersuite/port-forward/{{ port_index }}" hx-target="closest tr">
                 <span class="glyphicon glyphicon-trash pull-right"></span>
                 </button>
             </td>
