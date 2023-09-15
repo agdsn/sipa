@@ -9,7 +9,7 @@
                 {% for stop in stops %}
                     <h3>{{ _('Haltestelle') }} {{ stop }}</h3>
                     {% if not stops[stop] %}
-                        <div class="red">{{ _('Fehler bei der Abfrage!') }}</div>
+                        <div class="text-danger">{{ _('Fehler bei der Abfrage!') }}</div>
                     {% else %}
                         <table id="timetable" class="table table-bordered table-striped">
                             <thead>
@@ -24,7 +24,7 @@
                                     <tr>
                                         <td>{{ i.line }}</td>
                                         <td>{{ i.dest }}</td>
-                                        <td{% if i.minutes_left < 6 %} style="font-weight: bold; color: red"{% endif %}>{{ i.minutes_left }} Min</td>
+                                        <td{% if i.minutes_left < 6 %} class="bus_few_minutes_left text-danger"{% endif %}>{{ i.minutes_left }} Min</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -35,7 +35,7 @@
             </div>
         </div>
     {% else %}
-        <div class="red">{{ _('Fehler bei der Abfrage!') }}</div>
+        <div class="text-danger">{{ _('Fehler bei der Abfrage!') }}</div>
     {% endif %}
 
 {% endblock %}

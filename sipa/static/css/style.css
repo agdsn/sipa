@@ -169,9 +169,28 @@ tr:hover .text-password {
 	filter: none;
 }
 
-.red{
-	color: red;
-}
-.login_form{
+.login_form {
 	padding: 5px 10px;
+}
+
+.support_hotline_available_green {
+	color: #3c763d;
+}
+
+.register_reset_container {
+	text-align: right;
+	padding-top: 200px;
+}
+
+.register_reset_link {
+	size: 4px;
+	color: lightgray;
+}
+
+.service_status {
+	font-size: 2.5em;
+}
+
+.bus_few_minutes_left {
+	font-weight: bold;
 }
