@@ -628,7 +628,7 @@ test_list = [[12,12, "192.168.10.1", "UDP"]]
 @login_required
 def show_port_forwardings():
     """
-    returns the table if with the fetched user port forwardings
+    Returns the table if with the fetched user port forwardings
     if not has param show it will just added the overline and a button to show the
     """
     if request.args.get("show"):
@@ -638,46 +638,65 @@ def show_port_forwardings():
     port_forwad = test_list
     return render_template("usersuite/_port_forwardings.html", table=table, port_forwardings=port_forwad)
 
+
 @bp_usersuite.route("/get_row/<int:port_forward>", methods=['GET'])
 @login_required
 def get_edit(port_forward: int):
-
+    """
+    Returns a template for editing a port forwarding
+    """
     port_forwarding = None
 
     if port_forward < len(test_list):
         port_forwarding = test_list[port_forward]
     return render_template("usersuite/_get_port_row.html", edit=True, port_index=port_forward, port_forwarding=port_forwarding, form=AddPortForwardForm())
 
+
 @bp_usersuite.route("/get_row", methods=['GET'])
 @login_required
 def get_new_portforward():
-
+    """
+    Returns the template for a new port forwarding
+    """
     port_forwarding = None
     return render_template("usersuite/_get_port_row.html", port_forwarding=port_forwarding, form=AddPortForwardForm())
+
 
 @bp_usersuite.route("/port-forward-edit/<int:port_index>", methods=['PUT', 'POST'])
 @login_required
 def save_portforward(port_index: int):
-    print(request.form)
+    """
+    edit an all ready applied port forwarding
+
+    Args:
+        port_index: identifier of the port
+    """
     form = AddPortForwardForm(request.form)
     edit = True
     if form.validate():
         test_list[port_index] = form.get_list()
         edit = False
-
     return render_template("usersuite/_get_port_row.html", port_index=port_index, port_forwarding=test_list[port_index], edit=edit, form=AddPortForwardForm())
+
 
 @bp_usersuite.route("/add-port-forward", methods=["POST"])
 @login_required
 def add_port_forwarding():
+    """
+    Adds a new port forwarding
+    """
     form = AddPortForwardForm(request.form)
     if form.validate():
         test_list.append(form.get_list())
         return render_template("usersuite/_get_port_row.html", port_forwarding=form.get_list())
-    return ""
+    return render_template("usersuite/_get_port_row.html", form=AddPortForwardForm())
+
 
 @bp_usersuite.route("/port-forward/<int:id>", methods=["DELETE"])
 @login_required
 def delete_forward(id: int):
+    """
+    Deletes a port forwarding
+    """
     test_list.remove(test_list[id])
     return ""
