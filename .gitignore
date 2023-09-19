@@ -172,3 +172,6 @@ config.py
 !docs/build/html/.nojekyll
 TAGS
 /docs/source/ref
+
+# js stuff
+node_modules
