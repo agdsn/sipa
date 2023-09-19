@@ -24,7 +24,7 @@
                                     <tr>
                                         <td>{{ i.line }}</td>
                                         <td>{{ i.dest }}</td>
-                                        <td{% if i.minutes_left < 6 %} style="font-weight: bold; color: red"{% endif %}>{{ i.minutes_left }} Min</td>
+                                        <td {% if i.minutes_left < 6 %} style="font-weight: bold; color: red"{% endif %}>{{ i.minutes_left }} Min</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

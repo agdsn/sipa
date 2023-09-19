@@ -262,46 +262,32 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             <h2>{{ _("Kontakt") }} </h2>
                             <hr class="full">
 
+                            {% macro contact_row(title, href) %}
+                            <div class="row">
+                                <div class="col-xs-1"><span class="glyphicon glyphicon-envelope"></span></div>
+                                <div class="col-xs-10"><a href="{{ href }}">{{ title }}</a></div>
+                            </div>
+                            {%- endmacro %}
+
                             <div>
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
-                                    </div>
-                                    <div class="col-xs-10">
-                                        {% if current_user.is_authenticated %}
-                                            {% set mail = current_datasource().support_mail %}
-                                            <a href="mailto:{{ mail }}">{{ mail }}</a>
+                                {% if current_user.is_authenticated %}
+                                  {% set mail = current_datasource().support_mail %}
+                                  {{ contact_row(title=mail, href="mailto:" + mail) }}
+                                  {{ contact_row(
+                                    title=_("Kontaktformular für Mitglieder"), 
+                                    href=url_for("usersuite.contact")
+                                  ) }}
+                                {% else %}
+                                  {{ contact_row(
+                                    title=_("Kontaktformular für Mitglieder"), 
+                                    href=url_for("generic.contact")
+                                  ) }}
+                                {% endif %}
 
-                                            </div>
-                                            </div>
-                                            <div class="row">
-                                            <div class="col-xs-1">
-                                                <span class="glyphicon glyphicon-envelope"></span>
-                                            </div>
-                                            <div class="col-xs-10">
-
-                                            <a href="{{ url_for('usersuite.contact') }}">
-                                                {{ _("Kontaktformular für Mitglieder") }}
-                                            </a>
-
-                                        {% else %}
-                                            <a href="{{ url_for('generic.contact') }}">
-                                                {{ _("Kontaktformular für Mitglieder") }}
-                                            </a>
-                                        {% endif %}
-
-                                        </div>
-                                        </div>
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <a href="{{ url_for('generic.contact_official') }}">
-                                            {{ _("Kontaktformular für Geschäftspartner") }}
-                                        </a>
-                                    </div>
-                                </div>
+                                {{ contact_row(
+                                  title=_("Kontaktformular für Geschäftspartner"),
+                                  href=url_for("generic.contact_official")
+                                ) }}
                                 <div class="row">
                                     <div class="col-xs-1">
                                         <span class="glyphicon glyphicon-earphone"></span>

@@ -14,27 +14,3 @@
 {% endcall %}
 {% endblock %}
 
-{% block custom_script -%}
-<script type="text/javascript">
-    $("#dormitory").change(function(){
-        unsupported = {
-            {% for dorm in unsupported -%}
-                {{ dorm.name }}: ["{{ dorm.display_name }}", "{{ dorm.datasource.website_url }}"],
-            {%- endfor %}
-        }
-        selected = $("select#dormitory").find(":selected").prop("value")
-        if (selected in unsupported) {
-            $("#loginform form input.form-control, #loginform form input[type=checkbox]").prop(
-                "disabled", true);
-            $("#loginform #extern>a#link").prop("href", unsupported[selected][1]);
-            $("#loginform #extern>a#link").html(unsupported[selected][0]);
-            $("#loginform #extern").removeClass("hidden");
-        } else {
-            $("#loginform form input.form-control, #loginform form input[type=checkbox]").prop(
-                "disabled", false)
-            $("#loginform #extern").addClass("hidden")
-        }
-    });
-    $("#dormitory").on("load", function() {}).triggerHandler("change")
-</script>
-{%- endblock %}
