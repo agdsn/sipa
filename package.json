@@ -1,0 +1,20 @@
+{
+  "name": "sipa",
+  "version": "1.1.0",
+  "description": "AG DSN website",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agdsn/sipa.git"
+  },
+  "author": "AG DSN authors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agdsn/sipa/issues"
+  },
+  "homepage": "https://github.com/agdsn/sipa#readme",
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-jinja-template": "^1.1.0"
+  }
+}

@@ -1,0 +1,6 @@
+**/*.min.*
+/sipa/static/js/*.js
+!agdsn.js
+/sipa/static/css/*.css
+!style.css
+/sipa/templates/base.html
