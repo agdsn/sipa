@@ -488,13 +488,22 @@ class RegisterRoomForm(FlaskForm):
 
 
 def ip_validatior(form, field: str):
-    print(field.data)
-    ip = ipaddress.ip_address(field.data)
+    """
+    checks rather the field contains a valid ip address
+    """
+    try:
+        ipaddress.ip_address(field.data)
+    except:
+        raise ValidationError
+
 
 
 def check_prot(form, field):
+    """
+    Checks rather the fild contains a valid protocol
+    """
     if not field.data == "udp" and not field.data == "tcp":
-        raise ValueError
+        raise ValidationError
 
 
 class AddPortForwardForm(FlaskForm):
@@ -504,6 +513,9 @@ class AddPortForwardForm(FlaskForm):
     prot = StringField(label="port", validators=[check_prot])
 
     def get_list(self) -> list:
+        """
+        retruns the list for the port forward table
+        """
         return [self.source_port.data, self.dest_port.data, self.ip_address.data, self.prot.data.upper()]
 
 
