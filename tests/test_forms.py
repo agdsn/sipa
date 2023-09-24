@@ -111,3 +111,33 @@ class TestMacUnicastVadator:
             validatemac(mac)
         except ValidationError:
             pytest.fail()
+
+
+class TestAddPortForwardForm:
+
+    @pytest.fixture(scope="class")
+    def validate_ip(self):
+        def validate_ip(ip):
+            form = forms.AddPortForwardForm(data={
+                "ip_address": ip, "source_port": 12, "dest_port": 12, "prot": "tcp"})
+            ip = form.ip_address
+
+            forms.ip_validatior(None, ip)
+        return validate_ip
+
+    @pytest.mark.parametrize(
+        "ip",
+        [
+            "1.1",
+            "0z:80:41:ae:fd:7e",
+            "0+:80:41:ae:fd:7e",
+            "awda ssfsfwa",
+            "a",
+            "ab",
+            "1000",
+            "1.6.7."
+        ],
+    )
+    def test_bad_ip(self, ip, validate_ip):
+        with pytest.raises(ValidationError):
+            validate_ip(ip)
