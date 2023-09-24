@@ -7,12 +7,17 @@
     <td>
         <input type="number" min="1" name="source_port" hx-post="/control/port" hx-trigger="change" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[0] }}">
         <label class='error-label' for="source_port"></label>
+        <input name="old_source_port" value="{{ port_forwarding[0] }}" hidden="">
     </td>
-         <td>
-             <input type="number" min="1" name="dest_port" hx-post="/control/port" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[1] }}">
-             <label class='error-label' for="dest_port"></label>
+    <td>
+        <input type="number" min="1" name="dest_port" hx-post="/control/port" hx-target="next .error-label" hx-swap="innerHTML" value="{{ port_forwarding[1] }}">
+        <label class='error-label' for="dest_port"></label>
+        <input name="old_dest_port" type="number" value="{{ port_forwarding[1] }}" hidden="">
     </td>
-     <td><input type="text" name="ip_address" placeholder="source ip" hx-post="/control/ip" value="{{ port_forwarding[2] }}"></td>
+     <td>
+         <input type="text" name="ip_address" placeholder="source ip" hx-post="/control/ip" value="{{ port_forwarding[2] }}">
+         <input name="old_ip_address" value="{{ port_forwarding[2] }}" hidden="">
+     </td>
     <td>
          <label for="udp">UDP</label>
          <input type="radio" name="prot" value="udp" {% if port_forwarding[3] =="UDP" %}checked{% endif %}>
@@ -30,19 +35,29 @@
 
 </tr >
 {% else %}
-        <tr >
+        <tr>
+        <form>
+
             <td>
                 <label>{{ port_forwarding[0] }}</label>
+                <input name="source_port" value="{{ port_forwarding[0] }}" hidden="">
             </td>
             <td>
                 <label >{{ port_forwarding[1] }}</label>
+                <input name="dest_port" type="number" value="{{ port_forwarding[1] }}" hidden="">
             </td>
-            <td><label >{{ port_forwarding[2] }}</label></td>
+            <td>
+                <label >{{ port_forwarding[2] }}</label>
+                <input name="ip_address" value="{{ port_forwarding[2] }}" hidden="">
+            </td>
+
             <td>
                 <label>{{ port_forwarding[3] }}</label>
+                <input name="prot" type="radio" value="{{ port_forwarding[3] }}"  checked hidden="">
             </td>
+            </form>
             <td>
-                <button class="edit-button edit-pen" aria-label="edit" hx-get="/usersuite/get_row/{{ port_index }}" hx-target="closest tr" hx-swap="outerHTML swap:500ms">
+                <button class="edit-button edit-pen" aria-label="edit" hx-post="/usersuite/get_row" hx-include="closest tr" hx-target="closest tr" hx-swap="outerHTML swap:500ms">
                 <span class="glyphicon glyphicon-pencil pull-left"></span>
                 </button>
                 <button class="edit-button error-label" hx-confirm="{{ _("wollen sie die port Weiterleitung wirklich löschen?") }}" hx-delete="/usersuite/port-forward/{{ port_index }}" hx-target="closest tr">

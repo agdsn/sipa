@@ -652,14 +652,18 @@ def get_edit(port_forward: int):
     return render_template("usersuite/_get_port_row.html", edit=True, port_index=port_forward, port_forwarding=port_forwarding, form=AddPortForwardForm())
 
 
-@bp_usersuite.route("/get_row", methods=['GET'])
+@bp_usersuite.route("/get_row", methods=['GET', 'POST'])
 @login_required
 def get_new_portforward():
     """
     Returns the template for a new port forwarding
     """
-    port_forwarding = None
-    return render_template("usersuite/_get_port_row.html", port_forwarding=port_forwarding, form=AddPortForwardForm())
+    if request.method == 'POST':
+        port_forwarding = AddPortForwardForm(request.form).get_list()
+    else:
+        port_forwarding = None
+
+    return render_template("usersuite/_get_port_row.html", port_forwarding=port_forwarding, form=AddPortForwardForm(), edit=True)
 
 
 @bp_usersuite.route("/port-forward-edit/<int:port_index>", methods=['PUT', 'POST'])
