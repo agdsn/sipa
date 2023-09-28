@@ -127,17 +127,6 @@ class ActiveProperty(PropertyBase[TVal, TRawVal]):
         )
 
 
-def unsupported_prop(func):
-    import warnings
-
-    warnings.warn(
-        "unsupported_prop is deprecated. directly return UnsupportedProperty instead.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-    return property(lambda self: UnsupportedProperty(name=func.__name__))
-
-
 def connection_dependent(func):
     """A decorator to “deactivate” the property if the user's not active."""
 
