@@ -1,4 +1,5 @@
 import logging
+import typing as t
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date
@@ -52,7 +53,7 @@ class PycroftApi():
         return self.get(f'user/{username}')
 
     def get_user_from_ip(self, ip):
-        return self.get('user/from-ip', params={'ip': ip}, no_raise=True)
+        return self.get("user/from-ip", params={"ip": ip})
 
     def authenticate(self, username, password):
         return self.post('user/authenticate',
@@ -206,37 +207,36 @@ class PycroftApi():
 
         return result
 
-    def get(self, url, params=None, no_raise=False):
+    def get(self, url: t.LiteralString, params=None):
         request_function = partial(requests.get, params=params or {})
         return self._do_api_call(request_function, url)
 
-    def post(self, url, data=None, no_raise=False):
+    def post(self, url: t.LiteralString, data=None):
         request_function = partial(requests.post, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def delete(self, url, data=None, no_raise=False):
+    def delete(self, url: t.LiteralString, data=None):
         request_function = partial(requests.delete, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def patch(self, url, data=None, no_raise=False):
+    def patch(self, url: t.LiteralString, data=None):
         request_function = partial(requests.patch, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def _do_api_call(self, request_function: Callable, url: str, no_raise: bool = False) -> tuple[int, Any]:
+    def _do_api_call(
+        self, request_function: Callable, url: t.LiteralString
+    ) -> tuple[int, Any]:
         try:
             response = request_function(
                 self._endpoint + url,
                 headers={'Authorization': f'ApiKey {self._api_key}'},
             )
         except ConnectionError as e:
-            if no_raise:
-                return 0, None
-
             logger.error("Caught a ConnectionError when accessing Pycroft API",
                          extra={'data': {'endpoint': self._endpoint + url}})
             raise PycroftBackendError("Pycroft API unreachable") from e
 
-        if response.status_code not in [200, 400, 401, 403, 404, 412, 422] and not no_raise:
+        if response.status_code not in [200, 400, 401, 403, 404, 412, 422]:
             try:
                 response.raise_for_status()
             except HTTPError as e:
