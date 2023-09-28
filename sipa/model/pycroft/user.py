@@ -259,7 +259,7 @@ class User(BaseUser):
         return UnsupportedProperty(name="hostalias")
 
     @property
-    def userdb_status(self):
+    def userdb_status(self) -> ActiveProperty[str, str]:
         status = self.userdb.has_db
 
         capabilities = Capabilities(edit=True, delete=True)
