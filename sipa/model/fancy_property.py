@@ -130,6 +130,13 @@ class ActiveProperty(PropertyBase):
 
 
 def unsupported_prop(func):
+    import warnings
+
+    warnings.warn(
+        "unsupported_prop is deprecated. directly return UnsupportedProperty instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     return property(lambda self: UnsupportedProperty(name=func.__name__))
 
 
@@ -162,6 +169,14 @@ class active_prop(property):
     >>> User().bar.capabilities
     capabilities(edit=True, delete=False)
     """
+
+    import warnings
+
+    warnings.warn(
+        "active_prop is deprecated. directly return ActiveProperty instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
 
     def __init__(self, fget, fset=None, fdel=None, doc=None,
                  fake_setter=False):
@@ -251,6 +266,13 @@ class active_prop(property):
 def connection_dependent(func):
     """A decorator to “deactivate” the property if the user's not active.
     """
+    import warnings
+
+    warnings.warn(
+        "@connection_dependent is deprecated. use @connection_dependent_ instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
 
     def _connection_dependent(self, *args, **kwargs):
         if not self.has_connection:
@@ -267,6 +289,25 @@ def connection_dependent(func):
         except AttributeError:
             ret = {'value': ret, 'name': func.__name__}
 
+        return ret
+
+    return _connection_dependent
+
+
+def connection_dependent_(func):
+    """A decorator to “deactivate” the property if the user's not active."""
+
+    @wraps(func)
+    def _connection_dependent(self, *args, **kwargs) -> ActiveProperty:
+        if not self.has_connection:
+            return ActiveProperty(
+                name=func.__name__,
+                value=gettext("Nicht verfügbar"),
+                empty=True,
+                capabilities=NO_CAPABILITIES,
+            )
+
+        ret = func(self, *args, **kwargs)
         return ret
 
     return _connection_dependent
