@@ -1,5 +1,5 @@
 import typing as t
-from datetime import datetime
+from datetime import datetime, date
 from random import random
 
 from flask import current_app
@@ -7,7 +7,11 @@ from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 
 from sipa.model.exceptions import PasswordInvalid, UserNotFound
-from sipa.model.fancy_property import active_prop, unsupported_prop
+from sipa.model.fancy_property import (
+    ActiveProperty,
+    Capabilities,
+    UnsupportedProperty,
+)
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
 from sipa.model.user import BaseUser
@@ -82,9 +86,9 @@ class SampleFinanceInformation(BaseFinanceInformation):
 class User(BaseUser):
     def __init__(self, uid):
         super().__init__(uid)
-        self.config = config
-        self._realname = config[uid]['name']
-        self.old_mail = config[uid]['mail']
+        self.config: SampleUserData = config[uid]
+        self._realname = self.config["name"]
+        self.old_mail = self.config["mail"]
         self._ip = "127.0.0.1"
 
     def __repr__(self):
@@ -141,88 +145,111 @@ class User(BaseUser):
             })(rand(), rand()*0.04),
         } for day in range(7)]
 
-    @active_prop
+    @property
     def realname(self):
-        return self._realname
+        return ActiveProperty[str, str](name="realname", value=self._realname)
 
-    @active_prop
+    @property
     def login(self):
-        return self.uid
+        return ActiveProperty[str, str](name="login", value=self.uid)
 
-    @active_prop
+    @property
     def mac(self):
-        return config[self.uid]['mac']
+        return ActiveProperty[str, str](
+            name="mac",
+            value=config[self.uid]["mac"],
+            capabilities=Capabilities(edit=True, delete=False),
+        )
 
     @mac.setter
     def mac(self, value):
         config[self.uid]['mac'] = value
 
-    @active_prop
+    @property
     def mail(self):
-        return config[self.uid]['mail']
+        return ActiveProperty[str, str](
+            name="mail",
+            value=config[self.uid]["mail"],
+            capabilities=Capabilities(edit=True, delete=False),
+        )
 
-    @active_prop
+    @property
     def mail_forwarded(self):
-        return config[self.uid]['mail_forwarded']
+        return ActiveProperty[bool, bool](
+            name="mail_forwarded", value=config[self.uid]["mail_forwarded"]
+        )
 
-    @active_prop
+    @property
     def mail_confirmed(self):
-        return config[self.uid]['mail_confirmed']
+        return ActiveProperty[bool, bool](
+            name="mail_confirmed", value=config[self.uid]["mail_confirmed"]
+        )
 
     def resend_confirm_mail(self) -> bool:
         """ Resend the confirmation mail."""
         pass
 
     @mail.setter
-    def mail(self, value):
+    def mail(self, value: str) -> None:
         config[self.uid]['mail'] = value
 
-    @active_prop
+    @property
     def network_access_active(self):
-        return True
+        return ActiveProperty[bool, bool](
+            name="network_access_active",
+            value=True,
+            capabilities=Capabilities(edit=True, delete=False),
+        )
 
     @network_access_active.setter
     def network_access_active(self, value):
         pass
 
-    @active_prop
+    @property
     def address(self):
-        return self.config[self.uid]['address']
+        return ActiveProperty[str, str](
+            name="address", value=config[self.uid]["address"]
+        )
 
-    @active_prop
+    @property
     def ips(self):
-        return self.config[self.uid]['ip']
+        return ActiveProperty[str, str](name="ips", value=config[self.uid]["ip"])
 
-    @active_prop
+    @property
     def status(self):
-        status_str = self.config[self.uid]['status']
-        return (status_str
-                if not self.membership_end_date
-                else f"{status_str} (ends at {self.membership_end_date.value})")
+        status_str = self.config["status"]
+        value = (
+            status_str
+            if not self.membership_end_date
+            else f"{status_str} (ends at {self.membership_end_date.value})"
+        )
+        return ActiveProperty[str, str](name="status", value=value)
 
     has_connection = True
 
-    @active_prop
+    @property
     def id(self):
-        return self.config[self.uid]['id']
+        return ActiveProperty[str, str](name="id", value=self.config["id"])
 
-    @active_prop
+    @property
     def hostname(self):
-        return self.config[self.uid]['hostname']
+        return ActiveProperty[str, str](name="hostname", value=self.config["hostname"])
 
-    @active_prop
+    @property
     def hostalias(self):
-        return self.config[self.uid]['hostalias']
+        return ActiveProperty[str, str](
+            name="hostalias", value=self.config["hostalias"]
+        )
 
-    @unsupported_prop
+    @property
     def userdb_status(self):
-        pass
+        return UnsupportedProperty("userdb_status")
 
-    @unsupported_prop
+    @property
     def birthdate(self):
-        pass
+        return UnsupportedProperty("birthdate")
 
-    def payment_details(self):
+    def payment_details(self) -> PaymentDetails:
         return PaymentDetails(
             recipient="Donald Duck",
             bank="Geldspeicher GbR",
@@ -231,35 +258,32 @@ class User(BaseUser):
             purpose=self.id.value,
         )
 
-    @active_prop
+    @property
     def membership_end_date(self):
-        print(self.config[self.uid])
-        return {'value': self.config[self.uid]['membership_end_date'],
-                # we cannot edit it if we are not a member
-                'tmp_readonly': not self.is_member}
-
-    # Empty setter for "edit" capability
-    @membership_end_date.setter
-    def membership_end_date(self, end_date):
-        pass
+        print(self.config)
+        return ActiveProperty[date | None, date | None](
+            name="membership_end_date",
+            value=self.config["membership_end_date"],
+            capabilities=Capabilities.edit_if(self.is_member),
+        )
 
     @property
-    def is_member(self):
-        return self.config[self.uid]['is_member']
+    def is_member(self) -> bool:
+        return self.config["is_member"]
 
     def estimate_balance(self, end_date):
         return random() * 10 - 5
 
     def terminate_membership(self, end_date):
-        self.config[self.uid]['membership_end_date'] = end_date
-        print(self.config[self.uid])
+        self.config["membership_end_date"] = end_date
+        print(self.config)
 
     def continue_membership(self):
-        self.config[self.uid]['membership_end_date'] = None
+        self.config["membership_end_date"] = None
 
-    @active_prop
+    @property
     def wifi_password(self):
-        return {'value': 'password'}
+        return ActiveProperty[str, str](name="wifi_password", value="password")
 
     @classmethod
     def request_password_reset(cls, user_ident, email):
