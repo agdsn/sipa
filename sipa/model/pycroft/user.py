@@ -1,5 +1,7 @@
 import logging
 
+from pydantic import ValidationError
+
 from sipa.model.user import BaseUser
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import active_prop, connection_dependent, \
@@ -11,7 +13,6 @@ from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
-from .unserialize import UnserializationError
 from .userdb import UserDB
 
 from flask_login import AnonymousUserMixin
@@ -30,9 +31,9 @@ class User(BaseUser):
 
     def __init__(self, user_data: dict):
         try:
-            self.user_data: UserData = UserData(user_data)
+            self.user_data: UserData = UserData.model_validate(user_data)
             self._userdb: UserDB = UserDB(self)
-        except UnserializationError as e:
+        except ValidationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
         super().__init__(uid=str(self.user_data.id))
 
