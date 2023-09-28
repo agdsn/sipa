@@ -138,7 +138,7 @@ def unsupported_prop(func):
     return property(lambda self: UnsupportedProperty(name=func.__name__))
 
 
-def connection_dependent_(func):
+def connection_dependent(func):
     """A decorator to “deactivate” the property if the user's not active."""
 
     @wraps(func)

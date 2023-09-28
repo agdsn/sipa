@@ -10,7 +10,7 @@ from sipa.model.fancy_property import (
     ActiveProperty,
     UnsupportedProperty,
     Capabilities,
-    connection_dependent_,
+    connection_dependent,
 )
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
@@ -110,13 +110,13 @@ class User(BaseUser):
         return ActiveProperty[str, str](name="login", value=self.user_data.login)
 
     @property
-    @connection_dependent_
+    @connection_dependent
     def ips(self) -> ActiveProperty[str, str]:
         ips = sorted(ip for i in self.user_data.interfaces for ip in i.ips)
         return ActiveProperty[str, str](name="ips", value=", ".join(ips))
 
     @property
-    @connection_dependent_
+    @connection_dependent
     def mac(self) -> ActiveProperty[str, str]:
         macs = ", ".join(i.mac for i in self.user_data.interfaces)
         return ActiveProperty[str, str](
@@ -138,7 +138,7 @@ class User(BaseUser):
             raise MacAlreadyExists
 
     @property
-    @connection_dependent_
+    @connection_dependent
     def network_access_active(self) -> ActiveProperty[bool, bool]:
         can_edit = (
             self.user_data.room is not None
