@@ -11,6 +11,14 @@ class Capabilities(t.NamedTuple):
     edit: bool
     delete: bool
 
+    @classmethod
+    def edit_if(cls, condition: bool) -> t.Self:
+        return cls(edit=condition, delete=False)
+
+    @classmethod
+    def edit_delete_if(cls, condition: bool) -> t.Self:
+        return cls(edit=condition, delete=condition)
+
 
 NO_CAPABILITIES = Capabilities(edit=False, delete=False)
 
@@ -33,12 +41,12 @@ STYLE = t.Literal[
 class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
     name: str
     value: TVal
-    raw_value: TRawVal
-    capabilities: Capabilities
+    raw_value: TRawVal = None
+    capabilities: Capabilities = NO_CAPABILITIES
     style: STYLE | None = None
     # TODO actually is not None due to post_init. More elegantly solved with
     # separate `InitVar`
-    empty: bool | None = False
+    empty: bool | None = None
     description_url: str | None = None
 
     def __post_init__(self):
@@ -73,7 +81,7 @@ class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
         return not self.empty
 
 
-class UnsupportedProperty(PropertyBase):
+class UnsupportedProperty(PropertyBase[str, None]):
     supported = False
 
     def __init__(self, name):
@@ -97,28 +105,18 @@ class UnsupportedProperty(PropertyBase):
             return False
 
 
-class ActiveProperty(PropertyBase):
+class ActiveProperty(PropertyBase[TVal, TRawVal]):
     supported = True
 
-    def __init__(self, name, value=None, raw_value=None, capabilities=NO_CAPABILITIES,
-                 style=None, empty=False, description_url=None):
-
-        # Enforce css classes
-        assert style in {None, 'muted', 'primary', 'success',
-                         'info', 'warning', 'danger', 'password'}, \
-                         "Style must be a valid text-class string"
-
-        super().__init__(
-            name=name,
-            value=(value if value else gettext("Nicht angegeben")),
-            raw_value=raw_value if raw_value is not None else value,
-            capabilities=capabilities,
-            style=(style if style  # customly given style is most important
-                   else 'muted' if empty or not value
-                   else None),
-            empty=empty or not value,
-            description_url=description_url,
-        )
+    def __post_init__(self):
+        if self.empty is None:
+            self.empty = not bool(self.value)
+        if self.raw_value is None:
+            self.raw_value = self.value
+        if self.value is None:
+            self.value = gettext("Nicht angegeben")
+        if self.style is None:
+            self.style = "muted" if self.empty else None
 
     def __repr__(self):
         return "<{cls} {name}='{value}' [{empty}]>".format(
