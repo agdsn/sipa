@@ -30,8 +30,6 @@ class SampleUserData(t.TypedDict):
     mac: str
     ip: str
     status: str
-    hostname: str
-    hostalias: str
     membership_end_date: str | None
     is_member: bool
 
@@ -50,8 +48,6 @@ def init_context(app):
             'mac': 'aa:bb:cc:dd:ee:ff',
             'ip': '141.30.228.39',
             'status': "OK",
-            'hostname': 'My_Server',
-            'hostalias': 'leethax0r',
             'membership_end_date': None,
             'is_member': True,
         }
@@ -230,16 +226,6 @@ class User(BaseUser):
     @property
     def id(self):
         return ActiveProperty[str, str](name="id", value=self.config["id"])
-
-    @property
-    def hostname(self):
-        return ActiveProperty[str, str](name="hostname", value=self.config["hostname"])
-
-    @property
-    def hostalias(self):
-        return ActiveProperty[str, str](
-            name="hostalias", value=self.config["hostalias"]
-        )
 
     @property
     def userdb_status(self):

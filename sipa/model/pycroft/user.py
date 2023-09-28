@@ -250,13 +250,6 @@ class User(BaseUser):
     def id(self) -> ActiveProperty[str, str]:
         return ActiveProperty[str, str](name="id", value=self.user_data.user_id)
 
-    @property
-    def hostname(self) -> UnsupportedProperty:
-        return UnsupportedProperty(name="hostname")
-
-    @property
-    def hostalias(self) -> UnsupportedProperty:
-        return UnsupportedProperty(name="hostalias")
 
     @property
     def userdb_status(self) -> ActiveProperty[str, str]:

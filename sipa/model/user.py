@@ -231,25 +231,6 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def hostname(self) -> PropertyBase[str, str]:
-        """The hostname.
-
-        This usually is an alias consisting of the last digits of the
-        mac/ip.
-        """
-        pass
-
-    @property
-    @abstractmethod
-    def hostalias(self) -> PropertyBase[str, str]:
-        """The hostalias.
-
-        An optionally configurable alias for the device.
-        """
-        pass
-
-    @property
-    @abstractmethod
     def userdb_status(self) -> PropertyBase[str, str]:
         """The status of the user's db, if available."""
         pass
