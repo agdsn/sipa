@@ -1,40 +1,53 @@
-from collections import namedtuple
+import typing as t
+from dataclasses import dataclass
 from functools import wraps
 
 from flask_babel import gettext
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from sipa.utils import argstr
 
 
-Capabilities = namedtuple('capabilities', ['edit', 'delete'])
+class Capabilities(t.NamedTuple):
+    edit: bool
+    delete: bool
+
+
 NO_CAPABILITIES = Capabilities(edit=False, delete=False)
 
+TVal = t.TypeVar("TVal")
+TRawVal = t.TypeVar("TRawVal")
 
-class PropertyBase(metaclass=ABCMeta):
-    def __init__(self, name, value, raw_value, capabilities=NO_CAPABILITIES,
-                 style=None, empty=False, description_url=None):
-        self.name = name
-        self.value = value
-        self.raw_value = raw_value
-        self.capabilities = capabilities
-        self.style = style
-        self.empty = empty or not value
-        self.description_url = description_url
 
-    def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            name=self.name,
-            value=self.value,
-            raw_value=self.raw_value,
-            capabilities=self.capabilities,
-            style=self.style,
-            empty=self.empty,
-            description_url=self.description_url
-        ))
+STYLE = t.Literal[
+    "muted",
+    "primary",
+    "success",
+    "info",
+    "warning",
+    "danger",
+    "password",
+]
+
+
+@dataclass
+class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
+    name: str
+    value: TVal
+    raw_value: TRawVal
+    capabilities: Capabilities
+    style: STYLE | None = None
+    # TODO actually is not None due to post_init. More elegantly solved with
+    # separate `InitVar`
+    empty: bool | None = False
+    description_url: str | None = None
+
+    def __post_init__(self):
+        if self.empty is None:
+            self.empty = not bool(self.value)
 
     @property
     @abstractmethod
-    def supported(self):
+    def supported(self) -> bool:
         pass
 
     def __eq__(self, other):
