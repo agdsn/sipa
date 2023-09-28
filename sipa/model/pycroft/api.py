@@ -42,7 +42,7 @@ class MatchPersonResult:
         return dataclass_from_dict(MatchPersonResult, json)
 
 
-class PycroftApi():
+class PycroftApi:
     def __init__(self, endpoint: str, api_key: str):
         if not endpoint.endswith("/"):
             raise InvalidConfiguration("API endpoint must end with a '/'")
