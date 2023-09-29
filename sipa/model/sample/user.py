@@ -126,7 +126,7 @@ class User(BaseUser):
         return cls.get('test')
 
     def change_password(self, old, new):
-        config[self.uid]['password'] = new
+        self.config["password"] = new
 
     @property
     def traffic_history(self):
@@ -153,32 +153,32 @@ class User(BaseUser):
     def mac(self):
         return ActiveProperty[str, str](
             name="mac",
-            value=config[self.uid]["mac"],
+            value=self.config["mac"],
             capabilities=Capabilities(edit=True, delete=False),
         )
 
     @mac.setter
     def mac(self, value):
-        config[self.uid]['mac'] = value
+        self.config["mac"] = value
 
     @property
     def mail(self):
         return ActiveProperty[str, str](
             name="mail",
-            value=config[self.uid]["mail"],
+            value=self.config["mail"],
             capabilities=Capabilities(edit=True, delete=False),
         )
 
     @property
     def mail_forwarded(self):
         return ActiveProperty[bool, bool](
-            name="mail_forwarded", value=config[self.uid]["mail_forwarded"]
+            name="mail_forwarded", value=self.config["mail_forwarded"]
         )
 
     @property
     def mail_confirmed(self):
         return ActiveProperty[bool, bool](
-            name="mail_confirmed", value=config[self.uid]["mail_confirmed"]
+            name="mail_confirmed", value=self.config["mail_confirmed"]
         )
 
     def resend_confirm_mail(self) -> bool:
@@ -187,7 +187,7 @@ class User(BaseUser):
 
     @mail.setter
     def mail(self, value: str) -> None:
-        config[self.uid]['mail'] = value
+        self.config["mail"] = value
 
     @property
     def network_access_active(self):
@@ -197,19 +197,13 @@ class User(BaseUser):
             capabilities=Capabilities(edit=True, delete=False),
         )
 
-    @network_access_active.setter
-    def network_access_active(self, value):
-        pass
-
     @property
     def address(self):
-        return ActiveProperty[str, str](
-            name="address", value=config[self.uid]["address"]
-        )
+        return ActiveProperty[str, str](name="address", value=self.config["address"])
 
     @property
     def ips(self):
-        return ActiveProperty[str, str](name="ips", value=config[self.uid]["ip"])
+        return ActiveProperty[str, str](name="ips", value=self.config["ip"])
 
     @property
     def status(self):
