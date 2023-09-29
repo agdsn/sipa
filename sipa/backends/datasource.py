@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from ipaddress import IPv4Network, IPv4Address, AddressValueError
 
 from flask import Flask
@@ -18,10 +19,17 @@ class DataSource:
     This class provides information about the backend you defined, for
     instance the user class.
     """
-    def __init__(self, name: str, user_class: type[UserLike], mail_server: str,
-                 webmailer_url: str = None,
-                 support_mail: str = None,
-                 init_context: InitContextCallable = None) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        user_class: type[UserLike],
+        dormitories: list[Dormitory],
+        mail_server: str,
+        webmailer_url: str = None,
+        support_mail: str = None,
+        init_context: InitContextCallable = None,
+    ) -> None:
         super().__init__()
 
         #: Holds the name of this datasource.  Must be unique among
@@ -33,6 +41,7 @@ class DataSource:
         #: the user_class used in the sense of ``flask_login``.
         self.user_class: type[UserLike] = _user_class
 
+        self._dormitories = {d.name: d for d in dormitories}
         #: The mail server to be appended to a user's login in order
         #: to construct the mail address.
         self.mail_server = mail_server
@@ -40,7 +49,6 @@ class DataSource:
         self.support_mail = (support_mail if support_mail
                              else f"support@{mail_server}")
         self._init_context = init_context
-        self._dormitories: dict[str, Dormitory] = {}
 
     def __eq__(self, other):
         return compare_all_attributes(self, other, ['name'])
@@ -53,12 +61,6 @@ class DataSource:
 
     def __hash__(self):
         return xor_hashes(self.name, self.user_class, self.support_mail, self.mail_server)
-
-    def register_dormitory(self, dormitory: Dormitory):
-        name = dormitory.name
-        if name in self._dormitories:
-            raise ValueError("Dormitory {} already registered", name)
-        self._dormitories[name] = dormitory
 
     @property
     def dormitories(self) -> list[Dormitory]:
@@ -155,30 +157,11 @@ class SubnetCollection:
 # used for two things:
 # 1. determining whether the source IP belongs to a pycroft user
 # 2. suggesting a default dormitory name based on an IP
+@dataclass(frozen=True)
 class Dormitory:
     """A dormitory as selectable on the login page."""
 
-    def __init__(self, name: str, display_name: str, datasource: DataSource,
-                 subnets=None) -> None:
-        self.name = name
-        self.display_name = display_name
-        self.datasource = datasource
-        # TODO rework dormitory registration (make it safe)
-        # Add a `Backends` binding to `Datasource` and check global dorm
-        # existence when calling `register_dormitory`
-        datasource.register_dormitory(self)
-        self.subnets = SubnetCollection(subnets if subnets else [])
+    name: str
+    display_name: str
+    subnets: SubnetCollection = SubnetCollection([])
 
-    def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            name=self.name,
-            display_name=self.display_name,
-            datasource=self.datasource,
-            subnets=self.subnets.subnets,
-        ))
-
-    def __eq__(self, other):
-        return compare_all_attributes(self, other, ['name', 'datasource'])
-
-    def __hash__(self):
-        return xor_hashes(self.name, self.display_name, self.datasource, self.subnets)

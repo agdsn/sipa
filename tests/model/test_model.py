@@ -21,18 +21,18 @@ class TestBackendInitializationCase(TestCase):
         self.app = Flask("sipa")
         self.app.config["BACKEND"] = "foo"
         self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        dormitory = Dormitory(
+            name="test", display_name="", subnets=[IPv4Network("127.0.0.0/8")]
+        )
         datasource = DataSource(
             name='foo',
             user_class=object,
             mail_server="",
             webmailer_url="",
             support_mail="",
-            init_context=lambda app: None
+            init_context=lambda app: None,
+            dormitories=[dormitory],
         )
-
-        Dormitory(name='test', display_name="",
-                  datasource=datasource, subnets=[IPv4Network('127.0.0.0/8')])
-
         self.backends = Backends([datasource])
         self.backends.init_app(self.app)
         self.backends.init_backends()
@@ -87,6 +87,7 @@ class TestDataSource:
             'name': 'test',
             'user_class': object,
             'mail_server': "",
+            "dormitories": [],
         }
 
     def test_init_context_gets_called_correctly(self, default_args, app):
