@@ -92,13 +92,33 @@ class Backends:
         #: Which datasources are available
         self.available_datasources = {d.name: d for d in available_datasources}
         #: The datasources dict
-        # TODO replace by single `datasource`
-        self._datasources: dict[str, DataSource] = {}
+        self._datasources_: dict[str, DataSource] = {}
         #: The dormitory dict
-        # TODO remove
-        self._dormitories: dict[str, Dormitory] = {}
+        self._dormitories_: dict[str, Dormitory] = {}
         self.app: Flask = None
         self._pre_backends_init_hook: Callable[[Flask], None] = lambda app: None
+
+    @property
+    def _datasources(self):
+        import warnings
+
+        warnings.warn(
+            "Backends._datasources is deprecated. Use Backends.datasource",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._datasources_
+
+    @property
+    def _dormitories(self):
+        import warnings
+
+        warnings.warn(
+            "Backends._dormitories is deprecated. Build an alternative instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._dormitories_
 
     def init_app(self, app: Flask):
         """Register self to app and initialize datasources
@@ -140,6 +160,7 @@ class Backends:
                 f"{name} is not an available datasource"
             ) from None
 
+        self.datasource = new_datasource
         self._datasources[name] = new_datasource
 
         # check for name collisions in the updated dormitories
