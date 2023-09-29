@@ -3,17 +3,16 @@ from __future__ import annotations
 from datetime import date
 from decimal import Decimal
 
-from sipa.model.pycroft.unserialize import unserializer
+from pydantic import BaseModel
 
 
-@unserializer
-class UserData:
+class UserData(BaseModel):
     id: int
     user_id: str
     login: str
     name: str
     status: UserStatus
-    room: str
+    room: str | None
     mail: str
     mail_forwarded: bool
     mail_confirmed: bool
@@ -32,8 +31,7 @@ class UserData:
     wifi_password: str | None
 
 
-@unserializer
-class UserStatus:
+class UserStatus(BaseModel):
     member: bool
     traffic_exceeded: bool
     network_access: bool
@@ -41,22 +39,19 @@ class UserStatus:
     violation: bool
 
 
-@unserializer
-class Interface:
+class Interface(BaseModel):
     id: int
     mac: str
     ips: list[str]
 
 
-@unserializer
-class TrafficHistoryEntry:
+class TrafficHistoryEntry(BaseModel):
     timestamp: str
     ingress: int | None
     egress: int | None
 
 
-@unserializer
-class FinanceHistoryEntry:
+class FinanceHistoryEntry(BaseModel):
     valid_on: str
     amount: Decimal
     description: str

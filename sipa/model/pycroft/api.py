@@ -1,4 +1,5 @@
 import logging
+import typing as t
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date
@@ -6,6 +7,7 @@ from functools import partial
 from typing import Any
 
 import requests
+import requests.auth
 from requests import ConnectionError, HTTPError
 
 from sipa.backends.exceptions import InvalidConfiguration
@@ -41,18 +43,29 @@ class MatchPersonResult:
         return dataclass_from_dict(MatchPersonResult, json)
 
 
-class PycroftApi():
+class PycroftAuthorization(requests.auth.AuthBase):
+    def __init__(self, api_key: str):
+        super().__init__()
+        self.api_key = api_key
+
+    def __call__(self, r: requests.Request) -> requests.Request:
+        r.headers["Authorization"] = f"ApiKey {self.api_key}"
+        return r
+
+
+class PycroftApi:
     def __init__(self, endpoint: str, api_key: str):
         if not endpoint.endswith("/"):
             raise InvalidConfiguration("API endpoint must end with a '/'")
         self._endpoint = endpoint
-        self._api_key = api_key
+        self.session = requests.Session()
+        self.session.auth = PycroftAuthorization(api_key)
 
     def get_user(self, username: str) -> tuple[int, dict]:
         return self.get(f'user/{username}')
 
     def get_user_from_ip(self, ip):
-        return self.get('user/from-ip', params={'ip': ip}, no_raise=True)
+        return self.get("user/from-ip", params={"ip": ip})
 
     def authenticate(self, username, password):
         return self.post('user/authenticate',
@@ -206,37 +219,33 @@ class PycroftApi():
 
         return result
 
-    def get(self, url, params=None, no_raise=False):
-        request_function = partial(requests.get, params=params or {})
+    def get(self, url: t.LiteralString, params=None):
+        request_function = partial(self.session.get, params=params or {})
         return self._do_api_call(request_function, url)
 
-    def post(self, url, data=None, no_raise=False):
-        request_function = partial(requests.post, data=data or {})
+    def post(self, url: t.LiteralString, data=None):
+        request_function = partial(self.session.post, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def delete(self, url, data=None, no_raise=False):
-        request_function = partial(requests.delete, data=data or {})
+    def delete(self, url: t.LiteralString, data=None):
+        request_function = partial(self.session.delete, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def patch(self, url, data=None, no_raise=False):
-        request_function = partial(requests.patch, data=data or {})
+    def patch(self, url: t.LiteralString, data=None):
+        request_function = partial(self.session.patch, data=data or {})
         return self._do_api_call(request_function, url)
 
-    def _do_api_call(self, request_function: Callable, url: str, no_raise: bool = False) -> tuple[int, Any]:
+    def _do_api_call(
+        self, request_function: Callable, url: t.LiteralString
+    ) -> tuple[int, Any]:
         try:
-            response = request_function(
-                self._endpoint + url,
-                headers={'Authorization': f'ApiKey {self._api_key}'},
-            )
+            response = request_function(self._endpoint + url)
         except ConnectionError as e:
-            if no_raise:
-                return 0, None
-
             logger.error("Caught a ConnectionError when accessing Pycroft API",
                          extra={'data': {'endpoint': self._endpoint + url}})
             raise PycroftBackendError("Pycroft API unreachable") from e
 
-        if response.status_code not in [200, 400, 401, 403, 404, 412, 422] and not no_raise:
+        if response.status_code not in [200, 400, 401, 403, 404, 412, 422]:
             try:
                 response.raise_for_status()
             except HTTPError as e:
