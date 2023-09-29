@@ -334,17 +334,6 @@ class Backends:
 
         return datasource.user_class.from_ip(ip)
 
-    # PROXIES
-    def current_datasource(self) -> DataSource | None:
-        """Read the current datasource from the session"""
-        import warnings
-
-        warnings.warn(
-            "Backends.current_datasource is deprecated. Use Backends.datasource",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.datasource
 
 
 #: A namedtuple to improve readability of some return values

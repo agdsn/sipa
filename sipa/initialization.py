@@ -82,7 +82,7 @@ def init_app(app, **kwargs):
         get_attribute_endpoint=get_attribute_endpoint,
         should_display_traffic_data=should_display_traffic_data,
         traffic_chart=provide_render_function(generate_traffic_chart),
-        current_datasource=backends.current_datasource,
+        current_datasource=lambda: backends.datasource,
         form_label_width_class=f"col-sm-{form_label_width}",
         form_input_width_class=f"col-sm-{form_input_width}",
         form_input_offset_class=f"col-sm-offset-{form_label_width}",
