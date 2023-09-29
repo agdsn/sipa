@@ -14,35 +14,6 @@ from .logging import logger
 from .types import UserLike
 
 
-def evaluates_uniquely(objects, func) -> bool:
-    """Return true if the return value of ``func`` is unique among
-    ``objects``.
-
-    This can be used to check whether some attribute `obj.attr` is
-    unique among a set of such objects, and can thus be used as a key.
-
-    **Usage:**
-
-    >>> from operator import itemgetter
-    >>> objs = [{'name': "foo"}, {'name': "bar"}]
-    >>> evaluates_uniquely(objs, func=itemgetter('name'))
-    True
-
-    >>> from operator import itemgetter
-    >>> objs = [{'name': "foo"}, {'name': "foo"}]
-    >>> evaluates_uniquely(objs, func=itemgetter('name'))
-    False
-
-    :param objects: the object on which to apply func to
-    :param func: the function to be evaluated, given each object as a
-        parameter.  Must return something hashable.
-
-    :return: whether the uniqueness holds
-    """
-    values = [func(obj) for obj in objects]
-    return len(values) == len(set(values))
-
-
 class Backends:
     """The `Backends` flask extension
 
