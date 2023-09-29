@@ -162,8 +162,7 @@ def login():
         # injection using the `next` parameter
         return redirect(url_for('usersuite.index'))
 
-    return render_template('login.html', form=form,
-                           unsupported=backends.premature_dormitories)
+    return render_template("login.html", form=form)
 
 
 @bp_generic.route("/logout")
