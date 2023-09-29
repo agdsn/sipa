@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import typing as t
 # noinspection PyMethodMayBeStatic
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 from contextlib import contextmanager
+from datetime import date
 from typing import TypeVar
 
-from sipa.model.fancy_property import active_prop, UnsupportedProperty, PropertyBase, \
-    unsupported_prop
+from sipa.model.fancy_property import UnsupportedProperty, PropertyBase
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
 
@@ -51,17 +52,17 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     Abstract methods / properties are prepended with ``[Abstract]``.
     """
 
-    def __init__(self, uid):
+    def __init__(self, uid: str):
         #: A unique unicode identifier for the User, needed for
         #: :meth:`get_id`
-        self.uid = uid
+        self.uid: str = uid
 
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
 
     datasource = None
 
-    def get_id(self):
+    def get_id(self) -> str:
         """This method is Required by flask-login."""
         return self.uid
 
@@ -149,52 +150,52 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
-    def generate_rows(self, description_dict: dict):
+    def generate_rows(self, description_dict: dict) -> t.Iterator[Row]:
         for key, val in description_dict.items():
             yield Row(description=val, property=getattr(self, key))
 
-    @active_prop
+    @property
     @abstractmethod
-    def realname(self) -> PropertyBase:
+    def realname(self) -> PropertyBase[str, str]:
         """The real-life name"""
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def login(self) -> PropertyBase:
+    def login(self) -> PropertyBase[str, str]:
         """The login"""
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def mac(self) -> PropertyBase:
+    def mac(self) -> PropertyBase[str, str]:
         """The MAC Address"""
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def mail(self) -> PropertyBase:
+    def mail(self) -> PropertyBase[str, str]:
         """The mail address.
 
         (``"{login}@{server}"``)
         """
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def birthdate(self) -> PropertyBase:
+    def birthdate(self) -> PropertyBase[date, date]:
         """Date of birth"""
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def mail_forwarded(self) -> PropertyBase:
+    def mail_forwarded(self) -> PropertyBase[bool, bool]:
         """Whether mail forwarding is enabled."""
         pass
 
     @property
     @abstractmethod
-    def mail_confirmed(self) -> PropertyBase:
+    def mail_confirmed(self) -> PropertyBase[bool, bool]:
         """Whether mail is confirmed."""
         pass
 
@@ -203,15 +204,15 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """Resend the confirmation mail."""
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def address(self) -> PropertyBase:
+    def address(self) -> PropertyBase[str, str]:
         """Where the user lives"""
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def status(self) -> PropertyBase:
+    def status(self) -> PropertyBase[str, str]:
         """The current membership status in the sense of
         the AG DSN constitution.
 
@@ -219,37 +220,18 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
-    @active_prop
+    @property
     @abstractmethod
-    def id(self) -> PropertyBase:
+    def id(self) -> PropertyBase[str, str]:
         """The “user-id”.
 
         Some Backends provide a secondary id besides the login.
         """
         pass
 
-    @active_prop
-    @abstractmethod
-    def hostname(self) -> PropertyBase:
-        """The hostname.
-
-        This usually is an alias consisting of the last digits of the
-        mac/ip.
-        """
-        pass
-
-    @active_prop
-    @abstractmethod
-    def hostalias(self) -> PropertyBase:
-        """The hostalias.
-
-        An optionally configurable alias for the device.
-        """
-        pass
-
     @property
     @abstractmethod
-    def userdb_status(self) -> PropertyBase:
+    def userdb_status(self) -> PropertyBase[str, str]:
         """The status of the user's db, if available."""
         pass
 
@@ -264,7 +246,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def has_connection(self) -> PropertyBase:
+    def has_connection(self) -> PropertyBase[bool, bool]:
         """Whether the user has a connection"""
         pass
 
@@ -278,7 +260,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         pass
 
     @property
-    def finance_balance(self) -> PropertyBase:
+    def finance_balance(self) -> PropertyBase[str, float | None]:
         """The :class:`fancy property <sipa.model.fancy_property.PropertyBase>`
         representing the finance balance"""
         info = self.finance_information
@@ -295,15 +277,15 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """Method to check if a user has a property"""
         return False
 
-    @unsupported_prop
-    def membership_end_date(self):
+    @property
+    def membership_end_date(self) -> PropertyBase[date | None, date | None]:
         """Date when the membership ends"""
-        raise NotImplementedError
+        return UnsupportedProperty("membership_end_date")
 
-    @unsupported_prop
-    def network_access_active(self):
+    @property
+    def network_access_active(self) -> PropertyBase[bool, bool] | UnsupportedProperty:
         """Whether or not the network access is active"""
-        raise NotImplementedError
+        return UnsupportedProperty("network_access_active")
 
     def activate_network_access(self, password, mac, birthdate, host_name):
         """Method to activate network access"""
@@ -323,12 +305,12 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def is_member(self):
+    def is_member(self) -> bool:
         pass
 
-    @unsupported_prop
-    def wifi_password(self):
-        pass
+    @property
+    def wifi_password(self) -> PropertyBase[str, str | None]:
+        return UnsupportedProperty("wifi_password")
 
     @classmethod
     def request_password_reset(cls, user_ident, email):

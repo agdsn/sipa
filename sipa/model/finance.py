@@ -20,7 +20,7 @@ class BaseFinanceInformation(metaclass=ABCMeta):
     """
 
     @property
-    def balance(self):
+    def balance(self) -> ActiveProperty[str, float]:
         """The current balance as a
         :py:class:`~sipa.model.fancy_property.ActiveProperty`
 

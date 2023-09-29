@@ -38,8 +38,6 @@ EXPECTED_RESULT: dict[str, tuple[str, Capabilities]] = {
     "ips": ("ip", NO_CAPABILITIES),
     "status": ("status", NO_CAPABILITIES),
     "id": ("id", NO_CAPABILITIES),
-    "hostname": ("hostname", NO_CAPABILITIES),
-    "hostalias": ("hostalias", NO_CAPABILITIES),
 }
 
 

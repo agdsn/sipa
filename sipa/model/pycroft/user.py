@@ -1,11 +1,17 @@
+from __future__ import annotations
 import logging
+from datetime import date
 
 from pydantic import ValidationError
 
 from sipa.model.user import BaseUser
 from sipa.model.finance import BaseFinanceInformation
-from sipa.model.fancy_property import active_prop, connection_dependent, \
-    unsupported_prop, ActiveProperty, UnsupportedProperty, Capabilities
+from sipa.model.fancy_property import (
+    ActiveProperty,
+    UnsupportedProperty,
+    Capabilities,
+    connection_dependent,
+)
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
@@ -89,37 +95,37 @@ class User(BaseUser):
             'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
         } for entry in self.user_data.traffic_history]
 
-    @active_prop
-    def realname(self):
-        return self.user_data.name
+    @property
+    def realname(self) -> ActiveProperty[str, str]:
+        return ActiveProperty[str, str](name="realname", value=self.user_data.name)
 
-    @active_prop
-    def birthdate(self):
-        return self.user_data.birthdate
+    @property
+    def birthdate(self) -> ActiveProperty[date, date]:
+        return ActiveProperty[date, date](
+            name="birthdate", value=self.user_data.birthdate
+        )
 
-    @active_prop
-    def login(self):
-        return self.user_data.login
+    @property
+    def login(self) -> ActiveProperty[str, str]:
+        return ActiveProperty[str, str](name="login", value=self.user_data.login)
 
-    @active_prop
+    @property
     @connection_dependent
-    def ips(self):
+    def ips(self) -> ActiveProperty[str, str]:
         ips = sorted(ip for i in self.user_data.interfaces for ip in i.ips)
-        return ", ".join(ips)
+        return ActiveProperty[str, str](name="ips", value=", ".join(ips))
 
-    @active_prop
+    @property
     @connection_dependent
-    def mac(self):
-        return {'value': ", ".join(i.mac for i in self.user_data.interfaces),
-                'tmp_readonly': len(self.user_data.interfaces) > 1 or not self.has_property('network_access')}
-
-    # Empty setter for "edit" capability
-    @mac.setter
-    def mac(self, new_mac):
-        pass
+    def mac(self) -> ActiveProperty[str, str]:
+        macs = ", ".join(i.mac for i in self.user_data.interfaces)
+        return ActiveProperty[str, str](
+            name="mac",
+            value=macs,
+            capabilities=Capabilities.edit_if(len(self.user_data.interfaces) <= 1),
+        )
 
     def change_mac_address(self, new_mac, host_name):
-        # if this has been reached despite `tmp_readonly`, this is a bug.
         assert len(self.user_data.interfaces) == 1
 
         status, result = api.change_mac(self.user_data.id, self._tmp_password,
@@ -131,17 +137,19 @@ class User(BaseUser):
         elif status == 400:
             raise MacAlreadyExists
 
-    @active_prop
+    @property
     @connection_dependent
-    def network_access_active(self):
-        return {'value': len(self.user_data.interfaces) > 0,
-                'tmp_readonly': len(self.user_data.interfaces) > 0
-                                or not self.has_property('network_access')
-                                or self.user_data.room is None}
-
-    @network_access_active.setter
-    def network_access_active(self, value):
-        pass
+    def network_access_active(self) -> ActiveProperty[bool, bool]:
+        can_edit = (
+            self.user_data.room is not None
+            and self.has_property("network_access")
+            and not self.user_data.interfaces
+        )
+        return ActiveProperty[bool, bool](
+            name="network_access_active",
+            value=bool(self.user_data.interfaces),
+            capabilities=Capabilities.edit_if(can_edit),
+        )
 
     def activate_network_access(self, password, mac, birthdate, host_name):
         status, result = api.activate_network_access(self.user_data.id, password, mac,
@@ -180,10 +188,13 @@ class User(BaseUser):
         elif status != 200:
             raise UnknownError
 
-    @active_prop
-    def mail(self):
-        return {'value': self.user_data.mail,
-                'tmp_readonly': not self.has_property('mail')}
+    @property
+    def mail(self) -> ActiveProperty[str, str]:
+        return ActiveProperty[str, str](
+            name="mail",
+            value=self.user_data.mail,
+            capabilities=Capabilities.edit_if(self.has_property("mail")),
+        )
 
     @mail.setter
     def mail(self, new_mail):
@@ -195,53 +206,53 @@ class User(BaseUser):
         elif status == 404:
             raise UserNotFound
 
-    @active_prop
-    def mail_forwarded(self):
+    @property
+    def mail_forwarded(self) -> ActiveProperty[bool, str]:
         value = self.user_data.mail_forwarded
-        return {'raw_value': value,
-                'value': gettext('Aktiviert') if value else gettext('Nicht aktiviert'),
-                'tmp_readonly': not self.has_property('mail')}
+        return ActiveProperty[bool, str](
+            name="mail_forwarded",
+            raw_value=value,
+            value=gettext("Aktiviert") if value else gettext("Nicht aktiviert"),
+            capabilities=Capabilities.edit_if(self.has_property("mail")),
+        )
 
     @mail_forwarded.setter
     def mail_forwarded(self, value):
         self.user_data.mail_forwarded = value
 
     @property
-    def mail_confirmed(self):
+    def mail_confirmed(self) -> ActiveProperty[str, str]:
         confirmed = self.user_data.mail_confirmed
         editable = self.has_property('mail') and self.user_data.mail and not confirmed
         return ActiveProperty(
-                name='mail_confirmed',
-                value=gettext('Bestätigt') if confirmed else gettext('Nicht bestätigt'),
-                style='success' if confirmed else 'danger',
-                capabilities=Capabilities(edit=editable, delete=False))
+            name="mail_confirmed",
+            value=gettext("Bestätigt") if confirmed else gettext("Nicht bestätigt"),
+            style="success" if confirmed else "danger",
+            capabilities=Capabilities.edit_if(editable),
+        )
 
     def resend_confirm_mail(self) -> bool:
         return api.resend_confirm_email(self.user_data.id)
 
-    @active_prop
-    def address(self):
-        return self.user_data.room
-
-    @active_prop
-    def status(self):
-        value, style = self.evaluate_status(self.user_data.status)
-        return {'value': value, 'style': style}
-
-    @active_prop
-    def id(self):
-        return {'value': self.user_data.user_id}
-
-    @unsupported_prop
-    def hostname(self):
-        raise NotImplementedError
-
-    @unsupported_prop
-    def hostalias(self):
-        raise NotImplementedError
+    @property
+    def address(self) -> ActiveProperty[str | None, str]:
+        return ActiveProperty[str | None, str](
+            name="address",
+            value=self.user_data.room,
+        )
 
     @property
-    def userdb_status(self):
+    def status(self) -> ActiveProperty[str, str]:
+        value, style = self.evaluate_status(self.user_data.status)
+        return ActiveProperty[str, str](name="status", value=value, style=style)
+
+    @property
+    def id(self) -> ActiveProperty[str, str]:
+        return ActiveProperty[str, str](name="id", value=self.user_data.user_id)
+
+
+    @property
+    def userdb_status(self) -> ActiveProperty[str, str]:
         status = self.userdb.has_db
 
         capabilities = Capabilities(edit=True, delete=True)
@@ -267,15 +278,15 @@ class User(BaseUser):
                                   capabilities=capabilities)
 
     @property
-    def userdb(self):
+    def userdb(self) -> UserDB:
         return self._userdb
 
     @property
-    def has_connection(self):
+    def has_connection(self) -> bool:
         return True
 
     @property
-    def finance_information(self):
+    def finance_information(self) -> FinanceInformation:
         return FinanceInformation(
             balance=self.user_data.finance_balance,
             transactions=((parse_date(t.valid_on), t.amount, t.description) for t in
@@ -296,22 +307,20 @@ class User(BaseUser):
             ),
         )
 
-    def has_property(self, property):
+    def has_property(self, property: str) -> bool:
         return property in self.user_data.properties
 
-    @active_prop
-    def membership_end_date(self):
+    @property
+    def membership_end_date(self) -> ActiveProperty[date | None, date | None]:
         """Implicitly used in :py:meth:`evaluate_status`"""
-        return {'value': self.user_data.membership_end_date,
-                'tmp_readonly': not self.is_member}
-
-    # Empty setter for "edit" capability
-    @membership_end_date.setter
-    def membership_end_date(self, end_date):
-        pass
+        return ActiveProperty[date | None, date | None](
+            name="membership_end_date",
+            value=self.user_data.membership_end_date,
+            capabilities=Capabilities.edit_if(self.is_member),
+        )
 
     @property
-    def is_member(self):
+    def is_member(self) -> bool:
         return self.has_property('member')
 
     def evaluate_status(self, status: UserStatus):
@@ -347,15 +356,15 @@ class User(BaseUser):
 
         return message, style
 
-    @active_prop
-    def wifi_password(self):
-        return {'value': self.user_data.wifi_password,
-                'style': 'password' if self.user_data.wifi_password is not None else None,
-                'description_url': '../pages/service/wlan'}
-
-    @wifi_password.setter
-    def wifi_password(self, val):
-        raise NotImplementedError
+    @property
+    def wifi_password(self) -> ActiveProperty[str | None, str | None]:
+        return ActiveProperty(
+            name="wifi_password",
+            value=self.user_data.wifi_password,
+            style="password" if self.user_data.wifi_password is not None else None,
+            description_url="../pages/service/wlan",
+            capabilities=Capabilities(edit=True, delete=False),
+        )
 
     def reset_wifi_password(self):
         status, result = api.reset_wifi_password(self.user_data.id)
