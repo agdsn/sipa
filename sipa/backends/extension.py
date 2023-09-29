@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import operator
 from collections.abc import Callable
 from ipaddress import IPv4Address, AddressValueError
 from typing import NamedTuple, cast
@@ -91,34 +90,8 @@ class Backends:
     def __init__(self, available_datasources: list[DataSource]):
         #: Which datasources are available
         self.available_datasources = {d.name: d for d in available_datasources}
-        #: The datasources dict
-        self._datasources_: dict[str, DataSource] = {}
-        #: The dormitory dict
-        self._dormitories_: dict[str, Dormitory] = {}
         self.app: Flask = None
         self._pre_backends_init_hook: Callable[[Flask], None] = lambda app: None
-
-    @property
-    def _datasources(self):
-        import warnings
-
-        warnings.warn(
-            "Backends._datasources is deprecated. Use Backends.datasource",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._datasources_
-
-    @property
-    def _dormitories(self):
-        import warnings
-
-        warnings.warn(
-            "Backends._dormitories is deprecated. Build an alternative instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._dormitories_
 
     def init_app(self, app: Flask):
         """Register self to app and initialize datasources
@@ -149,7 +122,7 @@ class Backends:
         :raises InvalidConfiguration: if the name does not correspond to a
             registered datasource
         """
-        if name in self._datasources:
+        if hasattr(self, "datasource"):
             logger.warning(f"Datasource {name} already activated")
             return
 
@@ -161,29 +134,6 @@ class Backends:
             ) from None
 
         self.datasource = new_datasource
-        self._datasources[name] = new_datasource
-
-        # check for name collisions in the updated dormitories
-        new_dormitories = new_datasource.dormitories
-        if any(dorm.name in self._dormitories.keys()
-               for dorm in new_dormitories):
-            raise ValueError("Some dormitories of datasource Dormitory "
-                             "have a name already registered")
-        for dormitory in new_datasource.dormitories:
-            self._register_dormitory(dormitory)
-
-    def _register_dormitory(self, dormitory: Dormitory):
-        """Register a dormitory by putting it to the dict
-
-        :param dormitory: The dormitory to register
-        :raises: `ValueError` if a dormitory with this name is already
-            registered.
-        """
-        name = dormitory.name
-        if name in self._dormitories:
-            raise ValueError("Dormitory with name {} already exists"
-                             .format(name))
-        self._dormitories[name] = dormitory
 
     @property
     def pre_init_hook(self) -> Callable[[Callable], Callable]:  # Decorators are fun :-)
@@ -201,32 +151,15 @@ class Backends:
         backend specific flask extensions to the app might be done.
         """
         self._pre_backends_init_hook(self.app)
-
-        for datasource in self.datasources:
-            if datasource.init_context:
-                datasource.init_context(self.app)
+        if self.datasource.init_context:
+            self.datasource.init_context(self.app)
 
     # CENTRAL PROPERTIES
 
     @property
-    def datasources(self) -> list[DataSource]:
-        """A list of the currently registered datasources"""
-        return list(self._datasources.values())
-
-    @property
     def dormitories(self) -> list[Dormitory]:
         """A list of the currently registered dormitories"""
-        return list(self._dormitories.values())
-
-    # The logic is removed, but the interface is still used
-    premature_dormitories: list[Dormitory] = []
-
-    @property
-    def all_dormitories(self) -> list[Dormitory]:
-        """A list of the currently registered dormitories including
-        premature dormitories.
-        """
-        return self.dormitories + self.premature_dormitories
+        return self.datasource.dormitories
 
     # CONVENIENCE PROPERTIES
 
@@ -236,56 +169,14 @@ class Backends:
         return sorted(
             _dorm_summary(name=dormitory.name,
                           display_name=dormitory.display_name)
-            for dormitory in self.dormitories + self.premature_dormitories
-        )
-
-    @property
-    def supported_dormitories_short(self) -> list[_dorm_summary]:
-        """Return a list of supported dormitories as tuples instead of
-        objects
-        """
-        return sorted((
-            _dorm_summary(name=dormitory.name,
-                          display_name=dormitory.display_name)
             for dormitory in self.dormitories
-        ), key=operator.itemgetter(1))
+        )
 
     # LOOKUP METHODS
 
     def get_dormitory(self, name: str) -> Dormitory | None:
-        """Lookup the dormitory with name ``name``.
-
-        :param name: The dormitory's ``name``
-
-        :return: The dormitory object
-        """
-        for dormitory in self.all_dormitories:
-            if dormitory.name == name:
-                return dormitory
-        return None
-
-    def get_first_dormitory(self) -> Dormitory | None:
-        """Quick fix function to remove dorm selector on login.
-
-        :return: The dormitory object
-        """
-        for dormitory in self.all_dormitories:
-            return dormitory
-
-        return None
-
-
-    def get_datasource(self, name: str) -> DataSource | None:
-        """Lookup the datasource with name ``name``.
-
-        :param name: The datasource's ``name``
-
-        :return: The datasource object
-        """
-        for datasource in self.datasources:
-            if datasource.name == name:
-                return datasource
-        return None
+        """Lookup the dormitory with name ``name``."""
+        return self.datasource.get_dormitory(name)
 
     def dormitory_from_ip(self, ip: str) -> Dormitory | None:
         """Return the dormitory whose subnets contain ``ip``
@@ -294,15 +185,12 @@ class Backends:
 
         :return: The dormitory containing ``ip``
         """
+        # TODO push down to `DataSource`
         try:
             address = IPv4Address(str(ip))
         except AddressValueError:
-            pass
-        else:
-            for dormitory in self.dormitories:
-                if address in dormitory.subnets:
-                    return dormitory
-        return None
+            return None
+        return next((d for d in self.dormitories if address in d.subnets), None)
 
     def preferred_dormitory_name(self) -> str | None:
         """Return the name of the preferred dormitory based on the
@@ -324,16 +212,11 @@ class Backends:
         :return: The corresponding User in the sense of the
                  datasource.
         """
-        dormitory = self.dormitory_from_ip(ip)
-        if not dormitory:
+        # initial check: IP in known ranges?
+        if not self.dormitory_from_ip(ip):
             return AnonymousUserMixin()
 
-        datasource = dormitory.datasource
-        if datasource is None:
-            return AnonymousUserMixin()
-
-        return datasource.user_class.from_ip(ip)
-
+        return self.datasource.user_class.from_ip(ip)
 
 
 #: A namedtuple to improve readability of some return values

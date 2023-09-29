@@ -65,6 +65,10 @@ class DataSource:
         """A list of all registered dormitories."""
         return list(self._dormitories.values())
 
+    def get_dormitory(self, name) -> Dormitory | None:
+        """Get the dormitory with the given name."""
+        return self._dormitories.get(name)
+
     def init_context(self, app: Flask):
         """Initialize this backend
 

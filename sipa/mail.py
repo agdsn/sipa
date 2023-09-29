@@ -157,7 +157,7 @@ def send_contact_mail(author: str, subject: str, message: str,
 
     return send_complex_mail(
         author=author,
-        recipient=dormitory.datasource.support_mail,
+        recipient=backends.datasource.support_mail,
         subject=subject,
         message=message,
         tag="Kontakt",
