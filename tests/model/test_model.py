@@ -18,9 +18,9 @@ from sipa.backends import Backends, DataSource, Dormitory, InitContextCallable
 class TestBackendInitializationCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.app = Flask('sipa')
-        self.app.config['BACKENDS'] = ['foo']
-        self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        self.app = Flask("sipa")
+        self.app.config["BACKEND"] = "foo"
+        self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
         datasource = DataSource(
             name='foo',
             user_class=object,
@@ -33,8 +33,7 @@ class TestBackendInitializationCase(TestCase):
         Dormitory(name='test', display_name="",
                   datasource=datasource, subnets=[IPv4Network('127.0.0.0/8')])
 
-        self.backends = Backends()
-        self.backends.register(datasource)
+        self.backends = Backends([datasource])
         self.backends.init_app(self.app)
         self.backends.init_backends()
 

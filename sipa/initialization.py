@@ -11,12 +11,13 @@ from flask_qrcode import QRcode
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from sipa.babel import possible_locales, save_user_locale_setting, select_locale
+from sipa.backends import Backends
 from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
 from sipa.forms import render_links
-from sipa.model import build_backends_ext
+from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import url_self, support_hotline_available, meetingcal
@@ -51,7 +52,7 @@ def init_app(app, **kwargs):
     app.session_interface = SeparateLocaleCookieSessionInterface()
     cf_pages = CategorizedFlatPages()
     cf_pages.init_app(app)
-    backends = build_backends_ext()
+    backends = Backends(available_datasources=AVAILABLE_DATASOURCES)
     backends.init_app(app)
     QRcode(app)
 

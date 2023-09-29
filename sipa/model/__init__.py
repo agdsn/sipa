@@ -12,12 +12,3 @@ AVAILABLE_DATASOURCES = [
     sample.datasource,
     pycroft.datasource
 ]
-
-
-def build_backends_ext() -> Backends:
-    backends = Backends()
-    for d in AVAILABLE_DATASOURCES:
-        backends.register(d)
-
-    # pre_init_hook is designed to be a decorator, so this may look weird.
-    return backends

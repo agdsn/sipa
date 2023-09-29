@@ -15,7 +15,7 @@ LOCALE_COOKIE_MAX_AGE = 86400 * 31
 # Maximum number of reverse proxies
 NUM_PROXIES = 1
 
-BACKENDS = ['pycroft']
+BACKEND = "pycroft"
 
 FLATPAGES_ROOT = None
 FLATPAGES_EXTENSION = '.md'

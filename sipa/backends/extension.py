@@ -69,10 +69,9 @@ class Backends:
     >>> app = Flask('appname')
     >>> datasource = DataSource(name='name1', user_class=object,
     >>>                         mail_server='srv')
-    >>> backends = Backends()
-    >>> backends.register(datasource)
+    >>> backends = Backends(available_datasources=[datasource])
     >>> backends.init_app(app)
-    >>> app.config['BACKENDS'] = ['name1']
+    >>> app.config['BACKEND'] = 'name1'
     >>> # further initialization…
     >>> backends.init_backends()  # call each backend's init method
     >>> app.run()
@@ -88,12 +87,15 @@ class Backends:
       (similiar to current_user)
 
     """
-    def __init__(self):
+
+    def __init__(self, available_datasources: list[DataSource]):
         #: Which datasources are available
-        self.available_datasources: dict[str, DataSource] = {}
+        self.available_datasources = {d.name: d for d in available_datasources}
         #: The datasources dict
+        # TODO replace by single `datasource`
         self._datasources: dict[str, DataSource] = {}
         #: The dormitory dict
+        # TODO remove
         self._dormitories: dict[str, Dormitory] = {}
         self.app: Flask = None
         self._pre_backends_init_hook: Callable[[Flask], None] = lambda app: None
@@ -109,21 +111,13 @@ class Backends:
         app.extensions['backends'] = self
         self.app = app
 
-        backends_to_enable = app.config.get('BACKENDS')
-        if not backends_to_enable:
-            logger.warning('No backends configured')
-            return
-
-        for backend_name in backends_to_enable:
-            self._activate_datasource(backend_name)
-
-    def register(self, datasource: DataSource):
-        # TODO: annotate the return type as Backend → Backend
-
-        if datasource.name in self.available_datasources:
-            raise InvalidConfiguration(f"Datasource name {datasource.name}"
-                                       f" is used multiple times")
-        self.available_datasources[datasource.name] = datasource
+        if "BACKENDS" in app.config:
+            logger.warning(
+                "BACKENDS is deprecated. Use BACKEND instead. "
+                "Multiple backends at the same time is unsupported."
+            )
+        backend_name = app.config["BACKEND"]
+        self._activate_datasource(backend_name)
 
     def _activate_datasource(self, name: str):
         """Activate a datasource by name.

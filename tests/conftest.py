@@ -42,4 +42,4 @@ def bare_app() -> Flask:
 @pytest.fixture(scope="session")
 def app() -> Flask:
     """App with `sample` backend"""
-    return make_testing_app(DEFAULT_TESTING_CONFIG | {"BACKENDS": ["sample"]})
+    return make_testing_app(DEFAULT_TESTING_CONFIG | {"BACKEND": "sample"})

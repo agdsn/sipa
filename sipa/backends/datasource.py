@@ -83,6 +83,7 @@ class DataSource:
         :param Flask app: the app to initialize against
         """
         # copy the dict so we can freely ``pop`` things
+        # TODO deprecate `BACKENDS_CONFIG`
         config = app.config.get('BACKENDS_CONFIG', {}).get(self.name, {}).copy()
 
         try:

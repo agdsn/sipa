@@ -41,7 +41,7 @@ def test_index_reachable(client: TestClient):
 
 
 def test_correct_backend(app: Flask):
-    assert app.config["BACKENDS"] == ["sample"]
+    assert app.config["BACKEND"] == "sample"
 
 
 @pytest.mark.usefixtures("user_logged_in")

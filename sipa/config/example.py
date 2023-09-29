@@ -13,7 +13,7 @@
 # The datasources to use.  Must be a list of strings being the name of
 # an implemented datasource.  The list of available datasources is
 # defined at the top of `model.__init__`.
-# BACKENDS = ['hss', 'sample', 'pycroft', …]
+# BACKEND = "pycroft"  # (or "sample")
 
 # Datasource-specific config
 # For each backend, you can set a config dict.

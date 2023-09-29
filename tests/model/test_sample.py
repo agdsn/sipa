@@ -9,7 +9,7 @@ from ..fixture_helpers import make_testing_app
 
 @pytest.fixture(scope="module")
 def app():
-    return make_testing_app(config={"BACKENDS": ["sample"]})
+    return make_testing_app(config={"BACKEND": "sample"})
 
 
 @pytest.fixture(scope="module")
