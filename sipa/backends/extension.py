@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from ipaddress import IPv4Address, AddressValueError
 from typing import NamedTuple, cast
 
 from flask import request, current_app, Flask
@@ -150,18 +149,8 @@ class Backends:
         return self.datasource.get_dormitory(name)
 
     def dormitory_from_ip(self, ip: str) -> Dormitory | None:
-        """Return the dormitory whose subnets contain ``ip``
-
-        :param ip: The ip
-
-        :return: The dormitory containing ``ip``
-        """
-        # TODO push down to `DataSource`
-        try:
-            address = IPv4Address(str(ip))
-        except AddressValueError:
-            return None
-        return next((d for d in self.dormitories if address in d.subnets), None)
+        """Return the dormitory whose subnets contain ``ip``"""
+        return self.datasource.dormitory_from_ip(ip)
 
     def preferred_dormitory_name(self) -> str | None:
         """Return the name of the preferred dormitory based on the

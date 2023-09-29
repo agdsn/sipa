@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from ipaddress import IPv4Network, IPv4Address
+from ipaddress import IPv4Network, IPv4Address, AddressValueError
 
 from flask import Flask
 
@@ -68,6 +68,19 @@ class DataSource:
     def get_dormitory(self, name) -> Dormitory | None:
         """Get the dormitory with the given name."""
         return self._dormitories.get(name)
+
+    def dormitory_from_ip(self, ip: str) -> Dormitory | None:
+        """Return the dormitory whose subnets contain ``ip``
+
+        :param ip: The ip
+
+        :return: The dormitory containing ``ip``
+        """
+        try:
+            address = IPv4Address(str(ip))
+        except AddressValueError:
+            return None
+        return next((d for d in self.dormitories if address in d.subnets), None)
 
     def init_context(self, app: Flask):
         """Initialize this backend
