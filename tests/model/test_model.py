@@ -13,6 +13,7 @@ import pytest
 from flask import Flask
 
 from sipa.backends import Backends, DataSource, Dormitory, InitContextCallable
+from sipa.backends.datasource import SubnetCollection
 
 
 class TestBackendInitializationCase(TestCase):
@@ -22,7 +23,9 @@ class TestBackendInitializationCase(TestCase):
         self.app.config["BACKEND"] = "foo"
         self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
         dormitory = Dormitory(
-            name="test", display_name="", subnets=[IPv4Network("127.0.0.0/8")]
+            name="test",
+            display_name="",
+            subnets=SubnetCollection([IPv4Network("127.0.0.0/8")]),
         )
         datasource = DataSource(
             name='foo',
