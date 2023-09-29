@@ -135,6 +135,9 @@ class SubnetCollection:
         return xor_hashes(*self.subnets)
 
 
+# used for two things:
+# 1. determining whether the source IP belongs to a pycroft user
+# 2. suggesting a default dormitory name based on an IP
 class Dormitory:
     """A dormitory as selectable on the login page."""
 

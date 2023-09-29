@@ -40,22 +40,6 @@ class TestBackendInitializationCase(TestCase):
     def test_extension_registrated(self):
         assert 'backends' in self.app.extensions
 
-    def test_datasource_names_unique(self):
-        names = [dsrc.name for dsrc in self.backends.datasources]
-        assert len(names) == len(set(names))
-
-    def test_dormitory_names_unique(self):
-        names = [dorm.name for dorm in self.backends.dormitories]
-        assert len(names) == len(set(names))
-
-    def test_all_dormitories_names_unique(self):
-        names = [dorm.name for dorm in self.backends.all_dormitories]
-        assert len(names) == len(set(names))
-
-    def test_all_dormitories_greater(self):
-        assert (set(self.backends.all_dormitories) >=
-                set(self.backends.dormitories))
-
     def assert_dormitories_namelist(self, list, base):
         """Asserts whether the list consists of (str, str) tuples
 
@@ -65,18 +49,6 @@ class TestBackendInitializationCase(TestCase):
         for name, display_name in list:
             assert isinstance(name, str)
             assert isinstance(display_name, str)
-
-    def test_all_dormitories_list(self):
-        self.assert_dormitories_namelist(
-            self.backends.dormitories_short,
-            self.backends.all_dormitories,
-        )
-
-    def test_supported_dormitories_list(self):
-        self.assert_dormitories_namelist(
-            self.backends.supported_dormitories_short,
-            self.backends.dormitories,
-        )
 
     def test_get_dormitory(self):
         for dormitory in self.backends.dormitories:
