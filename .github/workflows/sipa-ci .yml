@@ -23,7 +23,7 @@ jobs:
       - name: Build the Docker image
         run: docker build -t sipa:latest .
       - name: Login to GitLab Registry
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v1
         with:
           registry: registry.agdsn.de
           username: "github-actions"
@@ -41,7 +41,7 @@ jobs:
           submodules: recursive
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
           cache: 'pip'
       - name: print information about pip cache
         run: pip cache info && pip cache list
