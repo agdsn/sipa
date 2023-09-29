@@ -5,7 +5,7 @@ from collections.abc import Callable
 from ipaddress import IPv4Address, AddressValueError
 from typing import NamedTuple, cast
 
-from flask import request, session, current_app, Flask
+from flask import request, current_app, Flask
 from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 
@@ -335,17 +335,16 @@ class Backends:
         return datasource.user_class.from_ip(ip)
 
     # PROXIES
-
-    def current_dormitory(self) -> Dormitory | None:
-        """Read the current dormitory from the session"""
-        return self.get_dormitory(session['dormitory'])
-
     def current_datasource(self) -> DataSource | None:
         """Read the current datasource from the session"""
-        dormitory = self.current_dormitory()
-        if dormitory:
-            return dormitory.datasource
-        return None
+        import warnings
+
+        warnings.warn(
+            "Backends.current_datasource is deprecated. Use Backends.datasource",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.datasource
 
 
 #: A namedtuple to improve readability of some return values
