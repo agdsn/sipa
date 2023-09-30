@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from ipaddress import IPv4Network, IPv4Address, AddressValueError
 
 from flask import Flask
 
-from sipa.utils import argstr, compare_all_attributes, xor_hashes
+from sipa.utils import compare_all_attributes, xor_hashes
 from .logging import logger
 from .types import UserLike
 
@@ -118,27 +118,14 @@ class DataSource:
             return self._init_context(app)
 
 
+@dataclass(frozen=True)
 class SubnetCollection:
     """A simple class for combining multiple IPv4Networks.
 
     Provides __contains__ functionality for IPv4Addresses.
     """
 
-    def __init__(self, subnets: list[IPv4Network]) -> None:
-        if isinstance(subnets, list):
-            for subnet in subnets:
-                if not isinstance(subnet, IPv4Network):
-                    raise TypeError("List of IPv4Network objects expected "
-                                    "in SubnetCollection.__init__")
-        else:
-            raise TypeError("List expected in SubnetCollection.__init__")
-
-        self.subnets = subnets
-
-    def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            subnets=self.subnets,
-        ))
+    subnets: list[IPv4Network] = field(default_factory=list)
 
     # hint should be replaced with typing info from stub
     def __contains__(self, address: IPv4Address):
@@ -146,12 +133,6 @@ class SubnetCollection:
             if address in subnet:
                 return True
         return False
-
-    def __eq__(self, other):
-        return compare_all_attributes(self, other, ['subnets'])
-
-    def __hash__(self):
-        return xor_hashes(*self.subnets)
 
 
 # used for two things:
@@ -163,5 +144,5 @@ class Dormitory:
 
     name: str
     display_name: str
-    subnets: SubnetCollection = SubnetCollection([])
+    subnets: SubnetCollection = SubnetCollection()
 
