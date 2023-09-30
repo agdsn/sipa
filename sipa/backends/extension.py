@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import NamedTuple, cast
 
 from flask import request, current_app, Flask
@@ -61,7 +60,6 @@ class Backends:
         #: Which datasources are available
         self.available_datasources = {d.name: d for d in available_datasources}
         self.app: Flask = None
-        self._pre_backends_init_hook: Callable[[Flask], None] = lambda app: None
 
     def init_app(self, app: Flask):
         """Register self to app and initialize datasources
@@ -105,12 +103,6 @@ class Backends:
 
         self.datasource = new_datasource
 
-    @property
-    def pre_init_hook(self) -> Callable[[Callable], Callable]:  # Decorators are fun :-)
-        def decorator(f):
-            self._pre_backends_init_hook = f
-        return decorator
-
     def init_backends(self):
         """Initialize the activated backends
 
@@ -120,7 +112,6 @@ class Backends:
         In there, things like setting up a pg session or registering
         backend specific flask extensions to the app might be done.
         """
-        self._pre_backends_init_hook(self.app)
         if self.datasource.init_context:
             self.datasource.init_context(self.app)
 
