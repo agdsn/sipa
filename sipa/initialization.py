@@ -11,12 +11,13 @@ from flask_qrcode import QRcode
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from sipa.babel import possible_locales, save_user_locale_setting, select_locale
+from sipa.backends import Backends
 from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
 from sipa.forms import render_links
-from sipa.model import build_backends_ext
+from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import url_self, support_hotline_available, meetingcal
@@ -51,7 +52,7 @@ def init_app(app, **kwargs):
     app.session_interface = SeparateLocaleCookieSessionInterface()
     cf_pages = CategorizedFlatPages()
     cf_pages.init_app(app)
-    backends = build_backends_ext()
+    backends = Backends(available_datasources=AVAILABLE_DATASOURCES)
     backends.init_app(app)
     QRcode(app)
 
@@ -81,7 +82,7 @@ def init_app(app, **kwargs):
         get_attribute_endpoint=get_attribute_endpoint,
         should_display_traffic_data=should_display_traffic_data,
         traffic_chart=provide_render_function(generate_traffic_chart),
-        current_datasource=backends.current_datasource,
+        current_datasource=lambda: backends.datasource,
         form_label_width_class=f"col-sm-{form_label_width}",
         form_input_width_class=f"col-sm-{form_input_width}",
         form_input_offset_class=f"col-sm-offset-{form_label_width}",
@@ -96,8 +97,6 @@ def init_app(app, **kwargs):
     app.add_template_filter(render_links)
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
-
-    backends.init_backends()
 
 
 def inject_hotline_status():

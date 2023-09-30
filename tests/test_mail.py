@@ -342,7 +342,7 @@ class ContactMailTestCase(MailSendingTestBase):
         self.dorm_display_name = "Testdormitory"
         self.backends_mock.get_dormitory('test').display_name = self.dorm_display_name
         self.dorm_mail = "support@foo.bar"
-        self.backends_mock.get_dormitory('test').datasource.support_mail = self.dorm_mail
+        self.backends_mock.datasource.support_mail = self.dorm_mail
 
         # the setup of the parent class comes later because this
         # prepares the `mail_function` call

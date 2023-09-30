@@ -124,15 +124,12 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        # dormitory = backends.get_dormitory(form.dormitory.data)
-        # Quick fix function to remove dorm selector on login.
-        dormitory = backends.get_first_dormitory()
         username = form.username.data
         password = form.password.data
         remember = form.remember.data
-        User = dormitory.datasource.user_class
+        User = backends.datasource.user_class
 
-        valid_suffix = f"@{dormitory.datasource.mail_server}"
+        valid_suffix = f"@{backends.datasource.mail_server}"
 
         if username.endswith(valid_suffix):
             username = username[:-len(valid_suffix)]
@@ -153,7 +150,6 @@ def login():
             flash(gettext("Anmeldedaten fehlerhaft!"), "error")
         else:
             if isinstance(user, User):
-                session['dormitory'] = dormitory.name
                 login_user(user, remember=remember)
                 logger.info('Authentication successful',
                             extra={'tags': {'user': username}})
@@ -166,8 +162,7 @@ def login():
         # injection using the `next` parameter
         return redirect(url_for('usersuite.index'))
 
-    return render_template('login.html', form=form,
-                           unsupported=backends.premature_dormitories)
+    return render_template("login.html", form=form)
 
 
 @bp_generic.route("/logout")

@@ -8,33 +8,5 @@
     <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info" style="padding: 5px 10px;">
         <a href="{{ url_for('generic.request_password_reset') }}">{{ _("Passwort vergessen?") }}</a>
     </div>
-    <div class="{{ form_input_offset_class }} {{ form_input_width_class }} alert alert-info hidden" id="extern">
-        {{ _('Dieses Wohnheim erreichst du hier:') }} <a id="link" href="#"></a>
-    </div>
 {% endcall %}
 {% endblock %}
-
-{% block custom_script -%}
-<script type="text/javascript">
-    $("#dormitory").change(function(){
-        unsupported = {
-            {% for dorm in unsupported -%}
-                {{ dorm.name }}: ["{{ dorm.display_name }}", "{{ dorm.datasource.website_url }}"],
-            {%- endfor %}
-        }
-        selected = $("select#dormitory").find(":selected").prop("value")
-        if (selected in unsupported) {
-            $("#loginform form input.form-control, #loginform form input[type=checkbox]").prop(
-                "disabled", true);
-            $("#loginform #extern>a#link").prop("href", unsupported[selected][1]);
-            $("#loginform #extern>a#link").html(unsupported[selected][0]);
-            $("#loginform #extern").removeClass("hidden");
-        } else {
-            $("#loginform form input.form-control, #loginform form input[type=checkbox]").prop(
-                "disabled", false)
-            $("#loginform #extern").addClass("hidden")
-        }
-    });
-    $("#dormitory").on("load", function() {}).triggerHandler("change")
-</script>
-{%- endblock %}

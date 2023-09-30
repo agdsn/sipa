@@ -13,49 +13,33 @@ import pytest
 from flask import Flask
 
 from sipa.backends import Backends, DataSource, Dormitory, InitContextCallable
+from sipa.backends.datasource import SubnetCollection
 
 
 class TestBackendInitializationCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.app = Flask('sipa')
-        self.app.config['BACKENDS'] = ['foo']
-        self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        self.app = Flask("sipa")
+        self.app.config["BACKEND"] = "foo"
+        self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        dormitory = Dormitory(
+            name="test",
+            display_name="",
+            subnets=SubnetCollection([IPv4Network("127.0.0.0/8")]),
+        )
         datasource = DataSource(
             name='foo',
             user_class=object,
             mail_server="",
             webmailer_url="",
             support_mail="",
-            init_context=lambda app: None
+            dormitories=[dormitory],
         )
-
-        Dormitory(name='test', display_name="",
-                  datasource=datasource, subnets=[IPv4Network('127.0.0.0/8')])
-
-        self.backends = Backends()
-        self.backends.register(datasource)
+        self.backends = Backends([datasource])
         self.backends.init_app(self.app)
-        self.backends.init_backends()
 
     def test_extension_registrated(self):
         assert 'backends' in self.app.extensions
-
-    def test_datasource_names_unique(self):
-        names = [dsrc.name for dsrc in self.backends.datasources]
-        assert len(names) == len(set(names))
-
-    def test_dormitory_names_unique(self):
-        names = [dorm.name for dorm in self.backends.dormitories]
-        assert len(names) == len(set(names))
-
-    def test_all_dormitories_names_unique(self):
-        names = [dorm.name for dorm in self.backends.all_dormitories]
-        assert len(names) == len(set(names))
-
-    def test_all_dormitories_greater(self):
-        assert (set(self.backends.all_dormitories) >=
-                set(self.backends.dormitories))
 
     def assert_dormitories_namelist(self, list, base):
         """Asserts whether the list consists of (str, str) tuples
@@ -66,18 +50,6 @@ class TestBackendInitializationCase(TestCase):
         for name, display_name in list:
             assert isinstance(name, str)
             assert isinstance(display_name, str)
-
-    def test_all_dormitories_list(self):
-        self.assert_dormitories_namelist(
-            self.backends.dormitories_short,
-            self.backends.all_dormitories,
-        )
-
-    def test_supported_dormitories_list(self):
-        self.assert_dormitories_namelist(
-            self.backends.supported_dormitories_short,
-            self.backends.dormitories,
-        )
 
     def test_get_dormitory(self):
         for dormitory in self.backends.dormitories:
@@ -116,16 +88,17 @@ class TestDataSource:
             'name': 'test',
             'user_class': object,
             'mail_server': "",
+            "dormitories": [],
         }
 
     def test_init_context_gets_called_correctly(self, default_args, app):
         init_mock = cast(InitContextCallable, MagicMock())
         datasource = DataSource(
             **default_args,
-            init_context=init_mock,
+            init_app=init_mock,
         )
 
-        datasource.init_context(app)
+        datasource.init_app(app)
         assert init_mock.call_args[0] == (app,)
 
     @pytest.fixture(scope="function")
@@ -136,7 +109,7 @@ class TestDataSource:
         config = {"support_mail": "bazingle.foo@shizzle.xxx"}
         app.config["BACKENDS_CONFIG"] = {datasource.name: config}
 
-        datasource.init_context(app)
+        datasource.init_app(app)
 
         assert datasource.support_mail == config["support_mail"]
 
@@ -149,7 +122,7 @@ class TestDataSource:
         app.config["BACKENDS_CONFIG"] = {datasource.name: bad_config}
 
         caplog.set_level(logging.WARNING, logger="sipa.backend")
-        datasource.init_context(app)
+        datasource.init_app(app)
 
         for record in caplog.records:
             assert re.match(RE_UNKNOWN_KEY, record.message)

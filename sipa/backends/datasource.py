@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from ipaddress import IPv4Network, IPv4Address
+from dataclasses import dataclass, field
+from ipaddress import IPv4Network, IPv4Address, AddressValueError
 
 from flask import Flask
 
-from sipa.utils import argstr, compare_all_attributes, xor_hashes
+from sipa.utils import compare_all_attributes, xor_hashes
 from .logging import logger
 from .types import UserLike
 
@@ -18,10 +19,17 @@ class DataSource:
     This class provides information about the backend you defined, for
     instance the user class.
     """
-    def __init__(self, name: str, user_class: type[UserLike], mail_server: str,
-                 webmailer_url: str = None,
-                 support_mail: str = None,
-                 init_context: InitContextCallable = None) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        user_class: type[UserLike],
+        dormitories: list[Dormitory],
+        mail_server: str,
+        webmailer_url: str = None,
+        support_mail: str = None,
+        init_app: InitContextCallable = None,
+    ) -> None:
         super().__init__()
 
         #: Holds the name of this datasource.  Must be unique among
@@ -33,14 +41,14 @@ class DataSource:
         #: the user_class used in the sense of ``flask_login``.
         self.user_class: type[UserLike] = _user_class
 
+        self._dormitories = {d.name: d for d in dormitories}
         #: The mail server to be appended to a user's login in order
         #: to construct the mail address.
         self.mail_server = mail_server
         self.webmailer_url = webmailer_url
         self.support_mail = (support_mail if support_mail
                              else f"support@{mail_server}")
-        self._init_context = init_context
-        self._dormitories: dict[str, Dormitory] = {}
+        self._init_app = init_app
 
     def __eq__(self, other):
         return compare_all_attributes(self, other, ['name'])
@@ -54,18 +62,29 @@ class DataSource:
     def __hash__(self):
         return xor_hashes(self.name, self.user_class, self.support_mail, self.mail_server)
 
-    def register_dormitory(self, dormitory: Dormitory):
-        name = dormitory.name
-        if name in self._dormitories:
-            raise ValueError("Dormitory {} already registered", name)
-        self._dormitories[name] = dormitory
-
     @property
     def dormitories(self) -> list[Dormitory]:
         """A list of all registered dormitories."""
         return list(self._dormitories.values())
 
-    def init_context(self, app: Flask):
+    def get_dormitory(self, name) -> Dormitory | None:
+        """Get the dormitory with the given name."""
+        return self._dormitories.get(name)
+
+    def dormitory_from_ip(self, ip: str) -> Dormitory | None:
+        """Return the dormitory whose subnets contain ``ip``
+
+        :param ip: The ip
+
+        :return: The dormitory containing ``ip``
+        """
+        try:
+            address = IPv4Address(str(ip))
+        except AddressValueError:
+            return None
+        return next((d for d in self.dormitories if address in d.subnets), None)
+
+    def init_app(self, app: Flask):
         """Initialize this backend
 
             - Apply the custom configuration of
@@ -83,6 +102,7 @@ class DataSource:
         :param Flask app: the app to initialize against
         """
         # copy the dict so we can freely ``pop`` things
+        # TODO deprecate `BACKENDS_CONFIG`
         config = app.config.get('BACKENDS_CONFIG', {}).get(self.name, {}).copy()
 
         try:
@@ -94,31 +114,18 @@ class DataSource:
             logger.warning("Ignoring unknown key '%s'", key,
                            extra={'data': {'config': config}})
 
-        if self._init_context:
-            return self._init_context(app)
+        if self._init_app:
+            return self._init_app(app)
 
 
+@dataclass(frozen=True)
 class SubnetCollection:
     """A simple class for combining multiple IPv4Networks.
 
     Provides __contains__ functionality for IPv4Addresses.
     """
 
-    def __init__(self, subnets: list[IPv4Network]) -> None:
-        if isinstance(subnets, list):
-            for subnet in subnets:
-                if not isinstance(subnet, IPv4Network):
-                    raise TypeError("List of IPv4Network objects expected "
-                                    "in SubnetCollection.__init__")
-        else:
-            raise TypeError("List expected in SubnetCollection.__init__")
-
-        self.subnets = subnets
-
-    def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            subnets=self.subnets,
-        ))
+    subnets: list[IPv4Network] = field(default_factory=list)
 
     # hint should be replaced with typing info from stub
     def __contains__(self, address: IPv4Address):
@@ -127,37 +134,15 @@ class SubnetCollection:
                 return True
         return False
 
-    def __eq__(self, other):
-        return compare_all_attributes(self, other, ['subnets'])
 
-    def __hash__(self):
-        return xor_hashes(*self.subnets)
-
-
+# used for two things:
+# 1. determining whether the source IP belongs to a pycroft user
+# 2. suggesting a default dormitory name based on an IP
+@dataclass(frozen=True)
 class Dormitory:
     """A dormitory as selectable on the login page."""
 
-    def __init__(self, name: str, display_name: str, datasource: DataSource,
-                 subnets=None) -> None:
-        self.name = name
-        self.display_name = display_name
-        self.datasource = datasource
-        # TODO rework dormitory registration (make it safe)
-        # Add a `Backends` binding to `Datasource` and check global dorm
-        # existence when calling `register_dormitory`
-        datasource.register_dormitory(self)
-        self.subnets = SubnetCollection(subnets if subnets else [])
+    name: str
+    display_name: str
+    subnets: SubnetCollection = SubnetCollection()
 
-    def __repr__(self):
-        return "{}.{}({})".format(__name__, type(self).__name__, argstr(
-            name=self.name,
-            display_name=self.display_name,
-            datasource=self.datasource,
-            subnets=self.subnets.subnets,
-        ))
-
-    def __eq__(self, other):
-        return compare_all_attributes(self, other, ['name', 'datasource'])
-
-    def __hash__(self):
-        return xor_hashes(self.name, self.display_name, self.datasource, self.subnets)
