@@ -28,7 +28,7 @@ class DataSource:
         mail_server: str,
         webmailer_url: str = None,
         support_mail: str = None,
-        init_context: InitContextCallable = None,
+        init_app: InitContextCallable = None,
     ) -> None:
         super().__init__()
 
@@ -48,7 +48,7 @@ class DataSource:
         self.webmailer_url = webmailer_url
         self.support_mail = (support_mail if support_mail
                              else f"support@{mail_server}")
-        self._init_context = init_context
+        self._init_app = init_app
 
     def __eq__(self, other):
         return compare_all_attributes(self, other, ['name'])
@@ -84,7 +84,7 @@ class DataSource:
             return None
         return next((d for d in self.dormitories if address in d.subnets), None)
 
-    def init_context(self, app: Flask):
+    def init_app(self, app: Flask):
         """Initialize this backend
 
             - Apply the custom configuration of
@@ -114,8 +114,8 @@ class DataSource:
             logger.warning("Ignoring unknown key '%s'", key,
                            extra={'data': {'config': config}})
 
-        if self._init_context:
-            return self._init_context(app)
+        if self._init_app:
+            return self._init_app(app)
 
 
 @dataclass(frozen=True)

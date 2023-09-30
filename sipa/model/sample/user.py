@@ -34,7 +34,7 @@ class SampleUserData(t.TypedDict):
     is_member: bool
 
 
-def init_context(app):
+def init_app(app):
     app.extensions['sample_users'] = {
         'test': {
             'name': 'Test User',

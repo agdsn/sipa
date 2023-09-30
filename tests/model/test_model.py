@@ -33,7 +33,6 @@ class TestBackendInitializationCase(TestCase):
             mail_server="",
             webmailer_url="",
             support_mail="",
-            init_context=lambda app: None,
             dormitories=[dormitory],
         )
         self.backends = Backends([datasource])
@@ -96,10 +95,10 @@ class TestDataSource:
         init_mock = cast(InitContextCallable, MagicMock())
         datasource = DataSource(
             **default_args,
-            init_context=init_mock,
+            init_app=init_mock,
         )
 
-        datasource.init_context(app)
+        datasource.init_app(app)
         assert init_mock.call_args[0] == (app,)
 
     @pytest.fixture(scope="function")
@@ -110,7 +109,7 @@ class TestDataSource:
         config = {"support_mail": "bazingle.foo@shizzle.xxx"}
         app.config["BACKENDS_CONFIG"] = {datasource.name: config}
 
-        datasource.init_context(app)
+        datasource.init_app(app)
 
         assert datasource.support_mail == config["support_mail"]
 
@@ -123,7 +122,7 @@ class TestDataSource:
         app.config["BACKENDS_CONFIG"] = {datasource.name: bad_config}
 
         caplog.set_level(logging.WARNING, logger="sipa.backend")
-        datasource.init_context(app)
+        datasource.init_app(app)
 
         for record in caplog.records:
             assert re.match(RE_UNKNOWN_KEY, record.message)

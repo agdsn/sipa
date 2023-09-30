@@ -9,7 +9,7 @@ datasource = DataSource(
     name='sample',
     user_class=user.User,
     mail_server="test.agdsn.de",
-    init_context=user.init_context,
+    init_app=user.init_app,
     dormitories=[
         Dormitory(
             name="localhost",

@@ -87,8 +87,8 @@ class Backends:
                 f"{backend_name} is not an available datasource"
             ) from None
         self.datasource = new_datasource
-        if self.datasource.init_context:
-            self.datasource.init_context(self.app)
+        if self.datasource.init_app:
+            self.datasource.init_app(self.app)
 
     # CENTRAL PROPERTIES
 

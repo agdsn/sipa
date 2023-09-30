@@ -20,7 +20,7 @@ def init_userdb(app):
     userdb.register_userdb_extension(app)
 
 
-def init_context(app):
+def init_app(app):
     init_pycroft_api(app)
     init_userdb(app)
 
@@ -31,7 +31,7 @@ datasource = DataSource(
     mail_server="agdsn.me",
     support_mail="support@agdsn.de",
     webmailer_url="https://mail.agdsn.de",
-    init_context=init_context,
+    init_app=init_app,
     dormitories=[
         Dormitory(
             name=name,
