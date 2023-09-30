@@ -37,11 +37,9 @@ class Backends:
     >>> app = Flask('appname')
     >>> datasource = DataSource(name='name1', user_class=object,
     >>>                         mail_server='srv')
+    >>> app.config['BACKEND'] = 'name1'
     >>> backends = Backends(available_datasources=[datasource])
     >>> backends.init_app(app)
-    >>> app.config['BACKEND'] = 'name1'
-    >>> # further initialization…
-    >>> backends.init_backends()  # call each backend's init method
     >>> app.run()
 
     This class provides methods concerning:
@@ -60,6 +58,7 @@ class Backends:
         #: Which datasources are available
         self.available_datasources = {d.name: d for d in available_datasources}
         self.app: Flask = None
+        self.datasource: DataSource = None
 
     def init_app(self, app: Flask):
         """Register self to app and initialize datasources
@@ -69,6 +68,9 @@ class Backends:
 
         :param app: The flask app object to register against
         """
+        if "backends" in app.extensions:
+            logger.warning("Backends extension already initialized. Skipping.")
+            return
         app.extensions['backends'] = self
         self.app = app
 
@@ -78,41 +80,13 @@ class Backends:
                 "Multiple backends at the same time is unsupported."
             )
         backend_name = app.config["BACKEND"]
-        self._activate_datasource(backend_name)
-        self.init_backends()
-
-    def _activate_datasource(self, name: str):
-        """Activate a datasource by name.
-
-        First, find the name in the available datasources' names, warn
-        on inconsistencies.  If found, add the `name: datasource` pair
-        to the private dict.
-
-        :raises InvalidConfiguration: if the name does not correspond to a
-            registered datasource
-        """
-        if hasattr(self, "datasource"):
-            logger.warning(f"Datasource {name} already activated")
-            return
-
         try:
-            new_datasource = self.available_datasources[name]
+            new_datasource = self.available_datasources[backend_name]
         except KeyError:
             raise InvalidConfiguration(
-                f"{name} is not an available datasource"
+                f"{backend_name} is not an available datasource"
             ) from None
-
         self.datasource = new_datasource
-
-    def init_backends(self):
-        """Initialize the activated backends
-
-        This is the method that does the actual initialization.  It
-        calls each :py:class:`DataSource`s `init_context` function.
-
-        In there, things like setting up a pg session or registering
-        backend specific flask extensions to the app might be done.
-        """
         if self.datasource.init_context:
             self.datasource.init_context(self.app)
 
