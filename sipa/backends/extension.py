@@ -79,6 +79,7 @@ class Backends:
             )
         backend_name = app.config["BACKEND"]
         self._activate_datasource(backend_name)
+        self.init_backends()
 
     def _activate_datasource(self, name: str):
         """Activate a datasource by name.

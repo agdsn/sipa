@@ -98,8 +98,6 @@ def init_app(app, **kwargs):
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
 
-    backends.init_backends()
-
 
 def inject_hotline_status():
     """Adds :func:`support_hotline_available <sipa.utils.support_hotline_available>`

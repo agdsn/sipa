@@ -38,7 +38,6 @@ class TestBackendInitializationCase(TestCase):
         )
         self.backends = Backends([datasource])
         self.backends.init_app(self.app)
-        self.backends.init_backends()
 
     def test_extension_registrated(self):
         assert 'backends' in self.app.extensions
