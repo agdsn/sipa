@@ -22,8 +22,8 @@
 {% endblock %}
 
 {% block custom_script %}
-    <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap-toc.min.js") }}"></script>
+    <script src="{{ url_for("static", filename="js/bootstrap-toc.min.js") }}"></script>
     <script src="{{ url_for("static", filename="js/usersuite_index.js") }}"></script>
-    <script type="text/javascript" src="{{ url_for("static", filename="js/svg.jquery.js") }}"></script>
-    <script type="text/javascript" src="{{ url_for("static", filename="js/pygal-tooltips.js") }}"></script>
+    <script src="{{ url_for("static", filename="js/svg.jquery.js") }}"></script>
+    <script src="{{ url_for("static", filename="js/pygal-tooltips.js") }}"></script>
 {% endblock %}
