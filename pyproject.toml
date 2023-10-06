@@ -1,6 +1,6 @@
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 exclude = [
 ]
 # to look up the meaning of specific rule IDs, use `ruff rule $id`
