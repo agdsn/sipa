@@ -13,7 +13,7 @@ class UserData(BaseModel):
     name: str
     status: UserStatus
     room: str | None
-    mail: str
+    mail: str | None
     mail_forwarded: bool
     mail_confirmed: bool
     properties: list[str]
