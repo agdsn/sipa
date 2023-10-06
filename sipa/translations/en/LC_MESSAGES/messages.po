@@ -639,7 +639,7 @@ msgid "Deine Datenbank wurde erstellt."
 msgstr "Your database has been created."
 
 msgid "Weiter"
-msgstr "Continue"
+msgstr "Proceed"
 
 msgid "Mitgliedschaft beenden"
 msgstr "Terminate membership"
