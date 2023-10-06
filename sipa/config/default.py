@@ -81,7 +81,7 @@ BUSSTOPS = [
 MEMBERSHIP_CONTRIBUTION = 500
 
 # Pycroft backend
-PYCROFT_ENDPOINT = "http://pycroft_dev-app_1:5000/api/v0/"
+PYCROFT_ENDPOINT = "http://localhost:5000/api/v0/"
 PYCROFT_API_KEY = "secret"
 
 DB_HELIOS_URI = "mysql+pymysql://verwaltung:{}@userdb.agdsn.network:3306/".format("secret")
