@@ -64,8 +64,8 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     {% block custom_css %}{% endblock %}
 
     <script type="application/json" id="locale">
-            {{ get_locale() | string | tojson }}
-        </script>
+        {{- get_locale() | string | tojson -}}
+    </script>
 </head>
 
 <body>
