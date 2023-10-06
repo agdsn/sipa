@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/agdsn/sipa.svg?branch=develop)](https://travis-ci.org/agdsn/sipa) [![Code Climate](https://codeclimate.com/github/agdsn/sipa/badges/gpa.svg)](https://codeclimate.com/github/agdsn/sipa)
+[![Code Climate](https://codeclimate.com/github/agdsn/sipa/badges/gpa.svg)](https://codeclimate.com/github/agdsn/sipa)
 
 SIPA - Supreme Information Providing Application
 ================================================
