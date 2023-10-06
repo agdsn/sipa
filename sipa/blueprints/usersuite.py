@@ -5,7 +5,18 @@ import logging
 from datetime import datetime
 
 from babel.numbers import format_currency
-from flask import Blueprint, render_template, url_for, redirect, flash, abort, request, current_app
+from flask import (
+    Blueprint,
+    render_template,
+    url_for,
+    redirect,
+    flash,
+    abort,
+    request,
+    current_app,
+    make_response,
+    g,
+)
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
@@ -28,6 +39,7 @@ from sipa.model.exceptions import (
     SubnetFull,
 )
 from sipa.model.misc import PaymentDetails
+from sipa.utils.graph_utils import NonceInfo
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +115,26 @@ def index():
             logs=info.history,
         )
 
-    return render_template("usersuite/index.html", payment_form=payment_form, **context)
+    resp = make_response(
+        render_template("usersuite/index.html", payment_form=payment_form, **context)
+    )
+    nonce_info = g.nonce_info
+    if nonce_info is None:
+        logger.error(
+            "nonce_info not set after rendering usersuite index", exc_info=True
+        )
+        return resp
+
+    assert isinstance(nonce_info, NonceInfo)
+    script_nonces_str = " ".join(f"'nonce-{n}'" for n in nonce_info.script_nonces)
+    # NOTE when we do this on other occasions as well, find a way to stop hard-coding
+    #  the rest of our `script_src` CSP and find a more flexible approach
+    resp.content_security_policy.script_src = (
+        f"'self' {script_nonces_str} https://status.agdsn.net"
+    )
+    style_nonces_str = " ".join(f"'nonce-{n}'" for n in nonce_info.style_nonces)
+    resp.content_security_policy.style_src = f"'self' {style_nonces_str}"
+    return resp
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])

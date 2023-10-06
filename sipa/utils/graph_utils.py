@@ -1,3 +1,6 @@
+import secrets
+from dataclasses import field, dataclass
+
 import pygal
 from flask_babel import gettext
 from pygal import Graph
@@ -43,6 +46,26 @@ def default_chart(chart_type, title, inline=True, **kwargs):
     )
 
 
+def generate_nonce() -> str:
+    return secrets.token_hex(32)
+
+
+@dataclass(frozen=True)
+class NonceInfo:
+    """struct to remember which nonces have been generated for inline scripts"""
+
+    style_nonces: list[str] = field(default_factory=list)
+    script_nonces: list[str] = field(default_factory=list)
+
+    def add_style_nonce(self) -> str:
+        self.style_nonces.append(n := generate_nonce())
+        return n
+
+    def add_script_nonce(self) -> str:
+        self.script_nonces.append(n := generate_nonce())
+        return n
+
+
 def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Graph:
     """Create a graph object from the input traffic data with pygal.
      If inline is set, the chart is being passed the option to not add an XML
@@ -84,6 +107,21 @@ def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Gra
     traffic_chart.add(gettext("Gesamt"),
                       [day['throughput'] for day in traffic_data],
                       stroke_style={'width': '2'})
+
+    from flask import g
+
+    if not hasattr(g, "nonce_info"):
+        g.nonce_info = NonceInfo()
+
+    def add_nonces(el):
+        for sub_el in el.findall("./defs/style"):
+            sub_el.set("nonce", g.nonce_info.add_style_nonce())
+        for script in el.findall("./defs/script"):
+            script.set("nonce", g.nonce_info.add_script_nonce())
+
+        return el
+
+    traffic_chart.add_xml_filter(add_nonces)
 
     return traffic_chart
 
