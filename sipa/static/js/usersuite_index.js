@@ -1,23 +1,14 @@
-$(function() {
-    var selector = '#usersuite-sidebar-nav';
-    var $toc = $(selector);
-    var $parent = $toc.parent();
-    var offset = 60;
-    var $body = $('body');
+document.addEventListener("DOMContentLoaded", () => {
+    const selector = '#usersuite-sidebar-nav';
+    const $toc = $(selector);
+    const $parent = $toc.parent();
+    const offset = 60;
+    const $body = $('body');
     Toc.init($toc);
-    $body.scrollspy({
-	target: selector,
-	offset: offset
-    });
+    $body.scrollspy({target: selector, offset: offset});
     $toc.affix({
-	offset: {
-	    top: function() {
-		return $parent.offset().top - offset;
-	    }
-	}
+        offset: {top: () => $parent.offset().top - offset}
     });
     // Handle window resize
-    $(window).resize(function(){
-	$toc.affix('checkPosition');
-    });
+    $(window).resize(() => $toc.affix('checkPosition'));
 });
