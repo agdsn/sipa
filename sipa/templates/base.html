@@ -259,10 +259,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                             <div>
                                 <div class="row">
-                                    <div class="col-xs-1">
+                                    <div class="col-1">
                                         <span class="bi-envelope-fill"></span>
                                     </div>
-                                    <div class="col-xs-10">
+                                    <div class="col-10">
                                         {% if current_user.is_authenticated %}
                                             {% set mail = current_datasource().support_mail %}
                                             <a href="mailto:{{ mail }}">{{ mail }}</a>
@@ -270,10 +270,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                             </div>
                                             </div>
                                             <div class="row">
-                                            <div class="col-xs-1">
+                                            <div class="col-1">
                                                 <span class="bi-envelope-fill"></span>
                                             </div>
-                                            <div class="col-xs-10">
+                                            <div class="col-10">
 
                                             <a href="{{ url_for('usersuite.contact') }}">
                                                 {{ _("Kontaktformular für Mitglieder") }}
@@ -288,20 +288,20 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                         </div>
                                         </div>
                                 <div class="row">
-                                    <div class="col-xs-1">
+                                    <div class="col-1">
                                         <span class="bi-envelope-fill"></span>
                                     </div>
-                                    <div class="col-xs-10">
+                                    <div class="col-10">
                                         <a href="{{ url_for('generic.contact_official') }}">
                                             {{ _("Kontaktformular für Geschäftspartner") }}
                                         </a>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-1">
+                                    <div class="col-1">
                                         <span class="bi-telephone-fill"></span>
                                     </div>
-                                    <div class="col-xs-10">
+                                    <div class="col-10">
                                         <a href="tel:004935189670993">
                                             0351 89670993
 					                    </a><br>
@@ -316,10 +316,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                                 {% for address in config.CONTACT_ADDRESSES %}
                                     <div class="row">
-                                        <div class="col-xs-1">
+                                        <div class="col-1">
                                             <span class="bi-house-door-fill"></span>
                                         </div>
-                                        <div class="col-xs-10">
+                                        <div class="col-10">
                                             <address>
                                                 <strong>{{ address.name }}</strong><br>
 
@@ -352,7 +352,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                 <hr>
 
                                 <div class="row">
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-mastodon"
                                            href="https://social.anoxinon.de/@ag_dsn"
 					   rel="me"
@@ -360,21 +360,21 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                             <span class="bi-mastodon" aria-hidden="true"></span>
                                         </a>
                                     </div>
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-twitter"
                                            href="https://twitter.com/ag_dsn"
                                            aria-label="Twitter">
                                             <span class="bi-twitter" aria-hidden="true"></span>
                                         </a>
                                     </div>
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-facebook"
                                            href="https://www.facebook.com/DresdnerStudentenNetz"
                                            aria-label="Facebook">
                                             <span class="bi-facebook" aria-hidden="true"></span>
                                         </a>
                                     </div>
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-github"
                                            href="https://github.com/agdsn/sipa"
                                            aria-label="Github">
