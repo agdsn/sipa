@@ -15,6 +15,18 @@ body {
 	padding-top: 50px;
 }
 
+/* LINKS:
+ * Don't underline them if they're not part of a special component
+ * (i.e., don't have a `class=` attribute
+ */
+a:not([class]):not(:hover) {
+    text-decoration: none;
+}
+
+a:not([class]):hover {
+    text-decoration: underline;
+}
+
 .affix {
 	top: 60px;
 	width: 100%;
