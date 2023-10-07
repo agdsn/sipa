@@ -39,7 +39,7 @@ from sipa.model.exceptions import (
     SubnetFull,
 )
 from sipa.model.misc import PaymentDetails
-from sipa.utils.graph_utils import NonceInfo
+from sipa.utils.csp import NonceInfo
 
 logger = logging.getLogger(__name__)
 
@@ -126,14 +126,7 @@ def index():
         return resp
 
     assert isinstance(nonce_info, NonceInfo)
-    script_nonces_str = " ".join(f"'nonce-{n}'" for n in nonce_info.script_nonces)
-    # NOTE when we do this on other occasions as well, find a way to stop hard-coding
-    #  the rest of our `script_src` CSP and find a more flexible approach
-    resp.content_security_policy.script_src = (
-        f"'self' {script_nonces_str} https://status.agdsn.net"
-    )
-    style_nonces_str = " ".join(f"'nonce-{n}'" for n in nonce_info.style_nonces)
-    resp.content_security_policy.style_src = f"'self' {style_nonces_str}"
+    nonce_info.apply_to_csp(resp.content_security_policy)
     return resp
 
 

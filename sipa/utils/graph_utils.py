@@ -1,6 +1,3 @@
-import secrets
-from dataclasses import field, dataclass
-
 import pygal
 from flask_babel import gettext
 from pygal import Graph
@@ -10,6 +7,7 @@ from pygal.style import Style
 from sipa.units import (format_as_traffic, max_divisions,
                         reduce_by_base)
 from sipa.utils.babel_utils import get_weekday
+from sipa.utils.csp import NonceInfo
 
 
 def rgb_string(r, g, b):
@@ -44,26 +42,6 @@ def default_chart(chart_type, title, inline=True, **kwargs):
         js=[],  # prevent automatically fetching scripts from github
         **kwargs,
     )
-
-
-def generate_nonce() -> str:
-    return secrets.token_hex(32)
-
-
-@dataclass(frozen=True)
-class NonceInfo:
-    """struct to remember which nonces have been generated for inline scripts"""
-
-    style_nonces: list[str] = field(default_factory=list)
-    script_nonces: list[str] = field(default_factory=list)
-
-    def add_style_nonce(self) -> str:
-        self.style_nonces.append(n := generate_nonce())
-        return n
-
-    def add_script_nonce(self) -> str:
-        self.script_nonces.append(n := generate_nonce())
-        return n
 
 
 def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Graph:

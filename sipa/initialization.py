@@ -1,4 +1,3 @@
-import typing as t
 import logging
 import logging.config
 import os
@@ -24,6 +23,7 @@ from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import url_self, support_hotline_available, meetingcal
 from sipa.utils.babel_utils import get_weekday
+from sipa.utils.csp import ensure_items
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.graph_utils import generate_traffic_chart, provide_render_function
 
@@ -259,8 +259,3 @@ def ensure_csp(r: Response) -> Response:
     csp.worker_src = ensure_items(csp.worker_src, ("'none'",))
     # there doesn't seem to be a good way to set `upgrade-insecure-requests`
     return r
-
-
-def ensure_items(current_items: str | None, items: t.Iterable[str]) -> str:
-    _cur = set(current_items.split()) if current_items else set()
-    return " ".join(_cur | set(items))
