@@ -2,20 +2,20 @@
 
 {%- macro user_nav_items() -%}
     {% if current_user.is_anonymous -%}
-        <li>
+        <li class="nav-item">
             <a href="{{ url_for('generic.login') }}" class="nav-link">
                 <span class="bi-person-fill"></span>
             </a>
         </li>
     {%- else -%}
-        <li>
+        <li class="nav-item">
             <a href="{{ url_for('usersuite.index') }}" class="nav-link">
                 <span class="bi-person-fill"></span>
                 {{ current_user.realname.value }}
             </a>
         </li>
 
-        <li>
+        <li class="nav-item">
             <a href="{{ url_for('generic.logout') }}" class="nav-link">
                 <span class="bi-power"></span>
                 {{ _("Logout") }}
@@ -68,85 +68,79 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 </head>
 
 <body>
-<nav id="main-navbar" class="navbar navbar-default navbar-fixed-top">
+<nav id="main-navbar" class="navbar navbar-default navbar-fixed-top navbar-expand-lg">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#navbar">
-                <span class="sr-only">toggle</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+        <a class="navbar-brand" href="{{ url_for('generic.index') }}">
+            <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}"
+                 alt="AG DSN"/>
+        </a>
+        <a class="navbar-brand d-lg-none" href="{{ url_for('generic.index') }}">
+            AG DSN
+        </a>
+        <button type="button" class="navbar-toggler"
+        data-bs-toggle="collapse" data-bs-target="#navbar"
+        aria-controls="navbar" aria-label="Toggle navigation"
+        aria-expanded="false">
+            <span class="sr-only">toggle</span>
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <a class="navbar-brand" href="{{ url_for('generic.index') }}">
-                <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}"
-                     alt="AG DSN"/>
-            </a>
-            <a class="navbar-brand d-sm-none" href="{{ url_for('generic.index') }}">
-                AG DSN
-            </a>
-        </div>
 
         <div class="collapse navbar-collapse" id="navbar">
-            <ul class="nav navbar-nav" role="menu">
-                <li class="dropdown">
+            <ul class="navbar-nav mr-auto" role="menu">
+                <li class="nav-item dropdown">
                     <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
                         {{ _("News") }}<span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a href="{{ url_for('news.show', start=0) }}" class="nav-link">
-                                <span class="bi-skip-start-fill"></span>
-                                &nbsp; {{ _("Neueste") }}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('news.show', end=-1) }}" class="nav-link">
-                                <span class="bi-skip-end-fill"></span>
-                                &nbsp; {{ _("Älteste") }}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('news.show', start=0, end=-1) }}" class="nav-link">
-                                <span class="bi-collection-fill"></span>
-                                &nbsp; {{ _("Alle") }}
-                            </a>
-                        </li>
-                    </ul>
+                    <!-- TODO add aria-labelledby ↓ and id ↑ -->
+                    <div class="dropdown-menu" role="menu">
+                        <a href="{{ url_for('news.show', start=0) }}" class="dropdown-item">
+                            <span class="bi-skip-start-fill"></span>
+                            &nbsp; {{ _("Neueste") }}
+                        </a>
+                        <a href="{{ url_for('news.show', end=-1) }}" class="dropdown-item">
+                            <span class="bi-skip-end-fill"></span>
+                            &nbsp; {{ _("Älteste") }}
+                        </a>
+                        <a href="{{ url_for('news.show', start=0, end=-1) }}" class="dropdown-item">
+                            <span class="bi-collection-fill"></span>
+                            &nbsp; {{ _("Alle") }}
+                        </a>
+                    </div>
                 </li>
+
                 {% for c in cf_pages.categories -%}
                     {% if c.index -%}
-                        <li class="dropdown">
+                        <li class="nav-item dropdown">
                             <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
                                 {{ c.name }}<span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu" role="menu">
+                            <!-- TODO add aria-labelledby ↓ and id ↑ -->
+                            <div class="dropdown-menu" role="menu">
                                 {%- for article in c.articles -%}
                                     {%- if not article.id == 'index' and article.title and not article.hidden -%}
-                                        <li>
-                                            <a href="{{ url_for('pages.show', category_id=c.id, article_id=article.id) }}" class="nav-link">
-                                                <span class="bi-{{ article.glyphicon }}"></span>
-                                                &nbsp; {{ article.title }}
-                                            </a>
-                                        </li>
+                                    <a href="{{ url_for('pages.show', category_id=c.id, article_id=article.id) }}" class="dropdown-item">
+                                        <span class="bi-{{ article.glyphicon }}"></span>
+                                        &nbsp; {{ article.title }}
+                                    </a>
                                     {%- endif %}
                                 {%- endfor %}
-                            </ul>
-                        <li>
+                            </div>
+                        </li>
                     {% endif -%}
                 {%- endfor %}
             </ul>
 
+            <!-- dropdown cog: visible on lg only -->
             <ul id="navbar-right-dropdown"
-                class="nav navbar-nav navbar-right d-xs-none d-sm-block">
-                <li>
+                class="navbar-nav ms-auto d-xs-none d-lg-block d-xl-none">
+                <li class="nav-item dropdown">
                     <button id="language-dropdown-button" type="button"
                             class="btn btn-default navbar-btn"
-                            data-bs-toggle="dropdown" aria-label="Toggle Menu">
+                            data-bs-toggle="dropdown" aria-label="Toggle Menu" aria-expanded="false">
                         <span class="bi-gear-fill" aria-hidden="true"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu"
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu"
                         aria-labelledby="language-dropdown-button">
                         <li class="dropdown-header">{{ _("Anmeldung") }}</li>
 
@@ -174,16 +168,17 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
             </ul>
 
-            <ul id="navbar-right" class="nav navbar-nav navbar-right hidden-sm hidden-md">
+            <!-- ≥xl: expanded log{in,out}/language menu -->
+            <ul id="navbar-right" class="navbar-nav ms-auto d-lg-none d-xl-inline-flex">
                 {{ user_nav_items() }}
 
-                <li>
+                <li class="nav-item dropdown">
                     <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
                         <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}"
                              alt="{{ get_locale().display_name }}"/>
                         <span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
                             <li>
                                 <a href="{{ url_self(locale=locale.language) }}" class="nav-link">

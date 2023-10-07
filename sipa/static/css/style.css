@@ -11,10 +11,6 @@ hr {
 	margin-top: 5px;
 }
 
-body {
-	padding-top: 50px;
-}
-
 /* LINKS:
  * Don't underline them if they're not part of a special component
  * (i.e., don't have a `class=` attribute
@@ -71,28 +67,6 @@ a:not([class]):hover {
 
 #logo:hover {
 	opacity: 1;
-}
-
-@media (max-height: 480px) {
-    #navbar {
-        max-height: 200px;
-    }
-}
-
-@media (max-height: 300px) {
-    #navbar {
-        max-height: 150px;
-    }
-}
-
-@media (max-width: 767px) {
-    #navbar {
-        background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), white 40%);
-    }
-
-    #navbar > ul:last-child {
-        border-bottom: 4px double rgba(0, 0, 0, 0.1);
-    }
 }
 
 #trafficgauge {
