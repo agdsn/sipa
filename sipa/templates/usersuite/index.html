@@ -23,31 +23,7 @@
 
 {% block custom_script %}
     <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap-toc.min.js") }}"></script>
-    <script type="text/javascript">
-        $(function() {
-            var selector = '#usersuite-sidebar-nav';
-            var $toc = $(selector);
-            var $parent = $toc.parent();
-            var offset = 60;
-            var $body = $('body');
-            Toc.init($toc);
-            $body.scrollspy({
-                target: selector,
-                offset: offset
-            });
-            $toc.affix({
-                offset: {
-                    top: function() {
-                        return $parent.offset().top - offset;
-                    }
-                }
-            });
-            // Handle window resize
-            $(window).resize(function(){
-                $toc.affix('checkPosition');
-            });
-        });
-    </script>
+    <script src="{{ url_for("static", filename="js/usersuite_index.js") }}"></script>
     <script type="text/javascript" src="{{ url_for("static", filename="js/svg.jquery.js") }}"></script>
     <script type="text/javascript" src="{{ url_for("static", filename="js/pygal-tooltips.js") }}"></script>
 {% endblock %}
