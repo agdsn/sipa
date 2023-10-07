@@ -1,4 +1,4 @@
-{% extends "register/base.html" %}#
+{% extends "register/base.html" %}
 
 {% block register_content %}
     Deine Registrierung wurde entgegen genommen!<br>
@@ -6,7 +6,7 @@
     sobald du auf diesen Link klickst.<br>
     Bitte schaue auch in deinem Spam/Junk Ordner nach, falls du die E-Mail nicht in deinem
     Posteingang findest.
-    <div style="text-align: right; padding-top: 200px;">
-        <a  style="size: 4px; color: lightgray;" href="{{ url_for('.restart') }}">Rst</a>
+    <div class="register_reset_container">
+        <a class="register_reset_link" href="{{ url_for('.restart') }}">Rst</a>
     </div>
 {% endblock %}

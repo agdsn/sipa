@@ -1,4 +1,4 @@
-{% extends "base.html" %}#
+{% extends "base.html" %}
 {% set page_title = _('Teamsitzungen') %}
 
 {% block content %}
@@ -27,7 +27,7 @@
             </tbody>
         </table>
     {% else %}
-        <div style="color: red;">{{ _('Fehler bei der Abfrage!') }}</div>
+        <div class="text-danger">{{ _('Fehler bei der Abfrage!') }}</div>
     {% endif %}
 
 {% endblock %}

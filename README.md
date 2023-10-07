@@ -19,7 +19,7 @@ Usage
 
 Please note that SIPA has been built to fit our specific purposes.  This means
 that there will be features you probably won't need, such as the traffic
-monitoring or splitting the login process into certain divisions.
+monitoring.
 
 
 How can I run Sipa?
@@ -234,70 +234,5 @@ section:
 Translations
 ------------
 Make sure you installed `Babel` via pip. Then, just run `make translate`.
-
-Adding dynamic content
-----------------------
-
-Sipa is capable of parsing a `json` file to provide “dynamic” content,
-i.e. content which varies according to the dormitory selected.
-
-For each content file, Sipa tries to open a file following the naming
-scheme `<pagename>.<locale>.json`. If it does not exist or does not
-contain valid json, this is ignored and no additional block is
-displayed on the webpage.
-
-The file has to follow the format below:
-
-```json
-{
-    "title": "Financial data",
-    "keys": {
-        "beneficiary": "Beneficiary",
-        "iban": "IBAN",
-        "bank": "Bank",
-        "bic": "BIC",
-        "information": "Information"
-    },
-    "values": {
-        "wu": {
-            "beneficiary": "Studentenrat TUD - AG DSN",
-            "bank": "Ostsächsische Sparkasse Dresden",
-            "iban": "DE61850503003120219540",
-            "bic": "OSDD DE 81 XXX",
-            "information": "User-ID, Last Name, First Name, Dormitory / Room number"
-        },
-        "gerok": {
-            "beneficiary": "Studentenrat TUD - AG DSN",
-            "bank": "Ostsächsische Sparkasse Dresden",
-            "iban": "To be investigated",
-            "bic": "To be investigated",
-            "information": "To be investigated"
-        },
-        "local": {
-            "beneficiary": "Not available",
-            "bank": "Not available",
-            "iban": "Not available",
-            "bic": "Not available",
-            "information": "Not available"
-        }
-    },
-    "mappings": {
-        "wu": "wu",
-        "zw": "wu",
-        "borsi": "wu",
-        "gerok": "gerok",
-        "localhost": "local"
-    }
-}
-```
-
-Because information may or may not dependend on a data source, it can
-be grouped using `mappings`. Dormitories whose name is not specified
-in `mappings` will not appear in the `select` field on the web page,
-so be careful to keep the list complete.
-
-The value of a `mappings` field has to correspond to a dataset in `values`.
-
-
 
 [1] https://en.wikipedia.org/wiki/Sipa

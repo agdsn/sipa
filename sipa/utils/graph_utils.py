@@ -7,6 +7,7 @@ from pygal.style import Style
 from sipa.units import (format_as_traffic, max_divisions,
                         reduce_by_base)
 from sipa.utils.babel_utils import get_weekday
+from sipa.utils.csp import NonceInfo
 
 
 def rgb_string(r, g, b):
@@ -84,6 +85,21 @@ def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Gra
     traffic_chart.add(gettext("Gesamt"),
                       [day['throughput'] for day in traffic_data],
                       stroke_style={'width': '2'})
+
+    from flask import g
+
+    if not hasattr(g, "nonce_info"):
+        g.nonce_info = NonceInfo()
+
+    def add_nonces(el):
+        for sub_el in el.findall("./defs/style"):
+            sub_el.set("nonce", g.nonce_info.add_style_nonce())
+        for script in el.findall("./defs/script"):
+            script.set("nonce", g.nonce_info.add_script_nonce())
+
+        return el
+
+    traffic_chart.add_xml_filter(add_nonces)
 
     return traffic_chart
 

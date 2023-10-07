@@ -33,4 +33,4 @@ def show(category_id, article_id):
     if article.link:
         return redirect(article.link)
 
-    return render_template("template.html", article=article, dynamic=False)
+    return render_template("template.html", article=article)
