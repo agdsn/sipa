@@ -1,12 +1,12 @@
 <h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
 <div class="btn-group">
     {% if current_user.can_change_password %}
-    <a href="{{ url_for('.change_password') }}" class="btn btn-default">
+    <a href="{{ url_for('.change_password') }}" class="btn btn-outline-secondary">
         <span class="bi-asterisk"></span>
         {{ _("Passwort ändern") }}
     </a>
     {% else %}
-    <a class="btn btn-default" disabled title="{{ _('Nicht unterstützt') }}">
+    <a class="btn btn-secondary" disabled title="{{ _('Nicht unterstützt') }}">
         <span class="bi-pencil-fill"></span>
         {{ _("Passwort ändern") }}
     </a>
@@ -17,19 +17,19 @@
         {{ _("Netzwerkanschluss aktivieren") }}
     </a>
     {% elif current_user.mac.capabilities.edit %}
-    <a href="{{ url_for('.change_mac') }}" class="btn btn-default">
+    <a href="{{ url_for('.change_mac') }}" class="btn btn-outline-secondary">
         <span class="bi-pencil-fill"></span>
         {{ _("MAC-Adresse ändern") }}
     </a>
     {% else %}
-    <a class="btn btn-default" disabled title="{{ _('Nicht unterstützt') }}">
+    <a class="btn btn-outline-secondary" disabled title="{{ _('Nicht unterstützt') }}">
         <span class="bi-pencil-fill"></span>
         {{ _("MAC-Adresse ändern") }}
     </a>
     {% endif %}
 
     {% if webmailer_url %}
-    <a href="{{ webmailer_url }}" class="btn btn-default">
+    <a href="{{ webmailer_url }}" class="btn btn-outline-secondary">
         <span class="bi-envelope-fill"></span>
         {{ _("Webmailer") }}
     </a>
@@ -49,11 +49,11 @@
     {% endif %}
 </div>
 <div class="btn-group">
-    <a href="{{ url_for('.contact') }}" class="btn btn-default">
+    <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
         <span class="bi-question-circle-fill"></span>
         {{ _("Kontaktformular") }}
     </a>
-    <a href="{{ url_for('.subscribe') }}" class="btn btn-default">
+    <a href="{{ url_for('.subscribe') }}" class="btn btn-outline-secondary">
         <span class="bi-megaphone-fill"></span>
         {{ _("Status-Page abonnieren") }}
     </a>

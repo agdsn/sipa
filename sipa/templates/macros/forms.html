@@ -50,10 +50,10 @@
                 <div class="{{ form_input_offset_class }} {{ form_input_width_class }} text-nowrap">
                     <button type="submit" class="btn btn-primary">{{ submit_text }}</button>
                     {% if reset_button -%}
-                        <button type="reset" class="btn btn-default">{{ _('Zurücksetzen') }}</button>
+                        <button type="reset" class="btn btn-secondary">{{ _('Zurücksetzen') }}</button>
                     {%- endif %}
                     {% if cancel_to -%}
-                        <a href="{{ cancel_to }}" class="btn btn-default">{{ cancel_text }}</a>
+                        <a href="{{ cancel_to }}" class="btn btn-secondary">{{ cancel_text }}</a>
                     {%- endif %}
                     {% if extra_btn -%}{{ extra_btn() }}{%- endif %}
                 </div>
