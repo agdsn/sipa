@@ -84,7 +84,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}"
                      alt="AG DSN"/>
             </a>
-            <a class="navbar-brand visible-xs" href="{{ url_for('generic.index') }}">
+            <a class="navbar-brand d-sm-none" href="{{ url_for('generic.index') }}">
                 AG DSN
             </a>
         </div>
@@ -140,7 +140,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
             </ul>
 
             <ul id="navbar-right-dropdown"
-                class="nav navbar-nav navbar-right visible-md-block visible-sm-block">
+                class="nav navbar-nav navbar-right d-xs-none d-sm-block">
                 <li>
                     <button id="language-dropdown-button" type="button"
                             class="btn btn-default navbar-btn"
@@ -212,7 +212,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 <div id="center" class="container">
     <div class="row">
         <main class="col-sm-9">
-            <div class="visible-xs">
+            <div class="d-sm-none">
                 <br/>
                 {{ services_status.widget() }}
                 <hr/>
