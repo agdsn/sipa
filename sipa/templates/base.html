@@ -4,21 +4,20 @@
     {% if current_user.is_anonymous -%}
         <li>
             <a href="{{ url_for('generic.login') }}" class="nav-link">
-                <span class="glyphicon glyphicon-user"></span>
-                {{ _("Login") }}
+                <span class="bi-person-fill"></span>
             </a>
         </li>
     {%- else -%}
         <li>
             <a href="{{ url_for('usersuite.index') }}" class="nav-link">
-                <span class="glyphicon glyphicon-user"></span>
+                <span class="bi-person-fill"></span>
                 {{ current_user.realname.value }}
             </a>
         </li>
 
         <li>
             <a href="{{ url_for('generic.logout') }}" class="nav-link">
-                <span class="glyphicon glyphicon-off"></span>
+                <span class="bi-power"></span>
                 {{ _("Logout") }}
             </a>
         </li>
@@ -56,7 +55,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/fa-all.min.css') }}"/>
+          href="{{ url_for('static', filename='bootstrap-icons.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='css/bootstrap-social.css') }}"/>
     <link rel="stylesheet" type="text/css"
@@ -98,19 +97,19 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     <ul class="dropdown-menu" role="menu">
                         <li>
                             <a href="{{ url_for('news.show', start=0) }}" class="nav-link">
-                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                <span class="bi-skip-start-fill"></span>
                                 &nbsp; {{ _("Neueste") }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('news.show', end=-1) }}" class="nav-link">
-                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                <span class="bi-skip-end-fill"></span>
                                 &nbsp; {{ _("Älteste") }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('news.show', start=0, end=-1) }}" class="nav-link">
-                                <span class="glyphicon glyphicon-book"></span>
+                                <span class="bi-collection-fill"></span>
                                 &nbsp; {{ _("Alle") }}
                             </a>
                         </li>
@@ -127,7 +126,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                     {%- if not article.id == 'index' and article.title and not article.hidden -%}
                                         <li>
                                             <a href="{{ url_for('pages.show', category_id=c.id, article_id=article.id) }}" class="nav-link">
-                                                <span class="glyphicon {{ article.glyphicon }}"></span>
+                                                <span class="bi-{{ article.glyphicon }}"></span>
                                                 &nbsp; {{ article.title }}
                                             </a>
                                         </li>
@@ -145,7 +144,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     <button id="language-dropdown-button" type="button"
                             class="btn btn-default navbar-btn"
                             data-bs-toggle="dropdown" aria-label="Toggle Menu">
-                        <span class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        <span class="bi-gear-fill" aria-hidden="true"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu"
                         aria-labelledby="language-dropdown-button">
@@ -254,7 +253,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     {% if should_display_traffic_data() -%}
                         <div class="module"><h2>
                             <a href="{{ url_for('generic.usertraffic') }}"><span
-                                    class="glyphicon glyphicon-stats"></span> Traffic</a>
+                                    class="bi-bar-chart-fill"></span> Traffic</a>
                         </h2></div>
                     {%- endif %}
                     <div id="row-contact">
@@ -265,7 +264,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             <div>
                                 <div class="row">
                                     <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
+                                        <span class="bi-envelope-fill"></span>
                                     </div>
                                     <div class="col-xs-10">
                                         {% if current_user.is_authenticated %}
@@ -276,7 +275,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                             </div>
                                             <div class="row">
                                             <div class="col-xs-1">
-                                                <span class="glyphicon glyphicon-envelope"></span>
+                                                <span class="bi-envelope-fill"></span>
                                             </div>
                                             <div class="col-xs-10">
 
@@ -294,7 +293,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                         </div>
                                 <div class="row">
                                     <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
+                                        <span class="bi-envelope-fill"></span>
                                     </div>
                                     <div class="col-xs-10">
                                         <a href="{{ url_for('generic.contact_official') }}">
@@ -304,7 +303,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-earphone"></span>
+                                        <span class="bi-telephone-fill"></span>
                                     </div>
                                     <div class="col-xs-10">
                                         <a href="tel:004935189670993">
@@ -322,7 +321,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                 {% for address in config.CONTACT_ADDRESSES %}
                                     <div class="row">
                                         <div class="col-xs-1">
-                                            <span class="glyphicon glyphicon-home"></span>
+                                            <span class="bi-house-door-fill"></span>
                                         </div>
                                         <div class="col-xs-10">
                                             <address>
@@ -362,28 +361,28 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                            href="https://social.anoxinon.de/@ag_dsn"
 					   rel="me"
                                            aria-label="Mastodon">
-                                            <span class="fa-brands fa-mastodon" aria-hidden="true"></span>
+                                            <span class="bi-mastodon" aria-hidden="true"></span>
                                         </a>
                                     </div>
                                     <div class="col-xs-3 text-center">
                                         <a class="btn btn-social-icon btn-twitter"
                                            href="https://twitter.com/ag_dsn"
                                            aria-label="Twitter">
-                                            <span class="fa-brands fa-twitter" aria-hidden="true"></span>
+                                            <span class="bi-twitter" aria-hidden="true"></span>
                                         </a>
                                     </div>
                                     <div class="col-xs-3 text-center">
                                         <a class="btn btn-social-icon btn-facebook"
                                            href="https://www.facebook.com/DresdnerStudentenNetz"
                                            aria-label="Facebook">
-                                            <span class="fa-brands fa-facebook" aria-hidden="true"></span>
+                                            <span class="bi-facebook" aria-hidden="true"></span>
                                         </a>
                                     </div>
                                     <div class="col-xs-3 text-center">
                                         <a class="btn btn-social-icon btn-github"
                                            href="https://github.com/agdsn/sipa"
                                            aria-label="Github">
-                                            <span class="fa-brands fa-github" aria-hidden="true"></span>
+                                            <span class="bi-github" aria-hidden="true"></span>
                                         </a>
                                     </div>
                                 </div>
