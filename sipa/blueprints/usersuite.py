@@ -14,8 +14,6 @@ from flask import (
     abort,
     request,
     current_app,
-    make_response,
-    g,
 )
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
@@ -39,7 +37,6 @@ from sipa.model.exceptions import (
     SubnetFull,
 )
 from sipa.model.misc import PaymentDetails
-from sipa.utils.csp import NonceInfo
 
 logger = logging.getLogger(__name__)
 
@@ -115,19 +112,7 @@ def index():
             logs=info.history,
         )
 
-    resp = make_response(
-        render_template("usersuite/index.html", payment_form=payment_form, **context)
-    )
-    nonce_info = g.nonce_info
-    if nonce_info is None:
-        logger.error(
-            "nonce_info not set after rendering usersuite index", exc_info=True
-        )
-        return resp
-
-    assert isinstance(nonce_info, NonceInfo)
-    nonce_info.apply_to_csp(resp.content_security_policy)
-    return resp
+    return render_template("usersuite/index.html", payment_form=payment_form, **context)
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])

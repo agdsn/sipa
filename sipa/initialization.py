@@ -5,6 +5,7 @@ import os.path
 from datetime import datetime
 
 import sentry_sdk
+from flask import g
 from flask_babel import Babel, get_locale
 from werkzeug import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -23,7 +24,7 @@ from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import url_self, support_hotline_available, meetingcal
 from sipa.utils.babel_utils import get_weekday
-from sipa.utils.csp import ensure_items
+from sipa.utils.csp import ensure_items, NonceInfo
 from sipa.utils.git_utils import init_repo, update_repo
 from sipa.utils.graph_utils import generate_traffic_chart, provide_render_function
 
@@ -226,6 +227,8 @@ def init_logging(app):
 
 
 def ensure_csp(r: Response) -> Response:
+    apply_nonces_to_csp(r)
+
     csp = r.content_security_policy
     SELF = ("'self'",)
     csp.default_src = ensure_items(csp.default_src, SELF)
@@ -259,3 +262,13 @@ def ensure_csp(r: Response) -> Response:
     csp.worker_src = ensure_items(csp.worker_src, ("'none'",))
     # there doesn't seem to be a good way to set `upgrade-insecure-requests`
     return r
+
+
+def apply_nonces_to_csp(r: Response) -> None:
+    if not hasattr(g, "nonce_info"):
+        return
+
+    nonce_info = g.nonce_info
+    assert isinstance(nonce_info, NonceInfo)
+
+    nonce_info.apply_to_csp(r.content_security_policy)
