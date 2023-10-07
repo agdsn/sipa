@@ -1,3 +1,4 @@
+import typing as t
 import logging
 import logging.config
 import os
@@ -6,6 +7,7 @@ from datetime import datetime
 
 import sentry_sdk
 from flask_babel import Babel, get_locale
+from werkzeug import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_qrcode import QRcode
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -49,6 +51,7 @@ def init_app(app, **kwargs):
     babel.init_app(app)
     babel.localeselector(select_locale)
     app.before_request(save_user_locale_setting)
+    app.after_request(ensure_csp)
     app.session_interface = SeparateLocaleCookieSessionInterface()
     cf_pages = CategorizedFlatPages()
     cf_pages.init_app(app)
@@ -220,3 +223,44 @@ def init_logging(app):
         'DEFAULT_CONFIG': DEFAULT_CONFIG,
         'EXTRA_CONFIG': app.config.get('LOG_CONFIG')
     }})
+
+
+def ensure_csp(r: Response) -> Response:
+    csp = r.content_security_policy
+    SELF = ("'self'",)
+    csp.default_src = ensure_items(csp.default_src, SELF)
+    csp.connect_src = ensure_items(
+        csp.connect_src,
+        (
+            "'self'",
+            "https://status.agdsn.net",
+            "https://*.tile.openstreetmap.de",
+        ),
+    )
+    csp.form_action = ensure_items(csp.form_action, SELF)
+    csp.frame_ancestors = ensure_items(csp.frame_ancestors, SELF)
+    csp.img_src = ensure_items(
+        csp.img_src,
+        (
+            "'self'",
+            "data:",
+            "https://*.tile.opentsreetmap.de",
+        ),
+    )
+    csp.script_src = ensure_items(
+        csp.script_src,
+        (
+            "'self'",
+            "https://status.agdsn.net",
+        ),
+    )
+    csp.style_src = ensure_items(csp.style_src, SELF)
+    csp.style_src_attr = ensure_items(csp.style_src_attr, ("'self'", "'unsafe-inline'"))
+    csp.worker_src = ensure_items(csp.worker_src, ("'none'",))
+    # there doesn't seem to be a good way to set `upgrade-insecure-requests`
+    return r
+
+
+def ensure_items(current_items: str | None, items: t.Iterable[str]) -> str:
+    _cur = set(current_items.split()) if current_items else set()
+    return " ".join(_cur | set(items))
