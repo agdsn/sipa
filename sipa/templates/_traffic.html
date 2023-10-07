@@ -1,8 +1,8 @@
 <h2 id="traffic">{{ _('Dein Traffic') }}</h2>
 
 <h3 id="traffic-table">{{ _('Traffic Tabelle') }}</h3>
-<div class="panel panel-default">
-    <table class="panel-body table table-striped">
+<div class="card">
+    <table class="card-body table table-striped">
         <thead>
             <tr>
                 <th>{{ _('Wochentag') }}</th>
@@ -27,8 +27,8 @@
 </div>
 
 <h3 id="traffic-chart">{{ _('Traffic Diagramm') }}</h3>
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="card">
+    <div class="card-body">
     <figure id="trafficchart">
         {{ traffic_chart(traffic_user.traffic_history)|safe }}
     </figure>

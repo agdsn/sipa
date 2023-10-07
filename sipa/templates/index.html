@@ -1,18 +1,5 @@
 {% extends "base.html" %}
 {% set page_title = "News" %}
-{% macro panelclass(type) %}
-    {% if type == 'alert' %}
-        panel-danger
-    {% elif type == 'warning' %}
-        panel-warning
-    {% elif type == 'info' %}
-        panel-info
-    {% elif type == 'good' %}
-        panel-success
-    {% else %}
-        panel-default
-    {% endif %}
-{% endmacro %}
 
 {% block content %}
     {% if articles %}{% for art in articles %}

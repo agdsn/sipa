@@ -21,9 +21,9 @@
 </div>
 
 {% if not user_has_db %}
-    <div class="panel panel-info">
-        <div class="panel-heading">{{ _("Datenbank Erstellen") }}</div>
-        <div class="panel-body">
+    <div class="card card-info">
+        <div class="card-header">{{ _("Datenbank Erstellen") }}</div>
+        <div class="card-body">
             <div id="create-mysql-form">
                 {% call forms.render(form=form, form_id="hosting-form",
                     cancel_to=url_for('.index')) %}
@@ -34,10 +34,10 @@
     </div>
 {% else %}
 
-    <div class="panel panel-warning">
-        <div class="panel-heading">{{ _("Deine Datenbank") }}</div>
+    <div class="card card-warning">
+        <div class="card-header">{{ _("Deine Datenbank") }}</div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="form container col-sm-10">
                 <div class="form-group">
                         {{ _("Hier kannst Du Deine Datenbank löschen:") }}
@@ -54,9 +54,9 @@
             </div>
         </div>
 
-        <div class="panel panel-info">
-            <div class="panel-heading">{{ _("Passwort Ändern") }}</div>
-            <div class="panel-body">
+        <div class="card card-info">
+            <div class="card-header">{{ _("Passwort Ändern") }}</div>
+            <div class="card-body">
                 <div id="change-mysql-form">
                     {% call forms.render(form=form, form_id="hosting-form",
                         cancel_to=url_for('.index')) %}
