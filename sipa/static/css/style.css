@@ -69,14 +69,6 @@ a:not([class]):hover {
 	opacity: 1;
 }
 
-#trafficgauge {
-    height: 200px;
-    /* Hack to remove upper spacing of the trafficgauge
-     * See https://github.com/toorshia/justgage/issues/172
-     */
-    margin-top: -50px;
-}
-
 .module {
     padding: 15px;
     margin-bottom: 10px;
