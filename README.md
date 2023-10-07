@@ -155,7 +155,7 @@ every time, since you can include `'incremental': True` in said dict.
 
 ## Translations
 
-Sipa uses [flask-babel](https://pythonhosted.org/Flask-Babel/) for
+Sipa uses [flask-babel](https://python-babel.github.io/flask-babel/) for
 translations.  To update translations, You should have pybabel and
 poedit installed (via pip or any other way), and run `make translate`.
 Since unfortunately, the build proocess is not automated (or done at
