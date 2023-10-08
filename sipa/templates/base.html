@@ -82,7 +82,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
         data-bs-toggle="collapse" data-bs-target="#navbar"
         aria-controls="navbar" aria-label="Toggle navigation"
         aria-expanded="false">
-            <span class="sr-only">toggle</span>
+            <span class="visually-hidden">toggle</span>
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -134,7 +134,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
             <!-- dropdown cog: visible on lg only -->
             <ul id="navbar-right-dropdown"
-                class="navbar-nav ms-auto d-xs-none d-lg-block d-xl-none">
+                class="navbar-nav ms-auto d-none d-lg-block d-xl-none">
                 <li class="nav-item dropdown">
                     <button id="language-dropdown-button" type="button"
                             class="btn btn-secondary navbar-btn"
@@ -179,17 +179,15 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                              alt="{{ get_locale().display_name }}"/>
                         <span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" role="menu">
+                    <div class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
-                            <li>
-                                <a href="{{ url_self(locale=locale.language) }}" class="nav-link">
-                                    <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
-                                         alt="{{ locale.display_name }}"/>
-                                    {{ locale.display_name }}
-                                </a>
-                            </li>
+                            <a href="{{ url_self(locale=locale.language) }}" class="dropdown-item">
+                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+                                     alt="{{ locale.display_name }}"/>
+                                {{ locale.display_name }}
+                            </a>
                         {% endfor %}
-                    </ul>
+                    </div>
                 </li>
             </ul>
         </div>
