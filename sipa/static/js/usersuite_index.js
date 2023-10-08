@@ -1,14 +1,13 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const selector = '#usersuite-sidebar-nav';
-    const $toc = $(selector);
-    const $parent = $toc.parent();
-    const offset = 60;
-    const $body = $('body');
-    Toc.init($toc);
-    $body.scrollspy({target: selector, offset: offset});
-    $toc.affix({
-        offset: {top: () => $parent.offset().top - offset}
-    });
-    // Handle window resize
-    $(window).resize(() => $toc.affix('checkPosition'));
+tocbot.init({
+  // Where to render the table of contents.
+  tocSelector: '.js-toc',
+  // Where to grab the headings to build the table of contents.
+  contentSelector: '.js-toc-content',
+  // Which headings to grab inside of the contentSelector element.
+  headingSelector: 'h2, h3',
+  // For headings inside relative or absolute positioned containers within content.
+  hasInnerContainers: true,
+
+  positionFixedSelector: '#usersuite-sidebar-nav',
+  extraLinkClasses: 'text-decoration-none'
 });

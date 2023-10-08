@@ -68,7 +68,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     </script>
 </head>
 
-<body>
+<body class="js-toc-content">
 <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="{{ url_for('generic.index') }}">
@@ -234,6 +234,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
         <div id="sidebar" class="col-sm-3">
             {% block sidebar %}
                 <div>
+                    <!-- TODO Fix visibility -->
                     <div class="module hidden-xs">
                         <h2>
                             {{ _("Status") }}
