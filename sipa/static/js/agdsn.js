@@ -31,52 +31,62 @@ let statusMessages = {
 }
 
 //Status widget
+/**
+ * @param {Status} status
+ * @returns {string} HTML for the icon
+ */
+function status_to_icon(status) {
+    switch (status) {
+        case 'degraded_performance':
+            return '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
+        case 'maintenance':
+            return '<span class="glyphicon glyphicon-info-sign text-primary"></span>';
+        case 'partial_outage':
+            return '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+        case 'major_outage':
+            return '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
+        default:
+            return "";
+    }
+}
+/**
+ * Applies the status of the components to the status widget
+ * @param {Array<Component>} components – the component information
+ */
 function initStatus (components) {
-    let content = '',
-        statusCode = 'okay'
-        allGood = true;
+    let content = '';
+    let statusCode = 'okay';
+    let allGood = true;
 
     for (const component of components) {
+        /** whether to list this component.
+         *
+         * true whenever status is not operational,
+         * and in that case, $`<div> {icon} {component.name}</div>` is emitted.*/
         let listComponent = false;
-        let new_content = '<div>';
 
         if (component.status === 'degraded_performance') {
-            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
-
             if(statusCode === 'okay') {
                 statusCode = 'performanceIssues';
             }
-
             listComponent = true
         } else if (component.status === 'maintenance') {
-            new_content += '<span class="glyphicon glyphicon-info-sign text-primary"></span>';
-
             if(statusCode === 'okay'){
                 statusCode = 'maintenance';
             }
-
             listComponent = true
         } else if (component.status === 'partial_outage') {
-            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-
             if(statusCode === 'okay' || statusCode === 'performanceIssues'){
                 statusCode = 'partialOutage';
             }
-
             listComponent = true
         }else if (component.status === 'major_outage') {
-            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
-
             statusCode = 'fullOutage';
-
             listComponent = true
         }
 
-        new_content += ' ' + component.name;
-        new_content += '</div>';
-
         if (listComponent){
-            content += new_content
+            content += $`<div>${(status_to_icon(component.status))} ${component.name}</div>`
         }
 
         if (component.status !== 'operational') {
