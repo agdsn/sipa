@@ -59,37 +59,24 @@ function initStatus (components) {
     let allGood = true;
 
     for (const component of components) {
-        /** whether to list this component.
-         *
-         * true whenever status is not operational,
-         * and in that case, $`<div> {icon} {component.name}</div>` is emitted.*/
-        let listComponent = false;
-
         if (component.status === 'degraded_performance') {
             if(statusCode === 'okay') {
                 statusCode = 'performanceIssues';
             }
-            listComponent = true
         } else if (component.status === 'maintenance') {
             if(statusCode === 'okay'){
                 statusCode = 'maintenance';
             }
-            listComponent = true
         } else if (component.status === 'partial_outage') {
             if(statusCode === 'okay' || statusCode === 'performanceIssues'){
                 statusCode = 'partialOutage';
             }
-            listComponent = true
         }else if (component.status === 'major_outage') {
             statusCode = 'fullOutage';
-            listComponent = true
-        }
-
-        if (listComponent){
-            content += $`<div>${(status_to_icon(component.status))} ${component.name}</div>`
         }
 
         if (component.status !== 'operational') {
+            content += $`<div>${(status_to_icon(component.status))} ${component.name}</div>`
             allGood = false;
         }
     }
