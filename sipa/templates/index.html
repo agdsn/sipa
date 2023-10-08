@@ -51,20 +51,15 @@
         </div>
     {%- endif %}
     <nav>
-        <ul class="pager">
-        {% if previous_range -%}
-            <li class="previous">
-                <a href="{{ url_for(".show", start=previous_range.start, end=previous_range.end) }}">
-                <span aria-hidden="true">&larr;</span>&nbsp;{{ _("Neuer") }}</a>
+        <ul class="pagination hstack justify-content-between">
+            <li class="page-item {% if not previous_range %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for(".show", start=previous_range.start, end=previous_range.end) }}">
+                    <span aria-hidden="true">&larr;</span>&nbsp;{{ _("Neuer") }}</a>
             </li>
-        {%- endif %}
-
-        {% if next_range -%}
-            <li class="next">
-                <a href="{{ url_for(".show", start=next_range.start, end=next_range.end) }}">
-                {{ _("Älter") }}&nbsp;<span aria-hidden="true">&rarr;</span></a>
+            <li class="page-item {% if not next_range %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for(".show", start=next_range.start, end=next_range.end) }}">
+                    {{ _("Älter") }}&nbsp;<span aria-hidden="true">&rarr;</span></a>
             </li>
-        {%- endif %}
         </ul>
     </nav>
 {% endblock %}
