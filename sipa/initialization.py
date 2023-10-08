@@ -247,7 +247,7 @@ def ensure_csp(r: Response) -> Response:
         (
             "'self'",
             "data:",
-            "https://*.tile.opentsreetmap.de",
+            "https://*.tile.openstreetmap.de",
         ),
     )
     csp.script_src = ensure_items(
