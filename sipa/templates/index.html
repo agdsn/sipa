@@ -12,7 +12,7 @@
 {%- endmacro %}
 {% block content %}
     {% if articles %}{% for art in articles %}
-        <article>
+        <article class="mb-4">
             <h2>{{ art.title }}</h2>
             <div class="hstack mb-2 gap-3">
                 {% if art.outage or art.information or art.event %}
@@ -42,7 +42,7 @@
                     </a>
                 </div>
             </div>
-            <div class="newsblock ps-3 border-3 border-start {{ border_style(art) }}">{{ art.html|safe }}</div>
+            <div class="ps-3 border-3 border-start {{ border_style(art) }}">{{ art.html|safe }}</div>
         </article>
 
     {%- endfor %}{%- else -%}
