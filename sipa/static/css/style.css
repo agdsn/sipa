@@ -139,7 +139,7 @@ img[alt=software_logo] {
 
 
 .text-password {
-	filter: blur(2px);
+	filter: blur(5px);
 	font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 
