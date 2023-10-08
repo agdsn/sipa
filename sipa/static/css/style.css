@@ -23,12 +23,6 @@ a:not([class]):hover {
     text-decoration: underline;
 }
 
-.affix {
-	top: 60px;
-	width: 100%;
-	max-width: inherit;
-}
-
 @media (min-width: 768px) {
 	.pg-header {
 		display: block;
@@ -96,18 +90,6 @@ a:not([class]):hover {
     margin-right: -15px;
 }
 
-a#traffic_gauge_link {
-    text-decoration: none;
-    transition: text-shadow 1s ease, color 1s ease;
-    -moz-transition: text-shadow 1s ease, color 1s ease;
-    -webkit-transition: text-shadow 1s ease, color 1s ease;
-    -o-transition: text-shadow 1s ease, color 1s ease;
-}
-
-#traffic_gauge_error {
-    margin-top: 1em;
-}
-
 div#row-contact div.module > div > div.row + div.row{
     margin-top: 1em;
 }
@@ -115,10 +97,6 @@ div#row-contact div.module > div > div.row + div.row{
 td {
 	vertical-align: top;
 	padding-bottom: 20px;
-}
-
-#trafstat {
-	width: 100%;
 }
 
 img[alt=software_logo] {
