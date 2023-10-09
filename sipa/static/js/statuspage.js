@@ -24,10 +24,8 @@ function parse_statuspage_data(data) {
 }
 
 class Statuspage {
-    static DEFAULTS = {endpointPath: '/pubapi/services/all'};
-
     constructor(url, callback) {
-        this.url = url.concat(Statuspage.DEFAULTS.endpointPath);
+        this.url = url;
         this.callback = callback || function () {
         };
 

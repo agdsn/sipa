@@ -102,5 +102,5 @@ function initStatus(components) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new Statuspage('https://status.agdsn.net', initStatus);
+    new Statuspage('https://status.agdsn.net/pubapi/services/all', initStatus);
 });
