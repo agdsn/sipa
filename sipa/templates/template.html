@@ -1,26 +1,8 @@
 {% extends "base.html" %}
 {% set page_title = article.title %}
 {% set page = article.localized_page %}
+{% import "macros/article.html" as m %}
 
 {% block content %}
-    <h2>{{ page.meta.title }}</h2>
-    {% if page.meta.outage or page.meta.information or page.meta.event %}
-        <p>
-        {%- for out in page.meta.outage %}
-            <span class="badge text-bg-danger">{{ out }}</span>
-        {%- endfor %}
-        {%- for info in page.meta.information %}
-            <span class="badge text-bg-warning">{{ info }}</span>
-        {%- endfor %}
-        {%- for ev in page.meta.event %}
-            <span class="badge text-bg-success">{{ ev }}</span>
-        {%- endfor %}
-        </p>
-    {% endif %}
-    {% if page.meta.author -%}
-        <small class="text-secondary">{{ _("Geschrieben von") }} {{ page.meta.author }}, {{ page.meta.date }}.</small>
-    {%- endif %}
-    <hr />
-    <div>{{ page.html|safe }}</div>
-    <hr />
+    {{ m.render_page(page) }}
 {% endblock %}

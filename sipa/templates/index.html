@@ -1,50 +1,10 @@
 {% extends "base.html" %}
 {% set page_title = "News" %}
 
-{% macro border_style(article) -%}
-    {% if article.outage %}
-    	border-danger-subtle
-    {% elif article.information %}
-        border-warning-subtle
-    {% elif article.event %}
-        border-success-subtle
-    {% endif %}
-{%- endmacro %}
+{% import "macros/article.html" as m %}
 {% block content %}
     {% if articles %}{% for art in articles %}
-        <article class="mb-4">
-            <h2>{{ art.title }}</h2>
-            <div class="hstack mb-2 gap-3">
-                {% if art.outage or art.information or art.event %}
-                    <div>
-                        {%- for out in art.outage %}
-                            <span class="badge bg-danger-subtle text-danger-emphasis">{{ out }}</span>
-                        {%- endfor %}
-                        {%- for info in art.information %}
-                            <span class="badge bg-warning-subtle text-warning-emphasis">{{ info }}</span>
-                        {%- endfor %}
-                        {%- for ev in art.event %}
-                            <span class="badge bg-success-subtle text-success-emphasis">{{ ev }}</span>
-                        {%- endfor %}
-                    </div>
-                {% endif %}
-                <div>
-                    {% if art.author -%}
-                        <small class="text-secondary">{{ _("Geschrieben von") }} {{ art.author }}, {{ art.date }}.</small>
-                    {%- elif art.date -%}
-                        <small class="text-secondary">{{ _("Vom")}} {{ art.date }}.</small>
-                    {%- endif %}
-                    <a href="{{ url_for('news.show_news', filename=art.file_basename) }}"
-                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-                        <small>
-                            Permalink&nbsp;<span class="bi-link-45deg"></span>
-                        </small>
-                    </a>
-                </div>
-            </div>
-            <div class="ps-3 border-3 border-start {{ border_style(art) }}">{{ art.html|safe }}</div>
-        </article>
-
+        {{ m.render_news(art) }}
     {%- endfor %}{%- else -%}
         <div class="alert alert-info">
             {{ _("Keine News Vorhanden!") }}
