@@ -12,7 +12,7 @@
             {{ _("Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
             "identifizieren und Deine Anfrage schneller bearbeiten!") }}
             <div>
-                <span class="glyphicon glyphicon-share-alt"></span>
+                <span class="bi-box-arrow-up-right"></span>
                 {% if current_user.is_authenticated -%}
                     <a href="{{ url_for('usersuite.contact') }}">&nbsp;
                         {{- _("Zum Kontaktformular für angemeldete Nutzer") -}}
@@ -26,5 +26,5 @@
 {% endblock %}
 
 {% block custom_script %}
-    <script src="{{ url_for("static", filename="js/contact-hints.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/contact-hints.js") }}"></script>
 {% endblock %}

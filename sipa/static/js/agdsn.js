@@ -2,104 +2,131 @@ function get_language() {
     return JSON.parse(document.getElementById('locale').innerHTML);
 }
 
-let statusMessages = {
+/**
+ * @typedef {{de: string, classes: string, en: string}} StatusMessage
+ */
+/**
+ * @type {Record<StatusCode, StatusMessage>}
+ */
+const statusMessages = {
     'okay': {
         'de': 'Derzeit sind keine Probleme bekannt.',
         'en': 'There are currently no known issues.',
-        'classes': 'glyphicon-ok-sign text-success',
+        'classes': 'bi-check-circle-fill text-success',
     },
     'maintenance': {
         'de': 'Derzeit findet eine Wartung statt.',
         'en': 'There is an ongoing maintenance.',
-        'classes': 'glyphicon-info-sign text-primary',
+        'classes': 'bi-info-circle-fill text-primary',
     },
     'performanceIssues': {
         'de': 'Es gibt derzeit Leistungsprobleme.',
         'en': 'There are currently performance issues.',
-        'classes': 'glyphicon-exclamation-sign text-primary',
+        'classes': 'bi-exclamation-circle-fill text-primary',
     },
     'partialOutage': {
         'de': 'Es gibt derzeit einen teilweisen Ausfall.',
         'en': 'There is currently a partial outage.',
-        'classes': 'glyphicon-exclamation-sign text-warning',
+        'classes': 'bi-exclamation-circle-fill text-warning',
     },
     'fullOutage':{
         'de': 'Es gibt derzeit einen schweren Ausfall',
         'en': 'There is currently a critical outage.',
-        'classes': 'glyphicon-exclamation-sign text-danger',
+        'classes': 'bi-exclamation-circle-fill text-danger',
     }
 }
 
 //Status widget
-function initStatus (components) {
-    let content = '',
-        statusCode = 'okay'
-        allGood = true;
-
-    for (const component of components) {
-        let listComponent = false;
-        let new_content = '<div>';
-
-        if (component.status === 'degraded_performance') {
-            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
-
-            if(statusCode === 'okay') {
-                statusCode = 'performanceIssues';
-            }
-
-            listComponent = true
-        } else if (component.status === 'maintenance') {
-            new_content += '<span class="glyphicon glyphicon-info-sign text-primary"></span>';
-
-            if(statusCode === 'okay'){
-                statusCode = 'maintenance';
-            }
-
-            listComponent = true
-        } else if (component.status === 'partial_outage') {
-            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-
-            if(statusCode === 'okay' || statusCode === 'performanceIssues'){
-                statusCode = 'partialOutage';
-            }
-
-            listComponent = true
-        }else if (component.status === 'major_outage') {
-            new_content += '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
-
-            statusCode = 'fullOutage';
-
-            listComponent = true
-        }
-
-        new_content += ' ' + component.name;
-        new_content += '</div>';
-
-        if (listComponent){
-            content += new_content
-        }
-
-        if (component.status !== 'operational') {
-            allGood = false;
-        }
+/**
+ * @param {Status} status
+ * @returns {string} HTML for the icon
+ */
+function status_to_icon(status) {
+    switch (status) {
+        case 'degraded_performance':
+            return '<span class="bi-exclamation-circle-fill text-primary"></span>';
+        case 'maintenance':
+            return '<span class="bi-info-circle-fill text-primary"></span>';
+        case 'partial_outage':
+            return '<span class="bi-exclamation-circle-fill text-warning"></span>';
+        case 'major_outage':
+            return '<span class="bi-exclamation-circle-fill text-danger"></span>';
+        default:
+            return "";
     }
+}
 
-    let status = $('.services-status'),
-        icon = $('.services-status .glyphicon'),
-        link = $('.services-status a');
+/**
+ * @typedef {"fullOutage" | "maintenance" | "partialOutage" | "performanceIssues" | "okay"} StatusCode
+ */
+/**
+ * @param {Array<Status>} statuses
+ * @returns {StatusCode}
+ */
+function determineStatus(statuses) {
+    if (statuses.some(s => s === 'major_outage')) {
+        return "fullOutage";
+    }
+    if (statuses.some(s => s === "partial_outage")) {
+        return "partialOutage";
+    }
+    if (statuses.some(s => s === "maintenance")) {
+        return "maintenance";
+    }
+    if (statuses.some(s => s === "degraded_performance")) {
+        return "performanceIssues";
+    }
+    return "okay";
+}
 
-    icon.removeClass('glyphicon-question-sign')
-            .addClass(statusMessages[statusCode]['classes']);
+/**
+ * @param {StatusMessage} statusMessage
+ * @param {HTMLElement} statusEl
+ * @param {?string} tooltipContent
+ */
+function updateStatusWidget(statusMessage, statusEl, tooltipContent) {
+    // icon
+    for (const icon of statusEl.getElementsByClassName("service_status")) {
+        icon.classList.remove('bi-question-circle-fill');
+        icon.classList.add(...statusMessage.classes.split(" "));
+    }
+    // link
+    for (const link of statusEl.getElementsByTagName("a")) {
+        link.classList.remove("placeholder");
+        link.innerHTML = statusMessage[get_language()];
+    }
+    // tooltip
+    if (tooltipContent !== null) {
+        statusEl.dataset.bsTitle = tooltipContent;
+        new bootstrap.Tooltip(statusEl);
+    }
+}
 
-    link.html(statusMessages[statusCode][get_language()]);
+/**
+ * Applies the status of the components to the status widget
+ * @param {Array<Component>} components – the component information
+ */
+function handleStatusResponse(components) {
+    const statusCode = determineStatus(
+        [...components.map(c => c.status)]
+    );
+    const statusMessage = statusMessages[statusCode]
+    const issueDescriptions =
+        statusCode === null ? "" : components
+            .filter(c => c.status !== 'operational')
+            .map(c => `<div>${(status_to_icon(c.status))} ${c.name}</div>`)
+            .join("");
 
-    // Set content of the popover window and activate it
-    if(!allGood){
-        status.data('content', content)
-        .popover({trigger: 'hover focus', html: true, placement: 'bottom'});
+    for (const statusEl of document.getElementsByClassName("services-status")) {
+        updateStatusWidget(statusMessage, statusEl, issueDescriptions);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new Statuspage('https://status.agdsn.net', initStatus);
+    new Statuspage(
+        'https://status.agdsn.net/pubapi/services/all',
+        // replace URL by this for testing
+        // "/static/statuspage.json",
+        handleStatusResponse
+    );
 });

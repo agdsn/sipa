@@ -1,7 +1,12 @@
+/**
+ * @typedef {'degraded_performance' | 'maintenance' | 'partial_outage' | 'major_outage' | 'operational'} Status
+ * @typedef {{ status: Status, name: string }} Component
+ * */
+
 /** Extract components (services) from statuspage API response sorted by priority
  *
- * @param data the JSON response from `/services/all`
- * @returns Array
+ * @param {object} data the JSON response from the API endpoint
+ * @returns Array<Component>
  */
 function parse_statuspage_data(data) {
     let {results} = data;
@@ -19,10 +24,8 @@ function parse_statuspage_data(data) {
 }
 
 class Statuspage {
-    static DEFAULTS = {endpointPath: '/pubapi/services/all'};
-
     constructor(url, callback) {
-        this.url = url.concat(Statuspage.DEFAULTS.endpointPath);
+        this.url = url;
         this.callback = callback || function () {
         };
 

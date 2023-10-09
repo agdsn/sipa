@@ -1,9 +1,14 @@
-#usersuite-sidebar-nav .nav>li>a {
-    font-size: 20px;
+.toc .node-name--H2 {
+    font-size: 1.5rem;
 }
-#usersuite-sidebar-nav .nav .nav>li>a {
-    font-size: 19px;
+.toc .node-name--H3 {
+    font-size: 1.25rem;
 }
+
+.is-active-link::before {
+    background-color: var(--bs-primary);
+}
+
 h2,h3 {
     padding-top: 70px;
     margin-top: -50px;

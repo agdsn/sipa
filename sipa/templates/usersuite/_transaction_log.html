@@ -7,8 +7,8 @@
 {%- endmacro %}
 
 <h2 id="transaction-log">{{ _("Buchungen") }}</h2>
-<div class="panel panel-default">
-    <table class="panel-body table table-hover">
+<div class="card">
+    <table class="card-body table table-borderless table-hover mb-0">
         <thead>
             <tr>
                 <th>{{ _("Datum") }}</th>
@@ -19,10 +19,10 @@
 
         <tbody>
             {% for log in logs %}
-                <tr class="{{ value_context(log[1]) }}">
+                <tr class="table-{{ value_context(log[1]) }}">
                     <td>{{ log[0] | date }}</td>
                     <td>{{ log[2] }}</td>
-                    <td>{{ log[1] | money }}</td>
+                    <td class="text-end">{{ log[1] | money }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -30,7 +30,7 @@
             <tr>
                 <td></td>
                 <td><strong>{{ _("Summe") }}</strong> <em class="text-muted pull-right">{{ _("Stand") }} {{ last_update | date }}</em></td>
-                <td class="text-{{ value_context(balance) }}"><strong>{{ balance | money }}</strong></td>
+                <td class="text-end text-{{ value_context(balance) }}"><strong>{{ balance | money }}</strong></td>
             </tr>
         </tfoot>
     </table>

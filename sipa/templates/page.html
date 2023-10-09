@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% set page_title = article.title %}
+{% set page = article.localized_page %}
+{% import "macros/article.html" as m %}
+
+{% block content %}
+    {{ m.render_page(page) }}
+{% endblock %}

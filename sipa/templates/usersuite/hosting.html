@@ -3,50 +3,50 @@
 {% set page_title = _("MySQL Datenbank") %}
 
 {% block content %}
-    {% include "heading.html" %}
-    {% if action == 'delete' %}
-        <div class="alert alert-warning">
-            {{ _('Willst Du deine Datenbank wirklich löschen?') }}
-            <a href="{{ url_for('.hosting', action='confirm') }}">
-                {{ _('Jawohl!') }}
-            </a>
-        </div>
-    {% endif %}
-
-    <div class="well">
-        {{ _("Du kannst auf unserem Server eine MySQL-Datenbank anlegen.") }}
-        {{ _("Weitere Infos zum Webhosting findest Du ") }}
-        <a href={{ url_for('pages.show', category_id="service", article_id="hosting") }}>
-            {{ _("hier") }}</a>.
+{% include "heading.html" %}
+{% if action == 'delete' %}
+    <div class="alert alert-warning">
+        {{ _('Willst Du deine Datenbank wirklich löschen?') }}
+        <a href="{{ url_for('.hosting', action='confirm') }}">
+            {{ _('Jawohl!') }}
+        </a>
     </div>
+{% endif %}
 
-    {% if not user_has_db %}
-        <div class="panel panel-info">
-            <div class="panel-heading">{{ _("Datenbank Erstellen") }}</div>
-            <div class="panel-body">
-                <div id="create-mysql-form">
-                    {% call forms.render(form=form, form_id="hosting-form",
-                        cancel_to=url_for('.index')) %}
-                        {{ form.action(value="create") }}
-                    {% endcall %}
-                </div>
+<div class="well">
+    {{ _("Du kannst auf unserem Server eine MySQL-Datenbank anlegen.") }}
+    {{ _("Weitere Infos zum Webhosting findest Du ") }}
+    <a href={{ url_for('pages.show', category_id="service", article_id="hosting") }}>
+        {{ _("hier") }}</a>.
+</div>
+
+{% if not user_has_db %}
+    <div class="card card-info">
+        <div class="card-header">{{ _("Datenbank Erstellen") }}</div>
+        <div class="card-body">
+            <div id="create-mysql-form">
+                {% call forms.render(form=form, form_id="hosting-form",
+                    cancel_to=url_for('.index')) %}
+                    {{ form.action(value="create") }}
+                {% endcall %}
             </div>
         </div>
-    {% else %}
+    </div>
+{% else %}
 
-        <div class="panel panel-warning">
-            <div class="panel-heading">{{ _("Deine Datenbank") }}</div>
+    <div class="card card-warning">
+        <div class="card-header">{{ _("Deine Datenbank") }}</div>
 
-            <div class="panel-body">
-                <div class="form container col-sm-10">
-                    <div class="form-group">
-                            {{ _("Hier kannst Du Deine Datenbank löschen:") }}
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <a href="{{ url_for('usersuite.hosting', action='delete') }}"
-                               class="btn btn-danger">
-                               <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+        <div class="card-body">
+            <div class="form container col-sm-10">
+                <div class="form-group">
+                        {{ _("Hier kannst Du Deine Datenbank löschen:") }}
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <a href="{{ url_for('usersuite.hosting', action='delete') }}"
+                           class="btn btn-danger">
+                           <span class="bi-dash-square-fill" aria-hidden="true"></span>
                                {{ _("Datenbank löschen") }}
                             </a>
                         </div>
@@ -54,9 +54,9 @@
             </div>
         </div>
 
-        <div class="panel panel-info">
-            <div class="panel-heading">{{ _("Passwort Ändern") }}</div>
-            <div class="panel-body">
+        <div class="card card-info">
+            <div class="card-header">{{ _("Passwort Ändern") }}</div>
+            <div class="card-body">
                 <div id="change-mysql-form">
                     {% call forms.render(form=form, form_id="hosting-form",
                         cancel_to=url_for('.index')) %}

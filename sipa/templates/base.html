@@ -2,27 +2,37 @@
 
 {%- macro user_nav_items() -%}
     {% if current_user.is_anonymous -%}
-        <li>
-            <a href="{{ url_for('generic.login') }}">
-                <span class="glyphicon glyphicon-user"></span>
+        <li class="nav-item">
+            <a href="{{ url_for('generic.login') }}" class="nav-link">
+                <span class="bi-person-fill"></span>
                 {{ _("Login") }}
             </a>
         </li>
     {%- else -%}
-        <li>
-            <a href="{{ url_for('usersuite.index') }}">
-                <span class="glyphicon glyphicon-user"></span>
+        <li class="nav-item">
+            <a href="{{ url_for('usersuite.index') }}" class="nav-link">
+                <span class="bi-person-fill"></span>
                 {{ current_user.realname.value }}
             </a>
         </li>
 
-        <li>
-            <a href="{{ url_for('generic.logout') }}">
-                <span class="glyphicon glyphicon-off"></span>
+        <li class="nav-item">
+            <a href="{{ url_for('generic.logout') }}" class="nav-link">
+                <span class="bi-power"></span>
                 {{ _("Logout") }}
             </a>
         </li>
     {%- endif %}
+{%- endmacro -%}
+{%- macro locale_image(locale) -%}
+    <img
+        src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+        alt="{{ locale.display_name }}"
+    />
+{%- endmacro -%}
+{%- macro locale_image_and_text(locale) -%}
+    {{ locale_image(locale) }}
+    {{ locale.display_name }}
 {%- endmacro -%}
 <!DOCTYPE html>
 <html lang="{{ get_locale().language }}">
@@ -56,7 +66,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/fa-all.min.css') }}"/>
+          href="{{ url_for('static', filename='bootstrap-icons.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='css/bootstrap-social.css') }}"/>
     <link rel="stylesheet" type="text/css"
@@ -66,108 +76,99 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     <script type="application/json" id="locale">
         {{- get_locale() | string | tojson -}}
     </script>
+    <script defer src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/bootstrap.bundle.min.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/statuspage.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
+    {% block custom_script %}{% endblock %}
 </head>
 
-<body>
-<nav id="main-navbar" class="navbar navbar-default navbar-fixed-top">
+<body class="js-toc-content">
+<nav id="main-navbar" class="navbar navbar-default navbar-fixed-top navbar-expand-lg">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#navbar">
-                <span class="sr-only">toggle</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+        <a class="navbar-brand" href="{{ url_for('generic.index') }}">
+            <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}"
+                 alt="AG DSN"/>
+        </a>
+        <a class="navbar-brand d-lg-none" href="{{ url_for('generic.index') }}">
+            AG DSN
+        </a>
+        <button type="button" class="navbar-toggler"
+        data-bs-toggle="collapse" data-bs-target="#navbar"
+        aria-controls="navbar" aria-label="Toggle navigation"
+        aria-expanded="false">
+            <span class="visually-hidden">toggle</span>
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <a class="navbar-brand" href="{{ url_for('generic.index') }}">
-                <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}"
-                     alt="AG DSN"/>
-            </a>
-            <a class="navbar-brand visible-xs" href="{{ url_for('generic.index') }}">
-                AG DSN
-            </a>
-        </div>
 
         <div class="collapse navbar-collapse" id="navbar">
-            <ul class="nav navbar-nav" role="menu">
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+            <ul class="navbar-nav mr-auto" role="menu">
+                <li class="nav-item dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
                         {{ _("News") }}<span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a href="{{ url_for('news.show', start=0) }}">
-                                <span class="glyphicon glyphicon-fast-backward"></span>
-                                &nbsp; {{ _("Neueste") }}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('news.show', end=-1) }}">
-                                <span class="glyphicon glyphicon-fast-forward"></span>
-                                &nbsp; {{ _("Älteste") }}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('news.show', start=0, end=-1) }}">
-                                <span class="glyphicon glyphicon-book"></span>
-                                &nbsp; {{ _("Alle") }}
-                            </a>
-                        </li>
-                    </ul>
+                    <!-- TODO add aria-labelledby ↓ and id ↑ -->
+                    <div class="dropdown-menu" role="menu">
+                        <a href="{{ url_for('news.show', start=0) }}" class="dropdown-item">
+                            <span class="bi-skip-start-fill"></span>
+                            &nbsp; {{ _("Neueste") }}
+                        </a>
+                        <a href="{{ url_for('news.show', end=-1) }}" class="dropdown-item">
+                            <span class="bi-skip-end-fill"></span>
+                            &nbsp; {{ _("Älteste") }}
+                        </a>
+                        <a href="{{ url_for('news.show', start=0, end=-1) }}" class="dropdown-item">
+                            <span class="bi-collection-fill"></span>
+                            &nbsp; {{ _("Alle") }}
+                        </a>
+                    </div>
                 </li>
+
                 {% for c in cf_pages.categories -%}
                     {% if c.index -%}
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
                                 {{ c.name }}<span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu" role="menu">
+                            <!-- TODO add aria-labelledby ↓ and id ↑ -->
+                            <div class="dropdown-menu" role="menu">
                                 {%- for article in c.articles -%}
                                     {%- if not article.id == 'index' and article.title and not article.hidden -%}
-                                        <li>
-                                            <a href="{{ url_for('pages.show', category_id=c.id, article_id=article.id) }}">
-                                                <span class="glyphicon {{ article.glyphicon }}"></span>
-                                                &nbsp; {{ article.title }}
-                                            </a>
-                                        </li>
+                                    <a href="{{ url_for('pages.show', category_id=c.id, article_id=article.id) }}" class="dropdown-item">
+                                        <span class="{{ article.icon | glyphicon_to_bi }}"></span>
+                                        &nbsp; {{ article.title }}
+                                    </a>
                                     {%- endif %}
                                 {%- endfor %}
-                            </ul>
-                        <li>
+                            </div>
+                        </li>
                     {% endif -%}
                 {%- endfor %}
             </ul>
 
+            <!-- dropdown cog: visible on lg only -->
             <ul id="navbar-right-dropdown"
-                class="nav navbar-nav navbar-right visible-md-block visible-sm-block">
-                <li>
+                class="navbar-nav ms-auto d-none d-lg-block d-xl-none">
+                <li class="nav-item dropdown">
                     <button id="language-dropdown-button" type="button"
-                            class="btn btn-default navbar-btn"
-                            data-toggle="dropdown" aria-label="Toggle Menu">
-                        <span class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            class="btn btn-secondary navbar-btn"
+                            data-bs-toggle="dropdown" aria-label="Toggle Menu" aria-expanded="false">
+                        <span class="bi-gear-fill" aria-hidden="true"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu"
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu"
                         aria-labelledby="language-dropdown-button">
                         <li class="dropdown-header">{{ _("Anmeldung") }}</li>
-
                         {{ user_nav_items() }}
-
                         <li class="dropdown-header">{{ _("Sprache") }}</li>
-
                         <li>
                             {%- for locale in possible_locales() %}
-                                <li {% if get_locale() == locale -%}
-                                    class="active"
-                                {%- endif %}>
-                                    <a href="{{ url_self(locale=locale.language) }}">
-                                        <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
-                                             alt="{{ locale.display_name }}"/>
-                                        {{ locale.display_name }}
+                                <li {% if get_locale() == locale -%} class="active" {%- endif %}>
+                                    <a href="{{ url_self(locale=locale.language) }}" class="nav-link">
+                                        {{ locale_image_and_text(locale) }}
                                     </a>
                                 </li>
                             {% endfor %}
-
                         </li>
 
                     </ul>
@@ -175,26 +176,47 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
             </ul>
 
-            <ul id="navbar-right" class="nav navbar-nav navbar-right hidden-sm hidden-md">
+            <!-- ≥xl: expanded log{in,out}/language menu; <l: log{in,out} + language toggle -->
+            <ul id="navbar-right" class="navbar-nav ms-auto d-lg-none d-xl-inline-flex">
                 {{ user_nav_items() }}
 
-                <li>
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                        <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}"
-                             alt="{{ get_locale().display_name }}"/>
+                <!-- lanugage toggle button -->
+                <li class="nav-item btn-group hstack justify-content-center d-xl-none" aria-label="language selection">
+                    {% for locale in possible_locales() %}
+                        <a
+                            href="{{ url_self(locale=locale.language) }}"
+                            {% if locale == get_locale() %}
+                            aria-current="true"
+                            class="btn btn-outline-primary active"
+                            {% else %}
+                            class="btn btn-outline-primary"
+                            {% endif %}
+                        >
+                            {{ locale_image_and_text(locale) }}
+                        </a>
+                    {% endfor %}
+                </li>
+
+                <!-- language dropdown -->
+                <li class="nav-item dropdown d-none d-xl-inline-flex">
+                    <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
+                        {{ locale_image(get_locale()) }}
                         <span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu" role="menu">
+                    <div class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
-                            <li>
-                                <a href="{{ url_self(locale=locale.language) }}">
-                                    <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
-                                         alt="{{ locale.display_name }}"/>
-                                    {{ locale.display_name }}
-                                </a>
-                            </li>
+                            <a
+                                href="{{ url_self(locale=locale.language) }}"
+                                {%- if locale == get_locale() -%}
+                                class="dropdown-item active"
+                                {%- else -%}
+                                class="dropdown-item"
+                                {%- endif -%}
+                            >
+                                {{ locale_image_and_text(locale) }}
+                            </a>
                         {% endfor %}
-                    </ul>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -211,8 +233,8 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
 <div id="center" class="container">
     <div class="row">
-        <main class="col-sm-9">
-            <div class="visible-xs">
+        <main class="col">
+            <div class="d-md-none">
                 <br/>
                 {{ services_status.widget() }}
                 <hr/>
@@ -238,10 +260,11 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
             {% endblock %}
         </main>
 
-        <div id="sidebar" class="col-sm-3">
+        <div id="sidebar" class="col-xl-3 col-lg-4 col-md-5">
             {% block sidebar %}
                 <div>
-                    <div class="module hidden-xs">
+                    <!-- TODO Fix visibility -->
+                    <div class="module d-none d-md-block">
                         <h2>
                             {{ _("Status") }}
                         </h2>
@@ -254,7 +277,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     {% if should_display_traffic_data() -%}
                         <div class="module"><h2>
                             <a href="{{ url_for('generic.usertraffic') }}"><span
-                                    class="glyphicon glyphicon-stats"></span> Traffic</a>
+                                    class="bi-bar-chart-fill"></span> Traffic</a>
                         </h2></div>
                     {%- endif %}
                     <div id="row-contact">
@@ -264,10 +287,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                             <div>
                                 <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
+                                    <div class="col-1">
+                                        <span class="bi-envelope-fill"></span>
                                     </div>
-                                    <div class="col-xs-10">
+                                    <div class="col-10">
                                         {% if current_user.is_authenticated %}
                                             {% set mail = current_datasource().support_mail %}
                                             <a href="mailto:{{ mail }}">{{ mail }}</a>
@@ -275,10 +298,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                             </div>
                                             </div>
                                             <div class="row">
-                                            <div class="col-xs-1">
-                                                <span class="glyphicon glyphicon-envelope"></span>
+                                            <div class="col-1">
+                                                <span class="bi-envelope-fill"></span>
                                             </div>
-                                            <div class="col-xs-10">
+                                            <div class="col-10">
 
                                             <a href="{{ url_for('usersuite.contact') }}">
                                                 {{ _("Kontaktformular für Mitglieder") }}
@@ -293,20 +316,20 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                         </div>
                                         </div>
                                 <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-envelope"></span>
+                                    <div class="col-1">
+                                        <span class="bi-envelope-fill"></span>
                                     </div>
-                                    <div class="col-xs-10">
+                                    <div class="col-10">
                                         <a href="{{ url_for('generic.contact_official') }}">
                                             {{ _("Kontaktformular für Geschäftspartner") }}
                                         </a>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-earphone"></span>
+                                    <div class="col-1">
+                                        <span class="bi-telephone-fill"></span>
                                     </div>
-                                    <div class="col-xs-10">
+                                    <div class="col-10">
                                         <a href="tel:004935189670993">
                                             0351 89670993
 					                    </a><br>
@@ -321,10 +344,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                                 {% for address in config.CONTACT_ADDRESSES %}
                                     <div class="row">
-                                        <div class="col-xs-1">
-                                            <span class="glyphicon glyphicon-home"></span>
+                                        <div class="col-1">
+                                            <span class="bi-house-door-fill"></span>
                                         </div>
-                                        <div class="col-xs-10">
+                                        <div class="col-10">
                                             <address>
                                                 <strong>{{ address.name }}</strong><br>
 
@@ -357,33 +380,33 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                 <hr>
 
                                 <div class="row">
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-mastodon"
                                            href="https://social.anoxinon.de/@ag_dsn"
 					   rel="me"
                                            aria-label="Mastodon">
-                                            <span class="fa-brands fa-mastodon" aria-hidden="true"></span>
+                                            <span class="bi-mastodon" aria-hidden="true"></span>
                                         </a>
                                     </div>
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-twitter"
                                            href="https://twitter.com/ag_dsn"
                                            aria-label="Twitter">
-                                            <span class="fa-brands fa-twitter" aria-hidden="true"></span>
+                                            <span class="bi-twitter" aria-hidden="true"></span>
                                         </a>
                                     </div>
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-facebook"
                                            href="https://www.facebook.com/DresdnerStudentenNetz"
                                            aria-label="Facebook">
-                                            <span class="fa-brands fa-facebook" aria-hidden="true"></span>
+                                            <span class="bi-facebook" aria-hidden="true"></span>
                                         </a>
                                     </div>
-                                    <div class="col-xs-3 text-center">
+                                    <div class="col-3 text-center">
                                         <a class="btn btn-social-icon btn-github"
                                            href="https://github.com/agdsn/sipa"
                                            aria-label="Github">
-                                            <span class="fa-brands fa-github" aria-hidden="true"></span>
+                                            <span class="bi-github" aria-hidden="true"></span>
                                         </a>
                                     </div>
                                 </div>
@@ -441,10 +464,5 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     </div>
 </footer>
 
-<script src="{{ url_for("static", filename="js/jquery-2.1.1.min.js") }}"></script>
-<script src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
-<script src="{{ url_for("static", filename="js/statuspage.js") }}"></script>
-<script src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
-{% block custom_script %}{% endblock %}
 </body>
 </html>

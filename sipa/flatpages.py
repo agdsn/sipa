@@ -132,6 +132,12 @@ class Article(Node):
         """
         return self.localized_page.meta.get('hidden', False)
 
+    @property
+    def icon(self) -> str:
+        return self.localized_page.meta.get("icon") or self.localized_page.meta.get(
+            "glyphicon"
+        )
+
     def __getattr__(self, attr: str) -> str:
         """Return the meta attribute of the localized page
 
