@@ -12,6 +12,6 @@
 {% endblock %}
 
 {% block custom_script -%}
-    <script src="{{ url_for("static", filename="js/register_base.js") }}"></script>
+    <script defer src="{{ url_for("static", filename="js/register_base.js") }}"></script>
     {% block register_custom_script %}{% endblock %}
 {% endblock %}
