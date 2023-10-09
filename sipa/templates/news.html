@@ -10,6 +10,7 @@
             {{ _("Keine News Vorhanden!") }}
         </div>
     {%- endif %}
+    {% if previous_range or next_range %}
     <nav>
         <ul class="pagination hstack justify-content-between">
             <li class="page-item {% if not previous_range %}disabled{% endif %}">
@@ -22,4 +23,5 @@
             </li>
         </ul>
     </nav>
+    {% endif %}
 {% endblock %}

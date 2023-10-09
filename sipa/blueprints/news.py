@@ -25,8 +25,9 @@ def show():
         reverse=True,
     )
     if len(news) == 0:
-        return render_template("index.html", articles=None,
-                               previous_range=0, next_range=0)
+        return render_template(
+            "news.html", articles=None, previous_range=0, next_range=0
+        )
 
     default_step = 10
     # calculating mod len() allows things like `end=-1` for the last
@@ -56,8 +57,12 @@ def show():
     if end < len(news) - 1:
         next_range = {'start': end + 1, 'end': min(end + delta, len(news) - 1)}
 
-    return render_template("index.html", articles=news[start:end+1],
-                           previous_range=prev_range, next_range=next_range)
+    return render_template(
+        "news.html",
+        articles=news[start : end + 1],
+        previous_range=prev_range,
+        next_range=next_range,
+    )
 
 
 @bp_news.route("/<filename>")
@@ -66,6 +71,6 @@ def show_news(filename):
 
     for article in news:
         if article.file_basename == filename:
-            return render_template("template.html", article=article)
+            return render_template("news.html", articles=[article])
 
     abort(404)
