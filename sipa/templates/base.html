@@ -24,6 +24,16 @@
         </li>
     {%- endif %}
 {%- endmacro -%}
+{%- macro locale_image(locale) -%}
+    <img
+        src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+        alt="{{ locale.display_name }}"
+    />
+{%- endmacro -%}
+{%- macro locale_image_and_text(locale) -%}
+    {{ locale_image(locale) }}
+    {{ locale.display_name }}
+{%- endmacro -%}
 <!DOCTYPE html>
 <html lang="{{ get_locale().language }}">
 
@@ -149,24 +159,16 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     <ul class="dropdown-menu dropdown-menu-end" role="menu"
                         aria-labelledby="language-dropdown-button">
                         <li class="dropdown-header">{{ _("Anmeldung") }}</li>
-
                         {{ user_nav_items() }}
-
                         <li class="dropdown-header">{{ _("Sprache") }}</li>
-
                         <li>
                             {%- for locale in possible_locales() %}
-                                <li {% if get_locale() == locale -%}
-                                    class="active"
-                                {%- endif %}>
+                                <li {% if get_locale() == locale -%} class="active" {%- endif %}>
                                     <a href="{{ url_self(locale=locale.language) }}" class="nav-link">
-                                        <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
-                                             alt="{{ locale.display_name }}"/>
-                                        {{ locale.display_name }}
+                                        {{ locale_image_and_text(locale) }}
                                     </a>
                                 </li>
                             {% endfor %}
-
                         </li>
 
                     </ul>
@@ -190,11 +192,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                             class="btn btn-outline-primary"
                             {% endif %}
                         >
-                            <img
-                                src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
-                                alt="{{ locale.display_name }}"
-                            />
-                            {{ locale.display_name }}
+                            {{ locale_image_and_text(locale) }}
                         </a>
                     {% endfor %}
                 </li>
@@ -202,16 +200,13 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <!-- language dropdown -->
                 <li class="nav-item dropdown d-none d-xl-inline-flex">
                     <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
-                        <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}"
-                             alt="{{ get_locale().display_name }}"/>
+                        {{ locale_image(get_locale()) }}
                         <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
                             <a href="{{ url_self(locale=locale.language) }}" class="dropdown-item">
-                                <img src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
-                                     alt="{{ locale.display_name }}"/>
-                                {{ locale.display_name }}
+                                {{ locale_image_and_text(locale) }}
                             </a>
                         {% endfor %}
                     </div>
