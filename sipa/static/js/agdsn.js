@@ -125,6 +125,8 @@ function handleStatusResponse(components) {
 document.addEventListener('DOMContentLoaded', () => {
     new Statuspage(
         'https://status.agdsn.net/pubapi/services/all',
+        // replace URL by this for testing
+        // "/static/statuspage.json",
         handleStatusResponse
     );
 });
