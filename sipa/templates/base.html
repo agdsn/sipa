@@ -174,11 +174,33 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
             </ul>
 
-            <!-- ≥xl: expanded log{in,out}/language menu -->
+            <!-- ≥xl: expanded log{in,out}/language menu; <l: log{in,out} + language toggle -->
             <ul id="navbar-right" class="navbar-nav ms-auto d-lg-none d-xl-inline-flex">
                 {{ user_nav_items() }}
 
-                <li class="nav-item dropdown">
+                <!-- lanugage toggle button -->
+                <li class="nav-item btn-group hstack justify-content-center d-xl-none" aria-label="language selection">
+                    {% for locale in possible_locales() %}
+                        <a
+                            href="{{ url_self(locale=locale.language) }}"
+                            {% if locale == get_locale() %}
+                            aria-current="true"
+                            class="btn btn-outline-primary active"
+                            {% else %}
+                            class="btn btn-outline-primary"
+                            {% endif %}
+                        >
+                            <img
+                                src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
+                                alt="{{ locale.display_name }}"
+                            />
+                            {{ locale.display_name }}
+                        </a>
+                    {% endfor %}
+                </li>
+
+                <!-- language dropdown -->
+                <li class="nav-item dropdown d-none d-xl-inline-flex">
                     <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
                         <img src="{{ url_for('static', filename='img/{}.png'.format(get_locale().language)) }}"
                              alt="{{ get_locale().display_name }}"/>
