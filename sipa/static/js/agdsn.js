@@ -80,33 +80,51 @@ function determineStatus(statuses) {
 }
 
 /**
+ * @param {StatusMessage} statusMessage
+ * @param {HTMLElement} statusEl
+ * @param {?string} tooltipContent
+ */
+function updateStatusWidget(statusMessage, statusEl, tooltipContent) {
+    // icon
+    for (const icon of statusEl.getElementsByClassName("service_status")) {
+        icon.classList.remove('bi-question-circle-fill');
+        icon.classList.add(...statusMessage.classes.split(" "));
+    }
+    // link
+    for (const link of statusEl.getElementsByTagName("a")) {
+        link.classList.remove("placeholder");
+        link.innerHTML = statusMessage[get_language()];
+    }
+    // tooltip
+    if (tooltipContent !== null) {
+        statusEl.dataset.bsTitle = tooltipContent;
+        new bootstrap.Tooltip(statusEl);
+    }
+}
+
+/**
  * Applies the status of the components to the status widget
  * @param {Array<Component>} components – the component information
  */
-function initStatus(components) {
+function handleStatusResponse(components) {
     const statusCode = determineStatus(
         [...components.map(c => c.status)]
     );
-
-    let status = $('.services-status'),
-        icon = $('.services-status .service_status'),
-        link = $('.services-status a');
-
-    icon.removeClass('bi-question-circle-fill')
-        .addClass(statusMessages[statusCode]['classes']);
-    link.html(statusMessages[statusCode][get_language()]);
-
-    if (statusCode !== "okay") {
-        let issueDescriptions = components
+    const statusMessage = statusMessages[statusCode]
+    const issueDescriptions =
+        statusCode === null ? "" : components
             .filter(c => c.status !== 'operational')
-            .map(c => $`<div>${(status_to_icon(c.status))} ${c.name}</div>`)
+            .map(c => `<div>${(status_to_icon(c.status))} ${c.name}</div>`)
             .join("");
 
-        status.data('content', issueDescriptions)
-            .popover({trigger: 'hover focus', html: true, placement: 'bottom'});
+    for (const statusEl of document.getElementsByClassName("services-status")) {
+        updateStatusWidget(statusMessage, statusEl, issueDescriptions);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new Statuspage('https://status.agdsn.net/pubapi/services/all', initStatus);
+    new Statuspage(
+        'https://status.agdsn.net/pubapi/services/all',
+        handleStatusResponse
+    );
 });
