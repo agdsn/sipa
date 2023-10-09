@@ -2,7 +2,13 @@ function get_language() {
     return JSON.parse(document.getElementById('locale').innerHTML);
 }
 
-let statusMessages = {
+/**
+ * @typedef {{de: string, classes: string, en: string}} StatusMessage
+ */
+/**
+ * @type {Record<StatusCode, StatusMessage>}
+ */
+const statusMessages = {
     'okay': {
         'de': 'Derzeit sind keine Probleme bekannt.',
         'en': 'There are currently no known issues.',
