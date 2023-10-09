@@ -49,51 +49,55 @@ function status_to_icon(status) {
             return "";
     }
 }
+
+/**
+ * @typedef {"fullOutage" | "maintenance" | "partialOutage" | "performanceIssues" | "okay"} StatusCode
+ */
+/**
+ * @param {Array<Status>} statuses
+ * @returns {StatusCode}
+ */
+function determineStatus(statuses) {
+    if (statuses.some(s => s === 'major_outage')) {
+        return "fullOutage";
+    }
+    if (statuses.some(s => s === "partial_outage")) {
+        return "partialOutage";
+    }
+    if (statuses.some(s => s === "maintenance")) {
+        return "maintenance";
+    }
+    if (statuses.some(s => s === "degraded_performance")) {
+        return "performanceIssues";
+    }
+    return "okay";
+}
+
 /**
  * Applies the status of the components to the status widget
  * @param {Array<Component>} components – the component information
  */
-function initStatus (components) {
-    let content = '';
-    let statusCode = 'okay';
-    let allGood = true;
-
-    for (const component of components) {
-        if (component.status === 'degraded_performance') {
-            if(statusCode === 'okay') {
-                statusCode = 'performanceIssues';
-            }
-        } else if (component.status === 'maintenance') {
-            if(statusCode === 'okay'){
-                statusCode = 'maintenance';
-            }
-        } else if (component.status === 'partial_outage') {
-            if(statusCode === 'okay' || statusCode === 'performanceIssues'){
-                statusCode = 'partialOutage';
-            }
-        }else if (component.status === 'major_outage') {
-            statusCode = 'fullOutage';
-        }
-
-        if (component.status !== 'operational') {
-            content += $`<div>${(status_to_icon(component.status))} ${component.name}</div>`
-            allGood = false;
-        }
-    }
+function initStatus(components) {
+    const statusCode = determineStatus(
+        [...components.map(c => c.status)]
+    );
 
     let status = $('.services-status'),
         icon = $('.services-status .glyphicon'),
         link = $('.services-status a');
 
     icon.removeClass('glyphicon-question-sign')
-            .addClass(statusMessages[statusCode]['classes']);
-
+        .addClass(statusMessages[statusCode]['classes']);
     link.html(statusMessages[statusCode][get_language()]);
 
-    // Set content of the popover window and activate it
-    if(!allGood){
-        status.data('content', content)
-        .popover({trigger: 'hover focus', html: true, placement: 'bottom'});
+    if (statusCode !== "okay") {
+        let issueDescriptions = components
+            .filter(c => c.status !== 'operational')
+            .map(c => $`<div>${(status_to_icon(c.status))} ${c.name}</div>`)
+            .join("");
+
+        status.data('content', issueDescriptions)
+            .popover({trigger: 'hover focus', html: true, placement: 'bottom'});
     }
 }
 
