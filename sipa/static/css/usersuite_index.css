@@ -5,6 +5,10 @@
     font-size: 1.25rem;
 }
 
+.is-active-link::before {
+    background-color: var(--bs-primary);
+}
+
 h2,h3 {
     padding-top: 70px;
     margin-top: -50px;
