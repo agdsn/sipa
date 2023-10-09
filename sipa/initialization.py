@@ -99,6 +99,37 @@ def init_app(app, **kwargs):
     app.context_processor(inject_meetingcal)
 
     app.add_template_filter(render_links)
+
+    def glyphicon_to_bi(glyphicon: str) -> str:
+        MAP = {
+            "glyphicon-briefcase": "bi-briefcase-fill",
+            "glyphicon-bullhorn": "bi-megaphone-fill",
+            "glyphicon-chevron-down": "bi-chevron-down",
+            "glyphicon-cloud": "bi-cloud-fill",
+            "glyphicon-comment": "bi-chat-left-fill",
+            "glyphicon-dashboard": "bi-speedometer",
+            "glyphicon-download-alt": "bi-download",
+            "glyphicon-envelope": "bi-envelope-fill",
+            "glyphicon-euro": "bi-currency-euro",
+            "glyphicon-file": "bi-file-earmark-fill",
+            "glyphicon-globe": "bi-globe-europe-africa",
+            "glyphicon-headphones": "bi-headphones",
+            "glyphicon-list-alt": "bi-card-list",
+            "glyphicon-lock": "bi-lock-fill",
+            "glyphicon-log-in": "bi-box-arrow-in-right",
+            "glyphicon-question-sign": "bi-question-circle-fill",
+            "glyphicon-retweet": "bi-arrow-repeat",
+            "glyphicon-signal": "bi-router-fill",  # used for router page
+            "glyphicon-star": "bi-star-fill",
+            "glyphicon-tasks": "bi-box-arrow-up-right",
+            "glyphicon-tint": "bi-droplet-fill",
+            "glyphicon-transfer": "bi-arrow-left-right",
+            "glyphicon-user": "bi-person-fill",
+            "glyphicon-wrench": "bi-wrench-adjustable",
+        }
+        return MAP.get(glyphicon, glyphicon.replace("glyphicon-", "bi-"))
+
+    app.add_template_filter(glyphicon_to_bi)
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
 
