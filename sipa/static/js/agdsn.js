@@ -6,27 +6,27 @@ let statusMessages = {
     'okay': {
         'de': 'Derzeit sind keine Probleme bekannt.',
         'en': 'There are currently no known issues.',
-        'classes': 'glyphicon-ok-sign text-success',
+        'classes': 'bi-check-circle-fill text-success',
     },
     'maintenance': {
         'de': 'Derzeit findet eine Wartung statt.',
         'en': 'There is an ongoing maintenance.',
-        'classes': 'glyphicon-info-sign text-primary',
+        'classes': 'bi-info-circle-fill text-primary',
     },
     'performanceIssues': {
         'de': 'Es gibt derzeit Leistungsprobleme.',
         'en': 'There are currently performance issues.',
-        'classes': 'glyphicon-exclamation-sign text-primary',
+        'classes': 'bi-exclamation-circle-fill text-primary',
     },
     'partialOutage': {
         'de': 'Es gibt derzeit einen teilweisen Ausfall.',
         'en': 'There is currently a partial outage.',
-        'classes': 'glyphicon-exclamation-sign text-warning',
+        'classes': 'bi-exclamation-circle-fill text-warning',
     },
     'fullOutage':{
         'de': 'Es gibt derzeit einen schweren Ausfall',
         'en': 'There is currently a critical outage.',
-        'classes': 'glyphicon-exclamation-sign text-danger',
+        'classes': 'bi-exclamation-circle-fill text-danger',
     }
 }
 
@@ -38,13 +38,13 @@ let statusMessages = {
 function status_to_icon(status) {
     switch (status) {
         case 'degraded_performance':
-            return '<span class="glyphicon glyphicon-exclamation-sign text-primary"></span>';
+            return '<span class="bi-exclamation-circle-fill text-primary"></span>';
         case 'maintenance':
-            return '<span class="glyphicon glyphicon-info-sign text-primary"></span>';
+            return '<span class="bi-info-circle-fill text-primary"></span>';
         case 'partial_outage':
-            return '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+            return '<span class="bi-exclamation-circle-fill text-warning"></span>';
         case 'major_outage':
-            return '<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>';
+            return '<span class="bi-exclamation-circle-fill text-danger"></span>';
         default:
             return "";
     }
@@ -83,10 +83,10 @@ function initStatus(components) {
     );
 
     let status = $('.services-status'),
-        icon = $('.services-status .glyphicon'),
+        icon = $('.services-status .service_status'),
         link = $('.services-status a');
 
-    icon.removeClass('glyphicon-question-sign')
+    icon.removeClass('bi-question-circle-fill')
         .addClass(statusMessages[statusCode]['classes']);
     link.html(statusMessages[statusCode][get_language()]);
 
