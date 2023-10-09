@@ -96,7 +96,7 @@ function updateStatusWidget(statusMessage, statusEl, tooltipContent) {
         link.innerHTML = statusMessage[get_language()];
     }
     // tooltip
-    if (tooltipContent !== null) {
+    if (tooltipContent) {
         statusEl.dataset.bsTitle = tooltipContent;
         new bootstrap.Tooltip(statusEl);
     }
