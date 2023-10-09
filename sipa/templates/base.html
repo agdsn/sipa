@@ -205,7 +205,14 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
-                            <a href="{{ url_self(locale=locale.language) }}" class="dropdown-item">
+                            <a
+                                href="{{ url_self(locale=locale.language) }}"
+                                {%- if locale == get_locale() -%}
+                                class="dropdown-item active"
+                                {%- else -%}
+                                class="dropdown-item"
+                                {%- endif -%}
+                            >
                                 {{ locale_image_and_text(locale) }}
                             </a>
                         {% endfor %}
