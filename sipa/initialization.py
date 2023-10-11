@@ -76,8 +76,8 @@ def init_app(app, **kwargs):
     app.register_blueprint(bp_register)
 
     logger.debug('Registering Jinja globals')
-    form_label_width = 3
-    form_input_width = 7
+    form_label_width = 4
+    form_input_width = 8
     app.jinja_env.globals.update(
         cf_pages=cf_pages,
         get_locale=get_locale,
@@ -89,7 +89,7 @@ def init_app(app, **kwargs):
         current_datasource=lambda: backends.datasource,
         form_label_width_class=f"col-sm-{form_label_width}",
         form_input_width_class=f"col-sm-{form_input_width}",
-        form_input_offset_class=f"col-sm-offset-{form_label_width}",
+        form_input_offset_class=f"offset-sm-{form_label_width}",
         url_self=url_self,
         now=datetime.utcnow()
     )
