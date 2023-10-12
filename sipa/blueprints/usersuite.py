@@ -357,7 +357,7 @@ def change_mac():
                                'tags': {'rate_critical': True}})
 
             flash(gettext("MAC-Adresse wurde geändert!"), 'success')
-            flash(gettext("Es kann bis zu 24 Stunden (!) dauern, "
+            flash(gettext("Es kann bis zu 15 Minuten dauern, "
                           "bis die Änderung wirksam ist."), 'info')
 
             return redirect(url_for('.index'))

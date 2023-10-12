@@ -614,8 +614,8 @@ msgstr "MAC address is already in use!"
 msgid "MAC-Adresse wurde geändert!"
 msgstr "MAC address has been changed"
 
-msgid "Es kann bis zu 24 Stunden (!) dauern, bis die Änderung wirksam ist."
-msgstr "It can take up to 24 (!) hours until the changes apply."
+msgid "Es kann bis zu 15 Minuten dauern, bis die Änderung wirksam ist."
+msgstr "It can take up to 15 minutes until the changes apply."
 
 msgid ""
 "Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den "
