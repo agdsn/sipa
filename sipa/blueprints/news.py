@@ -1,9 +1,21 @@
 """
 Blueprint providing features regarding the news entries.
 """
+import typing as t
 from operator import attrgetter
+from traceback import format_exception_only
 
-from flask import Blueprint, abort, current_app, render_template, request
+from flask import (
+    Blueprint,
+    abort,
+    current_app,
+    render_template,
+    request,
+    render_template_string,
+)
+from flask_flatpages import Page
+
+from sipa.flatpages import CategorizedFlatPages, Article
 
 bp_news = Blueprint('news', __name__, url_prefix='/news')
 
@@ -74,3 +86,50 @@ def show_news(filename):
             return render_template("news.html", articles=[article])
 
     abort(404)
+
+
+def try_get_content(cf_pages: CategorizedFlatPages, filename: str) -> str:
+    """Reconstructs the content of a news article from the given filename."""
+    news = cf_pages.get_articles_of_category("news")
+    article = next((a for a in news if a.file_basename == filename), None)
+    assert isinstance(article, Article)
+    if not article:
+        return ""
+    p = article.localized_page
+    # need to reconstruct actual content; only have access to parsed form
+    return p._meta + "\n\n" + p.body
+
+
+@bp_news.route("/edit")
+@bp_news.route("/<filename>/edit")
+def edit(filename: str | None = None):
+    return render_template(
+        "news_edit.html", content=try_get_content(current_app.cf_pages, filename)
+    )
+
+
+@bp_news.route("/preview", methods=["GET", "POST"])
+def preview():
+    article = request.form.get("article-content") or request.args.get("article-content")
+    if article is None:
+        abort(400)
+
+    flatpages = t.cast(CategorizedFlatPages, current_app.cf_pages).flat_pages
+    page = t.cast(Page, flatpages._parse(content=article, path="…", rel_path="…"))
+    try:
+        return render_template_string(
+            '{% import "macros/article.html" as m %} {{ m.render_news(page) }}',
+            page=page,
+        )
+    except Exception as e:
+        return render_template_string(
+            """
+                <div class="alert alert-danger" role='alert'>
+                    <h4 class="alert-heading">Error</h4>
+                    <small>
+                        <pre><code>{{ backtrace }}</code></pre>
+                    </small>
+                </div>
+            """,
+            backtrace=("\n".join(format_exception_only(e))),
+        )

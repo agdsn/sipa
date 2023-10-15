@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% set known_meta_keys = [
+    "title", "author", "date",
+    "outage", "information", "event",
+    "rank", "link", "hidden", "icon", "glyphicon",
+] %}
+{% block content %}
+    <div class="mb-3">
+        <strong>Hinweise:</strong>
+        <small>
+            <ul>
+                <li>Metadaten a la <code>foo: bar</code> durch Leerzeile von Inhalt trennen</li>
+                <li>Verfügbare metadaten:
+                    {% for item in known_meta_keys -%}
+                        <span
+                            class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">
+                            {{ item }}
+                        </span>{% if not loop.last %}, {% endif %}
+                    {%- endfor %}.
+                </li>
+                <li>Event, outage, und information nehmen eine Liste.</li>
+            </ul>
+        </small>
+        <label for="article-content" class="visually-hidden">Content to preview</label>
+        <textarea
+            placeholder="Enter content to preview"
+            class="form-control w-100 font-monospace" name="article-content" id="" cols="30"
+            rows="10"
+            hx-post="{{ url_for("news.preview") }}"
+            hx-trigger="load,keyup changed delay:500ms"
+            hx-target="#article-preview"
+            hx-swap="innerHTML"
+        >{{ content | default("") }}</textarea>
+    </div>
+    <div id="article-preview" class="mb-3" style="transition: 500ms;"></div>
+{% endblock %}
