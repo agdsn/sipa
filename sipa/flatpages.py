@@ -63,30 +63,13 @@ class Article(Node):
         :param page: The page to add
         :param locale: The locale of this page
         """
-        if not (self.id == 'index' or self.validate_page_meta(page)):
+        if not (self.id == "index" or validate_page_meta(page)):
             return
 
         self.localized_pages[str(locale)] = page
         default_locale = self.extension.app.babel_instance.default_locale
         if self.default_page is None or locale == default_locale:
             self.default_page = page
-
-    @staticmethod
-    def validate_page_meta(page: Page) -> bool:
-        """Validate that the pages meta-section.
-
-        This function is necessary because a page with incorrect
-        metadata will raise some Errors when trying to access them.
-        Note that this is done rather early as pages are cached.
-
-        :param page: The page to validate
-
-        :returns: Whether the page is valid
-        """
-        try:
-            return 'title' in page.meta
-        except ScannerError:
-            return False
 
     @property
     def rank(self) -> int:
@@ -189,6 +172,23 @@ class Article(Node):
         :returns: The basename of the :py:attr:`localized_page`
         """
         return splitext(basename(self.localized_page.path))[0]
+
+
+def validate_page_meta(page: Page) -> bool:
+    """Validate that the pages meta-section.
+
+    This function is necessary because a page with incorrect
+    metadata will raise some Errors when trying to access them.
+    Note that this is done rather early as pages are cached.
+
+    :param page: The page to validate
+
+    :returns: Whether the page is valid
+    """
+    try:
+        return "title" in page.meta
+    except ScannerError:
+        return False
 
 
 class Category(Node):
