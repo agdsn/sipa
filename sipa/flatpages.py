@@ -1,7 +1,8 @@
+from __future__ import annotations
 import logging
+from dataclasses import dataclass, field
 from operator import attrgetter
 from os.path import basename, dirname, splitext
-from typing import Any
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, request
@@ -13,18 +14,19 @@ from sipa.babel import get_user_locale_setting, possible_locales
 logger = logging.getLogger(__name__)
 
 
+# NB: Node is meant to be a union `Article | Category`.
+@dataclass
 class Node:
     """An abstract object with a parent and an id"""
 
-    def __init__(self, extension, parent, node_id):
-        #: The CategorizedFlatPages extension
-        self.extension = extension
-        #: The parent object
-        self.parent = parent
-        #: This object's id
-        self.id = node_id
+    extension: CategorizedFlatPages
+    parent: Category | None
+    id: str
 
 
+
+
+@dataclass
 class Article(Node):
     """The Article class
 
@@ -40,14 +42,13 @@ class Article(Node):
     Besides that, :py:meth:`__getattr__` comfortably passes queries to
     the :py:obj:`localized_page.meta` dict.
     """
-    def __init__(self, extension, parent, article_id):
-        super().__init__(extension, parent, article_id)
-        #: The dict containing the localized pages of this article
-        self.localized_pages: dict[Any, Page] = {}
-        #: The default page
-        self.default_page: Page = None
 
-    def add_page(self, page: Page, locale: Locale):
+    #: The dict containing the localized pages of this article
+    localized_pages: dict[str, Page] = field(init=False, default_factory=dict)
+    #: The default page
+    default_page: Page | None = field(init=False, default=None)
+
+    def add_page(self, page: Page, locale: Locale) -> None:
         """Add a page to the pages list.
 
         If the name is not ``index`` and the validation via
@@ -191,6 +192,7 @@ def validate_page_meta(page: Page) -> bool:
         return False
 
 
+@dataclass
 class Category(Node):
     """The Category class
 
@@ -198,10 +200,9 @@ class Category(Node):
 
     - Containing articles → should be iterable!
     """
-    def __init__(self, extension, parent, category_id):
-        super().__init__(extension, parent, category_id)
-        self.categories = {}
-        self._articles = {}
+
+    categories: dict = field(init=False, default_factory=dict)
+    _articles: dict = field(init=False, default_factory=dict)
 
     @property
     def articles(self):
@@ -233,7 +234,7 @@ class Category(Node):
         if category is not None:
             return category
 
-        category = Category(self.extension, self, id)
+        category = Category(extension=self.extension, parent=self, id=id)
         self.categories[id] = category
         return category
 
@@ -278,7 +279,7 @@ class Category(Node):
 
         article = self._articles.get(article_id)
         if article is None:
-            article = Article(self.extension, self, article_id)
+            article = Article(extension=self.extension, parent=self, id=article_id)
             self._articles[article_id] = article
 
         article.add_page(page, locale)
@@ -295,7 +296,7 @@ class CategorizedFlatPages:
     """
     def __init__(self):
         self.flat_pages = FlatPages()
-        self.root_category = Category(self, None, '<root>')
+        self.root_category = Category(extension=self, parent=None, id="<root>")
         self.app = None
 
     def init_app(self, app):
