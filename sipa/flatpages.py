@@ -1,6 +1,8 @@
 from __future__ import annotations
+import typing as t
 import logging
 from dataclasses import dataclass, field
+from functools import cached_property
 from operator import attrgetter
 from os.path import basename, dirname, splitext
 
@@ -24,6 +26,10 @@ class Node:
     id: str
 
 
+def iter_preferred_locales() -> t.Iterator[str]:
+    if (user_locale := str(get_user_locale_setting())) is not None:
+        yield user_locale
+    yield from request.accept_languages.values()
 
 
 @dataclass
@@ -139,6 +145,10 @@ class Article(Node):
                 "{!r} object has no attribute {!r}"
                 .format(type(self).__name__, attr)) from e
 
+    @cached_property
+    def available_locales(self) -> list[str]:
+        return list(self.localized_pages.keys())
+
     @property
     def localized_page(self) -> Page:
         """The current localized page
@@ -149,17 +159,11 @@ class Article(Node):
 
         :returns: The localized page
         """
-        available_locales = list(self.localized_pages.keys())
-
-        user_locale = str(get_user_locale_setting())
-        if user_locale is None:
-            preferred_locales = []
-        else:
-            preferred_locales = [user_locale]
-        preferred_locales.extend(request.accept_languages.values())
-
         negotiated_locale = negotiate_locale(
-            preferred_locales, available_locales, sep='-')
+            list(iter_preferred_locales()),
+            self.available_locales,
+            sep="-",
+        )
         if negotiated_locale is not None:
             return self.localized_pages[negotiated_locale]
         return self.default_page
