@@ -1,5 +1,4 @@
 from __future__ import annotations
-import typing as t
 import logging
 from dataclasses import dataclass, field
 from functools import cached_property
@@ -11,7 +10,7 @@ from flask import abort, request
 from flask_flatpages import FlatPages, Page
 from yaml.scanner import ScannerError
 
-from sipa.babel import get_user_locale_setting, possible_locales
+from sipa.babel import possible_locales, preferred_locales
 
 logger = logging.getLogger(__name__)
 
@@ -21,15 +20,12 @@ logger = logging.getLogger(__name__)
 class Node:
     """An abstract object with a parent and an id"""
 
-    extension: CategorizedFlatPages
     parent: Category | None
     id: str
 
-
-def iter_preferred_locales() -> t.Iterator[str]:
-    if (user_locale := str(get_user_locale_setting())) is not None:
-        yield user_locale
-    yield from request.accept_languages.values()
+    #: Only used for initialization.
+    #: determines the default page of an article.
+    default_locale: Locale
 
 
 @dataclass
@@ -74,8 +70,7 @@ class Article(Node):
             return
 
         self.localized_pages[str(locale)] = page
-        default_locale = self.extension.app.babel_instance.default_locale
-        if self.default_page is None or locale == default_locale:
+        if self.default_page is None or locale == self.default_locale:
             self.default_page = page
 
     @property
@@ -160,7 +155,7 @@ class Article(Node):
         :returns: The localized page
         """
         negotiated_locale = negotiate_locale(
-            list(iter_preferred_locales()),
+            preferred_locales(request),
             self.available_locales,
             sep="-",
         )
@@ -238,7 +233,11 @@ class Category(Node):
         if category is not None:
             return category
 
-        category = Category(extension=self.extension, parent=self, id=id)
+        category = Category(
+            parent=self,
+            id=id,
+            default_locale=self.default_locale,
+        )
         self.categories[id] = category
         return category
 
@@ -253,7 +252,7 @@ class Category(Node):
 
         :return: The tuple `(article_id, locale)`.
         """
-        default_locale = self.extension.app.babel_instance.default_locale
+        default_locale = self.default_locale
         article_id, sep, locale_identifier = basename.rpartition('.')
 
         if sep == '':
@@ -283,7 +282,11 @@ class Category(Node):
 
         article = self._articles.get(article_id)
         if article is None:
-            article = Article(extension=self.extension, parent=self, id=article_id)
+            article = Article(
+                parent=self,
+                id=article_id,
+                default_locale=self.default_locale,
+            )
             self._articles[article_id] = article
 
         article.add_page(page, locale)
@@ -300,7 +303,7 @@ class CategorizedFlatPages:
     """
     def __init__(self):
         self.flat_pages = FlatPages()
-        self.root_category = Category(extension=self, parent=None, id="<root>")
+        self.root_category = None
         self.app = None
 
     def init_app(self, app):
@@ -309,6 +312,11 @@ class CategorizedFlatPages:
         self.app = app
         app.cf_pages = self
         self.flat_pages.init_app(app)
+        self.root_category = Category(
+            parent=None,
+            id="<root>",
+            default_locale=app.babel_instance.default_locale,
+        )
         self._init_categories()
 
     @property

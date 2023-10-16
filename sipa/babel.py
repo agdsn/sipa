@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import logging
+import typing as t
 
 from babel import Locale, UnknownLocaleError, negotiate_locale
-from flask import request, session
+from flask import request, session, Request, g
 from werkzeug.exceptions import BadRequest
 
 logger = logging.getLogger(__name__)
@@ -70,3 +73,17 @@ def select_locale() -> str:
     return negotiate_locale(
         request.accept_languages.values(),
         list(map(str, possible_locales())), sep='-')
+
+
+def iter_preferred_locales(request: Request) -> t.Iterator[str]:
+    if (user_locale := str(get_user_locale_setting())) is not None:
+        yield user_locale
+    yield from request.accept_languages.values()
+
+
+def preferred_locales(request: Request) -> list[str]:
+    pl = g.get("preferred_locales")
+    if not pl:
+        pl = g.preferred_locales = list(iter_preferred_locales(request))
+
+    return pl
