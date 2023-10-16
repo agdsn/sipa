@@ -155,7 +155,7 @@ class Article(Node):
         :returns: The localized page
         """
         negotiated_locale = negotiate_locale(
-            preferred_locales(request),
+            preferred_locales(),
             self.available_locales,
             sep="-",
         )

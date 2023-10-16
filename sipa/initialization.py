@@ -5,14 +5,19 @@ import os.path
 from datetime import datetime
 
 import sentry_sdk
-from flask import g
+from flask import g, request_started
 from flask_babel import Babel, get_locale
 from werkzeug import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_qrcode import QRcode
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-from sipa.babel import possible_locales, save_user_locale_setting, select_locale
+from sipa.babel import (
+    possible_locales,
+    save_user_locale_setting,
+    select_locale,
+    cache_preferred_locales,
+)
 from sipa.backends import Backends
 from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
@@ -51,6 +56,7 @@ def init_app(app, **kwargs):
     babel = Babel()
     babel.init_app(app)
     babel.localeselector(select_locale)
+    request_started.connect(cache_preferred_locales)
     app.before_request(save_user_locale_setting)
     app.after_request(ensure_csp)
     app.session_interface = SeparateLocaleCookieSessionInterface()

@@ -81,9 +81,10 @@ def iter_preferred_locales(request: Request) -> t.Iterator[str]:
     yield from request.accept_languages.values()
 
 
-def preferred_locales(request: Request) -> list[str]:
-    pl = g.get("preferred_locales")
-    if not pl:
-        pl = g.preferred_locales = list(iter_preferred_locales(request))
+def preferred_locales() -> list[str]:
+    return g.preferred_locales
 
-    return pl
+
+def cache_preferred_locales(*a, **extra):
+    """Store the preferred locales on the `g` object."""
+    g.preferred_locales = list(iter_preferred_locales(request))
