@@ -29,7 +29,6 @@ def show():
     start = request.args.get('start', None, int)
     end = request.args.get('end', None, int)
     cf_pages = current_app.cf_pages
-    cf_pages.reload()
     news = sorted(
         (article for article in cf_pages.get_articles_of_category('news')
          if hasattr(article, 'date')),
