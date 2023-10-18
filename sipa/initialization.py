@@ -5,14 +5,19 @@ import os.path
 from datetime import datetime
 
 import sentry_sdk
-from flask import g
+from flask import g, request_started
 from flask_babel import Babel, get_locale
 from werkzeug import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_qrcode import QRcode
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-from sipa.babel import possible_locales, save_user_locale_setting, select_locale
+from sipa.babel import (
+    possible_locales,
+    save_user_locale_setting,
+    select_locale,
+    cache_preferred_locales,
+)
 from sipa.backends import Backends
 from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
@@ -22,7 +27,7 @@ from sipa.forms import render_links
 from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
-from sipa.utils import url_self, support_hotline_available, meetingcal
+from sipa.utils import url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.csp import ensure_items, NonceInfo
 from sipa.utils.git_utils import init_repo, update_repo
@@ -51,6 +56,7 @@ def init_app(app, **kwargs):
     babel = Babel()
     babel.init_app(app)
     babel.localeselector(select_locale)
+    request_started.connect(cache_preferred_locales)
     app.before_request(save_user_locale_setting)
     app.after_request(ensure_csp)
     app.session_interface = SeparateLocaleCookieSessionInterface()
@@ -93,11 +99,6 @@ def init_app(app, **kwargs):
         url_self=url_self,
         now=datetime.utcnow()
     )
-    # the functions could also directly be added as globals,
-    # however to minimize the diff things have been kept this way.
-    app.context_processor(inject_hotline_status)
-    app.context_processor(inject_meetingcal)
-
     app.add_template_filter(render_links)
 
     def glyphicon_to_bi(glyphicon: str) -> str:
@@ -132,18 +133,6 @@ def init_app(app, **kwargs):
     app.add_template_filter(glyphicon_to_bi)
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
-
-
-def inject_hotline_status():
-    """Adds :func:`support_hotline_available <sipa.utils.support_hotline_available>`
-    to the :class:`jinja context <jinja2.runtime.Context>`"""
-    return dict(support_hotline_available=support_hotline_available())
-
-
-def inject_meetingcal():
-    """Adds :func:`meetingcal <sipa.utils.meetingcal>`
-    to the :class:`jinja context <jinja2.runtime.Context>`"""
-    return dict(meetingcal=meetingcal())
 
 
 def load_config_file(app, config=None):

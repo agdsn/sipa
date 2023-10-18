@@ -34,6 +34,8 @@
     {{ locale_image(locale) }}
     {{ locale.display_name }}
 {%- endmacro -%}
+{% from "macros/support-hotline.html" import hotline_description %}
+
 <!DOCTYPE html>
 <html lang="{{ get_locale().language }}">
 
@@ -330,15 +332,13 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                     <div class="col-1">
                                         <span class="bi-telephone-fill"></span>
                                     </div>
-                                    <div class="col-10">
-                                        <a href="tel:004935189670993">
-                                            0351 89670993
-					                    </a><br>
-                                        {% if support_hotline_available %}
-                                            <span class="support_hotline_available_green">&#x25cf;</span> <small>{{ _("Aktuell erreichbar") }}</small>
-                                        {% else %}
-					                        <small>{{ _("Montag und Donnerstag 19:00-20:00") }}</small>
-                                        {% endif %}
+                                    <div
+                                        class="col-10"
+                                        hx-get="{{ url_for("features.hotline") }}"
+                                        hx-trigger="load"
+                                        hx-swap="innerHTML"
+                                    >
+                                        {{ hotline_description(available=support_hotline_available) }}
                                     </div>
                                 </div>
 				<hr>
@@ -423,22 +423,16 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                         </h2>
 
                         <hr class="full">
-                        <ul>
-                            {% if meetingcal %}
-                                {% for meeting in meetingcal[:4] %}
-                                <li><b>{{ meeting["title"] }}</b><br>
-                                    {# Use time zone given in event #}
-                                    {{ _(
-                                        "Am %(date)s im %(loc)s",
-                                        date=meeting["datetime"] | datetimeformat(format="short", rebase=False),
-                                        loc=meeting["location_link"] | safe
-                                    ) }}
-                                </li>
-                                {% endfor %}
-                                <li><a href="{{ url_for('features.render_meetingcal') }}">{{ _("Mehr anzeigen") }}</a></li>
-                            {% endif %}
+                        <ul
+                            id="meetings-list"
+                            hx-get="{{ url_for('features.meetings') }}"
+                            hx-swap="innerHTML"
+                            hx-trigger="load"
+                        >
+                            <li class="placeholder-glow"><span class="placeholder col-6 bg-secondary"></span></li>
+                            <li class="placeholder-glow"><span class="placeholder col-3 bg-secondary"></span></li>
+                            <li class="placeholder-glow"><span class="placeholder col-8 bg-secondary"></span></li>
                         </ul>
-
 
                     </div>
                 </div>

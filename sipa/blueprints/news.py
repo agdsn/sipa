@@ -29,7 +29,6 @@ def show():
     start = request.args.get('start', None, int)
     end = request.args.get('end', None, int)
     cf_pages = current_app.cf_pages
-    cf_pages.reload()
     news = sorted(
         (article for article in cf_pages.get_articles_of_category('news')
          if hasattr(article, 'date')),
@@ -92,9 +91,9 @@ def try_get_content(cf_pages: CategorizedFlatPages, filename: str) -> str:
     """Reconstructs the content of a news article from the given filename."""
     news = cf_pages.get_articles_of_category("news")
     article = next((a for a in news if a.file_basename == filename), None)
-    assert isinstance(article, Article)
     if not article:
         return ""
+    assert isinstance(article, Article)
     p = article.localized_page
     # need to reconstruct actual content; only have access to parsed form
     return p._meta + "\n\n" + p.body

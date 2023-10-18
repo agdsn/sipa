@@ -3,7 +3,8 @@ Basically, this is everything that is to specific to appear in the generic.py
 and does not fit into any other blueprint such as “documents”.
 """
 
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, current_app, render_template, render_template_string
+
 from sipa.utils import get_bustimes, meetingcal
 
 bp_features = Blueprint('features', __name__)
@@ -33,3 +34,25 @@ def bustimes(stopname=None):
 def render_meetingcal():
     meetings = meetingcal()
     return render_template('meetingcal.html', meetings=meetings)
+
+
+@bp_features.route("/meetings-fragment")
+def meetings():
+    return render_template_string(
+        """
+            {%- from "macros/meetingcal.html" import render_meetingcal -%}
+            {{- render_meetingcal(meetingcal) -}}
+        """,
+        meetingcal=meetingcal(),
+    )
+
+
+@bp_features.route("/hotline-fragment")
+def hotline():
+    return render_template_string(
+        """
+        {%- from "macros/support-hotline.html" import hotline_description -%}
+        {{- hotline_description(available=available) -}}
+        """,
+        available=True,
+    )

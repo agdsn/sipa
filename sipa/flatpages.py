@@ -1,30 +1,46 @@
+from __future__ import annotations
+
 import logging
+from dataclasses import dataclass, field
+from functools import cached_property, lru_cache
 from operator import attrgetter
 from os.path import basename, dirname, splitext
-from typing import Any
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, request
 from flask_flatpages import FlatPages, Page
 from yaml.scanner import ScannerError
 
-from sipa.babel import get_user_locale_setting, possible_locales
+from sipa.babel import possible_locales, preferred_locales
 
 logger = logging.getLogger(__name__)
 
 
+@lru_cache(maxsize=128)
+def cached_negotiate_locale(
+    preferred_locales: tuple[str], available_locales: tuple[str]
+) -> str | None:
+    return negotiate_locale(
+        preferred_locales,
+        available_locales,
+        sep="-",
+    )
+
+
+# NB: Node is meant to be a union `Article | Category`.
+@dataclass
 class Node:
     """An abstract object with a parent and an id"""
 
-    def __init__(self, extension, parent, node_id):
-        #: The CategorizedFlatPages extension
-        self.extension = extension
-        #: The parent object
-        self.parent = parent
-        #: This object's id
-        self.id = node_id
+    parent: Category | None
+    id: str
+
+    #: Only used for initialization.
+    #: determines the default page of an article.
+    default_locale: Locale
 
 
+@dataclass
 class Article(Node):
     """The Article class
 
@@ -40,14 +56,13 @@ class Article(Node):
     Besides that, :py:meth:`__getattr__` comfortably passes queries to
     the :py:obj:`localized_page.meta` dict.
     """
-    def __init__(self, extension, parent, article_id):
-        super().__init__(extension, parent, article_id)
-        #: The dict containing the localized pages of this article
-        self.localized_pages: dict[Any, Page] = {}
-        #: The default page
-        self.default_page: Page = None
 
-    def add_page(self, page: Page, locale: Locale):
+    #: The dict containing the localized pages of this article
+    localized_pages: dict[str, Page] = field(init=False, default_factory=dict)
+    #: The default page
+    default_page: Page | None = field(init=False, default=None)
+
+    def add_page(self, page: Page, locale: Locale) -> None:
         """Add a page to the pages list.
 
         If the name is not ``index`` and the validation via
@@ -63,30 +78,12 @@ class Article(Node):
         :param page: The page to add
         :param locale: The locale of this page
         """
-        if not (self.id == 'index' or self.validate_page_meta(page)):
+        if not (self.id == "index" or validate_page_meta(page)):
             return
 
         self.localized_pages[str(locale)] = page
-        default_locale = self.extension.app.babel_instance.default_locale
-        if self.default_page is None or locale == default_locale:
+        if self.default_page is None or locale == self.default_locale:
             self.default_page = page
-
-    @staticmethod
-    def validate_page_meta(page: Page) -> bool:
-        """Validate that the pages meta-section.
-
-        This function is necessary because a page with incorrect
-        metadata will raise some Errors when trying to access them.
-        Note that this is done rather early as pages are cached.
-
-        :param page: The page to validate
-
-        :returns: Whether the page is valid
-        """
-        try:
-            return 'title' in page.meta
-        except ScannerError:
-            return False
 
     @property
     def rank(self) -> int:
@@ -155,6 +152,10 @@ class Article(Node):
                 "{!r} object has no attribute {!r}"
                 .format(type(self).__name__, attr)) from e
 
+    @cached_property
+    def available_locales(self) -> tuple[str]:
+        return tuple(self.localized_pages.keys())
+
     @property
     def localized_page(self) -> Page:
         """The current localized page
@@ -165,17 +166,10 @@ class Article(Node):
 
         :returns: The localized page
         """
-        available_locales = list(self.localized_pages.keys())
-
-        user_locale = str(get_user_locale_setting())
-        if user_locale is None:
-            preferred_locales = []
-        else:
-            preferred_locales = [user_locale]
-        preferred_locales.extend(request.accept_languages.values())
-
-        negotiated_locale = negotiate_locale(
-            preferred_locales, available_locales, sep='-')
+        negotiated_locale = cached_negotiate_locale(
+            tuple(preferred_locales()),
+            self.available_locales,
+        )
         if negotiated_locale is not None:
             return self.localized_pages[negotiated_locale]
         return self.default_page
@@ -191,6 +185,24 @@ class Article(Node):
         return splitext(basename(self.localized_page.path))[0]
 
 
+def validate_page_meta(page: Page) -> bool:
+    """Validate that the pages meta-section.
+
+    This function is necessary because a page with incorrect
+    metadata will raise some Errors when trying to access them.
+    Note that this is done rather early as pages are cached.
+
+    :param page: The page to validate
+
+    :returns: Whether the page is valid
+    """
+    try:
+        return "title" in page.meta
+    except ScannerError:
+        return False
+
+
+@dataclass
 class Category(Node):
     """The Category class
 
@@ -198,10 +210,9 @@ class Category(Node):
 
     - Containing articles → should be iterable!
     """
-    def __init__(self, extension, parent, category_id):
-        super().__init__(extension, parent, category_id)
-        self.categories = {}
-        self._articles = {}
+
+    categories: dict = field(init=False, default_factory=dict)
+    _articles: dict = field(init=False, default_factory=dict)
 
     @property
     def articles(self):
@@ -233,7 +244,11 @@ class Category(Node):
         if category is not None:
             return category
 
-        category = Category(self.extension, self, id)
+        category = Category(
+            parent=self,
+            id=id,
+            default_locale=self.default_locale,
+        )
         self.categories[id] = category
         return category
 
@@ -248,7 +263,7 @@ class Category(Node):
 
         :return: The tuple `(article_id, locale)`.
         """
-        default_locale = self.extension.app.babel_instance.default_locale
+        default_locale = self.default_locale
         article_id, sep, locale_identifier = basename.rpartition('.')
 
         if sep == '':
@@ -278,7 +293,11 @@ class Category(Node):
 
         article = self._articles.get(article_id)
         if article is None:
-            article = Article(self.extension, self, article_id)
+            article = Article(
+                parent=self,
+                id=article_id,
+                default_locale=self.default_locale,
+            )
             self._articles[article_id] = article
 
         article.add_page(page, locale)
@@ -295,7 +314,7 @@ class CategorizedFlatPages:
     """
     def __init__(self):
         self.flat_pages = FlatPages()
-        self.root_category = Category(self, None, '<root>')
+        self.root_category = None
         self.app = None
 
     def init_app(self, app):
@@ -304,6 +323,11 @@ class CategorizedFlatPages:
         self.app = app
         app.cf_pages = self
         self.flat_pages.init_app(app)
+        self.root_category = Category(
+            parent=None,
+            id="<root>",
+            default_locale=app.babel_instance.default_locale,
+        )
         self._init_categories()
 
     @property

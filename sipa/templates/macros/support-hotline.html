@@ -1,0 +1,11 @@
+{% macro hotline_description(available=False) %}
+    <a href="tel:004935189670993">
+        0351 89670993
+    </a><br>
+    {% if available %}
+        <span class="support_hotline_available_green">&#x25cf;</span>
+        <small>{{ _("Aktuell erreichbar") }}</small>
+    {% else %}
+        <small>{{ _("Montag und Donnerstag 19:00-20:00") }}</small>
+    {% endif %}
+{% endmacro %}
