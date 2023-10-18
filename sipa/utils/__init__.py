@@ -7,11 +7,10 @@ import http.client
 import json
 import logging
 import typing
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from functools import wraps
 from itertools import chain
 from operator import itemgetter
-from zoneinfo import ZoneInfo
 
 import icalendar
 import markdown
@@ -19,7 +18,7 @@ import recurring_ical_events
 import requests
 from cachetools import TTLCache, cached
 from dateutil.relativedelta import relativedelta
-from flask import flash, redirect, request, session, url_for
+from flask import flash, redirect, request, url_for
 from flask_login import current_user
 from icalendar import Calendar
 from werkzeug.http import parse_date as parse_datetime
@@ -59,34 +58,19 @@ def get_bustimes(stopname, count=10):
 # TODO: check whether this is the correct format
 
 
-def support_hotline_available():
-    """Asks the PBX if there are agents logged in to anwser calls to our
+@cached(cache=TTLCache(maxsize=1, ttl=2 * 60))
+def try_fetch_hotline_availability(uri: str) -> bool:
+    """Determines whether there are agents logged in to anwser calls to our
     support hotline.
-
-    :return: True if the hotline is available
     """
-    UTC = ZoneInfo("UTC")
-    [avail, time] = session.get(
-        'PBX_available',
-        [False, datetime.fromtimestamp(0).replace(tzinfo=UTC)]
-    )
-    now = datetime.utcnow().replace(tzinfo=ZoneInfo("UTC"))
-
-    assert (now.tzinfo is None) == (time.tzinfo is None)
-    if now - time > timedelta(minutes=2):
-        # refresh availability from pbx
-        try:
-            r = requests.get(current_app.config['PBX_URI'], timeout=0.5)
-            r.raise_for_status()
-            avail = r.text
-            session['PBX_available'] = [avail, now]
-        except requests.exceptions.RequestException:
-            avail = False
-
-    if avail == 'AVAILABLE':
-        return True
-    else:
+    if not (r := requests.get(uri)):
         return False
+
+    return r.text == "AVAILABLE"
+
+
+def support_hotline_available():
+    return try_fetch_hotline_availability(current_app.config["PBX_URI"])
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
