@@ -27,7 +27,7 @@ from sipa.forms import render_links
 from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
-from sipa.utils import url_self, support_hotline_available, meetingcal
+from sipa.utils import url_self, support_hotline_available
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.csp import ensure_items, NonceInfo
 from sipa.utils.git_utils import init_repo, update_repo
@@ -102,7 +102,6 @@ def init_app(app, **kwargs):
     # the functions could also directly be added as globals,
     # however to minimize the diff things have been kept this way.
     app.context_processor(inject_hotline_status)
-    app.context_processor(inject_meetingcal)
 
     app.add_template_filter(render_links)
 
@@ -144,12 +143,6 @@ def inject_hotline_status():
     """Adds :func:`support_hotline_available <sipa.utils.support_hotline_available>`
     to the :class:`jinja context <jinja2.runtime.Context>`"""
     return dict(support_hotline_available=support_hotline_available())
-
-
-def inject_meetingcal():
-    """Adds :func:`meetingcal <sipa.utils.meetingcal>`
-    to the :class:`jinja context <jinja2.runtime.Context>`"""
-    return dict(meetingcal=meetingcal())
 
 
 def load_config_file(app, config=None):
