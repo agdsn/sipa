@@ -1,7 +1,8 @@
 from __future__ import annotations
+
 import logging
 from dataclasses import dataclass, field
-from functools import cached_property
+from functools import cached_property, lru_cache
 from operator import attrgetter
 from os.path import basename, dirname, splitext
 
@@ -13,6 +14,17 @@ from yaml.scanner import ScannerError
 from sipa.babel import possible_locales, preferred_locales
 
 logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=128)
+def cached_negotiate_locale(
+    preferred_locales: tuple[str], available_locales: tuple[str]
+) -> str | None:
+    return negotiate_locale(
+        preferred_locales,
+        available_locales,
+        sep="-",
+    )
 
 
 # NB: Node is meant to be a union `Article | Category`.
@@ -141,8 +153,8 @@ class Article(Node):
                 .format(type(self).__name__, attr)) from e
 
     @cached_property
-    def available_locales(self) -> list[str]:
-        return list(self.localized_pages.keys())
+    def available_locales(self) -> tuple[str]:
+        return tuple(self.localized_pages.keys())
 
     @property
     def localized_page(self) -> Page:
@@ -154,10 +166,9 @@ class Article(Node):
 
         :returns: The localized page
         """
-        negotiated_locale = negotiate_locale(
-            preferred_locales(),
+        negotiated_locale = cached_negotiate_locale(
+            tuple(preferred_locales()),
             self.available_locales,
-            sep="-",
         )
         if negotiated_locale is not None:
             return self.localized_pages[negotiated_locale]

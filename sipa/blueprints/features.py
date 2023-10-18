@@ -36,7 +36,7 @@ def render_meetingcal():
     return render_template('meetingcal.html', meetings=meetings)
 
 
-@bp_features.route("/meetings")
+@bp_features.route("/meetings-fragment")
 def meetings():
     return render_template_string(
         """
