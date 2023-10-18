@@ -5,7 +5,7 @@ and does not fit into any other blueprint such as “documents”.
 
 from flask import Blueprint, current_app, render_template, render_template_string
 
-from sipa.utils import get_bustimes, meetingcal
+from sipa.utils import get_bustimes, meetingcal, support_hotline_available
 
 bp_features = Blueprint('features', __name__)
 
@@ -54,5 +54,5 @@ def hotline():
         {%- from "macros/support-hotline.html" import hotline_description -%}
         {{- hotline_description(available=available) -}}
         """,
-        available=True,
+        available=support_hotline_available(),
     )
