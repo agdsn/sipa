@@ -35,6 +35,7 @@
     {{ locale.display_name }}
 {%- endmacro -%}
 {% from "macros/meetingcal.html" import render_meetingcal %}
+{% from "macros/support-hotline.html" import hotline_description %}
 
 <!DOCTYPE html>
 <html lang="{{ get_locale().language }}">
@@ -333,14 +334,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                         <span class="bi-telephone-fill"></span>
                                     </div>
                                     <div class="col-10">
-                                        <a href="tel:004935189670993">
-                                            0351 89670993
-					                    </a><br>
-                                        {% if support_hotline_available %}
-                                            <span class="support_hotline_available_green">&#x25cf;</span> <small>{{ _("Aktuell erreichbar") }}</small>
-                                        {% else %}
-					                        <small>{{ _("Montag und Donnerstag 19:00-20:00") }}</small>
-                                        {% endif %}
+                                        {{ hotline_description(available=support_hotline_available) }}
                                     </div>
                                 </div>
 				<hr>
