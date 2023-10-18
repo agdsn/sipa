@@ -27,7 +27,7 @@ from sipa.forms import render_links
 from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
-from sipa.utils import url_self, support_hotline_available
+from sipa.utils import url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.csp import ensure_items, NonceInfo
 from sipa.utils.git_utils import init_repo, update_repo
@@ -99,10 +99,6 @@ def init_app(app, **kwargs):
         url_self=url_self,
         now=datetime.utcnow()
     )
-    # the functions could also directly be added as globals,
-    # however to minimize the diff things have been kept this way.
-    app.context_processor(inject_hotline_status)
-
     app.add_template_filter(render_links)
 
     def glyphicon_to_bi(glyphicon: str) -> str:
@@ -137,12 +133,6 @@ def init_app(app, **kwargs):
     app.add_template_filter(glyphicon_to_bi)
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
-
-
-def inject_hotline_status():
-    """Adds :func:`support_hotline_available <sipa.utils.support_hotline_available>`
-    to the :class:`jinja context <jinja2.runtime.Context>`"""
-    return dict(support_hotline_available=support_hotline_available())
 
 
 def load_config_file(app, config=None):

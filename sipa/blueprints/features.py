@@ -45,3 +45,14 @@ def meetings():
         """,
         meetingcal=meetingcal(),
     )
+
+
+@bp_features.route("/hotline-fragment")
+def hotline():
+    return render_template_string(
+        """
+        {%- from "macros/support-hotline.html" import hotline_description -%}
+        {{- hotline_description(available=available) -}}
+        """,
+        available=True,
+    )

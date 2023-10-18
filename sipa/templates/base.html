@@ -34,7 +34,6 @@
     {{ locale_image(locale) }}
     {{ locale.display_name }}
 {%- endmacro -%}
-{% from "macros/meetingcal.html" import render_meetingcal %}
 {% from "macros/support-hotline.html" import hotline_description %}
 
 <!DOCTYPE html>
@@ -333,7 +332,12 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                     <div class="col-1">
                                         <span class="bi-telephone-fill"></span>
                                     </div>
-                                    <div class="col-10">
+                                    <div
+                                        class="col-10"
+                                        hx-get="{{ url_for("features.hotline") }}"
+                                        hx-trigger="load"
+                                        hx-swap="innerHTML"
+                                    >
                                         {{ hotline_description(available=support_hotline_available) }}
                                     </div>
                                 </div>
