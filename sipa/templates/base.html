@@ -34,24 +34,7 @@
     {{ locale_image(locale) }}
     {{ locale.display_name }}
 {%- endmacro -%}
-{%- macro render_meeting(meeting) -%}
-<li><b>{{ meeting["title"] }}</b><br>
-    {# Use time zone given in event #}
-    {{ _(
-        "Am %(date)s im %(loc)s",
-        date=meeting["datetime"] | datetimeformat(format="short", rebase=False),
-        loc=meeting["location_link"] | safe
-    ) }}
-</li>
-{%- endmacro -%}
-{%- macro render_meetingcal(meetingcal) -%}
-{% if meetingcal %}
-    {% for meeting in meetingcal[:4] %}
-        {{ render_meeting(meeting) }}
-    {% endfor %}
-    <li><a href="{{ url_for('features.render_meetingcal') }}">{{ _("Mehr anzeigen") }}</a></li>
-{% endif %}
-{%- endmacro -%}
+{% from "macros/meetingcal.html" import render_meetingcal %}
 
 <!DOCTYPE html>
 <html lang="{{ get_locale().language }}">
