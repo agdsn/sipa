@@ -230,9 +230,9 @@ def generate_epc_qr_code(details: PaymentDetails, months):
         "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n"
 
     return EPC_FORMAT.format(
-        bic=details.bic.replace(' ', ''),
+        bic=details.iban.bic.compact,
         recipient=details.recipient,
-        iban=details.iban.replace(' ', ''),
+        iban=details.iban.compact,
         amount=months * current_app.config['MEMBERSHIP_CONTRIBUTION'] / 100,
         purpose=details.purpose)
 
