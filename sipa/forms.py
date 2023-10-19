@@ -310,14 +310,19 @@ class TerminateMembershipForm(FlaskForm):
 
 
 class TerminateMembershipConfirmForm(FlaskForm):
-    end_date = NativeDateField(label=lazy_gettext("Austrittsdatum"),
-                         render_kw={'readonly': True},
-                         validators=[DataRequired("invalid end date")])
+    end_date = NativeDateField(
+        label=lazy_gettext("Austrittsdatum"),
+        render_kw={"readonly": True, "disabled": True},
+        validators=[DataRequired("invalid end date")],
+    )
 
     estimated_balance = StringField(
-        label=lazy_gettext("Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"),
-        render_kw={'readonly': True},
-        validators=[DataRequired("invalid balance")])
+        label=lazy_gettext(
+            "Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"
+        ),
+        render_kw={"readonly": True, "disabled": True},
+        validators=[DataRequired("invalid balance")],
+    )
 
     confirm_termination = BooleanField(label=lazy_gettext(
         "Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden möchte"),
