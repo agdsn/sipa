@@ -27,7 +27,7 @@
             class="form-control w-100 font-monospace" name="article-content" id="" cols="30"
             rows="10"
             hx-post="{{ url_for("news.preview") }}"
-            hx-trigger="load,keyup changed delay:500ms"
+            hx-trigger="load,input changed delay:500ms"
             hx-target="#article-preview"
             hx-swap="innerHTML"
         >{{ content | default("") }}</textarea>
