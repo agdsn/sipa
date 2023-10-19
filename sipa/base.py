@@ -4,11 +4,15 @@ Basic utilities for the Flask app
 These are basic utilities necessary for the Flask app which are
 disjoint from any blueprint.
 """
+import logging
+
 from flask.globals import session
 from werkzeug.routing import IntegerConverter as BaseIntegerConverter
 
 from sipa.login_manager import SipaLoginManager
 from sipa.backends import backends
+
+logger = logging.getLogger(__name__)
 
 login_manager = SipaLoginManager()
 login_manager.login_view = "generic.login"
@@ -29,6 +33,7 @@ class IntegerConverter(BaseIntegerConverter):
 def load_user(username):
     """Loads a User object from/into the session at every request
     """
+    logger.debug("User loader triggered (%r)", username)
     _cleanup_session(session)
     User = backends.datasource.user_class
     return User.get(username)

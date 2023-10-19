@@ -7,6 +7,7 @@ from datetime import datetime
 import sentry_sdk
 from flask import g
 from flask_babel import Babel, get_locale
+from flask_login import current_user
 from werkzeug import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_qrcode import QRcode
@@ -51,7 +52,7 @@ def init_app(app, **kwargs):
     init_logging(app)
     init_env_and_config(app)
     logger.debug('Initializing app')
-    login_manager.init_app(app)
+    login_manager.init_app(app, add_context_processor=False)
     babel = Babel()
     babel.init_app(app)
     babel.localeselector(select_locale)
@@ -83,6 +84,7 @@ def init_app(app, **kwargs):
     form_label_width = 4
     form_input_width = 8
     app.jinja_env.globals.update(
+        current_user=current_user,
         cf_pages=cf_pages,
         get_locale=get_locale,
         get_weekday=get_weekday,
