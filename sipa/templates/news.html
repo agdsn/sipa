@@ -4,6 +4,7 @@
 {% import "macros/article.html" as m %}
 {% block content %}
     {% if articles %}{% for art in articles %}
+        {%- if loop.first -%}{{ m.render_edit_link(art) }}{%- endif -%}
         {{ m.render_news(art) }}
     {%- endfor %}{%- else -%}
         <div class="alert alert-info">

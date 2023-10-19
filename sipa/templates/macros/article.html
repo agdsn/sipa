@@ -8,6 +8,10 @@
     {% endif %}
 {%- endmacro %}
 
+{%- macro render_edit_link(art) -%}
+<a href="{{ url_for('news.edit', filename=art.file_basename) }}" class="visually-hidden-focusable" accesskey="e">Edit</a>
+{%- endmacro -%}
+
 {% macro render_news(art) %}
     <article class="mb-4">
         <h2>{{ art.title }}</h2>
