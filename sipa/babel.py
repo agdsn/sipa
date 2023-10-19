@@ -17,10 +17,13 @@ def possible_locales() -> list[Locale]:
 
 def get_user_locale_setting() -> Locale | None:
     """Get a user's explicit locale setting, if available."""
-    locale_identifier = session.get('locale')
-    if locale_identifier is None:
+    if (locale_identifier := session.get("locale")) is None:
         return None
 
+    logger.debug(
+        "get_user_locale(): saving explicitly requested locale %r to session",
+        locale_identifier,
+    )
     try:
         locale = Locale.parse(locale_identifier)
     except (UnknownLocaleError, ValueError):
@@ -38,14 +41,14 @@ def get_user_locale_setting() -> Locale | None:
     return locale
 
 
-def save_user_locale_setting():
+def _save_user_locale_setting():
     """
     Persist the locale request argument in the session state.
-
-    This function should be installed as before_request handler.
     """
+    logger.debug("save_user_locale_setting")
     locale_identifier = request.args.get('locale')
     if locale_identifier is None:
+        logger.debug("  ...nothing to save.")
         return
     try:
         locale = Locale.parse(locale_identifier, sep='-')
@@ -75,7 +78,7 @@ def select_locale() -> str:
         list(map(str, possible_locales())), sep='-')
 
 
-def iter_preferred_locales(request: Request) -> t.Iterator[str]:
+def _iter_preferred_locales(request: Request) -> t.Iterator[str]:
     if (user_locale := str(get_user_locale_setting())) is not None:
         yield user_locale
     yield from request.accept_languages.values()
@@ -85,6 +88,19 @@ def preferred_locales() -> list[str]:
     return g.preferred_locales
 
 
-def cache_preferred_locales(*a, **extra):
+def _cache_preferred_locales(**extra):
     """Store the preferred locales on the `g` object."""
-    g.preferred_locales = list(iter_preferred_locales(request))
+    logger.debug("cache_preferred_locales; %r", request)
+
+    pl = list(_iter_preferred_locales(request))
+    logger.debug(f"cache update: {pl=}")
+    g.preferred_locales = pl
+
+
+def setup_request_locale_context():
+    """Saves locale information in session and caches preferred locales.
+
+    this function should be registered as a ``before_request`` handler.
+    """
+    _save_user_locale_setting()
+    _cache_preferred_locales()

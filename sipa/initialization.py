@@ -5,7 +5,7 @@ import os.path
 from datetime import datetime
 
 import sentry_sdk
-from flask import g, request_started
+from flask import g
 from flask_babel import Babel, get_locale
 from werkzeug import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -14,9 +14,8 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 from sipa.babel import (
     possible_locales,
-    save_user_locale_setting,
     select_locale,
-    cache_preferred_locales,
+    setup_request_locale_context,
 )
 from sipa.backends import Backends
 from sipa.base import IntegerConverter, login_manager
@@ -56,8 +55,7 @@ def init_app(app, **kwargs):
     babel = Babel()
     babel.init_app(app)
     babel.localeselector(select_locale)
-    request_started.connect(cache_preferred_locales)
-    app.before_request(save_user_locale_setting)
+    app.before_request(setup_request_locale_context)
     app.after_request(ensure_csp)
     app.session_interface = SeparateLocaleCookieSessionInterface()
     cf_pages = CategorizedFlatPages()
