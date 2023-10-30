@@ -582,7 +582,7 @@ msgstr ""
 msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
-msgid "Es kann bis zu 24 Stunden (!) dauern, bis die Änderung wirksam ist."
+msgid "Es kann bis zu 15 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
 msgid ""
