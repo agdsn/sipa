@@ -109,8 +109,8 @@ class UserDB(BaseUserDB):
         self.sql_query(
             "GRANT SELECT, INSERT, UPDATE, DELETE, "
             "ALTER, CREATE, DROP, INDEX, LOCK TABLES "
-            "ON `{}`.* "
-            "TO %s@%s".format(self.db_name()),
+            f"ON `{self.db_name()}`.* "
+            "TO %s@%s",
             (self.db_name(), self.ip_mask),
         )
 

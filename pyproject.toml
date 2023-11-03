@@ -8,6 +8,7 @@ select = [
     "E",
     "F",
     "B",  # flake8-bugbear
+    "UP",  # pyupgrade
 ]
 ignore = [
     "E741",  # ambiguous variable names
