@@ -8,6 +8,7 @@ from os.path import basename, dirname, splitext
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, request
+from flask_babel import get_babel
 from flask_flatpages import FlatPages, Page
 from yaml.scanner import ScannerError
 
@@ -323,10 +324,11 @@ class CategorizedFlatPages:
         self.app = app
         app.cf_pages = self
         self.flat_pages.init_app(app)
+        babel = get_babel(app)
         self.root_category = Category(
             parent=None,
             id="<root>",
-            default_locale=app.babel_instance.default_locale,
+            default_locale=babel.default_locale,
         )
         self._init_categories()
 
