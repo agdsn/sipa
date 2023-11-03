@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.12
 MAINTAINER Lukas Juhrich der Große <lukasjuhrich@wh2.tu-dresden.de>
 
 
@@ -24,12 +24,11 @@ RUN addgroup --gid 9999 sipa && \
 RUN mkdir /home/sipa/sipa
 WORKDIR /home/sipa/sipa
 
-ADD ./build /home/sipa/sipa/build/
+COPY ./build /home/sipa/sipa/build/
 ARG additional_requirements
 RUN ./build/install_requirements.py $additional_requirements
 
-ADD . /home/sipa/sipa
-RUN chown -R sipa:sipa /home/sipa/sipa
+COPY --chown=sipa:sipa . /home/sipa/sipa
 
 EXPOSE 5000
 
