@@ -1,1 +1,2 @@
 FLASK_APP=sipa:create_app
+FLASK_TEMPLATES_AUTO_RELOAD=true
