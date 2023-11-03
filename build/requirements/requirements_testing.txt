@@ -4,5 +4,5 @@ profilehooks~=1.9.0
 pycodestyle~=2.4.0
 mypy~=0.960
 sphinx~=1.8.4
-pytest~=7.1.2
 pytest-freezegun~=0.4.2
+pytest~=7.4.3
