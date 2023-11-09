@@ -300,11 +300,7 @@ class User(BaseUser):
             bank="Ostsächsische Sparkasse Dresden",
             iban="DE61 8505 0300 3120 2195 40",
             bic="OSDD DE 81 XXX",
-            purpose="{id}, {name}, {address}".format(
-                id=self.user_data.user_id,
-                name=self.user_data.name,
-                address=self.user_data.room,
-            ),
+            purpose=f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",
         )
 
     def has_property(self, property: str) -> bool:

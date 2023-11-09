@@ -14,10 +14,7 @@ def absolute_path_replacer(match):
     if prefix.endswith("/"):
         prefix = prefix[:-1]
 
-    return "{key}=\"{path}\"".format(
-        key=match.group(1),
-        path=prefix + match.group(2)
-    )
+    return f'{match.group(1)}="{prefix + match.group(2)}"'
 
 
 class LinkPostprocessor(Postprocessor):

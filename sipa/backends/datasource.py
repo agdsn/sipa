@@ -54,10 +54,7 @@ class DataSource:
         return compare_all_attributes(self, other, ['name'])
 
     def __repr__(self):
-        return "<{cls} {name!r}>".format(
-            cls=type(self).__name__,
-            name=self.name,
-        )
+        return f"<{type(self).__name__} {self.name!r}>"
 
     def __hash__(self):
         return xor_hashes(self.name, self.user_class, self.support_mail, self.mail_server)

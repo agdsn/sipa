@@ -8,6 +8,7 @@ from os.path import basename, dirname, splitext
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
 from flask import abort, request
+from flask_babel import get_babel
 from flask_flatpages import FlatPages, Page
 from yaml.scanner import ScannerError
 
@@ -149,8 +150,8 @@ class Article(Node):
             return self.localized_page.meta[attr]
         except KeyError as e:
             raise AttributeError(
-                "{!r} object has no attribute {!r}"
-                .format(type(self).__name__, attr)) from e
+                f"{type(self).__name__!r} object has no attribute {attr!r}"
+            ) from e
 
     @cached_property
     def available_locales(self) -> tuple[str]:
@@ -231,8 +232,8 @@ class Category(Node):
             index = self._articles['index']
         except KeyError as e:
             raise AttributeError(
-                "{!r} object has no attribute {!r}"
-                .format(type(self).__name__, attr)) from e
+                f"{type(self).__name__!r} object has no attribute {attr!r}"
+            ) from e
         return getattr(index, attr)
 
     def add_child_category(self, id):
@@ -323,10 +324,11 @@ class CategorizedFlatPages:
         self.app = app
         app.cf_pages = self
         self.flat_pages.init_app(app)
+        babel = get_babel(app)
         self.root_category = Category(
             parent=None,
             id="<root>",
-            default_locale=app.babel_instance.default_locale,
+            default_locale=babel.default_locale,
         )
         self._init_categories()
 

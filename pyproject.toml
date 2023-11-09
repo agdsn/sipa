@@ -1,6 +1,6 @@
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py312"
 exclude = [
 ]
 # to look up the meaning of specific rule IDs, use `ruff rule $id`
@@ -8,6 +8,7 @@ select = [
     "E",
     "F",
     "B",  # flake8-bugbear
+    "UP",  # pyupgrade
 ]
 ignore = [
     "E741",  # ambiguous variable names

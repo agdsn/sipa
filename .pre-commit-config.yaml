@@ -1,16 +1,16 @@
 # see https://github.com/topics/pre-commit-hook for more
 repos:
 -   repo: https://github.com/akaihola/darker
-    rev: 1.6.1
+    rev: 1.7.2
     hooks:
     -   id: darker
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.29.0
+    rev: v3.15.0
     hooks:
     -   id: pyupgrade
-        args: ["--py310-plus"]
+        args: ["--py312-plus"]
 - repo: https://github.com/charliermarsh/ruff-pre-commit
   # Ruff version.
-  rev: 'v0.0.241'
+  rev: 'v0.1.3'
   hooks:
     - id: ruff

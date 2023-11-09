@@ -2,7 +2,7 @@ import logging
 import logging.config
 import os
 import os.path
-from datetime import datetime
+from datetime import datetime, UTC
 
 import sentry_sdk
 from flask import g
@@ -54,8 +54,7 @@ def init_app(app, **kwargs):
     logger.debug('Initializing app')
     login_manager.init_app(app, add_context_processor=False)
     babel = Babel()
-    babel.init_app(app)
-    babel.localeselector(select_locale)
+    babel.init_app(app, locale_selector=select_locale)
     app.before_request(setup_request_locale_context)
     app.after_request(ensure_csp)
     app.session_interface = SeparateLocaleCookieSessionInterface()
@@ -97,7 +96,7 @@ def init_app(app, **kwargs):
         form_input_width_class=f"col-sm-{form_input_width}",
         form_input_offset_class=f"offset-sm-{form_label_width}",
         url_self=url_self,
-        now=datetime.utcnow()
+        now=datetime.now(UTC),
     )
     app.add_template_filter(render_links)
 
