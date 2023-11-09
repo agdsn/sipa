@@ -1,6 +1,8 @@
 FROM python:3.12
 MAINTAINER Lukas Juhrich der Große <lukasjuhrich@wh2.tu-dresden.de>
 
+ARG UID=9999
+ARG GID=9999
 
 ENV DEBIAN_FRONTEND=noninteractive \
 	LC_ALL=C
@@ -18,17 +20,16 @@ RUN pip install --upgrade pip
 
 RUN pip install uwsgi
 
-RUN addgroup --gid 9999 sipa && \
-	adduser --uid 9999 --gid 9999 --disabled-password --gecos "Application" sipa
+RUN groupadd --force --gid $GID sipa \
+    && useradd --non-unique --home-dir /opt/sipa --create-home --uid $UID --gid $GID --comment "Application" sipa
 
-RUN mkdir /home/sipa/sipa
-WORKDIR /home/sipa/sipa
+WORKDIR /opt/sipa
 
-COPY ./build /home/sipa/sipa/build/
+COPY --chown=sipa:sipa ./build /opt/sipa/build/
 ARG additional_requirements
 RUN ./build/install_requirements.py $additional_requirements
 
-COPY --chown=sipa:sipa . /home/sipa/sipa
+COPY --chown=sipa:sipa . /opt/sipa
 
 EXPOSE 5000
 
