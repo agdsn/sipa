@@ -2,6 +2,7 @@ import logging
 import logging.config
 import os
 import os.path
+from contextlib import contextmanager
 from datetime import datetime, UTC
 
 import sentry_sdk
@@ -158,13 +159,27 @@ def load_config_file(app, config=None):
         logger.info("No SIPA_CONFIG_FILE configured. Moving on.")
 
 
+@contextmanager
+def maybe_uwsgi_lock():
+    try:
+        import uwsgi
+    except ImportError:
+        yield
+        return
+
+    uwsgi.lock()
+    yield
+    uwsgi.unlock()
+
+
 def init_env_and_config(app):
     if not app.config['FLATPAGES_ROOT']:
         app.config['FLATPAGES_ROOT'] = os.path.join(
             os.path.dirname(__file__),
             '../content')
     if app.config['CONTENT_URL']:
-        init_repo(app.config["FLATPAGES_ROOT"], app.config['CONTENT_URL'])
+        with maybe_uwsgi_lock():
+            init_repo(app.config["FLATPAGES_ROOT"], app.config["CONTENT_URL"])
     else:
         if not os.path.isdir(app.config['FLATPAGES_ROOT']):
             try:
