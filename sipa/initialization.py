@@ -173,17 +173,21 @@ def maybe_uwsgi_lock():
 
 
 def init_env_and_config(app):
-    if not app.config['FLATPAGES_ROOT']:
-        app.config['FLATPAGES_ROOT'] = os.path.join(
+    if not app.config.get("FLATPAGES_ROOT"):
+        app.config["FLATPAGES_ROOT"] = os.path.join(
             os.path.dirname(__file__),
-            '../content')
-    if app.config['CONTENT_URL']:
+            "../content",
+        )
+
+    content_root = app.config["FLATPAGES_ROOT"]
+
+    if url := app.config["CONTENT_URL"]:
         with maybe_uwsgi_lock():
-            init_repo(app.config["FLATPAGES_ROOT"], app.config["CONTENT_URL"])
+            init_repo(content_root, url)
     else:
-        if not os.path.isdir(app.config['FLATPAGES_ROOT']):
+        if not os.path.isdir(content_root):
             try:
-                os.mkdir(app.config['FLATPAGES_ROOT'])
+                os.mkdir(content_root)
             except PermissionError as e:
                 raise RuntimeError(
                     "The FLATPAGES_ROOT does not exist and cannot be created."
