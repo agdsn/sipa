@@ -18,8 +18,8 @@ def calendar(ical_data: str) -> icalendar.Calendar:
     return icalendar.Calendar.from_ical(ical_data)
 
 
-def test_ical_conversion(calendar: icalendar.Calendar, freezer):
-    freezer.move_to("2023-05-20")
+def test_ical_conversion(calendar: icalendar.Calendar, time_machine):
+    time_machine.move_to("2023-05-20")
     events = events_from_calendar(calendar)
     assert len(events) == 1
     [ev] = events
