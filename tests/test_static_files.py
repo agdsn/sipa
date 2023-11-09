@@ -33,6 +33,5 @@ def app(static_file, documents_dir):
 
 
 def test_static_view(app: Flask):
-    with app.test_client() as c:
-        resp = c.get("/documents/test.txt")
-    assert resp.text == "Test!"
+    with app.test_client() as c, c.get("/documents/test.txt") as resp:
+        assert resp.text == "Test!"
