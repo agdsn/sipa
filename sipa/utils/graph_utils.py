@@ -67,7 +67,7 @@ def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Gra
                     for entry in traffic_data]
 
     traffic_chart = default_chart(
-        pygal.Bar,
+        pygal.StackedBar,
         gettext("Traffic (MiB)"),
         inline,
         # don't divide, since the raw values already have been prepared.
@@ -82,9 +82,6 @@ def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Gra
     traffic_chart.add(gettext("Ausgehend"),
                       [day['output'] for day in traffic_data],
                       stroke_style={'dasharray': '5'})
-    traffic_chart.add(gettext("Gesamt"),
-                      [day['throughput'] for day in traffic_data],
-                      stroke_style={'width': '2'})
 
     from flask import g
 
