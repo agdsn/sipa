@@ -25,10 +25,11 @@
     {%- endif %}
 {%- endmacro -%}
 {%- macro locale_image(locale) -%}
-    <img
-        src="{{ url_for('static', filename='img/{}.png'.format(locale.language)) }}"
-        alt="{{ locale.display_name }}"
-    />
+{%- if locale.language == "de" %}
+    <span>&#127465;&#127466;</span>
+{%- elif locale.language == "en" %}
+    <span>&#127468;&#127463;</span>
+{%- endif -%}
 {%- endmacro -%}
 {%- macro locale_image_and_text(locale) -%}
     {{ locale_image(locale) }}
