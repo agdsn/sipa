@@ -7,6 +7,7 @@ from flask_babel import gettext
 
 bp_control = Blueprint('control', __name__, url_prefix='/control')
 @bp_control.route("/port", methods=['POST'])
+@login_required
 def check_port():
     """
     returns json with all the port forwardings
@@ -23,6 +24,7 @@ def check_port():
     return ""
 
 @bp_control.route("/ip", methods=['POST'])
+@login_required
 def checks_ip_address():
     """
     checks rather the given ip address is valid
@@ -34,8 +36,8 @@ def checks_ip_address():
         ip = ipaddress.ip_address(request.form.get("ip_address"))
     except ValueError:
         return gettext("die IP scheint keine valide IP Adresse zu sein")
-    #network = ipaddress.ip_network("%s/24", current_user.ip)
     network = ipaddress.ip_network("192.168.10.0/24")
+    #network = ipaddress.ip_network(f"{getattr(current_user, 'ips').value}/24")
     if ip not in network:
         return gettext("die angegebene IP gehört nicht zu deinem Subnetz")
     return ""
