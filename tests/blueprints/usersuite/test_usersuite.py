@@ -101,3 +101,19 @@ def test_usersuite_contains_urls(usersuite_response):
         assert re.search(
             f'href="[^"]*{url}[^"]*"', usersuite_response.data.decode()
         ), f"Usersuite does not contain any reference to url {url!r}"
+
+def test_port_forward(client):
+    rv = client.get("usersuite/show-port-forwardings?show=True")
+    assert rv.status_code == 200
+    assert "source port" in rv.data.decode("UTF-8")
+    assert "destination port" in rv.data.decode("UTF-8")
+    rv = client.get("usersuite/show-port-forwardings")
+    assert rv.status_code == 404
+
+def test_wrong_forwad_index(client):
+    rv = client.get("usersuite/get_row/-1")
+    assert rv.status_code == 404
+
+def test_add_port_forward(client):
+    data = {}
+    rv = client.post("usersuite/add-port-forward")
