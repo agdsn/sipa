@@ -22,7 +22,7 @@
         {% endif %}
         <tr id="port_forward_footer">
             <td colspan="3">
-                <button class="btn btn-default" hx-get="/usersuite/get_row" hx-target="#port_forward_footer" hx-swap="beforebegin swap:500ms">
+                <button class="btn btn-default" hx-get="/usersuite/get_row" name="new" value="True" hx-params="*" hx-target="#port_forward_footer" hx-swap="beforebegin swap:200ms">
                 <span class="glyphicon glyphicon-plus">
 
                 </span>
@@ -35,6 +35,6 @@
     </table>
 </div>
 {% else %}
-    <button class="btn btn-default" hx-get="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" hx-params="show">show table</button>
+    <button class="btn btn-default" hx-get="/usersuite/show-port-forwardings" hx-target="#port_forward" hx-swap="outerHTML" name="show"  value="True" hx-params="*">show table</button>
 {% endif %}
 </div>

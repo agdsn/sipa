@@ -512,11 +512,18 @@ class AddPortForwardForm(FlaskForm):
     ip_address = StringField(label="ip_address", validators=[ip_validatior])
     prot = StringField(label="port", validators=[check_prot])
 
+    old_source_port = IntegerField(label="old_source_port")
+    old_dest_port = IntegerField(label="old_dest_port")
+    old_ip_address = StringField(label="old_ip_address")
+    old_port = StringField(label="old_port")
     def get_list(self) -> list:
         """
         retruns the list for the port forward table
         """
         return [self.source_port.data, self.dest_port.data, self.ip_address.data, self.prot.data.upper()]
+
+    def get_old_list(self) -> list:
+        return [self.old_source_port.data, self.old_dest_port.data, self.old_ip_address.data, self.old_port.data.upper()]
 
 
 class RegisterFinishForm(FlaskForm):

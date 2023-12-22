@@ -631,7 +631,7 @@ def show_port_forwardings():
     Returns the table if with the fetched user port forwardings
     if not has param show it will just added the overline and a button to show the
     """
-    if request.args.get("show"):
+    if request.args.get("show") == "True":
         table = True
     else:
         table = False
@@ -645,11 +645,10 @@ def get_edit(port_forward: int):
     """
     Returns a template for editing a port forwarding
     """
-    port_forwarding = None
-
-    if port_forward < len(test_list):
+    if port_forward < len(test_list) and port_forward > 0:
         port_forwarding = test_list[port_forward]
-    return render_template("usersuite/_get_port_row.html", edit=True, port_index=port_forward, port_forwarding=port_forwarding, form=AddPortForwardForm())
+        return render_template("usersuite/_get_port_row.html", edit=True, port_index=port_forward, port_forwarding=port_forwarding, form=AddPortForwardForm())
+    return "Not Found", 404
 
 
 @bp_usersuite.route("/get_row", methods=['GET', 'POST'])
@@ -662,15 +661,17 @@ def get_new_portforward():
         port_forwarding = AddPortForwardForm(request.form).get_list()
     else:
         port_forwarding = None
+        if request.args.get("new") != "True":
+            return "Not Found", 404
 
     return render_template("usersuite/_get_port_row.html", port_forwarding=port_forwarding, form=AddPortForwardForm(), edit=True)
 
 
-@bp_usersuite.route("/port-forward-edit/<int:port_index>", methods=['PUT', 'POST'])
+@bp_usersuite.route("/port-forward-edit", methods=['PUT', 'POST'])
 @login_required
-def save_portforward(port_index: int):
+def save_portforward():
     """
-    edit an all ready applied port forwarding
+    edit an already applied port forwarding
 
     Args:
         port_index: identifier of the port
@@ -678,9 +679,13 @@ def save_portforward(port_index: int):
     form = AddPortForwardForm(request.form)
     edit = True
     if form.validate():
-        test_list[port_index] = form.get_list()
-        edit = False
-    return render_template("usersuite/_get_port_row.html", port_index=port_index, port_forwarding=test_list[port_index], edit=edit, form=AddPortForwardForm())
+        #test_list[port_index] = form.get_list()
+        print(f"{form.get_old_list()}")
+        if form.get_old_list() in test_list:
+            test_list.append(form.get_list())
+            test_list.remove(form.get_old_list())
+            edit = False
+    return render_template("usersuite/_get_port_row.html", port_forwarding=form.get_list(), edit=edit, form=AddPortForwardForm())
 
 
 @bp_usersuite.route("/add-port-forward", methods=["POST"])
