@@ -63,7 +63,7 @@
 <div class="card">
     <table class="card-body table table-striped table-hover mb-0">
         <tbody>
-            {% for description, property in rows %}
+            {% for  property, description, subtext in rows %}
             <tr>
                 {% if property.description_url %}
                     <td class="col-md-3">
@@ -72,9 +72,17 @@
 
                             <span class="bi-box-arrow-up-right"></span>
                         </a>
+
                     </td>
                 {% else %}
-                    <td class="col-md-3">{{ description }}</td>
+                    <td class="col-md-3">
+                        {{ description }}
+                    {% if subtext %}
+                        <div class="text-muted">
+                            {{ subtext }}
+                        </div>
+                    {% endif %}
+                    </td>
                 {% endif %}
                 {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
                 <td class="col-md-3">
