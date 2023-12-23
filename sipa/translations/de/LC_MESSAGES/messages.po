@@ -1059,6 +1059,11 @@ msgstr ""
 msgid "Ausgehend"
 msgstr ""
 
+msgid "Eingeangenezahlung"
+msgstr ""
+
+msgid "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
+msgstr ""
 #~ msgid "Bezahlt, verbunden"
 #~ msgstr ""
 

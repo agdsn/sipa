@@ -1101,6 +1101,12 @@ msgstr "Incoming"
 msgid "Ausgehend"
 msgstr "Outgoing"
 
+msgid "Eingeangenezahlung"
+msgstr "Received payments from"
+
+msgid "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
+msgstr "the MAC address of the devices network interfaces which is connected via cable"
+
 #~ msgid ""
 #~ "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. "
 #~ "Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht "

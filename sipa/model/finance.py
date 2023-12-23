@@ -69,6 +69,12 @@ class BaseFinanceInformation(metaclass=ABCMeta):
         """The time of the last update."""
         pass
 
+    @property
+    @abstractmethod
+    def last_received_update(self):
+        """The earliest time a payment was received."""
+        pass
+
     def __eq__(self, other):
         return compare_all_attributes(self, other, ['raw_balance', 'has_to_pay',
                                                     'history', 'last_update'])
