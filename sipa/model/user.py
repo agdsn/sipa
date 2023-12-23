@@ -27,7 +27,7 @@ class AuthenticatedUserMixin:
     is_anonymous = False
 
 
-Row = namedtuple('Row', ['description', 'property'])
+Row = namedtuple('Row', [ 'property','description', 'subtext'])
 
 # for annotating the classmethods
 T = TypeVar('T', bound='BaseUser')
@@ -152,7 +152,12 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     def generate_rows(self, description_dict: dict) -> t.Iterator[Row]:
         for key, val in description_dict.items():
-            yield Row(description=val, property=getattr(self, key))
+            yield Row(property=getattr(self, key), **self.__text_to_dict(val))
+
+    def __text_to_dict(self, val: str|list[str]) -> dict:
+        if isinstance(val, list):
+            return {'description': val[0], 'subtext': val[1] if len(val) == 2 else val}
+        return {'description':val, 'subtext': None}
 
     @property
     @abstractmethod

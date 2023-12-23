@@ -1,6 +1,6 @@
 from __future__ import annotations
 import logging
-from datetime import date
+from datetime import date, timedelta
 
 from pydantic import ValidationError
 
@@ -418,3 +418,13 @@ class FinanceInformation(BaseFinanceInformation):
     @property
     def history(self):
         return self._transactions
+
+    @property
+    def last_received_update(self):
+        last_update = self.last_update
+        weekday = last_update.toordinal() % 7
+        match weekday:
+            case 6: return last_update - timedelta(days=2)
+            case 7: return last_update - timedelta(days=3)
+            case 1: return last_update - timedelta(days=3)
+            case _: return last_update - timedelta(days=1)
