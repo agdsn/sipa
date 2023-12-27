@@ -1,5 +1,5 @@
 import typing as t
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 from random import random
 
 from flask import current_app
@@ -76,23 +76,6 @@ class SampleFinanceInformation(BaseFinanceInformation):
     @property
     def last_update(self):
         return max(l[0] for l in self.history)
-
-    @property
-    def last_received_update(self):
-        last_update = self.last_update
-        weekday = last_update.toordinal() % 7
-        match weekday:
-            case 6:
-                return last_update - timedelta(days=2)
-            case 7:
-                return last_update - timedelta(days=3)
-            case 1:
-                return last_update - timedelta(days=3)
-            case _:
-                return last_update - timedelta(days=1)
-
-
-
 
 # noinspection PyMethodMayBeStatic
 class User(BaseUser):

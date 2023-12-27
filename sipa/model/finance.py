@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from datetime import timedelta
 
 from flask_babel import gettext
 
@@ -70,10 +71,18 @@ class BaseFinanceInformation(metaclass=ABCMeta):
         pass
 
     @property
-    @abstractmethod
     def last_received_update(self):
-        """The earliest time a payment was received."""
-        pass
+        last_update = self.last_update
+        weekday = last_update.toordinal() % 7
+        match weekday:
+            case 6:
+                return last_update - timedelta(days=2)
+            case 7:
+                return last_update - timedelta(days=3)
+            case 1:
+                return last_update - timedelta(days=3)
+            case _:
+                return last_update - timedelta(days=1)
 
     def __eq__(self, other):
         return compare_all_attributes(self, other, ['raw_balance', 'has_to_pay',

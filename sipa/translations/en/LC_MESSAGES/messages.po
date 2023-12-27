@@ -1101,7 +1101,7 @@ msgstr "Incoming"
 msgid "Ausgehend"
 msgstr "Outgoing"
 
-msgid "Eingeangenezahlung"
+msgid "Eingegangene Zahlung"
 msgstr "Received payments from"
 
 msgid "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
