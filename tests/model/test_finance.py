@@ -19,6 +19,7 @@ class TestNoNeedToPay:
         raw_balance = 0
         history = []
         last_update = None
+        last_received_update = None
 
     @pytest.fixture(scope="class")
     def finance_info(self) -> BaseFinanceInformation:
@@ -36,6 +37,7 @@ class TestStaticBalance:
         raw_balance = 30
         history = []
         last_update = None
+        last_received_update = None
 
     @pytest.fixture(scope="class")
     def balance(self) -> ActiveProperty:
