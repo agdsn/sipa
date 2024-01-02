@@ -8,7 +8,7 @@ from werkzeug import Response
 
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.model.fancy_property import PropertyBase
-from sipa.model.user import Row
+from sipa.model.user import TableRow
 from tests.assertions import TestClient, RenderedTemplate
 
 
@@ -49,8 +49,8 @@ def usersuite_response(_usersuite_index):
 
 
 @pytest.fixture(scope="module")
-def usersuite_passed_rows(_usersuite_index) -> list[Row]:
-    return t.cast(list[Row], _usersuite_index[1].context["rows"])
+def usersuite_passed_rows(_usersuite_index) -> list[TableRow]:
+    return t.cast(list[TableRow], _usersuite_index[1].context["rows"])
 
 
 @pytest.mark.parametrize(

@@ -64,24 +64,44 @@ def index():
         if last_update
         else ""
     )
-    finance_received_string = format_date(last_received_update, 'short', rebase=False) if last_received_update else ""
-    descriptions = OrderedDict([
-        ('id', gettext("Nutzer-ID")),
-        ('realname', gettext("Voller Name")),
-        ('login', gettext("Accountname")),
-        ('status', gettext("Mitgliedschaftsstatus")),
-        ('address', gettext("Aktuelles Zimmer")),
-        ('ips', gettext("Aktuelle IP-Adresse")),
-        ('mac', [gettext("Aktuelle MAC-Adresse"), gettext("die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes")]),
-        ('mail', gettext("E-Mail-Adresse")),
-        ('mail_confirmed', gettext("Status deiner E-Mail-Adresse")),
-        ('mail_forwarded', gettext("E-Mail-Weiterleitung")),
-        ('wifi_password', gettext("WLAN Passwort")),
-        # ('hostname', gettext("Hostname")),
-        # ('hostalias', gettext("Hostalias")),
-        ('userdb_status', gettext("MySQL Datenbank")),
-        ('finance_balance', [gettext("Kontostand") + finance_update_string, gettext("Eingeangenezahlung") + ": " + finance_received_string]),
-    ])
+    finance_received_string = (
+        format_date(last_received_update, "short", rebase=False)
+        if last_received_update
+        else ""
+    )
+    descriptions = OrderedDict(
+        [
+            ("id", [gettext("Nutzer-ID")]),
+            ("realname", [gettext("Voller Name")]),
+            ("login", [gettext("Accountname")]),
+            ("status", [gettext("Mitgliedschaftsstatus")]),
+            ("address", [gettext("Aktuelles Zimmer")]),
+            ("ips", [gettext("Aktuelle IP-Adresse")]),
+            (
+                "mac",
+                [
+                    gettext("Aktuelle MAC-Adresse"),
+                    gettext(
+                        "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
+                    ),
+                ],
+            ),
+            ("mail", [gettext("E-Mail-Adresse")]),
+            ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
+            ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
+            ("wifi_password", [gettext("WLAN Passwort")]),
+            # ('hostname', gettext("Hostname")),
+            # ('hostalias', gettext("Hostalias")),
+            ("userdb_status", [gettext("MySQL Datenbank")]),
+            (
+                "finance_balance",
+                [
+                    gettext("Kontostand") + finance_update_string,
+                    gettext("Eingegangene Zahlung") + ": " + finance_received_string,
+                ],
+            ),
+        ]
+    )
 
     rows = list(current_user.generate_rows(descriptions))
     payment_form = PaymentForm()
