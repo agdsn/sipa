@@ -216,7 +216,7 @@ complete .md file can look like this:
     title: Stuff
     author: alice
     date: 2015-03-27
-    glyphicon: glyphicon-user
+    icon: bi-person
 
     ### Stuff
     #### Part 1
@@ -227,8 +227,8 @@ Another possibility is to include hyperlinks, which only have a metadata
 section:
 
     title: Awesome page
-    glyphicon: glyphicon-tower
-    link: http://http://www.awesome-page.com/
+    icon: bi-emoji-smile
+    link: https://example.org/
     rank: 1
 
 Translations

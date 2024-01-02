@@ -141,7 +141,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                 {%- for article in c.articles -%}
                                     {%- if not article.id == 'index' and article.title and not article.hidden -%}
                                     <a href="{{ url_for('pages.show', category_id=c.id, article_id=article.id) }}" class="dropdown-item">
-                                        <span class="{{ article.icon | glyphicon_to_bi }}"></span>
+                                        <span class="{{ article.icon }}"></span>
                                         &nbsp; {{ article.title }}
                                     </a>
                                     {%- endif %}
