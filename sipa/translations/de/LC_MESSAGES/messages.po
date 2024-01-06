@@ -994,6 +994,12 @@ msgstr ""
 msgid "Ausgehend"
 msgstr ""
 
+msgid "Apple WLAN-Konfigurationsprofil herunterladen"
+msgstr ""
+
+msgid "Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines"
+msgstr ""
+
 #~ msgid "Bezahlt, verbunden"
 #~ msgstr ""
 

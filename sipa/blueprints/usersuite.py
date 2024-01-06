@@ -3,6 +3,7 @@
 from collections import OrderedDict
 import logging
 from datetime import datetime
+from io import BytesIO
 
 from babel.numbers import format_currency
 from flask import (
@@ -14,6 +15,7 @@ from flask import (
     abort,
     request,
     current_app,
+    send_file,
 )
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
@@ -642,3 +644,32 @@ def reset_wifi_password():
     return render_template('generic_form.html',
                            page_title=gettext("Neues WLAN Passwort"),
                            form_args=form_args)
+
+
+@bp_usersuite.route("/get-apple-wlan-mobileconfig", methods=["GET"])
+@login_required
+def get_apple_wlan_mobileconfig():
+    """
+    Get the mobileconfig for the agdsn WLAN for an Apple device.
+    """
+
+    login = current_user.login.raw_value
+    wifi_password = current_user.wifi_password.raw_value
+
+    if not wifi_password:
+        abort(404)
+
+    return send_file(
+        BytesIO(
+            bytes(
+                render_template(
+                    "apple-mobileconfig.xml.j2",
+                    login=login,
+                    wifi_password=wifi_password,
+                ),
+                encoding="utf-8",
+            )
+        ),
+        as_attachment=True,
+        download_name="agdsn.mobileconfig",
+    )

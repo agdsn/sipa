@@ -48,6 +48,21 @@
         {% endif %}
     {% endif %}
 </div>
+
+<div>
+{% if current_user.wifi_password.raw_value %}
+    <a href="{{ url_for('.get_apple_wlan_mobileconfig') }}" class="btn btn-outline-secondary">
+        <span class="bi-apple"></span>
+        {{ _("Apple WLAN-Konfigurationsprofil herunterladen") }}
+    </a>
+{% else %}
+    <a href="#" class="btn btn-outline-secondary" data-bs-toggle="popover" data-bs-html="true" data-bs-content='{{ _("Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines") }} <a href="{{ url_for('.reset_wifi_password') }}">{{ _("hier") }}</a>.'>
+        <span class="bi-apple"></span>
+        {{ _("Apple WLAN-Konfigurationsprofil herunterladen") }}
+    </a>
+{% endif %}
+</div>
+
 <div class="btn-group">
     <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
         <span class="bi-question-circle-fill"></span>

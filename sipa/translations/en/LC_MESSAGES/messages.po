@@ -1002,6 +1002,12 @@ msgstr "Outgoing"
 #~ msgid "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht helfen können."
 #~ msgstr "Please note, that this might cause problems with your clients. If there are problems, get in touch with us, the service providers won't be able to help."
 
+msgid "Apple WLAN-Konfigurationsprofil herunterladen"
+msgstr "Download Apple WLAN configuration profile"
+
+msgid "Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines"
+msgstr "You need a WLAN password first.  Create one"
+
 #~ msgid "Zahlungsdetails für "
 #~ msgstr "Payment details for "
 
