@@ -414,3 +414,7 @@ class FinanceInformation(BaseFinanceInformation):
     @property
     def last_update(self):
         return self._last_update
+
+    @property
+    def history(self):
+        return self._transactions
