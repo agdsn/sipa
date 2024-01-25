@@ -70,13 +70,12 @@ class SampleFinanceInformation(BaseFinanceInformation):
         return [
             (datetime(2016, 4, 1), 21, "Desc 1"),
             (datetime(2016, 4, 30), -3.5, "Desc 2"),
-            (datetime(2016, 5, 30), -3.5, "Desc 3"),
+            (datetime(2023, 12, 23), -3.5, "Desc 3"),
         ]
 
     @property
     def last_update(self):
         return max(l[0] for l in self.history)
-
 
 # noinspection PyMethodMayBeStatic
 class User(BaseUser):

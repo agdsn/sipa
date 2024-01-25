@@ -3,7 +3,6 @@ from __future__ import annotations
 import typing as t
 # noinspection PyMethodMayBeStatic
 from abc import ABCMeta, abstractmethod
-from collections import namedtuple
 from contextlib import contextmanager
 from datetime import date
 from typing import TypeVar
@@ -27,7 +26,13 @@ class AuthenticatedUserMixin:
     is_anonymous = False
 
 
-Row = namedtuple('Row', ['description', 'property'])
+class TableRow(t.NamedTuple):
+    """Represents a Row in on the user pages Table"""
+
+    property: str
+    description: str
+    subtext: str | None = None
+
 
 # for annotating the classmethods
 T = TypeVar('T', bound='BaseUser')
@@ -150,9 +155,18 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
-    def generate_rows(self, description_dict: dict) -> t.Iterator[Row]:
+    def generate_rows(self, description_dict: dict) -> t.Iterator[TableRow]:
         for key, val in description_dict.items():
-            yield Row(description=val, property=getattr(self, key))
+            yield TableRow(property=getattr(self, key), **self.__text_to_dict(val))
+
+    def __text_to_dict(self, val: str|list[str]) -> dict:
+        match val:
+            case [d, s]:
+                return {"description": d, "subtext": s}
+            case [d]:
+                return {"description": d}
+            case _:
+                return {"description": "Error"}
 
     @property
     @abstractmethod

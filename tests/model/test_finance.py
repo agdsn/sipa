@@ -1,3 +1,5 @@
+import datetime
+
 import pytest
 
 from sipa.model.fancy_property import ActiveProperty
@@ -19,6 +21,7 @@ class TestNoNeedToPay:
         raw_balance = 0
         history = []
         last_update = None
+        last_received_update = None
 
     @pytest.fixture(scope="class")
     def finance_info(self) -> BaseFinanceInformation:
@@ -36,6 +39,7 @@ class TestStaticBalance:
         raw_balance = 30
         history = []
         last_update = None
+        last_received_update = None
 
     @pytest.fixture(scope="class")
     def balance(self) -> ActiveProperty:
@@ -51,3 +55,18 @@ class TestStaticBalance:
 
     def test_balance_not_deletable(self, balance):
         assert not balance.capabilities.delete
+
+
+class TestLastReceivedUpdate:
+    class StaticFinanceInformation(BaseFinanceInformation):
+        has_to_pay = True
+        raw_balance = 30
+        history = []
+        last_update = datetime.date.today()
+
+    @pytest.fixture(scope="class")
+    def last_recv(self) -> ActiveProperty:
+        return self.StaticFinanceInformation().last_received_update
+
+    def test_has_correct_balance(self, last_recv):
+        assert last_recv != datetime.date.today()

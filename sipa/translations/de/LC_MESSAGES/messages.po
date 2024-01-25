@@ -1,13 +1,13 @@
 # German translations for sipa.
-# Copyright (C) 2023 AG DSN
+# Copyright (C) 2024 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-05-23 09:55+0200\n"
+"POT-Creation-Date: 2024-01-25 13:34+0100\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.13.1\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -30,10 +30,7 @@ msgstr ""
 msgid "andere Zeichen"
 msgstr ""
 
-msgid ""
-"Dein Passwort muss mindestens {min_length} Zeichen lang sein und "
-"mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. "
-"Zeichen von Klassen sind: {classes}."
+msgid "Dein Passwort muss mindestens {min_length} Zeichen lang sein und mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. Zeichen von Klassen sind: {classes}."
 msgstr ""
 
 msgid "E-Mail-Adresse hat ein ungültiges Format!"
@@ -174,9 +171,7 @@ msgstr ""
 msgid "Geschätzter Kontostand (in EUR) zum Ende der Mitgliedschaft"
 msgstr ""
 
-msgid ""
-"Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum "
-"beenden möchte"
+msgid "Ich bestätige, dass ich meine Mitgliedschaft zum obenstehenden Datum beenden möchte"
 msgstr ""
 
 msgid "Bitte bestätige die Beendigung der Mitgliedschaft"
@@ -188,10 +183,7 @@ msgstr ""
 msgid "Bitte bestätige die baldmöglichste Bezahlung von ausstehenden Beiträgen."
 msgstr ""
 
-msgid ""
-"Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht"
-" innerhalb von 31 Tagen nach Mitgliedschaftsende einen "
-"Rückerüberweisungsantrag stelle"
+msgid "Ich bestätige, dass ich zu viel gezahltes Guthaben spende, wenn ich nicht innerhalb von 31 Tagen nach Mitgliedschaftsende einen Rückerüberweisungsantrag stelle"
 msgstr ""
 
 msgid "Bitte bestätige die Spendeneinwilligung."
@@ -257,9 +249,7 @@ msgstr ""
 msgid "Bitte gib dein Geburtsdatum an."
 msgstr ""
 
-msgid ""
-"Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom "
-"Studentenwerk Dresden."
+msgid "Ich bin Untermieter oder habe meinen Mietvertrag nicht direkt vom Studentenwerk Dresden."
 msgstr ""
 
 msgid "Debitorennummer (siehe Mietvertrag)"
@@ -286,11 +276,7 @@ msgstr ""
 msgid "Gewünschter Nutzername"
 msgstr ""
 
-msgid ""
-"Dein Nutzername muss mit einem Kleinbuchstaben beginnen und kann mit "
-"Kleinbuchstaben, Zahlen und Interpunktionszeichen (Punkt und Bindestrich)"
-" fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen "
-"den Interpunktionszeichen stehen."
+msgid "Dein Nutzername muss mit einem Kleinbuchstaben beginnen und kann mit Kleinbuchstaben, Zahlen und Interpunktionszeichen (Punkt und Bindestrich) fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen den Interpunktionszeichen stehen."
 msgstr ""
 
 msgid "E-Mail-Adresse erneut eingeben"
@@ -305,28 +291,19 @@ msgstr ""
 msgid "Mitgliedschaftsbeginn muss angegeben werden!"
 msgstr ""
 
-msgid ""
-"Ich bestätige, dass meine Angaben korrekt und vollständig sind und ich "
-"die Vorraussetzungen für die Mitgliedschaft (Student oder Bewohner eines "
-"Studentenwohnheimes) erfülle."
+msgid "Ich bestätige, dass meine Angaben korrekt und vollständig sind und ich die Vorraussetzungen für die Mitgliedschaft (Student oder Bewohner eines Studentenwohnheimes) erfülle."
 msgstr ""
 
 msgid "Bitte bestätige, dass deine Angaben korrekt sind."
 msgstr ""
 
-msgid ""
-"Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen der AG "
-"DSN in ihrer jeweils aktuellen Fassung anerkenne, insbesondere die "
-"[Netzordnungen](network_constitution) und die "
-"[Beitragsordnung](fee_regulation)."
+msgid "Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen der AG DSN in ihrer jeweils aktuellen Fassung anerkenne, insbesondere die [Netzordnungen](network_constitution) und die [Beitragsordnung](fee_regulation)."
 msgstr ""
 
 msgid "Bitte bestätige deine Zustimmung zur Satzung und weiteren Ordnungen."
 msgstr ""
 
-msgid ""
-"Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden und "
-"stimme diesen zu."
+msgid "Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden und stimme diesen zu."
 msgstr ""
 
 msgid "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."
@@ -344,9 +321,7 @@ msgstr ""
 msgid "Es ist ein Fehler aufgetreten!"
 msgstr ""
 
-msgid ""
-"Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein "
-"paar Minuten noch mal."
+msgid "Es gab einen Fehler bei der Datenbankabfrage. Bitte probiere es in ein paar Minuten noch mal."
 msgstr ""
 
 #, python-format
@@ -371,17 +346,13 @@ msgstr ""
 msgid "Bitte kontaktiere den Support."
 msgstr ""
 
-msgid ""
-"Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. Falls"
-" du die Nachricht nicht erhälst, wende dich an den Support."
+msgid "Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. Falls du die Nachricht nicht erhälst, wende dich an den Support."
 msgstr ""
 
 msgid "Passwort zurücksetzen"
 msgstr ""
 
-msgid ""
-"Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen "
-"Link an."
+msgid "Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."
 msgstr ""
 
 msgid "Dein Passwort wurde geändert."
@@ -390,9 +361,7 @@ msgstr ""
 msgid "Aufgrund deines Nutzerstatus kannst Du keine Trafficdaten einsehen."
 msgstr ""
 
-msgid ""
-"Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist "
-"angemeldet!"
+msgid "Ein anderer Nutzer als der für diesen Anschluss Eingetragene ist angemeldet!"
 msgstr ""
 
 msgid "Hier werden die Trafficdaten dieses Anschlusses angezeigt."
@@ -404,28 +373,16 @@ msgstr ""
 msgid "Es gab einen Fehler beim Versenden der Nachricht."
 msgstr ""
 
-msgid ""
-"Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es "
-"erneut."
+msgid "Fehler bei der Kommunikation mit dem Backend-Server. Bitte versuche es erneut."
 msgstr ""
 
-msgid ""
-"Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft. "
-"Bitte wähle aus, in welchem Wohnheim du vorher gewohnt hast."
+msgid "Zu den von dir angegebenen Daten existiert bereits eine Mitgliedschaft. Bitte wähle aus, in welchem Wohnheim du vorher gewohnt hast."
 msgstr ""
 
-msgid ""
-"Für den dir zugeordneten Raum gibt es bereits ein Konto. Falls du denkst,"
-" dass es sich dabei um einen Fehler handelt, kannst du den entsprechenden"
-" Button klicken. Die Verifizierung wird dann später manuell durchgeführt."
+msgid "Für den dir zugeordneten Raum gibt es bereits ein Konto. Falls du denkst, dass es sich dabei um einen Fehler handelt, kannst du den entsprechenden Button klicken. Die Verifizierung wird dann später manuell durchgeführt."
 msgstr ""
 
-msgid ""
-"Die Verifizierung deiner Daten mit dem Studentenwerk Dresden ist "
-"fehlgeschlagen. Bitte überprüfe, dass du die exakt selben Daten, wie beim"
-" Studentenwerk Dresden bzw. wie auf deinem Mietvertrag, angegeben hast. "
-"Um die Verifizierung zu überspringen, kannst du den entsprechenden Button"
-" klicken. Die Verifizierung wird dann später manuell durchgeführt."
+msgid "Die Verifizierung deiner Daten mit dem Studentenwerk Dresden ist fehlgeschlagen. Bitte überprüfe, dass du die exakt selben Daten, wie beim Studentenwerk Dresden bzw. wie auf deinem Mietvertrag, angegeben hast. Um die Verifizierung zu überspringen, kannst du den entsprechenden Button klicken. Die Verifizierung wird dann später manuell durchgeführt."
 msgstr ""
 
 msgid "Identifizierung"
@@ -455,10 +412,7 @@ msgstr ""
 msgid "Registrierung aus unbekanntem Grund fehlgeschlagen."
 msgstr ""
 
-msgid ""
-"Du hast die Verifikation übersprungen oder dein Zimmer nicht bestätigt. "
-"Dadurch kann dein Antrag nicht automatisch bearbeitet werden. Eine "
-"manuelle Bearbeitung kann mehrere Tage dauern."
+msgid "Du hast die Verifikation übersprungen oder dein Zimmer nicht bestätigt. Dadurch kann dein Antrag nicht automatisch bearbeitet werden. Eine manuelle Bearbeitung kann mehrere Tage dauern."
 msgstr ""
 
 msgid "Konto erstellen"
@@ -470,9 +424,7 @@ msgstr ""
 msgid "Bestätigung fehlgeschlagen."
 msgstr ""
 
-msgid ""
-"Der Bestätigungslink ist nicht gültig. Möglicherweise hast du dein Konto "
-"bereits bestätigt, oder der Bestätigungszeitraum ist verstrichen."
+msgid "Der Bestätigungslink ist nicht gültig. Möglicherweise hast du dein Konto bereits bestätigt, oder der Bestätigungszeitraum ist verstrichen."
 msgstr ""
 
 msgid "Stand"
@@ -499,6 +451,9 @@ msgstr ""
 msgid "Aktuelle MAC-Adresse"
 msgstr ""
 
+msgid "Die MAC Adresse des per Kabel verbundenen Gerätes"
+msgstr ""
+
 msgid "Status deiner E-Mail-Adresse"
 msgstr ""
 
@@ -514,9 +469,10 @@ msgstr ""
 msgid "Kontostand"
 msgstr ""
 
-msgid ""
-"Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns "
-"direkt eine E-Mail an {}"
+msgid "Eingegangene Zahlung"
+msgstr ""
+
+msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an {}"
 msgstr ""
 
 msgid "Deine E-Mail Adresse ({}) wurde zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
@@ -585,9 +541,7 @@ msgstr ""
 msgid "Es kann bis zu 15 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
-msgid ""
-"Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere"
-" den Support."
+msgid "Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."
 msgstr ""
 
 msgid "Netzwerkzugang wurde aktiviert!"
@@ -722,9 +676,7 @@ msgstr ""
 msgid "Hinweis:"
 msgstr ""
 
-msgid ""
-"Wenn du uns angemeldet schreibst, können wir Dich als Mitglied "
-"identifizieren und Deine Anfrage schneller bearbeiten!"
+msgid "Wenn du uns angemeldet schreibst, können wir Dich als Mitglied identifizieren und Deine Anfrage schneller bearbeiten!"
 msgstr ""
 
 msgid "Zum Kontaktformular für angemeldete Nutzer"
@@ -766,12 +718,6 @@ msgstr ""
 msgid "Kontaktformular für Geschäftspartner"
 msgstr ""
 
-msgid "Aktuell erreichbar"
-msgstr ""
-
-msgid "Montag und Donnerstag 19:00-20:00"
-msgstr ""
-
 msgid "Klingel"
 msgstr ""
 
@@ -788,13 +734,6 @@ msgid "Nur für Bewohner des Hauses!"
 msgstr ""
 
 msgid "Teamsitzungen"
-msgstr ""
-
-#, python-format
-msgid "Am %(date)s im %(loc)s"
-msgstr ""
-
-msgid "Mehr anzeigen"
 msgstr ""
 
 msgid "Informationen zur Version"
@@ -827,25 +766,7 @@ msgstr ""
 msgid "Zur Hauptseite"
 msgstr ""
 
-msgid "Geschrieben von"
-msgstr ""
-
-msgid "Vom"
-msgstr ""
-
-msgid "Keine News Vorhanden!"
-msgstr ""
-
-msgid "Neuer"
-msgstr ""
-
-msgid "Älter"
-msgstr ""
-
 msgid "Passwort vergessen?"
-msgstr ""
-
-msgid "Dieses Wohnheim erreichst du hier:"
 msgstr ""
 
 msgid "Team"
@@ -861,6 +782,15 @@ msgstr ""
 msgid "Am %(meeting_time)s"
 msgstr ""
 
+msgid "Keine News Vorhanden!"
+msgstr ""
+
+msgid "Neuer"
+msgstr ""
+
+msgid "Älter"
+msgstr ""
+
 msgid "Achtung:"
 msgstr ""
 
@@ -869,9 +799,6 @@ msgid ""
 "            nicht mit deinem Anschluss geholfen!  Dieses Formular ist\n"
 "            nur für die Kommunikation mit unseren Partnern gedacht.  Bei\n"
 "            Missbrauch kann dein Account gesperrt werden."
-msgstr ""
-
-msgid "Wohnheim auswählen"
 msgstr ""
 
 msgid "Deine Nutzer-ID lautet"
@@ -898,6 +825,12 @@ msgstr ""
 msgid "Autor"
 msgstr ""
 
+msgid "Geschrieben von"
+msgstr ""
+
+msgid "Vom"
+msgstr ""
+
 msgid "Abschicken"
 msgstr ""
 
@@ -905,6 +838,19 @@ msgid "Abbrechen"
 msgstr ""
 
 msgid "Zurücksetzen"
+msgstr ""
+
+#, python-format
+msgid "Am %(date)s im %(loc)s"
+msgstr ""
+
+msgid "Mehr anzeigen"
+msgstr ""
+
+msgid "Aktuell erreichbar"
+msgstr ""
+
+msgid "Montag und Donnerstag 19:00-20:00"
 msgstr ""
 
 msgid "Onlineanmeldung"
@@ -967,9 +913,7 @@ msgstr ""
 msgid "GiroCode"
 msgstr ""
 
-msgid ""
-"Nutze den GiroCode, um die Überweisungsdaten automatisch in deine "
-"Banking-App zu übernehmen."
+msgid "Nutze den GiroCode, um die Überweisungsdaten automatisch in deine Banking-App zu übernehmen."
 msgstr ""
 
 msgid "Buchungen"
@@ -984,20 +928,13 @@ msgstr ""
 msgid "Summe"
 msgstr ""
 
-msgid ""
-"Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine "
-"Benachrichtigungsmail an uns gesandt."
+msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
 msgstr ""
 
-msgid ""
-"Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es"
-" ist nicht zulässig, den eigenen Account weiterzugeben."
+msgid "Bitte beachtet, dass Nach-/Untermieter einen eigenen Account brauchen. Es ist nicht zulässig, den eigenen Account weiterzugeben."
 msgstr ""
 
-msgid ""
-"Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde "
-"MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für "
-"alle Aktivitäten des Accounts!"
+msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
 msgstr ""
 
 msgid "Kontakt für Mitglieder"
@@ -1012,9 +949,7 @@ msgstr ""
 msgid "Die Antwort erhältst Du per Mail."
 msgstr ""
 
-msgid ""
-"Du kannst eine Weiterleitung deiner AGDSN-Mails in den "
-"Benutzereinstellungen einrichten."
+msgid "Du kannst eine Weiterleitung deiner AGDSN-Mails in den Benutzereinstellungen einrichten."
 msgstr ""
 
 msgid "Willst Du deine Datenbank wirklich löschen?"
@@ -1711,28 +1646,16 @@ msgstr ""
 #~ msgid "In Miete inbegriffen"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Bitte beachte, dass diese Funktion "
-#~ "deinen Steam-Client beeinträchtigen kann. "
-#~ "Sollten Probleme auftreten, kontaktiere uns,"
-#~ " der Steam-Support wird dir nicht "
-#~ "helfen können."
+#~ msgid "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht helfen können."
 #~ msgstr ""
 
 #~ msgid "Zahlungsdetails für "
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Außerdem kannst Du in Deinen "
-#~ "Einstellungen bereits einige Daten wie "
-#~ "z.B. die MAC-Adresse selbstständig "
-#~ "ändern."
+#~ msgid "Außerdem kannst Du in Deinen Einstellungen bereits einige Daten wie z.B. die MAC-Adresse selbstständig ändern."
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Es gab einen internen Fehler. Bitte "
-#~ "probiere es in ein paar Minuten "
-#~ "noch mal."
+#~ msgid "Es gab einen internen Fehler. Bitte probiere es in ein paar Minuten noch mal."
 #~ msgstr ""
 
 #~ msgid "Raumnummer"
@@ -1813,25 +1736,13 @@ msgstr ""
 #~ msgid "Cache-Nutzung ändern"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Infos zu den unterstützten Services und"
-#~ " zur Funktionsweise des Caches findest "
-#~ "Du hier."
+#~ msgid "Infos zu den unterstützten Services und zur Funktionsweise des Caches findest Du hier."
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Bitte beachte, dass diese Funktion deine"
-#~ " Clients beeinträchtigen kann. Sollten "
-#~ "Probleme auftreten, kontaktiere uns, der "
-#~ "Hersteller-Support wird dir nicht helfen"
-#~ " können."
+#~ msgid "Bitte beachte, dass diese Funktion deine Clients beeinträchtigen kann. Sollten Probleme auftreten, kontaktiere uns, der Hersteller-Support wird dir nicht helfen können."
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Sicher, dass Du das anonyme Formular "
-#~ "benutzen möchtest? Dies ist nur "
-#~ "erforderlich, wenn Du Administratoren eines"
-#~ " anderen Wohnheims kontaktieren willst."
+#~ msgid "Sicher, dass Du das anonyme Formular benutzen möchtest? Dies ist nur erforderlich, wenn Du Administratoren eines anderen Wohnheims kontaktieren willst."
 #~ msgstr ""
 
 #~ msgid "Hostname"
@@ -1840,9 +1751,7 @@ msgstr ""
 #~ msgid "Hostalias"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Für das angegebene Nutzerkonto ist keine"
-#~ " Kontakt E-Mail Adresse hinterlegt. {}"
+#~ msgid "Für das angegebene Nutzerkonto ist keine Kontakt E-Mail Adresse hinterlegt. {}"
 #~ msgstr ""
 
 #~ msgid "Es ist ein unbekannter Fehler aufgetreten. {}"
@@ -1863,5 +1772,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Es gab einen Fehler bei der Datenbankanfrage!"
+#~ msgstr ""
+
+#~ msgid "Dieses Wohnheim erreichst du hier:"
+#~ msgstr ""
+
+#~ msgid "Wohnheim auswählen"
+#~ msgstr ""
+
+#~ msgid "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
 #~ msgstr ""
 

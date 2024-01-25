@@ -72,6 +72,7 @@ class DegenerateFinanceInformation(BaseFinanceInformation):
     has_to_pay = None
     history = None
     last_update = None
+    last_received_update = None
 
 
 class UserWithFinancesTestCase(TestCase):
