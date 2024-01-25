@@ -81,9 +81,7 @@ def index():
                 "mac",
                 [
                     gettext("Aktuelle MAC-Adresse"),
-                    gettext(
-                        "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
-                    ),
+                    gettext("Die MAC Adresse des per Kabel verbundenen Gerätes"),
                 ],
             ),
             ("mail", [gettext("E-Mail-Adresse")]),

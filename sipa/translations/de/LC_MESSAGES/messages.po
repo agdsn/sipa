@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-01-25 13:29+0100\n"
+"POT-Creation-Date: 2024-01-25 13:34+0100\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -451,7 +451,7 @@ msgstr ""
 msgid "Aktuelle MAC-Adresse"
 msgstr ""
 
-msgid "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
+msgid "Die MAC Adresse des per Kabel verbundenen Gerätes"
 msgstr ""
 
 msgid "Status deiner E-Mail-Adresse"
@@ -1778,5 +1778,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Wohnheim auswählen"
+#~ msgstr ""
+
+#~ msgid "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
 #~ msgstr ""
 
