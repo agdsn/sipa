@@ -14,13 +14,10 @@ RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
 	libxslt1-dev \
     && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN pip install --upgrade pip
-
-RUN pip install uwsgi
-
-RUN groupadd --force --gid $GID sipa \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+  && pip install --upgrade pip \
+  && pip install uwsgi \
+  && groupadd --force --gid $GID sipa \
     && useradd --non-unique --home-dir /opt/sipa --create-home --uid $UID --gid $GID --comment "Application" sipa
 
 WORKDIR /opt/sipa
