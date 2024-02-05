@@ -190,7 +190,7 @@ def subscribe():
 
     email = current_user.mail.raw_value
     if email == "":
-        email = f"{current_user.login.raw_value}@agdsn.me"
+        email = f"{current_user.login.raw_value}@{current_user.datasource.mail_server}"
 
     result = subscribe_to_status_page(
         current_app.config['STATUS_PAGE_API_SUBSCRIBE_ENDPOINT'],
