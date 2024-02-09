@@ -168,6 +168,9 @@ class User(BaseUser):
             capabilities=Capabilities(edit=True, delete=False),
         )
 
+    def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
+        self.config["mail"] = new_mail
+
     @property
     def mail_forwarded(self):
         return ActiveProperty[bool, bool](

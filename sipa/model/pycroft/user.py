@@ -125,12 +125,16 @@ class User(BaseUser):
             capabilities=Capabilities.edit_if(len(self.user_data.interfaces) <= 1),
         )
 
-    def change_mac_address(self, new_mac, host_name):
+    def change_mac_address(self, new_mac, host_name, password):
         assert len(self.user_data.interfaces) == 1
 
-        status, result = api.change_mac(self.user_data.id, self._tmp_password,
-                                        self.user_data.interfaces[0].id,
-                                        new_mac, host_name)
+        status, result = api.change_mac(
+            self.user_data.id,
+            password,
+            self.user_data.interfaces[0].id,
+            new_mac,
+            host_name,
+        )
 
         if status == 401:
             raise PasswordInvalid
@@ -196,15 +200,19 @@ class User(BaseUser):
             capabilities=Capabilities.edit_if(self.has_property("mail")),
         )
 
-    @mail.setter
-    def mail(self, new_mail):
-        status, result = api.change_mail(self.user_data.id, self._tmp_password, new_mail,
-                                         self.user_data.mail_forwarded)
-
+    def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
+        status, result = api.change_mail(
+            self.user_data.id,
+            password,
+            new_mail,
+            mail_forwarded,
+        )
         if status == 401:
             raise PasswordInvalid
         elif status == 404:
             raise UserNotFound
+        self.user_data.mail_forwarded = mail_forwarded
+        self.user_data.mail = new_mail
 
     @property
     def mail_forwarded(self) -> ActiveProperty[bool, str]:
@@ -215,10 +223,6 @@ class User(BaseUser):
             value=gettext("Aktiviert") if value else gettext("Nicht aktiviert"),
             capabilities=Capabilities.edit_if(self.has_property("mail")),
         )
-
-    @mail_forwarded.setter
-    def mail_forwarded(self, value):
-        self.user_data.mail_forwarded = value
 
     @property
     def mail_confirmed(self) -> ActiveProperty[str, str]:

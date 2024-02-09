@@ -270,8 +270,7 @@ def change_password():
         new = form.new.data
 
         try:
-            with current_user.tmp_authentication(old):
-                current_user.change_password(old, new)
+            current_user.change_password(old, new)
         except PasswordInvalid:
             flash(gettext("Altes Passwort war inkorrekt!"), "error")
         else:
@@ -298,9 +297,11 @@ def change_mail():
         email = form.email.data
 
         try:
-            with current_user.tmp_authentication(password):
-                current_user.mail_forwarded = form.forwarded.data
-                current_user.mail = email
+            current_user.change_mail(
+                password=password,
+                new_mail=email,
+                mail_forwarded=form.forwarded.data,
+            )
         except UserNotFound:
             flash(gettext("Nutzer nicht gefunden!"), "error")
         except PasswordInvalid:
@@ -367,8 +368,7 @@ def change_mac():
         host_name = form.host_name.data
 
         try:
-            with current_user.tmp_authentication(password):
-                current_user.change_mac_address(mac, host_name)
+            current_user.change_mac_address(mac, host_name, password)
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
@@ -410,8 +410,7 @@ def activate_network_access():
         host_name = form.host_name.data
 
         try:
-            with current_user.tmp_authentication(password):
-                current_user.activate_network_access(password, mac, birthdate, host_name)
+            current_user.activate_network_access(password, mac, birthdate, host_name)
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
