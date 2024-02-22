@@ -1,28 +1,40 @@
-var hints = [];
-$.getJSON("/sipa/static/js/hints.json", function (raw_hints) {
-    hints = raw_hints.map(function (hint) {
+let hints = [];
+
+fetch("static/js/hints.json").then(response => response.json()).then((raw_hints) => {
+    hints = raw_hints.map((hint) => {
         return {
             not_in_dorm: hint.not_in_dorm,
-            patterns: hint.patterns.map(function (pattern) {
+            patterns: hint.patterns.map((pattern) => {
                 return new RegExp(pattern, "i");
             }),
             hint: hint.hint
         };
     });
 });
-$("#message").on("input", function () {
-    var applicable = hints.filter(function (hint) {
-        var contains = hint.patterns.some(function (pattern) {
-            return pattern.test($("#message").val())
+
+
+const e_message = document.getElementById("message");
+const e_dormitory = document.getElementById("dormitory");
+const e_hints = document.getElementById("hints")
+
+e_message.addEventListener("input", (event) => {
+    const applicable = hints.filter((hint) => {
+        const contains = hint.patterns.some((pattern) => {
+            return pattern.test(e_message.value)
         });
-        var not_blacklisted = hint.not_in_dorm.every(function (dorm) {
-            return dorm !== $("#dormitory").val();
+        const not_blacklisted = hint.not_in_dorm.every((dorm) => {
+            return dorm !== e_dormitory.value;
         });
         return contains & not_blacklisted;
     });
-    $("#hints").empty();
-    applicable.forEach(function (hint) {
-        var hint_text = hint.hint[get_language()];
-        $("#hints").append("<div class='alert alert-warning'>" + hint_text + "</div>");
+
+    while (e_hints.lastChild) {
+        e_hints.removeChild(e_hints.lastChild);
+    }
+    applicable.forEach((hint) => {
+        e_hints.insertAdjacentHTML("beforeend",
+            "<div class='alert alert-warning'>" + hint.hint[get_language()] +
+            "</div>"
+        );
     });
 });

@@ -1,12 +1,21 @@
-function updateState() {
-    var swdd_tenant = !$("#no_swdd_tenant").prop("checked");
-    $("#tenant_number,[for=tenant_number]").toggle(swdd_tenant);
-    $("#tenant_number").prop("required", swdd_tenant);
+function updateForm(target, invert, updateId, event) {
+    // Invert checked if invert is true (XOR)
+    const shouldBeVisible = target.checked !== invert;
 
-    var agdsn_history = $("#agdsn_history").prop("checked");
-    $("#previous_dorm,[for=previous_dorm]").toggle(agdsn_history);
-    $("#previous_dorm").prop("required", agdsn_history);
+    const element = document.getElementById(updateId);
+    element.style.display = shouldBeVisible ? "block" : "none";
+    element.required = shouldBeVisible;
+
+    element.labels.forEach((label) => {
+        label.style.display = shouldBeVisible ? "block" : "none";
+    });
 }
-$("#no_swdd_tenant").change(updateState);
-$("#agdsn_history").change(updateState);
-updateState();
+
+const no_swdd_tenant = document.getElementById("no_swdd_tenant");
+no_swdd_tenant.addEventListener("change", updateForm.bind(undefined, no_swdd_tenant, true, "tenant_number"));
+
+const agdsn_history = document.getElementById("agdsn_history");
+agdsn_history.addEventListener("change", updateForm.bind(undefined, agdsn_history, false, "previous_dorm"));
+
+updateForm(no_swdd_tenant, true, "tenant_number", undefined)
+updateForm(agdsn_history, false, "previous_dorm", undefined)
