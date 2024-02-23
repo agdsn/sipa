@@ -1,8 +1,8 @@
 /**
  * @typedef {'degraded_performance' | 'maintenance' | 'partial_outage' | 'major_outage' | 'operational'} Status
- * @typedef {'schedule' | 'in_progress' | 'verifying' | 'completed'} MaintenanceStatus
  * @typedef {{ status: Status, name: string }} Component
- * @typedef {{ status: MaintenanceStatus, title: string, scheduled_at: string }} Maintenance
+ * @typedef {'schedule' | 'in_progress' | 'verifying' | 'completed'} MaintenanceStatus
+* @typedef {{ status: MaintenanceStatus, title: string, scheduled_at: string }} Maintenance
  * */
 
 /** Extract components (services) from statuspage API response sorted by priority

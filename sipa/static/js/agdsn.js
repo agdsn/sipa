@@ -115,9 +115,10 @@ function updateMaintenancesPartOfStatusWidget(statusEl, tooltipContent) {
     if (tooltipContent) {
         for (const link of statusEl.getElementsByTagName("a")) {
             const parent = link.parentElement;
-            if (parent.tagName == "div") {
+            if (parent.tagName.toLowerCase() == "div") {
                 parent.innerHTML += `<br><span class="bi-clock-fill text-muted"></span>`
                 const spanElement = document.createElement("span");
+                spanElement.innerHTML += ` ${maintenanceMessage[get_language()]}`;
                 spanElement.classList.add(...'text-decoration-none text-muted'.split(" "));
                 spanElement.setAttribute("data-bs-toggle", "tooltip");
                 spanElement.setAttribute("data-bs-placement", "bottom");
@@ -156,7 +157,7 @@ function handleStatusResponse(components) {
  */
 function handleMaintenancesResponse(maintenances) {
     const issueDescriptions = maintenances
-        //.filter(m => m.status == 'schedule')
+        .filter(m => m.status == 'schedule')
         .map(m => `<div><span class="bi-info-circle-fill text-primary"></span> ${m.title}</div>`)
         .join("");
     for (const statusEl of document.getElementsByClassName("services-status")) {
