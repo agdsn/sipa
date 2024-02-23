@@ -1,6 +1,8 @@
 /**
  * @typedef {'degraded_performance' | 'maintenance' | 'partial_outage' | 'major_outage' | 'operational'} Status
+ * @typedef {'schedule' | 'in_progress' | 'verifying' | 'completed'} MaintenanceStatus
  * @typedef {{ status: Status, name: string }} Component
+ * @typedef {{ status: MaintenanceStatus, title: string, scheduled_at: string }} Maintenance
  * */
 
 /** Extract components (services) from statuspage API response sorted by priority
@@ -23,16 +25,50 @@ function parse_statuspage_data(data) {
     return components;
 }
 
+/** Extract upcomming maintenances from statuspage API response sorted by date
+ *
+ * @param {object} data the JSON response from the API endpoint
+ * @returns Array<Maintenance>
+ */
+function parse_statuspage_maintenances_data(data) {
+    let {results} = data;
+    if (results === undefined) {
+        throw new Error('Invalid statuspage response (`results` key missing)');
+    }
+
+    let maintenances = Array.from(results.map((maintenance) => ({
+        title: maintenance.title,
+        status: maintenance.status.toLowerCase(),
+        scheduled_at: maintenance.scheduled_at,
+    })));
+    maintenances.sort((f, s) => new Date(f.scheduled_at).getTime() - new Date(s.scheduled_at).getTime());
+    return maintenances;
+}
+
 class Statuspage {
-    constructor(url, callback) {
+    constructor(url, callback, maintenancesUrl, maintenancesCallback) {
         this.url = url;
         this.callback = callback || function () {
+        };
+        this.maintenancesUrl = maintenancesUrl;
+        this.maintenancesCallback = maintenancesCallback || function () {
         };
 
         let self = this;
         issueCachedRequest(
             this.url,
-            data => self.callback.call(null, parse_statuspage_data(data)),
+            data => {
+                self.callback.call(null, parse_statuspage_data(data));
+                if (maintenancesUrl !== null) {
+                    issueCachedRequest(
+                        this.maintenancesUrl,
+                        data => self.maintenancesCallback.call(null, parse_statuspage_maintenances_data(data)),
+                        err => {
+                            throw new Error(err);
+                        }
+                    );
+                }
+            },
             err => {
                 throw new Error(err);
             },

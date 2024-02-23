@@ -36,6 +36,11 @@ const statusMessages = {
     }
 }
 
+const maintenanceMessage = {
+    'de': 'Es stehen Wartungen an!',
+    'en': 'Upcomming maintenances!'
+}
+
 //Status widget
 /**
  * @param {Status} status
@@ -103,6 +108,29 @@ function updateStatusWidget(statusMessage, statusEl, tooltipContent) {
 }
 
 /**
+ * @param {HTMLElement} statusEl
+ * @param {?string} tooltipContent
+ */
+function updateMaintenancesPartOfStatusWidget(statusEl, tooltipContent) {
+    if (tooltipContent) {
+        for (const link of statusEl.getElementsByTagName("a")) {
+            const parent = link.parentElement;
+            if (parent.tagName == "div") {
+                parent.innerHTML += `<br><span class="bi-clock-fill text-muted"></span>`
+                const spanElement = document.createElement("span");
+                spanElement.classList.add(...'text-decoration-none text-muted'.split(" "));
+                spanElement.setAttribute("data-bs-toggle", "tooltip");
+                spanElement.setAttribute("data-bs-placement", "bottom");
+                spanElement.setAttribute("data-bs-html", "true");
+                parent.append(spanElement);
+                spanElement.dataset.bsTitle = tooltipContent;
+                new bootstrap.Tooltip(spanElement);
+            }
+        }
+    }
+}
+
+/**
  * Applies the status of the components to the status widget
  * @param {Array<Component>} components – the component information
  */
@@ -122,11 +150,27 @@ function handleStatusResponse(components) {
     }
 }
 
+/**
+ * Applies upcomming maintenances to the status widget
+ * @param {Array<Maintenance>} maintenances – the maintenance information
+ */
+function handleMaintenancesResponse(maintenances) {
+    const issueDescriptions = maintenances
+        //.filter(m => m.status == 'schedule')
+        .map(m => `<div><span class="bi-info-circle-fill text-primary"></span> ${m.title}</div>`)
+        .join("");
+    for (const statusEl of document.getElementsByClassName("services-status")) {
+        updateMaintenancesPartOfStatusWidget(statusEl, issueDescriptions);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     new Statuspage(
         'https://status.agdsn.net/pubapi/services/all',
         // replace URL by this for testing
         // "/static/statuspage.json",
-        handleStatusResponse
+        handleStatusResponse,
+        'https://status.agdsn.net/pubapi/maintenances/all',
+        handleMaintenancesResponse
     );
 });
