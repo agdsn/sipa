@@ -1,16 +1,19 @@
 {% macro widget() -%}
-    <div
-        class="services-status"
-        data-bs-toggle="tooltip"
-        data-bs-placement="bottom"
-        data-bs-html="true"
-    >
+    <div class="services-status">
         <div class="hstack">
             <div class="col-2">
                 <span class="service_status bi-question-circle-fill"></span>
             </div>
             <div class="col-10 text-center placeholder-glow">
-                <a href="https://status.agdsn.net" class="placeholder text-decoration-none">Status</a>
+                <a
+                    href="https://status.agdsn.net"
+                    class="placeholder text-decoration-none"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    data-bs-html="true"
+                >
+                    Status
+                </a>
             </div>
         </div>
     </div>

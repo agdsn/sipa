@@ -94,11 +94,11 @@ function updateStatusWidget(statusMessage, statusEl, tooltipContent) {
     for (const link of statusEl.getElementsByTagName("a")) {
         link.classList.remove("placeholder");
         link.innerHTML = statusMessage[get_language()];
-    }
-    // tooltip
-    if (tooltipContent) {
-        statusEl.dataset.bsTitle = tooltipContent;
-        new bootstrap.Tooltip(statusEl);
+        // tooltip
+        if (tooltipContent) {
+            link.dataset.bsTitle = tooltipContent;
+            new bootstrap.Tooltip(link);
+        }
     }
 }
 
