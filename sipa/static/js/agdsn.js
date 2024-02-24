@@ -116,7 +116,7 @@ function updateMaintenancesPartOfStatusWidget(statusEl, tooltipContent) {
         for (const link of statusEl.getElementsByTagName("a")) {
             const parent = link.parentElement;
             if (parent.tagName.toLowerCase() == "div") {
-                parent.innerHTML += `<br><span class="bi-clock-fill text-muted"></span>`
+parent.innerHTML += `<br><span class="bi-clock text-muted"></span>`
                 const spanElement = document.createElement("span");
                 spanElement.innerHTML += ` ${maintenanceMessage[get_language()]}`;
                 spanElement.classList.add(...'text-decoration-none text-muted'.split(" "));
