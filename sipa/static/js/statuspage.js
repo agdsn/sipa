@@ -31,7 +31,7 @@ function parse_statuspage_data(data) {
  * @returns Array<Maintenance>
  */
 function parse_statuspage_maintenances_data(data) {
-    let {results} = data;
+    const {results} = data;
     if (results === undefined) {
         throw new Error('Invalid statuspage response (`results` key missing)');
     }
