@@ -38,7 +38,7 @@ const statusMessages = {
 
 const maintenanceMessage = {
     'de': 'Es stehen Wartungen an!',
-    'en': 'Upcomming maintenances!'
+    'en': 'Upcoming maintenances!'
 }
 
 //Status widget
