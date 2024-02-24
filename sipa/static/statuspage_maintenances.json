@@ -1,0 +1,154 @@
+{
+  "count": 14,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 0,
+      "url": "http://127.0.0.1:8001/api/maintenances/maintenances/1/",
+      "title": "Oil change",
+      "visibility": true,
+      "status": "schedule",
+      "impact": "maintenance",
+      "scheduled_at": "2123-03-25T10:00:00+01:00",
+      "start_automatically": true,
+      "end_at": "2123-03-25T23:30:00+01:00",
+      "end_automatically": true,
+      "user": {
+        "id": 2,
+        "url": "http://127.0.0.1:8001/api/users/users/2/",
+        "display": "services@agdsn.de (AG DSN)",
+        "username": "services@agdsn.de"
+      },
+      "components": []
+    },
+    {
+      "id": 1,
+      "url": "http://127.0.0.1:8001/api/maintenances/maintenances/1/",
+      "title": "Hardware replacement at St. Petersburger Straße 21, 25 and 29",
+      "visibility": true,
+      "status": "schedule",
+      "impact": "maintenance",
+      "scheduled_at": "2223-03-25T10:00:00+01:00",
+      "start_automatically": true,
+      "end_at": "2223-03-25T23:30:00+01:00",
+      "end_automatically": true,
+      "user": {
+        "id": 2,
+        "url": "http://127.0.0.1:8001/api/users/users/2/",
+        "display": "services@agdsn.de (AG DSN)",
+        "username": "services@agdsn.de"
+      },
+      "components": [
+        {
+          "id": 25,
+          "url": "http://127.0.0.1:8001/api/components/components/25/",
+          "display": "St.-Petersburger-Straße 21",
+          "name": "St.-Petersburger-Straße 21",
+          "description": "",
+          "status": "operational",
+          "order": 1,
+          "component_group": {
+            "id": 2,
+            "url": "http://127.0.0.1:8001/api/components/component-groups/2/",
+            "display": "Dormitories",
+            "name": "Dormitories",
+            "description": "",
+            "order": 2,
+            "created": "2023-03-07T22:24:25.034681+01:00",
+            "last_updated": "2023-03-07T22:24:25.034701+01:00"
+          },
+          "created": "2023-03-07T22:30:25.106819+01:00",
+          "last_updated": "2023-08-08T01:12:08.114042+02:00"
+        },
+        {
+          "id": 26,
+          "url": "http://127.0.0.1:8001/api/components/components/26/",
+          "display": "St.-Petersburger-Straße 25",
+          "name": "St.-Petersburger-Straße 25",
+          "description": "",
+          "status": "operational",
+          "order": 1,
+          "component_group": {
+            "id": 2,
+            "url": "http://127.0.0.1:8001/api/components/component-groups/2/",
+            "display": "Dormitories",
+            "name": "Dormitories",
+            "description": "",
+            "order": 2,
+            "created": "2023-03-07T22:24:25.034681+01:00",
+            "last_updated": "2023-03-07T22:24:25.034701+01:00"
+          },
+          "created": "2023-03-07T22:30:32.239713+01:00",
+          "last_updated": "2023-08-08T01:12:08.412978+02:00"
+        },
+        {
+          "id": 27,
+          "url": "http://127.0.0.1:8001/api/components/components/27/",
+          "display": "St.-Petersburger-Straße 29",
+          "name": "St.-Petersburger-Straße 29",
+          "description": "",
+          "status": "operational",
+          "order": 1,
+          "component_group": {
+            "id": 2,
+            "url": "http://127.0.0.1:8001/api/components/component-groups/2/",
+            "display": "Dormitories",
+            "name": "Dormitories",
+            "description": "",
+            "order": 2,
+            "created": "2023-03-07T22:24:25.034681+01:00",
+            "last_updated": "2023-03-07T22:24:25.034701+01:00"
+          },
+          "created": "2023-03-07T22:30:38.829282+01:00",
+          "last_updated": "2023-08-08T01:12:08.693640+02:00"
+        }
+      ],
+      "created": "2023-03-22T11:14:55+01:00",
+      "last_updated": "2023-03-25T23:30:03.033729+01:00"
+    },
+    {
+      "id": 2,
+      "url": "http://127.0.0.1:8001/api/maintenances/maintenances/2/",
+      "title": "Router upgrade @ZW41d",
+      "visibility": true,
+      "status": "completed",
+      "impact": "maintenance",
+      "scheduled_at": "2023-04-02T00:00:00+02:00",
+      "start_automatically": true,
+      "end_at": "2023-04-02T01:00:00+02:00",
+      "end_automatically": false,
+      "user": {
+        "id": 2,
+        "url": "http://127.0.0.1:8001/api/users/users/2/",
+        "display": "services@agdsn.de (AG DSN)",
+        "username": "services@agdsn.de"
+      },
+      "components": [
+        {
+          "id": 40,
+          "url": "http://127.0.0.1:8001/api/components/components/40/",
+          "display": "Zellescher Weg 41d",
+          "name": "Zellescher Weg 41d",
+          "description": "",
+          "status": "operational",
+          "order": 1,
+          "component_group": {
+            "id": 2,
+            "url": "http://127.0.0.1:8001/api/components/component-groups/2/",
+            "display": "Dormitories",
+            "name": "Dormitories",
+            "description": "",
+            "order": 2,
+            "created": "2023-03-07T22:24:25.034681+01:00",
+            "last_updated": "2023-03-07T22:24:25.034701+01:00"
+          },
+          "created": "2023-03-07T22:33:38.566991+01:00",
+          "last_updated": "2023-08-08T01:12:12.125185+02:00"
+        }
+      ],
+      "created": "2023-03-31T11:07:36+02:00",
+      "last_updated": "2023-04-02T00:22:55.643823+02:00"
+    }
+  ]
+}
