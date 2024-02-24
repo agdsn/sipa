@@ -161,13 +161,14 @@ function handleMaintenancesResponse(maintenances) {
     }
 }
 
+// set to true to test status page parsing / rendering
+const useTestStatusData = false;
+
 document.addEventListener('DOMContentLoaded', () => {
     new Statuspage(
-        'https://status.agdsn.net/pubapi/services/all',
-        // replace URL by this for testing
-        // "/static/statuspage.json",
+        useTestStatusData ? "/static/statuspage.json" : "https://status.agdsn.net/pubapi/services/all",
         handleStatusResponse,
-        'https://status.agdsn.net/pubapi/maintenances/all',
+        useTestStatusData ? "/static/statuspage_maintenances.json" : "https://status.agdsn.net/pubapi/maintenances/all",
         handleMaintenancesResponse
     );
 });
