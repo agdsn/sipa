@@ -112,22 +112,18 @@ function updateStatusWidget(statusMessage, statusEl, tooltipContent) {
  * @param {?string} tooltipContent
  */
 function updateMaintenancesPartOfStatusWidget(statusEl, tooltipContent) {
-    if (tooltipContent) {
-        for (const link of statusEl.getElementsByTagName("a")) {
-            const parent = link.parentElement;
-            if (parent.tagName.toLowerCase() == "div") {
-parent.innerHTML += `<br><span class="bi-clock text-muted"></span>`
-                const spanElement = document.createElement("span");
-                spanElement.innerHTML += ` ${maintenanceMessage[get_language()]}`;
-                spanElement.classList.add(...'text-decoration-none text-muted'.split(" "));
-                spanElement.setAttribute("data-bs-toggle", "tooltip");
-                spanElement.setAttribute("data-bs-placement", "bottom");
-                spanElement.setAttribute("data-bs-html", "true");
-                parent.append(spanElement);
-                spanElement.dataset.bsTitle = tooltipContent;
-                new bootstrap.Tooltip(spanElement);
-            }
-        }
+    if (!tooltipContent) { return; }
+    for (const statusTxt of statusEl.getElementsByClassName("status_text")) {
+        statusTxt.innerHTML += `<br><span class="bi-clock text-muted"></span>`;
+        const spanElement = document.createElement("span");
+        spanElement.innerHTML += ` ${maintenanceMessage[get_language()]}`;
+        spanElement.classList.add(...'text-decoration-none text-muted'.split(" "));
+        spanElement.dataset.bsToggle = "tooltip";
+        spanElement.dataset.bsPlacement = "bottom";
+        spanElement.dataset.bsHtml = "true";
+        statusTxt.append(spanElement);
+        spanElement.dataset.bsTitle = tooltipContent;
+        new bootstrap.Tooltip(spanElement);
     }
 }
 
