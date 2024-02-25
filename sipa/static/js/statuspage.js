@@ -36,10 +36,10 @@ function parse_statuspage_maintenances_data(data) {
         throw new Error('Invalid statuspage response (`results` key missing)');
     }
 
-    let maintenances = Array.from(results.map((maintenance) => ({
-        title: maintenance.title,
-        status: maintenance.status.toLowerCase(),
-        scheduled_at: maintenance.scheduled_at,
+    let maintenances = Array.from(results.map(({title, status, scheduled_at}) => ({
+        title,
+        status: status.toLowerCase(),
+        scheduled_at,
     })));
     maintenances.sort((f, s) => new Date(f.scheduled_at).getTime() - new Date(s.scheduled_at).getTime());
     return maintenances;
