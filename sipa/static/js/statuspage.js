@@ -56,18 +56,16 @@ class Statuspage {
 
         let self = this;
         issueCachedRequest(
-            this.url,
+            this.maintenancesUrl,
             data => {
-                self.callback.call(null, parse_statuspage_data(data));
-                if (maintenancesUrl !== null) {
-                    issueCachedRequest(
-                        this.maintenancesUrl,
-                        data => self.maintenancesCallback.call(null, parse_statuspage_maintenances_data(data)),
-                        err => {
-                            throw new Error(err);
-                        }
-                    );
-                }
+                self.maintenancesCallback.call(null, parse_statuspage_maintenances_data(data));
+                issueCachedRequest(
+                    this.url,
+                    data => self.callback.call(null, parse_statuspage_data(data)),
+                    err => {
+                        throw new Error(err);
+                    }
+                );
             },
             err => {
                 throw new Error(err);
