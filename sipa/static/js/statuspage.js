@@ -1,6 +1,8 @@
 /**
  * @typedef {'degraded_performance' | 'maintenance' | 'partial_outage' | 'major_outage' | 'operational'} Status
  * @typedef {{ status: Status, name: string }} Component
+ * @typedef {'schedule' | 'in_progress' | 'verifying' | 'completed'} MaintenanceStatus
+ * @typedef {{ status: MaintenanceStatus, title: string, scheduled_at: string }} Maintenance
  * */
 
 /** Extract components (services) from statuspage API response sorted by priority
@@ -23,16 +25,48 @@ function parse_statuspage_data(data) {
     return components;
 }
 
+/** Extract upcomming maintenances from statuspage API response sorted by date
+ *
+ * @param {object} data the JSON response from the API endpoint
+ * @returns Array<Maintenance>
+ */
+function parse_statuspage_maintenances_data(data) {
+    const {results} = data;
+    if (results === undefined) {
+        throw new Error('Invalid statuspage response (`results` key missing)');
+    }
+
+    let maintenances = Array.from(results.map(({title, status, scheduled_at}) => ({
+        title,
+        status: status.toLowerCase(),
+        scheduled_at,
+    })));
+    maintenances.sort((f, s) => new Date(f.scheduled_at).getTime() - new Date(s.scheduled_at).getTime());
+    return maintenances;
+}
+
 class Statuspage {
-    constructor(url, callback) {
+    constructor(url, callback, maintenancesUrl, maintenancesCallback) {
         this.url = url;
         this.callback = callback || function () {
+        };
+        this.maintenancesUrl = maintenancesUrl;
+        this.maintenancesCallback = maintenancesCallback || function () {
         };
 
         let self = this;
         issueCachedRequest(
-            this.url,
-            data => self.callback.call(null, parse_statuspage_data(data)),
+            this.maintenancesUrl,
+            data => {
+                self.maintenancesCallback.call(null, parse_statuspage_maintenances_data(data));
+                issueCachedRequest(
+                    this.url,
+                    data => self.callback.call(null, parse_statuspage_data(data)),
+                    err => {
+                        throw new Error(err);
+                    }
+                );
+            },
             err => {
                 throw new Error(err);
             },
