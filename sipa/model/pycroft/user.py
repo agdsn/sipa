@@ -178,7 +178,7 @@ class User(BaseUser):
         elif status != 200:
             raise UnknownError
 
-    def estimate_balance(self, end_date):
+    def estimate_balance(self, end_date) -> str:
         status, result = api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
 
         if status == 200:

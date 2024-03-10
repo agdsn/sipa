@@ -263,6 +263,7 @@ def ensure_csp(r: Response) -> Response:
         (
             "'self'",
             "https://status.agdsn.net",
+            "https://unpkg.com",
         ),
     )
     csp.style_src = ensure_items(csp.style_src, SELF)

@@ -162,7 +162,7 @@ function handleMaintenancesResponse(maintenances) {
 }
 
 // set to true to test status page parsing / rendering
-const useTestStatusData = false;
+const useTestStatusData = true;
 
 document.addEventListener('DOMContentLoaded', () => {
     new Statuspage(

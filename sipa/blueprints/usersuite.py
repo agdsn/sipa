@@ -502,15 +502,22 @@ def finance_logs():
 @use_kwargs({"end_date": fields.Date(required=False)}, location="query")
 @login_required
 @htmx_fragment
+# TODO improve naming. does multiple things.
 def predict_credit_fragment(end_date: date | None = None) -> Response:
     today_midnight = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
     if end_date is None:
         abort(400, "end_date must be given")
 
-    estimated_balance = current_user.estimate_balance(end_date)
+    estimated_balance = float(current_user.estimate_balance(end_date))
+    balance_class = "text-success" if estimated_balance >= 0 else "text-danger"
     resp = make_response(
-        f'Estimated balance: <div class="text-success">{estimated_balance}€</div>'
+        render_template(
+            "termination_post_estimate.html",
+            estimated_balance=estimated_balance,
+            balance_class=balance_class,
+            form_repayment_data=RequestRepaymentForm("foo"),
+        )
     )
     resp.last_modified = today_midnight
     return resp
@@ -518,16 +525,53 @@ def predict_credit_fragment(end_date: date | None = None) -> Response:
 
 @bp_usersuite.route("/terminate-membership", methods=['GET', 'POST'])
 @login_required
-def terminate_membership():
+@use_kwargs({"end_date": fields.Date(required=False)}, location="query")
+@htmx_fragment
+def terminate_membership(end_date: date | None = None):
     """
     As member, cancel your membership to a given date
     :return:
     """
     capability_or_403('membership_end_date', 'edit')
 
+    from werkzeug.datastructures import ImmutableMultiDict
+
+    formdata = ImmutableMultiDict(
+        {
+            "end_date": str(end_date),
+            **request.form,
+        }
+        if request.form
+        else {"end_date": str(end_date)}
+    )
+    form = RequestRepaymentForm(formdata)
+    form.validate()
+
+    if not form.end_date.data:
+        form.end_date.data = end_date
+    # TODO parse end_date from GET var
+    balance_class = None
+    estimated_balance = None
+    if end_date := form.end_date.data:
+        estimated_balance = float(current_user.estimate_balance(end_date))
+        balance_class = "text-success" if estimated_balance >= 0 else "text-danger"
+
+    # TODO case distinction
     return render_template(
         "termination.html",
         page_title=gettext("Mitgliedschaft beenden"),
+        end_date=end_date,
+        estimated_balance=estimated_balance,
+        balance_class=balance_class,
+        form_repayment_data=form,
+        end_date_render_kw={
+            "hx-get": url_for(".terminate_membership"),
+            "hx-parms": "end_date",
+            "hx-trigger": "change delay:500ms",
+            "hx-target": "#termination_request",
+            "hx-swap": "outerHTML",
+            "hx-push-url": "true",
+        },
     )
 
 

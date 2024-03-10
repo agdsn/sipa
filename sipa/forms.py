@@ -299,6 +299,20 @@ def validate_amount(form, field: DecimalField) -> None:
 
 
 class RequestRepaymentForm(FlaskForm):
+    end_date = NativeDateField(
+        label=lazy_gettext("Austrittsdatum"),
+        validators=[DataRequired(lazy_gettext("Austrittsdatum nicht angegeben!"))],
+        description=lazy_gettext("YYYY-MM-DD (z.B. 2018-10-01)"),
+    )
+
+    def validate_end_date(form, field):
+        if field.data < date.today():
+            raise ValidationError(
+                lazy_gettext(
+                    "Das Austrittsdatum darf nicht in der Vergangenheit " "liegen!"
+                )
+            )
+
     beneficiary = StrippedStringField(
         label=lazy_gettext("Empfänger"),
         validators=[DataRequired(lazy_gettext("Empfänger nicht angegeben!"))],
@@ -309,19 +323,11 @@ class RequestRepaymentForm(FlaskForm):
         validators=[DataRequired(lazy_gettext("IBAN nicht angegeben!")), validate_iban],
     )
 
-    amount = (
-        DecimalField(
-            label=lazy_gettext("Betrag (EUR)"),
-            validators=[
-                DataRequired(lazy_gettext("Betrag nicht angegeben!")),
-                NumberRange(
-                    min=Decimal('0.01'),
-                    message=lazy_gettext("Betrag muss mindestens 0,01 € betragen!"),
-                ),
-                validate_amount,
-            ],
-        )
+    bic = StrippedStringField(
+        label=lazy_gettext("BIC"),
+        render_kw={"readonly": True},
     )
+
 
 
 class RequestRepaymentConfirmForm(FlaskForm):

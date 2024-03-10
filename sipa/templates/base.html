@@ -62,7 +62,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Arbeitsgemeinschaft Dresdner Studentennetz">
     <meta name="author" content="AG DSN Administrators">
-    <meta name="htmx-config" content='{"includeIndicatorStyles": false}' />
+    <meta name="htmx-config" content='{"includeIndicatorStyles": false, "defaultSwapStyle": "morphdom"}' />
 
     <title>AG DSN {% if page_title %} - {{ page_title }}{% endif %}</title>
 
@@ -84,10 +84,12 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     <script defer src="{{ url_for("static", filename="js/statuspage.js") }}"></script>
     <script defer src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
     <script defer src="{{ url_for("static", filename="js/htmx.min.js") }}"></script>
+    <script defer src="https://unpkg.com/morphdom@2.7.2/dist/morphdom-umd.min.js"></script>
+    <script defer src="https://unpkg.com/htmx.org/dist/ext/morphdom-swap.js"></script>
     {% block custom_script %}{% endblock %}
 </head>
 
-<body class="js-toc-content">
+<body class="js-toc-content" hx-ext="morphdom-swap">
 <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="{{ url_for('generic.index') }}">
