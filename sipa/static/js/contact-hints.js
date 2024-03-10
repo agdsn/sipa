@@ -1,28 +1,41 @@
-var hints = [];
-$.getJSON("/sipa/static/js/hints.json", function (raw_hints) {
-    hints = raw_hints.map(function (hint) {
-        return {
-            not_in_dorm: hint.not_in_dorm,
-            patterns: hint.patterns.map(function (pattern) {
-                return new RegExp(pattern, "i");
-            }),
-            hint: hint.hint
-        };
-    });
+let hints = [];
+
+fetch("static/js/hints.json").then(response => response.json()).then((rawHints) => {
+    hints = rawHints.map(({
+        not_in_dorm,
+        patterns,
+        hint
+    }) => ({
+        not_in_dorm,
+        patterns: patterns.map((pattern) => new RegExp(pattern, "i")),
+        hint
+    }));
 });
-$("#message").on("input", function () {
-    var applicable = hints.filter(function (hint) {
-        var contains = hint.patterns.some(function (pattern) {
-            return pattern.test($("#message").val())
-        });
-        var not_blacklisted = hint.not_in_dorm.every(function (dorm) {
-            return dorm !== $("#dormitory").val();
-        });
+
+
+const eMessage = document.getElementById("message");
+const eDormitory = document.getElementById("dormitory");
+const eHints = document.getElementById("hints");
+
+const lang = get_language();
+
+eMessage.addEventListener("input", (event) => {
+    const applicable = hints.filter((hint) => {
+        const contains = hint.patterns.some(
+            (pattern) => pattern.test(eMessage.value)
+        );
+        const not_blacklisted = hint.not_in_dorm.every(
+            (dorm) => dorm !== eDormitory.value
+        );
         return contains & not_blacklisted;
     });
-    $("#hints").empty();
-    applicable.forEach(function (hint) {
-        var hint_text = hint.hint[get_language()];
-        $("#hints").append("<div class='alert alert-warning'>" + hint_text + "</div>");
+
+    while (eHints.lastChild) {
+        eHints.removeChild(eHints.lastChild);
+    }
+    applicable.forEach((hint) => {
+        eHints.insertAdjacentHTML("beforeend",
+            `<div class='alert alert-warning'>${hint.hint[lang]}</div>`
+        );
     });
 });
