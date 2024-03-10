@@ -2,16 +2,17 @@
 """
 from collections import OrderedDict
 import logging
-from datetime import datetime
+from datetime import datetime, date
 from decimal import Decimal
 from functools import partial
 from io import BytesIO
-from schwifty import IBAN
 
 from babel.numbers import format_currency
 from flask import (
     Blueprint,
     render_template,
+    make_response,
+    Response,
     url_for,
     redirect,
     flash,
@@ -24,12 +25,25 @@ from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from markupsafe import Markup
+from schwifty import IBAN
+from webargs import fields
+from webargs.flaskparser import use_kwargs
 
-from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
-    ChangePasswordForm, flash_formerrors, HostingForm, \
-    PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
-    TerminateMembershipConfirmForm, ContinueMembershipForm, \
-    RequestRepaymentForm, RequestRepaymentConfirmForm
+from sipa.forms import (
+    ContactForm,
+    ChangeMACForm,
+    ChangeMailForm,
+    ChangePasswordForm,
+    flash_formerrors,
+    HostingForm,
+    PaymentForm,
+    ActivateNetworkAccessForm,
+    TerminateMembershipConfirmForm,
+    ContinueMembershipForm,
+    RequestRepaymentForm,
+    RequestRepaymentConfirmForm,
+)
+from sipa.htmx import htmx_fragment
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable, subscribe_to_status_page
@@ -482,6 +496,26 @@ def finance_logs():
     return redirect(url_for('usersuite.index', _anchor='transaction-log'))
 
 
+@bp_usersuite.route(
+    "/terminate-membership/predict-credit-fragment", methods=["GET", "POST"]
+)
+@use_kwargs({"end_date": fields.Date(required=False)}, location="query")
+@login_required
+@htmx_fragment
+def predict_credit_fragment(end_date: date | None = None) -> Response:
+    today_midnight = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+    if end_date is None:
+        abort(400, "end_date must be given")
+
+    estimated_balance = current_user.estimate_balance(end_date)
+    resp = make_response(
+        f'Estimated balance: <div class="text-success">{estimated_balance}€</div>'
+    )
+    resp.last_modified = today_midnight
+    return resp
+
+
 @bp_usersuite.route("/terminate-membership", methods=['GET', 'POST'])
 @login_required
 def terminate_membership():
@@ -489,31 +523,12 @@ def terminate_membership():
     As member, cancel your membership to a given date
     :return:
     """
-
     capability_or_403('membership_end_date', 'edit')
 
-    if current_user.membership_end_date.raw_value is not None:
-        abort(403)
-
-    form = TerminateMembershipForm()
-
-    if form.validate_on_submit():
-        end_date = form.end_date.data
-
-        return redirect(url_for('.terminate_membership_confirm',
-                                end_date=end_date))
-    elif form.is_submitted():
-        flash_formerrors(form)
-
-    form_args = {
-        'form': form,
-        'cancel_to': url_for('.index'),
-        'submit_text': gettext('Weiter')
-    }
-
-    return render_template('generic_form.html',
-                           page_title=gettext("Mitgliedschaft beenden"),
-                           form_args=form_args)
+    return render_template(
+        "termination.html",
+        page_title=gettext("Mitgliedschaft beenden"),
+    )
 
 
 @bp_usersuite.route("/terminate-membership/confirm", methods=['GET', 'POST'])
