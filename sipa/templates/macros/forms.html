@@ -4,33 +4,18 @@
 {%- endmacro %}
 
 {% macro render(form, form_id='form', reset_button=False, cancel_to=None, submit_text=_("Abschicken"), cancel_text=_("Abbrechen"), extra_btn=None, links=None) -%}
-    <div id="{{ form_id }}" class="container col-sm-10">
+    <div id="{{ form_id }}" class="container col-sm-12">
         <form action="" method="post" class="form form-horizontal">
             {{ form.csrf_token }}
             {% for field in form -%}{% if field and field.id != 'csrf_token' %}
                 {% if loop.index0 == 0 %}{% set focus = true %}{% endif %}
-                <div class="row mb-3 {% if field.errors %}has-error{% endif %}">
-                    {% if field.type == "BooleanField" %}
-                        <div class="{{ form_input_offset_class }} {{ form_input_width_class }}">
-                            {% set label=field.label(class_="form-check-label") %}
-                            <div class="form-check">
-                                <!-- `for="{field.id}"` included in `form.label()` rendering -->
-                                <!--suppress HtmlFormInputWithoutLabel -->
-                                <input id="{{ field.name }}" type="checkbox" class="form-check-input" name="{{ field.name }}"
-                                    {{ 'checked' if field.data | default(field.default) }}>
-                                {% if links %}{{ label | render_links(links) | safe }}
-                                {% else %}{{ label }}{% endif %}
-                            </div>
-                        </div>
-                    {% elif field.type != "HiddenField" %}
-                        <div class="{{ form_label_width_class }} col-form-label">
-                            {{ field.label() }}
-                        </div>
-                        <div class="{{ form_input_width_class }}">
-                            {{ render_field(field, focus=focus) }}
-                        </div>
-                    {% endif %}
+                {% if field.flags.hidden %}
+                {{ field() }}
+                {% else %}
+                <div class="mb-3">
+                {{ field(render_mode="horizontal", autofocus=focus) }}
                 </div>
+                {% endif %}
             {% endif %}{%- endfor %}
 
             {# Here can things like notes or alerts be placed #}
