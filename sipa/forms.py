@@ -6,7 +6,6 @@ from functools import partial
 from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
-from flask import flash
 from flask_login import current_user
 from wtforms_widgets.base_form import BaseForm as FlaskForm
 from werkzeug.local import LocalProxy
@@ -618,14 +617,3 @@ class RegisterFinishForm(FlaskForm):
                 "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."))
         ]
     )
-
-
-def flash_formerrors(form):
-    """If a form is submitted but could not be validated, the routing passes
-    the form and this method returns all form errors (form.errors)
-    as flash messages.
-    """
-    for _field, errors in list(form.errors.items()):
-        for e in errors:
-            flash(e, "error")
-
