@@ -82,7 +82,7 @@ def init_app(app, **kwargs):
 
     logger.debug('Registering Jinja globals')
     form_label_width = 4
-    form_input_width = 8
+    form_input_width = 4
     app.jinja_env.globals.update(
         current_user=current_user,
         cf_pages=cf_pages,
