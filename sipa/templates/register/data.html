@@ -3,5 +3,5 @@
 {% block register_content %}
     {{  forms.render_simple(form=form, form_id="register-form",
                             submit_text=_("Kostenpflichtig Mitglied werden (5€/Mo.)"),
-                            cancel_to=url_for('.cancel'), links=links) }}
+                            cancel_to=url_for('.cancel')) }}
 {% endblock %}
