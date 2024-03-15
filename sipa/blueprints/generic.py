@@ -18,8 +18,13 @@ from flask_login import current_user, login_user, logout_user, \
 from sqlalchemy.exc import DatabaseError
 
 from sipa.backends.exceptions import BackendError
-from sipa.forms import flash_formerrors, LoginForm, AnonymousContactForm, \
-    OfficialContactForm, PasswordRequestResetForm, PasswordResetForm
+from sipa.forms import (
+    LoginForm,
+    AnonymousContactForm,
+    OfficialContactForm,
+    PasswordRequestResetForm,
+    PasswordResetForm,
+)
 from sipa.mail import send_official_contact_mail, send_contact_mail
 from sipa.backends.extension import backends
 from sipa.model import pycroft
@@ -154,8 +159,6 @@ def login():
                 logger.info('Authentication successful',
                             extra={'tags': {'user': username}})
                 flash(gettext("Anmeldung erfolgreich!"), "success")
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     if current_user.is_authenticated:
         # `url_redirect` would not be bad here because this would allow for URL
@@ -198,8 +201,6 @@ def request_password_reset():
                           "Falls du die Nachricht nicht erhälst, wende dich an den Support."), "success")
 
             return redirect(url_for('.login'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     return render_template('generic_form.html', page_title=gettext("Passwort zurücksetzen"),
                            form_args={'form': form, 'cancel_to': url_for('.login')})
@@ -222,8 +223,6 @@ def reset_password(token):
             flash(gettext("Dein Passwort wurde geändert."), "success")
 
             return redirect(url_for('.login'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     return render_template('generic_form.html', page_title=gettext("Passwort zurücksetzen"),
                            form_args={'form': form, 'cancel_to': url_for('.login')})
@@ -330,8 +329,6 @@ def contact():
             flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."),
                   'error')
         return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     return render_template('anonymous_contact.html', form=form)
 
@@ -354,8 +351,6 @@ def contact_official():
             flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."),
                   'error')
         return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     return render_template(
         'official_contact.html',
