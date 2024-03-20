@@ -80,6 +80,9 @@ BUSSTOPS = [
 # Amount of membership contribution in cents
 MEMBERSHIP_CONTRIBUTION = 500
 
+PAYMENT_BENEFICIARY = "StuRa der TUD - AG DSN"
+PAYMENT_IBAN = "DE61 8505 0300 3120 2195 40"
+
 # Pycroft backend
 PYCROFT_ENDPOINT = "http://localhost:5000/api/v0/"
 PYCROFT_API_KEY = "secret"

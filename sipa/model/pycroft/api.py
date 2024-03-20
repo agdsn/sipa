@@ -3,12 +3,14 @@ import typing as t
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date
+from decimal import Decimal
 from functools import partial
 from typing import Any
 
 import requests
 import requests.auth
 from requests import ConnectionError, HTTPError
+from schwifty import IBAN
 
 from sipa.backends.exceptions import InvalidConfiguration
 from sipa.utils import dataclass_from_dict
@@ -103,6 +105,15 @@ class PycroftApi:
 
     def reset_wifi_password(self, user_id):
         return self.patch(f"user/{user_id}/reset-wifi-password")
+
+    def get_request_repayment(self, user_id):
+        return self.get(f"user/{user_id}/request-repayment")
+
+    def post_request_repayment(self, user_id, beneficiary: str, iban: IBAN, amount: Decimal):
+        """
+        Request a repayment of excess membership contributions.
+        """
+        return self.post(f"user/{user_id}/request-repayment", data={"beneficiary": beneficiary, "iban": iban.compact, "amount": amount})
 
     def request_password_reset(self, user_ident: str, email: str):
         return self.post("user/reset-password", data={
