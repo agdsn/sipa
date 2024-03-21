@@ -933,6 +933,9 @@ msgstr "Value"
 msgid "Summe"
 msgstr "Sum"
 
+msgid "Hinweis: Es kann bis zu 7 Tage dauern, bis eine Überweisung von uns erfasst wird."
+msgstr "Note: It can take up to 7 days until a new payment is listed below."
+
 msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
 msgstr "Note: we will be notified about any change of your MAC address."
 
