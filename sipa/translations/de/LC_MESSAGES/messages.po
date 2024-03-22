@@ -925,6 +925,9 @@ msgstr ""
 msgid "Wert"
 msgstr ""
 
+msgid "Hinweis: Es kann bis zu 7 Tage dauern, bis eine Überweisung von uns erfasst wird."
+msgstr ""
+
 msgid "Summe"
 msgstr ""
 
