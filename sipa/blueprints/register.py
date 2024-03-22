@@ -13,7 +13,7 @@ from flask_login import current_user
 from werkzeug.local import LocalProxy
 
 from sipa.backends.extension import backends, _dorm_summary
-from sipa.forms import flash_formerrors, RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
+from sipa.forms import RegisterIdentifyForm, RegisterRoomForm, RegisterFinishForm
 from sipa.model.pycroft.api import PycroftApi, PycroftApiError
 from sipa.model.pycroft.exc import PycroftBackendError
 from sipa.utils import parse_date
@@ -167,9 +167,6 @@ def identify(reg_state: RegisterState):
         except PycroftBackendError as e:
             handle_backend_error(e)
 
-    elif form.is_submitted():
-        flash_formerrors(form)
-
     return render_template('register/identify.html', title=gettext('Identifizierung'), form=form,
                            skip_verification=suggest_skip)
 
@@ -181,9 +178,7 @@ def room(reg_state: RegisterState):
     if form.validate_on_submit():
         reg_state.room_confirmed = 'wrong_room' not in request.form
         return goto_step('data')
-    elif form.is_submitted():
-        flash_formerrors(form)
-    else:
+    elif not form.is_submitted():
         form.building.data = reg_state.building
         form.room.data = reg_state.room
         form.move_in_date.data = reg_state.move_in_date
@@ -236,9 +231,7 @@ def data(reg_state: RegisterState):
         except PycroftBackendError as e:
             handle_backend_error(e)
 
-    elif form.is_submitted():
-        flash_formerrors(form)
-    else:
+    elif not form.is_submitted():
         form.member_begin_date.data = max(reg_state.move_in_date, date.today()) \
             if reg_state.move_in_date is not None else date.today()
 
@@ -249,13 +242,9 @@ def data(reg_state: RegisterState):
                       "Dadurch kann dein Antrag nicht automatisch bearbeitet werden. "
                       "Eine manuelle Bearbeitung kann mehrere Tage dauern."), 'warning')
 
-    return render_template('register/data.html', title=gettext('Konto erstellen'), form=form,
-                           links={
-                               'constitution': '../pages/legal/agdsn_constitution',
-                               'fee_regulation': '../pages/legal/membership_fee_regulations',
-                               'network_constitution': '../pages/legal/network_constitution',
-                               'privacy_policy': '../pages/legal/agdsn_dataprotection',
-                           })
+    return render_template(
+        "register/data.html", title=gettext("Konto erstellen"), form=form
+    )
 
 
 @bp_register.route("/finish")
