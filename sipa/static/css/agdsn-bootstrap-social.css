@@ -1,0 +1,38 @@
+.btn-social-icon {
+    height: 36px;
+    width: 36px;
+    padding: 0;
+    background-color: var(--btn-social-bg-color);
+    color: white;
+    border: none;
+}
+.btn-social-icon > * {
+    font-size: 1.6em;
+}
+.btn-social-icon > *::before {
+    vertical-align: -1.5pt;
+}
+
+.btn-social-icon:focus,.btn-social-icon:hover,.btn-social-icon:active {
+    color: #fff;
+    background-color: color-mix(in hsl, black 16%, var(--btn-social-bg-color));
+    border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-social-icon:active:hover,.btn-social-icon:active:focus {
+    color: #fff;
+    background-color: color-mix(in hsl, black, var(--btn-social-bg-color) 20%);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-mastodon {
+    --btn-social-bg-color: #563acc;
+}
+.btn-twitter {
+    --btn-social-bg-color: #55acee;
+}
+.btn-instagram {
+    --btn-social-bg-color: #ff0069;
+}
+.btn-github {
+    --btn-social-bg-color: #444444;
+}
