@@ -1,0 +1,67 @@
+.btn-social-icon {
+    position: relative;
+    padding-left: 44px;
+    text-align: left;
+    write-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 34px;
+    width: 34px;
+    padding: 0;
+
+    background-color: var(--btn-social-bg-color);
+    color: #ffffff;
+
+    border: none;
+}
+.btn-social-icon>:first-child{
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 32px;
+    line-height: 34px;
+    font-size: 1.6em;
+    text-align: center;
+    border-right: 1px solid rgba(0, 0, 0, 0.2)
+    border: none;
+    width: 100%;
+}
+
+
+.btn-social-icon:focus,.btn-social-icon.focus{
+    color: #fff;
+    background-color: color-mix(in hsl, black 16%, var(--btn-social-bg-color));
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-social-icon:hover {
+    color: #fff;
+    background-color: color-mix(in hsl, black 16%, var(--btn-social-bg-color));
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-social-icon:active,.btn-social-icon.active, {
+    color: #fff;
+    background-color: color-mix(in hsl, black 16%, var(--btn-social-bg-color));
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-social-icon:active:hover,.btn-social-icon.active:hover,.btn-social-icon:active:focus,.btn-social-icon.active:focus,.btn-social-icon:active.focus,.btn-social-icon.active.focus {
+    color: #fff;
+    background-color: color-mix(in hsl, black, var(--btn-social-bg-color) 20%);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-mastodon {
+    --btn-social-bg-color: #563acc;
+}
+.btn-twitter {
+    --btn-social-bg-color: #55acee;
+}
+.btn-instagram {
+    --btn-social-bg-color: #ff0069;
+}
+.btn-github {
+    --btn-social-bg-color: #444444;
+}
