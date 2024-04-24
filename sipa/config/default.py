@@ -25,7 +25,8 @@ FLATPAGES_MARKDOWN_EXTENSIONS = [
     'sipa.utils.bootstraped_tables',
     'sipa.utils.link_patch',
     'meta',
-    'attr_list'
+    'attr_list',
+    'toc'
 ]
 FLATPAGES_EXTENSION_CONFIGS = {
     'sane_lists': {},
@@ -33,6 +34,9 @@ FLATPAGES_EXTENSION_CONFIGS = {
     'sipa.utils.link_patch': {},
     'meta': {},
     'attr_list': {},
+    'toc': {
+        'permalink': " #"
+    }
 }
 
 # Mail configuration

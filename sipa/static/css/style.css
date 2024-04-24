@@ -20,6 +20,18 @@ a:not([class]):hover {
     text-decoration: underline;
 }
 
+.headerlink {
+    color: var(--bs-secondary-color);
+    text-decoration: none;
+}
+
+.headerlink:hover {
+    color: var(--bs-heading-color);
+	font-weight: bold;
+}
+
+
+
 @media (min-width: 768px) {
 	.pg-header {
 		display: block;
