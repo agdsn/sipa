@@ -23,11 +23,15 @@ a:not([class]):hover {
 .headerlink {
     color: var(--bs-secondary-color);
     text-decoration: none;
+    display: none;
 }
 
 .headerlink:hover {
     color: var(--bs-heading-color);
-	font-weight: bold;
+}
+
+:is(h2, h3, h4, h5, h6):hover .headerlink {
+	display: inline;
 }
 
 

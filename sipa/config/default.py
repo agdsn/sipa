@@ -29,14 +29,22 @@ FLATPAGES_MARKDOWN_EXTENSIONS = [
     'toc'
 ]
 FLATPAGES_EXTENSION_CONFIGS = {
-    'sane_lists': {},
-    'sipa.utils.bootstraped_tables': {},
-    'sipa.utils.link_patch': {},
-    'meta': {},
-    'attr_list': {},
-    'toc': {
-        'permalink': " #"
-    }
+    "sane_lists": {},
+    "sipa.utils.bootstraped_tables": {},
+    "sipa.utils.link_patch": {},
+    "meta": {},
+    "attr_list": {},
+    "toc": {
+        "permalink": "#",
+        "permalink_class": " ".join(
+            [
+                "headerlink",
+                "ms-2",
+                "link-secondary",
+                "link-opacity-75",
+            ]
+        ),
+    },
 }
 
 # Mail configuration
