@@ -403,8 +403,8 @@ msgstr "Für den dir zugeordneten Raum gibt es bereits eine Mitgliedschaft."
 msgid "E-Mail-Adresse ist bereits in Verwendung."
 msgstr "Email address is already in use."
 
-msgid "Login ist bereits vergeben."
-msgstr "Login is already assigned."
+msgid "Nutzername ist bereits vergeben."
+msgstr "Username is already assigned."
 
 msgid "Nutzername hat ein ungültiges Format!"
 msgstr "Username has an invalid format!"

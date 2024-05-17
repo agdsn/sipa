@@ -222,7 +222,7 @@ def data(reg_state: RegisterState):
             elif e.code == 'email_taken':
                 flash(gettext('E-Mail-Adresse ist bereits in Verwendung.'), 'error')
             elif e.code == 'login_taken':
-                flash(gettext('Login ist bereits vergeben.'), 'error')
+                flash(gettext('Nutzername ist bereits vergeben.'), 'error')
             elif e.code == 'email_illegal':
                 flash(gettext("E-Mail-Adresse hat ein ungültiges Format!"), 'error')
             elif e.code == 'login_illegal':
