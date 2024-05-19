@@ -1,13 +1,15 @@
 import re
+import typing as t
 from datetime import date
+from dataclasses import dataclass
+from functools import partial
 from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
-from flask import flash
 from flask_login import current_user
-from flask_wtf import FlaskForm
+from wtforms_widgets.base_form import BaseForm as FlaskForm
 from werkzeug.local import LocalProxy
-from wtforms import (
+from wtforms_widgets.fields.core import (
     BooleanField,
     HiddenField,
     PasswordField,
@@ -39,6 +41,38 @@ class MacAddress(Regexp):
     def __init__(self, message=None):
         super().__init__(mac_regex, message=message)
 
+
+_LINK_PLACEHOLDER = re.compile(r"\[(?P<text>[^\]]+)\]\((?P<link>[^)]+)\)")
+
+
+def render_links(raw: str, links: dict):
+    """
+    Replace link placeholders in label of BooleanFields.
+
+    :param raw: Text that contains the link placeholders.
+    :param links: Link placeholder to url mapping.
+    """
+
+    def render_link(match: re.Match) -> str:
+        link = match.group("link")
+        if link in links:
+            return f'<a target="_blank" href="{links[link]}">{match.group("text")}</a>'
+        else:
+            return match.group(0)
+
+    return _LINK_PLACEHOLDER.sub(render_link, raw)
+
+
+@dataclass
+class LazilyProcessed:
+    message: str
+    process: t.Callable
+
+    def __str__(self):
+        return self.process(self.message.__str__())
+
+    def __html__(self):
+        return self.process(self.message.__html__())
 
 
 class PasswordComplexity:
@@ -545,12 +579,25 @@ class RegisterFinishForm(FlaskForm):
                 "Bitte bestätige, dass deine Angaben korrekt sind."))
         ]
     )
-
+    _render_links = partial(
+        render_links,
+        links={
+            "constitution": "../pages/legal/agdsn_constitution",
+            "fee_regulation": "../pages/legal/membership_fee_regulations",
+            "network_constitution": "../pages/legal/network_constitution",
+            "privacy_policy": "../pages/legal/agdsn_dataprotection",
+        },
+    )
     confirm_legal_2 = BooleanField(
-        label=lazy_gettext("Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen "
-                           "der AG DSN in ihrer jeweils aktuellen Fassung anerkenne, "
-                           "insbesondere die [Netzordnungen](network_constitution) "
-                           "und die [Beitragsordnung](fee_regulation)."),
+        label=LazilyProcessed(
+            lazy_gettext(
+                "Ich bestätige, dass ich die [Satzung](constitution) und Ordnungen "
+                "der AG DSN in ihrer jeweils aktuellen Fassung anerkenne, "
+                "insbesondere die [Netzordnungen](network_constitution) "
+                "und die [Beitragsordnung](fee_regulation)."
+            ),
+            process=_render_links,
+        ),
         validators=[
             DataRequired(lazy_gettext(
                 "Bitte bestätige deine Zustimmung zur Satzung und weiteren Ordnungen."))
@@ -558,40 +605,15 @@ class RegisterFinishForm(FlaskForm):
     )
 
     confirm_legal_3 = BooleanField(
-        label=lazy_gettext("Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden "
-                           "und stimme diesen zu."),
+        label=LazilyProcessed(
+            lazy_gettext(
+                "Ich habe die [Datenschutzbestimmungen](privacy_policy) verstanden "
+                "und stimme diesen zu."
+            ),
+            process=_render_links,
+        ),
         validators=[
             DataRequired(lazy_gettext(
                 "Bitte bestätige deine Zustimmung zu der Datenschutzbelehrung."))
         ]
     )
-
-
-def flash_formerrors(form):
-    """If a form is submitted but could not be validated, the routing passes
-    the form and this method returns all form errors (form.errors)
-    as flash messages.
-    """
-    for _field, errors in list(form.errors.items()):
-        for e in errors:
-            flash(e, "error")
-
-
-_LINK_PLACEHOLDER = re.compile(r'\[(?P<text>[^\]]+)\]\((?P<link>[^)]+)\)')
-
-
-def render_links(raw: str, links: dict):
-    """
-    Replace link placeholders in label of BooleanFields.
-
-    :param raw: Text that contains the link placeholders.
-    :param links: Link placeholder to url mapping.
-    """
-    def render_link(match: re.Match) -> str:
-        link = match.group('link')
-        if link in links:
-            return f'<a target="_blank" href="{links[link]}">{match.group("text")}</a>'
-        else:
-            return match.group(0)
-
-    return _LINK_PLACEHOLDER.sub(render_link, raw)

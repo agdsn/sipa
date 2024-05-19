@@ -24,7 +24,6 @@ from sipa.base import IntegerConverter, login_manager
 from sipa.blueprints.usersuite import get_attribute_endpoint
 from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
-from sipa.forms import render_links
 from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
 from sipa.session import SeparateLocaleCookieSessionInterface
@@ -99,7 +98,6 @@ def init_app(app, **kwargs):
         url_self=url_self,
         now=datetime.now(UTC),
     )
-    app.add_template_filter(render_links)
 
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
