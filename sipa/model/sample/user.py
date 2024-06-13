@@ -4,6 +4,7 @@ from random import random
 
 from flask import current_app
 from flask_login import AnonymousUserMixin
+from schwifty import IBAN
 from werkzeug.local import LocalProxy
 
 from sipa.model.exceptions import PasswordInvalid, UserNotFound
@@ -233,10 +234,8 @@ class User(BaseUser):
 
     def payment_details(self) -> PaymentDetails:
         return PaymentDetails(
-            recipient="Donald Duck",
-            bank="Geldspeicher GbR",
-            iban="EH12432543209523",
-            bic="ENTHAUS123",
+            recipient="Technische Universität Dresden",
+            iban=IBAN("DE52 8504 0000 0800 4004 00", validate_bban=True),
             purpose=self.id.value,
         )
 
