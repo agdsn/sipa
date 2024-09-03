@@ -5,9 +5,15 @@ from flask_login import current_user
 
 from sipa.backends import backends
 
+import typing as t
+from schwifty import IBAN
+
 TransactionTuple = namedtuple('Transaction', ['datum', 'value'])
 
-PaymentDetails = namedtuple('PaymentDetails', 'recipient bank iban bic purpose')
+class PaymentDetails(t.NamedTuple):
+    recipient: str
+    iban: IBAN
+    purpose: str
 
 
 def has_connection(user):

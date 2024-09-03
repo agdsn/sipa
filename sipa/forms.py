@@ -1,11 +1,14 @@
 import re
 from datetime import date
+from decimal import Decimal
 from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
 from flask import flash
 from flask_login import current_user
 from flask_wtf import FlaskForm
+from schwifty import IBAN
+from schwifty.exceptions import SchwiftyException
 from werkzeug.local import LocalProxy
 from wtforms import (
     BooleanField,
@@ -16,6 +19,7 @@ from wtforms import (
     TextAreaField,
     IntegerField,
     DateField,
+    DecimalField,
 )
 from wtforms.validators import (
     DataRequired,
@@ -234,10 +238,15 @@ class ChangeMailForm(FlaskForm):
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
     forwarded = BooleanField(
-        label=LocalProxy(lambda:
-            lazy_gettext("Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private "
-                         "E-Mail-Adresse weiterleiten")
-            .format(agdsn_email=f'{current_user.login.value}@agdsn.me')))
+        label=LocalProxy(
+            lambda: lazy_gettext(
+                "Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private "
+                "E-Mail-Adresse weiterleiten"
+            ).format(
+                agdsn_email=f"{current_user.login.value}@{current_user.datasource.mail_server}"
+            )
+        )
+    )
 
 
 def require_unicast_mac(form, field):
@@ -274,6 +283,89 @@ class ChangeMACForm(FlaskForm):
         description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."),
     )
 
+
+def validate_iban(form, field: StringField) -> None:
+    try:
+        IBAN(field.data, validate_bban=True)
+    except SchwiftyException as e:
+        # schwifty has fine-grained exceptions but such specific information
+        # might be confusing to users.  Feel free to change if you think
+        # otherwise.
+        raise ValidationError(lazy_gettext("IBAN ungültig!")) from e
+
+def validate_amount(form, field: DecimalField) -> None:
+    if current_user.finance_information.balance.raw_value < field.data:
+        raise ValidationError(lazy_gettext("Keine ausreichende Guthabendeckung vorhanden!"))
+
+
+class RequestRepaymentForm(FlaskForm):
+    beneficiary = StrippedStringField(
+        label=lazy_gettext("Empfänger"),
+        validators=[DataRequired(lazy_gettext("Empfänger nicht angegeben!"))],
+    )
+
+    iban = StrippedStringField(
+        label=lazy_gettext("IBAN"),
+        validators=[DataRequired(lazy_gettext("IBAN nicht angegeben!")), validate_iban],
+    )
+
+    amount = (
+        DecimalField(
+            label=lazy_gettext("Betrag (EUR)"),
+            validators=[
+                DataRequired(lazy_gettext("Betrag nicht angegeben!")),
+                NumberRange(
+                    min=Decimal('0.01'),
+                    message=lazy_gettext("Betrag muss mindestens 0,01 € betragen!"),
+                ),
+                validate_amount,
+            ],
+        )
+    )
+
+
+class RequestRepaymentConfirmForm(FlaskForm):
+    beneficiary = StrippedStringField(
+        label=lazy_gettext("Empfänger"),
+        render_kw={'readonly': True},
+        validators=[DataRequired(lazy_gettext("Empfänger nicht angegeben!"))],
+    )
+
+    iban = StrippedStringField(
+        label=lazy_gettext("IBAN"),
+        render_kw={'readonly': True},
+        validators=[DataRequired(lazy_gettext("IBAN nicht angegeben!")), validate_iban],
+    )
+
+    bic = StrippedStringField(
+        label=lazy_gettext("BIC"),
+        render_kw={'readonly': True},
+    )
+
+    bank = StrippedStringField(
+        label=lazy_gettext("Bank"),
+        render_kw={'readonly': True},
+    )
+
+    amount = (
+        DecimalField(
+            label=lazy_gettext("Betrag (EUR)"),
+            render_kw={'readonly': True},
+            validators=[
+                DataRequired(lazy_gettext("Betrag nicht angegeben!")),
+                NumberRange(
+                    min=Decimal('0.01'),
+                    message=lazy_gettext("Betrag muss mindestens 0,01 € betragen!"),
+                ),
+                validate_amount,
+            ],
+        )
+    )
+
+    estimated_balance = DecimalField(
+        label=lazy_gettext("Kontostand nach Rücküberweisung (EUR)"),
+        render_kw={'readonly': True},
+    )
 
 class ActivateNetworkAccessForm(FlaskForm):
     password = PasswordField(
