@@ -49,6 +49,7 @@ python -m venv venv
 
 # Install the dependencies
 sudo apt install libpq-dev  # For Debian based distributions
+sudo dnf install libpq-devel # For Fedora
 pip install -r requirements.txt
 
 # Run SIPA with flask
