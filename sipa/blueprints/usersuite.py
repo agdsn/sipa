@@ -22,10 +22,18 @@ from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from markupsafe import Markup
 
-from sipa.forms import ContactForm, ChangeMACForm, ChangeMailForm, \
-    ChangePasswordForm, flash_formerrors, HostingForm, \
-    PaymentForm, ActivateNetworkAccessForm, TerminateMembershipForm, \
-    TerminateMembershipConfirmForm, ContinueMembershipForm
+from sipa.forms import (
+    ContactForm,
+    ChangeMACForm,
+    ChangeMailForm,
+    ChangePasswordForm,
+    HostingForm,
+    PaymentForm,
+    ActivateNetworkAccessForm,
+    TerminateMembershipForm,
+    TerminateMembershipConfirmForm,
+    ContinueMembershipForm,
+)
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
 from sipa.utils import password_changeable, subscribe_to_status_page
@@ -109,7 +117,6 @@ def index():
         months = payment_form.months.data
     else:
         months = payment_form.months.default
-        flash_formerrors(payment_form)
 
     datasource = current_user.datasource
     context = dict(rows=rows,
@@ -168,8 +175,6 @@ def contact():
                           .format(current_user.datasource.support_mail),
                   'error')
         return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     form.email.default = current_user.mail.raw_value
 
@@ -276,8 +281,6 @@ def change_password():
         else:
             flash(gettext("Passwort wurde geändert"), "success")
             return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     return render_template("generic_form.html", page_title=gettext("Passwort ändern"),
                            form_args={'form': form, 'reset_button': True, 'cancel_to': url_for('.index')})
@@ -309,9 +312,7 @@ def change_mail():
         else:
             flash(gettext("E-Mail-Adresse wurde geändert"), "success")
             return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
-    else:
+    elif not form.is_submitted():
         form.email.data = current_user.mail.raw_value
         form.forwarded.data = current_user.mail_forwarded.raw_value
 
@@ -338,8 +339,6 @@ def resend_confirm_mail():
             flash(gettext('Versenden der Bestätigungs-E-Mail ist fehlgeschlagen!'), 'error')
 
         return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     form_args = {
         'form': form,
@@ -384,9 +383,6 @@ def change_mac():
 
             return redirect(url_for('.index'))
 
-    elif form.is_submitted():
-        flash_formerrors(form)
-
     form.mac.default = current_user.mac.value
 
     return render_template('usersuite/change_mac.html',
@@ -428,9 +424,6 @@ def activate_network_access():
 
             return redirect(url_for('.index'))
 
-    elif form.is_submitted():
-        flash_formerrors(form)
-
     return render_template('generic_form.html', page_title=gettext("Netzwerkanschluss aktivieren"),
                            form_args={'form': form, 'cancel_to': url_for('.index')})
 
@@ -457,8 +450,6 @@ def hosting(action=None):
             flash(gettext("Deine Datenbank wurde erstellt."), 'success')
         else:
             current_user.userdb.change_password(form.password.data)
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     try:
         user_has_db = current_user.userdb.has_db
@@ -495,8 +486,6 @@ def terminate_membership():
 
         return redirect(url_for('.terminate_membership_confirm',
                                 end_date=end_date))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     form_args = {
         'form': form,
@@ -553,8 +542,6 @@ def terminate_membership_confirm():
             flash(gettext("Deine Mitgliedschaft wird zum angegebenen Datum beendet."), 'success')
 
         return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     form_args = {
         'form': form,
@@ -595,8 +582,6 @@ def continue_membership():
             flash(gettext("Deine Mitgliedschaft wird fortgesetzt."), 'success')
 
         return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     form_args = {
         'form': form,
@@ -631,8 +616,6 @@ def reset_wifi_password():
             flash(Markup("{}:<pre>{}</pre>".format(gettext("Es wurde ein neues WLAN Passwort generiert"), new_password)), 'success')
 
         return redirect(url_for('.index'))
-    elif form.is_submitted():
-        flash_formerrors(form)
 
     form_args = {
         'form': form,

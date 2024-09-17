@@ -2,14 +2,12 @@
 <form action="#payment-details" method="post" class="form-inline"
       aria-label="{{ _("Monate der Beitragszahlung angeben") }}">
     {{ payment_form.csrf_token }}
-    {{ _("Beitrag für") }}
     <div class="input-group">
-        {{ payment_form.months(class_="form-control", size="2", **{'aria-label': _("Monate")}) }}
-        <span class="input-group-btn">
-            <button type="submit" class="btn btn-secondary">{{ _("Aktualisieren") }}</button>
-        </span>
+        <div class="input-group-text">{{ _("Beitrag für") }}</div>
+        {{ payment_form.months(render_mode="inline") }}
+        <div class="input-group-text">{{ _("Monat(e) zahlen.") }}</div>
+        <button type="submit" class="btn btn-secondary"><i class="bi bi-arrow-repeat"></i></button>
     </div>
-    {{ _("Monat(e) zahlen.") }}
 </form>
 <br>
 <div class="card">

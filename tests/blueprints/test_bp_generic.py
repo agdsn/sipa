@@ -72,18 +72,20 @@ class TestForm:
             client.assert_ok(endpoint)
 
     def test_post_flashes(self, client: TestClient, endpoint, template):
-        with client.renders_template(template), client.capture_flashes() as flashed:
+        with client.renders_template(template) as recorded:
             client.assert_ok(endpoint, method="POST")
-        assert flashed
-        assert all(m.category == "error" for m in flashed)
+
+        [(_, template_args)] = recorded
+        assert template_args["form"].errors
 
     def test_invalid_data_flashes(
         self, client: TestClient, endpoint, template, invalid_data
     ):
-        with client.renders_template(template), client.flashes_message(
-            ".*", category="error"
-        ):
+        with client.renders_template(template) as recorded:
             client.assert_ok(endpoint, data=invalid_data, method="POST")
+
+        [(_, template_args)] = recorded
+        assert template_args["form"].errors
 
     @pytest.fixture()
     def silence_logs(self):

@@ -1,0 +1,4 @@
+[submodule "wtforms_widgets"]
+	path = wtforms_widgets
+	url = https://github.com/agdsn/wtforms-widgets.git
+	branch = pycroft
