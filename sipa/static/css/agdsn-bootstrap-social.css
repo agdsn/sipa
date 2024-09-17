@@ -9,10 +9,6 @@
 .btn-social-icon > * {
     font-size: 1.6em;
 }
-.btn-social-icon > *::before {
-    vertical-align: -1.5pt;
-}
-
 .btn-social-icon:focus,.btn-social-icon:hover,.btn-social-icon:active {
     color: #fff;
     background-color: color-mix(in hsl, black 16%, var(--btn-social-bg-color));
