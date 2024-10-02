@@ -1,8 +1,11 @@
 """Blueprint for Usersuite components
 """
-from collections import OrderedDict
+
 import logging
+import math
+from collections import OrderedDict
 from datetime import datetime
+from decimal import Decimal
 from io import BytesIO
 
 from babel.numbers import format_currency
@@ -118,6 +121,13 @@ def index():
     else:
         months = payment_form.months.default
 
+    payment_form._fields["months"].validators[0].max = math.floor(
+        # Maximum value for EPC QR code, see https://de.wikipedia.org/wiki/EPC-QR-Code#EPC-QR-Code_Dateninhalt
+        Decimal("999999999.99")
+        / current_app.config["MEMBERSHIP_CONTRIBUTION"]
+        * 100
+    )
+
     datasource = current_user.datasource
     context = dict(rows=rows,
                    webmailer_url=datasource.webmailer_url,
@@ -217,8 +227,11 @@ def render_payment_details(details: PaymentDetails, months):
         gettext("IBAN"): details.iban,
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): format_currency(months * current_app.config['MEMBERSHIP_CONTRIBUTION'] / 100, 'EUR',
-                                           locale='de_DE')
+        gettext("Betrag"): format_currency(
+            Decimal(months) * current_app.config["MEMBERSHIP_CONTRIBUTION"] / 100,
+            "EUR",
+            locale="de_DE",
+        ),
     }
 
 
