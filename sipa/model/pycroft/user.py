@@ -1,6 +1,7 @@
 from __future__ import annotations
 import logging
 from datetime import date
+from typing import List
 
 from pydantic import ValidationError
 
@@ -320,6 +321,10 @@ class User(BaseUser):
         )
 
     @property
+    def mpsks_clients(self) -> ActiveProperty[str | None, str | None]:
+        return ActiveProperty (name="mpsks_clients")
+
+    @property
     def is_member(self) -> bool:
         return self.has_property('member')
 
@@ -422,3 +427,17 @@ class FinanceInformation(BaseFinanceInformation):
     @property
     def history(self):
         return self._transactions
+
+class MPSK_Client:
+
+    def __init__(self, name="", mac=""):
+        self._name = name
+        self._mac = mac
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def mac(self):
+        return self._mac
