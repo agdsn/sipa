@@ -320,9 +320,9 @@ class User(BaseUser):
             capabilities=Capabilities.edit_if(self.is_member),
         )
 
-    @poperty
-    def mpsks_clients(self) -> List[MPSK_Client]:
-        return
+    @property
+    def mpsks_clients(self) -> ActiveProperty[str | None, str | None]:
+        return ActiveProperty (name="mpsks_clients")
 
     @property
     def is_member(self) -> bool:

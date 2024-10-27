@@ -311,6 +311,10 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     def wifi_password(self) -> PropertyBase[str, str | None]:
         return UnsupportedProperty("wifi_password")
 
+    @property
+    def mpsks_clients(self) -> PropertyBase[str, str | None]:
+        return UnsupportedProperty("mpsks_clients")
+
     @classmethod
     def request_password_reset(cls, user_ident, email):
         raise NotImplementedError
