@@ -63,6 +63,15 @@
 {% endif %}
 </div>
 
+<div>
+{% if current_user.mpsks_clients %}
+    <a href="">Create clients</a>
+{% else %}
+    <a href="" class="btn btn-outline-secondary" title="{{ _('Editieren IOT Geräte') }}">Clients </a>
+{% endif %}
+</div>
+
+
 <div class="btn-group">
     <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
         <span class="bi-question-circle-fill"></span>
