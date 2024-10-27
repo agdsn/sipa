@@ -309,6 +309,25 @@ class ChangeMACForm(FlaskForm):
     )
 
 
+class MPSKS_ClientForm(FlaskForm):
+    password = PasswordField(
+        label=lazy_gettext("Passwort"),
+        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
+    mac = StrippedStringField(
+        label=lazy_gettext("Neue MAC"),
+        validators=[DataRequired(lazy_gettext("MAC-Adresse nicht angegeben!")),
+                    MacAddress(lazy_gettext("MAC ist nicht in gültigem Format!")),
+                    require_unicast_mac],
+        description="XX:XX:XX:XX:XX:XX")
+    host_name = StringField(
+        label=lazy_gettext("Neuer Gerätename (Optional)"),
+        validators=[Regexp(regex="^[a-zA-Z0-9 ]+",
+                           message=lazy_gettext("Gerätename ist ungültig")),
+                    Optional(),
+                    Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
+        description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."),
+    )
+
 class ActivateNetworkAccessForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
