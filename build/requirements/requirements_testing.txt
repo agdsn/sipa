@@ -5,4 +5,5 @@ pycodestyle~=2.4.0
 mypy~=0.960
 sphinx~=1.8.4
 pytest~=7.4.3
+pytest-cov~=2.10.1
 time_machine~=2.13.0
