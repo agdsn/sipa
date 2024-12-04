@@ -1,0 +1,18 @@
+<div>Estimated balance: <span class="{{ balance_class }}">{{ estimated_balance | round(2) }}€</span></div>
+
+{% if estimated_balance > 0 %}
+    <div>
+    Still some Credit.
+    {% for field in form_repayment_data %}
+    {{ field(class="form-control", placeholder=description, autofocus=first) }}
+    {% endfor %}
+    </div>
+{% elif estimated_balance < 0 %}
+    <div>
+    MONEY PLZ! :-(
+    </div>
+{% endif %}
+<form>
+<button class="btn btn-primary" type="submit">Confirm</button>
+<a href="#" class="btn btn-secondary">Abort</a>
+</form>

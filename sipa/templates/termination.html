@@ -1,0 +1,86 @@
+<div id="termination_request">
+<form method="post">
+    {% set field = form_repayment_data.end_date %}
+    <div class="row mb-3 {% if field.errors %}is-invalid{% endif %}">
+    		<div class="col-sm-6 col-form-label">
+    			{{ field.label() }}
+    		</div>
+    		<div class="col-sm-6">
+    			{{ field(class="form-control", placeholder=field.description, autofocus=True, **({
+            "hx-get": url_for(".terminate_membership"),
+            "hx-parms": "end_date",
+            "hx-trigger": "change delay:500ms",
+            "hx-target": "#termination_request",
+            "___hx-swap": "morphdom",
+            "hx-push-url": "true",
+        })) }}
+            <!--<input
+                id="end_date"
+                class="form-control"
+                name="end_date"
+                type="date"
+                hx-get="{{ url_for(".terminate_membership") }}"
+                hx-parms="end_date"
+                hx-trigger="change delay:500ms"
+                hx-target="#termination_request"
+                hx-swap="outerHTML"
+                hx-push-url="true"
+                value="{{ end_date | default("") }}"
+            ></input>-->
+    		</div>
+    </div>
+
+{% if estimated_balance is not none %}
+    <div>Estimated balance: <span class="{{ balance_class }}">{{ estimated_balance | round(2) }}€</span></div>
+
+
+    {% if estimated_balance > 0 %}
+        <div>
+        Still some Credit.
+        {% set field = form_repayment_data.beneficiary %}
+        <div class="row mb-3">
+        		<div class="col-sm-6 col-form-label">
+        			{{ field.label() }}
+        		</div>
+        		<div class="col-sm-6">
+        			{{ field(class="form-control" + (" is-invalid" if field.errors else ""), placeholder=field.description, autofocus=True, **({"aria-describedby": "form-iban-error-desc"})) }}
+        		</div>
+        </div>
+        {% set field = form_repayment_data.iban %}
+        <div
+            class="row mb-3 {% if field.errors %}is-invalid{% endif %}"
+        >
+        		<div class="col-sm-6 col-form-label">
+        			{{ field.label() }}
+        		</div>
+        		<div class="col-sm-6">
+        			{{ field(class="form-control" + (" is-invalid" if field.errors else ""), placeholder=field.description) }}
+                <div id="form-iban-error-desc" class="invalid-feedback">
+                    {% for error in field.errors %}
+                    <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+        		</div>
+        </div>
+        {% set field = form_repayment_data.bic %}
+        <div class="row mb-3 {% if field.errors %}is-invalid{% endif %}">
+        		<div class="col-sm-6 col-form-label">
+        			{{ field.label() }}
+        		</div>
+        		<div class="col-sm-6">
+        			{{ field(class="form-control", placeholder=field.description) }}
+        		</div>
+        </div>
+
+        </div>
+    {% elif estimated_balance < 0 %}
+        <div>
+        MONEY PLZ! :-(
+        </div>
+    {% endif %}
+    <form>
+    <button class="btn btn-primary" type="submit">Confirm</button>
+    <a href="#" class="btn btn-secondary">Abort</a>
+{% endif %}
+</form>
+</div>
