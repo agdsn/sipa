@@ -32,7 +32,7 @@ class SampleUserData(t.TypedDict):
     status: str
     membership_end_date: str | None
     is_member: bool
-
+    mpsks_clients: list[str] | None
 
 def init_app(app):
     app.extensions['sample_users'] = {
@@ -47,6 +47,7 @@ def init_app(app):
             'mail_confirmed': True,
             'mac': 'aa:bb:cc:dd:ee:ff',
             'ip': '141.30.228.39',
+            'mpsks_clients': [("Client A", "Hallo!")],
             'status': "OK",
             'membership_end_date': None,
             'is_member': True,
@@ -159,6 +160,19 @@ class User(BaseUser):
     @mac.setter
     def mac(self, value):
         self.config["mac"] = value
+
+    @property
+    def mpsks_clients(self) -> ActiveProperty[str | None, list | None]:
+        return ActiveProperty(name="mpsks_clients", value=self.config["mpsks_clients"], capabilities=Capabilities(edit=True, delete=False),)
+
+    @mpsks_clients.setter
+    def mpsks_clients(self, value):
+        self.config["mpsks_clients"] = value
+
+
+    def change_mpsks_clients(self, password: str, mpsks: list):
+        self.config["mpsks_clients"] = mpsks
+
 
     @property
     def mail(self):

@@ -260,6 +260,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mail_confirmed': 'resend_confirm_mail',
             'wifi_password': 'reset_wifi_password',
             'finance_balance': 'finance_logs',
+            'mpsks_clients': "view_mpsk",
         }
 
         assert attribute in attribute_mappings.keys(), \
@@ -402,6 +403,24 @@ def change_mac():
     return render_template('usersuite/change_mac.html',
                            form_args={'form': form, 'cancel_to': url_for('.index')})
 
+
+@bp_usersuite.route("/get-mpsks", methods=['GET'])
+@login_required
+def get_mpsks_clients():
+    """
+    returns a template with all set mpsks Clients
+    """
+
+    return render_template('usersuite/change_mac.html')
+
+
+@bp_usersuite.route("/view-mpsks_clients", methods=['GET', 'POST'])
+@login_required
+def view_mpsk():
+
+    current = current_user.mpsks_clients.value
+
+    return render_template('usersuite/mpsks_things.html', clients=current)
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
 @login_required
