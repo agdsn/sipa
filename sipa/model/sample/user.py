@@ -170,9 +170,24 @@ class User(BaseUser):
         self.config["mpsks_clients"] = value
 
 
-    def change_mpsks_clients(self, password: str, mpsks: list):
-        self.config["mpsks_clients"] = mpsks
+    def change_mpsks_clients(self, mac, name: str, old_mac, password: str):
+        for i, el in enumerate(self.config["mpsks_clients"]):
+            if old_mac == el[1]:
+                self.config["mpsks_clients"][i] = (name, mac)
+                break
+        else:
+            raise ValueError(f"mac: {mac} not found for user")
 
+    def add_mpsks_client(self, name, mac, password):
+        self.config["mpsks_clients"].append((name, mac))
+
+    def delete_mpsks_client(self, mac, password):
+        for i, el in enumerate(self.config["mpsks_clients"]):
+            if mac == el[1]:
+                self.config["mpsks_clients"].remove(el)
+                break
+        else:
+            raise ValueError(f"mac: {mac} not found for user")
 
     @property
     def mail(self):
