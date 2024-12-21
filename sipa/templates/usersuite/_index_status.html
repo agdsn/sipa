@@ -65,9 +65,9 @@
 
 <div>
 {% if current_user.mpsks_clients %}
-    <a href="">Create clients</a>
+    <a href="{{ url_for('.view_mpsk') }}">Create clients</a>
 {% else %}
-    <a href="" class="btn btn-outline-secondary" title="{{ _('Editieren IOT Geräte') }}">Clients </a>
+    <a href="{{ url_for('.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Editieren IOT Geräte') }}">Clients </a>
 {% endif %}
 </div>
 
