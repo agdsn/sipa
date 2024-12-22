@@ -84,6 +84,15 @@ class PycroftApi:
         return self.post(f'user/{user_id}/change-mac/{interface_id}',
                          data={'password': password, 'mac': new_mac, 'host_name': host_name})
 
+    def add_mpsk(self, user_id, password, name, mac):
+        return self.post(f'user/{user_id}/add-mpsk', data={'password': password, 'name': name, 'mac': mac})
+
+    def change_mpsk(self, user_id, password, name, mac, mpsk_id):
+        return self.post(f'user/{user_id}/change-mpsk/{mpsk_id}', data={'password': password, 'name': name, 'mac': mac})
+
+    def delete_mpsk(self, user_id, password, mpsk_id):
+        return self.post(f'user/{user_id}/delete-mpsk/{mpsk_id}', data={'password': password})
+
     def activate_network_access(self, user_id, password, mac, birthdate, host_name):
         return self.post(f'user/{user_id}/activate-network-access',
                          data={'password': password, 'mac': mac,
