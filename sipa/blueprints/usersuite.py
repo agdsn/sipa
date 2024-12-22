@@ -410,10 +410,6 @@ def change_mac():
 def change_mpsks(mpsk_id: int):
     """Changes the WiFi MPSK MAC address of a device
     """
-
-    if not request.args.get('mac') and not request.form.get('name'):
-        abort(403)
-
     capability_or_403('mpsks_clients', 'edit')
 
     form = MPSKSClientForm()
@@ -440,9 +436,9 @@ def change_mpsks(mpsk_id: int):
                           "bis die Änderung wirksam ist."), 'info')
 
             return redirect(url_for('.view_mpsk'))
-
-    form.mac.data = request.args.get('mac')
-    form.name.data = request.args.get('name')
+    mpsk_client = current_user.mpsks_clients.value[mpsk_id]
+    form.mac.data = mpsk_client.mac
+    form.name.data = mpsk_client.name
 
     return render_template('usersuite/change_mac.html',
                            form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
