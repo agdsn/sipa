@@ -48,6 +48,7 @@ class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
     # separate `InitVar`
     empty: bool | None = None
     description_url: str | None = None
+    displayable: bool | None = None
 
     def __post_init__(self):
         if self.empty is None:
@@ -115,6 +116,8 @@ class ActiveProperty(PropertyBase[TVal, TRawVal]):
             self.raw_value = self.value
         if self.value is None:
             self.value = gettext("Nicht angegeben")
+        if self.displayable is None:
+            self.displayable = True
         if self.style is None:
             self.style = "muted" if self.empty else None
 
