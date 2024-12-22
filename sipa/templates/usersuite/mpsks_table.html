@@ -13,13 +13,13 @@
         {% for client in clients %}
     <tr>
 
-            <td>{{ client[0] }}</td>
-            <td>{{ client[1] }}</td>
+            <td>{{ client.name }}</td>
+            <td>{{ client.mac }}</td>
         <td>
-            <a href="{{ url_for('usersuite.change_mpsks', name=client[0], mac=client[1]) }}">
+            <a href="{{ url_for('usersuite.change_mpsks',mpsk_id=client.id) }}">
                 <span class="bi-pencil-fill ms-auto"></span>
             </a>
-            <a href="{{ url_for('usersuite.delete_mpsk', mac=client[1]) }}">
+            <a href="{{ url_for('usersuite.delete_mpsk', mpsk_id=client.id) }}">
                 <span class="bi-trash-fill ms-auto"></span>
             </a>
         </td>
