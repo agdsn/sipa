@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import json
 import logging
 from datetime import date
 from typing import List
@@ -27,6 +29,8 @@ from flask.globals import current_app
 from flask_babel import gettext
 from werkzeug.local import LocalProxy
 from werkzeug.http import parse_date
+
+from ..mspk_client import MPSKClientEntry
 
 logger = logging.getLogger(__name__)
 
@@ -322,7 +326,51 @@ class User(BaseUser):
 
     @property
     def mpsks_clients(self) -> ActiveProperty[str | None, str | None]:
-        return ActiveProperty (name="mpsks_clients")
+        return ActiveProperty(name="mpsks_clients", value=self.config["mpsks_clients"], capabilities=Capabilities(edit=True, delete=False),)
+
+    def change_mpsks_clients(self, mac, name, mpsk_id, password: str):
+        for i, el in enumerate(self.config["mpsks_clients"]):
+            if mpsk_id == el.id:
+                el.name = name
+                el.mac = mac
+                break
+        else:
+            raise ValueError(f"mac: {mac} not found for user")
+
+    def add_mpsks_client(self, name, mac, password):
+        status, response = api.add_mpsk(
+            self.user_data.id,
+            password,
+            mac,
+            name)
+
+        if status == 400:
+            raise ValueError(f"Execceds maximum clients")
+        elif status == 409:
+            raise MacAlreadyExists
+        elif status == 422:
+            raise ValueError
+
+        try:
+            response = json.loads(response)
+        except json.decoder.JSONDecodeError:
+            raise ValueError(f"Invalid response from {response}")
+
+        if ('name', 'mac', 'id') in response.keys():
+            return MPSKClientEntry(name=response.get('name'), mac=response.get('mac'), id=response.get('id'))
+        else:
+            raise ValueError(f"Invalid response from {response}")
+
+
+    def delete_mpsks_client(self, mpsk_id, password):
+        status, response = api.delete_mpsk(
+                self.user_data.id,
+                password,
+                mpsk_id,
+            )
+        if status == 400 or status == 401:
+            raise ValueError(f'Mpsk client not found for user: {mpsk_id}')
+
 
     @property
     def is_member(self) -> bool:
@@ -428,16 +476,3 @@ class FinanceInformation(BaseFinanceInformation):
     def history(self):
         return self._transactions
 
-class MPSK_Client:
-
-    def __init__(self, name="", mac=""):
-        self._name = name
-        self._mac = mac
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def mac(self):
-        return self._mac
