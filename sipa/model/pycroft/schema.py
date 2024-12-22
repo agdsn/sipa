@@ -5,6 +5,8 @@ from decimal import Decimal
 
 from pydantic import BaseModel
 
+from sipa.model.mspk_client import MPSKClientEntry
+
 
 class UserData(BaseModel):
     id: int
@@ -58,7 +60,3 @@ class FinanceHistoryEntry(BaseModel):
     description: str
 
 
-class MPSKClientEntry(BaseModel):
-    mac: str
-    name: str
-    id: int
