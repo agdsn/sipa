@@ -35,7 +35,7 @@ from sipa.forms import (
     ActivateNetworkAccessForm,
     TerminateMembershipForm,
     TerminateMembershipConfirmForm,
-    ContinueMembershipForm,
+    ContinueMembershipForm, MPSKSClientForm, DeleteMPSKClientForm,
 )
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
@@ -404,14 +404,115 @@ def change_mac():
                            form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
-@bp_usersuite.route("/get-mpsks", methods=['GET'])
+
+@bp_usersuite.route("/change-mpsks/<int:mpsk_id>", methods=['GET', 'POST'])
 @login_required
-def get_mpsks_clients():
-    """
-    returns a template with all set mpsks Clients
+def change_mpsks(mpsk_id: int):
+    """Changes the WiFi MPSK MAC address of a device
     """
 
-    return render_template('usersuite/change_mac.html')
+    if not request.args.get('mac') and not request.form.get('name'):
+        abort(403)
+
+    capability_or_403('mpsks_clients', 'edit')
+
+    form = MPSKSClientForm()
+
+    if form.validate_on_submit():
+        password = form.password.data
+        mac = form.mac.data
+        name = form.name.data
+        try:
+            current_user.change_mpsks_clients(mac, name, mpsk_id, password)
+        except PasswordInvalid:
+            flash(gettext("Passwort war inkorrekt!"), "error")
+        except ValueError:
+            flash(gettext("MPSK Greät nicht gefunden!"), "error")
+        except MacAlreadyExists:
+            flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
+        else:
+            logger.info('Successfully changed MAC address',
+                        extra={'data': {'mac': mac},
+                               'tags': {'rate_critical': True}})
+
+            flash(gettext("MAC-Adresse wurde geändert!"), 'success')
+            flash(gettext("Es kann bis zu 15 Minuten dauern, "
+                          "bis die Änderung wirksam ist."), 'info')
+
+            return redirect(url_for('.view_mpsk'))
+
+    form.mac.data = request.args.get('mac')
+    form.name.data = request.args.get('name')
+
+    return render_template('usersuite/change_mac.html',
+                           form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
+
+
+@bp_usersuite.route("/add-mpsks", methods=['GET', 'POST'])
+@login_required
+def add_mpsks():
+    """As user, adds a mpsk devices MAC address for WiFi
+    """
+
+    capability_or_403('mpsks_clients', 'edit')
+
+    form = MPSKSClientForm()
+
+    if form.validate_on_submit():
+        password = form.password.data
+        mac = form.mac.data
+        name = form.name.data
+
+        try:
+            device = current_user.add_mpsks_client(mac, name, password)
+        except PasswordInvalid:
+            flash(gettext("Passwort war inkorrekt!"), "error")
+        except MacAlreadyExists:
+            flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
+        else:
+            logger.info('Successfully changed MAC address',
+                        extra={'data': {'mac': mac},
+                               'tags': {'rate_critical': True}})
+
+            flash(gettext("MAC-Adresse wurde geändert!"), 'success')
+            flash(gettext("Es kann bis zu 15 Minuten dauern, "
+                          "bis die Änderung wirksam ist."), 'info')
+            current_user.mpsks_clients.value.append(device)
+
+            return redirect(url_for('.view_mpsk'))
+
+
+    return render_template('usersuite/mpsk_client.html',
+                           form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
+
+
+@bp_usersuite.route("/delete-mpsks/<int:mpsk_id>", methods=['GET', 'POST'])
+@login_required
+def delete_mpsk(mpsk_id: int):
+
+    capability_or_403('mpsks_clients', 'edit')
+    form = DeleteMPSKClientForm()
+
+    if form.validate_on_submit():
+        password = form.password.data
+        #mac = form.mac.data
+        try:
+            logging.warn(f"MPSK: {mpsk_id}")
+            current_user.delete_mpsks_client(mpsk_id, password)
+        except PasswordInvalid:
+            flash(gettext("Passwort war inkorrekt!"), "error")
+        except ValueError:
+            flash(gettext("MPSK MAC wurde nicht gefunden!"), "error")
+        else:
+            flash(gettext("MPSK Client wurde gelöscht!"), 'success')
+
+            return redirect(url_for('.view_mpsk'))
+
+    #form.mac.data = request.args.get('mac')
+    return render_template('usersuite/mpsk_client.html',
+                           form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
+
+
 
 
 @bp_usersuite.route("/view-mpsks_clients", methods=['GET', 'POST'])
@@ -420,7 +521,7 @@ def view_mpsk():
 
     current = current_user.mpsks_clients.value
 
-    return render_template('usersuite/mpsks_things.html', clients=current)
+    return render_template('usersuite/mpsks_table.html', clients=current)
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
 @login_required
