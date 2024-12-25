@@ -465,6 +465,8 @@ def add_mpsks():
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
             flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
+        except ValueError:
+            flash(gettext("Maximale Anzahl von MPSK Clients erreicht!"), "error")
         else:
             logger.info('Successfully changed MAC address',
                         extra={'data': {'mac': mac},
