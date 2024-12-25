@@ -1,5 +1,3 @@
-
-
 class MPSKClientEntry:
     mac: str
     name: str

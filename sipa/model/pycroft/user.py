@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import logging
 from datetime import date
-from typing import List
 
 from pydantic import ValidationError
 
@@ -349,7 +348,7 @@ class User(BaseUser):
             name)
 
         if status == 400:
-            raise ValueError(f"Execceds maximum clients")
+            raise ValueError("Execceds maximum clients")
         elif status == 409:
             raise MacAlreadyExists
         elif status == 422:
@@ -357,8 +356,8 @@ class User(BaseUser):
 
         try:
             response = json.loads(response)
-        except json.decoder.JSONDecodeError:
-            raise ValueError(f"Invalid response from {response}")
+        except json.decoder.JSONDecodeError as err:
+            raise ValueError(f"Invalid response from {response}") from err
 
         if ('name', 'mac', 'id') in response.keys():
             return MPSKClientEntry(name=response.get('name'), mac=response.get('mac'), id=response.get('id'))
