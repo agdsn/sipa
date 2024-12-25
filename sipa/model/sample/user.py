@@ -179,7 +179,6 @@ class User(BaseUser):
 
     def add_mpsks_client(self, name, mac, password):
         dev = MPSKClientEntry(mac=mac, name=name, id=len(self.config["mpsks_clients"]))
-        self.config["mpsks_clients"].append(dev)
         return dev
 
     def delete_mpsks_client(self, mpsk_id: int, password):

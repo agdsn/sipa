@@ -332,10 +332,6 @@ class DeleteMPSKClientForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
-    mac = StrippedStringField(
-        label=lazy_gettext("WiFi MAC"),
-        render_kw={'readonly': True, 'disabled': True},
-        description="XX:XX:XX:XX:XX:XX")
 
 
 class ActivateNetworkAccessForm(FlaskForm):

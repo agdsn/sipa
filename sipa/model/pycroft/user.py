@@ -329,13 +329,17 @@ class User(BaseUser):
         return ActiveProperty(name="mpsks_clients", value=self.config["mpsks_clients"], capabilities=Capabilities(edit=True, delete=False),)
 
     def change_mpsks_clients(self, mac, name, mpsk_id, password: str):
-        for i, el in enumerate(self.config["mpsks_clients"]):
-            if mpsk_id == el.id:
-                el.name = name
-                el.mac = mac
-                break
-        else:
+        status, _ = api.change_mpsk(self.user_data.id, mac, name, mpsk_id, password)
+
+        if status == 400:
             raise ValueError(f"mac: {mac} not found for user")
+        elif status == 409:
+            raise MacAlreadyExists
+        elif status == 422:
+            raise ValueError
+
+        self.mpsks_clients.value[mpsk_id].name = name
+        self.mpsks_clients.value[mpsk_id].mac = mac
 
     def add_mpsks_client(self, name, mac, password):
         status, response = api.add_mpsk(
