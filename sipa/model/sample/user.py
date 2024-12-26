@@ -171,7 +171,7 @@ class User(BaseUser):
         self.config["mpsk_clients"] = value
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
-        if mpsk_id < len(self.config["mpsk_clients"]):
+        if mpsk_id in range(len(self.config["mpsk_clients"])):
             self.config["mpsk_clients"][mpsk_id].name = name
             self.config["mpsk_clients"][mpsk_id].mac = mac
         else:
