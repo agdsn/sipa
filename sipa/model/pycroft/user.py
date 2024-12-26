@@ -367,10 +367,10 @@ class User(BaseUser):
 
     def delete_mpsks_client(self, mpsk_id, password):
         status, response = api.delete_mpsk(
-                self.user_data.id,
-                password,
-                mpsk_id,
-            )
+            self.user_data.id,
+            password,
+            mpsk_id,
+        )
         if status == 400 or status == 401:
             raise ValueError(f'Mpsk client not found for user: {mpsk_id}')
 
