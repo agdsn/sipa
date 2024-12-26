@@ -324,10 +324,10 @@ class User(BaseUser):
         )
 
     @property
-    def mpsks_clients(self) -> ActiveProperty[str | None, str | None]:
-        return ActiveProperty(name="mpsks_clients", value=self.config["mpsks_clients"], capabilities=Capabilities(edit=True, delete=False),)
+    def mpsk_clients(self) -> ActiveProperty[str | None, str | None]:
+        return ActiveProperty(name="mpsk_clients", value=self.config["mpsk_clients"], capabilities=Capabilities(edit=True, delete=False, displayable=False),)
 
-    def change_mpsks_clients(self, mac, name, mpsk_id, password: str):
+    def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
         status, _ = api.change_mpsk(self.user_data.id, mac, name, mpsk_id, password)
 
         if status == 400:
@@ -337,10 +337,10 @@ class User(BaseUser):
         elif status == 422:
             raise ValueError
 
-        self.mpsks_clients.value[mpsk_id].name = name
-        self.mpsks_clients.value[mpsk_id].mac = mac
+        self.mpsk_clients.value[mpsk_id].name = name
+        self.mpsk_clients.value[mpsk_id].mac = mac
 
-    def add_mpsks_client(self, name, mac, password):
+    def add_mpsk_client(self, name, mac, password):
         status, response = api.add_mpsk(
             self.user_data.id,
             password,
@@ -365,7 +365,7 @@ class User(BaseUser):
             raise ValueError(f"Invalid response from {response}")
 
 
-    def delete_mpsks_client(self, mpsk_id, password):
+    def delete_mpsk_client(self, mpsk_id, password):
         status, response = api.delete_mpsk(
             self.user_data.id,
             password,

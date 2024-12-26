@@ -36,7 +36,7 @@ from sipa.forms import (
     TerminateMembershipForm,
     TerminateMembershipConfirmForm,
     ContinueMembershipForm,
-    MPSKSClientForm,
+    MPSKClientForm,
     DeleteMPSKClientForm,
 )
 from sipa.mail import send_usersuite_contact_mail
@@ -103,7 +103,7 @@ def index():
             ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
             ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
             ("wifi_password", [gettext("WLAN Passwort")]),
-            ("mpsks_clients", [gettext("WLAN mpsks clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen") ]),
+            ("mpsk_clients", [gettext("WLAN mpsk clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen") ]),
             # ('hostname', gettext("Hostname")),
             # ('hostalias', gettext("Hostalias")),
             ("userdb_status", [gettext("MySQL Datenbank")]),
@@ -262,7 +262,7 @@ def get_attribute_endpoint(attribute, capability='edit'):
             'mail_confirmed': 'resend_confirm_mail',
             'wifi_password': 'reset_wifi_password',
             'finance_balance': 'finance_logs',
-            'mpsks_clients': "view_mpsk",
+            'mpsk_clients': "view_mpsk",
         }
 
         assert attribute in attribute_mappings.keys(), \
@@ -407,21 +407,21 @@ def change_mac():
 
 
 
-@bp_usersuite.route("/change-mpsks/<int:mpsk_id>", methods=['GET', 'POST'])
+@bp_usersuite.route("/change-mpsk/<int:mpsk_id>", methods=['GET', 'POST'])
 @login_required
-def change_mpsks(mpsk_id: int):
+def change_mpsk(mpsk_id: int):
     """Changes the WiFi MPSK MAC address of a device
     """
-    capability_or_403('mpsks_clients', 'edit')
+    capability_or_403('mpsk_clients', 'edit')
 
-    form = MPSKSClientForm()
+    form = MPSKClientForm()
 
     if form.validate_on_submit():
         password = form.password.data
         mac = form.mac.data
         name = form.name.data
         try:
-            current_user.change_mpsks_clients(mac, name, mpsk_id, password)
+            current_user.change_mpsk_clients(mac, name, mpsk_id, password)
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except ValueError:
@@ -438,7 +438,7 @@ def change_mpsks(mpsk_id: int):
                           "bis die Änderung wirksam ist."), 'info')
 
             return redirect(url_for('.view_mpsk'))
-    mpsk_client = current_user.mpsks_clients.value[mpsk_id]
+    mpsk_client = current_user.mpsk_clients.value[mpsk_id]
     form.mac.data = mpsk_client.mac
     form.name.data = mpsk_client.name
 
@@ -446,15 +446,15 @@ def change_mpsks(mpsk_id: int):
                            form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
 
 
-@bp_usersuite.route("/add-mpsks", methods=['GET', 'POST'])
+@bp_usersuite.route("/add-mpsk", methods=['GET', 'POST'])
 @login_required
-def add_mpsks():
+def add_mpsk():
     """As user, adds a mpsk devices MAC address for WiFi
     """
 
-    capability_or_403('mpsks_clients', 'edit')
+    capability_or_403('mpsk_clients', 'edit')
 
-    form = MPSKSClientForm()
+    form = MPSKClientForm()
 
     if form.validate_on_submit():
         password = form.password.data
@@ -462,7 +462,7 @@ def add_mpsks():
         name = form.name.data
 
         try:
-            device = current_user.add_mpsks_client(mac, name, password)
+            device = current_user.add_mpsk_client(mac, name, password)
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
@@ -477,7 +477,7 @@ def add_mpsks():
             flash(gettext("MAC-Adresse wurde geändert!"), 'success')
             flash(gettext("Es kann bis zu 15 Minuten dauern, "
                           "bis die Änderung wirksam ist."), 'info')
-            current_user.mpsks_clients.value.append(device)
+            current_user.mpsk_clients.value.append(device)
 
             return redirect(url_for('.view_mpsk'))
 
@@ -486,11 +486,11 @@ def add_mpsks():
                            form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
 
 
-@bp_usersuite.route("/delete-mpsks/<int:mpsk_id>", methods=['GET', 'POST'])
+@bp_usersuite.route("/delete-mpsk/<int:mpsk_id>", methods=['GET', 'POST'])
 @login_required
 def delete_mpsk(mpsk_id: int):
 
-    capability_or_403('mpsks_clients', 'edit')
+    capability_or_403('mpsk_clients', 'edit')
     form = DeleteMPSKClientForm()
 
     if form.validate_on_submit():
@@ -498,7 +498,7 @@ def delete_mpsk(mpsk_id: int):
         #mac = form.mac.data
         try:
             logging.warn(f"MPSK: {mpsk_id}")
-            current_user.delete_mpsks_client(mpsk_id, password)
+            current_user.delete_mpsk_client(mpsk_id, password)
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except ValueError:
@@ -515,13 +515,13 @@ def delete_mpsk(mpsk_id: int):
 
 
 
-@bp_usersuite.route("/view-mpsks_clients", methods=['GET', 'POST'])
+@bp_usersuite.route("/view-mpsk_clients", methods=['GET', 'POST'])
 @login_required
 def view_mpsk():
 
-    current = current_user.mpsks_clients.value
+    current = current_user.mpsk_clients.value
 
-    return render_template('usersuite/mpsks_table.html', clients=current)
+    return render_template('usersuite/mpsk_table.html', clients=current)
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
 @login_required

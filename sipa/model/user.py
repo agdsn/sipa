@@ -312,8 +312,8 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         return UnsupportedProperty("wifi_password")
 
     @property
-    def mpsks_clients(self) -> PropertyBase[str, str | None]:
-        return UnsupportedProperty("mpsks_clients")
+    def mpsk_clients(self) -> PropertyBase[str, str | None]:
+        return UnsupportedProperty("mpsk_clients")
 
     @classmethod
     def request_password_reset(cls, user_ident, email):

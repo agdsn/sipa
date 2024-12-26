@@ -309,7 +309,7 @@ class ChangeMACForm(FlaskForm):
     )
 
 
-class MPSKSClientForm(FlaskForm):
+class MPSKClientForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
