@@ -35,7 +35,9 @@ from sipa.forms import (
     ActivateNetworkAccessForm,
     TerminateMembershipForm,
     TerminateMembershipConfirmForm,
-    ContinueMembershipForm, MPSKSClientForm, DeleteMPSKClientForm,
+    ContinueMembershipForm,
+    MPSKSClientForm,
+    DeleteMPSKClientForm,
 )
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
