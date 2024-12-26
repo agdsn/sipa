@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass(frozen=true)
+@dataclass(frozen=True)
 class MPSKClientEntry:
     mac: str
     name: str
