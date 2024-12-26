@@ -325,7 +325,7 @@ class User(BaseUser):
 
     @property
     def mpsk_clients(self) -> ActiveProperty[str | None, str | None]:
-        return ActiveProperty(name="mpsk_clients", value=self.config["mpsk_clients"], capabilities=Capabilities(edit=True, delete=False, displayable=False),)
+        return ActiveProperty(name="mpsk_clients", value=self.user_data.mpsk_clients, capabilities=Capabilities(edit=True, delete=False, displayable=False),)
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
         status, _ = api.change_mpsk(self.user_data.id, mac, name, mpsk_id, password)

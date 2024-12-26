@@ -328,6 +328,7 @@ class MPSKClientForm(FlaskForm):
         description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."),
     )
 
+
 class DeleteMPSKClientForm(FlaskForm):
     password = PasswordField(
         label=lazy_gettext("Passwort"),

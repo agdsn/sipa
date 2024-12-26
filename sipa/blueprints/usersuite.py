@@ -406,7 +406,6 @@ def change_mac():
                            form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
-
 @bp_usersuite.route("/change-mpsk/<int:mpsk_id>", methods=['GET', 'POST'])
 @login_required
 def change_mpsk(mpsk_id: int):
@@ -513,8 +512,6 @@ def delete_mpsk(mpsk_id: int):
                            form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
 
 
-
-
 @bp_usersuite.route("/view-mpsk_clients", methods=['GET', 'POST'])
 @login_required
 def view_mpsk():
@@ -522,6 +519,7 @@ def view_mpsk():
     current = current_user.mpsk_clients.value
 
     return render_template('usersuite/mpsk_table.html', clients=current)
+
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
 @login_required
