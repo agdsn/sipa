@@ -172,8 +172,9 @@ class User(BaseUser):
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
         if mpsk_id in range(len(self.config["mpsk_clients"])):
-            self.config["mpsk_clients"][mpsk_id].name = name
-            self.config["mpsk_clients"][mpsk_id].mac = mac
+            self.config["mpsk_clients"][mpsk_id] = MPSKClientEntry(
+                name=name, id=mpsk_id, mac=mac
+            )
         else:
             raise ValueError(f"mac: {mac} not found for user")
 

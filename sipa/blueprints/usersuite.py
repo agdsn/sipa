@@ -422,7 +422,7 @@ def change_mpsk(mpsk_id: int):
     capability_or_403('mpsk_clients', 'edit')
 
     form = MPSKClientForm()
-
+    mpsk_client = get_mpsk_client_or_404(mpsk_id)
     if form.validate_on_submit():
         password = form.password.data
         mac = form.mac.data
@@ -451,7 +451,7 @@ def change_mpsk(mpsk_id: int):
             )
 
             return redirect(url_for(".view_mpsk"))
-    mpsk_client = get_mpsk_client_or_404(mpsk_id)
+
     form.mac.data = mpsk_client.mac
     form.name.data = mpsk_client.name
 
@@ -515,6 +515,7 @@ def add_mpsk():
 def delete_mpsk(mpsk_id: int):
 
     capability_or_403('mpsk_clients', 'edit')
+    get_mpsk_client_or_404(mpsk_id)
     form = DeleteMPSKClientForm()
 
     if form.validate_on_submit():
