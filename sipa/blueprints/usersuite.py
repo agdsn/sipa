@@ -41,6 +41,7 @@ from sipa.forms import (
 )
 from sipa.mail import send_usersuite_contact_mail
 from sipa.model.fancy_property import ActiveProperty
+from sipa.model.mspk_client import MPSKClientEntry
 from sipa.utils import password_changeable, subscribe_to_status_page
 from sipa.model.exceptions import (
     PasswordInvalid,
@@ -64,7 +65,14 @@ def capability_or_403(active_property, capability):
         abort(403)
 
 
-@bp_usersuite.route("/", methods=['GET', 'POST'])
+def get_mpsk_client_or_404(mpsk_id: int) -> int | MPSKClientEntry:
+    for client in current_user.mpsk_clients.value:
+        if client.id == mpsk_id:
+            return client
+    abort(404)
+
+
+@bp_usersuite.route("/", methods=["GET", "POST"])
 @login_required
 def index():
     """Usersuite landing page with user account information
@@ -420,7 +428,9 @@ def change_mpsk(mpsk_id: int):
         mac = form.mac.data
         name = form.name.data
         try:
-            current_user.change_mpsk_clients(mac, name, mpsk_id, password)
+            current_user.change_mpsk_clients(
+                mac=mac, name=name, mpsk_id=mpsk_id, password=password
+            )
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except ValueError:
@@ -432,17 +442,23 @@ def change_mpsk(mpsk_id: int):
                         extra={'data': {'mac': mac},
                                'tags': {'rate_critical': True}})
 
-            flash(gettext("MAC-Adresse wurde geändert!"), 'success')
-            flash(gettext("Es kann bis zu 15 Minuten dauern, "
-                          "bis die Änderung wirksam ist."), 'info')
+            flash(gettext("MAC-Adresse wurde geändert!"), "success")
+            flash(
+                gettext(
+                    "Es kann bis zu 15 Minuten dauern, " "bis die Änderung wirksam ist."
+                ),
+                "info",
+            )
 
-            return redirect(url_for('.view_mpsk'))
-    mpsk_client = current_user.mpsk_clients.value[mpsk_id]
+            return redirect(url_for(".view_mpsk"))
+    mpsk_client = get_mpsk_client_or_404(mpsk_id)
     form.mac.data = mpsk_client.mac
     form.name.data = mpsk_client.name
 
-    return render_template('usersuite/change_mac.html',
-                           form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
+    return render_template(
+        "usersuite/change_mac.html",
+        form_args={"form": form, "cancel_to": url_for(".view_mpsk")},
+    )
 
 
 @bp_usersuite.route("/add-mpsk", methods=['GET', 'POST'])
@@ -478,19 +494,23 @@ def add_mpsk():
                         extra={'data': {'mac': mac},
                                'tags': {'rate_critical': True}})
 
-            flash(gettext("MAC-Adresse wurde geändert!"), 'success')
-            flash(gettext("Es kann bis zu 15 Minuten dauern, "
-                          "bis die Änderung wirksam ist."), 'info')
+            flash(gettext("MAC-Adresse wurde geändert!"), "success")
+            flash(
+                gettext(
+                    "Es kann bis zu 15 Minuten dauern, " "bis die Änderung wirksam ist."
+                ),
+                "info",
+            )
             current_user.mpsk_clients.value.append(device)
+            return redirect(url_for(".view_mpsk"))
 
-            return redirect(url_for('.view_mpsk'))
+    return render_template(
+        "usersuite/mpsk_client.html",
+        form_args={"form": form, "cancel_to": url_for(".view_mpsk")},
+    )
 
 
-    return render_template('usersuite/mpsk_client.html',
-                           form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
-
-
-@bp_usersuite.route("/delete-mpsk/<int:mpsk_id>", methods=['GET', 'POST'])
+@bp_usersuite.route("/delete-mpsk/<int:mpsk_id>", methods=["GET", "POST"])
 @login_required
 def delete_mpsk(mpsk_id: int):
 
