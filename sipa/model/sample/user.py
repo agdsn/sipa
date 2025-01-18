@@ -155,7 +155,7 @@ class User(BaseUser):
         return ActiveProperty[str, str](
             name="mac",
             value=self.config["mac"],
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     @mac.setter
@@ -164,7 +164,7 @@ class User(BaseUser):
 
     @property
     def mpsk_clients(self) -> ActiveProperty[str | None, list | None]:
-        return ActiveProperty(name="mpsk_clients", value=self.config["mpsk_clients"], capabilities=Capabilities(edit=True, delete=False), displayable=False)
+        return ActiveProperty(name="mpsk_clients", value=self.config["mpsk_clients"], capabilities=Capabilities(edit=True, delete=False, displayable=False))
 
     @mpsk_clients.setter
     def mpsk_clients(self, value):
@@ -193,7 +193,7 @@ class User(BaseUser):
         return ActiveProperty[str, str](
             name="mail",
             value=self.config["mail"],
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
@@ -224,7 +224,7 @@ class User(BaseUser):
         return ActiveProperty[bool, bool](
             name="network_access_active",
             value=True,
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     @property
