@@ -42,8 +42,6 @@ class User(BaseUser):
 
     def __init__(self, user_data: dict):
         try:
-            user_data["mpsk_clients"] = []
-            print(user_data)
             self.user_data: UserData = UserData.model_validate(user_data)
             self._userdb: UserDB = UserDB(self)
         except ValidationError as e:
@@ -266,7 +264,7 @@ class User(BaseUser):
     def userdb_status(self) -> ActiveProperty[str, str]:
         status = self.userdb.has_db
 
-        capabilities = Capabilities(edit=True, delete=True)
+        capabilities = Capabilities(edit=True, delete=True, displayable=True)
 
         if not self.has_property("userdb"):
             return UnsupportedProperty("userdb_status")
@@ -328,10 +326,20 @@ class User(BaseUser):
 
     @property
     def mpsk_clients(self) -> ActiveProperty[str | None, str | None]:
-        return ActiveProperty(name="mpsk_clients", value=self.user_data.mpsk_clients, capabilities=Capabilities(edit=True, delete=False),)
+        return ActiveProperty(
+            name="mpsk_clients",
+            value=self.user_data.mpsk_clients,
+            capabilities=Capabilities(edit=True, delete=False, displayable=False),
+        )
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
-        status, _ = api.change_mpsk(self.user_data.id, mac, name, mpsk_id, password)
+        status, _ = api.change_mpsk(
+            user_id=self.user_data.id,
+            mac=mac,
+            name=name,
+            mpsk_id=mpsk_id,
+            password=password,
+        )
 
         if status == 400:
             raise ValueError(f"mac: {mac} not found for user")
@@ -340,16 +348,12 @@ class User(BaseUser):
         elif status == 422:
             raise ValueError
 
-        self.mpsk_clients.value[mpsk_id].name = name
-        self.mpsk_clients.value[mpsk_id].mac = mac
-
     def add_mpsk_client(self, name, mac, password):
         status, response = api.add_mpsk(
             self.user_data.id,
             password,
             mac,
             name)
-        print(status)
         if status == 400:
             raise MaximumNumberMPSKClients
         elif status == 409:
@@ -360,11 +364,8 @@ class User(BaseUser):
             raise NoWiFiPasswordGenerated
 
 
-        try:
-            response = response
-            print(f"response {response}")
-        except json.decoder.JSONDecodeError as err:
-            raise ValueError(f"Invalid response from {response}") from err
+        if type(response) is not dict:
+            raise ValueError(f"Invalid response from {response}")
 
         if 'name' in response.keys() and 'mac' in response.keys() and 'id' in response.keys():
             return MPSKClientEntry(name=response.get('name'), mac=response.get('mac'), id=response.get('id'))
@@ -426,7 +427,7 @@ class User(BaseUser):
             value=self.user_data.wifi_password,
             style="password" if self.user_data.wifi_password is not None else None,
             description_url="../pages/service/wlan",
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     def reset_wifi_password(self):
