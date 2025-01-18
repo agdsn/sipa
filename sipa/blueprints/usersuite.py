@@ -49,7 +49,7 @@ from sipa.model.exceptions import (
     TerminationNotPossible,
     UnknownError,
     ContinuationNotPossible,
-    SubnetFull,
+    SubnetFull, MaximumNumberMPSKClients, NoWiFiPasswordGenerated,
 )
 from sipa.model.misc import PaymentDetails
 
@@ -467,7 +467,12 @@ def add_mpsk():
         except MacAlreadyExists:
             flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
         except ValueError:
-            flash(gettext("Maximale Anzahl von MPSK Clients erreicht!"), "error")
+            flash(gettext("Invalide Mac Adresse!"), "error")
+        except MaximumNumberMPSKClients:
+            flash(gettext("Maximale anzahl an MPSK Clients bereits erstellt!"), "error")
+        except NoWiFiPasswordGenerated:
+            flash(gettext("Bevor MPSK Clients angelegt werden können muss ein WiFi Passwort erstellt werden!"), "error")
+
         else:
             logger.info('Successfully changed MAC address',
                         extra={'data': {'mac': mac},

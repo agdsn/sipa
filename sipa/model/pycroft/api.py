@@ -84,6 +84,9 @@ class PycroftApi:
         return self.post(f'user/{user_id}/change-mac/{interface_id}',
                          data={'password': password, 'mac': new_mac, 'host_name': host_name})
 
+    def get_mpsk_clients(self, user_id):
+        return self.get(f'user/{user_id}/get-mpsks',)
+
     def add_mpsk(self, user_id, password, name, mac):
         return self.post(f'user/{user_id}/add-mpsk', data={'password': password, 'name': name, 'mac': mac})
 

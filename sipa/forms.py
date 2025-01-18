@@ -320,10 +320,9 @@ class MPSKClientForm(FlaskForm):
                     require_unicast_mac],
         description="XX:XX:XX:XX:XX:XX")
     name = StringField(
-        label=lazy_gettext("Neuer Gerätename (Optional)"),
+        label=lazy_gettext("Neuer Gerätename"),
         validators=[Regexp(regex="^[a-zA-Z0-9 ]+",
                            message=lazy_gettext("Gerätename ist ungültig")),
-                    Optional(),
                     Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
         description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."),
     )
