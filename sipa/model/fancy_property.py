@@ -10,17 +10,18 @@ from sipa.utils import argstr
 class Capabilities(t.NamedTuple):
     edit: bool
     delete: bool
+    displayable: bool
 
     @classmethod
     def edit_if(cls, condition: bool) -> t.Self:
-        return cls(edit=condition, delete=False)
+        return cls(edit=condition, delete=False, displayable=True)
 
     @classmethod
     def edit_delete_if(cls, condition: bool) -> t.Self:
         return cls(edit=condition, delete=condition)
 
 
-NO_CAPABILITIES = Capabilities(edit=False, delete=False)
+NO_CAPABILITIES = Capabilities(edit=False, delete=False, displayable=True)
 
 TVal = t.TypeVar("TVal")
 TRawVal = t.TypeVar("TRawVal")

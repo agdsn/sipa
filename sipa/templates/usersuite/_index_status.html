@@ -111,7 +111,7 @@
                 {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
                 <td class="col-md-3">
                     <span class="d-inline-flex w-100 justify-content-between">
-                        {% if property.displayable %}
+                        {% if property.capabilities.displayable %}
                             <span class="{{ style }}">{{ property.value }}</span>
                         {% else %}
                             <span class="{{ style }}"></span>
