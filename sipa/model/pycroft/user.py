@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import logging
 from datetime import date
 
@@ -362,10 +361,6 @@ class User(BaseUser):
             raise ValueError
         elif status == 412:
             raise NoWiFiPasswordGenerated
-
-
-        if type(response) is not dict:
-            raise ValueError(f"Invalid response from {response}")
 
         if 'name' in response.keys() and 'mac' in response.keys() and 'id' in response.keys():
             return MPSKClientEntry(name=response.get('name'), mac=response.get('mac'), id=response.get('id'))
