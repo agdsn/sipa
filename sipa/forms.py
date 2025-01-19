@@ -264,7 +264,7 @@ class ChangePasswordForm(FlaskForm):
 
 class ChangeMailForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
     forwarded = BooleanField(
@@ -291,7 +291,7 @@ def require_unicast_mac(form, field):
 
 class ChangeMACForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     mac = StrippedStringField(
         label=lazy_gettext("Neue MAC"),
@@ -311,7 +311,7 @@ class ChangeMACForm(FlaskForm):
 
 class MPSKClientForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     mac = StrippedStringField(
         label=lazy_gettext("Neue MPSK Wi-Fi MAC"),
@@ -330,13 +330,13 @@ class MPSKClientForm(FlaskForm):
 
 class DeleteMPSKClientForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
 
 
 class ActivateNetworkAccessForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     mac = StrippedStringField(
         label=lazy_gettext("MAC-Adresse"),

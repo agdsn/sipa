@@ -111,7 +111,7 @@ def index():
             ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
             ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
             ("wifi_password", [gettext("WLAN Passwort")]),
-            ("mpsk_clients", [gettext("WLAN mpsk clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen") ]),
+            ("mpsk_clients", [gettext("WLAN MPSK Clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen") ]),
             # ('hostname', gettext("Hostname")),
             # ('hostalias', gettext("Hostalias")),
             ("userdb_status", [gettext("MySQL Datenbank")]),
@@ -485,7 +485,7 @@ def add_mpsk():
         except ValueError:
             flash(gettext("Invalide Mac Adresse!"), "error")
         except MaximumNumberMPSKClients:
-            flash(gettext("Maximale anzahl an MPSK Clients bereits erstellt!"), "error")
+            flash(gettext("Maximale Anzahl an MPSK Clients bereits erstellt!"), "error")
         except NoWiFiPasswordGenerated:
             flash(gettext("Bevor MPSK Clients angelegt werden können muss ein WiFi Passwort erstellt werden!"), "error")
 

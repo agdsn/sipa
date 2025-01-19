@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% import "macros/forms.html" as forms %}
-{% set page_title = _("MPSK Wi-Fi Geräte") %}
+{% set page_title = _("MPSK WLAN Geräte") %}
 {% block content %}
     {% include "heading.html" %}
     <table class="table table-striped">
     <tr>
         <th>{{ _("Greät") }}</th>
-        <th>{{ _("Wi-Fi MAC") }}</th>
+        <th>{{ _("WLAN MAC") }}</th>
         <th>{{ _("Aktion") }}</th>
     </tr>
         {% for client in clients %}
