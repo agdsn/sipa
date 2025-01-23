@@ -5,20 +5,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Sipa\n"
+"Project-Id-Version:  Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-22 23:35+0100\n"
+"POT-Creation-Date: 2025-01-23 13:44+0100\n"
 "PO-Revision-Date: 2025-01-22 23:35+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
-"Language-Team: \n"
 "Language: en\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.13.1\n"
-"X-Source-Language: de\n"
-"X-Generator: Poedit 3.5\n"
+"X-Source-Language: de"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
@@ -830,11 +829,13 @@ msgstr "Older"
 msgid "Achtung:"
 msgstr "Attention:"
 
-msgid "Hier wird dir\n"
+msgid ""
+"Hier wird dir\n"
 "            nicht mit deinem Anschluss geholfen!  Dieses Formular ist\n"
 "            nur für die Kommunikation mit unseren Partnern gedacht.  Bei\n"
 "            Missbrauch kann dein Account gesperrt werden."
-msgstr "Here, nobody will help you with your connection! This form is reserved for communication with our partners.\n"
+msgstr ""
+"Here, nobody will help you with your connection! This form is reserved for communication with our partners.\n"
 "Abuse may be punished by blocking your account."
 
 msgid "Deine Nutzer-ID lautet"
@@ -922,8 +923,11 @@ msgstr "You need a WiFi password first.  Create one"
 msgid "hier"
 msgstr "over here"
 
+msgid "Erstellen IOT Geräte"
+msgstr "Create IOT devices"
+
 msgid "Editieren IOT Geräte"
-msgstr "edit IOT devices"
+msgstr "Edit IOT devices"
 
 msgid "Kontaktformular"
 msgstr "Contact form"
@@ -1037,7 +1041,7 @@ msgid "Bitte gehe sicher, dass es sich um die WLAN MAC-Adresse deines Gerätes h
 msgstr "Please make sure that it is the devices WiFi MAC address!"
 
 msgid "MPSK WLAN Geräte"
-msgstr "MPSK WiFi device"
+msgstr "MPSK WiFi devices"
 
 msgid "Greät"
 msgstr "Device"
@@ -1176,3 +1180,4 @@ msgstr ""
 
 #~ msgid "Wi-Fi MAC"
 #~ msgstr "New Wi-Fi MAC"
+
