@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import logging
 from datetime import date
 
@@ -15,7 +16,8 @@ from sipa.model.fancy_property import (
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed
+    ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed, \
+    MaximumNumberMPSKClients, NoWiFiPasswordGenerated
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -26,6 +28,8 @@ from flask.globals import current_app
 from flask_babel import gettext
 from werkzeug.local import LocalProxy
 from werkzeug.http import parse_date
+
+from ..mspk_client import MPSKClientEntry
 
 logger = logging.getLogger(__name__)
 
@@ -259,7 +263,7 @@ class User(BaseUser):
     def userdb_status(self) -> ActiveProperty[str, str]:
         status = self.userdb.has_db
 
-        capabilities = Capabilities(edit=True, delete=True)
+        capabilities = Capabilities(edit=True, delete=True, displayable=True)
 
         if not self.has_property("userdb"):
             return UnsupportedProperty("userdb_status")
@@ -320,6 +324,61 @@ class User(BaseUser):
         )
 
     @property
+    def mpsk_clients(self) -> ActiveProperty[str | None, str | None]:
+        return ActiveProperty(
+            name="mpsk_clients",
+            value=self.user_data.mpsk_clients,
+            capabilities=Capabilities(edit=True, delete=False, displayable=False),
+        )
+
+    def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
+        status, _ = api.change_mpsk(
+            user_id=self.user_data.id,
+            mac=mac,
+            name=name,
+            mpsk_id=mpsk_id,
+            password=password,
+        )
+
+        if status == 400:
+            raise ValueError(f"mac: {mac} not found for user")
+        elif status == 409:
+            raise MacAlreadyExists
+        elif status == 422:
+            raise ValueError
+
+    def add_mpsk_client(self, name, mac, password):
+        status, response = api.add_mpsk(
+            self.user_data.id,
+            password,
+            mac,
+            name)
+        if status == 400:
+            raise MaximumNumberMPSKClients
+        elif status == 409:
+            raise MacAlreadyExists
+        elif status == 422:
+            raise ValueError
+        elif status == 412:
+            raise NoWiFiPasswordGenerated
+
+        if 'name' in response.keys() and 'mac' in response.keys() and 'id' in response.keys():
+            return MPSKClientEntry(name=response.get('name'), mac=response.get('mac'), id=response.get('id'))
+        else:
+            raise ValueError(f"Invalid response from {response}")
+
+
+    def delete_mpsk_client(self, mpsk_id, password):
+        status, response = api.delete_mpsk(
+            self.user_data.id,
+            password,
+            mpsk_id,
+        )
+        if status == 400 or status == 401:
+            raise ValueError(f'Mpsk client not found for user: {mpsk_id}')
+
+
+    @property
     def is_member(self) -> bool:
         return self.has_property('member')
 
@@ -363,7 +422,7 @@ class User(BaseUser):
             value=self.user_data.wifi_password,
             style="password" if self.user_data.wifi_password is not None else None,
             description_url="../pages/service/wlan",
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     def reset_wifi_password(self):
@@ -422,3 +481,4 @@ class FinanceInformation(BaseFinanceInformation):
     @property
     def history(self):
         return self._transactions
+

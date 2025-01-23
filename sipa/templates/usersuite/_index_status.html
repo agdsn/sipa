@@ -63,6 +63,21 @@
 {% endif %}
 </div>
 
+<div>
+{% if not current_user.mpsk_clients %}
+    <a href="{{ url_for('.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Erstellen IOT Geräte') }}">
+        <span class="bi-wifi"></span>
+        {{ _('Erstellen IOT Geräte') }}
+    </a>
+{% else %}
+    <a href="{{ url_for('.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Editieren IOT Geräte') }}">
+        <span class="bi-wifi"></span>
+        {{ _('Editieren IOT Geräte') }}
+    </a>
+{% endif %}
+</div>
+
+
 <div class="btn-group">
     <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
         <span class="bi-question-circle-fill"></span>
@@ -102,7 +117,11 @@
                 {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
                 <td class="col-md-3">
                     <span class="d-inline-flex w-100 justify-content-between">
-                        <span class="{{ style }}">{{ property.value }}</span>
+                        {% if property.capabilities.displayable %}
+                            <span class="{{ style }}">{{ property.value }}</span>
+                        {% else %}
+                            <span class="{{ style }}"></span>
+                        {% endif %}
 
                         {%- if property.capabilities.edit and property.empty -%}
                             <a href="{{ url_for(get_attribute_endpoint(property.name)) }}"

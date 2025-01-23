@@ -23,6 +23,13 @@ class MacAlreadyExists(Exception):
     pass
 
 
+class MaximumNumberMPSKClients(Exception):
+    pass
+
+
+class NoWiFiPasswordGenerated(Exception):
+    pass
+
 class NetworkAccessAlreadyActive(Exception):
     pass
 

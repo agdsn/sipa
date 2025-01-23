@@ -14,6 +14,7 @@ from sipa.model.fancy_property import (
 )
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
+from sipa.model.mspk_client import MPSKClientEntry
 from sipa.model.user import BaseUser
 from sipa.utils import argstr
 
@@ -32,7 +33,7 @@ class SampleUserData(t.TypedDict):
     status: str
     membership_end_date: str | None
     is_member: bool
-
+    mpsk_clients: list[MPSKClientEntry] | None
 
 def init_app(app):
     app.extensions['sample_users'] = {
@@ -47,6 +48,7 @@ def init_app(app):
             'mail_confirmed': True,
             'mac': 'aa:bb:cc:dd:ee:ff',
             'ip': '141.30.228.39',
+            'mpsk_clients': [MPSKClientEntry(name="Hallo", id=0, mac="11:11:11:11:11")],
             'status': "OK",
             'membership_end_date': None,
             'is_member': True,
@@ -153,7 +155,7 @@ class User(BaseUser):
         return ActiveProperty[str, str](
             name="mac",
             value=self.config["mac"],
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     @mac.setter
@@ -161,11 +163,38 @@ class User(BaseUser):
         self.config["mac"] = value
 
     @property
+    def mpsk_clients(self) -> ActiveProperty[str | None, list | None]:
+        return ActiveProperty(name="mpsk_clients", value=self.config["mpsk_clients"], capabilities=Capabilities(edit=True, delete=False, displayable=False))
+
+    @mpsk_clients.setter
+    def mpsk_clients(self, value):
+        self.config["mpsk_clients"] = value
+
+    def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
+        if mpsk_id in range(len(self.config["mpsk_clients"])):
+            self.config["mpsk_clients"][mpsk_id] = MPSKClientEntry(
+                name=name, id=mpsk_id, mac=mac
+            )
+        else:
+            raise ValueError(f"mac: {mac} not found for user")
+
+    def add_mpsk_client(self, name, mac, password):
+        dev = MPSKClientEntry(mac=mac, name=name, id=len(self.config["mpsk_clients"]))
+        return dev
+
+    def delete_mpsk_client(self, mpsk_id: int, password):
+
+        if mpsk_id <= len(self.config["mpsk_clients"]):
+            self.config["mpsk_clients"].pop(mpsk_id)
+        else:
+            raise ValueError(f"Id: {mpsk_id} not found for user")
+
+    @property
     def mail(self):
         return ActiveProperty[str, str](
             name="mail",
             value=self.config["mail"],
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
@@ -196,7 +225,7 @@ class User(BaseUser):
         return ActiveProperty[bool, bool](
             name="network_access_active",
             value=True,
-            capabilities=Capabilities(edit=True, delete=False),
+            capabilities=Capabilities(edit=True, delete=False, displayable=True),
         )
 
     @property

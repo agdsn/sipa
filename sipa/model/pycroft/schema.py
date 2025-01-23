@@ -5,6 +5,8 @@ from decimal import Decimal
 
 from pydantic import BaseModel
 
+from sipa.model.mspk_client import MPSKClientEntry
+
 
 class UserData(BaseModel):
     id: int
@@ -29,6 +31,7 @@ class UserData(BaseModel):
     membership_end_date: date | None
     membership_begin_date: date | None
     wifi_password: str | None
+    mpsk_clients: list[MPSKClientEntry]
 
 
 class UserStatus(BaseModel):
@@ -55,3 +58,5 @@ class FinanceHistoryEntry(BaseModel):
     valid_on: str
     amount: Decimal
     description: str
+
+
