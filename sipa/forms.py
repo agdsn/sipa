@@ -264,7 +264,7 @@ class ChangePasswordForm(FlaskForm):
 
 class ChangeMailForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     email = EmailField(label=lazy_gettext("E-Mail-Adresse"))
     forwarded = BooleanField(
@@ -291,7 +291,7 @@ def require_unicast_mac(form, field):
 
 class ChangeMACForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     mac = StrippedStringField(
         label=lazy_gettext("Neue MAC"),
@@ -309,9 +309,34 @@ class ChangeMACForm(FlaskForm):
     )
 
 
+class MPSKClientForm(FlaskForm):
+    password = PasswordField(
+        label=lazy_gettext("Nutzer Passwort"),
+        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
+    mac = StrippedStringField(
+        label=lazy_gettext("Neue MPSK Wi-Fi MAC"),
+        validators=[DataRequired(lazy_gettext("MAC-Adresse nicht angegeben!")),
+                    MacAddress(lazy_gettext("MAC ist nicht in gültigem Format!")),
+                    require_unicast_mac],
+        description="XX:XX:XX:XX:XX:XX")
+    name = StringField(
+        label=lazy_gettext("Neuer Gerätename"),
+        validators=[Regexp(regex="^[a-zA-Z0-9 ]+",
+                           message=lazy_gettext("Gerätename ist ungültig")),
+                    Length(-1, 30, lazy_gettext("Gerätename zu lang"))],
+        description=lazy_gettext("TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."),
+    )
+
+
+class DeleteMPSKClientForm(FlaskForm):
+    password = PasswordField(
+        label=lazy_gettext("Nutzer Passwort"),
+        validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
+
+
 class ActivateNetworkAccessForm(FlaskForm):
     password = PasswordField(
-        label=lazy_gettext("Passwort"),
+        label=lazy_gettext("Nutzer Passwort"),
         validators=[DataRequired(lazy_gettext("Passwort nicht angegeben!"))])
     mac = StrippedStringField(
         label=lazy_gettext("MAC-Adresse"),

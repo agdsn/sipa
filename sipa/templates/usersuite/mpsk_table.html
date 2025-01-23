@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% import "macros/forms.html" as forms %}
+{% set page_title = _("MPSK WLAN Geräte") %}
+{% block content %}
+    {% include "heading.html" %}
+    <table class="table table-striped">
+    <tr>
+        <th>{{ _("Greät") }}</th>
+        <th>{{ _("WLAN MAC") }}</th>
+        <th>{{ _("Aktion") }}</th>
+    </tr>
+        {% for client in clients %}
+    <tr>
+
+            <td>{{ client.name }}</td>
+            <td>{{ client.mac }}</td>
+        <td>
+            <a href="{{ url_for('usersuite.change_mpsk',mpsk_id=client.id) }}">
+                <span class="bi-pencil-fill ms-auto"></span>
+            </a>
+            <a href="{{ url_for('usersuite.delete_mpsk', mpsk_id=client.id) }}">
+                <span class="bi-trash-fill ms-auto"></span>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="3" class="text-center">
+            <a href="{{ url_for('usersuite.add_mpsk') }}" class="align-items-center " >
+                <span class="bi-plus-square-fill ms-auto"></span>
+            </a>
+        </td>
+    </tr>
+    </table>
+
+{% endblock %}
+

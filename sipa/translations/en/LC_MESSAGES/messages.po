@@ -1,24 +1,23 @@
 # English translations for sipa.
-# Copyright (C) 2024 AG DSN
+# Copyright (C) 2025 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Sipa\n"
+"Project-Id-Version:  Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-01-25 13:34+0100\n"
-"PO-Revision-Date: 2024-01-25 13:35+0100\n"
+"POT-Creation-Date: 2025-01-23 13:44+0100\n"
+"PO-Revision-Date: 2025-01-22 23:35+0100\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
-"Language-Team: \n"
 "Language: en\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.13.1\n"
-"X-Source-Language: de\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Source-Language: de"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
@@ -104,8 +103,8 @@ msgstr "Verification of your new password is missing!"
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr "Password verification was unsuccessful!"
 
-msgid "Passwort"
-msgstr "Password"
+msgid "Nutzer Passwort"
+msgstr "User password"
 
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
@@ -123,7 +122,7 @@ msgid "Mac zu kurz!"
 msgstr "MAC too short"
 
 msgid "Neue MAC"
-msgstr "New mac"
+msgstr "New MAC"
 
 msgid "MAC-Adresse nicht angegeben!"
 msgstr "MAC address not supplied!"
@@ -142,6 +141,12 @@ msgstr "Device name too long"
 
 msgid "TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."
 msgstr "TL-WR841N, MacBook, FritzBox, PC, Laptop, etc."
+
+msgid "Neue MPSK Wi-Fi MAC"
+msgstr "New Wi-Fi MAC"
+
+msgid "Neuer Gerätename"
+msgstr "New device name"
 
 msgid "MAC-Adresse"
 msgstr "MAC address"
@@ -205,6 +210,9 @@ msgstr "No username submitted!"
 
 msgid "Nutzername enthält ungültige Zeichen!"
 msgstr "Username contains invalid characters!"
+
+msgid "Passwort"
+msgstr "Password"
 
 msgid "Kein Passwort eingegeben!"
 msgstr "No password submitted!"
@@ -466,6 +474,12 @@ msgstr "E-Mail forwarding address"
 msgid "WLAN Passwort"
 msgstr "WiFi Password"
 
+msgid "WLAN MPSK Clients"
+msgstr "WiFi MPSK clients"
+
+msgid "Für Geräte die kein WPA-Enterprise Unterstützen"
+msgstr "Used for devices which do not support WPA-Enterprise Authentication (PS4, Smart Devices, ...)"
+
 msgid "MySQL Datenbank"
 msgstr "MySQL database"
 
@@ -543,6 +557,24 @@ msgstr "MAC address has been changed"
 
 msgid "Es kann bis zu 15 Minuten dauern, bis die Änderung wirksam ist."
 msgstr "It can take up to 15 minutes until the changes apply."
+
+msgid "MPSK Greät nicht gefunden!"
+msgstr "MPSK device not found!"
+
+msgid "Invalide Mac Adresse!"
+msgstr "invalid MAC address"
+
+msgid "Maximale Anzahl an MPSK Clients bereits erstellt!"
+msgstr "Maximum of MPSK Clients reached"
+
+msgid "Bevor MPSK Clients angelegt werden können muss ein WiFi Passwort erstellt werden!"
+msgstr "Please generate a WiFi password before adding MPSK Clients!"
+
+msgid "MPSK MAC wurde nicht gefunden!"
+msgstr "MPSK MAC was not found!"
+
+msgid "MPSK Client wurde gelöscht!"
+msgstr "Your MPSK client has been deleted."
 
 msgid "Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."
 msgstr "There are not enough free IPv4 addresses available. Please contact the support."
@@ -882,6 +914,21 @@ msgstr "Change MAC address"
 msgid "Webmailer"
 msgstr "Webmailer"
 
+msgid "Apple WLAN-Konfigurationsprofil herunterladen"
+msgstr "Download Apple WiFi configuration profile"
+
+msgid "Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines"
+msgstr "You need a WiFi password first.  Create one"
+
+msgid "hier"
+msgstr "over here"
+
+msgid "Erstellen IOT Geräte"
+msgstr "Create IOT devices"
+
+msgid "Editieren IOT Geräte"
+msgstr "Edit IOT devices"
+
 msgid "Kontaktformular"
 msgstr "Contact form"
 
@@ -909,9 +956,6 @@ msgstr "State months of payment duration"
 msgid "Beitrag für"
 msgstr "Pay membership contribution for"
 
-msgid "Aktualisieren"
-msgstr "Update"
-
 msgid "Monat(e) zahlen."
 msgstr "month(s)."
 
@@ -924,6 +968,9 @@ msgstr "Scan this QR-Code to import the payment details into your banking app."
 msgid "Buchungen"
 msgstr "Transactions"
 
+msgid "Hinweis: Es kann bis zu 7 Tage dauern, bis eine Überweisung von uns erfasst wird."
+msgstr "Note: It can take up to 7 days until a new payment is listed below."
+
 msgid "Referenz"
 msgstr "Reference"
 
@@ -932,9 +979,6 @@ msgstr "Value"
 
 msgid "Summe"
 msgstr "Sum"
-
-msgid "Hinweis: Es kann bis zu 7 Tage dauern, bis eine Überweisung von uns erfasst wird."
-msgstr "Note: It can take up to 7 days until a new payment is listed below."
 
 msgid "Hinweis: Bei einer Änderung der MAC-Adresse wird automatisch eine Benachrichtigungsmail an uns gesandt."
 msgstr "Note: we will be notified about any change of your MAC address."
@@ -972,9 +1016,6 @@ msgstr "You can create a MySQL database on our servers."
 msgid "Weitere Infos zum Webhosting findest Du "
 msgstr "You can find more information"
 
-msgid "hier"
-msgstr "over here"
-
 msgid "Datenbank Erstellen"
 msgstr "Create Database"
 
@@ -993,6 +1034,24 @@ msgstr "Change Password"
 msgid "Usersuite von "
 msgstr "Usersuite of "
 
+msgid "MPSKs Form"
+msgstr ""
+
+msgid "Bitte gehe sicher, dass es sich um die WLAN MAC-Adresse deines Gerätes handelt."
+msgstr "Please make sure that it is the devices WiFi MAC address!"
+
+msgid "MPSK WLAN Geräte"
+msgstr "MPSK WiFi devices"
+
+msgid "Greät"
+msgstr "Device"
+
+msgid "WLAN MAC"
+msgstr "WiFi MAC"
+
+msgid "Aktion"
+msgstr "action"
+
 msgid "Traffic (MiB)"
 msgstr "Traffic (MiB)"
 
@@ -1002,14 +1061,11 @@ msgstr "Incoming"
 msgid "Ausgehend"
 msgstr "Outgoing"
 
+msgid "This field is required."
+msgstr ""
+
 #~ msgid "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht helfen können."
 #~ msgstr "Please note, that this might cause problems with your clients. If there are problems, get in touch with us, the service providers won't be able to help."
-
-msgid "Apple WLAN-Konfigurationsprofil herunterladen"
-msgstr "Download Apple WLAN configuration profile"
-
-msgid "Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines"
-msgstr "You need a WLAN password first.  Create one"
 
 #~ msgid "Zahlungsdetails für "
 #~ msgstr "Payment details for "
@@ -1115,3 +1171,13 @@ msgstr "You need a WLAN password first.  Create one"
 
 #~ msgid "Wohnheim auswählen"
 #~ msgstr "Choose dormitory"
+
+#~ msgid "Aktualisieren"
+#~ msgstr "Update"
+
+#~ msgid "WLAN MAC"
+#~ msgstr "WiFi MAC"
+
+#~ msgid "Wi-Fi MAC"
+#~ msgstr "New Wi-Fi MAC"
+

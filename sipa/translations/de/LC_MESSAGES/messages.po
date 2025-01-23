@@ -1,13 +1,13 @@
 # German translations for sipa.
-# Copyright (C) 2024 AG DSN
+# Copyright (C) 2025 AG DSN
 # This file is distributed under the same license as the sipa project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-01-25 13:34+0100\n"
+"POT-Creation-Date: 2025-01-23 13:44+0100\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Neue Passwörter stimmen nicht überein!"
 msgstr ""
 
-msgid "Passwort"
+msgid "Nutzer Passwort"
 msgstr ""
 
 msgid "Passwort nicht angegeben!"
@@ -139,6 +139,12 @@ msgid "Gerätename zu lang"
 msgstr ""
 
 msgid "TL-WR841N, MacBook, FritzBox, PC, Laptop, o.Ä."
+msgstr ""
+
+msgid "Neue MPSK Wi-Fi MAC"
+msgstr ""
+
+msgid "Neuer Gerätename"
 msgstr ""
 
 msgid "MAC-Adresse"
@@ -202,6 +208,9 @@ msgid "Nutzername muss angegeben werden!"
 msgstr ""
 
 msgid "Nutzername enthält ungültige Zeichen!"
+msgstr ""
+
+msgid "Passwort"
 msgstr ""
 
 msgid "Kein Passwort eingegeben!"
@@ -400,7 +409,7 @@ msgstr ""
 msgid "E-Mail-Adresse ist bereits in Verwendung."
 msgstr ""
 
-msgid "Login ist bereits vergeben."
+msgid "Nutzername ist bereits vergeben."
 msgstr ""
 
 msgid "Nutzername hat ein ungültiges Format!"
@@ -462,6 +471,12 @@ msgstr ""
 
 msgid "WLAN Passwort"
 msgstr ""
+
+msgid "WLAN MPSK Clients"
+msgstr ""
+
+msgid "Für Geräte die kein WPA-Enterprise Unterstützen"
+msgstr "Für Geräte die kein WPA-Enterprise Unterstützen (PS4, Smart Geräte, ...)"
 
 msgid "MySQL Datenbank"
 msgstr ""
@@ -539,6 +554,24 @@ msgid "MAC-Adresse wurde geändert!"
 msgstr ""
 
 msgid "Es kann bis zu 15 Minuten dauern, bis die Änderung wirksam ist."
+msgstr ""
+
+msgid "MPSK Greät nicht gefunden!"
+msgstr ""
+
+msgid "Invalide Mac Adresse!"
+msgstr ""
+
+msgid "Maximale Anzahl an MPSK Clients bereits erstellt!"
+msgstr ""
+
+msgid "Bevor MPSK Clients angelegt werden können muss ein WiFi Passwort erstellt werden!"
+msgstr ""
+
+msgid "MPSK MAC wurde nicht gefunden!"
+msgstr ""
+
+msgid "MPSK Client wurde gelöscht!"
 msgstr ""
 
 msgid "Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."
@@ -877,6 +910,21 @@ msgstr ""
 msgid "Webmailer"
 msgstr ""
 
+msgid "Apple WLAN-Konfigurationsprofil herunterladen"
+msgstr ""
+
+msgid "Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines"
+msgstr ""
+
+msgid "hier"
+msgstr ""
+
+msgid "Erstellen IOT Geräte"
+msgstr "IOT Geräte anlegen"
+
+msgid "Editieren IOT Geräte"
+msgstr "IOT Geräte editieren"
+
 msgid "Kontaktformular"
 msgstr ""
 
@@ -904,9 +952,6 @@ msgstr ""
 msgid "Beitrag für"
 msgstr ""
 
-msgid "Aktualisieren"
-msgstr ""
-
 msgid "Monat(e) zahlen."
 msgstr ""
 
@@ -919,13 +964,13 @@ msgstr ""
 msgid "Buchungen"
 msgstr ""
 
+msgid "Hinweis: Es kann bis zu 7 Tage dauern, bis eine Überweisung von uns erfasst wird."
+msgstr ""
+
 msgid "Referenz"
 msgstr ""
 
 msgid "Wert"
-msgstr ""
-
-msgid "Hinweis: Es kann bis zu 7 Tage dauern, bis eine Überweisung von uns erfasst wird."
 msgstr ""
 
 msgid "Summe"
@@ -967,9 +1012,6 @@ msgstr ""
 msgid "Weitere Infos zum Webhosting findest Du "
 msgstr ""
 
-msgid "hier"
-msgstr ""
-
 msgid "Datenbank Erstellen"
 msgstr ""
 
@@ -988,6 +1030,24 @@ msgstr ""
 msgid "Usersuite von "
 msgstr ""
 
+msgid "MPSKs Form"
+msgstr ""
+
+msgid "Bitte gehe sicher, dass es sich um die WLAN MAC-Adresse deines Gerätes handelt."
+msgstr ""
+
+msgid "MPSK WLAN Geräte"
+msgstr ""
+
+msgid "Greät"
+msgstr ""
+
+msgid "WLAN MAC"
+msgstr ""
+
+msgid "Aktion"
+msgstr ""
+
 msgid "Traffic (MiB)"
 msgstr ""
 
@@ -997,11 +1057,8 @@ msgstr ""
 msgid "Ausgehend"
 msgstr ""
 
-msgid "Apple WLAN-Konfigurationsprofil herunterladen"
-msgstr ""
-
-msgid "Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines"
-msgstr ""
+msgid "This field is required."
+msgstr "dieses Feld wird benötigt!"
 
 #~ msgid "Bezahlt, verbunden"
 #~ msgstr ""
@@ -1790,5 +1847,35 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "die MAC Adresse des Anschlusses des per Kabel verbundenen Gerätes"
+#~ msgstr ""
+
+#~ msgid "Login ist bereits vergeben."
+#~ msgstr ""
+
+#~ msgid "Aktualisieren"
+#~ msgstr ""
+
+#~ msgid "WLAN mpsks clients"
+#~ msgstr ""
+
+#~ msgid "Maximale Anzahl von MPSK Clients erreicht!"
+#~ msgstr ""
+
+#~ msgid "WLAN mpsk Clients"
+#~ msgstr ""
+
+#~ msgid "Bitte gehe sicher, dass es sich um die Wi-Fi MAC-Adresse deines Gerätes handelt."
+#~ msgstr ""
+
+#~ msgid "MPSK Wi-Fi Geräte"
+#~ msgstr ""
+
+#~ msgid "Wi-Fi MAC"
+#~ msgstr ""
+
+#~ msgid "MPSK Wlan Geräte"
+#~ msgstr ""
+
+#~ msgid "Wlan MAC"
 #~ msgstr ""
 

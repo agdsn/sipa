@@ -69,6 +69,7 @@ def usersuite_passed_rows(_usersuite_index) -> list[TableRow]:
         "status",
         "userdb_status",  # unsupported
         "wifi_password",
+        "mpsk_clients",
     ),
 )
 def test_usersuite_passes_correct_rows(usersuite_passed_rows, propname):
@@ -101,3 +102,80 @@ def test_usersuite_contains_urls(usersuite_response):
         assert re.search(
             f'href="[^"]*{url}[^"]*"', usersuite_response.data.decode()
         ), f"Usersuite does not contain any reference to url {url!r}"
+
+
+def test_usersuite_form_add_mpsk(client):
+    client.assert_ok("usersuite.add_mpsk")
+
+
+def test_usersuite_change_mpsk_not_found(client):
+    resp = client.get(url_for("usersuite.change_mpsk", mpsk_id=1))
+    assert resp.status_code == 404
+
+def test_usersuite_delete_mpsk_not_found(client):
+    resp = client.get(url_for("usersuite.delete_mpsk", mpsk_id=1))
+    assert resp.status_code == 404
+
+
+@pytest.mark.parametrize(
+    "data", ({"password": "test", "name": "a", "mac": "88:88:88:88:87:88"},)
+)
+def test_add_mpsk_client(client, data):
+    resp = client.post(url_for("usersuite.add_mpsk"), data=data)
+    assert resp.status_code == 302
+
+    assert resp.headers["location"] == url_for("usersuite.view_mpsk")
+
+
+@pytest.mark.parametrize(
+    "data",
+    (
+        {"password": "test"},
+        {"name": "a"},
+        {"mac": "88:88:88:88:87:88"},
+        {"password": "test", "name": "", "mac": "88:88:88:88:87:88"},
+        {"password": "test", "name": "", "mac": "FF:FF:FF:FF:FF:FF"},
+    ),
+)
+def test_add_invalid_mpsk(client, data):
+    resp = client.post(url_for("usersuite.add_mpsk"), data=data)
+    assert resp.status_code == 200
+
+@pytest.mark.parametrize(
+    "data",
+    (
+        {"password": "test"},
+        {"name": "a"},
+        {"mac": "88:88:88:88:87:88"},
+        {"password": "test", "name": "", "mac": "88:88:88:88:87:88"},
+        {"password": "test", "name": "", "mac": "FF:FF:FF:FF:FF:FF"},
+    ),
+)
+def test_change_invalid_mpsk(client, data):
+    resp = client.post(url_for("usersuite.add_mpsk"), data={"password": "test", "name": "a", "mac": "88:88:88:88:87:88"})
+    assert resp.status_code == 302
+
+    resp = client.post(url_for("usersuite.change_mpsk", mpsk_id=0), data=data)
+    assert resp.status_code == 200
+
+@pytest.mark.parametrize(
+    "data", ({"password": "test", "name": "a", "mac": "88:88:88:88:87:88"},)
+)
+def test_delete_mpsk(client, data):
+    resp = client.post(url_for("usersuite.add_mpsk"), data=data)
+    assert resp.status_code == 302
+
+    assert resp.headers["location"] == url_for("usersuite.view_mpsk")
+    resp = client.post(
+        url_for("usersuite.delete_mpsk", mpsk_id=0), data={"password": "test"}
+    )
+    assert resp.status_code == 302
+
+    assert resp.headers["location"] == url_for("usersuite.view_mpsk")
+
+
+def test_usersuite_get_no_mpsks(client):
+    client.assert_ok("usersuite.view_mpsk")
+    resp = client.get("usersuite.view_mpsk")
+
+    assert "delete-mpsk" not in str(resp)

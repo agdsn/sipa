@@ -10,17 +10,18 @@ from sipa.utils import argstr
 class Capabilities(t.NamedTuple):
     edit: bool
     delete: bool
+    displayable: bool
 
     @classmethod
     def edit_if(cls, condition: bool) -> t.Self:
-        return cls(edit=condition, delete=False)
+        return cls(edit=condition, delete=False, displayable=True)
 
     @classmethod
     def edit_delete_if(cls, condition: bool) -> t.Self:
         return cls(edit=condition, delete=condition)
 
 
-NO_CAPABILITIES = Capabilities(edit=False, delete=False)
+NO_CAPABILITIES = Capabilities(edit=False, delete=False, displayable=True)
 
 TVal = t.TypeVar("TVal")
 TRawVal = t.TypeVar("TRawVal")
@@ -48,6 +49,7 @@ class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
     # separate `InitVar`
     empty: bool | None = None
     description_url: str | None = None
+    displayable: bool | None = None
 
     def __post_init__(self):
         if self.empty is None:
@@ -115,6 +117,8 @@ class ActiveProperty(PropertyBase[TVal, TRawVal]):
             self.raw_value = self.value
         if self.value is None:
             self.value = gettext("Nicht angegeben")
+        if self.displayable is None:
+            self.displayable = True
         if self.style is None:
             self.style = "muted" if self.empty else None
 
