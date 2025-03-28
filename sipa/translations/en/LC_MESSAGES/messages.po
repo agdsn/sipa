@@ -511,7 +511,7 @@ msgid "BIC"
 msgstr "BIC"
 
 msgid "Verwendungszweck"
-msgstr "Purpose/Intended use / payment reference"
+msgstr "Purpose / Intended use / payment reference"
 
 msgid "Betrag"
 msgstr "Amount"
