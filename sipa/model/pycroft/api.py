@@ -257,7 +257,7 @@ class PycroftApi:
                          extra={'data': {'endpoint': self._endpoint + url}})
             raise PycroftBackendError("Pycroft API unreachable") from e
 
-        if response.status_code not in [200, 400, 401, 403, 404, 412, 422]:
+        if response.status_code not in [200, *range(400, 500)]:
             try:
                 response.raise_for_status()
             except HTTPError as e:
