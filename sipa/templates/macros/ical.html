@@ -16,3 +16,16 @@
     <li><a href="{{ url_for('features.render_meetingcal') }}">{{ _("Mehr anzeigen") }}</a></li>
 {% endif %}
 {%- endmacro -%}
+{%- macro render_support(supports) -%}
+    {% for support in supports %}
+<li><b>{{ support["title"] }}</b><br>
+    {# Use time zone given in event #}
+    {{ _(
+        "Am %(date)s von %(start)s bis %(end)s",
+        date=support["datetime"] | datetimeformat('dd MM') ,
+        start=support["datetime"] | datetimeformat('hh:mm'),
+        end=support["datetime"] | datetimeformat('hh:mm')
+    ) }}<br>
+</li>
+    {% endfor %}
+{%- endmacro -%}

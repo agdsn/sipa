@@ -5,7 +5,7 @@ and does not fit into any other blueprint such as “documents”.
 
 from flask import Blueprint, current_app, render_template, render_template_string
 
-from sipa.utils import get_bustimes, meetingcal, support_hotline_available
+from sipa.utils import get_bustimes, meetingcal, support_hotline_available, support_cal
 
 bp_features = Blueprint('features', __name__)
 
@@ -40,10 +40,21 @@ def render_meetingcal():
 def meetings():
     return render_template_string(
         """
-            {%- from "macros/meetingcal.html" import render_meetingcal -%}
+            {%- from "macros/ical.html" import render_meetingcal -%}
             {{- render_meetingcal(meetingcal) -}}
         """,
         meetingcal=meetingcal(),
+    )
+
+@bp_features.route("/support-fragment")
+def support_office():
+    a = support_cal()
+    return render_template_string(
+        """
+            {%- from "macros/ical.html" import render_support -%}
+            {{- render_support(supports) -}}
+        """,
+        supports=a,
     )
 
 

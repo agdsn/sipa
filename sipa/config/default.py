@@ -15,7 +15,7 @@ LOCALE_COOKIE_MAX_AGE = 86400 * 31
 # Maximum number of reverse proxies
 NUM_PROXIES = 1
 
-BACKEND = "pycroft"
+BACKEND = "sample"
 
 FLATPAGES_ROOT = None
 FLATPAGES_EXTENSION = '.md'
@@ -126,6 +126,7 @@ CONTACT_ADDRESSES = [
 
 # link to clandar
 MEETINGS_ICAL_URL = "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
+SUPPORT_ICAL_URL = "https://agdsn.de/cloud/remote.php/dav/public-calendars/X85iT2XPQqaeg3im?export"
 
 # statuspage
 STATUS_PAGE_API_SUBSCRIBE_ENDPOINT = "https://status.agdsn.net/api/subscribers/subscribers/"

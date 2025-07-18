@@ -20,6 +20,6 @@ def test_bustimes(client: TestClient):
 
 
 def test_meetingcal(client: TestClient):
-    with client.renders_template("meetingcal.html"):
+    with client.renders_template("ical.html"):
         resp = client.assert_ok("features.render_meetingcal")
     assert "Teamsitzung" in resp.data.decode()
