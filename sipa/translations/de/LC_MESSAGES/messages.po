@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-23 13:44+0100\n"
+"POT-Creation-Date: 2025-07-19 18:18+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -751,21 +751,6 @@ msgstr ""
 msgid "Kontaktformular für Geschäftspartner"
 msgstr ""
 
-msgid "Klingel"
-msgstr ""
-
-msgid "Erdgeschoss"
-msgstr ""
-
-msgid "Keller"
-msgstr ""
-
-msgid "Etage"
-msgstr ""
-
-msgid "Nur für Bewohner des Hauses!"
-msgstr ""
-
 msgid "Teamsitzungen"
 msgstr ""
 
@@ -878,6 +863,28 @@ msgid "Am %(date)s im %(loc)s"
 msgstr ""
 
 msgid "Mehr anzeigen"
+msgstr ""
+
+msgid "Klingel"
+msgstr ""
+
+msgid "Erdgeschoss"
+msgstr ""
+
+msgid "Keller"
+msgstr ""
+
+msgid "Etage"
+msgstr ""
+
+msgid "Nur für Bewohner des Hauses!"
+msgstr ""
+
+msgid "Nächste Sprechstunde"
+msgstr ""
+
+#, python-format
+msgid "Am %(date)s von %(start)s bis %(end)s"
 msgstr ""
 
 msgid "Aktuell erreichbar"
