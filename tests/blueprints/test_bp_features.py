@@ -20,6 +20,14 @@ def test_bustimes(client: TestClient):
 
 
 def test_meetingcal(client: TestClient):
-    with client.renders_template("ical.html"):
+    with client.renders_template("meetingcal.html"):
         resp = client.assert_ok("features.render_meetingcal")
     assert "Teamsitzung" in resp.data.decode()
+
+def test_support(client: TestClient):
+    client.assert_ok("features.support_office")
+
+def test_unable_to_fetch(client: TestClient):
+    with patch('sipa.utils.try_fetch_calendar', return_value=None):
+        client.assert_ok("features.support_office")
+
