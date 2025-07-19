@@ -344,40 +344,10 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                                 </div>
 				<hr>
 
-                                {% for address in config.CONTACT_ADDRESSES %}
-                                    <div class="row">
-                                        <div class="col-1">
-                                            <span class="bi-house-door-fill"></span>
-                                        </div>
-                                        <div class="col-10">
-                                            <address>
-                                                <strong>{{ address.name }}</strong><br>
-
-                                                {% if address.doorbell %}
-                                                    {{ _("Klingel") }} {{ address.doorbell }}<br>
-                                                {% endif %}
-
-                                                {% if address.floor != None %}
-                                                    {% if address.floor == 0 %}
-                                                        {{ _("Erdgeschoss") }}
-                                                    {% elif address.floor < 0 %}
-                                                        {{ _("Keller") }}
-                                                    {% else %}
-                                                        {{ _("Etage") }} {{ address.floor }}
-                                                    {% endif %}
-                                                    <br/>
-                                                {% endif %}
-
-                                                {{ address.city }}
-
-                                                {% if address.only_residents %}
-                                                    <br/>
-                                                    <u>{{ _('Nur für Bewohner des Hauses!') }}</u>
-                                                {% endif %}
-                                            </address>
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                                <div hx-get="{{ url_for('features.support_office') }}"
+                                    hx-swap="innerHTML"
+                                    hx-trigger="load">
+                                </div>
 
                                 <hr>
 
