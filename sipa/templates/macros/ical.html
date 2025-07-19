@@ -8,6 +8,7 @@
     ) }}
 </li>
 {%- endmacro -%}
+
 {%- macro render_meetingcal(meetingcal) -%}
 {% if meetingcal %}
     {% for meeting in meetingcal[:4] %}
@@ -16,16 +17,56 @@
     <li><a href="{{ url_for('features.render_meetingcal') }}">{{ _("Mehr anzeigen") }}</a></li>
 {% endif %}
 {%- endmacro -%}
+
 {%- macro render_support(supports) -%}
-    {% for support in supports %}
-<li><b>{{ support["title"] }}</b><br>
-    {# Use time zone given in event #}
-    {{ _(
-        "Am %(date)s von %(start)s bis %(end)s",
-        date=support["datetime"] | datetimeformat('dd MM') ,
-        start=support["datetime"] | datetimeformat('hh:mm'),
-        end=support["datetime"] | datetimeformat('hh:mm')
-    ) }}<br>
-</li>
-    {% endfor %}
+{% for office, information in supports.items() %}
+ <div class="row">
+    <div class="col-1">
+        <span class="bi-house-door-fill"></span>
+    </div>
+     <div class="col-10">
+         <address>
+             <strong>{{ office }}</strong><br>
+
+             {% if information.doorbell %}
+                {{ _("Klingel") }} {{ information.doorbell }}<br>
+             {% endif %}
+
+             {% if information.floor != None %}
+                {% if information.floor == 0 %}
+                    {{ _("Erdgeschoss") }}
+                {% elif information.floor < 0 %}
+                    {{ _("Keller") }}
+                {% else %}
+                    {{ _("Etage") }} {{ information.floor }}
+                {% endif %}
+                <br/>
+                {% endif %}
+
+                {{ information.city }}
+
+                {% if information.only_residents %}
+                    <br/>
+                    <u>{{ _('Nur für Bewohner des Hauses!') }}</u>
+                {% endif %}
+                {% if information.next %}
+                <div>
+                    {{ _('Nächste Sprechstunde') }}:
+                    <ul>
+                        {% for time in information.next %}
+                        <li>{{
+                            _("Am %(date)s von %(start)s bis %(end)s",
+                            date=time.date  | dateformat("dd.MM"),
+                            start=time.start  | timeformat("HH:mm"),
+                            end=time.end  | datetimeformat("HH:mm"))
+                            }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+             {% endif %}
+         </address>
+     </div>
+ </div>
+{% endfor %}
 {%- endmacro -%}
