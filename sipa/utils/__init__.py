@@ -147,20 +147,22 @@ def meetingcal():
 @cached(cache=TTLCache(maxsize=1, ttl=300))
 def support_cal():
     """Returns the list of offices with next opening times within a month."""
-    supports = {item.pop("name"): item for item in
-                deepcopy(current_app.config["CONTACT_ADDRESSES"])}
-    if not (calendar := try_fetch_calendar(current_app.config['SUPPORT_ICAL_URL'])):
-        return supports
-    events = events_from_calendar(calendar)
+    offices = {item.pop("name"): item for item in deepcopy(current_app.config["CONTACT_ADDRESSES"])}
+    if not (calendar := try_fetch_calendar(current_app.config["SUPPORT_ICAL_URL"])):
+        return offices
 
-    for event in events:
-        if doorm := supports.get(event["LOCATION"]):
-            if not doorm.get("next"):
-                doorm["next"] = []
-            if len(doorm["next"]) >= current_app.config.get("SUPPORT_MAX_DISPLAYED", 3):
-                continue
-            doorm["next"].append({"date": event["DTSTART"].dt.date(), "start": event["DTSTART"].dt.time(), "end": event["DTEND"].dt.time()})
-    return supports
+    for office in offices:
+        offices[office]["next"] = [
+            {
+                "date": event["DTSTART"].dt.date(),
+                "start": event["DTSTART"].dt.time(),
+                "end": event["DTEND"].dt.time(),
+            }
+            for event in sorted(events_from_calendar(calendar), key=lambda evnt: evnt.start)
+            if event["LOCATION"] == office
+        ][: current_app.config.get("SUPPORT_MAX_DISPLAYED", 3)]
+
+    return offices
 
 
 def subscribe_to_status_page(url: str, token: str, request_timeout: int, email: str) -> bool | None:

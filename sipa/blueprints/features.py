@@ -48,13 +48,12 @@ def meetings():
 
 @bp_features.route("/support-fragment")
 def support_office():
-    a = support_cal()
     return render_template_string(
         """
-            {%- from "macros/ical.html" import render_support -%}
-            {{- render_support(supports) -}}
+        {%- from "macros/ical.html" import render_support -%}
+        {{- render_support(supports) -}}
         """,
-        supports=a,
+        supports=support_cal(),
     )
 
 
