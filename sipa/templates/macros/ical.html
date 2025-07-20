@@ -56,9 +56,9 @@
                         {% for time in information.next %}
                         <li>{{
                             _("Am %(date)s von %(start)s bis %(end)s",
-                            date=time.date  | dateformat("dd.MM"),
-                            start=time.start  | timeformat("HH:mm"),
-                            end=time.end  | datetimeformat("HH:mm"))
+                            date=time.date  | dateformat(format="short", rebase=False),
+                            start=time.start  | timeformat(format="short", rebase=False),
+                            end=time.end  | timeformat(format="short", rebase=False))
                             }}
                         </li>
                         {% endfor %}
