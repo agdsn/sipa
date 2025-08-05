@@ -126,8 +126,8 @@ CONTACT_ADDRESSES = [
 
 # link to clandar
 MEETINGS_ICAL_URL = "https://agdsn.de/cloud/remote.php/dav/public-calendars/bgiQmBstmfzRdMeH?export"
-SUPPORT_ICAL_URL = "https://agdsn.de/cloud/remote.php/dav/public-calendars/X85iT2XPQqaeg3im?export"
-SUPPORT_MAX_DISPLAYED = 3
+SUPPORT_ICAL_URL = "https://agdsn.de/cloud/remote.php/dav/public-calendars/rkocEZqKat8SybNx?export"
+SUPPORT_MAX_DISPLAYED = 2
 # statuspage
 STATUS_PAGE_API_SUBSCRIBE_ENDPOINT = "https://status.agdsn.net/api/subscribers/subscribers/"
 STATUS_PAGE_API_TOKEN = ""
