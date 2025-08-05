@@ -159,7 +159,7 @@ def support_cal():
                 "end": event["DTEND"].dt.time(),
             }
             for event in sorted(events_from_calendar(calendar), key=lambda evnt: evnt.start)
-            if event["LOCATION"] == office
+            if event.get("LOCATION") == office
         ][: current_app.config.get("SUPPORT_MAX_DISPLAYED", 3)]
 
     return offices
