@@ -155,7 +155,7 @@ class User(BaseUser):
         return ActiveProperty[str, str](
             name="mac",
             value=self.config["mac"],
-            capabilities=Capabilities(edit=True, delete=False, displayable=True),
+            capabilities=Capabilities.set_kargs(edit=True),
         )
 
     @mac.setter
@@ -164,7 +164,7 @@ class User(BaseUser):
 
     @property
     def mpsk_clients(self) -> ActiveProperty[str | None, list | None]:
-        return ActiveProperty(name="mpsk_clients", value=self.config["mpsk_clients"], capabilities=Capabilities(edit=True, delete=False, displayable=False))
+        return ActiveProperty(name="mpsk_clients", value=self.config["mpsk_clients"], capabilities=Capabilities.set_kargs(edit=True, displayable=False))
 
     @mpsk_clients.setter
     def mpsk_clients(self, value):
@@ -194,7 +194,7 @@ class User(BaseUser):
         return ActiveProperty[str, str](
             name="mail",
             value=self.config["mail"],
-            capabilities=Capabilities(edit=True, delete=False, displayable=True),
+            capabilities=Capabilities.set_kargs(edit=True),
         )
 
     def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
@@ -225,7 +225,7 @@ class User(BaseUser):
         return ActiveProperty[bool, bool](
             name="network_access_active",
             value=True,
-            capabilities=Capabilities(edit=True, delete=False, displayable=True),
+            capabilities=Capabilities.set_kargs(edit=True),
         )
 
     @property
@@ -294,7 +294,7 @@ class User(BaseUser):
 
     @property
     def wifi_password(self):
-        return ActiveProperty[str, str](name="wifi_password", value="password")
+        return ActiveProperty[str, str](name="wifi_password", value="password", style="password", capabilities=Capabilities.set_kargs(edit=True, copyable=True))
 
     @classmethod
     def request_password_reset(cls, user_ident, email):

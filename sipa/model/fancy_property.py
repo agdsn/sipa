@@ -11,17 +11,31 @@ class Capabilities(t.NamedTuple):
     edit: bool
     delete: bool
     displayable: bool
+    copyable: bool
+
+    @classmethod
+    def set_kargs(cls, **kwargs) -> t.Self:
+        """
+        creates Capabilities instance from given kwargs.
+
+        :param bool edit: set when activity can be edited. default: False.
+        :param bool delete: makes activity deletable. default: False.
+        :param bool displayable: shows value of activity in frontend. default: True.
+        :param bool copyable: element is copyable via easy access. default: False.
+        :return:
+        """
+        return cls(edit=kwargs.get("edit", False), delete=kwargs.get("delete", False), displayable=kwargs.get("displayable", True), copyable=kwargs.get("copyable", False))
 
     @classmethod
     def edit_if(cls, condition: bool) -> t.Self:
-        return cls(edit=condition, delete=False, displayable=True)
+        return cls(edit=condition, delete=False, displayable=True, copyable=False)
 
     @classmethod
     def edit_delete_if(cls, condition: bool) -> t.Self:
-        return cls(edit=condition, delete=condition)
+        return cls(edit=condition, delete=condition, displayable=False, copyable=False)
 
 
-NO_CAPABILITIES = Capabilities(edit=False, delete=False, displayable=True)
+NO_CAPABILITIES = Capabilities(edit=False, delete=False, displayable=True, copyable=False)
 
 TVal = t.TypeVar("TVal")
 TRawVal = t.TypeVar("TRawVal")
@@ -49,7 +63,6 @@ class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
     # separate `InitVar`
     empty: bool | None = None
     description_url: str | None = None
-    displayable: bool | None = None
 
     def __post_init__(self):
         if self.empty is None:
@@ -117,8 +130,6 @@ class ActiveProperty(PropertyBase[TVal, TRawVal]):
             self.raw_value = self.value
         if self.value is None:
             self.value = gettext("Nicht angegeben")
-        if self.displayable is None:
-            self.displayable = True
         if self.style is None:
             self.style = "muted" if self.empty else None
 
