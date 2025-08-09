@@ -16,12 +16,18 @@ tocbot.init({
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
 const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
+const toastLive = document.getElementById('liveToast')
+const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive, { delay: 1000 })
+const copyMessage = {'en': "Copied to clipboard!", 'de': "In das Clipboard kopiert!"};
+
 document.querySelectorAll('span[data-copy]').forEach(span => {
   span.addEventListener("click", e => {
       const span = e.target.closest(".copy-span");
       if (!span) return;
     navigator.clipboard.writeText(span.dataset.copy).then(() => {
         span.classList.add("copied");
+        toastLive.querySelector(".toast-body").textContent = `${copyMessage[get_language()]}`;
+        toastBootstrap.show()
         setTimeout(() => span.classList.remove("copied"), 1000);
     }).catch(error => {console.log(error)});
   });
