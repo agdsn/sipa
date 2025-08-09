@@ -15,3 +15,15 @@ tocbot.init({
 // Enable popovers, see https://getbootstrap.com/docs/5.3/components/popovers/
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
 const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+document.querySelectorAll('span[data-copy]').forEach(span => {
+  span.addEventListener("click", e => {
+      const span = e.target.closest(".copy-span");
+      if (!span) return;
+    navigator.clipboard.writeText(span.dataset.copy).then(() => {
+        span.classList.add("copied");
+        setTimeout(() => span.classList.remove("copied"), 1000);
+    }).catch(error => {console.log(error)});
+  });
+});
+

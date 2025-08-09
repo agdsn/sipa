@@ -118,7 +118,10 @@
                 <td class="col-md-3">
                     <span class="d-inline-flex w-100 justify-content-between">
                         {% if property.capabilities.displayable %}
-                            <span class="{{ style }}">{{ property.value }}</span>
+                            <span 
+                                class="{{ style }} {% if property.capabilities.copyable %}copy-span{% endif%}"
+                                {% if property.capabilities.copyable %}data-copy="{{ property.value }}"{% endif %}
+                            >{{ property.value }}</span>
                         {% else %}
                             <span class="{{ style }}"></span>
                         {% endif %}

@@ -13,3 +13,18 @@ h2,h3 {
     padding-top: 70px;
     margin-top: -50px;
 }
+
+ .copy-span {
+    cursor: pointer;
+    background-color: #f0f0f0;
+    padding: 0.2em 0.2em;
+    border-radius: 0.1em;
+    transition: background-color 0.2s;
+    user-select: none;
+  }
+  .copy-span:hover {
+    background-color: #e0e0ff;
+  }
+  .copy-span.copied {
+    background-color: #c8ffc8;
+  }
