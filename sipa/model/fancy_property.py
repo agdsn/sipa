@@ -8,23 +8,10 @@ from sipa.utils import argstr
 
 
 class Capabilities(t.NamedTuple):
-    edit: bool
-    delete: bool
-    displayable: bool
-    copyable: bool
-
-    @classmethod
-    def set_kargs(cls, **kwargs) -> t.Self:
-        """
-        creates Capabilities instance from given kwargs.
-
-        :param bool edit: set when activity can be edited. default: False.
-        :param bool delete: makes activity deletable. default: False.
-        :param bool displayable: shows value of activity in frontend. default: True.
-        :param bool copyable: element is copyable via easy access. default: False.
-        :return:
-        """
-        return cls(edit=kwargs.get("edit", False), delete=kwargs.get("delete", False), displayable=kwargs.get("displayable", True), copyable=kwargs.get("copyable", False))
+    edit: bool = False
+    delete: bool = False
+    displayable: bool = True
+    copyable: bool = False
 
     @classmethod
     def edit_if(cls, condition: bool) -> t.Self:

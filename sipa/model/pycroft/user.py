@@ -263,7 +263,7 @@ class User(BaseUser):
     def userdb_status(self) -> ActiveProperty[str, str]:
         status = self.userdb.has_db
 
-        capabilities = Capabilities.set_kargs(edit=True, delete=True)
+        capabilities = Capabilities(edit=True, delete=True)
 
         if not self.has_property("userdb"):
             return UnsupportedProperty("userdb_status")
@@ -328,7 +328,7 @@ class User(BaseUser):
         return ActiveProperty(
             name="mpsk_clients",
             value=self.user_data.mpsk_clients,
-            capabilities=Capabilities.set_kargs(edit=True, displayable=False),
+            capabilities=Capabilities(edit=True, displayable=False),
         )
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
@@ -422,7 +422,7 @@ class User(BaseUser):
             value=self.user_data.wifi_password,
             style="password" if self.user_data.wifi_password is not None else None,
             description_url="../pages/service/wlan",
-            capabilities=Capabilities.set_kargs(edit=True, copyable=True),
+            capabilities=Capabilities(edit=True, copyable=True),
         )
 
     def reset_wifi_password(self):

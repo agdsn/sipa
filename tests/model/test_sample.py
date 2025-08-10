@@ -32,8 +32,8 @@ EXPECTED_RESULT: dict[str, tuple[str, Capabilities]] = {
     # 'attr_name': ('key_in_sample_dict', Capabilities())
     "realname": ("name", NO_CAPABILITIES),
     "login": ("uid", NO_CAPABILITIES),
-    "mac": ("mac", Capabilities.set_kargs(edit=True)),
-    "mail": ("mail", Capabilities.set_kargs(edit=True)),
+    "mac": ("mac", Capabilities(edit=True)),
+    "mail": ("mail", Capabilities(edit=True)),
     "address": ("address", NO_CAPABILITIES),
     "ips": ("ip", NO_CAPABILITIES),
     "status": ("status", NO_CAPABILITIES),
