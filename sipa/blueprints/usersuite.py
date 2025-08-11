@@ -110,7 +110,7 @@ def index():
             ("mail", [gettext("E-Mail-Adresse")]),
             ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
             ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
-            ("wifi_password", [gettext("WLAN Passwort")]),
+            ("wifi_password", [gettext("WLAN Passwort"), gettext("Clicken um Passwort zu Kopieren!")]),
             ("mpsk_clients", [gettext("WLAN MPSK Clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen") ]),
             # ('hostname', gettext("Hostname")),
             # ('hostalias', gettext("Hostalias")),
