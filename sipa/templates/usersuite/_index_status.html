@@ -102,7 +102,11 @@
 
                             <span class="bi-box-arrow-up-right"></span>
                         </a>
-
+                        {% if subtext %}
+                            <div class="text-muted">
+                                {{ subtext }}
+                            </div>
+                        {% endif %}
                     </td>
                 {% else %}
                     <td class="col-md-3">
@@ -118,7 +122,7 @@
                 <td class="col-md-3">
                     <span class="d-inline-flex w-100 justify-content-between">
                         {% if property.capabilities.displayable %}
-                            <span 
+                            <span
                                 class="{{ style }} {% if property.capabilities.copyable %}copy-span{% endif%}"
                                 {% if property.capabilities.copyable %}data-copy="{{ property.value }}"{% endif %}
                             >{{ property.value }}</span>
