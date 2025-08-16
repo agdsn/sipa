@@ -94,3 +94,5 @@ python_files = [
     "test_*.py",
 ]
 
+[tool.mypy]
+mypy_path = "stubs"
