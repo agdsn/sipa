@@ -294,7 +294,7 @@ class User(BaseUser):
 
     @property
     def wifi_password(self):
-        return ActiveProperty[str, str](name="wifi_password", value="password", style="password", capabilities=Capabilities(edit=True, copyable=True))
+        return ActiveProperty[str, str](name="wifi_password", value="password", style="password", capabilities=Capabilities(edit=True, copyable=True), description_url="../")
 
     @classmethod
     def request_password_reset(cls, user_ident, email):
