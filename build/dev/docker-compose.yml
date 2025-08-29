@@ -1,0 +1,13 @@
+version: '2'
+services:
+  sipa:
+    build:
+      context: ../../
+      dockerfile: ./Dockerfile
+    image: sipa:latest
+    command: flask run --host 0.0.0.0 --debug --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../..:/opt/sipa
+    container_name: sipa
