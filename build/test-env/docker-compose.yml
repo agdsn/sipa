@@ -1,0 +1,44 @@
+services:
+  sipa:
+    build:
+      context: ../..
+      dockerfile: build/dev/Dockerfile
+    image: sipa-dev  # tag of the built image
+    command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa --set debug=True --set py-autoreload=1
+    volumes:
+      - ../..:/opt/sipa
+    container_name: sipa_test_env
+    networks:
+      - sipa_test_net
+
+  nginx:
+    image: nginx
+    volumes:
+      - ../../example/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+      - "8000:8000"
+    links:
+      - sipa
+    networks:
+      - sipa_test_net
+
+
+  haproxy:
+    image: haproxy:latest
+    container_name: ssl_termination
+    networks:
+      - sipa_test_net
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ../../example/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ../../example/server.pem:/etc/haproxy/certs/server.pem:ro
+    depends_on:
+      - nginx
+    restart: unless-stopped
+
+networks:
+  sipa_test_net:
+    driver: bridge

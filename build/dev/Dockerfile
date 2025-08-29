@@ -1,4 +1,5 @@
 FROM python:3.12
+MAINTAINER Alexander Lindner <alexif@agdsn.me>
 
 ARG UID=9999
 ARG GID=9999
