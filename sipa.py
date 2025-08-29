@@ -12,10 +12,12 @@ import argparse
 import logging
 
 from sipa import create_app
+from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 logger.info('Starting sipa...')
 
+load_dotenv()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sipa launcher")

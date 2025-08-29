@@ -3,7 +3,9 @@ all configuration options and dicts of external
 information (dormitory mapping etc.)
 Project-specific options should be included in the `config.py`,
 which is a file not tracked in git containing IPs, user names, passwords, etc.
+can be influenced by .env
 """
+import os
 
 SENTRY_DSN = None
 
@@ -15,7 +17,10 @@ LOCALE_COOKIE_MAX_AGE = 86400 * 31
 # Maximum number of reverse proxies
 NUM_PROXIES = 1
 
-BACKEND = "pycroft"
+if backend := os.environ.get("SIPA_BACKEND"):
+    BACKEND = backend
+else:
+    BACKEND = "pycroft"
 
 FLATPAGES_ROOT = None
 FLATPAGES_EXTENSION = '.md'
