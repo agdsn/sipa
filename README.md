@@ -55,7 +55,11 @@ pip install -r requirements.txt
 # Run SIPA with flask
 flask run
 ```
-
+## Changing Backends
+To set a different backend a dot `.env` file can be used. Just `cp example/.env .env` and set the prefered backend.
+Backends
+- pycroft: is the main Backend for interaction with [pycroft](https://github.com/agdsn/pycroft). Important make sure pycroft is running properly first!!!
+- sample: used for easy setup and will be sufficient when just the frontend or presentation is touched
 
 ## Is there any more documentation?
 
@@ -82,6 +86,11 @@ docker-compose -f build/testing/docker-compose.yml up -d
 docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing pytest -v
 ```
 
+or run
+
+```shell
+just tests
+```
 …ore choose any other testing command you wish.  For example, you can
 execute a single test case using `nosetests -v
 tests.integration.test_hss_ldap:HssLdapPasswordTestCase`
@@ -89,34 +98,52 @@ tests.integration.test_hss_ldap:HssLdapPasswordTestCase`
 Running on Docker
 -----------------
 
-To build the image, `cd` into your instance of sipa (which contains the
-`Dockerfile`) and run
+### Requirements
 
-```shell
-docker build -t sipa .
-```
+Before you start, make sure you have installed:
 
-Now, you have basically two possibilities to use sipa:
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- ([just](https://just.systems/man/en/) not needed but a nice to have for just using the just file)
+### Development Environment (dev)
 
-- Using uwsgi: This is the standard option. Just run:
+The development environment is intended for local development.
 
-```shell
-docker run --name sipa -d sipa
-```
+Start:
+`just start dev`
 
-Note that in order to use above example, you have to use another docker
-container, i.e. an nginx instance, which is linked to the `sipa` container. If
-you don't want to do this, you have to expose port 5000 adding `-p 5000:5000` as
-a parameter.
+Stop:
+`just stop dev`
 
-- Using http: This is an option you have to envoke manually. To use it, run
+Access in browser:  http://127.0.0.1:8000
 
-```shell
-docker run --name sipa -p 5000:5000 -d sipa python sipa.py --exposed
-```
+### Test Environment (test-env)
 
-If you want to use sipa for development, adding `--debug` after `sipa.py` and
-mounting your sipa folder using `-v <path>:/home/sipa/sipa` is recommended.
+The test environment mirrors the production setup more closely.
+It is mainly used for testing JavaScript features that require HTTPS or special headers.
+
+Initial setup:
+`just setup test-env`
+
+Start and stop:
+- `just start test-env`
+- `just stop test-env`
+
+Access in browser
+- https://localhost
+- http://localhost
+
+The TLS certificate can be found in the `example/` directory.
+
+### Common Issues
+
+Port already in use
+Adjust the port in docker-compose.override.yml or in your just commands.
+
+Rebuilding after code changes
+
+`just rebuild SETUP`
+
 
 
 ### Running with a prefix
