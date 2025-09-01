@@ -110,6 +110,9 @@ def load_config_file(app, config=None):
 
     app.config.from_pyfile(default.__file__)
 
+    if app.config.from_prefixed_env(prefix="SIPA"):
+        logger.warning("Env Variables with SIPA prefix set!")
+
     if config:
         app.config.update(config)
 
