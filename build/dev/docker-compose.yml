@@ -3,7 +3,7 @@ services:
   sipa-dev:
     build:
       context: ../../
-      dockerfile: ./dev/Dockerfile
+      dockerfile: ./build/dev/Dockerfile
     image: sipa-dev:latest
     command: flask run --host 0.0.0.0 --debug --port 8000
     ports:
