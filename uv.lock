@@ -866,7 +866,7 @@ requires-dist = [
     { name = "factory-boy", specifier = "~=3.2.1" },
     { name = "flask", specifier = "~=3.0.0" },
     { name = "flask-babel", specifier = "~=4.0.0" },
-    { name = "flask-flatpages", specifier = "~=0.8.1" },
+    { name = "flask-flatpages", specifier = "~=0.8.3" },
     { name = "flask-login", specifier = "~=0.6.1" },
     { name = "flask-qrcode", specifier = "~=3.1.0" },
     { name = "flask-wtf", specifier = "~=1.2.1" },
