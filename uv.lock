@@ -841,6 +841,7 @@ dependencies = [
     { name = "sentry-sdk", extra = ["flask"] },
     { name = "sqlalchemy" },
     { name = "werkzeug" },
+    { name = "wtforms-widgets" },
 ]
 
 [package.dev-dependencies]
@@ -884,6 +885,7 @@ requires-dist = [
     { name = "sentry-sdk", extras = ["flask"], specifier = "~=1.34.0" },
     { name = "sqlalchemy", specifier = "~=1.4.40" },
     { name = "werkzeug", specifier = "~=3.0.1" },
+    { name = "wtforms-widgets", editable = "wtforms_widgets" },
 ]
 
 [package.metadata.requires-dev]
@@ -1127,6 +1129,40 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/01/e4/633d080897e769ed5712dcfad626e55dbd6cf45db0ff4d9884315c6a82da/wtforms-3.2.1.tar.gz", hash = "sha256:df3e6b70f3192e92623128123ec8dca3067df9cfadd43d59681e210cfb8d4682", size = 137801, upload-time = "2024-10-21T11:34:00.108Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/08/c9/2088fb5645cd289c99ebe0d4cdcc723922a1d8e1beaefb0f6f76dff9b21c/wtforms-3.2.1-py3-none-any.whl", hash = "sha256:583bad77ba1dd7286463f21e11aa3043ca4869d03575921d1a1698d0715e0fd4", size = 152454, upload-time = "2024-10-21T11:33:58.44Z" },
+]
+
+[[package]]
+name = "wtforms-sqlalchemy"
+version = "0.4.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "sqlalchemy" },
+    { name = "wtforms" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8c/39/58e06f6b38b220820a831a957b20035ae8c9e763d654da883c9dc282cfca/wtforms_sqlalchemy-0.4.2.tar.gz", hash = "sha256:638f23372e654eded3c19ea605a2d318062e26234772977b9bb1619160eed798", size = 17412, upload-time = "2024-10-25T11:04:32.239Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4e/2e/0182ee7e62816f4bc6dea4e369f61c365c74d15caeb82b87be9c96d9e8b5/wtforms_sqlalchemy-0.4.2-py3-none-any.whl", hash = "sha256:5dfa6b9cd8c0fab644178af6a90adc057c1c2695a17c20a074f1f3c4d49a434d", size = 9881, upload-time = "2024-10-25T11:04:30.886Z" },
+]
+
+[[package]]
+name = "wtforms-widgets"
+version = "1.0.8"
+source = { editable = "wtforms_widgets" }
+dependencies = [
+    { name = "flask" },
+    { name = "flask-wtf" },
+    { name = "markupsafe" },
+    { name = "wtforms" },
+    { name = "wtforms-sqlalchemy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "flask" },
+    { name = "flask-wtf" },
+    { name = "markupsafe" },
+    { name = "wtforms" },
+    { name = "wtforms-sqlalchemy" },
 ]
 
 [[package]]

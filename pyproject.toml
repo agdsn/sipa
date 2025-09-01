@@ -35,7 +35,7 @@ dependencies = [
     "cachetools ~= 5.2.0",
     "python-dotenv ~= 0.21.0",
     "pydantic ~= 2.11.7",
-    # "-e wtforms_widgets",
+    "wtforms_widgets",
 ]
 [dependency-groups]
 dev = [
@@ -50,6 +50,9 @@ dev = [
     "time_machine ~= 2.19.0",
     "types-wtforms>=3.2.1.20250809",
 ]
+
+[tool.uv.sources]
+wtforms-widgets = { path = "wtforms_widgets", editable = true }
 
 [tool.uv-dynamic-versioning]
 
