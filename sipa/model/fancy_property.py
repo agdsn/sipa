@@ -40,10 +40,10 @@ STYLE = t.Literal[
 
 
 @dataclass
-class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
+class PropertyBase[TVal, TRawVal](ABC):
     name: str
     value: TVal
-    raw_value: TRawVal = None
+    raw_value: TRawVal | None = None
     capabilities: Capabilities = NO_CAPABILITIES
     style: STYLE | None = None
     # TODO actually is not None due to post_init. More elegantly solved with
@@ -83,7 +83,7 @@ class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
         return not self.empty
 
 
-class UnsupportedProperty(PropertyBase[str, None]):
+class UnsupportedProperty[TVal, TRawVal](PropertyBase[TVal, TRawVal]):
     supported = False
 
     def __init__(self, name):
