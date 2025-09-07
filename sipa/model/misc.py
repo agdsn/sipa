@@ -16,4 +16,4 @@ def has_connection(user):
 
 def should_display_traffic_data():
     return has_connection(current_user) or has_connection(
-        backends.user_from_ip(request.remote_addr))
+        backends.user_from_ip(request.remote_addr or ""))
