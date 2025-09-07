@@ -12,7 +12,14 @@ default:
 setup:
     cp example/.env .env
     @echo "Creating certificat for test environment!"
-    openssl req -x509 -nodes -days 3650 -newkey rsa:4096 -keyout example/priv.key -out example/cert.crt -subj /CN=AGDSN_Test
+    openssl req \
+        -x509 \
+        -nodes \
+        -days 3650 \
+        -newkey rsa:4096 \
+        -keyout example/priv.key \
+        -out example/cert.crt \
+        -subj /CN=AGDSN_Test
     cat example/priv.key example/cert.crt > example/server.pem
 
 start environment:
