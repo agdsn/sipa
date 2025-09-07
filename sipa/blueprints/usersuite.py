@@ -522,7 +522,7 @@ def delete_mpsk(mpsk_id: int):
         password = form.password.data
         #mac = form.mac.data
         try:
-            logging.warn(f"MPSK: {mpsk_id}")
+            logging.warning(f"MPSK: {mpsk_id}")
             current_user.delete_mpsk_client(mpsk_id, password)
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
