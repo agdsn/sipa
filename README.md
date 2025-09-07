@@ -91,9 +91,6 @@ or run
 ```shell
 just tests
 ```
-…ore choose any other testing command you wish.  For example, you can
-execute a single test case using `nosetests -v
-tests.integration.test_hss_ldap:HssLdapPasswordTestCase`
 
 Running on Docker
 -----------------
