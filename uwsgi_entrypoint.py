@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-    sipa.py
-    ~~~~~~~~~~~~~~
-
-    This file shall be used to start the Flask app. Specific things are handled
-    in the `sipa` package.
-
-"""
-
 import logging
 
 from sipa import create_app
