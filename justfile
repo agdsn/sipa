@@ -3,7 +3,6 @@
 # https://github.com/casey/just#packages
 
 drc := "docker compose"
-test_doc := "build/testing/docker-compose.yml"
 
 [private]
 default:
@@ -30,16 +29,11 @@ stop environment:
     @echo "Stopping {{environment}} environment!"
     {{ drc }} -f build/{{environment}}/docker-compose.yml down
 
-logs:
-    docker logs sipa-dev
+logs environment *args:
+    {{ drc }} -f build/{{environment}}/docker-compose.yml logs sipa {{args}}
 
-tests:
-    {{ drc }} -f {{ test_doc }} up -d
-    {{ drc }} -f {{ test_doc }}  run --rm sipa_testing pytest -v
-
-test test_to_run:
-    {{ drc }} -f {{ test_doc }} up -d
-    {{ drc }} -f {{ test_doc }}  run --rm sipa_testing nosetests -v {{ test_to_run }}
+test *pytest_args:
+    pytest -v {{ pytest_args }}
 
 rebuild environment:
     @echo "Rebuilding environment!"

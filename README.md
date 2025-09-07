@@ -79,17 +79,8 @@ part consists of automatic inclusion of module documentation using
 How can I run the tests?
 ------------------------
 
-For testing, there exists the docker-compose file `build/testing/docker-compose.yml`:
-
 ```shell
-docker-compose -f build/testing/docker-compose.yml up -d
-docker-compose -f build/testing/docker-compose.yml run --rm sipa_testing pytest -v
-```
-
-or run
-
-```shell
-just tests
+just test
 ```
 
 Running on Docker
