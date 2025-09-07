@@ -17,10 +17,10 @@ setup:
         -nodes \
         -days 3650 \
         -newkey rsa:4096 \
-        -keyout example/priv.key \
-        -out example/cert.crt \
+        -keyout example/dev-cert.key \
+        -out example/dev-cert.crt \
         -subj /CN=AGDSN_Test
-    cat example/priv.key example/cert.crt > example/server.pem
+    cat example/dev-cert.key example/dev-cert.crt > example/dev-cert.pem
 
 start environment:
     @echo "Starting {{environment}} environment!"

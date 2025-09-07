@@ -173,5 +173,5 @@ config.py
 TAGS
 /docs/source/ref
 
-# example config remove when changing example 
-example
+# auto-generated dev certificate
+/example/dev-cert.*

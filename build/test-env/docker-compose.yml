@@ -34,7 +34,7 @@ services:
       - "80:80"
     volumes:
       - ../../example/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-      - ../../example/server.pem:/etc/haproxy/certs/server.pem:ro
+      - ../../example/dev-cert.pem:/etc/haproxy/certs/dev-cert.pem:ro
     depends_on:
       - nginx
     restart: unless-stopped
