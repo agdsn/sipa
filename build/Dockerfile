@@ -24,7 +24,7 @@ WORKDIR /opt/sipa
 
 COPY --chown=sipa:sipa ./build /opt/sipa/build/
 COPY --chown=sipa:sipa ./wtforms_widgets /opt/sipa/wtforms_widgets
-RUN pip install -r ./build/requirements/requirements.txt
+RUN pip install -r ./requirements.txt
 
 COPY --chown=sipa:sipa . /opt/sipa
 
