@@ -129,20 +129,31 @@ class ActiveProperty(PropertyBase[TVal, TRawVal]):
         )
 
 
-def connection_dependent(func):
+class SupportsHasConnection(t.Protocol):
+    has_connection: bool
+
+
+def connection_dependent[
+    **P,
+    TSelf: SupportsHasConnection,
+    TRawVal,
+    TRet: PropertyBase[str, TRawVal],
+](
+    func: t.Callable[t.Concatenate[TSelf, P], TRet]
+):
     """A decorator to “deactivate” the property if the user's not active."""
 
     @wraps(func)
-    def _connection_dependent(self, *args, **kwargs) -> ActiveProperty:
+    def _connection_dependent(self: TSelf, *args: P.args, **kwargs: P.kwargs) -> PropertyBase[str, TRawVal]:
+        ret = func(self, *args, **kwargs)
         if not self.has_connection:
-            return ActiveProperty(
-                name=func.__name__,
+            return ActiveProperty[str, TRawVal](
+                name=ret.name,
                 value=gettext("Nicht verfügbar"),
                 empty=True,
                 capabilities=NO_CAPABILITIES,
             )
 
-        ret = func(self, *args, **kwargs)
-        return ret
+        return t.cast(PropertyBase[str, TRawVal], ret)
 
     return _connection_dependent
