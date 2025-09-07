@@ -25,6 +25,10 @@ monitoring.
 How can I run Sipa?
 -------------------
 
+> [!CAUTION]
+> This information is largely outdated.
+> It will be updated once a proper `pyproject.toml` stands and the docker setup has been simplified.
+
 As a general note, you should have `docker` and `docker-compose`
 installed.
 

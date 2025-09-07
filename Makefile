@@ -1,7 +1,5 @@
 .PHONY: run extract_messages update_messages translate docs show_docs
 
-run:
-	docker-compose -f build/development.yml up -d
 extract_messages:
 	pybabel extract -F babel.cfg -k lazy_gettext \
 		--project=sipa \

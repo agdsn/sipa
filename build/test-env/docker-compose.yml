@@ -2,7 +2,7 @@ services:
   sipa:
     build:
       context: ../..
-      dockerfile: build/dev/Dockerfile
+      dockerfile: build/Dockerfile
     image: sipa-dev  # tag of the built image
     command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa --set debug=True --set py-autoreload=1
     volumes:
