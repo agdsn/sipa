@@ -5,7 +5,6 @@ Project-specific options should be included in the `config.py`,
 which is a file not tracked in git containing IPs, user names, passwords, etc.
 can be influenced by .env
 """
-import os
 
 SENTRY_DSN = None
 
