@@ -8,38 +8,21 @@
 
 """
 
-import argparse
 import logging
 
 from sipa import create_app
 from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
-logger.info('Starting sipa...')
-
-load_dotenv()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Sipa launcher")
-    parser.add_argument("--debug", action="store_true",
-                        help="run Sipa in debug mode")
-    parser.add_argument("--exposed", action="store_const", const='0.0.0.0',
-                        dest='host', help="expose Sipa on the network")
-    parser.add_argument("-p", "--port", action="store",
-                        help="tcp port to use", type=int, default=5000)
-    args = parser.parse_args()
-
-    def preparation(app):
-        if args.debug:
-            app.debug = True
-            logger.warning('Running in Debug mode')
-
-    app = create_app(prepare_callable=preparation)
-    app.run(debug=args.debug, host=args.host, port=args.port)
-
+    logger.error("This file is not meant to be executed directly. Please use it in uwsgi only.")
 else:
     # __name__ == 'uwsgi_file_sipa'
     import uwsgi
+
+    logger.info('Starting sipa...')
+    load_dotenv()
     debug = uwsgi.opt.get('debug', False)
     app = create_app()
     if debug:
