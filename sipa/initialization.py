@@ -2,6 +2,7 @@ import logging
 import logging.config
 import os
 import os.path
+import typing as t
 from contextlib import contextmanager
 from datetime import datetime, UTC
 
@@ -37,12 +38,13 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())  # for before logging is configured
 
 
-def create_app(**kwargs) -> Flask:
-    return init_app(Flask("sipa"), **kwargs)
+def create_app(config: dict[str, t.Any] | None = None) -> Flask:
+    return init_app(Flask("sipa"), config)
 
 
-def init_app(app, **kwargs) -> Flask:
+def init_app(app: Flask, config: dict[str, t.Any] | None = None) -> Flask:
     """Initialize the Flask app located in the module sipa.
+
     This initializes the Flask app by:
 
     * calling the internal init_app() procedures of each module
@@ -51,7 +53,7 @@ def init_app(app, **kwargs) -> Flask:
     """
     # this is horribly confusing: if an app is given, we completely ignore the `app`s config,
     # and overwrite it with the `default` one.
-    load_config_file(app, config=kwargs.pop('config', None))
+    load_config_file(app, config=config)
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=app.config['NUM_PROXIES'])
     init_logging(app)
     init_env_and_config(app)
@@ -108,7 +110,7 @@ def init_app(app, **kwargs) -> Flask:
     return app
 
 
-def load_config_file(app, config=None):
+def load_config_file(app: Flask, config: dict[str, t.Any] | None = None):
     """Just load the config file, do nothing else"""
     # default configuration
     from .config import default
