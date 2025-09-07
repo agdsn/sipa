@@ -1,12 +1,12 @@
 services:
   sipa:
     build:
-      context: ../..
+      context: .
       dockerfile: build/Dockerfile
     image: sipa-dev  # tag of the built image
     command: uwsgi --ini uwsgi.ini:prefixed --set-ph prefix=/sipa --set debug=True --set py-autoreload=1
     volumes:
-      - ../..:/opt/sipa
+      - .:/opt/sipa
     container_name: sipa_test_env
     networks:
       - sipa_test_net
@@ -14,7 +14,7 @@ services:
   nginx:
     image: nginx
     volumes:
-      - ../../example/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./example/nginx.conf:/etc/nginx/nginx.conf:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
     ports:
       - "8000:8000"
@@ -33,8 +33,8 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ../../example/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-      - ../../example/dev-cert.pem:/etc/haproxy/certs/dev-cert.pem:ro
+      - ./example/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./example/dev-cert.pem:/etc/haproxy/certs/dev-cert.pem:ro
     depends_on:
       - nginx
     restart: unless-stopped

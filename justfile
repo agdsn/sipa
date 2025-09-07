@@ -21,23 +21,23 @@ setup:
         -subj /CN=AGDSN_Test
     cat example/dev-cert.key example/dev-cert.crt > example/dev-cert.pem
 
-start environment:
-    @echo "Starting {{environment}} environment!"
-    {{ drc }} -f build/{{environment}}/docker-compose.yml up -d
+start:
+    @echo "Starting environment!"
+    {{ drc }} up -d
 
-stop environment:
-    @echo "Stopping {{environment}} environment!"
-    {{ drc }} -f build/{{environment}}/docker-compose.yml down
+stop:
+    @echo "Stopping environment!"
+    {{ drc }} down
 
-logs environment *args:
-    {{ drc }} -f build/{{environment}}/docker-compose.yml logs sipa {{args}}
+logs *args:
+    {{ drc }} logs sipa {{args}}
 
 test *pytest_args:
     pytest -v {{ pytest_args }}
 
-rebuild environment:
+rebuild:
     @echo "Rebuilding environment!"
-    {{ drc }} -f build/{{environment}}/docker-compose.yml --force-recreate --no-deps up
+    {{ drc }} --force-recreate --no-deps up
 
 
 set backend:
