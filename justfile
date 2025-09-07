@@ -5,6 +5,9 @@
 drc := "docker compose"
 test_doc := "build/testing/docker-compose.yml"
 
+[private]
+default:
+    just --list
 
 setup:
     cp example/.env .env
