@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from datetime import datetime, UTC
 
 import sentry_sdk
-from flask import g
+from flask import g, Flask
 from flask_babel import Babel, get_locale
 from flask_login import current_user
 from werkzeug import Response
@@ -37,7 +37,11 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())  # for before logging is configured
 
 
-def init_app(app, **kwargs):
+def create_app(**kwargs) -> Flask:
+    return init_app(Flask("sipa"), **kwargs)
+
+
+def init_app(app, **kwargs) -> Flask:
     """Initialize the Flask app located in the module sipa.
     This initializes the Flask app by:
 
@@ -101,6 +105,7 @@ def init_app(app, **kwargs):
 
     logger.debug("Jinja globals have been set",
                  extra={'data': {'jinja_globals': app.jinja_env.globals}})
+    return app
 
 
 def load_config_file(app, config=None):

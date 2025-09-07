@@ -51,9 +51,8 @@ def _test_client(app: Flask) -> t.Iterator[TestClient]:
 
 def make_testing_app(config: dict[str, t.Any] | None = None) -> Flask:
     """app without backends"""
-    test_app = Flask("sipa")
     config = config or DEFAULT_TESTING_CONFIG
-    return prepare_app_for_testing(create_app(app=test_app, config=config))
+    return prepare_app_for_testing(create_app(config=config))
 
 
 DEFAULT_TESTING_CONFIG = {

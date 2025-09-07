@@ -1,9 +1,6 @@
-from flask import Flask
-
-from sipa.initialization import init_app
+from .initialization import create_app
 
 
-def create_app(app=None, **kwargs):
-    app = app if app else Flask(__name__)
-    init_app(app, **kwargs)
-    return app
+__all__ = (
+    "create_app",
+)
