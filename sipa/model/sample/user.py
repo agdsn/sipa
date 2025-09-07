@@ -214,7 +214,7 @@ class User(BaseUser):
 
     def resend_confirm_mail(self) -> bool:
         """ Resend the confirmation mail."""
-        pass
+        return False
 
     @mail.setter
     def mail(self, value: str) -> None:
