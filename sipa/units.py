@@ -13,7 +13,7 @@ TRAFFIC_FORMAT_STRING = "{0:.2f} {1}"
 MONEY_FORMAT_STRING = "{:+.2f} €"
 
 
-def max_divisions(number: float, base: int = 1024, unit_list: list = None) -> int:
+def max_divisions(number: float, base: int = 1024, unit_list: list[str] | None = None) -> int:
     """Find the maximum number of divisions to get 0 ≤ ``number`` ≤
     ``base``
 
