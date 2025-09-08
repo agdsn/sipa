@@ -15,18 +15,16 @@ RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-  && pip install --upgrade pip \
-  && pip install uwsgi \
   && groupadd --force --gid $GID sipa \
     && useradd --non-unique --home-dir /opt/sipa --create-home --uid $UID --gid $GID --comment "Application" sipa
 
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/astral-sh/uv/releases/download/0.8.15/uv-installer.sh | sh \
+    && mv $HOME/.local/bin/uv /usr/local/bin/
+
 WORKDIR /opt/sipa
 
-COPY --chown=sipa:sipa ./build /opt/sipa/build/
-COPY --chown=sipa:sipa ./wtforms_widgets /opt/sipa/wtforms_widgets
-RUN pip install -r ./requirements.txt
-
 COPY --chown=sipa:sipa . /opt/sipa
+RUN uv pip install --system . --group prod
 
 EXPOSE 5000
 
