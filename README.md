@@ -41,29 +41,32 @@ the first running on uwsgi, and the second directly using `sipa.py`.
 
 If this does not work for you see “Running on Docker” below for a
 manual (i.e. not docker-compose-based) container setup.
-
+requires [uv](https://docs.astral.sh/uv/getting-started/installation/#shell-autocompletion) installed!
 To run SIPA wihout Docker you can do the following:
 
 ```shell
-# Create an venv
-python -m venv venv
-
-# Activate the venv
-. venv/bin/activate[.fish|.csh]
+uv sync
+# maybe ask for installing python version then run: uv python install 3.12.11
 
 # Install the dependencies
 sudo apt install libpq-dev  # For Debian based distributions
 sudo dnf install libpq-devel # For Fedora
-pip install -r requirements.txt
 
 # Run SIPA with flask
-flask run
+uv run flask run
 ```
 ## Changing Backends
 To set a different backend a dot `.env` file can be used. Just `cp example/.env .env` and set the prefered backend.
 Backends
 - pycroft: is the main Backend for interaction with [pycroft](https://github.com/agdsn/pycroft). Important make sure pycroft is running properly first!!!
 - sample: used for easy setup and will be sufficient when just the frontend or presentation is touched
+
+can also be done via just:
+```shell
+just set sample
+# or
+just set pycroft
+```
 
 ## Is there any more documentation?
 
