@@ -7,7 +7,7 @@ name = "sipa"
 author = "AG DSN"
 # dynamic = ["version"]
 version = "0.1.0"
-requires-python = ">= 3.12"
+requires-python = "== 3.12.11"
 dependencies = [
     "flask ~= 3.0.0",
     "flask-babel ~= 4.0.0",
