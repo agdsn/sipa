@@ -7,7 +7,7 @@ name = "sipa"
 author = "AG DSN"
 # dynamic = ["version"]
 version = "0.1.0"
-requires-python = ">= 3.12"
+requires-python = "== 3.12.11"
 dependencies = [
     "flask ~= 3.0.0",
     "flask-babel ~= 4.0.0",
@@ -27,7 +27,7 @@ dependencies = [
     "Flask-QRcode ~= 3.1.0",
     "email_validator ~= 1.2.1",
     "Werkzeug ~= 3.0.1",
-    "sentry-sdk[flask] ~= 1.34.0",
+    "sentry-sdk[flask] ~= 1.39.2",
     # Pin to avoid incompatibility
     "jinja2 ~= 3.1.2",
     "MarkupSafe ~= 2.1.1",
@@ -38,6 +38,10 @@ dependencies = [
     "wtforms_widgets",
 ]
 [dependency-groups]
+prod = [
+    "uwsgi ~= 2.0.30",
+    "uwsgitop ~= 0.11",
+]
 dev = [
     "coverage ~= 4.4.1",
     "Flask-Testing ~= 0.8.1",

@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: "3.12"
+        python-version-file: "pyproject.toml" 
     - uses: pre-commit/action@v3.0.0
   build:
     runs-on: ubuntu-latest
@@ -43,22 +43,19 @@ jobs:
           submodules: recursive
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
-          cache: 'pip'
-      - name: print information about pip cache
-        run: pip cache info && pip cache list
-      - name: ensure presence of `wheel`
-        run: pip install wheel
-      - name: install pip dependencies
-        run: >
-          pip install
-          -r build/requirements/requirements.txt
-          -r build/requirements/requirements_testing.txt
+          python-version-file: "pyproject.toml" 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.15"
+          enable-cache: true
+      - name: install uv dependencies
+        run: uv sync
         id: pip-install
       # now come the tests
       - name: Run tests
         run: >
-          pytest
+          uv run pytest
           --junitxml=junit/test-results.xml
           --cov --cov-report=xml:cov/cov-results.xml
       - name: Publish Test Report
