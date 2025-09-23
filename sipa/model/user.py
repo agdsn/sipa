@@ -143,7 +143,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
                            description=d["description"],
                            subtext=d.get("subtext"))
 
-    def __text_to_dict(self, val: str | t.Iterable[str]) -> dict:
+    def __text_to_dict(self, val: str | t.Sequence[str]) -> dict:
         match val:
             case [d, s]:
                 return {"description": d, "subtext": s}
