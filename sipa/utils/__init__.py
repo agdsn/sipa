@@ -144,6 +144,7 @@ def meetingcal():
     next_meetings = sorted(next_meetings, key=itemgetter("datetime"))
     return next_meetings
 
+
 @cached(cache=TTLCache(maxsize=1, ttl=300))
 def support_cal():
     """Returns the list of offices with next opening times within a month."""
@@ -291,7 +292,11 @@ def xor_hashes(*elements: object) -> int:
 
 
 def parse_date(date: str | None) -> date | None:
-    return parse_datetime(date).date() if date is not None else None
+    if date is None:
+        return None
+    if (parsed := parse_datetime(date)) is None:
+        return None
+    return parsed.date()
 
 
 def dataclass_from_dict(cls, raw: dict):
