@@ -330,7 +330,7 @@ class User(BaseUser):
         )
 
     @property
-    def mpsk_clients(self) -> ActiveProperty[str | None, str | None]:
+    def mpsk_clients(self) -> ActiveProperty[list[MPSKClientEntry], list[MPSKClientEntry]]:
         return ActiveProperty(
             name="mpsk_clients",
             value=self.user_data.mpsk_clients,
