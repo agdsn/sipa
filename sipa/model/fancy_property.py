@@ -145,15 +145,15 @@ def connection_dependent[
 
     @wraps(func)
     def _connection_dependent(self: TSelf, *args: P.args, **kwargs: P.kwargs) -> PropertyBase[str, TRawVal]:
-        ret = func(self, *args, **kwargs)
         if not self.has_connection:
             return ActiveProperty[str, TRawVal](
-                name=ret.name,
+                name=func.__name__,  # type: ignore
                 value=gettext("Nicht verfügbar"),
                 empty=True,
                 capabilities=NO_CAPABILITIES,
             )
 
+        ret = func(self, *args, **kwargs)
         return t.cast(PropertyBase[str, TRawVal], ret)
 
     return _connection_dependent
