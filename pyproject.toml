@@ -58,6 +58,7 @@ dev = [
     "types-pytz>=2025.2.0.20250809",
     "types-requests>=2.31.0.6",
     "types-wtforms>=3.2.1.20250809",
+    "ipython>=9.5.0",
 ]
 
 [tool.uv.sources]
