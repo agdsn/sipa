@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import NamedTuple, cast
 
-from flask import request, current_app, Flask
+from flask import request, current_app, Flask, Request
 from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 
@@ -124,8 +124,9 @@ class Backends:
 
         :return: name of the dormitory
         """
-        dormitory = self.dormitory_from_ip(request.remote_addr)
-        if dormitory:
+        if (ip := request.remote_addr) is None:
+            return None
+        if dormitory := self.dormitory_from_ip(ip):
             return dormitory.name
         return None
 
@@ -149,5 +150,7 @@ class Backends:
 class _dorm_summary(NamedTuple):
     name: str
     display_name: str
+
+
 backends: Backends = cast(Backends,
                           LocalProxy(lambda: current_app.extensions['backends']))

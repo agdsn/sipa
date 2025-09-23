@@ -26,9 +26,9 @@ class DataSource:
         user_class: type[UserLike],
         dormitories: list[Dormitory],
         mail_server: str,
-        webmailer_url: str = None,
-        support_mail: str = None,
-        init_app: InitContextCallable = None,
+        webmailer_url: str | None = None,
+        support_mail: str | None = None,
+        init_app: InitContextCallable | None = None,
     ) -> None:
         super().__init__()
 
@@ -36,7 +36,7 @@ class DataSource:
         #: what you register onto your `Backends` object.
         self.name = name
 
-        class _user_class(user_class):  # type: ignore
+        class _user_class(user_class):
             datasource = self
         #: the user_class used in the sense of ``flask_login``.
         self.user_class: type[UserLike] = _user_class
