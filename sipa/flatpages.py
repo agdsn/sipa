@@ -7,7 +7,7 @@ from operator import attrgetter
 from os.path import basename, dirname, splitext
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
-from flask import abort, request
+from flask import abort, request, Flask
 from flask_babel import get_babel
 from flask_flatpages import FlatPages, Page
 from yaml.scanner import ScannerError
@@ -315,13 +315,13 @@ class CategorizedFlatPages:
     def __init__(self):
         self.flat_pages = FlatPages()
         self.root_category: Category | None = None
-        self.app: Category | None = None
+        self.app: Flask | None = None
 
-    def init_app(self, app):
+    def init_app(self, app: Flask):
         assert self.app is None, "Already initialized with an app"
         app.config.setdefault('FLATPAGES_LEGACY_META_PARSER', True)
         self.app = app
-        app.cf_pages = self
+        app.cf_pages = self  # type: ignore
         self.flat_pages.init_app(app)
         babel = get_babel(app)
         self.root_category = Category(
