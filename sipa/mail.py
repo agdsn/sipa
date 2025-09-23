@@ -47,7 +47,7 @@ def wrap_message(message: str, chars_in_line: int = 80) -> str:
 
 
 def send_mail(author: str, recipient: str, subject: str, message: str,
-              reply_to: str = None) -> bool:
+              reply_to: str | None = None) -> bool:
     """Send a MIME text mail
 
     Send a mail from ``author`` to ``receipient`` with ``subject`` and
@@ -154,6 +154,9 @@ def send_contact_mail(author: str, subject: str, message: str,
     :returns: see :py:func:`send_complex_mail`
     """
     dormitory = backends.get_dormitory(dormitory_name)
+    if dormitory is None:
+        logger.error("Unable to get dormitory %s – cannot send contact mail", dormitory_name)
+        return False
 
     return send_complex_mail(
         author=author,
@@ -188,9 +191,13 @@ def send_official_contact_mail(author: str, subject: str, message: str,
     )
 
 
-def send_usersuite_contact_mail(subject: str, message: str, category: str,
-                                user: BaseUser = current_user,
-                                author: str = None) -> bool:
+def send_usersuite_contact_mail(
+    subject: str,
+    message: str,
+    category: str,
+    user: BaseUser,
+    author: str | None = None,
+) -> bool:
     """Compose a mail for contacting from the usersuite
 
     Call :py:func:`send_complex_mail` setting a tag and the category
@@ -207,6 +214,10 @@ def send_usersuite_contact_mail(subject: str, message: str, category: str,
 
     :returns: see :py:func:`send_complex_mail`
     """
+    if user.datasource is None:
+        logger.error("user %r had no datasource, cannot send mail", user)
+        return False
+
     return send_complex_mail(
         author=f"{user.login.value}@{user.datasource.mail_server}",
         recipient=user.datasource.support_mail,
@@ -214,7 +225,7 @@ def send_usersuite_contact_mail(subject: str, message: str, category: str,
         message=message,
         tag="Usersuite",
         category=category,
-        header={'Login': user.login.value},
+        header={"Login": user.login.value},
         reply_to=author,
     )
 

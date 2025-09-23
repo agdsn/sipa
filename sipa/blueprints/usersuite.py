@@ -3,6 +3,7 @@
 
 import logging
 import math
+import typing as t
 from collections import OrderedDict
 from datetime import datetime
 from decimal import Decimal
@@ -53,6 +54,7 @@ from sipa.model.exceptions import (
     SubnetFull, MaximumNumberMPSKClients, NoWiFiPasswordGenerated,
 )
 from sipa.model.misc import PaymentDetails
+from sipa.model.user import BaseUser
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +67,8 @@ def capability_or_403(active_property, capability):
         abort(403)
 
 
-def get_mpsk_client_or_404(mpsk_id: int) -> int | MPSKClientEntry:
-    for client in current_user.mpsk_clients.value:
+def get_mpsk_client_or_404(mpsk_id: int) -> MPSKClientEntry:
+    for client in t.cast(BaseUser, current_user).mpsk_clients.value:
         if client.id == mpsk_id:
             return client
     abort(404)
@@ -185,7 +187,8 @@ def contact():
             author=form.email.data,
             category=types.get(form.type.data, "Allgemein"),
             subject=form.subject.data,
-            message=form.message.data
+            message=form.message.data,
+            user=t.cast(BaseUser, current_user),
         )
 
         if success:

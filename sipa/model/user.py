@@ -9,6 +9,7 @@ from typing import TypeVar
 from sipa.model.fancy_property import UnsupportedProperty, PropertyBase
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
+from .mspk_client import MPSKClientEntry
 
 
 # noinspection PyMethodMayBeStatic
@@ -315,7 +316,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         return UnsupportedProperty[str, str | None]("wifi_password")
 
     @property
-    def mpsk_clients(self) -> PropertyBase[str, str | None]:
+    def mpsk_clients(self) -> PropertyBase[list[MPSKClientEntry], list[MPSKClientEntry]]:
         return UnsupportedProperty("mpsk_clients")
 
     @classmethod
