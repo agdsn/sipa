@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import NamedTuple, cast
 
-from flask import request, current_app, Flask, Request
+from flask import request, current_app, Flask
 from flask_login import AnonymousUserMixin
 from werkzeug.local import LocalProxy
 

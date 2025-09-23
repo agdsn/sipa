@@ -20,7 +20,6 @@ from email.utils import formatdate, make_msgid
 from typing import Any
 
 from flask import current_app
-from flask_login import current_user
 
 from sipa.backends.extension import backends
 from sipa.model.user import BaseUser
