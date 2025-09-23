@@ -17,9 +17,11 @@ PaymentDetails = namedtuple('PaymentDetails', 'recipient bank iban bic purpose')
 
 
 def has_connection(user: UserLike) -> bool:
-    if not isinstance(user, BaseUser):
+    try:
+        has_connection = user.has_connection
+    except AttributeError:
         return False
-    return user.is_authenticated and user.has_connection
+    return user.is_authenticated and has_connection
 
 
 def should_display_traffic_data() -> bool:
