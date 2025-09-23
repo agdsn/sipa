@@ -37,6 +37,7 @@ from sipa.forms import (
     HostingForm,
     PaymentForm,
     ActivateNetworkAccessForm,
+    StrippedStringField,
     TerminateMembershipForm,
     TerminateMembershipConfirmForm,
     ContinueMembershipForm,
