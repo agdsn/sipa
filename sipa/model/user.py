@@ -249,7 +249,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def has_connection(self) -> PropertyBase[bool, bool]:
+    def has_connection(self) -> bool:
         """Whether the user has a connection"""
         pass
 
