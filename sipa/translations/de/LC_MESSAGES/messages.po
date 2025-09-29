@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-08-11 18:30+0200\n"
+"POT-Creation-Date: 2025-09-29 12:36+0200\n"
 "PO-Revision-Date: 2019-09-10 15:06+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr ""
@@ -30,6 +30,7 @@ msgstr ""
 msgid "andere Zeichen"
 msgstr ""
 
+#, python-brace-format
 msgid "Dein Passwort muss mindestens {min_length} Zeichen lang sein und mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. Zeichen von Klassen sind: {classes}."
 msgstr ""
 
@@ -108,6 +109,7 @@ msgstr ""
 msgid "Passwort nicht angegeben!"
 msgstr ""
 
+#, python-brace-format
 msgid "Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private E-Mail-Adresse weiterleiten"
 msgstr ""
 
@@ -445,9 +447,6 @@ msgstr ""
 msgid "Voller Name"
 msgstr ""
 
-msgid "Accountname"
-msgstr ""
-
 msgid "Mitgliedschaftsstatus"
 msgstr ""
 
@@ -490,9 +489,11 @@ msgstr ""
 msgid "Eingegangene Zahlung"
 msgstr ""
 
+#, python-brace-format
 msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an {}"
 msgstr ""
 
+#, python-brace-format
 msgid "Deine E-Mail Adresse ({}) wurde zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
 msgstr ""
 
@@ -778,6 +779,7 @@ msgstr ""
 msgid "Quelle"
 msgstr ""
 
+#, python-brace-format
 msgid "Fehler {} - {}"
 msgstr ""
 

@@ -96,7 +96,7 @@ def index():
         [
             ("id", [gettext("Nutzer-ID")]),
             ("realname", [gettext("Voller Name")]),
-            ("login", [gettext("Accountname")]),
+            ("login", [gettext("Nutzername")]),
             ("status", [gettext("Mitgliedschaftsstatus")]),
             ("address", [gettext("Aktuelles Zimmer")]),
             ("ips", [gettext("Aktuelle IP-Adresse")]),

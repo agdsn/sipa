@@ -5,20 +5,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Sipa\n"
+"Project-Id-Version:  Sipa\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-08-11 18:30+0200\n"
+"POT-Creation-Date: 2025-09-29 12:36+0200\n"
 "PO-Revision-Date: 2025-08-11 18:30+0200\n"
 "Last-Translator: Lukas Juhrich <lukasjuhrich@wh2.tu-dresden.de>\n"
-"Language-Team: \n"
 "Language: en\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Generated-By: Babel 2.13.1\n"
-"X-Source-Language: de\n"
-"X-Generator: Poedit 3.6\n"
+"Generated-By: Babel 2.17.0\n"
+"X-Source-Language: de"
 
 msgid "Kleinbuchstaben (a-z)"
 msgstr "lower case letters (a-z)"
@@ -32,6 +31,7 @@ msgstr "digits (0-9)"
 msgid "andere Zeichen"
 msgstr "other characters"
 
+#, python-brace-format
 msgid "Dein Passwort muss mindestens {min_length} Zeichen lang sein und mindestens {min_classes} verschiedene Klassen von Zeichen enthalten. Zeichen von Klassen sind: {classes}."
 msgstr "Your password must be at least {min_length} characters long and contain at least {min_classes} different characters classes. Character classes are: {classes}."
 
@@ -110,6 +110,7 @@ msgstr "User password"
 msgid "Passwort nicht angegeben!"
 msgstr "No password submitted!"
 
+#, python-brace-format
 msgid "Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private E-Mail-Adresse weiterleiten"
 msgstr "Forward mails for my AG DSN email account ({agdsn_email}) to private email address"
 
@@ -448,9 +449,6 @@ msgstr "User ID"
 msgid "Voller Name"
 msgstr "Full name"
 
-msgid "Accountname"
-msgstr "Account name"
-
 msgid "Mitgliedschaftsstatus"
 msgstr "Membership status"
 
@@ -493,9 +491,11 @@ msgstr "Finance balance"
 msgid "Eingegangene Zahlung"
 msgstr "Received payments from"
 
+#, python-brace-format
 msgid "Es gab einen Fehler beim Versenden der Nachricht. Bitte schicke uns direkt eine E-Mail an {}"
 msgstr "There was an error sending your message. Please contact us at {}"
 
+#, python-brace-format
 msgid "Deine E-Mail Adresse ({}) wurde zur Status-Page hinzugefügt. Du bekommst eine E-Mail mit weiteren Details."
 msgstr "Your email address ({}) has been added to the status page. You will receive an email with more details."
 
@@ -781,6 +781,7 @@ msgstr "Direction"
 msgid "Quelle"
 msgstr "Source"
 
+#, python-brace-format
 msgid "Fehler {} - {}"
 msgstr "Error {} - {}"
 
@@ -818,11 +819,13 @@ msgstr "Older"
 msgid "Achtung:"
 msgstr "Attention:"
 
-msgid "Hier wird dir\n"
+msgid ""
+"Hier wird dir\n"
 "            nicht mit deinem Anschluss geholfen!  Dieses Formular ist\n"
 "            nur für die Kommunikation mit unseren Partnern gedacht.  Bei\n"
 "            Missbrauch kann dein Account gesperrt werden."
-msgstr "Here, nobody will help you with your connection! This form is reserved for communication with our partners.\n"
+msgstr ""
+"Here, nobody will help you with your connection! This form is reserved for communication with our partners.\n"
 "Abuse may be punished by blocking your account."
 
 msgid "Deine Nutzer-ID lautet"
@@ -1189,3 +1192,4 @@ msgstr ""
 
 #~ msgid "Wi-Fi MAC"
 #~ msgstr "New Wi-Fi MAC"
+
