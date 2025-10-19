@@ -16,10 +16,10 @@
             <td>{{ client.name }}</td>
             <td>{{ client.mac }}</td>
         <td>
-            <a href="{{ url_for('usersuite.change_mpsk',mpsk_id=client.id) }}">
+            <a href="{{ url_for('usersuite.change_mpsk',mpsk_id=client.id) }}" aria-label="{{ _("Bearbeiten") }}">
                 <span class="bi-pencil-fill ms-auto"></span>
             </a>
-            <a href="{{ url_for('usersuite.delete_mpsk', mpsk_id=client.id) }}">
+            <a href="{{ url_for('usersuite.delete_mpsk', mpsk_id=client.id) }}" aria-label="{{ _("Löschen") }}">
                 <span class="bi-trash-fill ms-auto"></span>
             </a>
         </td>
@@ -27,7 +27,7 @@
     {% endfor %}
     <tr>
         <td colspan="3" class="text-center">
-            <a href="{{ url_for('usersuite.add_mpsk') }}" class="align-items-center " >
+            <a href="{{ url_for('usersuite.add_mpsk') }}" class="align-items-center" aria-label="{{ _("Hinzufügen") }}">
                 <span class="bi-plus-square-fill ms-auto"></span>
             </a>
         </td>
