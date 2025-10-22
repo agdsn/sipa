@@ -434,7 +434,7 @@ def change_mpsk(mpsk_id: int):
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except ValueError:
-            flash(gettext("MPSK Greät nicht gefunden!"), "error")
+            flash(gettext("MPSK Gerät nicht gefunden!"), "error")
         except MacAlreadyExists:
             flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
         else:

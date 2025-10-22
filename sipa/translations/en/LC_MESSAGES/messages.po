@@ -562,7 +562,7 @@ msgstr "MAC address has been changed"
 msgid "Es kann bis zu 15 Minuten dauern, bis die Änderung wirksam ist."
 msgstr "It can take up to 15 minutes until the changes apply."
 
-msgid "MPSK Greät nicht gefunden!"
+msgid "MPSK Gerät nicht gefunden!"
 msgstr "MPSK device not found!"
 
 msgid "Invalide Mac Adresse!"
@@ -1055,14 +1055,14 @@ msgstr "Please make sure that it is the devices WiFi MAC address!"
 msgid "MPSK WLAN Geräte"
 msgstr "MPSK WiFi devices"
 
-msgid "Greät"
+msgid "Gerät"
 msgstr "Device"
 
 msgid "WLAN MAC"
 msgstr "WiFi MAC"
 
 msgid "Aktion"
-msgstr "action"
+msgstr "Action"
 
 msgid "Traffic (MiB)"
 msgstr "Traffic (MiB)"

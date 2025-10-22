@@ -560,7 +560,7 @@ msgstr ""
 msgid "Es kann bis zu 15 Minuten dauern, bis die Änderung wirksam ist."
 msgstr ""
 
-msgid "MPSK Greät nicht gefunden!"
+msgid "MPSK Gerät nicht gefunden!"
 msgstr ""
 
 msgid "Invalide Mac Adresse!"
@@ -1051,7 +1051,7 @@ msgstr ""
 msgid "MPSK WLAN Geräte"
 msgstr ""
 
-msgid "Greät"
+msgid "Gerät"
 msgstr ""
 
 msgid "WLAN MAC"
