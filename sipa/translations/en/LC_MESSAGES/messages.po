@@ -685,6 +685,9 @@ msgstr "Member"
 msgid "Netzzugang gesperrt"
 msgstr "Network access blocked"
 
+msgid "Kabelgebundener Zugang nicht aktiviert"
+msgstr "Cable access not activated"
+
 msgid "Ok"
 msgstr "Ok"
 

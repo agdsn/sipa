@@ -406,7 +406,7 @@ class User(BaseUser):
 
         if status.member and not status.network_access:
             if message is not None:
-                message += ', {}'.format(gettext('Netzzugang gesperrt'))
+                message += ', {}'.format(gettext('Kabelgebundener Zugang nicht aktiviert'))
             else:
                 message, style = gettext('Netzzugang gesperrt'), 'danger'
 

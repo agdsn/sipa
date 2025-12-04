@@ -683,6 +683,9 @@ msgstr ""
 msgid "Netzzugang gesperrt"
 msgstr ""
 
+msgid "Kabelgebundener Zugang nicht aktiviert"
+msgstr "Cable access not activated"
+
 msgid "Ok"
 msgstr ""
 
