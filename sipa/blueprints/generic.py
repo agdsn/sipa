@@ -311,9 +311,6 @@ def traffic_api():
 
 @bp_generic.route('/contact', methods=['GET', 'POST'])
 def contact():
-    flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."), 'error')
-    return redirect(url_for('.index'))
-
     form = AnonymousContactForm()
     form.dormitory.choices = backends.dormitories_short
 
