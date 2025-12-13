@@ -338,9 +338,6 @@ def contact():
 
 @bp_generic.route('/contact_official', methods=['GET', 'POST'])
 def contact_official():
-    flash(gettext("Es gab einen Fehler beim Versenden der Nachricht."), 'error')
-    return redirect(url_for('.index'))
-
     form = OfficialContactForm()
 
     if form.validate_on_submit():
