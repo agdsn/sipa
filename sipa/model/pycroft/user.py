@@ -405,10 +405,10 @@ class User(BaseUser):
             message, style = gettext('Mitglied'), 'success'
 
         if status.member and not status.network_access:
-            if message is not None:
-                message += ', {}'.format(gettext('Kabelgebundener Zugang nicht aktiviert'))
+            if len(self.user_data.interfaces) > 0:
+                message += ', {}'.format(gettext('Netzzugang gesperrt'))
             else:
-                message, style = gettext('Netzzugang gesperrt'), 'danger'
+                message += ', {}'.format(gettext('Kabelgebundener Zugang nicht aktiviert'))
 
         if message is None:
             message, style = gettext('Ok'), 'success'
