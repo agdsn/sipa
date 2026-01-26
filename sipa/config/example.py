@@ -103,3 +103,12 @@
 #     "Strehlener Platz",
 #     "Weberplatz"
 # ]
+
+# Changes the payment details which are used to generate the QR code for the users
+
+PAYMENT_DETAILS = {
+    "RECIPIENT": "Donald",
+    "BANK": "Bank",
+    "IBAN": "DE09123123123",
+    "BIC": "KA"
+}

@@ -304,10 +304,10 @@ class User(BaseUser):
 
     def payment_details(self) -> PaymentDetails:
         return PaymentDetails(
-            recipient="StuRa der TUD - AG DSN",
-            bank="Ostsächsische Sparkasse Dresden",
-            iban="DE61 8505 0300 3120 2195 40",
-            bic="OSDD DE 81 XXX",
+            recipient=current_app.config["PAYMENT_DETAILS"]["RECIPIENT"],
+            bank=current_app.config["PAYMENT_DETAILS"]["BANK"],
+            iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],
+            bic=current_app.config["PAYMENT_DETAILS"]["BIC"],
             purpose=f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",
         )
 

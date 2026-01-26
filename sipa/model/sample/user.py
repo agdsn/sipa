@@ -262,10 +262,10 @@ class User(BaseUser):
 
     def payment_details(self) -> PaymentDetails:
         return PaymentDetails(
-            recipient="Donald Duck",
-            bank="Geldspeicher GbR",
-            iban="EH12432543209523",
-            bic="ENTHAUS123",
+            recipient=current_app.config["PAYMENT_DETAILS"]["RECIPIENT"],
+            bank=current_app.config["PAYMENT_DETAILS"]["BANK"],
+            iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],
+            bic=current_app.config["PAYMENT_DETAILS"]["BIC"],
             purpose=self.id.value,
         )
 

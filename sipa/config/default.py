@@ -133,3 +133,10 @@ SUPPORT_MAX_DISPLAYED = 2
 STATUS_PAGE_API_SUBSCRIBE_ENDPOINT = "https://status.agdsn.net/api/subscribers/subscribers/"
 STATUS_PAGE_API_TOKEN = ""
 STATUS_PAGE_REQUEST_TIMEOUT = 1
+
+PAYMENT_DETAILS = {
+    "RECIPIENT": "Donald",
+    "BANK": "Bank",
+    "IBAN": "DE09123123123",
+    "BIC": "KA"
+}
