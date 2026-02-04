@@ -2,6 +2,10 @@ from unittest import TestCase
 
 from sipa.model.user import BaseUser
 from sipa.model.finance import BaseFinanceInformation
+from sipa.model.pycroft.user import User as PycroftUser
+from sipa.model.pycroft.schema import UserStatus
+
+from datetime import date
 
 
 class TestBaseUserCase(TestCase):
@@ -89,3 +93,103 @@ class UserWithFinancesTestCase(TestCase):
 
     def test_balance_correct_name(self):
         assert self.bal.name == "finance_balance"
+
+class UserStatusTest(TestCase):
+    class FakeActiveProperty:
+        raw_value: any
+
+        def __init__(self, val):
+            self.raw_value = val
+
+        @property
+        def value(self):
+            return self.raw_value
+
+        def __bool__(self):
+            return bool(self.raw_value)
+
+        def __len__(self):
+            return 1 if self.raw_value else 0
+
+    class TestUserData:
+        membership_begin_date: date | None
+        membership_end_date: "UserStatusTest.FakeActiveProperty"
+
+    def setUp(self):
+        self.user = DegenerateUser
+        self.user.user_data = self.TestUserData()
+        self.user.user_data.membership_begin_date = None
+        self.user.membership_end_date = self.FakeActiveProperty(None)
+
+        self.status = UserStatus(
+            violation=False,
+            network_access=True,
+            member=True,
+            account_balanced=True,
+            traffic_exceeded=False,
+        )
+
+    def test_status_member(self):
+        assert (PycroftUser.evaluate_status(self.user, self.status)
+                == ('Mitglied', 'success'))
+
+    def test_status_violation(self):
+        self.status.violation = True
+        assert (PycroftUser.evaluate_status(self.user, self.status)
+                == ('Verstoß gegen Netzordnung', 'danger'))
+
+    def test_status_unbalanced(self):
+        self.status.account_balanced = False
+        assert (PycroftUser.evaluate_status(self.user, self.status)
+                == ('Nicht bezahlt', 'warning'))
+
+    def test_status_traffic_exceeded(self):
+        self.status.traffic_exceeded = True
+        assert (PycroftUser.evaluate_status(self.user, self.status)
+                == ('Trafficlimit überschritten', 'danger'))
+
+    def test_status_membership_begin_date(self):
+        d = date.today()
+        self.status.member = False
+        self.user.user_data.membership_begin_date = d
+        assert (PycroftUser.evaluate_status(self.user, self.status)
+                == (f'Mitglied ab {d.isoformat()}', 'warning'))
+
+    def test_status_not_member(self):
+        self.status.member = False
+        assert (PycroftUser.evaluate_status(self.user, self.status)
+                == ('Kein Mitglied', 'muted'))
+
+    def test_status_membership_end_date(self):
+        d = date.today()
+        self.user.membership_end_date = self.FakeActiveProperty(d)
+        assert (PycroftUser.evaluate_status(self.user, self.status)
+                == (f'Mitglied bis {d.isoformat()}', 'warning'))
+
+    def test_exhaust_everything(self):
+        def set_property(property: list[str], value: any):
+            curr_val = self
+            for value in property[0:-1]:
+                curr_val = getattr(curr_val, value)
+
+            setattr(curr_val, property[-1], value)
+
+        properties = [["status", "violation"],
+                      ["status", "account_balanced"],
+                      ["status", "traffic_exceeded"],
+                      ["user", "user_data", "membership_begin_date"],
+                      ["status", "member"],
+                      ["user", "membership_end_date"]]
+        true_val = self.FakeActiveProperty(date.today())
+        false_val = self.FakeActiveProperty(None)
+
+        for val_mapping in range(2 ** len(properties) - 1):
+            for i in range(len(properties)):
+                if val_mapping >> i & 1:
+                    set_property(properties[i], true_val)
+                else:
+                    set_property(properties[i], false_val)
+
+            message, style = PycroftUser.evaluate_status(self.user, self.status)
+            assert message is not None
+            assert style is not None
