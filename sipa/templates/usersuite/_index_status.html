@@ -27,13 +27,12 @@
         {{ _("MAC-Adresse ändern") }}
     </a>
     {% endif %}
-
-    {% if webmailer_url %}
-    <a href="{{ webmailer_url }}" class="btn btn-outline-secondary">
-        <span class="bi-envelope-fill"></span>
-        {{ _("Webmailer") }}
+</div>
+<div class="btn-group">
+    <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
+        <span class="bi-question-circle-fill"></span>
+        {{ _("Kontaktformular") }}
     </a>
-    {% endif %}
     {% if current_user.membership_end_date.capabilities.edit  %}
         {% if current_user.membership_end_date == None %}
             <a href="{{ terminate_membership_url }}" class="btn btn-danger">
@@ -79,10 +78,12 @@
 
 
 <div class="btn-group">
-    <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
-        <span class="bi-question-circle-fill"></span>
-        {{ _("Kontaktformular") }}
+    {% if webmailer_url %}
+    <a href="{{ webmailer_url }}" class="btn btn-outline-secondary">
+        <span class="bi-envelope-fill"></span>
+        {{ _("Webmailer") }}
     </a>
+    {% endif %}
     <a href="{{ url_for('.subscribe') }}" class="btn btn-outline-secondary">
         <span class="bi-megaphone-fill"></span>
         {{ _("Status-Page abonnieren") }}
