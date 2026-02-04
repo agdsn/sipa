@@ -387,24 +387,25 @@ class User(BaseUser):
         return self.has_property('member')
 
     def evaluate_status(self, status: UserStatus):
-        message = None
-        style = None
+        message, style = gettext('Ok'), 'success'
+
         if status.violation:
             message, style = gettext('Verstoß gegen Netzordnung'), 'danger'
         elif not status.account_balanced:
             message, style = gettext('Nicht bezahlt'), 'warning'
         elif status.traffic_exceeded:
             message, style = gettext('Trafficlimit überschritten'), 'danger'
-        elif not status.member and self.user_data.membership_begin_date is not None:
+        elif not status.member \
+            and self.user_data.membership_begin_date is not None:
             message, style = "{} {}".format(gettext('Mitglied ab'),
-                                            self.user_data.membership_begin_date.isoformat()), \
-                             'warning'
+                                self.user_data.membership_begin_date.isoformat()
+                                ), 'warning'
         elif not status.member:
             message, style = gettext('Kein Mitglied'), 'muted'
         elif status.member and self.membership_end_date.raw_value is not None:
             message, style = "{} {}".format(gettext('Mitglied bis'),
-                                            self.membership_end_date.value.isoformat()), \
-                             'warning'
+                                self.membership_end_date.value.isoformat()
+                                ), 'warning'
         elif status.member:
             message, style = gettext('Mitglied'), 'success'
 
@@ -412,10 +413,8 @@ class User(BaseUser):
             if len(self.user_data.interfaces) > 0:
                 message += ', {}'.format(gettext('Netzzugang gesperrt'))
             else:
-                message += ', {}'.format(gettext('Kabelgebundener Zugang nicht aktiviert'))
-
-        if message is None:
-            message, style = gettext('Ok'), 'success'
+                message += ', {}'.format(gettext(
+                    'Kabelgebundener Zugang nicht aktiviert'))
 
         return message, style
 
