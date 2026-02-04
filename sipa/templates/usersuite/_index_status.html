@@ -1,5 +1,5 @@
 <h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
-<div class="btn-group">
+<div class="btn-group" style="padding-bottom: 1rem;">
     {% if current_user.can_change_password %}
     <a href="{{ url_for('.change_password') }}" class="btn btn-outline-secondary">
         <span class="bi-asterisk"></span>
@@ -27,29 +27,11 @@
         {{ _("MAC-Adresse ändern") }}
     </a>
     {% endif %}
-
-    {% if webmailer_url %}
-    <a href="{{ webmailer_url }}" class="btn btn-outline-secondary">
-        <span class="bi-envelope-fill"></span>
-        {{ _("Webmailer") }}
-    </a>
-    {% endif %}
-    {% if current_user.membership_end_date.capabilities.edit  %}
-        {% if current_user.membership_end_date == None %}
-            <a href="{{ terminate_membership_url }}" class="btn btn-danger">
-                <span class="bi-x-circle-fill"></span>
-                {{ _("Mitgliedschaft beenden") }}
-            </a>
-        {% else %}
-            <a href="{{ continue_membership_url }}" class="btn btn-success">
-                <span class="bi-check-circle-fill"></span>
-                {{ _("Mitgliedschaft fortsetzen") }}
-            </a>
-        {% endif %}
-    {% endif %}
 </div>
 
-<div>
+<br>
+
+<div class="btn-group" style="padding-bottom: 1rem;">
 {% if current_user.wifi_password.raw_value %}
     <a href="{{ url_for('.get_apple_wlan_mobileconfig') }}" class="btn btn-outline-secondary">
         <span class="bi-apple"></span>
@@ -61,9 +43,7 @@
         {{ _("Apple WLAN-Konfigurationsprofil herunterladen") }}
     </a>
 {% endif %}
-</div>
 
-<div>
 {% if not current_user.mpsk_clients %}
     <a href="{{ url_for('.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Erstellen IOT Geräte') }}">
         <span class="bi-wifi"></span>
@@ -77,16 +57,36 @@
 {% endif %}
 </div>
 
+<br>
 
 <div class="btn-group">
-    <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
-        <span class="bi-question-circle-fill"></span>
-        {{ _("Kontaktformular") }}
+    {% if webmailer_url %}
+    <a href="{{ webmailer_url }}" class="btn btn-outline-secondary">
+        <span class="bi-envelope-fill"></span>
+        {{ _("Webmailer") }}
     </a>
+    {% endif %}
     <a href="{{ url_for('.subscribe') }}" class="btn btn-outline-secondary">
         <span class="bi-megaphone-fill"></span>
         {{ _("Status-Page abonnieren") }}
     </a>
+    <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
+        <span class="bi-question-circle-fill"></span>
+        {{ _("Kontaktformular") }}
+    </a>
+    {% if current_user.membership_end_date.capabilities.edit  %}
+        {% if current_user.membership_end_date == None %}
+            <a href="{{ terminate_membership_url }}" class="btn btn-danger">
+                <span class="bi-x-circle-fill"></span>
+                {{ _("Mitgliedschaft beenden") }}
+            </a>
+        {% else %}
+            <a href="{{ continue_membership_url }}" class="btn btn-success">
+                <span class="bi-check-circle-fill"></span>
+                {{ _("Mitgliedschaft fortsetzen") }}
+            </a>
+        {% endif %}
+    {% endif %}
 </div>
 
 <h2 id="status-information">{{ _("Statusinformationen") }}</h2>
