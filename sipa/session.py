@@ -16,7 +16,8 @@ class SeparateLocaleCookieSessionInterface(SecureCookieSessionInterface):
         return new_session
 
     def open_session(self, app, request):
-        session = super().open_session(app, request)
+        if (session := super().open_session(app, request)) is None:
+            return None
         locale = request.cookies.get(app.config['LOCALE_COOKIE_NAME'])
         if not locale:
             return session

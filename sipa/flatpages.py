@@ -7,7 +7,7 @@ from operator import attrgetter
 from os.path import basename, dirname, splitext
 
 from babel.core import Locale, UnknownLocaleError, negotiate_locale
-from flask import abort, request
+from flask import abort, request, Flask
 from flask_babel import get_babel
 from flask_flatpages import FlatPages, Page
 from yaml.scanner import ScannerError
@@ -38,7 +38,7 @@ class Node:
 
     #: Only used for initialization.
     #: determines the default page of an article.
-    default_locale: Locale
+    default_locale: str
 
 
 @dataclass
@@ -63,7 +63,7 @@ class Article(Node):
     #: The default page
     default_page: Page | None = field(init=False, default=None)
 
-    def add_page(self, page: Page, locale: Locale) -> None:
+    def add_page(self, page: Page, locale: str | Locale) -> None:
         """Add a page to the pages list.
 
         If the name is not ``index`` and the validation via
@@ -152,7 +152,7 @@ class Article(Node):
             ) from e
 
     @cached_property
-    def available_locales(self) -> tuple[str]:
+    def available_locales(self) -> tuple[str, ...]:
         return tuple(self.localized_pages.keys())
 
     @property
@@ -171,6 +171,7 @@ class Article(Node):
         )
         if negotiated_locale is not None:
             return self.localized_pages[negotiated_locale]
+        assert self.default_page is not None
         return self.default_page
 
     @property
@@ -251,7 +252,7 @@ class Category(Node):
         self.categories[id] = category
         return category
 
-    def _parse_page_basename(self, basename):
+    def _parse_page_basename(self, basename: str) -> tuple[str, str | Locale]:
         """Split the page basename into the article id and locale.
 
         `basename` is (supposed to be) of the form
@@ -313,14 +314,14 @@ class CategorizedFlatPages:
     """
     def __init__(self):
         self.flat_pages = FlatPages()
-        self.root_category = None
-        self.app = None
+        self.root_category: Category | None = None
+        self.app: Flask | None = None
 
-    def init_app(self, app):
+    def init_app(self, app: Flask):
         assert self.app is None, "Already initialized with an app"
         app.config.setdefault('FLATPAGES_LEGACY_META_PARSER', True)
         self.app = app
-        app.cf_pages = self
+        app.cf_pages = self  # type: ignore
         self.flat_pages.init_app(app)
         babel = get_babel(app)
         self.root_category = Category(
@@ -330,23 +331,30 @@ class CategorizedFlatPages:
         )
         self._init_categories()
 
+    @staticmethod
+    def _require_initialized[T](field: T | None) -> T:
+        if field is None:
+            raise RuntimeError("CategorizedFlatPages was not initialized")
+        return field
+
     @property
     def categories(self):
         """Yield all categories as an iterable
         """
-        return sorted(self.root_category.categories.values(),
-                      key=attrgetter('rank'))
+        root = self._require_initialized(self.root_category)
+        return sorted(root.categories.values(), key=attrgetter('rank'))
 
     def get(self, category_id, article_id):
-        category = self.root_category.categories.get(category_id)
-        if category is None:
+        root = self._require_initialized(self.root_category)
+        if (category := root.categories.get(category_id)) is None:
             return None
         return category._articles.get(article_id)
 
     def get_category(self, category_id):
         """Return the `Category` object from a given name (id)
         """
-        return self.root_category.categories.get(category_id)
+        root = self._require_initialized(self.root_category)
+        return root.categories.get(category_id)
 
     def get_articles_of_category(self, category_id):
         """Get the articles of a category
@@ -372,7 +380,7 @@ class CategorizedFlatPages:
             # get category + page name
             # plus, assert that there is nothing more to that.
             components = page.path.split('/')
-            parent = self.root_category
+            parent = self._require_initialized(self.root_category)
             for category_id in components[:-1]:
                 parent = parent.add_child_category(category_id)
             prefix = components[-1]

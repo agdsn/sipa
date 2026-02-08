@@ -31,10 +31,10 @@ class BaseFinanceInformation(metaclass=ABCMeta):
         this property editable.
         """
         if not self.has_to_pay:
-            return ActiveProperty('finance_balance',
+            return ActiveProperty[str, float]('finance_balance',
                                   value=gettext("Beitrag in Miete inbegriffen"),
                                   raw_value=0, empty=True)
-        return ActiveProperty('finance_balance',
+        return ActiveProperty[str, float]('finance_balance',
                               value=format_money(self.raw_balance),
                               raw_value=self.raw_balance)
 

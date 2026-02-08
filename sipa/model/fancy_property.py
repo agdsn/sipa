@@ -40,10 +40,10 @@ STYLE = t.Literal[
 
 
 @dataclass
-class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
+class PropertyBase[TVal, TRawVal](ABC):
     name: str
     value: TVal
-    raw_value: TRawVal = None
+    raw_value: TRawVal | None = None
     capabilities: Capabilities = NO_CAPABILITIES
     style: STYLE | None = None
     # TODO actually is not None due to post_init. More elegantly solved with
@@ -83,7 +83,7 @@ class PropertyBase(ABC, t.Generic[TVal, TRawVal]):
         return not self.empty
 
 
-class UnsupportedProperty(PropertyBase[str, None]):
+class UnsupportedProperty[TVal, TRawVal](PropertyBase[TVal, TRawVal]):
     supported = False
 
     def __init__(self, name):
@@ -129,20 +129,31 @@ class ActiveProperty(PropertyBase[TVal, TRawVal]):
         )
 
 
-def connection_dependent(func):
+class SupportsHasConnection(t.Protocol):
+    has_connection: bool
+
+
+def connection_dependent[
+    **P,
+    TSelf: SupportsHasConnection,
+    TRawVal,
+    TRet: PropertyBase[str, TRawVal],
+](
+    func: t.Callable[t.Concatenate[TSelf, P], TRet]
+):
     """A decorator to “deactivate” the property if the user's not active."""
 
     @wraps(func)
-    def _connection_dependent(self, *args, **kwargs) -> ActiveProperty:
+    def _connection_dependent(self: TSelf, *args: P.args, **kwargs: P.kwargs) -> PropertyBase[str, TRawVal]:
         if not self.has_connection:
-            return ActiveProperty(
-                name=func.__name__,
+            return ActiveProperty[str, TRawVal](
+                name=func.__name__,  # type: ignore
                 value=gettext("Nicht verfügbar"),
                 empty=True,
                 capabilities=NO_CAPABILITIES,
             )
 
         ret = func(self, *args, **kwargs)
-        return ret
+        return t.cast(PropertyBase[str, TRawVal], ret)
 
     return _connection_dependent

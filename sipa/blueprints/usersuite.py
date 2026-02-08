@@ -1,8 +1,12 @@
 """Blueprint for Usersuite components
 """
+from wtforms_widgets.fields.core import TextAreaField
+from wtforms.validators import NumberRange
+from wtforms import IntegerField
 
 import logging
 import math
+import typing as t
 from collections import OrderedDict
 from datetime import datetime
 from decimal import Decimal
@@ -33,6 +37,7 @@ from sipa.forms import (
     HostingForm,
     PaymentForm,
     ActivateNetworkAccessForm,
+    StrippedStringField,
     TerminateMembershipForm,
     TerminateMembershipConfirmForm,
     ContinueMembershipForm,
@@ -53,6 +58,7 @@ from sipa.model.exceptions import (
     SubnetFull, MaximumNumberMPSKClients, NoWiFiPasswordGenerated,
 )
 from sipa.model.misc import PaymentDetails
+from sipa.model.user import BaseUser
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +71,8 @@ def capability_or_403(active_property, capability):
         abort(403)
 
 
-def get_mpsk_client_or_404(mpsk_id: int) -> int | MPSKClientEntry:
-    for client in current_user.mpsk_clients.value:
+def get_mpsk_client_or_404(mpsk_id: int) -> MPSKClientEntry:
+    for client in t.cast(BaseUser, current_user).mpsk_clients.value:
         if client.id == mpsk_id:
             return client
     abort(404)
@@ -111,7 +117,7 @@ def index():
             ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
             ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
             ("wifi_password", [gettext("WLAN Passwort"), gettext("Clicken um Passwort zu Kopieren!")]),
-            ("mpsk_clients", [gettext("WLAN MPSK Clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen") ]),
+            ("mpsk_clients", [gettext("WLAN MPSK Clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen")]),
             # ('hostname', gettext("Hostname")),
             # ('hostalias', gettext("Hostalias")),
             ("userdb_status", [gettext("MySQL Datenbank")]),
@@ -132,7 +138,9 @@ def index():
     else:
         months = payment_form.months.default
 
-    payment_form._fields["months"].validators[0].max = math.floor(
+    months_field = t.cast(IntegerField, payment_form._fields["months"])
+    validator = t.cast(NumberRange, months_field.validators[0])
+    validator.max = math.floor(
         # Maximum value for EPC QR code, see https://de.wikipedia.org/wiki/EPC-QR-Code#EPC-QR-Code_Dateninhalt
         Decimal("999999999.99")
         / current_app.config["MEMBERSHIP_CONTRIBUTION"]
@@ -180,12 +188,16 @@ def contact():
             'finanzen': "Finanzen",
             'eigene-technik': "Eigene Technik"
         }
-
+        subj = t.cast(StrippedStringField, form.subject).data
+        assert subj is not None
+        msg = t.cast(TextAreaField, form.message).data
+        assert msg is not None
         success = send_usersuite_contact_mail(
             author=form.email.data,
             category=types.get(form.type.data, "Allgemein"),
-            subject=form.subject.data,
-            message=form.message.data
+            subject=subj,
+            message=msg,
+            user=t.cast(BaseUser, current_user),
         )
 
         if success:
@@ -520,7 +532,7 @@ def delete_mpsk(mpsk_id: int):
 
     if form.validate_on_submit():
         password = form.password.data
-        #mac = form.mac.data
+        # mac = form.mac.data
         try:
             logging.warning(f"MPSK: {mpsk_id}")
             current_user.delete_mpsk_client(mpsk_id, password)
@@ -533,7 +545,7 @@ def delete_mpsk(mpsk_id: int):
 
             return redirect(url_for('.view_mpsk'))
 
-    #form.mac.data = request.args.get('mac')
+    # form.mac.data = request.args.get('mac')
     return render_template('usersuite/mpsk_client.html',
                            form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
 
@@ -570,7 +582,7 @@ def activate_network_access():
         except MacAlreadyExists:
             flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
         except SubnetFull:
-            flash(gettext("Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."),  "error")
+            flash(gettext("Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."), "error")
         else:
             logger.info('Successfully activated network access',
                         extra={'data': {'mac': mac, 'birthdate': birthdate, 'host_name': host_name},

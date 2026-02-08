@@ -9,6 +9,7 @@ from typing import TypeVar
 from sipa.model.fancy_property import UnsupportedProperty, PropertyBase
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.misc import PaymentDetails
+from .mspk_client import MPSKClientEntry
 
 
 # noinspection PyMethodMayBeStatic
@@ -135,11 +136,14 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         """
         pass
 
-    def generate_rows(self, description_dict: dict) -> t.Iterator[TableRow]:
+    def generate_rows(self, description_dict: dict[str, tuple[str, str] | tuple[str]]) -> t.Iterator[TableRow]:
         for key, val in description_dict.items():
-            yield TableRow(property=getattr(self, key), **self.__text_to_dict(val))
+            d = self.__text_to_dict(val)
+            yield TableRow(property=getattr(self, key),
+                           description=d["description"],
+                           subtext=d.get("subtext"))
 
-    def __text_to_dict(self, val: str|list[str]) -> dict:
+    def __text_to_dict(self, val: str | t.Sequence[str]) -> dict:
         match val:
             case [d, s]:
                 return {"description": d, "subtext": s}
@@ -245,7 +249,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def has_connection(self) -> PropertyBase[bool, bool]:
+    def has_connection(self) -> bool:
         """Whether the user has a connection"""
         pass
 
@@ -309,10 +313,10 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
 
     @property
     def wifi_password(self) -> PropertyBase[str, str | None]:
-        return UnsupportedProperty("wifi_password")
+        return UnsupportedProperty[str, str | None]("wifi_password")
 
     @property
-    def mpsk_clients(self) -> PropertyBase[str, str | None]:
+    def mpsk_clients(self) -> PropertyBase[list[MPSKClientEntry], list[MPSKClientEntry]]:
         return UnsupportedProperty("mpsk_clients")
 
     @classmethod

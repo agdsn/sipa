@@ -7,6 +7,7 @@ from operator import itemgetter
 
 from flask_babel import gettext, lazy_gettext
 from flask_login import current_user
+from wtforms import Form
 from wtforms_widgets.base_form import BaseForm as FlaskForm
 from werkzeug.local import LocalProxy
 from wtforms_widgets.fields.core import (
@@ -37,6 +38,7 @@ from sipa.backends.extension import backends
 mac_regex = re.compile(r"^[a-f0-9]{2}((:|-|lo)[a-f0-9]{2}){5}$", re.IGNORECASE)
 hex_value = re.compile(r"^[a-fA-F0-9]+$")
 
+
 class MacAddress(Regexp):
     def __init__(self, message=None):
         super().__init__(mac_regex, message=message)
@@ -45,7 +47,7 @@ class MacAddress(Regexp):
 _LINK_PLACEHOLDER = re.compile(r"\[(?P<text>[^\]]+)\]\((?P<link>[^)]+)\)")
 
 
-def render_links(raw: str, links: dict):
+def render_links(raw: str, links: dict[str, str]):
     """
     Replace link placeholders in label of BooleanFields.
 
@@ -53,7 +55,7 @@ def render_links(raw: str, links: dict):
     :param links: Link placeholder to url mapping.
     """
 
-    def render_link(match: re.Match) -> str:
+    def render_link(match: re.Match[str]) -> str:
         link = match.group("link")
         if link in links:
             return f'<a target="_blank" href="{links[link]}">{match.group("text")}</a>'
@@ -63,11 +65,16 @@ def render_links(raw: str, links: dict):
     return _LINK_PLACEHOLDER.sub(render_link, raw)
 
 
-@dataclass
-class LazilyProcessed:
-    message: str
-    process: t.Callable
+class HtmlFormattable(t.Protocol):
+    def __html__(self) -> str: ...
 
+        
+@dataclass
+class LazilyProcessed[T: HtmlFormattable]:
+    message: T
+    process: t.Callable[[str], str]
+
+    @t.override
     def __str__(self):
         return self.process(self.message.__str__())
 
@@ -75,6 +82,7 @@ class LazilyProcessed:
         return self.process(self.message.__html__())
 
 
+@t.final
 class PasswordComplexity:
     character_classes = ((re.compile(r'[a-z]'), lazy_gettext("Kleinbuchstaben (a-z)")),
                          (re.compile(r'[A-Z]'), lazy_gettext("Großbuchstaben (A-Z)")),
@@ -86,17 +94,17 @@ class PasswordComplexity:
         "enthalten. Zeichen von Klassen sind: {classes}."
     )
 
-    def __init__(self, min_length=8, min_classes=3, message=None):
+    def __init__(self, min_length: int = 8, min_classes: int = 3, message: str | None = None):
         self.min_length = min_length
         self.min_classes = min_classes
         self.message = message
 
-    def __call__(self, form, field, message=None):
+    def __call__(self, form: Form, field, message=None):
         password = field.data or ''
 
         if len(password) < self.min_length:
             self.raise_error(message)
-        matched_classes = sum(1 for pattern, name in self.character_classes
+        matched_classes = sum(1 for pattern, _ in self.character_classes
                               if pattern.search(password))
         if matched_classes < self.min_classes:
             self.raise_error(message)

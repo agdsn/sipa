@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import typing as t
 from datetime import date
 
 from pydantic import ValidationError
@@ -10,6 +11,7 @@ from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import (
     ActiveProperty,
     UnsupportedProperty,
+    PropertyBase,
     Capabilities,
     connection_dependent,
 )
@@ -33,7 +35,10 @@ from ..mspk_client import MPSKClientEntry
 
 logger = logging.getLogger(__name__)
 
-api: PycroftApi = LocalProxy(lambda: current_app.extensions['pycroft_api'])
+api: PycroftApi = t.cast(
+    PycroftApi,
+    LocalProxy(lambda: current_app.extensions['pycroft_api'])
+)
 
 
 class User(BaseUser):
@@ -85,15 +90,17 @@ class User(BaseUser):
     can_change_password = True
 
     def change_password(self, old, new):
-        status, result = api.change_password(self.user_data.id, old, new)
+        status, _ = api.change_password(self.user_data.id, old, new)
 
         if status != 200:
             raise PasswordInvalid
 
+    # TODO just pass through `list[TrafficHistoryEntry]` and move presentation
+    # to the blueprint
     @property
     def traffic_history(self):
         return [{
-            'day': parse_date(entry.timestamp).weekday(),
+            'day': (d.weekday() if (d := parse_date(entry.timestamp)) else None),
             'input': to_kib(entry.ingress),
             'output': to_kib(entry.egress),
             'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
@@ -132,7 +139,7 @@ class User(BaseUser):
     def change_mac_address(self, new_mac, host_name, password):
         assert len(self.user_data.interfaces) == 1
 
-        status, result = api.change_mac(
+        status, _ = api.change_mac(
             self.user_data.id,
             password,
             self.user_data.interfaces[0].id,
@@ -160,7 +167,7 @@ class User(BaseUser):
         )
 
     def activate_network_access(self, password, mac, birthdate, host_name):
-        status, result = api.activate_network_access(self.user_data.id, password, mac,
+        status, _ = api.activate_network_access(self.user_data.id, password, mac,
                                                      birthdate, host_name)
 
         if status == 401:
@@ -173,7 +180,7 @@ class User(BaseUser):
             raise SubnetFull
 
     def terminate_membership(self, end_date):
-        status, result = api.terminate_membership(self.user_data.id, end_date)
+        status, _ = api.terminate_membership(self.user_data.id, end_date)
 
         if status == 400:
             raise TerminationNotPossible
@@ -189,7 +196,7 @@ class User(BaseUser):
             raise UnknownError
 
     def continue_membership(self):
-        status, result = api.continue_membership(self.user_data.id)
+        status, _ = api.continue_membership(self.user_data.id)
 
         if status == 400:
             raise ContinuationNotPossible
@@ -205,7 +212,7 @@ class User(BaseUser):
         )
 
     def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
-        status, result = api.change_mail(
+        status, _ = api.change_mail(
             self.user_data.id,
             password,
             new_mail,
@@ -219,9 +226,9 @@ class User(BaseUser):
         self.user_data.mail = new_mail
 
     @property
-    def mail_forwarded(self) -> ActiveProperty[bool, str]:
+    def mail_forwarded(self) -> ActiveProperty[str, bool]:
         value = self.user_data.mail_forwarded
-        return ActiveProperty[bool, str](
+        return ActiveProperty[str, bool](
             name="mail_forwarded",
             raw_value=value,
             value=gettext("Aktiviert") if value else gettext("Nicht aktiviert"),
@@ -232,7 +239,7 @@ class User(BaseUser):
     def mail_confirmed(self) -> ActiveProperty[str, str]:
         confirmed = self.user_data.mail_confirmed
         editable = self.has_property('mail') and self.user_data.mail and not confirmed
-        return ActiveProperty(
+        return ActiveProperty[str, str](
             name="mail_confirmed",
             value=gettext("Bestätigt") if confirmed else gettext("Nicht bestätigt"),
             style="success" if confirmed else "danger",
@@ -258,29 +265,28 @@ class User(BaseUser):
     def id(self) -> ActiveProperty[str, str]:
         return ActiveProperty[str, str](name="id", value=self.user_data.user_id)
 
-
     @property
-    def userdb_status(self) -> ActiveProperty[str, str]:
+    def userdb_status(self) -> PropertyBase[str, str]:
         status = self.userdb.has_db
 
         capabilities = Capabilities(edit=True, delete=True)
 
         if not self.has_property("userdb"):
-            return UnsupportedProperty("userdb_status")
+            return UnsupportedProperty[str, str]("userdb_status")
 
         if status is None:
-            return ActiveProperty(name="userdb_status",
+            return ActiveProperty[str, str](name="userdb_status",
                                   value=gettext("Datenbank nicht erreichbar"),
                                   style='danger',
                                   empty=True)
 
         if status:
-            return ActiveProperty(name="userdb_status",
+            return ActiveProperty[str, str](name="userdb_status",
                                   value=gettext("Aktiviert"),
                                   style='success',
                                   capabilities=capabilities)
 
-        return ActiveProperty(name="userdb_status",
+        return ActiveProperty[str, str](name="userdb_status",
                                   value=gettext("Nicht aktiviert"),
                                   empty=True,
                                   capabilities=capabilities)
@@ -324,7 +330,7 @@ class User(BaseUser):
         )
 
     @property
-    def mpsk_clients(self) -> ActiveProperty[str | None, str | None]:
+    def mpsk_clients(self) -> ActiveProperty[list[MPSKClientEntry], list[MPSKClientEntry]]:
         return ActiveProperty(
             name="mpsk_clients",
             value=self.user_data.mpsk_clients,
@@ -367,16 +373,14 @@ class User(BaseUser):
         else:
             raise ValueError(f"Invalid response from {response}")
 
-
     def delete_mpsk_client(self, mpsk_id, password):
-        status, response = api.delete_mpsk(
+        status, _ = api.delete_mpsk(
             self.user_data.id,
             password,
             mpsk_id,
         )
         if status == 400 or status == 401:
             raise ValueError(f'Mpsk client not found for user: {mpsk_id}')
-
 
     @property
     def is_member(self) -> bool:
