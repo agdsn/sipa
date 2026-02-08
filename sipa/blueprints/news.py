@@ -5,6 +5,8 @@ import typing as t
 from operator import attrgetter
 from traceback import format_exception_only
 
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
 from flask import (
     Blueprint,
     abort,
@@ -15,9 +17,11 @@ from flask import (
 )
 from flask_flatpages import Page
 
+from sipa.deps import Templates
 from sipa.flatpages import CategorizedFlatPages, Article
 
 bp_news = Blueprint('news', __name__, url_prefix='/news')
+router_news = APIRouter(prefix="/news", default_response_class=HTMLResponse)
 
 
 @bp_news.route("/")
@@ -73,6 +77,25 @@ def show():
         articles=news[start : end + 1],
         previous_range=prev_range,
         next_range=next_range,
+    )
+
+
+@router_news.get("", name="news.show")
+def show_(
+    request: Request,
+    templates: Templates,
+    start: int | None = None,
+    end: int | None = None,
+) -> HTMLResponse:
+    # TODO jinja, how?
+    return templates.TemplateResponse(
+        request,
+        "news.html",
+        context=dict(
+            articles=[],
+            previous_range=None,
+            next_range=None,
+        )
     )
 
 

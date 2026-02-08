@@ -1,6 +1,8 @@
 import logging
 import os
 
+from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse, HTMLResponse
 from flask import (
     render_template,
     request,
@@ -42,6 +44,7 @@ from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
 logger = logging.getLogger(__name__)
 
 bp_generic = Blueprint('generic', __name__)
+router_generic = APIRouter(default_response_class=HTMLResponse)
 
 
 @bp_generic.before_app_request
@@ -122,6 +125,12 @@ def index():
     return redirect(url_for('news.show'))
 
 
+@router_generic.get("/index.php", name="generic.index")
+@router_generic.get("/", name="generic.index")
+def index_(request: Request) -> RedirectResponse:
+    return RedirectResponse(request.url_for("news.show"))
+
+
 @bp_generic.route("/login", methods=['GET', 'POST'])
 def login():
     """Login page for users
@@ -166,6 +175,11 @@ def login():
         return redirect(url_for('usersuite.index'))
 
     return render_template("login.html", form=form)
+
+
+@router_generic.get("/", name="generic.login")
+def login_():
+    ...
 
 
 @bp_generic.route("/logout")
@@ -333,6 +347,11 @@ def contact():
     return render_template('anonymous_contact.html', form=form)
 
 
+@router_generic.get("/", name="generic.contact")
+def contact_():
+    ...
+
+
 @bp_generic.route('/contact_official', methods=['GET', 'POST'])
 def contact_official():
     form = OfficialContactForm()
@@ -358,6 +377,11 @@ def contact_official():
     )
 
 
+@router_generic.get("/", name="generic.contact_official")
+def contact_official_():
+    ...
+
+
 @bp_generic.route('/version')
 def version():
     """ Display version information from local repo """
@@ -367,6 +391,11 @@ def version():
         active_branch=get_repo_active_branch(sipa_dir),
         commits=get_latest_commits(sipa_dir, 20),
     )
+
+
+@router_generic.get("/version", name="generic.version")
+def version_():
+    ...
 
 
 @bp_generic.route('/debug-sentry')

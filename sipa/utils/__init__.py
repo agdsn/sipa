@@ -7,6 +7,7 @@ import http.client
 import json
 import logging
 import typing
+import typing as t
 from copy import deepcopy
 from datetime import date, datetime
 from functools import wraps
@@ -70,8 +71,8 @@ def try_fetch_hotline_availability(uri: str) -> bool:
     return r.text == "AVAILABLE"
 
 
-def support_hotline_available():
-    return try_fetch_hotline_availability(current_app.config["PBX_URI"])
+def support_hotline_available(uri: str | None = None):
+    return try_fetch_hotline_availability(uri or current_app.config["PBX_URI"])
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
@@ -146,10 +147,11 @@ def meetingcal():
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
-def support_cal():
+def support_cal(config: dict[str, t.Any] | None = None):
     """Returns the list of offices with next opening times within a month."""
-    offices = {item.pop("name"): item for item in deepcopy(current_app.config["CONTACT_ADDRESSES"])}
-    if not (calendar := try_fetch_calendar(current_app.config["SUPPORT_ICAL_URL"])):
+    conf = config or current_app.config
+    offices = {item.pop("name"): item for item in deepcopy(conf["CONTACT_ADDRESSES"])}
+    if not (calendar := try_fetch_calendar(conf["SUPPORT_ICAL_URL"])):
         return offices
 
     for office in offices:
@@ -161,7 +163,7 @@ def support_cal():
             }
             for event in sorted(events_from_calendar(calendar), key=lambda evnt: evnt.start)
             if event.get("LOCATION") == office
-        ][: current_app.config.get("SUPPORT_MAX_DISPLAYED", 3)]
+        ][: conf.get("SUPPORT_MAX_DISPLAYED", 3)]
 
     return offices
 

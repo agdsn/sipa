@@ -13,6 +13,8 @@ from decimal import Decimal
 from io import BytesIO
 
 from babel.numbers import format_currency
+from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
 from flask import (
     Blueprint,
     render_template,
@@ -59,10 +61,12 @@ from sipa.model.exceptions import (
 )
 from sipa.model.misc import PaymentDetails
 from sipa.model.user import BaseUser
+from ..deps import Templates
 
 logger = logging.getLogger(__name__)
 
 bp_usersuite = Blueprint('usersuite', __name__, url_prefix='/usersuite')
+router_usersuite = APIRouter(prefix='/usersuite', default_response_class=HTMLResponse)
 
 
 def capability_or_403(active_property, capability):
@@ -171,6 +175,13 @@ def index():
         )
 
     return render_template("usersuite/index.html", payment_form=payment_form, **context)
+
+
+@router_usersuite.get("/", name="usersuite.index")
+@router_usersuite.post("/", name="usersuite.index")
+def index_(templates: Templates) -> HTMLResponse:
+    return HTMLResponse("STUB")
+    # return templates.TemplateResponse("usersuite/index.html", payment_form=None)
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])

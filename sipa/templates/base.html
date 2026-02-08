@@ -66,24 +66,25 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
     <title>AG DSN {% if page_title %} - {{ page_title }}{% endif %}</title>
 
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='img/favicon.png') }}">
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+          href="{{ url_for('static', path='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='bootstrap-icons.min.css') }}"/>
+          href="{{ url_for('static', path='bootstrap-icons.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/agdsn-bootstrap-social.css') }}"/>
+          href="{{ url_for('static', path='css/agdsn-bootstrap-social.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/style.css') }}"/>
+          href="{{ url_for('static', path='css/style.css') }}"/>
+
     {% block custom_css %}{% endblock %}
 
     <script type="application/json" id="locale">
         {{- get_locale() | string | tojson -}}
     </script>
-    <script defer src="{{ url_for("static", filename="js/bootstrap.bundle.min.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/statuspage.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/htmx.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/bootstrap.bundle.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/statuspage.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/agdsn.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/htmx.min.js") }}"></script>
     {% block custom_script %}{% endblock %}
 </head>
 
@@ -91,7 +92,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="{{ url_for('generic.index') }}">
-            <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}"
+            <img id="logo" src="{{ url_for('static', path='img/logo_hover.png') }}"
                  alt="AG DSN"/>
         </a>
         <a class="navbar-brand d-lg-none" href="{{ url_for('generic.index') }}">
@@ -114,15 +115,15 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     </a>
                     <!-- TODO add aria-labelledby ↓ and id ↑ -->
                     <div class="dropdown-menu" role="menu">
-                        <a href="{{ url_for('news.show', start=0) }}" class="dropdown-item">
+                        <a href="{{ url_for('news.show').include_query_params(start=0) }}" class="dropdown-item">
                             <span class="bi-skip-start-fill"></span>
                             &nbsp; {{ _("Neueste") }}
                         </a>
-                        <a href="{{ url_for('news.show', end=-1) }}" class="dropdown-item">
+                        <a href="{{ url_for('news.show').include_query_params(end=-1) }}" class="dropdown-item">
                             <span class="bi-skip-end-fill"></span>
                             &nbsp; {{ _("Älteste") }}
                         </a>
-                        <a href="{{ url_for('news.show', start=0, end=-1) }}" class="dropdown-item">
+                        <a href="{{ url_for('news.show').include_query_params(start=0, end=-1) }}" class="dropdown-item">
                             <span class="bi-collection-fill"></span>
                             &nbsp; {{ _("Alle") }}
                         </a>

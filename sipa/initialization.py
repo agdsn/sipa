@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from datetime import datetime, UTC
 
 import sentry_sdk
+from jinja2 import Environment
 from flask import g, Flask
 from flask_babel import Babel, get_locale
 from flask_login import current_user
@@ -86,10 +87,20 @@ def init_app(app: Flask, config: dict[str, t.Any] | None = None) -> Flask:
     app.register_blueprint(bp_register)
 
     logger.debug('Registering Jinja globals')
-    form_label_width = 4
-    form_input_width = 8
     app.jinja_env.globals.update(
         current_user=current_user,
+    )
+    init_jinja_env(app.jinja_env, cf_pages, backends)
+
+    logger.debug("Jinja globals have been set",
+                 extra={'data': {'jinja_globals': app.jinja_env.globals}})
+    return app
+
+
+def init_jinja_env(env: Environment, cf_pages: CategorizedFlatPages, backends: Backends):
+    form_label_width = 4
+    form_input_width = 8
+    env.globals.update(
         cf_pages=cf_pages,
         get_locale=get_locale,
         get_weekday=get_weekday,
@@ -104,11 +115,6 @@ def init_app(app: Flask, config: dict[str, t.Any] | None = None) -> Flask:
         url_self=url_self,
         now=datetime.now(UTC),
     )
-
-    logger.debug("Jinja globals have been set",
-                 extra={'data': {'jinja_globals': app.jinja_env.globals}})
-    return app
-
 
 def load_config_file(app: Flask, config: dict[str, t.Any] | None = None):
     """Just load the config file, do nothing else"""
