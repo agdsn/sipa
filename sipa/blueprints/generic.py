@@ -1,8 +1,9 @@
+import html
 import logging
 import os
 
 from fastapi import APIRouter, Request
-from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from flask import (
     render_template,
     request,
@@ -125,8 +126,8 @@ def index():
     return redirect(url_for('news.show'))
 
 
-@router_generic.get("/index.php", name="generic.index")
 @router_generic.get("/", name="generic.index")
+@router_generic.get("/index.php", name="generic.index_php")
 def index_(request: Request) -> RedirectResponse:
     return RedirectResponse(request.url_for("news.show"))
 
@@ -177,9 +178,13 @@ def login():
     return render_template("login.html", form=form)
 
 
-@router_generic.get("/", name="generic.login")
-def login_():
-    ...
+@router_generic.get("/login", name="generic.login")
+@router_generic.post("/login", name="generic.login")
+def login_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: Flask-WTF -> FastAPI form parsing + CSRF
+    # TODO nontrivial: flask_login session/cookie -> FastAPI auth middleware
+    # TODO nontrivial: flash messages + redirects after successful login
+    return HTMLResponse("TODO: /login (FastAPI)")
 
 
 @bp_generic.route("/logout")
@@ -190,6 +195,13 @@ def logout():
     logout_user()
     flash(gettext("Abmeldung erfolgreich!"), 'success')
     return redirect(url_for('.index'))
+
+
+@router_generic.get("/logout", name="generic.logout")
+def logout_(request: Request) -> RedirectResponse:
+    # TODO nontrivial: remove FastAPI session/cookie and clear request.state.user
+    return RedirectResponse(request.url_for("generic.index"), status_code=302)
+
 
 
 @bp_generic.route('/reset-password', methods=['GET', 'POST'])
@@ -240,6 +252,25 @@ def reset_password(token):
 
     return render_template('generic_form.html', page_title=gettext("Passwort zurücksetzen"),
                            form_args={'form': form, 'cancel_to': url_for('.login')})
+
+
+
+@router_generic.get("/reset-password", name="generic.request_password_reset")
+@router_generic.post("/reset-password", name="generic.request_password_reset")
+def request_password_reset_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: Flask-WTF form + CSRF -> FastAPI
+    # TODO nontrivial: capture client IP (request.client.host) for user_from_ip
+    # TODO nontrivial: implement flash messaging + redirects
+    # TODO nontrivial: call pycroft.user.User.request_password_reset
+    return HTMLResponse("TODO: /reset-password (FastAPI)")
+
+
+@router_generic.get("/reset-password/{token}", name="generic.reset_password")
+@router_generic.post("/reset-password/{token}", name="generic.reset_password")
+def reset_password_(request: Request, token: str) -> HTMLResponse:
+    # TODO nontrivial: Flask-WTF form + CSRF -> FastAPI
+    # TODO nontrivial: call pycroft.user.User.password_reset
+    return HTMLResponse(f"TODO: /reset-password/{token} (FastAPI)")
 
 
 bp_generic.add_app_template_filter(dynamic_unit, name='unit')
@@ -323,6 +354,20 @@ def traffic_api():
     return jsonify(version=3, **trafficdata)
 
 
+
+@router_generic.get("/usertraffic", name="generic.usertraffic")
+def usertraffic_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: implement auth and user selection (current_user vs user_from_ip)
+    # TODO nontrivial: port traffic chart generation + template rendering
+    return HTMLResponse("TODO: /usertraffic (FastAPI)")
+
+
+@router_generic.get("/usertraffic/json", name="generic.traffic_api")
+def traffic_api_(request: Request) -> JSONResponse:
+    # TODO nontrivial: port chosen user logic + traffic history serialization
+    return JSONResponse({"version": 0})
+
+
 @bp_generic.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = AnonymousContactForm()
@@ -347,9 +392,13 @@ def contact():
     return render_template('anonymous_contact.html', form=form)
 
 
-@router_generic.get("/", name="generic.contact")
-def contact_():
-    ...
+@router_generic.get("/contact", name="generic.contact")
+@router_generic.post("/contact", name="generic.contact")
+def contact_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: port AnonymousContactForm (Flask-WTF) incl. honeypot field
+    # TODO nontrivial: dormitory choices from backends.dormitories_short
+    # TODO nontrivial: send_contact_mail and flash+redirect
+    return HTMLResponse("TODO: /contact (FastAPI)")
 
 
 @bp_generic.route('/contact_official', methods=['GET', 'POST'])
@@ -377,9 +426,12 @@ def contact_official():
     )
 
 
-@router_generic.get("/", name="generic.contact_official")
-def contact_official_():
-    ...
+@router_generic.get("/contact_official", name="generic.contact_official")
+@router_generic.post("/contact_official", name="generic.contact_official")
+def contact_official_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: port OfficialContactForm (Flask-WTF) + CSRF
+    # TODO nontrivial: send_official_contact_mail + flash+redirect
+    return HTMLResponse("TODO: /contact_official (FastAPI)")
 
 
 @bp_generic.route('/version')
@@ -394,10 +446,33 @@ def version():
 
 
 @router_generic.get("/version", name="generic.version")
-def version_():
-    ...
+def version_(request: Request) -> HTMLResponse:
+    # NOTE: this intentionally avoids Jinja rendering for now.
+    # Rendering `version.html` currently still depends on several Flask-only
+    # Jinja globals (e.g. get_locale, cf_pages).
+    sipa_dir = os.getcwd()
+    active_branch = get_repo_active_branch(sipa_dir)
+    commits = get_latest_commits(sipa_dir, 20)
+
+    commit_lines = "\n".join(
+        f"{c.get('date', '')} {c.get('hexsha', '')[:8]} {c.get('author', '')}: {c.get('message', '')}"
+        for c in commits
+    )
+
+    body = (
+        "<h2>Version</h2>"
+        f"<p>Branch: <code>{html.escape(str(active_branch))}</code></p>"
+        f"<pre>{html.escape(commit_lines)}</pre>"
+    )
+    return HTMLResponse(body)
 
 
 @bp_generic.route('/debug-sentry')
 def trigger_error():
     """An endpoint intentionally triggering an error to test reporting"""
+
+
+@router_generic.get("/debug-sentry", name="generic.trigger_error")
+def trigger_error_(request: Request) -> None:
+    raise RuntimeError("FastAPI debug-sentry endpoint triggered")
+
