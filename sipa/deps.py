@@ -14,3 +14,10 @@ def templates(request: Request) -> Jinja2Templates:
 
 
 type Templates = t.Annotated[Jinja2Templates, Depends(templates)]
+
+
+def get_settings() -> SipaSettings:
+    return SipaSettings()
+
+
+type Settings = t.Annotated[SipaSettings, Depends(get_settings)]
