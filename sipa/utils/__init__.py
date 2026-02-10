@@ -125,9 +125,9 @@ def events_from_calendar(calendar: icalendar.Calendar) -> list[Event]:
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
-def meetingcal():
+def meetingcal(url: str | None = None):
     """Returns the calendar events got form the url in the config"""
-    if not (calendar := try_fetch_calendar(current_app.config['MEETINGS_ICAL_URL'])):
+    if not (calendar := try_fetch_calendar(url or current_app.config['MEETINGS_ICAL_URL'])):
         return []
 
     events = events_from_calendar(calendar)
