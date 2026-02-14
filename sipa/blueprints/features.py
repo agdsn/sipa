@@ -2,8 +2,6 @@
 Basically, this is everything that is to specific to appear in the generic.py
 and does not fit into any other blueprint such as “documents”.
 """
-from jinja2 import Template
-from starlette.templating import _TemplateResponse
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from flask import Blueprint, current_app, render_template, render_template_string
@@ -55,14 +53,8 @@ def bustimes_(
     return t.TemplateResponse(r, "bustimes.html", {"stops": stops})
 
 
-@bp_features.route("/meetingcal")
-def render_meetingcal():
-    meetings = meetingcal()
-    return render_template('meetingcal.html', meetings=meetings)
-
-
 @router_features.get("/meetingcal", name="features.render_meetingcal")
-def render_meetingcal_(t: Templates, r: Request, s: Settings):
+def render_meetingcal(t: Templates, r: Request, s: Settings):
     # TODO turn into proper component
     return t.TemplateResponse(
         request=r,
@@ -71,20 +63,12 @@ def render_meetingcal_(t: Templates, r: Request, s: Settings):
     )
 
 
-@bp_features.route("/meetings-fragment")
-def meetings():
-    return render_template_string(
-        """
-            {%- from "macros/ical.html" import render_meetingcal -%}
-            {{- render_meetingcal(meetingcal) -}}
-        """,
-        meetingcal=meetingcal(),
-    )
-
-
 @router_features.get("/meetings-fragment", name="features.meetings")
-def meetings_(t: Templates, r: Request, s: Settings):
+def meetings_fragment(t: Templates, r: Request, s: Settings):
     # TODO turn into proper component
+    # TODO think about `FragmentResponse` or some other helper which
+    # - when sent with `HX-Request: true`: only sends the fragment
+    # - otherwise: embeds it in a default “fragment” presenter
     return t.TemplateResponse(
         request=r,
         name="meetingcal-fragment.html",

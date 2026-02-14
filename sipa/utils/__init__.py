@@ -125,9 +125,12 @@ def events_from_calendar(calendar: icalendar.Calendar) -> list[Event]:
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
-def meetingcal(url: str | None = None):
+def meetingcal(url: str) -> list:
     """Returns the calendar events got form the url in the config"""
-    if not (calendar := try_fetch_calendar(url or current_app.config['MEETINGS_ICAL_URL'])):
+    # TODO make pure, inject `CalendarClient` with strongly typed interface or similar and
+    #   - do snapshot && contract tests for the `CalendarClient`
+    #   - do snapshot tests against the UI component given a fake calendar client.
+    if not (calendar := try_fetch_calendar(url)):
         return []
 
     events = events_from_calendar(calendar)
@@ -144,6 +147,13 @@ def meetingcal(url: str | None = None):
     ]
     next_meetings = sorted(next_meetings, key=itemgetter("datetime"))
     return next_meetings
+
+
+class MeetingInfo(t.TypedDict):
+    title: str
+    datetime: datetime
+    location: str
+    location_link: markdown.Markdown
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
