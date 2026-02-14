@@ -20,6 +20,7 @@ class Settings(BaseSettings):
         env_prefix="SIPA_",
         case_sensitive=False,
         extra="ignore",
+        frozen=True,
     )
 
     # --- observability ---
@@ -106,7 +107,7 @@ class Settings(BaseSettings):
     support_ical_url: HttpUrl = HttpUrl(
         "https://agdsn.de/cloud/remote.php/dav/public-calendars/rkocEZqKat8SybNx?export"
     )
-    support_max_displayed: PositiveInt = PositiveInt(2)
+    support_max_displayed: PositiveInt = 3
 
     # --- status page ---
     status_page_api_subscribe_endpoint: HttpUrl = HttpUrl(
@@ -158,3 +159,7 @@ class Settings(BaseSettings):
             ),
         ]
     )
+
+    # hacky & expensive, we should instead use immutable submodels
+    def __hash__(self) -> int:
+        return hash(str(self.model_dump(mode="python")))
