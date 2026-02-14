@@ -66,17 +66,6 @@ def support_office(tp: Templates, r: Request, s: Settings):
     )
 
 
-@bp_features.route("/hotline-fragment")
-def hotline():
-    return render_template_string(
-        """
-        {%- from "macros/support-hotline.html" import hotline_description -%}
-        {{- hotline_description(available=available) -}}
-        """,
-        available=support_hotline_available(),
-    )
-
-
 @router_features.get("/hotline-fragment", name="features.hotline")
 def hotline(tp: Templates, request: Request, s: Settings):
     return tp.TemplateResponse(

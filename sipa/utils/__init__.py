@@ -71,7 +71,7 @@ class TimeTable(t.TypedDict):
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=2 * 60))
-def try_fetch_hotline_availability(uri: str) -> bool:
+def support_hotline_available(uri: str) -> bool:
     """Determines whether there are agents logged in to anwser calls to our
     support hotline.
     """
@@ -79,10 +79,6 @@ def try_fetch_hotline_availability(uri: str) -> bool:
         return False
 
     return r.text == "AVAILABLE"
-
-
-def support_hotline_available(uri: str | None = None):
-    return try_fetch_hotline_availability(uri or current_app.config["PBX_URI"])
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
