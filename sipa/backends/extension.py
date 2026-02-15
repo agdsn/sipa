@@ -1,4 +1,5 @@
 from __future__ import annotations
+import warnings
 
 from typing import NamedTuple, cast
 
@@ -68,6 +69,11 @@ class Backends:
 
         :param app: The flask app object to register against
         """
+        warnings.warn(
+            "Use constructor with pre-onfigured datasource instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         if "backends" in app.extensions:
             logger.warning("Backends extension already initialized. Skipping.")
             return
@@ -152,5 +158,6 @@ class _dorm_summary(NamedTuple):
     display_name: str
 
 
+# TODO deprecated: should not be used
 backends: Backends = cast(Backends,
                           LocalProxy(lambda: current_app.extensions['backends']))

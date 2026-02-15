@@ -247,6 +247,9 @@ class PycroftApi:
         request_function = partial(self.session.patch, data=data or {})
         return self._do_api_call(request_function, url)
 
+    # TODO wrap in result type instead of doing this go-like ADT avoidance
+    # TODO also turn this into a context manager or whatever,
+    #   or at least properly type the callable
     def _do_api_call(
         self, request_function: Callable, url: t.LiteralString
     ) -> tuple[int, Any]:

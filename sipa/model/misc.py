@@ -1,3 +1,5 @@
+from __future__ import annotations
+from dataclasses import dataclass
 import typing as t
 from collections import namedtuple
 
@@ -6,14 +8,37 @@ from flask_login import current_user
 
 from sipa.backends import backends
 from sipa.backends.types import UserLike
+
 if t.TYPE_CHECKING:
     from .user import BaseUser
 else:
+
     class BaseUser: ...
 
-TransactionTuple = namedtuple('Transaction', ['datum', 'value'])
 
-PaymentDetails = namedtuple('PaymentDetails', 'recipient bank iban bic purpose')
+TransactionTuple = namedtuple("Transaction", ["datum", "value"])
+
+
+@dataclass(frozen=True)
+class PaymentDetails:
+    recipient: str
+    bank: str
+    iban: str
+    bic: str
+
+    def with_purpose(self, purpose: str):
+        return UserPaymentDetails(
+            recipient=self.recipient,
+            bank=self.bank,
+            iban=self.iban,
+            bic=self.bic,
+            purpose=purpose,
+        )
+
+
+@dataclass(frozen=True)
+class UserPaymentDetails(PaymentDetails):
+    purpose: str
 
 
 def has_connection(user: UserLike) -> bool:

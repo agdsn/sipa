@@ -15,7 +15,7 @@ from sipa.model.fancy_property import (
     Capabilities,
     connection_dependent,
 )
-from sipa.model.misc import PaymentDetails
+from sipa.model.misc import UserPaymentDetails, PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
     ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed, \
@@ -26,61 +26,66 @@ from .schema import UserData, UserStatus
 from .userdb import UserDB
 
 from flask_login import AnonymousUserMixin
-from flask.globals import current_app
 from flask_babel import gettext
-from werkzeug.local import LocalProxy
 from werkzeug.http import parse_date
 
 from ..mspk_client import MPSKClientEntry
 
 logger = logging.getLogger(__name__)
 
-api: PycroftApi = t.cast(
-    PycroftApi,
-    LocalProxy(lambda: current_app.extensions['pycroft_api'])
-)
 
-
+# TODO drop the sample user make this the only type
+@t.final
 class User(BaseUser):
     user_data: UserData
+    api: PycroftApi
+    _payment_details: PaymentDetails
 
-    def __init__(self, user_data: dict):
+    def __init__(
+        self,
+        user_data: dict,
+        api: PycroftApi | None = None,
+        payment_details: PaymentDetails | None = None,
+    ):
         try:
             self.user_data: UserData = UserData.model_validate(user_data)
+            self.login: str = self.user_data.login
             self._userdb: UserDB = UserDB(self)
         except ValidationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
         super().__init__(uid=str(self.user_data.id))
+        from flask.globals import current_app
+        self.api = api or t.cast(
+            PycroftApi,
+            current_app.extensions['pycroft_api']
+        )
+        self._payment_details = payment_details or PaymentDetails(
+            recipient=current_app.config["PAYMENT_DETAILS"]["RECIPIENT"],
+            bank=current_app.config["PAYMENT_DETAILS"]["BANK"],
+            iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],
+            bic=current_app.config["PAYMENT_DETAILS"]["BIC"],
+        )
 
+    # TODO deprecate / replace by proper api call
     @classmethod
-    def get(cls, username):
-        status, user_data = api.get_user(username)
-
-        if status != 200:
-            raise UserNotFound
-
-        return cls(user_data)
+    def get(cls, username: str):
+        raise NotImplementedError("You need to migrate to fetch_by_name() instead")
 
     @classmethod
     def from_ip(cls, ip):
-        status, user_data = api.get_user_from_ip(ip)
-
-        if status != 200:
-            return AnonymousUserMixin()
-
-        return cls(user_data)
+        raise NotImplementedError("You need to migrate to fetch_by_ip() instead")
 
     def re_authenticate(self, password):
-        self.authenticate(self.user_data.login, password)
+        self.authenticate(self.api, self.user_data.login, password)
 
-    @classmethod
-    def authenticate(cls, username, password):
+    @staticmethod
+    def authenticate(api: PycroftApi, username: str, password: str) -> User:
         status, result = api.authenticate(username, password)
 
         if status != 200:
             raise PasswordInvalid
 
-        user = cls.get(result['id'])
+        user = fetch_by_name(api, result['id'])
 
         if not user.has_property('sipa_login'):
             raise LoginNotAllowed
@@ -90,7 +95,7 @@ class User(BaseUser):
     can_change_password = True
 
     def change_password(self, old, new):
-        status, _ = api.change_password(self.user_data.id, old, new)
+        status, _ = self.api.change_password(self.user_data.id, old, new)
 
         if status != 200:
             raise PasswordInvalid
@@ -139,7 +144,7 @@ class User(BaseUser):
     def change_mac_address(self, new_mac, host_name, password):
         assert len(self.user_data.interfaces) == 1
 
-        status, _ = api.change_mac(
+        status, _ = self.api.change_mac(
             self.user_data.id,
             password,
             self.user_data.interfaces[0].id,
@@ -167,7 +172,7 @@ class User(BaseUser):
         )
 
     def activate_network_access(self, password, mac, birthdate, host_name):
-        status, _ = api.activate_network_access(self.user_data.id, password, mac,
+        status, _ = self.api.activate_network_access(self.user_data.id, password, mac,
                                                      birthdate, host_name)
 
         if status == 401:
@@ -180,7 +185,7 @@ class User(BaseUser):
             raise SubnetFull
 
     def terminate_membership(self, end_date):
-        status, _ = api.terminate_membership(self.user_data.id, end_date)
+        status, _ = self.api.terminate_membership(self.user_data.id, end_date)
 
         if status == 400:
             raise TerminationNotPossible
@@ -188,7 +193,7 @@ class User(BaseUser):
             raise UnknownError
 
     def estimate_balance(self, end_date):
-        status, result = api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
+        status, result = self.api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
 
         if status == 200:
             return result['estimated_balance']
@@ -196,7 +201,7 @@ class User(BaseUser):
             raise UnknownError
 
     def continue_membership(self):
-        status, _ = api.continue_membership(self.user_data.id)
+        status, _ = self.api.continue_membership(self.user_data.id)
 
         if status == 400:
             raise ContinuationNotPossible
@@ -212,7 +217,7 @@ class User(BaseUser):
         )
 
     def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
-        status, _ = api.change_mail(
+        status, _ = self.api.change_mail(
             self.user_data.id,
             password,
             new_mail,
@@ -247,7 +252,7 @@ class User(BaseUser):
         )
 
     def resend_confirm_mail(self) -> bool:
-        return api.resend_confirm_email(self.user_data.id)
+        return self.api.resend_confirm_email(self.user_data.id)
 
     @property
     def address(self) -> ActiveProperty[str | None, str]:
@@ -308,13 +313,9 @@ class User(BaseUser):
             last_update=self.user_data.last_finance_update
         )
 
-    def payment_details(self) -> PaymentDetails:
-        return PaymentDetails(
-            recipient=current_app.config["PAYMENT_DETAILS"]["RECIPIENT"],
-            bank=current_app.config["PAYMENT_DETAILS"]["BANK"],
-            iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],
-            bic=current_app.config["PAYMENT_DETAILS"]["BIC"],
-            purpose=f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",
+    def payment_details(self) -> UserPaymentDetails:
+        return self._payment_details.with_purpose(
+            f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",
         )
 
     def has_property(self, property: str) -> bool:
@@ -338,7 +339,7 @@ class User(BaseUser):
         )
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
-        status, _ = api.change_mpsk(
+        status, _ = self.api.change_mpsk(
             user_id=self.user_data.id,
             mac=mac,
             name=name,
@@ -354,7 +355,7 @@ class User(BaseUser):
             raise ValueError
 
     def add_mpsk_client(self, name, mac, password):
-        status, response = api.add_mpsk(
+        status, response = self.api.add_mpsk(
             self.user_data.id,
             password,
             mac,
@@ -374,7 +375,7 @@ class User(BaseUser):
             raise ValueError(f"Invalid response from {response}")
 
     def delete_mpsk_client(self, mpsk_id, password):
-        status, _ = api.delete_mpsk(
+        status, _ = self.api.delete_mpsk(
             self.user_data.id,
             password,
             mpsk_id,
@@ -430,36 +431,58 @@ class User(BaseUser):
         )
 
     def reset_wifi_password(self):
-        status, result = api.reset_wifi_password(self.user_data.id)
+        status, result = self.api.reset_wifi_password(self.user_data.id)
 
         if status != 200:
             raise UnknownError
 
         return result
 
-    @classmethod
-    def request_password_reset(cls, user_ident, email):
-        status, result = api.request_password_reset(user_ident, email.lower())
 
-        if status == 404:
-            raise UserNotFound
-        elif status == 412:
-            raise UserNotContactableError
-        elif status != 200:
-            raise UnknownError
+def fetch_by_name(api: PycroftApi, username: str) -> User:
+    status, user_data = api.get_user(username)
 
-        return result
+    if status != 200:
+        raise UserNotFound
 
-    @classmethod
-    def password_reset(cls, token, new_password):
-        status, result = api.reset_password(token, new_password)
+    # TODO can we reasonably ensure that `user` is a `LiteralString`?
+    #  It is not user-provided, but pycroft-provided.
+    #  so in _some sense_ it is internally controlled, but in another it is not.
+    #  Perhaps a conscious cast at this one point should be fine.
+    return User(user_data)
 
-        if status == 403:
-            raise TokenNotFound
-        elif status != 200:
-            raise UnknownError
 
-        return result
+def fetch_by_ip(api: PycroftApi, ip) -> User | AnonymousUserMixin:
+    status, user_data = api.get_user_from_ip(ip)
+
+    if status != 200:
+        return AnonymousUserMixin()
+
+    return User(user_data)
+
+
+def request_password_reset(api: PycroftApi, user_ident: str, email: str) -> dict:
+    status, result = api.request_password_reset(user_ident, email.lower())
+
+    if status == 404:
+        raise UserNotFound
+    elif status == 412:
+        raise UserNotContactableError
+    elif status != 200:
+        raise UnknownError
+
+    return result
+
+
+def password_reset(api: PycroftApi, token: str, new_password: str) -> dict:
+    status, result = api.reset_password(token, new_password)
+
+    if status == 403:
+        raise TokenNotFound
+    elif status != 200:
+        raise UnknownError
+
+    return result
 
 
 def to_kib(v: int) -> int:

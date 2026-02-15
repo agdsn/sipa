@@ -8,7 +8,7 @@ from typing import TypeVar
 
 from sipa.model.fancy_property import UnsupportedProperty, PropertyBase
 from sipa.model.finance import BaseFinanceInformation
-from sipa.model.misc import PaymentDetails
+from sipa.model.misc import UserPaymentDetails
 from .mspk_client import MPSKClientEntry
 
 
@@ -272,7 +272,7 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
         return info.balance
 
     @abstractmethod
-    def payment_details(self) -> PaymentDetails:
+    def payment_details(self) -> UserPaymentDetails:
         """Payment details for the User."""
         pass
 
@@ -318,14 +318,6 @@ class BaseUser(AuthenticatedUserMixin, metaclass=ABCMeta):
     @property
     def mpsk_clients(self) -> PropertyBase[list[MPSKClientEntry], list[MPSKClientEntry]]:
         return UnsupportedProperty("mpsk_clients")
-
-    @classmethod
-    def request_password_reset(cls, user_ident, email):
-        raise NotImplementedError
-
-    @classmethod
-    def password_reset(cls, token, new_password):
-        raise NotImplementedError
 
 
 class BaseUserDB(metaclass=ABCMeta):

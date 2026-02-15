@@ -59,7 +59,7 @@ from sipa.model.exceptions import (
     ContinuationNotPossible,
     SubnetFull, MaximumNumberMPSKClients, NoWiFiPasswordGenerated,
 )
-from sipa.model.misc import PaymentDetails
+from sipa.model.misc import UserPaymentDetails
 from sipa.model.user import BaseUser
 from ..deps import Templates
 
@@ -254,7 +254,7 @@ def subscribe():
     return redirect(url_for('.index'))
 
 
-def render_payment_details(details: PaymentDetails, months):
+def render_payment_details(details: UserPaymentDetails, months):
     return {
         gettext("Zahlungsempfänger"): details.recipient,
         gettext("Bank"): details.bank,
@@ -269,7 +269,7 @@ def render_payment_details(details: PaymentDetails, months):
     }
 
 
-def generate_epc_qr_code(details: PaymentDetails, months):
+def generate_epc_qr_code(details: UserPaymentDetails, months):
     # generate content for epc-qr-code (also known as giro-code)
     EPC_FORMAT = \
         "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n"

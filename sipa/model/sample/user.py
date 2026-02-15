@@ -13,7 +13,7 @@ from sipa.model.fancy_property import (
     UnsupportedProperty,
 )
 from sipa.model.finance import BaseFinanceInformation
-from sipa.model.misc import PaymentDetails
+from sipa.model.misc import UserPaymentDetails
 from sipa.model.mspk_client import MPSKClientEntry
 from sipa.model.user import BaseUser
 from sipa.utils import argstr
@@ -35,6 +35,8 @@ class SampleUserData(t.TypedDict):
     is_member: bool
     mpsk_clients: list[MPSKClientEntry] | None
 
+
+# TODO put this on the datasource
 def init_app(app):
     app.extensions['sample_users'] = {
         'test': {
@@ -56,6 +58,7 @@ def init_app(app):
     }
 
 
+# TODO find another way to access this `config` object
 config = LocalProxy(lambda: current_app.extensions['sample_users'])
 
 
@@ -102,6 +105,10 @@ class User(BaseUser):
         'test': ('test', 'Test Nutzer', 'test@agdsn.de'),
     }
 
+    # TODO we need to be able to inject the dependencies in here somehow.
+    #  perhaps we should just add `datasource.get_user(…)` instead of making
+    #  it a classmethod.
+    #  the login stuff would then just have a dependency on the datasource
     @classmethod
     def get(cls, username):
         """Static method for flask-login user_loader,
@@ -260,8 +267,8 @@ class User(BaseUser):
     def birthdate(self):
         return UnsupportedProperty("birthdate")
 
-    def payment_details(self) -> PaymentDetails:
-        return PaymentDetails(
+    def payment_details(self) -> UserPaymentDetails:
+        return UserPaymentDetails(
             recipient=current_app.config["PAYMENT_DETAILS"]["RECIPIENT"],
             bank=current_app.config["PAYMENT_DETAILS"]["BANK"],
             iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],

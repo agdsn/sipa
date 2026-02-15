@@ -216,12 +216,18 @@ def request_password_reset():
 
     if form.validate_on_submit():
         try:
-            pycroft.user.User.request_password_reset(form.ident.data, form.email.data)
+            api = current_app.extensions["pycroft_api"]
+            pycroft.user.request_password_reset(api, form.ident.data, form.email.data)
         except (UserNotContactableError, UserNotFound):
             flash(_("Für die angegebenen Daten konnte kein Benutzer gefunden werden."), "error")
         except UnknownError:
-            flash("{} {}".format(_("Es ist ein unbekannter Fehler aufgetreten."),
-                                 _("Bitte kontaktiere den Support.")), "error")
+            flash(
+                "{} {}".format(
+                    _("Es ist ein unbekannter Fehler aufgetreten."),
+                    _("Bitte kontaktiere den Support."),
+                ),
+                "error",
+            )
         else:
             flash(gettext("Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. "
                           "Falls du die Nachricht nicht erhälst, wende dich an den Support."), "success")
@@ -238,13 +244,23 @@ def reset_password(token):
 
     if form.validate_on_submit():
         try:
-            pycroft.user.User.password_reset(token, form.password.data)
+            pycroft.user.password_reset(
+                current_app.extensions["pycroft_api"], token, form.password.data
+            )
         except TokenNotFound:
-            flash(_("Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."), "error")
-            return redirect(url_for('.request_password_reset'))
+            flash(
+                _("Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."),
+                "error",
+            )
+            return redirect(url_for(".request_password_reset"))
         except UnknownError:
-            flash("{} {}".format(_("Es ist ein unbekannter Fehler aufgetreten."),
-                                 _("Bitte kontaktiere den Support.")), "error")
+            flash(
+                "{} {}".format(
+                    _("Es ist ein unbekannter Fehler aufgetreten."),
+                    _("Bitte kontaktiere den Support."),
+                ),
+                "error",
+            )
         else:
             flash(gettext("Dein Passwort wurde geändert."), "success")
 
