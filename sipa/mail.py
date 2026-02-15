@@ -22,7 +22,7 @@ from typing import Any
 from flask import current_app
 
 from sipa.backends.extension import backends
-from sipa.model.user import BaseUser
+from sipa.model.pycroft.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -194,7 +194,7 @@ def send_usersuite_contact_mail(
     subject: str,
     message: str,
     category: str,
-    user: BaseUser,
+    user: User,
     author: str | None = None,
 ) -> bool:
     """Compose a mail for contacting from the usersuite

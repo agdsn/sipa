@@ -60,7 +60,7 @@ from sipa.model.exceptions import (
     SubnetFull, MaximumNumberMPSKClients, NoWiFiPasswordGenerated,
 )
 from sipa.model.misc import UserPaymentDetails
-from sipa.model.user import BaseUser
+from sipa.model.pycroft.user import User
 from ..deps import Templates
 
 logger = logging.getLogger(__name__)
@@ -76,7 +76,7 @@ def capability_or_403(active_property, capability):
 
 
 def get_mpsk_client_or_404(mpsk_id: int) -> MPSKClientEntry:
-    for client in t.cast(BaseUser, current_user).mpsk_clients.value:
+    for client in t.cast(User, current_user).mpsk_clients.value:
         if client.id == mpsk_id:
             return client
     abort(404)
@@ -208,7 +208,7 @@ def contact():
             category=types.get(form.type.data, "Allgemein"),
             subject=subj,
             message=msg,
-            user=t.cast(BaseUser, current_user),
+            user=t.cast(User, current_user),
         )
 
         if success:

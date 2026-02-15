@@ -6,7 +6,7 @@ from datetime import date
 
 from pydantic import ValidationError
 
-from sipa.model.user import BaseUser
+from sipa.model.user import TableRow
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import (
     ActiveProperty,
@@ -35,8 +35,15 @@ logger = logging.getLogger(__name__)
 
 
 # TODO drop the sample user make this the only type
+# TODO find remaining usages of `BaseUser`
 @t.final
-class User(BaseUser):
+class User:
+    # TODO remove, this is legacy from flask_login
+    is_authenticated = True
+    is_active = True
+    is_anonymous = False
+
+    uid: int
     user_data: UserData
     api: PycroftApi
     _payment_details: PaymentDetails
@@ -50,10 +57,12 @@ class User(BaseUser):
         try:
             self.user_data: UserData = UserData.model_validate(user_data)
             self.login: str = self.user_data.login
-            self._userdb: UserDB = UserDB(self)
+            self._userdb: UserDB = UserDB(self.login)
         except ValidationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
-        super().__init__(uid=str(self.user_data.id))
+
+        self.uid: str = self.user_data.id
+
         from flask.globals import current_app
         self.api = api or t.cast(
             PycroftApi,
@@ -65,6 +74,9 @@ class User(BaseUser):
             iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],
             bic=current_app.config["PAYMENT_DETAILS"]["BIC"],
         )
+
+    def __eq__(self, other):
+        return self.uid == other.uid and self.datasource == other.datasource
 
     # TODO deprecate / replace by proper api call
     @classmethod
@@ -110,6 +122,25 @@ class User(BaseUser):
             'output': to_kib(entry.egress),
             'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
         } for entry in self.user_data.traffic_history]
+
+    def generate_rows(
+        self, description_dict: dict[str, tuple[str, str] | tuple[str]]
+    ) -> t.Iterator[TableRow]:
+        for key, val in description_dict.items():
+            d = self.__text_to_dict(val)
+            yield TableRow(
+                property=getattr(self, key), description=d["description"], subtext=d.get("subtext")
+            )
+
+    @staticmethod
+    def __text_to_dict(val: str | t.Sequence[str]) -> dict:
+        match val:
+            case [d, s]:
+                return {"description": d, "subtext": s}
+            case [d]:
+                return {"description": d}
+            case _:
+                return {"description": "Error"}
 
     @property
     def realname(self) -> ActiveProperty[str, str]:
@@ -312,6 +343,15 @@ class User(BaseUser):
                           self.user_data.finance_history),
             last_update=self.user_data.last_finance_update
         )
+
+    @property
+    def finance_balance(self) -> PropertyBase[str, float | None]:
+        """The :class:`fancy property <sipa.model.fancy_property.PropertyBase>`
+        representing the finance balance"""
+        info = self.finance_information
+        if not info:
+            return UnsupportedProperty("finance_balance")
+        return info.balance
 
     def payment_details(self) -> UserPaymentDetails:
         return self._payment_details.with_purpose(
