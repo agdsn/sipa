@@ -1,41 +1,26 @@
 import logging
-from ipaddress import IPv4Address, AddressValueError
+import typing as t
+from dataclasses import dataclass
 
 from flask import current_app
 from sqlalchemy import create_engine
+from sqlalchemy.engine.base import Engine
 from sqlalchemy.exc import OperationalError
 
 from sipa.backends.exceptions import InvalidConfiguration
+from sipa.config.typed_config import Mask
 
 logger = logging.getLogger(__name__)
 
 
+@t.final
+@dataclass(frozen=True)
 class UserDB:
-    def __init__(self, dbname: str):
-        # TODO inject config!
-        self.dbname = dbname
+    dbname: str
+    ip_mask: Mask
+    database: Engine
 
-        mask = current_app.config.get("DB_HELIOS_IP_MASK")
-        self.test_ipmask_validity(mask)
-        self.ip_mask = mask
-
-    @staticmethod
-    def test_ipmask_validity(mask):
-        """Test whether a valid ip mask (at max one consecutive '%') was given
-
-        This is being done by replacing '%' with the maximum possible
-        value ('255').  Thus, everything surrounding the '%' except
-        for dots causes an invalid IPv4Address and thus a
-        `ValueError`.
-        """
-        try:
-            IPv4Address(mask.replace("%", "255"))
-        except AddressValueError as e:
-            raise ValueError(
-                f"Mask {mask!r} is not a valid IP address or contains "
-                "more than one consecutive '%' sign"
-            ) from e
-
+    # TODO pass cursor explicitly or encapsulate in ctor
     @staticmethod
     def sql_query(query: str, args=()):
         """Prepare and execute a raw sql query.
@@ -44,7 +29,7 @@ class UserDB:
         :param args: is a tuple needed for string replacement.
             See :py:meth:`pymysql.cursors.Cursor.execute`.
         """
-        database = current_app.extensions["db_helios"]
+        database: Engine = current_app.extensions["db_helios"]
         # Connection.__enter__ returns Cursor, Cursor.__enter__ returns itself
         # and we need both things for their `__exit__` commands
         with database.connect() as cursor, cursor:
@@ -114,6 +99,7 @@ class UserDB:
 
 
 def register_userdb_extension(app):
+    # TODO replace by registering a helios_engine on `app.state`
     try:
         app.extensions['db_helios'] = create_engine(
             app.config['DB_HELIOS_URI'],

@@ -1,8 +1,9 @@
 from __future__ import annotations
+from ipaddress import IPv4Address, AddressValueError
 
 import typing as t
 
-from pydantic import BaseModel, Field, SecretStr, HttpUrl, PositiveFloat, PositiveInt, MySQLDsn
+from pydantic import BaseModel, Field, SecretStr, HttpUrl, PositiveFloat, PositiveInt, MySQLDsn, AfterValidator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -89,7 +90,7 @@ class Settings(BaseSettings):
 
     # --- database (helios) ---
     db_helios_uri: MySQLDsn = MySQLDsn("mysql+pymysql://verwaltung:secret@userdb.agdsn.network:3306/")
-    db_helios_ip_mask: str | None = "10.0.7.%"
+    db_helios_ip_mask: Mask
 
     sql_connect_timeout_seconds: int = 2
     sql_connection_recycle_seconds: int = 3600
@@ -163,3 +164,26 @@ class Settings(BaseSettings):
     # hacky & expensive, we should instead use immutable submodels
     def __hash__(self) -> int:
         return hash(str(self.model_dump(mode="python")))
+
+
+def _validate_ip_mask(mask: str | None) -> str | None:
+    """Test whether a valid ip mask (at max one consecutive '%') was given
+
+    This is being done by replacing '%' with the maximum possible
+    value ('255').  Thus, everything surrounding the '%' except
+    for dots causes an invalid IPv4Address and thus a
+    `ValueError`.
+    """
+    if not mask:
+        raise ValueError(f"{mask!r} is not a valid IP mask")
+
+    try:
+        IPv4Address(mask.replace("%", "255"))
+    except AddressValueError as e:
+        raise ValueError(
+            f"Mask {mask!r} is not a valid IP address or contains "
+            "more than one consecutive '%' sign"
+        ) from e
+
+
+type Mask = t.Annotated[str | None, AfterValidator(_validate_ip_mask), Field(default="10.0.7.%")]

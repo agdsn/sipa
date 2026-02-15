@@ -149,7 +149,9 @@ class Backends:
         if not self.dormitory_from_ip(ip):
             return AnonymousUserMixin()
 
-        return self.datasource.user_class.from_ip(ip)
+        # TODO move closer to where it's actually used
+        from sipa.model.pycroft.user import fetch_by_ip
+        return fetch_by_ip(__TODO_API, ip)
 
 
 #: A namedtuple to improve readability of some return values

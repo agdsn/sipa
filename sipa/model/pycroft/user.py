@@ -1,4 +1,5 @@
 from __future__ import annotations
+from sqlalchemy.engine.base import Engine
 
 import logging
 import typing as t
@@ -6,6 +7,7 @@ from datetime import date
 
 from pydantic import ValidationError
 
+from sipa.config.typed_config import Mask
 from sipa.model.user import TableRow
 from sipa.model.finance import BaseFinanceInformation
 from sipa.model.fancy_property import (
@@ -51,29 +53,25 @@ class User:
     def __init__(
         self,
         user_data: dict,
-        api: PycroftApi | None = None,
-        payment_details: PaymentDetails | None = None,
+        api: PycroftApi,
+        # TODO move these dependencies to the presentation layer: obtaining a `user` object
+        #  should be simple (e.g. for reauthentication purposes)
+        #  and not drag in unnecessary dependencies.
+        # TODO extract userdb info?
+        payment_details: PaymentDetails,
+        ip_mask: Mask,
+        engine: Engine,
     ):
         try:
             self.user_data: UserData = UserData.model_validate(user_data)
             self.login: str = self.user_data.login
-            self._userdb: UserDB = UserDB(self.login)
+            self._userdb: UserDB = UserDB(dbname=self.login, ip_mask=ip_mask, engine=engine)
         except ValidationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
 
         self.uid: str = self.user_data.id
-
-        from flask.globals import current_app
-        self.api = api or t.cast(
-            PycroftApi,
-            current_app.extensions['pycroft_api']
-        )
-        self._payment_details = payment_details or PaymentDetails(
-            recipient=current_app.config["PAYMENT_DETAILS"]["RECIPIENT"],
-            bank=current_app.config["PAYMENT_DETAILS"]["BANK"],
-            iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],
-            bic=current_app.config["PAYMENT_DETAILS"]["BIC"],
-        )
+        self.api = api
+        self._payment_details = payment_details
 
     def __eq__(self, other):
         return self.uid == other.uid and self.datasource == other.datasource
@@ -489,7 +487,8 @@ def fetch_by_name(api: PycroftApi, username: str) -> User:
     #  It is not user-provided, but pycroft-provided.
     #  so in _some sense_ it is internally controlled, but in another it is not.
     #  Perhaps a conscious cast at this one point should be fine.
-    return User(user_data)
+    # TODO pass these dependencies somehow (perhaps `UserLoader`? or deferring injection until needed)
+    return User(user_data, api, __TODO_payment_details, __TODO_ip_mask, __TODO_engine)
 
 
 def fetch_by_ip(api: PycroftApi, ip) -> User | AnonymousUserMixin:
@@ -498,7 +497,8 @@ def fetch_by_ip(api: PycroftApi, ip) -> User | AnonymousUserMixin:
     if status != 200:
         return AnonymousUserMixin()
 
-    return User(user_data)
+    # TODO pass these dependencies somehow (perhaps `UserLoader`? or deferring injection until needed)
+    return User(user_data, api, __TODO_payment_details, __TODO_ip_mask, __TODO_engine)
 
 
 def request_password_reset(api: PycroftApi, user_ident: str, email: str) -> dict:

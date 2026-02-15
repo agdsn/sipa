@@ -34,10 +34,6 @@ def load_user(username):
     """Loads a User object from/into the session at every request
     """
     raise NotImplementedError("unsupported, move to new API")
-    logger.debug("User loader triggered (%r)", username)
-    _cleanup_session(session)
-    User = backends.datasource.user_class
-    return User.get(username)
 
 
 def _cleanup_session(session):

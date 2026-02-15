@@ -53,6 +53,7 @@ class PycroftAuthorization(requests.auth.AuthBase):
         return r
 
 
+# TODO make methods return pydantic-parsed objects instead of a dict
 class PycroftApi:
     def __init__(self, endpoint: str, api_key: str):
         if not endpoint.endswith("/"):
