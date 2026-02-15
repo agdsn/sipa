@@ -1,46 +1,47 @@
+from sipa.model.pycroft import datasource
 import html
 import logging
 import os
 
 from fastapi import APIRouter, Request
-from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from flask import (
+    abort,
+    flash,
+    jsonify,
+    redirect,
     render_template,
     request,
-    redirect,
-    url_for,
-    flash,
     session,
-    abort,
-    jsonify,
+    url_for,
 )
 from flask.blueprints import Blueprint
-from flask_babel import gettext, format_date, _
-from flask_login import current_user, login_user, logout_user, \
-    login_required
+from flask_babel import _, format_date, gettext
+from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import DatabaseError
 
 from sipa.backends.exceptions import BackendError
+from sipa.backends.extension import backends
 from sipa.forms import (
-    LoginForm,
     AnonymousContactForm,
+    LoginForm,
     OfficialContactForm,
     PasswordRequestResetForm,
     PasswordResetForm,
 )
-from sipa.mail import send_official_contact_mail, send_contact_mail
-from sipa.backends.extension import backends
+from sipa.mail import send_contact_mail, send_official_contact_mail
 from sipa.model import pycroft
-from sipa.units import dynamic_unit, format_money
 from sipa.model.exceptions import (
-    UserNotFound,
     InvalidCredentials,
+    LoginNotAllowed,
+    TokenNotFound,
     UnknownError,
     UserNotContactableError,
-    TokenNotFound,
-    LoginNotAllowed,
+    UserNotFound,
 )
-from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
+from sipa.model.pycroft.user import User
+from sipa.units import dynamic_unit, format_money
+from sipa.utils.git_utils import get_latest_commits, get_repo_active_branch
 
 logger = logging.getLogger(__name__)
 
@@ -142,9 +143,8 @@ def login():
         username = form.username.data
         password = form.password.data
         remember = form.remember.data
-        User = backends.datasource.user_class
 
-        valid_suffix = f"@{backends.datasource.mail_server}"
+        valid_suffix = f"@{datasource.mail_server}"
 
         if username.endswith(valid_suffix):
             username = username[:-len(valid_suffix)]
@@ -181,9 +181,9 @@ def login():
 @router_generic.get("/login", name="generic.login")
 @router_generic.post("/login", name="generic.login")
 def login_(request: Request) -> HTMLResponse:
-    # TODO nontrivial: Flask-WTF -> FastAPI form parsing + CSRF
-    # TODO nontrivial: flask_login session/cookie -> FastAPI auth middleware
-    # TODO nontrivial: flash messages + redirects after successful login
+    # TODO first add a session cookie without CSRF
+    # TODO MVP: non-signed cookie, just to get the UI started
+    # TODO MVP2: signed, with `HttpOnly; Secure; SameSite=Lax`
     return HTMLResponse("TODO: /login (FastAPI)")
 
 

@@ -28,6 +28,7 @@ from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
 from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
+from sipa.model.pycroft import datasource
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import url_self
 from sipa.utils.babel_utils import get_weekday
@@ -108,7 +109,7 @@ def init_jinja_env(env: Environment, cf_pages: CategorizedFlatPages, backends: B
         get_attribute_endpoint=get_attribute_endpoint,
         should_display_traffic_data=should_display_traffic_data,
         traffic_chart=provide_render_function(generate_traffic_chart),
-        current_datasource=lambda: backends.datasource,
+        current_datasource=datasource,
         form_label_width_class=f"col-sm-{form_label_width}",
         form_input_width_class=f"col-sm-{form_input_width}",
         form_input_offset_class=f"offset-sm-{form_label_width}",

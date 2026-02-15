@@ -10,7 +10,6 @@ are needed to compose and send the mails.  The core is
 :py:func:`send_complex_mail`, which calls :py:func:`send_mail`
 prepending optional information to the title and body
 """
-
 import logging
 import smtplib
 import ssl
@@ -22,6 +21,7 @@ from typing import Any
 from flask import current_app
 
 from sipa.backends.extension import backends
+from sipa.model.pycroft import datasource
 from sipa.model.pycroft.user import User
 
 logger = logging.getLogger(__name__)
@@ -159,7 +159,7 @@ def send_contact_mail(author: str, subject: str, message: str,
 
     return send_complex_mail(
         author=author,
-        recipient=backends.datasource.support_mail,
+        recipient=datasource.support_mail,
         subject=subject,
         message=message,
         tag="Kontakt",
