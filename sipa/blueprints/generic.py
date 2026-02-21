@@ -2,6 +2,7 @@ import html
 import logging
 import os
 import typing as t
+from urllib.parse import quote
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -19,6 +20,8 @@ from flask.blueprints import Blueprint
 from flask_babel import _, format_date, gettext
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import DatabaseError
+from starlette.background import BackgroundTask
+from starlette.datastructures import URL
 from starlette.responses import Response
 
 from sipa.backends.exceptions import BackendError
@@ -193,7 +196,7 @@ def login_get(
     )
 
 
-@router_generic.post("/login", name="generic.login")
+@router_generic.post("/login", name="generic.login_post")
 def login_post(
     tp: Templates,
     r: Request,
@@ -206,13 +209,28 @@ def login_post(
     if not success:
         # TODO pass error && username
         return tp.TemplateResponse(
-            r, "login-fragment.html", context={},
+            r, "login-fragment.html", context={"errors": ["invalid."]},
         )
 
     # TODO first add a session cookie without CSRF
     # TODO MVP: non-signed cookie, just to get the UI started
     # TODO MVP2: signed, with `HttpOnly; Secure; SameSite=Lax`
-    return RedirectResponse(r.url_for('usersuite.index'), status_code=302)
+    resp = HtmxRedirectResponse(r.url_for('usersuite.index'))
+    resp.set_cookie("username", login)
+    return resp
+
+
+# TODO move to some htmx helpers module
+class HtmxRedirectResponse(Response):
+    def __init__(
+        self,
+        url: str | URL,
+        status_code: int = 204,
+        headers: t.Mapping[str, str] | None = None,
+        background: BackgroundTask | None = None,
+    ) -> None:
+        super().__init__(content=b"", status_code=status_code, headers=headers, background=background)
+        self.headers["HX-Location"] = quote(str(url), safe=":/%#?=@[]!$&'()*+,;")
 
 
 @bp_generic.route("/logout")

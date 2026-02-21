@@ -1,6 +1,6 @@
 {% macro fragment() %}
 <div class="row">
-    <form method="post" action="{{ url_self() }}">
+    <form hx-post="{{ url_self() }}">
         <div class="mb-3">
             <div class="form-label">Username</div>
             <input class="form-control" type="text" name="login"></input>
@@ -18,6 +18,12 @@
             <button type="submit" class="ms-auto btn btn-primary">Log in</button>
         </div>
     </form>
+
 </div>
+{% for error in errors %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% endfor %}
 
 {% endmacro %}
+
+{{ fragment() }}
