@@ -63,6 +63,12 @@ dev = [
     "ipython>=9.5.0",
 ]
 
+[tool.hatch.build.targets.wheel]
+include = ["sipa/static/**"]
+
+[tool.hatch.build.targets.sdist]
+include = ["sipa/static/**"]
+
 [tool.uv.sources]
 wtforms-widgets = { path = "wtforms_widgets", editable = true }
 
