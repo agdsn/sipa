@@ -1,9 +1,9 @@
-from sipa.model.pycroft import datasource
 import html
 import logging
 import os
+import typing as t
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from flask import (
     abort,
@@ -19,9 +19,11 @@ from flask.blueprints import Blueprint
 from flask_babel import _, format_date, gettext
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import DatabaseError
+from starlette.responses import Response
 
 from sipa.backends.exceptions import BackendError
 from sipa.backends.extension import backends
+from sipa.deps import Settings, Templates
 from sipa.forms import (
     AnonymousContactForm,
     LoginForm,
@@ -39,10 +41,10 @@ from sipa.model.exceptions import (
     UserNotContactableError,
     UserNotFound,
 )
+from sipa.model.pycroft import datasource
 from sipa.model.pycroft.user import User
 from sipa.units import dynamic_unit, format_money
 from sipa.utils.git_utils import get_latest_commits, get_repo_active_branch
-from sipa.deps import Templates, Settings
 
 logger = logging.getLogger(__name__)
 
@@ -196,9 +198,11 @@ def login_post(
     tp: Templates,
     r: Request,
     s: Settings,
-) -> HTMLResponse:
+    login: t.Annotated[str, Form()],
+    password: t.Annotated[str, Form()],
+) -> Response:
 
-    success = False
+    success = password == "password"
     if not success:
         # TODO pass error && username
         return tp.TemplateResponse(
@@ -208,7 +212,7 @@ def login_post(
     # TODO first add a session cookie without CSRF
     # TODO MVP: non-signed cookie, just to get the UI started
     # TODO MVP2: signed, with `HttpOnly; Secure; SameSite=Lax`
-    return RedirectResponse(url_for('usersuite.index'), status_code=302)
+    return RedirectResponse(r.url_for('usersuite.index'), status_code=302)
 
 
 @bp_generic.route("/logout")

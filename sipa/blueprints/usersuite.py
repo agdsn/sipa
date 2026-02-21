@@ -180,6 +180,8 @@ def index():
 @router_usersuite.get("/", name="usersuite.index")
 @router_usersuite.post("/", name="usersuite.index")
 def index_(templates: Templates) -> HTMLResponse:
+    # TODO inject user object
+    #   → can we initiate a redirect if the user is not authorized?
     return HTMLResponse("STUB")
     # return templates.TemplateResponse("usersuite/index.html", payment_form=None)
 

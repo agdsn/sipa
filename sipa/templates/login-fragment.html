@@ -1,6 +1,6 @@
 {% macro fragment() %}
 <div class="row">
-    <form>
+    <form method="post" action="{{ url_self() }}">
         <div class="mb-3">
             <div class="form-label">Username</div>
             <input class="form-control" type="text" name="login"></input>
