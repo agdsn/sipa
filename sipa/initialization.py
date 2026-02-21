@@ -106,8 +106,11 @@ def init_jinja_env(env: Environment, cf_pages: CategorizedFlatPages, backends: B
         get_locale=get_locale,
         get_weekday=get_weekday,
         possible_locales=possible_locales,
+        # needs current_user
         get_attribute_endpoint=get_attribute_endpoint,
+        # needs current_user, request
         should_display_traffic_data=should_display_traffic_data,
+        # needs gettext, g.nonce_info
         traffic_chart=provide_render_function(generate_traffic_chart),
         current_datasource=datasource,
         form_label_width_class=f"col-sm-{form_label_width}",
