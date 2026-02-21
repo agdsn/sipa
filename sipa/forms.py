@@ -68,7 +68,7 @@ def render_links(raw: str, links: dict[str, str]):
 class HtmlFormattable(t.Protocol):
     def __html__(self) -> str: ...
 
-        
+
 @dataclass
 class LazilyProcessed[T: HtmlFormattable]:
     message: T

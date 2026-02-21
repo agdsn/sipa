@@ -42,6 +42,7 @@ from sipa.model.exceptions import (
 from sipa.model.pycroft.user import User
 from sipa.units import dynamic_unit, format_money
 from sipa.utils.git_utils import get_latest_commits, get_repo_active_branch
+from sipa.deps import Templates, Settings
 
 logger = logging.getLogger(__name__)
 
@@ -179,12 +180,35 @@ def login():
 
 
 @router_generic.get("/login", name="generic.login")
+def login_get(
+    tp: Templates,
+    r: Request,
+    s: Settings,
+) -> HTMLResponse:
+    # TODO layout: should we use a component?
+    return tp.TemplateResponse(
+        r, "login.html", context={},
+    )
+
+
 @router_generic.post("/login", name="generic.login")
-def login_(request: Request) -> HTMLResponse:
+def login_post(
+    tp: Templates,
+    r: Request,
+    s: Settings,
+) -> HTMLResponse:
+
+    success = False
+    if not success:
+        # TODO pass error && username
+        return tp.TemplateResponse(
+            r, "login-fragment.html", context={},
+        )
+
     # TODO first add a session cookie without CSRF
     # TODO MVP: non-signed cookie, just to get the UI started
     # TODO MVP2: signed, with `HttpOnly; Secure; SameSite=Lax`
-    return HTMLResponse("TODO: /login (FastAPI)")
+    return RedirectResponse(url_for('usersuite.index'), status_code=302)
 
 
 @bp_generic.route("/logout")
@@ -201,7 +225,6 @@ def logout():
 def logout_(request: Request) -> RedirectResponse:
     # TODO nontrivial: remove FastAPI session/cookie and clear request.state.user
     return RedirectResponse(request.url_for("generic.index"), status_code=302)
-
 
 
 @bp_generic.route('/reset-password', methods=['GET', 'POST'])
@@ -268,7 +291,6 @@ def reset_password(token):
 
     return render_template('generic_form.html', page_title=gettext("Passwort zurücksetzen"),
                            form_args={'form': form, 'cancel_to': url_for('.login')})
-
 
 
 @router_generic.get("/reset-password", name="generic.request_password_reset")
@@ -368,7 +390,6 @@ def traffic_api():
     }
 
     return jsonify(version=3, **trafficdata)
-
 
 
 @router_generic.get("/usertraffic", name="generic.usertraffic")

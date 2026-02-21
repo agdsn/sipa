@@ -1,0 +1,23 @@
+{% macro fragment() %}
+<div class="row">
+    <form>
+        <div class="mb-3">
+            <div class="form-label">Username</div>
+            <input class="form-control" type="text" name="login"></input>
+        </div>
+        <div class="mb-3">
+            <div class="form-label">Password</div>
+            <input class="form-control" type="password" name="password"></input>
+        </div>
+        <div class="d-flex align-items-center">
+            <a class="btn btn-outline-secondary" href="{{ url_for('generic.request_password_reset') }}">
+                <span class="bi bi-question"></span>
+                {{ _("Passwort vergessen?") }}
+            </a>
+
+            <button type="submit" class="ms-auto btn btn-primary">Log in</button>
+        </div>
+    </form>
+</div>
+
+{% endmacro %}
