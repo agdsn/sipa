@@ -61,6 +61,7 @@ dev = [
     "types-requests>=2.31.0.6",
     "types-wtforms>=3.2.1.20250809",
     "ipython>=9.5.0",
+    "uvicorn-hmr[all]>=0.1.1.8",
 ]
 
 [tool.hatch.build.targets.wheel]
