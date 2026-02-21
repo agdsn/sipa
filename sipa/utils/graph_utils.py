@@ -83,6 +83,8 @@ def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Gra
                       [day['output'] for day in traffic_data],
                       stroke_style={'dasharray': '5'})
 
+    # TODO restrict: pass `NonceInfo()` in parameter
+    #   …or `get_nonce_info`
     from flask import g
 
     if not hasattr(g, "nonce_info"):

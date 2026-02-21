@@ -1,9 +1,5 @@
 """Blueprint for Usersuite components
 """
-from wtforms_widgets.fields.core import TextAreaField
-from wtforms.validators import NumberRange
-from wtforms import IntegerField
-
 import logging
 import math
 import typing as t
@@ -17,51 +13,59 @@ from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
 from flask import (
     Blueprint,
-    render_template,
-    url_for,
-    redirect,
-    flash,
     abort,
-    request,
     current_app,
+    flash,
+    redirect,
+    render_template,
+    request,
     send_file,
+    url_for,
 )
 from flask_babel import format_date, gettext
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from markupsafe import Markup
+from starlette.requests import Request
+from wtforms import IntegerField
+from wtforms.validators import NumberRange
+from wtforms_widgets.fields.core import TextAreaField
 
 from sipa.forms import (
-    ContactForm,
+    ActivateNetworkAccessForm,
     ChangeMACForm,
     ChangeMailForm,
     ChangePasswordForm,
-    HostingForm,
-    PaymentForm,
-    ActivateNetworkAccessForm,
-    StrippedStringField,
-    TerminateMembershipForm,
-    TerminateMembershipConfirmForm,
+    ContactForm,
     ContinueMembershipForm,
-    MPSKClientForm,
     DeleteMPSKClientForm,
+    HostingForm,
+    MPSKClientForm,
+    PaymentForm,
+    StrippedStringField,
+    TerminateMembershipConfirmForm,
+    TerminateMembershipForm,
 )
 from sipa.mail import send_usersuite_contact_mail
-from sipa.model.fancy_property import ActiveProperty
-from sipa.model.mspk_client import MPSKClientEntry
-from sipa.utils import password_changeable, subscribe_to_status_page
 from sipa.model.exceptions import (
-    PasswordInvalid,
-    UserNotFound,
+    ContinuationNotPossible,
     MacAlreadyExists,
+    MaximumNumberMPSKClients,
+    NoWiFiPasswordGenerated,
+    PasswordInvalid,
+    SubnetFull,
     TerminationNotPossible,
     UnknownError,
-    ContinuationNotPossible,
-    SubnetFull, MaximumNumberMPSKClients, NoWiFiPasswordGenerated,
+    UserNotFound,
 )
+from sipa.model.fancy_property import ActiveProperty
 from sipa.model.misc import UserPaymentDetails
+from sipa.model.mspk_client import MPSKClientEntry
 from sipa.model.pycroft.user import User
-from ..deps import Templates
+from sipa.utils import password_changeable, subscribe_to_status_page
+
+from ..deps import Settings, Templates, User
+from ..warnings import jinja_warn
 
 logger = logging.getLogger(__name__)
 
@@ -88,54 +92,7 @@ def index():
     """Usersuite landing page with user account information
     and traffic overview.
     """
-    info = current_user.finance_information
-    last_update = info.last_update if info else None
-    last_received_update = info.last_received_update if info else None
-    finance_update_string = (
-        " ({}: {})".format(gettext("Stand"),
-                           format_date(last_update, 'short', rebase=False))
-        if last_update
-        else ""
-    )
-    finance_received_string = (
-        format_date(last_received_update, "short", rebase=False)
-        if last_received_update
-        else ""
-    )
-    descriptions = OrderedDict(
-        [
-            ("id", [gettext("Nutzer-ID")]),
-            ("realname", [gettext("Voller Name")]),
-            ("login", [gettext("Nutzername")]),
-            ("status", [gettext("Mitgliedschaftsstatus")]),
-            ("address", [gettext("Aktuelles Zimmer")]),
-            ("ips", [gettext("Aktuelle IP-Adresse")]),
-            (
-                "mac",
-                [
-                    gettext("Aktuelle MAC-Adresse"),
-                    gettext("Die MAC Adresse des per Kabel verbundenen Gerätes"),
-                ],
-            ),
-            ("mail", [gettext("E-Mail-Adresse")]),
-            ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
-            ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
-            ("wifi_password", [gettext("WLAN Passwort"), gettext("Clicken um Passwort zu Kopieren!")]),
-            ("mpsk_clients", [gettext("WLAN MPSK Clients"), gettext("Für Geräte die kein WPA-Enterprise Unterstützen")]),
-            # ('hostname', gettext("Hostname")),
-            # ('hostalias', gettext("Hostalias")),
-            ("userdb_status", [gettext("MySQL Datenbank")]),
-            (
-                "finance_balance",
-                [
-                    gettext("Kontostand") + finance_update_string,
-                    gettext("Eingegangene Zahlung") + ": " + finance_received_string,
-                ],
-            ),
-        ]
-    )
-
-    rows = list(current_user.generate_rows(descriptions))
+    rows = rows_from_user(current_user)
     payment_form = PaymentForm()
     if payment_form.validate_on_submit():
         months = payment_form.months.data
@@ -177,13 +134,87 @@ def index():
     return render_template("usersuite/index.html", payment_form=payment_form, **context)
 
 
+def rows_from_user(user: User):
+    def gettext(string: str) -> str:
+        jinja_warn("`gettext` not ported yet")
+        return string
+
+    def format_date(date, format: t.Literal["long", "short"], **_kw) -> str:
+        jinja_warn("used legacy flask_babel `dateformat` filter")
+        return f"{date}"
+
+    info = user.finance_information
+    last_update = info.last_update if info else None
+    last_received_update = info.last_received_update if info else None
+    finance_update_string = (
+        " ({}: {})".format(gettext("Stand"), format_date(last_update, "short", rebase=False))
+        if last_update
+        else ""
+    )
+    finance_received_string = (
+        # TODO use proper `format_date`
+        format_date(last_received_update, "short", rebase=False) if last_received_update else ""
+    )
+    descriptions = OrderedDict([
+        ("id", [gettext("Nutzer-ID")]),
+        ("realname", [gettext("Voller Name")]),
+        ("login", [gettext("Nutzername")]),
+        ("status", [gettext("Mitgliedschaftsstatus")]),
+        ("address", [gettext("Aktuelles Zimmer")]),
+        ("ips", [gettext("Aktuelle IP-Adresse")]),
+        (
+            "mac",
+            [
+                gettext("Aktuelle MAC-Adresse"),
+                gettext("Die MAC Adresse des per Kabel verbundenen Gerätes"),
+            ],
+        ),
+        ("mail", [gettext("E-Mail-Adresse")]),
+        ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
+        ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
+        ("wifi_password", [gettext("WLAN Passwort"), gettext("Clicken um Passwort zu Kopieren!")]),
+        (
+            "mpsk_clients",
+            [
+                gettext("WLAN MPSK Clients"),
+                gettext("Für Geräte die kein WPA-Enterprise Unterstützen"),
+            ],
+        ),
+        # ('hostname', gettext("Hostname")),
+        # ('hostalias', gettext("Hostalias")),
+        ("userdb_status", [gettext("MySQL Datenbank")]),
+        (
+            "finance_balance",
+            [
+                gettext("Kontostand") + finance_update_string,
+                gettext("Eingegangene Zahlung") + ": " + finance_received_string,
+            ],
+        ),
+    ])
+
+    return list(user.generate_rows(descriptions))
+
+
 @router_usersuite.get("/", name="usersuite.index")
 @router_usersuite.post("/", name="usersuite.index")
-def index_(templates: Templates) -> HTMLResponse:
-    # TODO inject user object
-    #   → can we initiate a redirect if the user is not authorized?
-    return HTMLResponse("STUB")
-    # return templates.TemplateResponse("usersuite/index.html", payment_form=None)
+def index_(r: Request, tp: Templates, s: Settings, user: User) -> HTMLResponse:
+    class FakePaymentForm:
+        csrf_token = ""
+
+        def months(*a, **kw):
+            return Markup("""<input type="number" class="form-control" value=6></input>""")
+
+    return tp.TemplateResponse(
+        r,
+        "usersuite/index.html",
+        context={
+            "rows": [],  # rows_from_user(user),
+            "payment_form": FakePaymentForm(),
+            "payment_details": render_payment_details(
+                user.payment_details, months=6, contribution=s.membership_contribution_cents
+            ),
+        },
+    )
 
 
 @bp_usersuite.route("/contact", methods=['GET', 'POST'])
@@ -230,6 +261,12 @@ def contact():
                                       'cancel_to': url_for('.index')})
 
 
+@router_usersuite.get("/contact", name="usersuite.contact")
+@router_usersuite.post("/contact", name="usersuite.contact")
+def contact_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
+
+
 @bp_usersuite.route("/subscribe", methods=['GET'])
 @login_required
 def subscribe():
@@ -256,7 +293,16 @@ def subscribe():
     return redirect(url_for('.index'))
 
 
-def render_payment_details(details: UserPaymentDetails, months):
+@router_usersuite.get("/subscribe", name="usersuite.subscribe")
+@router_usersuite.post("/subscribe", name="usersuite.subscribe")
+def subscribe_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    # TODO remove these `raw_value` shenanigans
+    email = user.mail.raw_value or f"{user.login.raw_value}@agdsn.me"
+    return HTMLResponse("STUB")
+
+
+def render_payment_details(details: UserPaymentDetails, months, contribution: int | None = None):
+    contrib = contribution or current_app.config["MEMBERSHIP_CONTRIBUTION"]
     return {
         gettext("Zahlungsempfänger"): details.recipient,
         gettext("Bank"): details.bank,
@@ -264,7 +310,7 @@ def render_payment_details(details: UserPaymentDetails, months):
         gettext("BIC"): details.bic,
         gettext("Verwendungszweck"): details.purpose,
         gettext("Betrag"): format_currency(
-            Decimal(months) * current_app.config["MEMBERSHIP_CONTRIBUTION"] / 100,
+            Decimal(months) * contrib / 100,
             "EUR",
             locale="de_DE",
         ),
@@ -284,6 +330,7 @@ def generate_epc_qr_code(details: UserPaymentDetails, months):
         purpose=details.purpose)
 
 
+# TODO just remove this and hard-code
 def get_attribute_endpoint(attribute, capability='edit'):
     """Try to determine the flask endpoint for the according property."""
     if capability == 'edit':
@@ -336,6 +383,12 @@ def change_password():
                            form_args={'form': form, 'reset_button': True, 'cancel_to': url_for('.index')})
 
 
+@router_usersuite.get("/change_password", name="usersuite.change_password")
+@router_usersuite.post("/change_password", name="usersuite.change_password")
+def change_password_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
+
+
 @bp_usersuite.route("/change-mail", methods=['GET', 'POST'])
 @login_required
 def change_mail():
@@ -371,6 +424,12 @@ def change_mail():
                            form_args={'form': form, 'cancel_to': url_for('.index')})
 
 
+@router_usersuite.get("/change_mail", name="usersuite.change_mail")
+@router_usersuite.post("/change_mail", name="usersuite.change_mail")
+def change_mail_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
+
+
 @bp_usersuite.route("/resend-confirm-mail", methods=['GET', 'POST'])
 @login_required
 def resend_confirm_mail():
@@ -399,6 +458,12 @@ def resend_confirm_mail():
     return render_template('generic_form.html',
                            page_title=gettext("Bestätigung deiner E-Mail-Adresse"),
                            form_args=form_args)
+
+
+@router_usersuite.get("/resend_confirm_mail", name="usersuite.resend_confirm_mail")
+@router_usersuite.post("/resend_confirm_mail", name="usersuite.resend_confirm_mail")
+def resend_confirm_mail_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
 
 
 @bp_usersuite.route("/change-mac", methods=['GET', 'POST'])
@@ -437,6 +502,12 @@ def change_mac():
 
     return render_template('usersuite/change_mac.html',
                            form_args={'form': form, 'cancel_to': url_for('.index')})
+
+
+@router_usersuite.get("/change_mac", name="usersuite.change_mac")
+@router_usersuite.post("/change_mac", name="usersuite.change_mac")
+def change_mac_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
 
 
 @bp_usersuite.route("/change-mpsk/<int:mpsk_id>", methods=['GET', 'POST'])
@@ -563,13 +634,11 @@ def delete_mpsk(mpsk_id: int):
                            form_args={'form': form, 'cancel_to': url_for('.view_mpsk')})
 
 
-@bp_usersuite.route("/view-mpsk_clients", methods=['GET', 'POST'])
-@login_required
-def view_mpsk():
-
-    current = current_user.mpsk_clients.value
-
-    return render_template('usersuite/mpsk_table.html', clients=current)
+@router_usersuite.get("/view-mpsk_clients", name="usersuite.view_mpsk")
+@router_usersuite.post("/view-mpsk_clients")
+def view_mpsk(r: Request, tp: Templates, user: User):
+    current = user.mpsk_clients.value
+    return tp.TemplateResponse(r, "usersuite/mpsk_table.html", dict(clients=current))
 
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
@@ -838,3 +907,10 @@ def get_apple_wlan_mobileconfig():
         as_attachment=True,
         download_name="agdsn.mobileconfig",
     )
+
+
+@router_usersuite.get("/get_apple_wlan_mobileconfig", name="usersuite.get_apple_wlan_mobileconfig")
+def get_apple_wlan_mobileconfig_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
+
+

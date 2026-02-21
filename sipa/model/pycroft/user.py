@@ -64,8 +64,7 @@ class User:
     ):
         try:
             self.user_data: UserData = UserData.model_validate(user_data)
-            self.login: str = self.user_data.login
-            self._userdb: UserDB = UserDB(dbname=self.login, ip_mask=ip_mask, engine=engine)
+            self._userdb: UserDB = UserDB(dbname=self.login, ip_mask=ip_mask, database=engine)
         except ValidationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
 
@@ -351,6 +350,7 @@ class User:
             return UnsupportedProperty("finance_balance")
         return info.balance
 
+    @property
     def payment_details(self) -> UserPaymentDetails:
         return self._payment_details.with_purpose(
             f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",

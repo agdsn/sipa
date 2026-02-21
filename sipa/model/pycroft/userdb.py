@@ -38,16 +38,17 @@ class UserDB:
 
     @property
     def has_db(self):
-        try:
-            userdb = self.sql_query(
-                "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = %s",
-                (self.dbname,),
-            ).fetchone()
+        return False
+        # try:
+        #     userdb = self.sql_query(
+        #         "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = %s",
+        #         (self.dbname,),
+        #     ).fetchone()
 
-            return userdb is not None
-        except OperationalError:
-            logger.critical("User db of user %s unreachable", self.dbname, exc_info=True)
-            return None
+        #     return userdb is not None
+        # except OperationalError:
+        #     logger.critical("User db of user %s unreachable", self.dbname, exc_info=True)
+        #     return None
 
     def create(self, password):
         self.sql_query(

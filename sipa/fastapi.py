@@ -1,28 +1,53 @@
-from jinja2 import Environment
-from markupsafe import Markup
-from sipa.blueprints.features import router_features
-from starlette.background import BackgroundTask
-from starlette.templating import _TemplateResponse
+from starlette.staticfiles import StaticFiles
+from flask_qrcode import QRcode
 import typing as t
 import warnings
+from contextlib import asynccontextmanager
 from importlib.resources import files
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.datastructures import State
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from flask_login import AnonymousUserMixin
+from jinja2 import Environment
+from markupsafe import Markup
+from starlette.background import BackgroundTask
 from starlette.requests import Request
+from starlette.responses import RedirectResponse
+from starlette.templating import _TemplateResponse
 
+from sipa.blueprints.features import router_features
 from sipa.blueprints.generic import router_generic
 from sipa.blueprints.news import router_news
 from sipa.blueprints.pages import router_pages
 from sipa.blueprints.usersuite import router_usersuite
 from sipa.initialization import init_jinja_env
 
+from .deps import NotAuthenticated
+from .warnings import jinja_warn
+
+
+def _get_package_path() -> Path | None:
+    fs_path = Path(__file__).resolve().parent
+    if fs_path.is_dir():
+        return fs_path
+
+    pkg_path = files("sipa")
+    if pkg_path.is_dir():
+        return pkg_path
+    return None
+
 
 def create_app() -> FastAPI:
-    app = FastAPI()
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        if (pkg := _get_package_path()) is None:
+            raise RuntimeError("could not find package path for static files")
+        app.mount("/static", StaticFiles(directory=str(pkg / "static")), name="static")
+        yield
+
+    app = FastAPI(lifespan=lifespan)
 
     init_templates(app.state)
 
@@ -31,7 +56,10 @@ def create_app() -> FastAPI:
     app.include_router(router_pages)
     app.include_router(router_usersuite)
     app.include_router(router_features)
-    app.mount("/static", StaticFiles(directory=str(files("sipa") / "static")), name="static")
+
+    @app.exception_handler(NotAuthenticated)
+    def redirect_to_login(request: Request, exc: NotAuthenticated) -> RedirectResponse:
+        return RedirectResponse(request.url_for("generic.login"), status_code=303)
 
     return app
 
@@ -41,7 +69,7 @@ def init_templates(state: State):
         return {"current_user": getattr(request.state, "user", AnonymousUserMixin())}
 
     templates = Templates(
-        str(files("sipa") / "templates"),
+        str(_get_package_path() / "templates"),
         context_processors=[_get_current_user],
     )
 
@@ -56,6 +84,8 @@ def init_templates(state: State):
         BackendsStub(),  # type: ignore
     )
     _init_babel_stubs(templates.env)
+    templates.env.globals["qrcode"] = QRcode.qrcode
+    templates.env.filters["qrcode"] = QRcode.qrcode
     state.templates = templates
 
 
@@ -116,11 +146,3 @@ class Templates(Jinja2Templates):
             media_type=media_type,
             background=background,
         )
-
-
-def jinja_warn(msg: str) -> None:
-    warnings.warn(msg, FastAPIIncompleteWarning, stacklevel=5)
-
-
-class FastAPIIncompleteWarning(Warning):
-    ...
