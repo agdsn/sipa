@@ -18,6 +18,7 @@ class UserData(BaseModel):
     mail: str | None
     mail_forwarded: bool
     mail_confirmed: bool
+    # used: mail, member, network_access, sipa_login, userdb
     properties: list[str]
     traffic_history: list[TrafficHistoryEntry]
     interfaces: list[Interface]
