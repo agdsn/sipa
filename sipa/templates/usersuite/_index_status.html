@@ -94,10 +94,27 @@
     <table class="card-body table table-striped table-hover mb-0">
         <tbody>
             {% for  property, description, subtext in rows %}
+            {%- set description_url = property.description_url -%}
+            {%- set subtext = property.subtext -%}
+            {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
+            {%- set displayable = property.capabilities.displayable -%}
+            {%- set value = property.value -%}
+            {%- set copyable = property.capabilities.copyable -%}
+            {%- set add_url = url_for(get_attribute_endpoint(property.name))
+                                if property.capabilities.editable and property.empty
+                                else None -%}
+            {%- set edit_url = url_for(get_attribute_endpoint(property.name))
+                                if property.capabilities.editable and not property.empty
+                                else None -%}
+            {%- set delete_url = url_for(get_attribute_endpoint(property.name))
+                                if property.capabilities.delete and not property.empty
+                                else None -%}
+            {%- set _ = property._ -%}
+
             <tr>
-                {% if property.description_url %}
+                {% if description_url %}
                     <td class="col-md-3">
-                        <a href="{{ property.description_url }}" target="_blank">
+                        <a href="{{ description_url }}" target="_blank">
                             {{ description }}
 
                             <span class="bi-box-arrow-up-right"></span>
@@ -118,37 +135,34 @@
                     {% endif %}
                     </td>
                 {% endif %}
-                {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
+
                 <td class="col-md-3">
                     <span class="d-inline-flex w-100 justify-content-between">
-                        {% if property.capabilities.displayable %}
+                        {% if displayable %}
                             <span
-                                class="{{ style }} {% if property.capabilities.copyable %}copy-span{% endif%}"
-                                {% if property.capabilities.copyable %}data-copy="{{ property.value }}"{% endif %}
+                                class="{{ style }} {% if copyable %}copy-span{% endif%}"
+                                {% if copyable %}data-copy="{{ value }}"{% endif %}
                             >{{ property.value }}</span>
                         {% else %}
                             <span class="{{ style }}"></span>
                         {% endif %}
 
-                        {%- if property.capabilities.edit and property.empty -%}
-                            <a href="{{ url_for(get_attribute_endpoint(property.name)) }}"
-                               aria-label="{{ _("Hinzufügen") }}">
-                            <span class="bi-plus-square-fill ms-auto"></span>
-                        </a>
+                        {%- if add_url -%}
+                            <a href="{{ add_url }}" aria-label="{{ _("Hinzufügen") }}">
+                                <span class="bi-plus-square-fill ms-auto"></span>
+                            </a>
                         {%- endif -%}
 
-                        {%- if property.capabilities.edit and not property.empty -%}
-                            <a href="{{ url_for(get_attribute_endpoint(property.name)) }}"
-                               aria-label="{{ _("Bearbeiten") }}">
-                            <span class="bi-pencil-fill ms-auto"></span>
-                        </a>
+                        {%- if edit_url -%}
+                            <a href="{{ edit_url }}" aria-label="{{ _("Bearbeiten") }}">
+                                <span class="bi-pencil-fill ms-auto"></span>
+                            </a>
                         {%- endif -%}
 
-                        {%- if property.capabilities.delete and not property.empty -%}
-                            <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}"
-                               aria-label="{{ _("Löschen") }}">
-                            <span class="bi-dash-square-fill ms-auto"></span>
-                        </a>
+                        {%- if delete_url -%}
+                            <a href="{{ delete_url }}" aria-label="{{ _("Löschen") }}">
+                                <span class="bi-dash-square-fill ms-auto"></span>
+                            </a>
                         {%- endif -%}
 
                     </span>
