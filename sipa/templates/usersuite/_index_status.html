@@ -1,3 +1,66 @@
+{% macro prop_row(
+    description,
+    description_url,
+    subtext,
+    style,
+    value,
+    copyable,
+    add_url,
+    edit_url,
+    delete_url
+) %}
+<tr>
+    <td class="col-md-3">
+        {% if description_url %}
+            <a href="{{ description_url }}" target="_blank">
+                {{ description }}
+
+                <span class="bi-box-arrow-up-right"></span>
+            </a>
+        {% else %}
+            {{ description }}
+        {% endif %}
+        {% if subtext %}
+            <div class="text-muted">
+                {{ subtext }}
+            </div>
+        {% endif %}
+    </td>
+
+    <td class="col-md-3">
+        <span class="d-inline-flex w-100 justify-content-between">
+            {% if value is not None %}
+                <span
+                    class="{{ style }} {% if copyable %}copy-span{% endif%}"
+                    {% if copyable %}data-copy="{{ value }}"{% endif %}
+                >{{ value }}</span>
+            {% else %}
+                <span class="{{ style }}"></span>
+            {% endif %}
+
+            {%- if add_url -%}
+                <a href="{{ add_url }}" aria-label="{{ _("Hinzufügen") }}">
+                    <span class="bi-plus-square-fill ms-auto"></span>
+                </a>
+            {%- endif -%}
+
+            {%- if edit_url -%}
+                <a href="{{ edit_url }}" aria-label="{{ _("Bearbeiten") }}">
+                    <span class="bi-pencil-fill ms-auto"></span>
+                </a>
+            {%- endif -%}
+
+            {%- if delete_url -%}
+                <a href="{{ delete_url }}" aria-label="{{ _("Löschen") }}">
+                    <span class="bi-dash-square-fill ms-auto"></span>
+                </a>
+            {%- endif -%}
+
+        </span>
+    </td>
+</tr>
+{% endmacro %}
+
 <h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
 <div class="btn-group">
     {% if current_user.can_change_password %}
@@ -97,8 +160,7 @@
             {%- set description_url = property.description_url -%}
             {%- set subtext = property.subtext -%}
             {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
-            {%- set displayable = property.capabilities.displayable -%}
-            {%- set value = property.value -%}
+            {%- set value = (property.value or "") if property.capabilities.displayable else None -%}
             {%- set copyable = property.capabilities.copyable -%}
             {%- set add_url = url_for(get_attribute_endpoint(property.name))
                                 if property.capabilities.editable and property.empty
@@ -109,58 +171,19 @@
             {%- set delete_url = url_for(get_attribute_endpoint(property.name))
                                 if property.capabilities.delete and not property.empty
                                 else None -%}
-            {%- set _ = property._ -%}
+            {{ prop_row(
+                description,
+                description_url,
+                subtext,
+                style,
+                displayable,
+                value,
+                copyable,
+                add_url,
+                edit_url,
+                delete_url
+            ) }}
 
-            <tr>
-                <td class="col-md-3">
-                    {% if description_url %}
-                        <a href="{{ description_url }}" target="_blank">
-                            {{ description }}
-
-                            <span class="bi-box-arrow-up-right"></span>
-                        </a>
-                    {% else %}
-                        {{ description }}
-                    {% endif %}
-                    {% if subtext %}
-                        <div class="text-muted">
-                            {{ subtext }}
-                        </div>
-                    {% endif %}
-                </td>
-
-                <td class="col-md-3">
-                    <span class="d-inline-flex w-100 justify-content-between">
-                        {% if displayable %}
-                            <span
-                                class="{{ style }} {% if copyable %}copy-span{% endif%}"
-                                {% if copyable %}data-copy="{{ value }}"{% endif %}
-                            >{{ property.value }}</span>
-                        {% else %}
-                            <span class="{{ style }}"></span>
-                        {% endif %}
-
-                        {%- if add_url -%}
-                            <a href="{{ add_url }}" aria-label="{{ _("Hinzufügen") }}">
-                                <span class="bi-plus-square-fill ms-auto"></span>
-                            </a>
-                        {%- endif -%}
-
-                        {%- if edit_url -%}
-                            <a href="{{ edit_url }}" aria-label="{{ _("Bearbeiten") }}">
-                                <span class="bi-pencil-fill ms-auto"></span>
-                            </a>
-                        {%- endif -%}
-
-                        {%- if delete_url -%}
-                            <a href="{{ delete_url }}" aria-label="{{ _("Löschen") }}">
-                                <span class="bi-dash-square-fill ms-auto"></span>
-                            </a>
-                        {%- endif -%}
-
-                    </span>
-                </td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>
