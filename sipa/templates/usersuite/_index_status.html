@@ -29,7 +29,7 @@
 
     <td class="col-md-3">
         <span class="d-inline-flex w-100 justify-content-between">
-            {% if value is not None %}
+            {% if value != None %}
                 <span
                     class="{{ style }} {% if copyable %}copy-span{% endif%}"
                     {% if copyable %}data-copy="{{ value }}"{% endif %}
@@ -156,32 +156,17 @@
 <div class="card">
     <table class="card-body table table-striped table-hover mb-0">
         <tbody>
-            {% for  property, description, subtext in rows %}
-            {%- set description_url = property.description_url -%}
-            {%- set subtext = property.subtext -%}
-            {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
-            {%- set value = (property.value or "") if property.capabilities.displayable else None -%}
-            {%- set copyable = property.capabilities.copyable -%}
-            {%- set add_url = url_for(get_attribute_endpoint(property.name))
-                                if property.capabilities.editable and property.empty
-                                else None -%}
-            {%- set edit_url = url_for(get_attribute_endpoint(property.name))
-                                if property.capabilities.editable and not property.empty
-                                else None -%}
-            {%- set delete_url = url_for(get_attribute_endpoint(property.name))
-                                if property.capabilities.delete and not property.empty
-                                else None -%}
+            {% for row in rows %}
             {{ prop_row(
-                description,
-                description_url,
-                subtext,
-                style,
-                displayable,
-                value,
-                copyable,
-                add_url,
-                edit_url,
-                delete_url
+                row.desc,
+                row.desc_url,
+                row.subtext,
+                row.style,
+                row.value,
+                row.copyable,
+                row.add_url,
+                row.edit_url,
+                row.delete_url
             ) }}
 
             {% endfor %}

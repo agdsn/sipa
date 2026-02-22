@@ -1,5 +1,6 @@
 """Blueprint for Usersuite components
 """
+from dataclasses import dataclass
 import logging
 import math
 import typing as t
@@ -134,8 +135,21 @@ def index():
     return render_template("usersuite/index.html", payment_form=payment_form, **context)
 
 
-def rows_from_user(user: User):
-    def gettext(string: str) -> str:
+@dataclass(frozen=True)
+class Row:
+    desc: str
+    description_url: str | None = None
+    subtext: str | None = None
+    style: str | None = None
+    value: str | None = None
+    copyable: bool = False
+    add_url: str | None = None
+    edit_url: str | None = None
+    delete_url: str | None = None
+
+
+def rows_from_user(user: User) -> t.Iterable[Row]:
+    def _(string: str) -> str:
         jinja_warn("`gettext` not ported yet")
         return string
 
@@ -143,56 +157,56 @@ def rows_from_user(user: User):
         jinja_warn("used legacy flask_babel `dateformat` filter")
         return f"{date}"
 
-    info = user.finance_information
-    last_update = info.last_update if info else None
-    last_received_update = info.last_received_update if info else None
-    finance_update_string = (
-        " ({}: {})".format(gettext("Stand"), format_date(last_update, "short", rebase=False))
-        if last_update
-        else ""
-    )
-    finance_received_string = (
-        # TODO use proper `format_date`
-        format_date(last_received_update, "short", rebase=False) if last_received_update else ""
-    )
-    descriptions = OrderedDict([
-        ("id", [gettext("Nutzer-ID")]),
-        ("realname", [gettext("Voller Name")]),
-        ("login", [gettext("Nutzername")]),
-        ("status", [gettext("Mitgliedschaftsstatus")]),
-        ("address", [gettext("Aktuelles Zimmer")]),
-        ("ips", [gettext("Aktuelle IP-Adresse")]),
-        (
-            "mac",
-            [
-                gettext("Aktuelle MAC-Adresse"),
-                gettext("Die MAC Adresse des per Kabel verbundenen Gerätes"),
-            ],
-        ),
-        ("mail", [gettext("E-Mail-Adresse")]),
-        ("mail_confirmed", [gettext("Status deiner E-Mail-Adresse")]),
-        ("mail_forwarded", [gettext("E-Mail-Weiterleitung")]),
-        ("wifi_password", [gettext("WLAN Passwort"), gettext("Clicken um Passwort zu Kopieren!")]),
-        (
-            "mpsk_clients",
-            [
-                gettext("WLAN MPSK Clients"),
-                gettext("Für Geräte die kein WPA-Enterprise Unterstützen"),
-            ],
-        ),
-        # ('hostname', gettext("Hostname")),
-        # ('hostalias', gettext("Hostalias")),
-        ("userdb_status", [gettext("MySQL Datenbank")]),
-        (
-            "finance_balance",
-            [
-                gettext("Kontostand") + finance_update_string,
-                gettext("Eingegangene Zahlung") + ": " + finance_received_string,
-            ],
-        ),
-    ])
+    yield Row(desc=_("Nutzer-ID"))
+    yield Row(desc=_("Voller Name"))
+    yield Row(desc=_("Nutzername"))
+    yield Row(desc=_("Mitgliedschaftsstatus"))
+    yield Row(desc=_("Aktuelles Zimmer"))
+    yield Row(desc=_("Aktuelle IP-Adresse"))
 
-    return list(user.generate_rows(descriptions))
+    yield Row(
+        desc=_("Aktuelle MAC-Adresse"),
+        subtext=_("Die MAC Adresse des per Kabel verbundenen Gerätes"),
+    )
+
+    yield Row(desc=_("E-Mail-Adresse"))
+    yield Row(desc=_("Status deiner E-Mail-Adresse"))
+    yield Row(desc=_("E-Mail-Weiterleitung"))
+
+    yield Row(
+        desc=_("WLAN Passwort"),
+        subtext=_("Clicken um Passwort zu Kopieren!"),
+    )
+
+    yield Row(
+        desc=_("WLAN MPSK Clients"),
+        subtext=_("Für Geräte die kein WPA-Enterprise Unterstützen"),
+    )
+
+    yield Row(desc=_("MySQL Datenbank"))
+
+    if not (info := user.finance_information):
+        yield Row(
+            desc=_("Kontostand"),
+            subtext=_("Eingegangene Zahlung"),
+        )
+    else:
+        yield Row(
+            desc=_("Kontostand")
+            + (
+                " ({}: {})".format(_("Stand"), format_date(info.last_update, "short", rebase=False))
+                if info.last_update
+                else ""
+            ),
+            subtext=_("Eingegangene Zahlung")
+            + ": "
+            + (
+                # TODO use proper `format_date`
+                format_date(info.last_received_update, "short", rebase=False)
+                if info.last_received_update
+                else ""
+            ),
+        )
 
 
 @router_usersuite.get("/", name="usersuite.index")
@@ -208,7 +222,7 @@ def index_(r: Request, tp: Templates, s: Settings, user: User) -> HTMLResponse:
         r,
         "usersuite/index.html",
         context={
-            "rows": [],  # rows_from_user(user),
+            "rows": rows_from_user(user),
             "payment_form": FakePaymentForm(),
             "payment_details": render_payment_details(
                 user.payment_details, months=6, contribution=s.membership_contribution_cents
