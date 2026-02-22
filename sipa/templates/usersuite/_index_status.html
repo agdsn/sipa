@@ -112,29 +112,22 @@
             {%- set _ = property._ -%}
 
             <tr>
-                {% if description_url %}
-                    <td class="col-md-3">
+                <td class="col-md-3">
+                    {% if description_url %}
                         <a href="{{ description_url }}" target="_blank">
                             {{ description }}
 
                             <span class="bi-box-arrow-up-right"></span>
                         </a>
-                        {% if subtext %}
-                            <div class="text-muted">
-                                {{ subtext }}
-                            </div>
-                        {% endif %}
-                    </td>
-                {% else %}
-                    <td class="col-md-3">
+                    {% else %}
                         {{ description }}
+                    {% endif %}
                     {% if subtext %}
                         <div class="text-muted">
                             {{ subtext }}
                         </div>
                     {% endif %}
-                    </td>
-                {% endif %}
+                </td>
 
                 <td class="col-md-3">
                     <span class="d-inline-flex w-100 justify-content-between">
