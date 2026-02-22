@@ -12,7 +12,7 @@ from starlette.responses import RedirectResponse
 from .config.typed_config import Settings as SipaSettings
 from .model.misc import PaymentDetails
 from .model.pycroft.api import PycroftApi
-from .model.pycroft.schema import UserData, UserStatus
+from .model.pycroft.schema import UserData, UserStatus, Interface
 from .model.pycroft.user import User as PycroftUser
 
 
@@ -71,7 +71,9 @@ def get_user(request: Request, settings: Settings) -> PycroftUser:
                 "userdb",
             ],
             traffic_history=[],
-            interfaces=[],
+            interfaces=[
+                Interface(id=1, mac="00:de:ad:be:ef:00", ips=["141.30.228.39"]),
+            ],
             finance_balance=Decimal(200),
             finance_history=[],
             last_finance_update=date(2020, 1, 1),

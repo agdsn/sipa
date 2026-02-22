@@ -29,13 +29,18 @@
 
     <td class="col-md-3">
         <span class="d-inline-flex w-100 justify-content-between">
+            {% if style %}
+              {% set _val_css = "text-" + style %}
+            {% else %}
+              {% set _val_css = "" %}
+            {% endif %}
             {% if value != None %}
                 <span
-                    class="{{ style }} {% if copyable %}copy-span{% endif%}"
+                    class="{{ _val_css }} {% if copyable %}copy-span{% endif%}"
                     {% if copyable %}data-copy="{{ value }}"{% endif %}
                 >{{ value }}</span>
             {% else %}
-                <span class="{{ style }}"></span>
+                <span class="{{ _val_css }}"></span>
             {% endif %}
 
             {%- if add_url -%}
@@ -63,23 +68,17 @@
 
 <h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
 <div class="btn-group">
-    {% if current_user.can_change_password %}
     <a href="{{ url_for('usersuite.change_password') }}" class="btn btn-outline-secondary">
         <span class="bi-asterisk"></span>
         {{ _("Passwort ändern") }}
     </a>
-    {% else %}
-    <a class="btn btn-secondary" disabled title="{{ _('Nicht unterstützt') }}">
-        <span class="bi-pencil-fill"></span>
-        {{ _("Passwort ändern") }}
-    </a>
-    {% endif %}
-    {% if current_user.network_access_active.capabilities.edit %}
+
+    {% if current_user.can_activate_network_access %}
     <a href="{{ url_for('usersuite.activate_network_access') }}" class="btn btn-info">
         <span class="bi-power"></span>
         {{ _("Netzwerkanschluss aktivieren") }}
     </a>
-    {% elif current_user.mac.capabilities.edit %}
+    {% elif current_user.can_edit_mac %}
     <a href="{{ url_for('usersuite.change_mac') }}" class="btn btn-outline-secondary">
         <span class="bi-pencil-fill"></span>
         {{ _("MAC-Adresse ändern") }}
@@ -97,7 +96,7 @@
         {{ _("Webmailer") }}
     </a>
     {% endif %}
-    {% if current_user.membership_end_date.capabilities.edit  %}
+    {% if current_user.is_member  %}
         {% if current_user.membership_end_date == None %}
             <a href="{{ terminate_membership_url }}" class="btn btn-danger">
                 <span class="bi-x-circle-fill"></span>

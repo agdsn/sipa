@@ -1,5 +1,6 @@
 """Blueprint for Usersuite components
 """
+from fastapi.datastructures import URL
 from dataclasses import dataclass
 import logging
 import math
@@ -138,17 +139,18 @@ def index():
 @dataclass(frozen=True)
 class Row:
     desc: str
+    value: str | None = None
     description_url: str | None = None
     subtext: str | None = None
     style: str | None = None
-    value: str | None = None
     copyable: bool = False
-    add_url: str | None = None
-    edit_url: str | None = None
-    delete_url: str | None = None
+    add_url: URL | None = None
+    edit_url: URL | None = None
+    delete_url: URL | None = None
 
 
-def rows_from_user(user: User) -> t.Iterable[Row]:
+def rows_from_user(user: User, r: Request) -> t.Iterable[Row]:
+    # TODO push most of that in the view itself!
     def _(string: str) -> str:
         jinja_warn("`gettext` not ported yet")
         return string
@@ -157,21 +159,39 @@ def rows_from_user(user: User) -> t.Iterable[Row]:
         jinja_warn("used legacy flask_babel `dateformat` filter")
         return f"{date}"
 
-    yield Row(desc=_("Nutzer-ID"))
-    yield Row(desc=_("Voller Name"))
-    yield Row(desc=_("Nutzername"))
-    yield Row(desc=_("Mitgliedschaftsstatus"))
-    yield Row(desc=_("Aktuelles Zimmer"))
-    yield Row(desc=_("Aktuelle IP-Adresse"))
+    yield Row(_("Nutzer-ID"), user.id)
+    yield Row(_("Voller Name"), user.realname)
+    yield Row(_("Nutzername"), user.login)
+
+    status, status_style = user.status
+    yield Row(_("Mitgliedschaftsstatus"), status, style=status_style)
+    yield Row(_("Aktuelles Zimmer"), user.address)
+    yield Row(_("Aktuelle IP-Adresse"), ", ".join(user.ips))
 
     yield Row(
-        desc=_("Aktuelle MAC-Adresse"),
+        _("Aktuelle MAC-Adresse"),
+        ", ".join(user.macs),
         subtext=_("Die MAC Adresse des per Kabel verbundenen Gerätes"),
+        edit_url=r.url_for("usersuite.change_mac") if user.can_edit_mac else None,
+        add_url=r.url_for("usersuite.change_mac") if user.can_add_mac else None,
     )
 
-    yield Row(desc=_("E-Mail-Adresse"))
-    yield Row(desc=_("Status deiner E-Mail-Adresse"))
-    yield Row(desc=_("E-Mail-Weiterleitung"))
+    yield Row(
+        _("E-Mail-Adresse"),
+        user.mail or "",
+        edit_url=r.url_for("usersuite.change_mail") if user.can_edit_mail else None,
+    )
+    yield Row(
+        _("Status deiner E-Mail-Adresse"),
+        gettext("Bestätigt") if user.mail_confirmed else gettext("Nicht bestätigt"),
+        style="success" if user.mail_confirmed else "danger",
+        edit_url=r.url_for("usersuite.resend_confirm_mail") if user.can_edit_mail else None,
+    )
+    yield Row(
+        _("E-Mail-Weiterleitung"),
+        gettext("Aktiviert") if user.mail_forwarded else gettext("Nicht aktiviert"),
+        edit_url=r.url_for("usersuite.change_mail") if user.can_change_mail_forwarded else None,
+    )
 
     yield Row(
         desc=_("WLAN Passwort"),
@@ -222,7 +242,7 @@ def index_(r: Request, tp: Templates, s: Settings, user: User) -> HTMLResponse:
         r,
         "usersuite/index.html",
         context={
-            "rows": rows_from_user(user),
+            "rows": rows_from_user(user, r),
             "payment_form": FakePaymentForm(),
             "payment_details": render_payment_details(
                 user.payment_details, months=6, contribution=s.membership_contribution_cents
@@ -692,6 +712,13 @@ def activate_network_access():
 
     return render_template('generic_form.html', page_title=gettext("Netzwerkanschluss aktivieren"),
                            form_args={'form': form, 'cancel_to': url_for('.index')})
+
+
+@router_usersuite.get("/activate_network_access", name="usersuite.activate_network_access")
+@router_usersuite.post("/activate_network_access")
+def activate_network_access_(r: Request, tp: Templates, user: User):
+    current = user.mpsk_clients.value
+    return tp.TemplateResponse(r, "usersuite/mpsk_table.html", dict(clients=current))
 
 
 @bp_usersuite.route("/hosting", methods=['GET', 'POST'])

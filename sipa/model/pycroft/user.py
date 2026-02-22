@@ -15,7 +15,6 @@ from sipa.model.fancy_property import (
     UnsupportedProperty,
     PropertyBase,
     Capabilities,
-    connection_dependent,
 )
 from sipa.model.misc import UserPaymentDetails, PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
@@ -101,8 +100,6 @@ class User:
 
         return user
 
-    can_change_password = True
-
     def change_password(self, old, new):
         status, _ = self.api.change_password(self.user_data.id, old, new)
 
@@ -140,8 +137,8 @@ class User:
                 return {"description": "Error"}
 
     @property
-    def realname(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](name="realname", value=self.user_data.name)
+    def realname(self) -> str:
+        return self.user_data.name
 
     @property
     def birthdate(self) -> ActiveProperty[date, date]:
@@ -150,24 +147,24 @@ class User:
         )
 
     @property
-    def login(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](name="login", value=self.user_data.login)
+    def login(self) -> str:
+        return self.user_data.login
 
     @property
-    @connection_dependent
-    def ips(self) -> ActiveProperty[str, str]:
-        ips = sorted(ip for i in self.user_data.interfaces for ip in i.ips)
-        return ActiveProperty[str, str](name="ips", value=", ".join(ips))
+    def ips(self) -> list[str]:
+        return sorted(ip for i in self.user_data.interfaces for ip in i.ips)
 
     @property
-    @connection_dependent
-    def mac(self) -> ActiveProperty[str, str]:
-        macs = ", ".join(i.mac for i in self.user_data.interfaces)
-        return ActiveProperty[str, str](
-            name="mac",
-            value=macs,
-            capabilities=Capabilities.edit_if(len(self.user_data.interfaces) <= 1),
-        )
+    def macs(self) -> list[str]:
+        return sorted(i.mac for i in self.user_data.interfaces)
+
+    @property
+    def can_edit_mac(self) -> bool:
+        return len(self.macs) == 1
+
+    @property
+    def can_add_mac(self) -> bool:
+        return not self.macs
 
     def change_mac_address(self, new_mac, host_name, password):
         assert len(self.user_data.interfaces) == 1
@@ -186,7 +183,14 @@ class User:
             raise MacAlreadyExists
 
     @property
-    @connection_dependent
+    def can_activate_network_access(self) -> bool:
+        return all((
+            self.user_data.room is not None,
+            self.has_property("network_access"),
+            not self.user_data.interfaces,
+        ))
+
+    @property
     def network_access_active(self) -> ActiveProperty[bool, bool]:
         can_edit = (
             self.user_data.room is not None
@@ -237,12 +241,12 @@ class User:
             raise UnknownError
 
     @property
-    def mail(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](
-            name="mail",
-            value=self.user_data.mail,
-            capabilities=Capabilities.edit_if(self.has_property("mail")),
-        )
+    def mail(self) -> str | None:
+        return self.user_data.mail
+
+    @property
+    def can_edit_mail(self) -> bool:
+        return self.has_property("mail")
 
     def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
         status, _ = self.api.change_mail(
@@ -259,44 +263,36 @@ class User:
         self.user_data.mail = new_mail
 
     @property
-    def mail_forwarded(self) -> ActiveProperty[str, bool]:
-        value = self.user_data.mail_forwarded
-        return ActiveProperty[str, bool](
-            name="mail_forwarded",
-            raw_value=value,
-            value=gettext("Aktiviert") if value else gettext("Nicht aktiviert"),
-            capabilities=Capabilities.edit_if(self.has_property("mail")),
-        )
+    def mail_forwarded(self) -> bool:
+        return self.user_data.mail_forwarded
 
     @property
-    def mail_confirmed(self) -> ActiveProperty[str, str]:
-        confirmed = self.user_data.mail_confirmed
-        editable = self.has_property('mail') and self.user_data.mail and not confirmed
-        return ActiveProperty[str, str](
-            name="mail_confirmed",
-            value=gettext("Bestätigt") if confirmed else gettext("Nicht bestätigt"),
-            style="success" if confirmed else "danger",
-            capabilities=Capabilities.edit_if(editable),
-        )
+    def can_change_mail_forwarded(self) -> bool:
+        return self.has_property("mail")
 
+    @property
+    def mail_confirmed(self) -> bool:
+        return self.user_data.mail_confirmed
+
+    @property
+    def can_resend_confirmation(self) -> bool:
+        return all((self.has_property("mail"), self.user_data.mail, not self.mail_confirmed))
+
+    # TODO “drehstuhlinterface” → do directly in endpoint
     def resend_confirm_mail(self) -> bool:
         return self.api.resend_confirm_email(self.user_data.id)
 
     @property
-    def address(self) -> ActiveProperty[str | None, str]:
-        return ActiveProperty[str | None, str](
-            name="address",
-            value=self.user_data.room,
-        )
+    def address(self) -> str | None:
+        return self.user_data.room
 
     @property
-    def status(self) -> ActiveProperty[str, str]:
-        value, style = self.evaluate_status(self.user_data.status)
-        return ActiveProperty[str, str](name="status", value=value, style=style)
+    def status(self) -> tuple[str, str]:
+        return self.evaluate_status(self.user_data.status)
 
     @property
-    def id(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](name="id", value=self.user_data.user_id)
+    def id(self) -> str:
+        return self.user_data.user_id
 
     @property
     def userdb_status(self) -> PropertyBase[str, str]:
@@ -327,10 +323,6 @@ class User:
     @property
     def userdb(self) -> UserDB:
         return self._userdb
-
-    @property
-    def has_connection(self) -> bool:
-        return True
 
     @property
     def finance_information(self) -> FinanceInformation:
@@ -425,6 +417,7 @@ class User:
     def is_member(self) -> bool:
         return self.has_property('member')
 
+    # TODO instead return some ADT and leave styling to endpoint/component
     def evaluate_status(self, status: UserStatus):
         message = None
         style = None
