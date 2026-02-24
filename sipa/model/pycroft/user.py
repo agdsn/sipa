@@ -1,42 +1,52 @@
 from __future__ import annotations
-from sqlalchemy.engine.base import Engine
 
 import logging
 import typing as t
-from datetime import date
+from dataclasses import dataclass
+from datetime import date, timedelta
 
+from flask_babel import gettext
+from flask_login import AnonymousUserMixin
 from pydantic import ValidationError
+from sqlalchemy.engine.base import Engine
+from werkzeug.http import parse_date
 
 from sipa.config.typed_config import Mask
-from sipa.model.user import TableRow
-from sipa.model.finance import BaseFinanceInformation
+from sipa.model.exceptions import (
+    ContinuationNotPossible,
+    LoginNotAllowed,
+    MacAlreadyExists,
+    MaximumNumberMPSKClients,
+    NetworkAccessAlreadyActive,
+    NoWiFiPasswordGenerated,
+    PasswordInvalid,
+    SubnetFull,
+    TerminationNotPossible,
+    TokenNotFound,
+    UnknownError,
+    UserNotContactableError,
+    UserNotFound,
+)
 from sipa.model.fancy_property import (
     ActiveProperty,
-    UnsupportedProperty,
-    PropertyBase,
     Capabilities,
+    PropertyBase,
+    UnsupportedProperty,
 )
-from sipa.model.misc import UserPaymentDetails, PaymentDetails
-from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
-    MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed, \
-    MaximumNumberMPSKClients, NoWiFiPasswordGenerated
+from sipa.model.misc import PaymentDetails, UserPaymentDetails
+from sipa.model.user import TableRow
+
+from ..mspk_client import MPSKClientEntry
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
 from .userdb import UserDB
 
-from flask_login import AnonymousUserMixin
-from flask_babel import gettext
-from werkzeug.http import parse_date
-
-from ..mspk_client import MPSKClientEntry
-
 logger = logging.getLogger(__name__)
 
 
-# TODO drop the sample user make this the only type
-# TODO find remaining usages of `BaseUser`
+# TODO separate into sub-concerns derived from (validatd) `UserData` && `PycroftApi`
+# TODO try to separate queries (don't need API) and commands (need API)
 @t.final
 class User:
     # TODO remove, this is legacy from flask_login
@@ -63,6 +73,7 @@ class User:
     ):
         try:
             self.user_data: UserData = UserData.model_validate(user_data)
+            # TODO make userdb own dependency (ideally only of `user_data`)
             self._userdb: UserDB = UserDB(dbname=self.login, ip_mask=ip_mask, database=engine)
         except ValidationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
@@ -295,41 +306,14 @@ class User:
         return self.user_data.user_id
 
     @property
-    def userdb_status(self) -> PropertyBase[str, str]:
-        status = self.userdb.has_db
-
-        capabilities = Capabilities(edit=True, delete=True)
-
-        if not self.has_property("userdb"):
-            return UnsupportedProperty[str, str]("userdb_status")
-
-        if status is None:
-            return ActiveProperty[str, str](name="userdb_status",
-                                  value=gettext("Datenbank nicht erreichbar"),
-                                  style='danger',
-                                  empty=True)
-
-        if status:
-            return ActiveProperty[str, str](name="userdb_status",
-                                  value=gettext("Aktiviert"),
-                                  style='success',
-                                  capabilities=capabilities)
-
-        return ActiveProperty[str, str](name="userdb_status",
-                                  value=gettext("Nicht aktiviert"),
-                                  empty=True,
-                                  capabilities=capabilities)
-
-    @property
-    def userdb(self) -> UserDB:
-        return self._userdb
+    def userdb(self) -> UserDB | None:
+        return self._userdb if self.has_property("userdb") else None
 
     @property
     def finance_information(self) -> FinanceInformation:
         return FinanceInformation(
             balance=self.user_data.finance_balance,
-            transactions=((parse_date(t.valid_on), t.amount, t.description) for t in
-                          self.user_data.finance_history),
+            transactions=self.user_data.finance_history,
             last_update=self.user_data.last_finance_update
         )
 
@@ -361,12 +345,8 @@ class User:
         )
 
     @property
-    def mpsk_clients(self) -> ActiveProperty[list[MPSKClientEntry], list[MPSKClientEntry]]:
-        return ActiveProperty(
-            name="mpsk_clients",
-            value=self.user_data.mpsk_clients,
-            capabilities=Capabilities(edit=True, displayable=False),
-        )
+    def mpsk_clients(self) -> list[MPSKClientEntry]:
+        return self.user_data.mpsk_clients
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
         status, _ = self.api.change_mpsk(
@@ -452,14 +432,8 @@ class User:
         return message, style
 
     @property
-    def wifi_password(self) -> ActiveProperty[str | None, str | None]:
-        return ActiveProperty(
-            name="wifi_password",
-            value=self.user_data.wifi_password,
-            style="password" if self.user_data.wifi_password is not None else None,
-            description_url="../pages/service/wlan",
-            capabilities=Capabilities(edit=True, copyable=True),
-        )
+    def wifi_password(self) -> str | None:
+        return self.user_data.wifi_password
 
     def reset_wifi_password(self):
         status, result = self.api.reset_wifi_password(self.user_data.id)
@@ -522,23 +496,21 @@ def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
 
 
-class FinanceInformation(BaseFinanceInformation):
-    has_to_pay = True
-
-    def __init__(self, balance, transactions, last_update):
-        self._balance = balance
-        self._transactions = transactions
-        self._last_update = last_update
+@dataclass(frozen=True, slots=True)
+class FinanceInformation:
+    balance: float
+    transactions: list
+    last_update: date
 
     @property
-    def raw_balance(self):
-        return self._balance
-
-    @property
-    def last_update(self):
-        return self._last_update
-
-    @property
-    def history(self):
-        return self._transactions
-
+    def last_received_update(self):
+        last_update = self.last_update
+        match last_update.toordinal() % 7:
+            case 6:
+                return last_update - timedelta(days=2)
+            case 7:
+                return last_update - timedelta(days=3)
+            case 1:
+                return last_update - timedelta(days=3)
+            case _:
+                return last_update - timedelta(days=1)

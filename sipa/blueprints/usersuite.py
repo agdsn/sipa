@@ -1,17 +1,16 @@
 """Blueprint for Usersuite components
 """
-from fastapi.datastructures import URL
-from dataclasses import dataclass
 import logging
 import math
 import typing as t
-from collections import OrderedDict
+from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from io import BytesIO
 
 from babel.numbers import format_currency
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Response
+from fastapi.datastructures import URL
 from fastapi.responses import HTMLResponse
 from flask import (
     Blueprint,
@@ -24,7 +23,7 @@ from flask import (
     send_file,
     url_for,
 )
-from flask_babel import format_date, gettext
+from flask_babel import gettext
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from markupsafe import Markup
@@ -63,7 +62,7 @@ from sipa.model.exceptions import (
 from sipa.model.fancy_property import ActiveProperty
 from sipa.model.misc import UserPaymentDetails
 from sipa.model.mspk_client import MPSKClientEntry
-from sipa.model.pycroft.user import User
+from sipa.units import format_money
 from sipa.utils import password_changeable, subscribe_to_status_page
 
 from ..deps import Settings, Templates, User
@@ -194,39 +193,51 @@ def rows_from_user(user: User, r: Request) -> t.Iterable[Row]:
     )
 
     yield Row(
-        desc=_("WLAN Passwort"),
+        _("WLAN Passwort"),
+        user.wifi_password,
+        style="password" if user.wifi_password is not None else None,
         subtext=_("Clicken um Passwort zu Kopieren!"),
+        description_url="../pages/service/wlan",
+        copyable=True,
     )
 
     yield Row(
-        desc=_("WLAN MPSK Clients"),
+        _("WLAN MPSK Clients"),
+        str(len(user.mpsk_clients)) if user.mpsk_clients else None,
         subtext=_("Für Geräte die kein WPA-Enterprise Unterstützen"),
+        edit_url=r.url_for("usersuite.view_mpsk")
     )
 
-    yield Row(desc=_("MySQL Datenbank"))
+    if (db := user.userdb) is not None:
+        desc = _("MySQL Datenbank")
+        match db.has_db:
+            case None:
+                yield Row(desc, _("Datenbank nicht erreichbar"), style="danger")
+            case True:
+                yield Row(desc, _("Aktiviert"), style="success",
+                          delete_url=r.url_for("usersuite.hosting"))
+            case False:
+                yield Row(desc, _("Nicht aktiviert"), style="muted",
+                          add_url=r.url_for("usersuite.hosting"))
 
-    if not (info := user.finance_information):
-        yield Row(
-            desc=_("Kontostand"),
-            subtext=_("Eingegangene Zahlung"),
-        )
-    else:
-        yield Row(
-            desc=_("Kontostand")
-            + (
-                " ({}: {})".format(_("Stand"), format_date(info.last_update, "short", rebase=False))
-                if info.last_update
-                else ""
-            ),
-            subtext=_("Eingegangene Zahlung")
-            + ": "
-            + (
-                # TODO use proper `format_date`
-                format_date(info.last_received_update, "short", rebase=False)
-                if info.last_received_update
-                else ""
-            ),
-        )
+    info = user.finance_information
+    yield Row(
+        _("Kontostand")
+        + (
+            " ({}: {})".format(_("Stand"), format_date(info.last_update, "short", rebase=False))
+            if info.last_update
+            else ""
+        ),
+        format_money(info.balance),
+        subtext=_("Eingegangene Zahlung")
+        + ": "
+        + (
+            # TODO use proper `format_date`
+            format_date(info.last_received_update, "short", rebase=False)
+            if info.last_received_update
+            else ""
+        ),
+    )
 
 
 @router_usersuite.get("/", name="usersuite.index")
@@ -247,6 +258,7 @@ def index_(r: Request, tp: Templates, s: Settings, user: User) -> HTMLResponse:
             "payment_details": render_payment_details(
                 user.payment_details, months=6, contribution=s.membership_contribution_cents
             ),
+            "finance_information": user.finance_information
         },
     )
 
@@ -331,7 +343,7 @@ def subscribe():
 @router_usersuite.post("/subscribe", name="usersuite.subscribe")
 def subscribe_(r: Request, tp: Templates, user: User) -> HTMLResponse:
     # TODO remove these `raw_value` shenanigans
-    email = user.mail.raw_value or f"{user.login.raw_value}@agdsn.me"
+    email = user.mail or f"{user.login}@agdsn.me"
     return HTMLResponse("STUB")
 
 
@@ -717,7 +729,7 @@ def activate_network_access():
 @router_usersuite.get("/activate_network_access", name="usersuite.activate_network_access")
 @router_usersuite.post("/activate_network_access")
 def activate_network_access_(r: Request, tp: Templates, user: User):
-    current = user.mpsk_clients.value
+    current = user.mpsk_clients
     return tp.TemplateResponse(r, "usersuite/mpsk_table.html", dict(clients=current))
 
 
@@ -751,6 +763,19 @@ def hosting(action=None):
 
     return render_template('usersuite/hosting.html',
                            form=form, user_has_db=user_has_db, action=action)
+
+
+# TODO remove unused variants, e.g., I'm not sure POST /hosting makes any sense
+@router_usersuite.get("/hosting", name="usersuite.hosting")
+@router_usersuite.post("/hosting")
+@router_usersuite.get("/hosting/{action}")
+@router_usersuite.post("/hosting/{action}")
+def hosting_(r: Request, tp: Templates, user: User, action: str | None = None) -> Response:
+    # TODO replace manual 403 by dependency
+    if not user.has_property("userdb"):
+        raise HTTPException(status_code=403)
+
+    return HTMLResponse("STUB")
 
 
 @bp_usersuite.route("/finance-logs")
@@ -886,6 +911,12 @@ def continue_membership():
                            form_args=form_args)
 
 
+@router_usersuite.get("/continue_membership", name="usersuite.continue_membership")
+@router_usersuite.post("/continue_membership")
+def continue_membership_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
+
+
 @bp_usersuite.route("/reset-wifi-password", methods=['GET', 'POST'])
 @login_required
 def reset_wifi_password():
@@ -919,6 +950,12 @@ def reset_wifi_password():
     return render_template('generic_form.html',
                            page_title=gettext("Neues WLAN Passwort"),
                            form_args=form_args)
+
+
+@router_usersuite.get("/reset-wifi-password", name="usersuite.reset_wifi_password")
+@router_usersuite.post("/reset-wifi-password")
+def reset_wifi_password_(r: Request, tp: Templates, user: User) -> HTMLResponse:
+    return HTMLResponse("STUB")
 
 
 @bp_usersuite.route("/get-apple-wlan-mobileconfig", methods=["GET"])

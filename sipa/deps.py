@@ -1,18 +1,23 @@
 from __future__ import annotations
 
 import typing as t
-from datetime import date, datetime
+from datetime import date
 from decimal import Decimal
 
 from fastapi import Depends, Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.engine.create import create_engine
-from starlette.responses import RedirectResponse
 
 from .config.typed_config import Settings as SipaSettings
 from .model.misc import PaymentDetails
 from .model.pycroft.api import PycroftApi
-from .model.pycroft.schema import UserData, UserStatus, Interface
+from .model.pycroft.schema import (
+    FinanceHistoryEntry,
+    Interface,
+    TrafficHistoryEntry,
+    UserData,
+    UserStatus,
+)
 from .model.pycroft.user import User as PycroftUser
 
 
@@ -70,12 +75,24 @@ def get_user(request: Request, settings: Settings) -> PycroftUser:
                 "sipa_login",
                 "userdb",
             ],
-            traffic_history=[],
+            traffic_history=[
+                TrafficHistoryEntry(
+                    egress=int("1234567890"),
+                    ingress=int("9876543210"),
+                    timestamp="2020-01-01T00:00:00Z",
+                )
+            ],
             interfaces=[
                 Interface(id=1, mac="00:de:ad:be:ef:00", ips=["141.30.228.39"]),
             ],
             finance_balance=Decimal(200),
-            finance_history=[],
+            finance_history=[
+                FinanceHistoryEntry(
+                    amount=Decimal(100),
+                    valid_on="2020-01-01T00:00:00Z",
+                    description="Test transaction",
+                )
+            ],
             last_finance_update=date(2020, 1, 1),
             # TODO introduce properties once they can be excluded
             birthdate=date(2000, 1, 1),

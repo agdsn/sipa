@@ -1,3 +1,5 @@
+from functools import partial
+from sipa.units import format_money
 from starlette.staticfiles import StaticFiles
 from flask_qrcode import QRcode
 import typing as t
@@ -104,11 +106,13 @@ def _init_babel_stubs(env: Environment) -> None:
 
     env.filters["datetimeformat"] = _datetimeformat
 
-    def _dateformat(date, format: t.Literal["long", "short"], **_kw):
+    def _dateformat(date, format: t.Literal["long", "medium", "short"], **_kw):
         jinja_warn("used legacy flask_babel `dateformat` filter")
         return f"{date}"
 
     env.filters["dateformat"] = _dateformat
+    env.filters["date"] = partial(_dateformat, format="medium")
+    env.filters["money"] = format_money
 
     def _timeformat(time, format: t.Literal["long", "short"], **_kw):
         jinja_warn("used legacy flask_babel `timeformat` filter")
