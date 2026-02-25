@@ -32,7 +32,6 @@ from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import url_self
 from sipa.utils.babel_utils import get_weekday
 from sipa.utils.git_utils import init_repo, update_repo
-from sipa.utils.graph_utils import generate_traffic_chart, provide_render_function
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())  # for before logging is configured
@@ -91,7 +90,7 @@ def init_app(app: Flask, config: dict[str, t.Any] | None = None) -> Flask:
         get_locale=get_locale,
         get_weekday=get_weekday,
         possible_locales=possible_locales,
-        traffic_chart=provide_render_function(generate_traffic_chart),
+        # traffic_chart=provide_render_function(generate_traffic_chart),
     )
     init_jinja_env(app.jinja_env, cf_pages, backends)
 

@@ -2,7 +2,6 @@ from sipa.model.pycroft.user import TrafficHistoryRow
 import typing as t
 
 import pygal
-from pygal import Graph
 from pygal.colors import hsl_to_rgb
 from pygal.style import Style
 
@@ -29,28 +28,12 @@ traffic_style = Style(
 )
 
 
-def default_chart(chart_type, title, inline=True, **kwargs):
-    return chart_type(
-        fill=True,
-        title=title,
-        height=350,
-        show_y_guides=True,
-        human_readable=False,
-        major_label_font_size=12,
-        label_font_size=12,
-        style=traffic_style,
-        disable_xml_declaration=inline,   # for direct html import
-        js=[],  # prevent automatically fetching scripts from github
-        **kwargs,
-    )
-
-
 def generate_traffic_chart(
     traffic_data: list[TrafficHistoryRow],
     nonce: str,
     get_weekday: t.Callable[[int], str],
     _: t.Callable[[str], str],
-) -> Graph:
+) -> pygal.StackedBar:
     """Create a graph object from the input traffic data with pygal.
      If inline is set, the chart is being passed the option to not add an XML
      declaration header to the beginning of the `render()` output, so it can
@@ -75,10 +58,18 @@ def generate_traffic_chart(
         for day in traffic_data
     ]
 
-    traffic_chart = default_chart(
-        pygal.StackedBar,
-        _("Traffic (MiB)"),
-        inline=True,
+    traffic_chart = pygal.StackedBar(
+        fill=True,
+        title=_("Traffic (MiB)"),
+        height=350,
+        show_y_guides=True,
+        human_readable=False,
+        major_label_font_size=12,
+        label_font_size=12,
+        style=traffic_style,
+        disable_xml_declaration=True,
+        js=[],  # prevent automatically fetching scripts from github
+
         # don't divide, since the raw values already have been prepared.
         # `divide=False` effectively just appends the according unit.
         value_formatter=lambda value: format_as_traffic(value, divisions, divide=False),
@@ -112,9 +103,3 @@ class NormalizedTrafficHistoryRow(t.TypedDict):
     output: int | float
     throughput: int | float
 
-
-def provide_render_function(generator):
-    def renderer(data, **kwargs):
-        return generator(data, **kwargs).render()
-
-    return renderer
