@@ -79,7 +79,8 @@ def get_user(request: Request, settings: Settings) -> PycroftUser:
                 TrafficHistoryEntry(
                     egress=int("1234567890"),
                     ingress=int("9876543210"),
-                    timestamp="2020-01-01T00:00:00Z",
+                    # ewwwww.
+                    timestamp="Thu, 26 Feb 2026 14:37:00 +0100",
                 )
             ],
             interfaces=[

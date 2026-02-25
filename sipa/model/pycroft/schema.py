@@ -51,8 +51,8 @@ class Interface(BaseModel):
 
 class TrafficHistoryEntry(BaseModel):
     timestamp: str
-    ingress: int | None
-    egress: int | None
+    ingress: int
+    egress: int
 
 
 class FinanceHistoryEntry(BaseModel):

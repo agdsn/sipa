@@ -39,7 +39,7 @@ from sipa.model.user import TableRow
 from ..mspk_client import MPSKClientEntry
 from .api import PycroftApi
 from .exc import PycroftBackendError
-from .schema import UserData, UserStatus
+from .schema import UserData, UserStatus, TrafficHistoryEntry
 from .userdb import UserDB
 
 logger = logging.getLogger(__name__)
@@ -117,16 +117,13 @@ class User:
         if status != 200:
             raise PasswordInvalid
 
-    # TODO just pass through `list[TrafficHistoryEntry]` and move presentation
-    # to the blueprint
     @property
-    def traffic_history(self):
-        return [{
-            'day': (d.weekday() if (d := parse_date(entry.timestamp)) else None),
-            'input': to_kib(entry.ingress),
-            'output': to_kib(entry.egress),
-            'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
-        } for entry in self.user_data.traffic_history]
+    def traffic_history(self) -> list[TrafficHistoryRow]:
+        return [
+            parsed
+            for entry in self.user_data.traffic_history
+            if (parsed := parse_traffic_history_row(entry)) is not None
+        ]
 
     def generate_rows(
         self, description_dict: dict[str, tuple[str, str] | tuple[str]]
@@ -442,6 +439,26 @@ class User:
             raise UnknownError
 
         return result
+
+
+# TODO do conversion / mapping / validation / replace-by-empty-list on the pydantic model itself
+@t.final
+class TrafficHistoryRow(t.TypedDict):
+    day: int
+    input: int
+    output: int
+    throughput: int
+
+
+def parse_traffic_history_row(entry: TrafficHistoryEntry) -> TrafficHistoryRow | None:
+    return {
+        'day': d.weekday(),
+        'input': to_kib(entry.ingress),
+        'output': to_kib(entry.egress),
+        'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
+        # TODO WTF why are we using RFC2822 dates?
+        # TODO also: just replace this parsing foo by proper pydantic parsing
+    } if (d := parse_date(entry.timestamp)) else None
 
 
 def fetch_by_name(api: PycroftApi, username: str) -> User:

@@ -258,7 +258,8 @@ def index_(r: Request, tp: Templates, s: Settings, user: User) -> HTMLResponse:
             "payment_details": render_payment_details(
                 user.payment_details, months=6, contribution=s.membership_contribution_cents
             ),
-            "finance_information": user.finance_information
+            "finance_information": user.finance_information,
+            "traffic_history": user.traffic_history,
         },
     )
 
