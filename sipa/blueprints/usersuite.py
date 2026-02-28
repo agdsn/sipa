@@ -1,5 +1,6 @@
 """Blueprint for Usersuite components
 """
+from http.client import HTTPResponse
 from fastapi_babel import _
 import logging
 import math
@@ -681,8 +682,7 @@ def delete_mpsk(mpsk_id: int):
 @router_usersuite.get("/view-mpsk_clients", name="usersuite.view_mpsk")
 @router_usersuite.post("/view-mpsk_clients")
 def view_mpsk(r: Request, tp: Templates, user: User):
-    current = user.mpsk_clients.value
-    return tp.TemplateResponse(r, "usersuite/mpsk_table.html", dict(clients=current))
+    return tp.TemplateResponse(r, "usersuite/mpsk_table.html", {"clients": user.mpsk_clients})
 
 
 @bp_usersuite.route("/activate-network-access", methods=['GET', 'POST'])
@@ -693,7 +693,7 @@ def activate_network_access():
 
     capability_or_403('network_access_active', 'edit')
 
-    form = ActivateNetworkAccessForm(birthdate=current_user.birthdate.raw_value)
+    form = ActivateNetworkAccessForm(birthdate=current_user.birthdate)
 
     if form.validate_on_submit():
         password = form.password.data
@@ -727,6 +727,10 @@ def activate_network_access():
 @router_usersuite.get("/activate_network_access", name="usersuite.activate_network_access")
 @router_usersuite.post("/activate_network_access")
 def activate_network_access_(r: Request, tp: Templates, user: User):
+    if not user.can_activate_network_access:
+        # TODO is there a better code for “this does not make sense in this situation”?
+        raise HTTPException(status_code=403)
+
     current = user.mpsk_clients
     return tp.TemplateResponse(r, "usersuite/mpsk_table.html", dict(clients=current))
 

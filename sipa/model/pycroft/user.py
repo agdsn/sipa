@@ -27,19 +27,13 @@ from sipa.model.exceptions import (
     UserNotContactableError,
     UserNotFound,
 )
-from sipa.model.fancy_property import (
-    ActiveProperty,
-    Capabilities,
-    PropertyBase,
-    UnsupportedProperty,
-)
 from sipa.model.misc import PaymentDetails, UserPaymentDetails
 from sipa.model.user import TableRow
 
 from ..mspk_client import MPSKClientEntry
 from .api import PycroftApi
 from .exc import PycroftBackendError
-from .schema import UserData, UserStatus, TrafficHistoryEntry
+from .schema import TrafficHistoryEntry, UserData, UserStatus
 from .userdb import UserDB
 
 logger = logging.getLogger(__name__)
@@ -149,10 +143,8 @@ class User:
         return self.user_data.name
 
     @property
-    def birthdate(self) -> ActiveProperty[date, date]:
-        return ActiveProperty[date, date](
-            name="birthdate", value=self.user_data.birthdate
-        )
+    def birthdate(self) -> date | None:
+        return self.user_data.birthdate
 
     @property
     def login(self) -> str:
@@ -197,19 +189,6 @@ class User:
             self.has_property("network_access"),
             not self.user_data.interfaces,
         ))
-
-    @property
-    def network_access_active(self) -> ActiveProperty[bool, bool]:
-        can_edit = (
-            self.user_data.room is not None
-            and self.has_property("network_access")
-            and not self.user_data.interfaces
-        )
-        return ActiveProperty[bool, bool](
-            name="network_access_active",
-            value=bool(self.user_data.interfaces),
-            capabilities=Capabilities.edit_if(can_edit),
-        )
 
     def activate_network_access(self, password, mac, birthdate, host_name):
         status, _ = self.api.activate_network_access(self.user_data.id, password, mac,
@@ -315,15 +294,6 @@ class User:
         )
 
     @property
-    def finance_balance(self) -> PropertyBase[str, float | None]:
-        """The :class:`fancy property <sipa.model.fancy_property.PropertyBase>`
-        representing the finance balance"""
-        info = self.finance_information
-        if not info:
-            return UnsupportedProperty("finance_balance")
-        return info.balance
-
-    @property
     def payment_details(self) -> UserPaymentDetails:
         return self._payment_details.with_purpose(
             f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",
@@ -333,13 +303,13 @@ class User:
         return property in self.user_data.properties
 
     @property
-    def membership_end_date(self) -> ActiveProperty[date | None, date | None]:
+    def membership_end_date(self) -> date | None:
         """Implicitly used in :py:meth:`evaluate_status`"""
-        return ActiveProperty[date | None, date | None](
-            name="membership_end_date",
-            value=self.user_data.membership_end_date,
-            capabilities=Capabilities.edit_if(self.is_member),
-        )
+        return self.user_data.membership_end_date
+
+    @property
+    def can_edit_membership_end_date(self) -> bool:
+        return self.is_member
 
     @property
     def mpsk_clients(self) -> list[MPSKClientEntry]:
@@ -394,7 +364,8 @@ class User:
     def is_member(self) -> bool:
         return self.has_property('member')
 
-    # TODO instead return some ADT and leave styling to endpoint/component
+    # TODO fix gettext invocations
+    # TODO …or betterinstead return some ADT and leave styling to endpoint/component
     def evaluate_status(self, status: UserStatus):
         message = None
         style = None
@@ -409,11 +380,12 @@ class User:
                                             self.user_data.membership_begin_date.isoformat()), \
                              'warning'
         elif not status.member:
-            message, style = gettext('Kein Mitglied'), 'muted'
-        elif status.member and self.membership_end_date.raw_value is not None:
-            message, style = "{} {}".format(gettext('Mitglied bis'),
-                                            self.membership_end_date.value.isoformat()), \
-                             'warning'
+            message, style = gettext("Kein Mitglied"), "muted"
+        elif status.member and self.membership_end_date is not None:
+            message, style = (
+                "{} {}".format(gettext("Mitglied bis"), self.membership_end_date.isoformat()),
+                "warning",
+            )
         elif status.member:
             message, style = gettext('Mitglied'), 'success'
 

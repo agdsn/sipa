@@ -279,7 +279,7 @@ class ChangeMailForm(FlaskForm):
         label=LocalProxy(lambda:
             lazy_gettext("Mails für mein AG DSN E-Mail-Konto ({agdsn_email}) an private "
                          "E-Mail-Adresse weiterleiten")
-            .format(agdsn_email=f'{current_user.login.value}@agdsn.me')))
+            .format(agdsn_email=f'{current_user.login}@agdsn.me')))
 
 
 def require_unicast_mac(form, field):

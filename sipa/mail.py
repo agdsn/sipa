@@ -213,18 +213,14 @@ def send_usersuite_contact_mail(
 
     :returns: see :py:func:`send_complex_mail`
     """
-    if user.datasource is None:
-        logger.error("user %r had no datasource, cannot send mail", user)
-        return False
-
     return send_complex_mail(
-        author=f"{user.login.value}@{user.datasource.mail_server}",
-        recipient=user.datasource.support_mail,
+        author=f"{user.login}@{datasource.mail_server}",
+        recipient=datasource.support_mail,
         subject=subject,
         message=message,
         tag="Usersuite",
         category=category,
-        header={"Login": user.login.value},
+        header={"Login": user.login},
         reply_to=author,
     )
 

@@ -112,7 +112,7 @@
 </div>
 
 <div>
-{% if current_user.wifi_password.raw_value %}
+{% if current_user.wifi_password %}
     <a href="{{ url_for('usersuite.get_apple_wlan_mobileconfig') }}" class="btn btn-outline-secondary">
         <span class="bi-apple"></span>
         {{ _("Apple WLAN-Konfigurationsprofil herunterladen") }}
