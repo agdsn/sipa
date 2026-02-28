@@ -1,5 +1,6 @@
 """Blueprint for Usersuite components
 """
+from fastapi_babel import _
 import logging
 import math
 import typing as t
@@ -150,10 +151,6 @@ class Row:
 
 def rows_from_user(user: User, r: Request) -> t.Iterable[Row]:
     # TODO push most of that in the view itself!
-    def _(string: str) -> str:
-        jinja_warn("`gettext` not ported yet")
-        return string
-
     def format_date(date, format: t.Literal["long", "short"], **_kw) -> str:
         jinja_warn("used legacy flask_babel `dateformat` filter")
         return f"{date}"

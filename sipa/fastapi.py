@@ -1,5 +1,4 @@
 from __future__ import annotations
-from jinja2.runtime import Context
 
 import typing as t
 from contextlib import asynccontextmanager
@@ -7,11 +6,15 @@ from functools import partial
 from importlib.resources import files
 from pathlib import Path
 
+from babel import Locale
 from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
+from fastapi_babel import BabelMiddleware
+from fastapi_babel.properties import RootConfigs
 from flask_login import AnonymousUserMixin
 from flask_qrcode import QRcode
 from jinja2 import Environment, pass_context
+from jinja2.runtime import Context
 from markupsafe import Markup
 from starlette.background import BackgroundTask
 from starlette.requests import Request
@@ -19,6 +22,7 @@ from starlette.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
 from starlette.templating import _TemplateResponse
 
+from sipa.babel import fastapi_locale_selector
 from sipa.blueprints.features import router_features
 from sipa.blueprints.generic import router_generic
 from sipa.blueprints.news import router_news
@@ -63,6 +67,27 @@ def create_app() -> FastAPI:
     app.include_router(router_usersuite)
     app.include_router(router_features)
 
+    # TODO check why this does not translate `de` correctly!
+    #   example: `Erstellen IOT Geräte` (fixed de→de in german catalog)
+    app.add_middleware(
+        BabelMiddleware,
+        babel_configs=RootConfigs(
+            ROOT_DIR=".",
+            BABEL_DEFAULT_LOCALE="de",
+            BABEL_TRANSLATION_DIRECTORY=_get_package_path("translations"),
+        ),
+        jinja2_templates=app.state.templates,
+        locale_selector=fastapi_locale_selector,
+    )
+    from fastapi_babel.helpers import _ as fabgettext
+    app.state.templates.env.globals.update(gettext=fabgettext)
+
+    @app.get("/set-lang/{lang}", name="set_language")
+    def set_language(r: Request, lang: str):
+        resp = RedirectResponse(url=r.headers.get("referer") or "/")
+        resp.set_cookie("lang", lang, max_age=365 * 24 * 3600, httponly=True, samesite="lax")
+        return resp
+
     @app.middleware("http")
     async def add_csp_nonces(r: Request, call_next):
         r.state.nonce = (n := generate_nonce())
@@ -81,6 +106,9 @@ def init_templates() -> Templates:
         context_processors=[lambda request: {
             "current_user": getattr(request.state, "user", AnonymousUserMixin()),
             "nonce": request.state.nonce,
+            "current_locale": Locale(request.state.babel.locale),
+            # TODO post: replace all `get_locale()` usages by `current_locale` ones
+            "get_locale": lambda: Locale(request.state.babel.locale),
         }],
     )
 
@@ -105,14 +133,6 @@ def init_templates() -> Templates:
 
 
 def _init_babel_stubs(env: Environment) -> None:
-    # TODO replace by real thing
-    def _i18n(msg: str, **kw: str | Markup):
-        # stacklevel=4 is required due to jinja evaluation frames in the stack
-        jinja_warn("i18n _() not yet implemented")
-        return Markup(msg) % kw
-
-    env.globals["_"] = _i18n
-
     def _datetimeformat(datetime, format: t.Literal["long", "short"], **_kw):
         jinja_warn("used unported flask_babel `datetimeformat` filter")
         return f"{datetime}"
@@ -137,7 +157,6 @@ def _init_babel_stubs(env: Environment) -> None:
     # …all of these neet `@pass_context` to derive the current locale
     env.globals["get_weekday"] = lambda w: f"{w}"  # TODO should return locale.days["format"]["wide"][w]
     env.globals["get_locale"] = lambda: "en"  # TODO should return a locale
-    env.globals["possible_locales"] = lambda: ["en", "de"]
 
 
 @pass_context
@@ -154,6 +173,7 @@ def _templates_traffic_chart(ctx: Context, data) -> Markup:
     ).render()
 
     return Markup(svg_or_html)
+
 
 class Templates(Jinja2Templates):
     def TemplateResponse(  # type: ignore[invalid-method-override]

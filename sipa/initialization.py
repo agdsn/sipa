@@ -89,7 +89,6 @@ def init_app(app: Flask, config: dict[str, t.Any] | None = None) -> Flask:
         current_user=current_user,
         get_locale=get_locale,
         get_weekday=get_weekday,
-        possible_locales=possible_locales,
         # traffic_chart=provide_render_function(generate_traffic_chart),
     )
     init_jinja_env(app.jinja_env, cf_pages, backends)
@@ -103,6 +102,7 @@ def init_jinja_env(env: Environment, cf_pages: CategorizedFlatPages, backends: B
     form_label_width = 4
     form_input_width = 8
     env.globals.update(
+        possible_locales=possible_locales,
         cf_pages=cf_pages,
         # needs current_user
         get_attribute_endpoint=get_attribute_endpoint,

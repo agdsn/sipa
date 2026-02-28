@@ -4,7 +4,9 @@ import logging
 import typing as t
 
 from babel import Locale, UnknownLocaleError, negotiate_locale
-from flask import request, session, Request, g
+from fastapi import Request
+from flask import Request as FlaskRequest
+from flask import g, request, session
 from werkzeug.exceptions import BadRequest
 
 logger = logging.getLogger(__name__)
@@ -13,6 +15,14 @@ logger = logging.getLogger(__name__)
 def possible_locales() -> list[Locale]:
     """Return the locales usable for sipa."""
     return [Locale('de'), Locale('en')]
+
+
+def fastapi_locale_selector(request: Request) -> str | None:
+    available: list[str] = [str(p) for p in possible_locales()]
+
+    if (cookielang := request.cookies.get("lang")) in available:
+        return cookielang
+    return negotiate_locale(request.headers.values(), available, sep="-")
 
 
 def get_user_locale_setting() -> Locale | None:
@@ -76,7 +86,7 @@ def select_locale() -> str:
         list(map(str, possible_locales())), sep='-')
 
 
-def _iter_preferred_locales(request: Request) -> t.Iterator[str]:
+def _iter_preferred_locales(request: FlaskRequest) -> t.Iterator[str]:
     if (user_locale := str(get_user_locale_setting())) is not None:
         yield user_locale
     yield from request.accept_languages.values()

@@ -169,7 +169,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                         <li>
                             {%- for locale in possible_locales() %}
                                 <li {% if get_locale() == locale -%} class="active" {%- endif %}>
-                                    <a href="{{ url_self(locale=locale.language) }}" class="nav-link">
+                                    <a href="{{ url_for('set_language', lang=locale.language) }}" class="nav-link">
                                         {{ locale_image_and_text(locale) }}
                                     </a>
                                 </li>
@@ -189,7 +189,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <li class="nav-item btn-group hstack justify-content-center d-xl-none" aria-label="language selection">
                     {% for locale in possible_locales() %}
                         <a
-                            href="{{ url_self(locale=locale.language) }}"
+                            href="{{ url_for('set_language', lang=locale.language) }}"
                             {% if locale == get_locale() %}
                             aria-current="true"
                             class="btn btn-outline-primary active"
@@ -211,7 +211,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     <div class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
                             <a
-                                href="{{ url_self(locale=locale.language) }}"
+                                href="{{ url_for('set_language', lang=locale.language) }}"
                                 {%- if locale == get_locale() -%}
                                 class="dropdown-item active"
                                 {%- else -%}
