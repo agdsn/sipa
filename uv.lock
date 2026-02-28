@@ -253,6 +253,20 @@ standard-no-fastapi-cloud-cli = [
 ]
 
 [[package]]
+name = "fastapi-babel"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "babel" },
+    { name = "fastapi" },
+    { name = "uvicorn" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ea/0d/271af537fddc3c08e5f6e36c4e9f12c55d98ff9240a37454125b3c772fd2/fastapi_babel-1.0.0.tar.gz", hash = "sha256:a70005e132b6cfc611a5a02601c63bcd26a1b1cb689d7295be4587c9d35402f3", size = 12937, upload-time = "2024-12-05T20:48:09.838Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d8/d5/bc9fa86cb3fb3fa040c5841562ea874bbdc069b660739a314cf75df06200/fastapi_babel-1.0.0-py3-none-any.whl", hash = "sha256:9be639b098dd07dfe5b811df318abdd7e282622ac20304d909151f46b09a087d", size = 11789, upload-time = "2024-12-05T20:48:07.847Z" },
+]
+
+[[package]]
 name = "fastapi-cli"
 version = "0.0.20"
 source = { registry = "https://pypi.org/simple" }
@@ -1135,6 +1149,7 @@ dependencies = [
     { name = "email-validator" },
     { name = "factory-boy" },
     { name = "fastapi", extra = ["standard-no-fastapi-cloud-cli"] },
+    { name = "fastapi-babel" },
     { name = "flask" },
     { name = "flask-babel" },
     { name = "flask-flatpages" },
@@ -1192,6 +1207,7 @@ requires-dist = [
     { name = "email-validator", specifier = "~=2.3.0" },
     { name = "factory-boy", specifier = "~=3.2.1" },
     { name = "fastapi", extras = ["standard-no-fastapi-cloud-cli"], specifier = ">=0.128.5" },
+    { name = "fastapi-babel", specifier = ">=1.0.0" },
     { name = "flask", specifier = "~=3.0.0" },
     { name = "flask-babel", specifier = "~=4.0.0" },
     { name = "flask-flatpages", specifier = "~=0.8.3" },

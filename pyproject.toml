@@ -37,6 +37,7 @@ dependencies = [
     "pydantic ~= 2.11.7",
     "wtforms_widgets",
     "fastapi[standard-no-fastapi-cloud-cli]>=0.128.5",
+    "fastapi-babel>=1.0.0",
 ]
 [dependency-groups]
 prod = [
