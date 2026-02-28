@@ -38,7 +38,7 @@
 {% from "macros/support-hotline.html" import hotline_description %}
 
 <!DOCTYPE html>
-<html lang="{{ get_locale().language }}">
+<html lang="{{ current_locale.language }}">
 
 <!--
     ___    ______           ____    _____    _   __
@@ -79,7 +79,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     {% block custom_css %}{% endblock %}
 
     <script type="application/json" id="locale">
-        {{- get_locale() | string | tojson -}}
+        {{- current_locale | string | tojson -}}
     </script>
     <script defer src="{{ url_for("static", path="js/bootstrap.bundle.min.js") }}"></script>
     <script defer src="{{ url_for("static", path="js/statuspage.js") }}"></script>
@@ -168,7 +168,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                         <li class="dropdown-header">{{ _("Sprache") }}</li>
                         <li>
                             {%- for locale in possible_locales() %}
-                                <li {% if get_locale() == locale -%} class="active" {%- endif %}>
+                                <li {% if current_locale == locale -%} class="active" {%- endif %}>
                                     <a href="{{ url_for('set_language', lang=locale.language) }}" class="nav-link">
                                         {{ locale_image_and_text(locale) }}
                                     </a>
@@ -190,7 +190,7 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     {% for locale in possible_locales() %}
                         <a
                             href="{{ url_for('set_language', lang=locale.language) }}"
-                            {% if locale == get_locale() %}
+                            {% if locale == current_locale %}
                             aria-current="true"
                             class="btn btn-outline-primary active"
                             {% else %}
@@ -205,14 +205,14 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <!-- language dropdown -->
                 <li class="nav-item dropdown d-none d-xl-inline-flex">
                     <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
-                        {{ locale_image(get_locale()) }}
+                        {{ locale_image(current_locale) }}
                         <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
                             <a
                                 href="{{ url_for('set_language', lang=locale.language) }}"
-                                {%- if locale == get_locale() -%}
+                                {%- if locale == current_locale -%}
                                 class="dropdown-item active"
                                 {%- else -%}
                                 class="dropdown-item"
