@@ -1,7 +1,5 @@
 """Blueprint for Usersuite components
 """
-from http.client import HTTPResponse
-from fastapi_babel import _
 import logging
 import math
 import typing as t
@@ -14,6 +12,7 @@ from babel.numbers import format_currency
 from fastapi import APIRouter, HTTPException, Response
 from fastapi.datastructures import URL
 from fastapi.responses import HTMLResponse
+from fastapi_babel import _
 from flask import (
     Blueprint,
     abort,
