@@ -36,20 +36,6 @@ User
    :noindex:
 
 
-`.fancy_property`
------------------
-
-..
-  TODO use better documentation here!
-
-
-.. automodule:: sipa.model.fancy_property
-   :member-order: bysource
-   :members:
-   :undoc-members:
-   :noindex:
-
-
 `.finance`
 ----------
 

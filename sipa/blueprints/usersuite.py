@@ -61,7 +61,6 @@ from sipa.model.exceptions import (
     UnknownError,
     UserNotFound,
 )
-from sipa.model.fancy_property import ActiveProperty
 from sipa.model.misc import UserPaymentDetails
 from sipa.model.mspk_client import MPSKClientEntry
 from sipa.units import format_money
@@ -77,15 +76,16 @@ router_usersuite = APIRouter(prefix='/usersuite', default_response_class=HTMLRes
 
 
 def capability_or_403(active_property, capability):
-    prop: ActiveProperty = getattr(current_user, active_property)
-    if not getattr(prop.capabilities, capability):
-        abort(403)
+    # prop: ActiveProperty = getattr(current_user, active_property)
+    # if not getattr(prop.capabilities, capability):
+    #     abort(403)
+    return
 
 
 def get_mpsk_client_or_404(mpsk_id: int) -> MPSKClientEntry:
-    for client in t.cast(User, current_user).mpsk_clients.value:
-        if client.id == mpsk_id:
-            return client
+    # for client in t.cast(User, current_user).mpsk_clients:
+    #     if client.id == mpsk_id:
+    #         return client
     abort(404)
 
 
