@@ -67,13 +67,13 @@ def create_app() -> FastAPI:
     app.include_router(router_usersuite)
     app.include_router(router_features)
 
-    # TODO check why this does not translate `de` correctly!
-    #   example: `Erstellen IOT Geräte` (fixed de→de in german catalog)
     app.add_middleware(
         BabelMiddleware,
         babel_configs=RootConfigs(
             ROOT_DIR=".",
-            BABEL_DEFAULT_LOCALE="de",
+            # HACK: fastapi_babel (incorrectly) does not translate anything if locale == default_locale.
+            #   this circumvents that.
+            BABEL_DEFAULT_LOCALE="",
             BABEL_TRANSLATION_DIRECTORY=_get_package_path("translations"),
         ),
         jinja2_templates=app.state.templates,
