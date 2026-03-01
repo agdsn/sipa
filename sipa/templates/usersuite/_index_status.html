@@ -67,6 +67,7 @@
 {% endmacro %}
 
 <h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
+<div class="d-flex flex-column align-items-start gap-1">
 <div class="btn-group">
     <a href="{{ url_for('usersuite.change_password') }}" class="btn btn-outline-secondary">
         <span class="bi-asterisk"></span>
@@ -149,6 +150,7 @@
         <span class="bi-megaphone-fill"></span>
         {{ _("Status-Page abonnieren") }}
     </a>
+</div>
 </div>
 
 <h2 id="status-information">{{ _("Statusinformationen") }}</h2>
