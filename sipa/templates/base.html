@@ -85,10 +85,19 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
     <script defer src="{{ url_for("static", path="js/statuspage.js") }}"></script>
     <script defer src="{{ url_for("static", path="js/agdsn.js") }}"></script>
     <script defer src="{{ url_for("static", path="js/htmx.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="vendor/hyperscript/_hyperscript.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="vendor/hyperscript/socket.js") }}"></script>
+    <script type="text/hyperscript">
+        socket DevWs {{ url_for("__dev_reload_socket") }}
+            on message
+                log message
+                trigger dev:reload on <body/>
+        end
+    </script>
     {% block custom_script %}{% endblock %}
 </head>
 
-<body class="js-toc-content">
+<body class="js-toc-content" hx-get="." hx-trigger="dev:reload" hx-swap="morphdom">
 <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="{{ url_for('generic.index') }}">

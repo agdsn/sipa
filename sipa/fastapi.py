@@ -3,8 +3,6 @@ from __future__ import annotations
 import typing as t
 from contextlib import asynccontextmanager
 from functools import partial
-from importlib.resources import files
-from pathlib import Path
 
 from babel import Locale
 from fastapi import FastAPI
@@ -30,34 +28,26 @@ from sipa.blueprints.pages import router_pages
 from sipa.blueprints.usersuite import router_usersuite
 from sipa.initialization import init_jinja_env
 
+from ._pkg_path import get_package_path as get_package_path
 from .deps import NotAuthenticated
+from .fastapi_dev_reload import add_dev_websocket, lifespan_dev_watcher
 from .units import dynamic_unit, format_money
 from .utils.csp import generate_nonce, response_set_csp
 from .utils.graph_utils import generate_traffic_chart
 from .warnings import jinja_warn
 
 
-def _get_package_path(suffix: str = "") -> str:
-    fs_path = Path(__file__).resolve().parent
-    if fs_path.is_dir():
-        return str(fs_path / suffix)
-
-    pkg_path = files("sipa")
-    if pkg_path.is_dir():
-        return str(pkg_path / suffix)
-
-    raise AssertionError
-
-
 def create_app() -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        if (_get_package_path()) is None:
+        if (get_package_path()) is None:
             raise RuntimeError("could not find package path for static files")
-        app.mount("/static", StaticFiles(directory=_get_package_path("static")), name="static")
-        yield
+        app.mount("/static", StaticFiles(directory=get_package_path("static")), name="static")
+        async with lifespan_dev_watcher(app):
+            yield
 
     app = FastAPI(lifespan=lifespan)
+    add_dev_websocket(app=app)
 
     app.state.templates = init_templates()
 
@@ -74,7 +64,7 @@ def create_app() -> FastAPI:
             # HACK: fastapi_babel (incorrectly) does not translate anything if locale == default_locale.
             #   this circumvents that.
             BABEL_DEFAULT_LOCALE="",
-            BABEL_TRANSLATION_DIRECTORY=_get_package_path("translations"),
+            BABEL_TRANSLATION_DIRECTORY=get_package_path("translations"),
         ),
         jinja2_templates=app.state.templates,
         locale_selector=fastapi_locale_selector,
@@ -102,7 +92,7 @@ def create_app() -> FastAPI:
 
 def init_templates() -> Templates:
     templates = Templates(
-        _get_package_path("templates"),
+        get_package_path("templates"),
         context_processors=[lambda request: {
             "current_user": getattr(request.state, "user", AnonymousUserMixin()),
             "nonce": request.state.nonce,
