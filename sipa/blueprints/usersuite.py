@@ -88,54 +88,6 @@ def get_mpsk_client_or_404(mpsk_id: int) -> MPSKClientEntry:
     abort(404)
 
 
-@bp_usersuite.route("/", methods=["GET", "POST"])
-@login_required
-def index():
-    """Usersuite landing page with user account information
-    and traffic overview.
-    """
-    rows = rows_from_user(current_user)
-    payment_form = PaymentForm()
-    if payment_form.validate_on_submit():
-        months = payment_form.months.data
-    else:
-        months = payment_form.months.default
-
-    months_field = t.cast(IntegerField, payment_form._fields["months"])
-    validator = t.cast(NumberRange, months_field.validators[0])
-    validator.max = math.floor(
-        # Maximum value for EPC QR code, see https://de.wikipedia.org/wiki/EPC-QR-Code#EPC-QR-Code_Dateninhalt
-        Decimal("999999999.99")
-        / current_app.config["MEMBERSHIP_CONTRIBUTION"]
-        * 100
-    )
-
-    datasource = current_user.datasource
-    context = dict(rows=rows,
-                   webmailer_url=datasource.webmailer_url,
-                   terminate_membership_url=url_for('.terminate_membership'),
-                   continue_membership_url=url_for('.continue_membership'),
-                   payment_details=render_payment_details(current_user.payment_details(),
-                                                          months),
-                   girocode=generate_epc_qr_code(current_user.payment_details(), months))
-
-    if current_user.has_connection:
-        context.update(
-            show_traffic_data=True,
-            traffic_user=current_user,
-        )
-
-    if info and info.has_to_pay:
-        context.update(
-            show_transaction_log=True,
-            last_update=info.last_update,
-            balance=info.balance.raw_value,
-            logs=info.history,
-        )
-
-    return render_template("usersuite/index.html", payment_form=payment_form, **context)
-
-
 @dataclass(frozen=True)
 class Row:
     desc: str
@@ -252,11 +204,31 @@ def index_(r: Request, tp: Templates, s: Settings, user: User) -> HTMLResponse:
         context={
             "rows": rows_from_user(user, r),
             "payment_form": FakePaymentForm(),
-            "payment_details": render_payment_details(
-                user.payment_details, months=6, contribution=s.membership_contribution_cents
-            ),
             "finance_information": user.finance_information,
             "traffic_history": user.traffic_history,
+        },
+    )
+
+
+@router_usersuite.get("/fragments/payment-details-table", name="usersuite.payment_details_table")
+def payment_details_table(r: Request, tp: Templates, s: Settings, user: User, months: int) -> HTMLResponse:
+    return tp.TemplateResponse(
+        r,
+        "usersuite/fragment-payment-details.html",
+        context={
+            "payment_details": render_payment_details(
+                user.payment_details,
+                months=months,
+                contribution_ct=s.membership_contribution_cents
+            ),
+            # TODO: add validator to the form input field as to not surpass the
+            #  maximum value (`999999999.99`) for an EPC QR code.
+            #  see https://de.wikipedia.org/wiki/EPC-QR-Code#EPC-QR-Code_Dateninhalt
+            "girocode": generate_epc_qr_code(
+                user.payment_details,
+                months=months,
+                contribution_ct=s.membership_contribution_cents,
+            ),
         },
     )
 
@@ -345,33 +317,32 @@ def subscribe_(r: Request, tp: Templates, user: User) -> HTMLResponse:
     return HTMLResponse("STUB")
 
 
-def render_payment_details(details: UserPaymentDetails, months, contribution: int | None = None):
-    contrib = contribution or current_app.config["MEMBERSHIP_CONTRIBUTION"]
+def render_payment_details(details: UserPaymentDetails, months, contribution_ct: int):
     return {
-        gettext("Zahlungsempfänger"): details.recipient,
-        gettext("Bank"): details.bank,
-        gettext("IBAN"): details.iban,
-        gettext("BIC"): details.bic,
-        gettext("Verwendungszweck"): details.purpose,
-        gettext("Betrag"): format_currency(
-            Decimal(months) * contrib / 100,
+        _("Zahlungsempfänger"): details.recipient,
+        _("Bank"): details.bank,
+        _("IBAN"): details.iban,
+        _("BIC"): details.bic,
+        _("Verwendungszweck"): details.purpose,
+        _("Betrag"): format_currency(
+            Decimal(months) * contribution_ct / 100,
             "EUR",
             locale="de_DE",
         ),
     }
 
 
-def generate_epc_qr_code(details: UserPaymentDetails, months):
+def generate_epc_qr_code(details: UserPaymentDetails, months, contribution_ct: int):
     # generate content for epc-qr-code (also known as giro-code)
-    EPC_FORMAT = \
-        "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n"
+    EPC_FORMAT = "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n"
 
     return EPC_FORMAT.format(
-        bic=details.bic.replace(' ', ''),
+        bic=details.bic.replace(" ", ""),
         recipient=details.recipient,
-        iban=details.iban.replace(' ', ''),
-        amount=months * current_app.config['MEMBERSHIP_CONTRIBUTION'] / 100,
-        purpose=details.purpose)
+        iban=details.iban.replace(" ", ""),
+        amount=months * contribution_ct / 100,
+        purpose=details.purpose,
+    )
 
 
 # TODO just remove this and hard-code
