@@ -212,22 +212,33 @@ def index_(r: Request, tp: Templates, s: Settings, user: User) -> HTMLResponse:
 
 @router_usersuite.get("/fragments/payment-details-table", name="usersuite.payment_details_table")
 def payment_details_table(r: Request, tp: Templates, s: Settings, user: User, months: int) -> HTMLResponse:
+    EPC_FORMAT = "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n"
+
     return tp.TemplateResponse(
         r,
         "usersuite/fragment-payment-details.html",
         context={
-            "payment_details": render_payment_details(
-                user.payment_details,
-                months=months,
-                contribution_ct=s.membership_contribution_cents
-            ),
+            "payment_details": {
+                _("Zahlungsempfänger"): user.payment_details.recipient,
+                _("Bank"): user.payment_details.bank,
+                _("IBAN"): user.payment_details.iban,
+                _("BIC"): user.payment_details.bic,
+                _("Verwendungszweck"): user.payment_details.purpose,
+                _("Betrag"): format_currency(
+                    Decimal(months) * s.membership_contribution_cents / 100,
+                    "EUR",
+                    locale="de_DE",
+                ),
+            },
             # TODO: add validator to the form input field as to not surpass the
             #  maximum value (`999999999.99`) for an EPC QR code.
             #  see https://de.wikipedia.org/wiki/EPC-QR-Code#EPC-QR-Code_Dateninhalt
-            "girocode": generate_epc_qr_code(
-                user.payment_details,
-                months=months,
-                contribution_ct=s.membership_contribution_cents,
+            "girocode": EPC_FORMAT.format(
+                bic=user.payment_details.bic.replace(" ", ""),
+                recipient=user.payment_details.recipient,
+                iban=user.payment_details.iban.replace(" ", ""),
+                amount=months * s.membership_contribution_cents / 100,
+                purpose=user.payment_details.purpose,
             ),
         },
     )
@@ -315,34 +326,6 @@ def subscribe_(r: Request, tp: Templates, user: User) -> HTMLResponse:
     # TODO remove these `raw_value` shenanigans
     email = user.mail or f"{user.login}@agdsn.me"
     return HTMLResponse("STUB")
-
-
-def render_payment_details(details: UserPaymentDetails, months, contribution_ct: int):
-    return {
-        _("Zahlungsempfänger"): details.recipient,
-        _("Bank"): details.bank,
-        _("IBAN"): details.iban,
-        _("BIC"): details.bic,
-        _("Verwendungszweck"): details.purpose,
-        _("Betrag"): format_currency(
-            Decimal(months) * contribution_ct / 100,
-            "EUR",
-            locale="de_DE",
-        ),
-    }
-
-
-def generate_epc_qr_code(details: UserPaymentDetails, months, contribution_ct: int):
-    # generate content for epc-qr-code (also known as giro-code)
-    EPC_FORMAT = "BCD\n001\n1\nSCT\n{bic}\n{recipient}\n{iban}\nEUR{amount}\n\n\n{purpose}\n\n"
-
-    return EPC_FORMAT.format(
-        bic=details.bic.replace(" ", ""),
-        recipient=details.recipient,
-        iban=details.iban.replace(" ", ""),
-        amount=months * contribution_ct / 100,
-        purpose=details.purpose,
-    )
 
 
 # TODO just remove this and hard-code
