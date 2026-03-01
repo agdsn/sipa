@@ -24,6 +24,8 @@ class Settings(BaseSettings):
         frozen=True,
     )
 
+    dev: bool = False
+
     # --- observability ---
     sentry_dsn: str | None = None
 

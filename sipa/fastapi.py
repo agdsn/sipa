@@ -1,4 +1,5 @@
 from __future__ import annotations
+from sipa.config.typed_config import Settings
 
 import typing as t
 from contextlib import asynccontextmanager
@@ -38,16 +39,22 @@ from .warnings import jinja_warn
 
 
 def create_app() -> FastAPI:
+    settings = Settings()
+
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         if (get_package_path()) is None:
             raise RuntimeError("could not find package path for static files")
         app.mount("/static", StaticFiles(directory=get_package_path("static")), name="static")
-        async with lifespan_dev_watcher(app):
+        if settings.dev:
+            async with lifespan_dev_watcher(app):
+                yield
+        else:
             yield
 
     app = FastAPI(lifespan=lifespan)
-    add_dev_websocket(app=app)
+    if settings.dev:
+        add_dev_websocket(app=app)
 
     app.state.templates = init_templates()
 
@@ -82,7 +89,8 @@ def create_app() -> FastAPI:
 
     @app.middleware("http")
     async def add_csp_nonces(r: Request, call_next):
-        r.state.nonce = (n := generate_nonce())
+        n = generate_nonce() if not settings.dev else "STATIC-DEVNONCE"
+        r.state.nonce = n
         return response_set_csp(await call_next(r), n)
 
     @app.exception_handler(NotAuthenticated)
