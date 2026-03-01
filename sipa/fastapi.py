@@ -66,11 +66,13 @@ def create_app() -> FastAPI:
             BABEL_DEFAULT_LOCALE="",
             BABEL_TRANSLATION_DIRECTORY=get_package_path("translations"),
         ),
-        jinja2_templates=app.state.templates,
         locale_selector=fastapi_locale_selector,
     )
     from fastapi_babel.helpers import _ as fabgettext
-    app.state.templates.env.globals.update(gettext=fabgettext)
+
+    def mygettext(msg, **kw):
+        translated = fabgettext(msg)
+        return translated % kw if kw else translated
 
     @app.get("/set-lang/{lang}", name="set_language")
     def set_language(r: Request, lang: str):
@@ -103,6 +105,8 @@ def init_templates() -> Templates:
     )
 
     templates.env.globals["traffic_chart"] = _templates_traffic_chart
+    templates.env.globals["gettext"] = _jinja_gettext  # TODO warn
+    templates.env.globals["_"] = _jinja_gettext
 
     # TODO magic mock? some stupid stubs?
     class CfPagesStub: ...
@@ -163,6 +167,19 @@ def _templates_traffic_chart(ctx: Context, data) -> Markup:
     ).render()
 
     return Markup(svg_or_html)
+
+
+def _jinja_gettext(msg: str, **kw: dict[str, t.Any]) -> str | Markup:
+    # TODO provide this ourselves.
+    #   at this point we use almost no features of the package anymore.
+    from fastapi_babel.local_context import context_var
+    gettext = context_var.get()
+    translated = gettext(msg)
+    if not kw:
+        return translated
+    if any(isinstance(val, Markup) for val in kw.values()):
+        return Markup(translated % kw)
+    return translated % kw
 
 
 class Templates(Jinja2Templates):
