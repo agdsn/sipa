@@ -573,7 +573,6 @@ class RegisterFinishForm(FlaskForm):
                 "fortgesetzt werden, aber es müssen Kleinbuchstaben oder Zahlen zwischen "
                 "den Interpunktionszeichen stehen.")),
         ],
-        filters=[lower_filter]
     )
 
     password = PasswordField(
