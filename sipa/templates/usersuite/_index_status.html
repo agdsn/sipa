@@ -1,23 +1,86 @@
+{% macro prop_row(
+    description,
+    description_url,
+    subtext,
+    style,
+    value,
+    copyable,
+    add_url,
+    edit_url,
+    delete_url
+) %}
+<tr>
+    <td class="col-md-3">
+        {% if description_url %}
+            <a href="{{ description_url }}" target="_blank">
+                {{ description }}
+
+                <span class="bi-box-arrow-up-right"></span>
+            </a>
+        {% else %}
+            {{ description }}
+        {% endif %}
+        {% if subtext %}
+            <div class="text-muted">
+                {{ subtext }}
+            </div>
+        {% endif %}
+    </td>
+
+    <td class="col-md-3">
+        <span class="d-inline-flex w-100 justify-content-between">
+            {% if style %}
+              {% set _val_css = "text-" + style %}
+            {% else %}
+              {% set _val_css = "" %}
+            {% endif %}
+            {% if value != None %}
+                <span
+                    class="{{ _val_css }} {% if copyable %}copy-span{% endif%}"
+                    {% if copyable %}data-copy="{{ value }}"{% endif %}
+                >{{ value }}</span>
+            {% else %}
+                <span class="{{ _val_css }}"></span>
+            {% endif %}
+
+            {%- if add_url -%}
+                <a href="{{ add_url }}" aria-label="{{ _("Hinzufügen") }}">
+                    <span class="bi-plus-square-fill ms-auto"></span>
+                </a>
+            {%- endif -%}
+
+            {%- if edit_url -%}
+                <a href="{{ edit_url }}" aria-label="{{ _("Bearbeiten") }}">
+                    <span class="bi-pencil-fill ms-auto"></span>
+                </a>
+            {%- endif -%}
+
+            {%- if delete_url -%}
+                <a href="{{ delete_url }}" aria-label="{{ _("Löschen") }}">
+                    <span class="bi-dash-square-fill ms-auto"></span>
+                </a>
+            {%- endif -%}
+
+        </span>
+    </td>
+</tr>
+{% endmacro %}
+
 <h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
+<div class="d-flex flex-column align-items-start gap-1">
 <div class="btn-group">
-    {% if current_user.can_change_password %}
-    <a href="{{ url_for('.change_password') }}" class="btn btn-outline-secondary">
+    <a href="{{ url_for('usersuite.change_password') }}" class="btn btn-outline-secondary">
         <span class="bi-asterisk"></span>
         {{ _("Passwort ändern") }}
     </a>
-    {% else %}
-    <a class="btn btn-secondary" disabled title="{{ _('Nicht unterstützt') }}">
-        <span class="bi-pencil-fill"></span>
-        {{ _("Passwort ändern") }}
-    </a>
-    {% endif %}
-    {% if current_user.network_access_active.capabilities.edit %}
-    <a href="{{ url_for('.activate_network_access') }}" class="btn btn-info">
+
+    {% if current_user.can_activate_network_access %}
+    <a href="{{ url_for('usersuite.activate_network_access') }}" class="btn btn-info">
         <span class="bi-power"></span>
         {{ _("Netzwerkanschluss aktivieren") }}
     </a>
-    {% elif current_user.mac.capabilities.edit %}
-    <a href="{{ url_for('.change_mac') }}" class="btn btn-outline-secondary">
+    {% elif current_user.can_edit_mac %}
+    <a href="{{ url_for('usersuite.change_mac') }}" class="btn btn-outline-secondary">
         <span class="bi-pencil-fill"></span>
         {{ _("MAC-Adresse ändern") }}
     </a>
@@ -34,7 +97,7 @@
         {{ _("Webmailer") }}
     </a>
     {% endif %}
-    {% if current_user.membership_end_date.capabilities.edit  %}
+    {% if current_user.is_member  %}
         {% if current_user.membership_end_date == None %}
             <a href="{{ terminate_membership_url }}" class="btn btn-danger">
                 <span class="bi-x-circle-fill"></span>
@@ -50,13 +113,13 @@
 </div>
 
 <div>
-{% if current_user.wifi_password.raw_value %}
-    <a href="{{ url_for('.get_apple_wlan_mobileconfig') }}" class="btn btn-outline-secondary">
+{% if current_user.wifi_password %}
+    <a href="{{ url_for('usersuite.get_apple_wlan_mobileconfig') }}" class="btn btn-outline-secondary">
         <span class="bi-apple"></span>
         {{ _("Apple WLAN-Konfigurationsprofil herunterladen") }}
     </a>
 {% else %}
-    <a href="#" class="btn btn-outline-secondary" data-bs-toggle="popover" data-bs-html="true" data-bs-content='{{ _("Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines") }} <a href="{{ url_for('.reset_wifi_password') }}">{{ _("hier") }}</a>.'>
+    <a href="#" class="btn btn-outline-secondary" data-bs-toggle="popover" data-bs-html="true" data-bs-content='{{ _("Du benötigst zuerst ein WLAN-Passwort.  Erstelle eines") }} <a href="{{ url_for('usersuite.reset_wifi_password') }}">{{ _("hier") }}</a>.'>
         <span class="bi-apple"></span>
         {{ _("Apple WLAN-Konfigurationsprofil herunterladen") }}
     </a>
@@ -65,12 +128,12 @@
 
 <div>
 {% if not current_user.mpsk_clients %}
-    <a href="{{ url_for('.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Erstellen IOT Geräte') }}">
+    <a href="{{ url_for('usersuite.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Erstellen IOT Geräte') }}">
         <span class="bi-wifi"></span>
         {{ _('Erstellen IOT Geräte') }}
     </a>
 {% else %}
-    <a href="{{ url_for('.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Editieren IOT Geräte') }}">
+    <a href="{{ url_for('usersuite.view_mpsk') }}" class="btn btn-outline-secondary" title="{{ _('Editieren IOT Geräte') }}">
         <span class="bi-wifi"></span>
         {{ _('Editieren IOT Geräte') }}
     </a>
@@ -79,81 +142,34 @@
 
 
 <div class="btn-group">
-    <a href="{{ url_for('.contact') }}" class="btn btn-outline-secondary">
+    <a href="{{ url_for('usersuite.contact') }}" class="btn btn-outline-secondary">
         <span class="bi-question-circle-fill"></span>
         {{ _("Kontaktformular") }}
     </a>
-    <a href="{{ url_for('.subscribe') }}" class="btn btn-outline-secondary">
+    <a href="{{ url_for('usersuite.subscribe') }}" class="btn btn-outline-secondary">
         <span class="bi-megaphone-fill"></span>
         {{ _("Status-Page abonnieren") }}
     </a>
+</div>
 </div>
 
 <h2 id="status-information">{{ _("Statusinformationen") }}</h2>
 <div class="card">
     <table class="card-body table table-striped table-hover mb-0">
         <tbody>
-            {% for  property, description, subtext in rows %}
-            <tr>
-                {% if property.description_url %}
-                    <td class="col-md-3">
-                        <a href="{{ property.description_url }}" target="_blank">
-                            {{ description }}
+            {% for row in rows %}
+            {{ prop_row(
+                row.desc,
+                row.desc_url,
+                row.subtext,
+                row.style,
+                row.value,
+                row.copyable,
+                row.add_url,
+                row.edit_url,
+                row.delete_url
+            ) }}
 
-                            <span class="bi-box-arrow-up-right"></span>
-                        </a>
-                        {% if subtext %}
-                            <div class="text-muted">
-                                {{ subtext }}
-                            </div>
-                        {% endif %}
-                    </td>
-                {% else %}
-                    <td class="col-md-3">
-                        {{ description }}
-                    {% if subtext %}
-                        <div class="text-muted">
-                            {{ subtext }}
-                        </div>
-                    {% endif %}
-                    </td>
-                {% endif %}
-                {%- set style = ("text-{}".format(property.style) if property.style else '') -%}
-                <td class="col-md-3">
-                    <span class="d-inline-flex w-100 justify-content-between">
-                        {% if property.capabilities.displayable %}
-                            <span
-                                class="{{ style }} {% if property.capabilities.copyable %}copy-span{% endif%}"
-                                {% if property.capabilities.copyable %}data-copy="{{ property.value }}"{% endif %}
-                            >{{ property.value }}</span>
-                        {% else %}
-                            <span class="{{ style }}"></span>
-                        {% endif %}
-
-                        {%- if property.capabilities.edit and property.empty -%}
-                            <a href="{{ url_for(get_attribute_endpoint(property.name)) }}"
-                               aria-label="{{ _("Hinzufügen") }}">
-                            <span class="bi-plus-square-fill ms-auto"></span>
-                        </a>
-                        {%- endif -%}
-
-                        {%- if property.capabilities.edit and not property.empty -%}
-                            <a href="{{ url_for(get_attribute_endpoint(property.name)) }}"
-                               aria-label="{{ _("Bearbeiten") }}">
-                            <span class="bi-pencil-fill ms-auto"></span>
-                        </a>
-                        {%- endif -%}
-
-                        {%- if property.capabilities.delete and not property.empty -%}
-                            <a href="{{ url_for(get_attribute_endpoint(property.name, capability='delete')) }}"
-                               aria-label="{{ _("Löschen") }}">
-                            <span class="bi-dash-square-fill ms-auto"></span>
-                        </a>
-                        {%- endif -%}
-
-                    </span>
-                </td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>

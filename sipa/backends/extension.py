@@ -1,4 +1,5 @@
 from __future__ import annotations
+import warnings
 
 from typing import NamedTuple, cast
 
@@ -68,6 +69,11 @@ class Backends:
 
         :param app: The flask app object to register against
         """
+        warnings.warn(
+            "Use constructor with pre-onfigured datasource instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         if "backends" in app.extensions:
             logger.warning("Backends extension already initialized. Skipping.")
             return
@@ -143,7 +149,9 @@ class Backends:
         if not self.dormitory_from_ip(ip):
             return AnonymousUserMixin()
 
-        return self.datasource.user_class.from_ip(ip)
+        # TODO move closer to where it's actually used
+        from sipa.model.pycroft.user import fetch_by_ip
+        return fetch_by_ip(__TODO_API, ip)
 
 
 #: A namedtuple to improve readability of some return values
@@ -152,5 +160,6 @@ class _dorm_summary(NamedTuple):
     display_name: str
 
 
+# TODO deprecated: should not be used
 backends: Backends = cast(Backends,
                           LocalProxy(lambda: current_app.extensions['backends']))

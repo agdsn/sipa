@@ -2,67 +2,74 @@
 Basically, this is everything that is to specific to appear in the generic.py
 and does not fit into any other blueprint such as “documents”.
 """
+import typing as t
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
+from flask import Blueprint, render_template_string
 
-from flask import Blueprint, current_app, render_template, render_template_string
-
-from sipa.utils import get_bustimes, meetingcal, support_hotline_available, support_cal
+from sipa.deps import Templates, Settings
+from sipa.utils import get_bustimes, meetingcal, support_cal, support_hotline_available, TimeTable
 
 bp_features = Blueprint('features', __name__)
+router_features = APIRouter(default_response_class=HTMLResponse)
 
 
-@bp_features.route("/bustimes")
-@bp_features.route("/bustimes/<string:stopname>")
-def bustimes(stopname=None):
+@router_features.get("/bustimes")
+@router_features.get("/bustimes/{stopname}")
+def bustimes(
+    tp: Templates,
+    r: Request,
+    s: Settings,
+    stopname: str | None = None,
+):
     """Queries the VVO-Online widget for the given stop.
     If no specific stop is given in the URL, it will query all
     stops set up in the config.
     """
-    data = {}
-
-    if stopname:
-        # Only one stop requested
-        data[stopname] = get_bustimes(stopname)
-    else:
-        # General output page
-        for stop in current_app.config['BUSSTOPS']:
-            data[stop] = get_bustimes(stop, 4)
-
-    return render_template('bustimes.html', stops=data, stopname=stopname)
-
-
-@bp_features.route("/meetingcal")
-def render_meetingcal():
-    meetings = meetingcal()
-    return render_template('meetingcal.html', meetings=meetings)
-
-
-@bp_features.route("/meetings-fragment")
-def meetings():
-    return render_template_string(
-        """
-            {%- from "macros/ical.html" import render_meetingcal -%}
-            {{- render_meetingcal(meetingcal) -}}
-        """,
-        meetingcal=meetingcal(),
+    stops: dict[str, t.Iterable[TimeTable]] = (
+        {stopname: get_bustimes(stopname)}
+        if stopname
+        else {stop: get_bustimes(stop, 4) for stop in s.busstops}
     )
+    return tp.TemplateResponse(r, "bustimes.html", {"stops": stops})
 
-@bp_features.route("/support-fragment")
-def support_office():
-    return render_template_string(
-        """
-        {%- from "macros/ical.html" import render_support -%}
-        {{- render_support(supports) -}}
-        """,
-        supports=support_cal(),
+
+@router_features.get("/meetingcal", name="features.render_meetingcal")
+def render_meetingcal(tp: Templates, r: Request, s: Settings):
+    # TODO turn into proper component
+    return tp.TemplateResponse(
+        request=r,
+        name="meetingcal.html",
+        context={"meetings": meetingcal(url=(s.meetings_ical_url))}
     )
 
 
-@bp_features.route("/hotline-fragment")
-def hotline():
-    return render_template_string(
-        """
-        {%- from "macros/support-hotline.html" import hotline_description -%}
-        {{- hotline_description(available=available) -}}
-        """,
-        available=support_hotline_available(),
+@router_features.get("/meetings-fragment", name="features.meetings")
+def meetings_fragment(tp: Templates, r: Request, s: Settings):
+    # TODO turn into proper component
+    # TODO think about `FragmentResponse` or some other helper which
+    # - when sent with `HX-Request: true`: only sends the fragment
+    # - otherwise: embeds it in a default “fragment” presenter
+    return tp.TemplateResponse(
+        request=r,
+        name="meetingcal-fragment.html",
+        context={"meetingcal": meetingcal(url=s.meetings_ical_url)},
+    )
+
+
+@router_features.get("/support-fragment", name="features.support_office")
+def support_office(tp: Templates, r: Request, s: Settings):
+    return tp.TemplateResponse(
+        r,
+        "support-fragment.html",
+        context={"supports": support_cal(s)},
+    )
+
+
+@router_features.get("/hotline-fragment", name="features.hotline")
+def hotline(tp: Templates, request: Request, s: Settings):
+    return tp.TemplateResponse(
+        request,
+        "hotline-fragment.html",
+        context={"available": support_hotline_available(uri=str(s.pbx_uri))},
     )

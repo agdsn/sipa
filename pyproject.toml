@@ -25,17 +25,19 @@ dependencies = [
     "factory-boy ~= 3.2.1",
     "psycopg2 ~= 2.9.3",
     "Flask-QRcode ~= 3.1.0",
-    "email_validator ~= 1.2.1",
+    "email-validator~=2.3.0",
     "Werkzeug ~= 3.0.1",
     "sentry-sdk[flask] ~= 1.39.2",
     # Pin to avoid incompatibility
     "jinja2 ~= 3.1.2",
     "MarkupSafe ~= 2.1.1",
-    "recurring_ical_events ~= 1.0.2b0",
+    "recurring_ical_events ~= 3.8.0",
     "cachetools ~= 5.2.0",
     "python-dotenv ~= 0.21.0",
     "pydantic ~= 2.11.7",
     "wtforms_widgets",
+    "fastapi[standard-no-fastapi-cloud-cli]>=0.128.5",
+    "fastapi-babel>=1.0.0",
 ]
 [dependency-groups]
 prod = [
@@ -60,7 +62,15 @@ dev = [
     "types-requests>=2.31.0.6",
     "types-wtforms>=3.2.1.20250809",
     "ipython>=9.5.0",
+    "uvicorn-hmr[all]>=0.1.1.8",
+    "watchfiles>=1.1.1",
 ]
+
+[tool.hatch.build.targets.wheel]
+include = ["sipa/static/**"]
+
+[tool.hatch.build.targets.sdist]
+include = ["sipa/static/**"]
 
 [tool.uv.sources]
 wtforms-widgets = { path = "wtforms_widgets", editable = true }

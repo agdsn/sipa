@@ -25,9 +25,10 @@ def init_app(app):
     init_userdb(app)
 
 
+# TODO make this a part of the config
 datasource = DataSource(
     name='pycroft',
-    user_class=user.User,
+    user_class=user.User,  # TODO deprecate
     mail_server="agdsn.me",
     support_mail="support@agdsn.de",
     webmailer_url="https://mail.agdsn.de",

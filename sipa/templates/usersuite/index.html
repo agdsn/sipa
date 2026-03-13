@@ -1,15 +1,12 @@
 {% extends "base.html" %}
-{% set page_title = _('Usersuite von ') + current_user.realname.value %}
+{% set page_title = _('Usersuite von ') + current_user.realname %}
 
 {% block content %}
     {% include 'usersuite/_index_status.html' %}
     {% include 'usersuite/_payment_details.html' %}
-    {% if show_traffic_data %}
     {% include '_traffic.html' %}
-    {% endif %}
-    {% if show_transaction_log %}
+
     {% include 'usersuite/_transaction_log.html' %}
-    {% endif %}
 {% endblock %}
 
 {% block sidebar %}
@@ -17,12 +14,12 @@
 {% endblock %}
 
 {% block custom_css %}
-    <link rel="stylesheet" href="{{ url_for("static", filename="css/tocbot.css") }}"/>
-    <link rel="stylesheet" href="{{ url_for("static", filename="css/usersuite_index.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", path="css/tocbot.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", path="css/usersuite_index.css") }}"/>
 {% endblock %}
 
 {% block custom_script %}
-    <script defer src="{{ url_for("static", filename="js/tocbot.min.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/usersuite_index.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/pygal-tooltips.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/tocbot.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/usersuite_index.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/pygal-tooltips.min.js") }}"></script>
 {% endblock %}

@@ -10,7 +10,6 @@ are needed to compose and send the mails.  The core is
 :py:func:`send_complex_mail`, which calls :py:func:`send_mail`
 prepending optional information to the title and body
 """
-
 import logging
 import smtplib
 import ssl
@@ -22,7 +21,8 @@ from typing import Any
 from flask import current_app
 
 from sipa.backends.extension import backends
-from sipa.model.user import BaseUser
+from sipa.model.pycroft import datasource
+from sipa.model.pycroft.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -159,7 +159,7 @@ def send_contact_mail(author: str, subject: str, message: str,
 
     return send_complex_mail(
         author=author,
-        recipient=backends.datasource.support_mail,
+        recipient=datasource.support_mail,
         subject=subject,
         message=message,
         tag="Kontakt",
@@ -194,7 +194,7 @@ def send_usersuite_contact_mail(
     subject: str,
     message: str,
     category: str,
-    user: BaseUser,
+    user: User,
     author: str | None = None,
 ) -> bool:
     """Compose a mail for contacting from the usersuite
@@ -213,18 +213,14 @@ def send_usersuite_contact_mail(
 
     :returns: see :py:func:`send_complex_mail`
     """
-    if user.datasource is None:
-        logger.error("user %r had no datasource, cannot send mail", user)
-        return False
-
     return send_complex_mail(
-        author=f"{user.login.value}@{user.datasource.mail_server}",
-        recipient=user.datasource.support_mail,
+        author=f"{user.login}@{datasource.mail_server}",
+        recipient=datasource.support_mail,
         subject=subject,
         message=message,
         tag="Usersuite",
         category=category,
-        header={"Login": user.login.value},
+        header={"Login": user.login},
         reply_to=author,
     )
 

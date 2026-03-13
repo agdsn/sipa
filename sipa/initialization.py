@@ -7,10 +7,10 @@ from contextlib import contextmanager
 from datetime import datetime, UTC
 
 import sentry_sdk
-from flask import g, Flask
+from jinja2 import Environment
+from flask import Flask
 from flask_babel import Babel, get_locale
 from flask_login import current_user
-from werkzeug import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_qrcode import QRcode
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -27,12 +27,11 @@ from sipa.defaults import DEFAULT_CONFIG
 from sipa.flatpages import CategorizedFlatPages
 from sipa.model import AVAILABLE_DATASOURCES
 from sipa.model.misc import should_display_traffic_data
+from sipa.model.pycroft import datasource
 from sipa.session import SeparateLocaleCookieSessionInterface
 from sipa.utils import url_self
 from sipa.utils.babel_utils import get_weekday
-from sipa.utils.csp import ensure_items, NonceInfo
 from sipa.utils.git_utils import init_repo, update_repo
-from sipa.utils.graph_utils import generate_traffic_chart, provide_render_function
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())  # for before logging is configured
@@ -86,28 +85,36 @@ def init_app(app: Flask, config: dict[str, t.Any] | None = None) -> Flask:
     app.register_blueprint(bp_register)
 
     logger.debug('Registering Jinja globals')
-    form_label_width = 4
-    form_input_width = 8
     app.jinja_env.globals.update(
         current_user=current_user,
-        cf_pages=cf_pages,
         get_locale=get_locale,
         get_weekday=get_weekday,
+        # traffic_chart=provide_render_function(generate_traffic_chart),
+    )
+    init_jinja_env(app.jinja_env, cf_pages, backends)
+
+    logger.debug("Jinja globals have been set",
+                 extra={'data': {'jinja_globals': app.jinja_env.globals}})
+    return app
+
+
+def init_jinja_env(env: Environment, cf_pages: CategorizedFlatPages, backends: Backends):
+    form_label_width = 4
+    form_input_width = 8
+    env.globals.update(
         possible_locales=possible_locales,
+        cf_pages=cf_pages,
+        # needs current_user
         get_attribute_endpoint=get_attribute_endpoint,
+        # needs current_user, request
         should_display_traffic_data=should_display_traffic_data,
-        traffic_chart=provide_render_function(generate_traffic_chart),
-        current_datasource=lambda: backends.datasource,
+        current_datasource=datasource,
         form_label_width_class=f"col-sm-{form_label_width}",
         form_input_width_class=f"col-sm-{form_input_width}",
         form_input_offset_class=f"offset-sm-{form_label_width}",
         url_self=url_self,
         now=datetime.now(UTC),
     )
-
-    logger.debug("Jinja globals have been set",
-                 extra={'data': {'jinja_globals': app.jinja_env.globals}})
-    return app
 
 
 def load_config_file(app: Flask, config: dict[str, t.Any] | None = None):
@@ -226,7 +233,7 @@ def init_logging(app):
         sentry_sdk.init(
             dsn=dsn,
             integrations=[FlaskIntegration()],
-            traces_sample_rate = 1.0,
+            traces_sample_rate=1.0,
             # release="myapp@1.0.0",
         )
 
@@ -240,51 +247,3 @@ def init_logging(app):
         'DEFAULT_CONFIG': DEFAULT_CONFIG,
         'EXTRA_CONFIG': app.config.get('LOG_CONFIG')
     }})
-
-
-def ensure_csp(r: Response) -> Response:
-    apply_nonces_to_csp(r)
-
-    csp = r.content_security_policy
-    SELF = ("'self'",)
-    csp.default_src = ensure_items(csp.default_src, SELF)
-    csp.connect_src = ensure_items(
-        csp.connect_src,
-        (
-            "'self'",
-            "https://status.agdsn.net",
-            "https://*.tile.openstreetmap.de",
-        ),
-    )
-    csp.form_action = ensure_items(csp.form_action, SELF)
-    csp.frame_ancestors = ensure_items(csp.frame_ancestors, SELF)
-    csp.img_src = ensure_items(
-        csp.img_src,
-        (
-            "'self'",
-            "data:",
-            "https://*.tile.openstreetmap.de",
-        ),
-    )
-    csp.script_src = ensure_items(
-        csp.script_src,
-        (
-            "'self'",
-            "https://status.agdsn.net",
-        ),
-    )
-    csp.style_src = ensure_items(csp.style_src, SELF)
-    csp.style_src_attr = ensure_items(csp.style_src_attr, ("'self'", "'unsafe-inline'"))
-    csp.worker_src = ensure_items(csp.worker_src, ("'none'",))
-    # there doesn't seem to be a good way to set `upgrade-insecure-requests`
-    return r
-
-
-def apply_nonces_to_csp(r: Response) -> None:
-    if not hasattr(g, "nonce_info"):
-        return
-
-    nonce_info = g.nonce_info
-    assert isinstance(nonce_info, NonceInfo)
-
-    nonce_info.apply_to_csp(r.content_security_policy)

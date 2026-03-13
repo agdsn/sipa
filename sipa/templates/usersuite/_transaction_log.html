@@ -6,6 +6,7 @@
     {%- endif %}
 {%- endmacro %}
 
+{% set info = finance_information %}
 <h2 id="transaction-log">{{ _("Buchungen") }}</h2>
 <p>{{ _("Hinweis: Es kann bis zu 7 Tage dauern, bis eine Überweisung von uns erfasst wird.") }}</p>
 <div class="card">
@@ -19,19 +20,19 @@
         </thead>
 
         <tbody>
-            {% for log in logs %}
-                <tr class="table-{{ value_context(log[1]) }}">
-                    <td>{{ log[0] | date }}</td>
-                    <td>{{ log[2] }}</td>
-                    <td class="text-end">{{ log[1] | money }}</td>
+            {% for log in info.transactions %}
+                <tr class="table-{{ value_context(log.amount) }}">
+                    <td>{{ log.valid_on | date }}</td>
+                    <td>{{ log.description }}</td>
+                    <td class="text-end">{{ log.amount | money }}</td>
                 </tr>
             {% endfor %}
         </tbody>
         <tfoot>
             <tr>
                 <td></td>
-                <td><strong>{{ _("Summe") }}</strong> <em class="text-muted pull-right">{{ _("Stand") }} {{ last_update | date }}</em></td>
-                <td class="text-end text-{{ value_context(balance) }}"><strong>{{ balance | money }}</strong></td>
+                <td><strong>{{ _("Summe") }}</strong> <em class="text-muted pull-right">{{ _("Stand") }} {{ info.last_update | date }}</em></td>
+                <td class="text-end text-{{ value_context(info.balance) }}"><strong>{{ info.balance | money }}</strong></td>
             </tr>
         </tfoot>
     </table>

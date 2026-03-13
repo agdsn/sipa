@@ -1,3 +1,5 @@
+from __future__ import annotations
+from sipa.config.typed_config import ContactAddress, Settings
 """
 General utilities
 """
@@ -7,8 +9,10 @@ import http.client
 import json
 import logging
 import typing
+import typing as t
 from copy import deepcopy
-from datetime import date, datetime
+from dataclasses import dataclass
+from datetime import date, datetime, time
 from functools import wraps
 from itertools import chain
 from operator import itemgetter
@@ -29,7 +33,8 @@ from flask.globals import current_app
 logger = logging.getLogger(__name__)
 
 
-def get_bustimes(stopname, count=10):
+# TODO make pure, inject a BustimeClient or just HTTPX
+def get_bustimes(stopname: str, count: int = 10) -> t.Generator[TimeTable] | None:
     """Parses the VVO-Online API return string.
     API returns in format [["line", "to", "minutes"],[__],[__]], where "__" are
     up to nine more Elements.
@@ -50,17 +55,23 @@ def get_bustimes(stopname, count=10):
         return None
 
     response_data = json.loads(response.read().decode())
-
-    return ({
-        'line': i[0],
-        'dest': i[1],
+    # TODO validate response schema in pydantic && err out otherwise
+    return (t.cast(TimeTable, {
+        'line': str(i[0]),
+        'dest': str(i[1]),
         'minutes_left': int(i[2]) if i[2] else 0,
-    } for i in response_data)
+    }) for i in response_data)
 # TODO: check whether this is the correct format
 
 
+class TimeTable(t.TypedDict):
+    line: str
+    dest: str
+    minutes_left: int
+
+
 @cached(cache=TTLCache(maxsize=1, ttl=2 * 60))
-def try_fetch_hotline_availability(uri: str) -> bool:
+def support_hotline_available(uri: str) -> bool:
     """Determines whether there are agents logged in to anwser calls to our
     support hotline.
     """
@@ -68,10 +79,6 @@ def try_fetch_hotline_availability(uri: str) -> bool:
         return False
 
     return r.text == "AVAILABLE"
-
-
-def support_hotline_available():
-    return try_fetch_hotline_availability(current_app.config["PBX_URI"])
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
@@ -124,9 +131,12 @@ def events_from_calendar(calendar: icalendar.Calendar) -> list[Event]:
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
-def meetingcal():
+def meetingcal(url: str) -> list:
     """Returns the calendar events got form the url in the config"""
-    if not (calendar := try_fetch_calendar(current_app.config['MEETINGS_ICAL_URL'])):
+    # TODO make pure, inject `CalendarClient` with strongly typed interface or similar and
+    #   - do snapshot && contract tests for the `CalendarClient`
+    #   - do snapshot tests against the UI component given a fake calendar client.
+    if not (calendar := try_fetch_calendar(url)):
         return []
 
     events = events_from_calendar(calendar)
@@ -145,25 +155,67 @@ def meetingcal():
     return next_meetings
 
 
+class MeetingInfo(t.TypedDict):
+    title: str
+    datetime: datetime
+    location: str
+    location_link: markdown.Markdown
+
+
 @cached(cache=TTLCache(maxsize=1, ttl=300))
-def support_cal():
+def support_cal(settings: Settings):
     """Returns the list of offices with next opening times within a month."""
-    offices = {item.pop("name"): item for item in deepcopy(current_app.config["CONTACT_ADDRESSES"])}
-    if not (calendar := try_fetch_calendar(current_app.config["SUPPORT_ICAL_URL"])):
-        return offices
+    # TODO only inject the info we need (sub-settings?).
+    #  This is also better for caching.
+    # TODO make pure: inject ical client
+    if not (calendar := try_fetch_calendar(settings.support_ical_url)):
+        return {addr.name: UIContactInfo.from_config(addr) for addr in settings.contact_addresses}
 
-    for office in offices:
-        offices[office]["next"] = [
-            {
-                "date": event["DTSTART"].dt.date(),
-                "start": event["DTSTART"].dt.time(),
-                "end": event["DTEND"].dt.time(),
-            }
-            for event in sorted(events_from_calendar(calendar), key=lambda evnt: evnt.start)
-            if event.get("LOCATION") == office
-        ][: current_app.config.get("SUPPORT_MAX_DISPLAYED", 3)]
+    sorted_events: list[Event] = sorted(events_from_calendar(calendar), key=lambda evnt: evnt.start)
+    return {
+        addr.name: UIContactInfo.from_config(
+            addr,
+            next_office_hours=[
+                OfficeHourInfo(
+                    date=event["DTSTART"].dt.date(),
+                    start=event["DTSTART"].dt.time(),
+                    end=event["DTEND"].dt.time(),
+                )
+                for event in sorted_events
+                if event.get("LOCATION") == addr.name
+            ][: settings.support_max_displayed],
+        )
+        for addr in settings.contact_addresses
+    }
 
-    return offices
+
+@dataclass(frozen=True)
+class UIContactInfo:
+    """Contact information about an office with potential “next date” info."""
+    name: str
+    city: str
+    doorbell: str | None = None
+    floor: int | None = None
+    only_residents: bool = False
+    next: list[OfficeHourInfo] | None = None
+
+    @classmethod
+    def from_config(cls, addr: ContactAddress, next_office_hours: list[OfficeHourInfo] | None = None):
+        return cls(
+            name=addr.name,
+            city=addr.city,
+            doorbell=addr.doorbell,
+            floor=addr.floor,
+            only_residents=addr.only_residents,
+            next=next_office_hours
+        )
+
+
+@dataclass(frozen=True)
+class OfficeHourInfo:
+    date: date
+    start: time
+    end: time
 
 
 def subscribe_to_status_page(url: str, token: str, request_timeout: int, email: str) -> bool | None:

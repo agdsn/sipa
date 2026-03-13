@@ -12,7 +12,7 @@
         <li class="nav-item">
             <a href="{{ url_for('usersuite.index') }}" class="nav-link">
                 <span class="bi-person-fill"></span>
-                {{ current_user.realname.value }}
+                {{ current_user.realname }}
             </a>
         </li>
 
@@ -38,7 +38,7 @@
 {% from "macros/support-hotline.html" import hotline_description %}
 
 <!DOCTYPE html>
-<html lang="{{ get_locale().language }}">
+<html lang="{{ current_locale.language }}">
 
 <!--
     ___    ______           ____    _____    _   __
@@ -66,32 +66,42 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
     <title>AG DSN {% if page_title %} - {{ page_title }}{% endif %}</title>
 
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='img/favicon.png') }}">
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+          href="{{ url_for('static', path='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='bootstrap-icons.min.css') }}"/>
+          href="{{ url_for('static', path='bootstrap-icons.min.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/agdsn-bootstrap-social.css') }}"/>
+          href="{{ url_for('static', path='css/agdsn-bootstrap-social.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='css/style.css') }}"/>
+          href="{{ url_for('static', path='css/style.css') }}"/>
+
     {% block custom_css %}{% endblock %}
 
     <script type="application/json" id="locale">
-        {{- get_locale() | string | tojson -}}
+        {{- current_locale | string | tojson -}}
     </script>
-    <script defer src="{{ url_for("static", filename="js/bootstrap.bundle.min.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/statuspage.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/agdsn.js") }}"></script>
-    <script defer src="{{ url_for("static", filename="js/htmx.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/bootstrap.bundle.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/statuspage.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/agdsn.js") }}"></script>
+    <script defer src="{{ url_for("static", path="js/htmx.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="vendor/hyperscript/_hyperscript.min.js") }}"></script>
+    <script defer src="{{ url_for("static", path="vendor/hyperscript/socket.js") }}"></script>
+    <script type="text/hyperscript">
+        socket DevWs {{ url_for("__dev_reload_socket") }}
+            on message
+                log message
+                trigger dev:reload on <body/>
+        end
+    </script>
     {% block custom_script %}{% endblock %}
 </head>
 
-<body class="js-toc-content">
+<body class="js-toc-content" hx-get="." hx-trigger="dev:reload" hx-swap="morphdom">
 <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="{{ url_for('generic.index') }}">
-            <img id="logo" src="{{ url_for('static', filename='img/logo_hover.png') }}"
+            <img id="logo" src="{{ url_for('static', path='img/logo_hover.png') }}"
                  alt="AG DSN"/>
         </a>
         <a class="navbar-brand d-lg-none" href="{{ url_for('generic.index') }}">
@@ -114,15 +124,15 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                     </a>
                     <!-- TODO add aria-labelledby ↓ and id ↑ -->
                     <div class="dropdown-menu" role="menu">
-                        <a href="{{ url_for('news.show', start=0) }}" class="dropdown-item">
+                        <a href="{{ url_for('news.show').include_query_params(start=0) }}" class="dropdown-item">
                             <span class="bi-skip-start-fill"></span>
                             &nbsp; {{ _("Neueste") }}
                         </a>
-                        <a href="{{ url_for('news.show', end=-1) }}" class="dropdown-item">
+                        <a href="{{ url_for('news.show').include_query_params(end=-1) }}" class="dropdown-item">
                             <span class="bi-skip-end-fill"></span>
                             &nbsp; {{ _("Älteste") }}
                         </a>
-                        <a href="{{ url_for('news.show', start=0, end=-1) }}" class="dropdown-item">
+                        <a href="{{ url_for('news.show').include_query_params(start=0, end=-1) }}" class="dropdown-item">
                             <span class="bi-collection-fill"></span>
                             &nbsp; {{ _("Alle") }}
                         </a>
@@ -167,8 +177,8 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                         <li class="dropdown-header">{{ _("Sprache") }}</li>
                         <li>
                             {%- for locale in possible_locales() %}
-                                <li {% if get_locale() == locale -%} class="active" {%- endif %}>
-                                    <a href="{{ url_self(locale=locale.language) }}" class="nav-link">
+                                <li {% if current_locale == locale -%} class="active" {%- endif %}>
+                                    <a href="{{ url_for('set_language', lang=locale.language) }}" class="nav-link">
                                         {{ locale_image_and_text(locale) }}
                                     </a>
                                 </li>
@@ -188,8 +198,8 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <li class="nav-item btn-group hstack justify-content-center d-xl-none" aria-label="language selection">
                     {% for locale in possible_locales() %}
                         <a
-                            href="{{ url_self(locale=locale.language) }}"
-                            {% if locale == get_locale() %}
+                            href="{{ url_for('set_language', lang=locale.language) }}"
+                            {% if locale == current_locale %}
                             aria-current="true"
                             class="btn btn-outline-primary active"
                             {% else %}
@@ -204,14 +214,14 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
                 <!-- language dropdown -->
                 <li class="nav-item dropdown d-none d-xl-inline-flex">
                     <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">
-                        {{ locale_image(get_locale()) }}
+                        {{ locale_image(current_locale) }}
                         <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" role="menu">
                         {% for locale in possible_locales() %}
                             <a
-                                href="{{ url_self(locale=locale.language) }}"
-                                {%- if locale == get_locale() -%}
+                                href="{{ url_for('set_language', lang=locale.language) }}"
+                                {%- if locale == current_locale -%}
                                 class="dropdown-item active"
                                 {%- else -%}
                                 class="dropdown-item"
@@ -347,43 +357,33 @@ We like where you're looking. Wanna see more? Contact us at du-bist-gefragt<at>a
 
                                 <hr>
 
-                                <div class="row">
-                                    <div class="col-2">
-                                        <a class="btn btn-social-icon btn-mastodon text-center d-flex justify-content-center align-items-center"
-                                           href="https://social.anoxinon.de/@ag_dsn"
-                                           rel="me"
-                                           aria-label="Mastodon">
-                                            <span class="bi-mastodon" aria-hidden="true"></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="btn btn-social-icon btn-twitter text-center d-flex justify-content-center align-items-center"
-                                           href="https://twitter.com/ag_dsn"
-                                           aria-label="Twitter">
-                                            <span class="bi-twitter" aria-hidden="true"></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="btn btn-social-icon btn-instagram text-center d-flex justify-content-center align-items-center"
-                                           href="https://instagram.com/agdsn"
-                                           aria-label="Instagram">
-                                            <span class="bi-instagram" aria-hidden="true"></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="btn btn-social-icon btn-github text-center d-flex justify-content-center align-items-center"
-                                           href="https://github.com/agdsn"
-                                           aria-label="Github">
-                                            <span class="bi-github" aria-hidden="true"></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="btn btn-social-icon btn-linkedin text-center d-flex justify-content-center align-items-center"
-                                           href="https://www.linkedin.com/company/agdsn"
-                                           aria-label="LinkedIn">
-                                            <span class="bi-linkedin" aria-hidden="true"></span>
-                                        </a>
-                                    </div>
+                                <div class="d-flex flex-row justify-content-around">
+                                    <a class="btn btn-social-icon btn-mastodon text-center d-flex justify-content-center align-items-center"
+                                       href="https://social.anoxinon.de/@ag_dsn"
+                                       rel="me"
+                                       aria-label="Mastodon">
+                                        <span class="bi-mastodon" aria-hidden="true"></span>
+                                    </a>
+                                    <a class="btn btn-social-icon btn-twitter text-center d-flex justify-content-center align-items-center"
+                                       href="https://twitter.com/ag_dsn"
+                                       aria-label="Twitter">
+                                        <span class="bi-twitter" aria-hidden="true"></span>
+                                    </a>
+                                    <a class="btn btn-social-icon btn-instagram text-center d-flex justify-content-center align-items-center"
+                                       href="https://instagram.com/agdsn"
+                                       aria-label="Instagram">
+                                        <span class="bi-instagram" aria-hidden="true"></span>
+                                    </a>
+                                    <a class="btn btn-social-icon btn-github text-center d-flex justify-content-center align-items-center"
+                                       href="https://github.com/agdsn"
+                                       aria-label="Github">
+                                        <span class="bi-github" aria-hidden="true"></span>
+                                    </a>
+                                    <a class="btn btn-social-icon btn-linkedin text-center d-flex justify-content-center align-items-center"
+                                       href="https://www.linkedin.com/company/agdsn"
+                                       aria-label="LinkedIn">
+                                        <span class="bi-linkedin" aria-hidden="true"></span>
+                                    </a>
                                 </div>
 
                             </div>

@@ -1,13 +1,13 @@
+from sipa.model.pycroft.user import TrafficHistoryRow
+import typing as t
+
 import pygal
-from flask_babel import gettext
-from pygal import Graph
 from pygal.colors import hsl_to_rgb
 from pygal.style import Style
 
-from sipa.units import (format_as_traffic, max_divisions,
-                        reduce_by_base)
-from sipa.utils.babel_utils import get_weekday
-from sipa.utils.csp import NonceInfo
+from sipa.units import format_as_traffic, max_divisions, reduce_by_base
+
+# from sipa.utils.csp import NonceInfo
 
 
 def rgb_string(r, g, b):
@@ -28,30 +28,19 @@ traffic_style = Style(
 )
 
 
-def default_chart(chart_type, title, inline=True, **kwargs):
-    return chart_type(
-        fill=True,
-        title=title,
-        height=350,
-        show_y_guides=True,
-        human_readable=False,
-        major_label_font_size=12,
-        label_font_size=12,
-        style=traffic_style,
-        disable_xml_declaration=inline,   # for direct html import
-        js=[],  # prevent automatically fetching scripts from github
-        **kwargs,
-    )
-
-
-def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Graph:
+def generate_traffic_chart(
+    traffic_data: list[TrafficHistoryRow],
+    nonce: str,
+    get_weekday: t.Callable[[int], str],
+    _: t.Callable[[str], str],
+) -> pygal.StackedBar:
     """Create a graph object from the input traffic data with pygal.
      If inline is set, the chart is being passed the option to not add an XML
      declaration header to the beginning of the `render()` output, so it can
      be directly included in HTML code (wrapped by a `<figure>`)
 
     :param traffic_data: The traffic data as given by `user.traffic_history`
-    :param inline: Determines the option `disable_xml_declaration`
+    :param nonce: A CSP nonce injected into inline ``<style>`` and ``<script>`` tags
 
     :return: The graph object
     """
@@ -59,50 +48,58 @@ def generate_traffic_chart(traffic_data: list[dict], inline: bool = True) -> Gra
     divisions = (max_divisions(max(day['throughput'] for day in traffic_data))
                  if traffic_data else 0)
 
-    traffic_data = [{key: (reduce_by_base(val, divisions=divisions)
-                           if key in ['input', 'output', 'throughput']
-                           else val)
-                     for key, val in entry.items()
-                     }
-                    for entry in traffic_data]
+    converted: list[NormalizedTrafficHistoryRow] = [
+        {
+            "input": reduce_by_base(day["input"], divisions=divisions),
+            "output": reduce_by_base(day["output"], divisions=divisions),
+            "throughput": reduce_by_base(day["throughput"], divisions=divisions),
+            "day": day["day"],
+        }
+        for day in traffic_data
+    ]
 
-    traffic_chart = default_chart(
-        pygal.StackedBar,
-        gettext("Traffic (MiB)"),
-        inline,
+    traffic_chart = pygal.StackedBar(
+        fill=True,
+        title=_("Traffic (MiB)"),
+        height=350,
+        show_y_guides=True,
+        human_readable=False,
+        major_label_font_size=12,
+        label_font_size=12,
+        style=traffic_style,
+        disable_xml_declaration=True,
+        js=[],  # prevent automatically fetching scripts from github
+
         # don't divide, since the raw values already have been prepared.
         # `divide=False` effectively just appends the according unit.
         value_formatter=lambda value: format_as_traffic(value, divisions, divide=False),
     )
 
-    traffic_chart.x_labels = (get_weekday(day['day']) for day in traffic_data)
-    traffic_chart.add(gettext("Eingehend"),
-                      [day['input'] for day in traffic_data],
+    traffic_chart.x_labels = (get_weekday(day['day']) for day in converted)
+    traffic_chart.add(_("Eingehend"),
+                      [day['input'] for day in converted],
                       stroke_style={'dasharray': '5'})
-    traffic_chart.add(gettext("Ausgehend"),
-                      [day['output'] for day in traffic_data],
+    traffic_chart.add(_("Ausgehend"),
+                      [day['output'] for day in converted],
                       stroke_style={'dasharray': '5'})
 
-    from flask import g
-
-    if not hasattr(g, "nonce_info"):
-        g.nonce_info = NonceInfo()
-
-    def add_nonces(el):
+    def add_nonce(el):
         for sub_el in el.findall("./defs/style"):
-            sub_el.set("nonce", g.nonce_info.add_style_nonce())
+            sub_el.set("nonce", nonce)
         for script in el.findall("./defs/script"):
-            script.set("nonce", g.nonce_info.add_script_nonce())
+            script.set("nonce", nonce)
 
         return el
 
-    traffic_chart.add_xml_filter(add_nonces)
+    traffic_chart.add_xml_filter(add_nonce)
 
     return traffic_chart
 
 
-def provide_render_function(generator):
-    def renderer(data, **kwargs):
-        return generator(data, **kwargs).render()
+@t.final
+class NormalizedTrafficHistoryRow(t.TypedDict):
+    day: int
+    input: int | float
+    output: int | float
+    throughput: int | float
 
-    return renderer

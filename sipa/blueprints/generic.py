@@ -1,47 +1,58 @@
+import html
 import logging
 import os
+import typing as t
+from urllib.parse import quote
 
+from fastapi import APIRouter, Form, Request
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from flask import (
+    abort,
+    flash,
+    jsonify,
+    redirect,
     render_template,
     request,
-    redirect,
-    url_for,
-    flash,
     session,
-    abort,
-    jsonify,
+    url_for,
 )
 from flask.blueprints import Blueprint
-from flask_babel import gettext, format_date, _
-from flask_login import current_user, login_user, logout_user, \
-    login_required
+from flask_babel import _, format_date, gettext
+from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import DatabaseError
+from starlette.background import BackgroundTask
+from starlette.datastructures import URL
+from starlette.responses import Response
 
 from sipa.backends.exceptions import BackendError
+from sipa.backends.extension import backends
+from sipa.deps import Settings, Templates
 from sipa.forms import (
-    LoginForm,
     AnonymousContactForm,
+    LoginForm,
     OfficialContactForm,
     PasswordRequestResetForm,
     PasswordResetForm,
 )
-from sipa.mail import send_official_contact_mail, send_contact_mail
-from sipa.backends.extension import backends
+from sipa.mail import send_contact_mail, send_official_contact_mail
 from sipa.model import pycroft
-from sipa.units import dynamic_unit, format_money
 from sipa.model.exceptions import (
-    UserNotFound,
     InvalidCredentials,
+    LoginNotAllowed,
+    TokenNotFound,
     UnknownError,
     UserNotContactableError,
-    TokenNotFound,
-    LoginNotAllowed,
+    UserNotFound,
 )
-from sipa.utils.git_utils import get_repo_active_branch, get_latest_commits
+from sipa.model.pycroft import datasource
+from sipa.model.pycroft.user import User
+from sipa.units import dynamic_unit, format_money
+from sipa.utils.git_utils import get_latest_commits, get_repo_active_branch
 
 logger = logging.getLogger(__name__)
 
 bp_generic = Blueprint('generic', __name__)
+router_generic = APIRouter(default_response_class=HTMLResponse)
 
 
 @bp_generic.before_app_request
@@ -122,6 +133,12 @@ def index():
     return redirect(url_for('news.show'))
 
 
+@router_generic.get("/", name="generic.index")
+@router_generic.get("/index.php", name="generic.index_php")
+def index_(request: Request) -> RedirectResponse:
+    return RedirectResponse(request.url_for("news.show"))
+
+
 @bp_generic.route("/login", methods=['GET', 'POST'])
 def login():
     """Login page for users
@@ -132,9 +149,8 @@ def login():
         username = form.username.data
         password = form.password.data
         remember = form.remember.data
-        User = backends.datasource.user_class
 
-        valid_suffix = f"@{backends.datasource.mail_server}"
+        valid_suffix = f"@{datasource.mail_server}"
 
         if username.endswith(valid_suffix):
             username = username[:-len(valid_suffix)]
@@ -168,6 +184,55 @@ def login():
     return render_template("login.html", form=form)
 
 
+@router_generic.get("/login", name="generic.login")
+def login_get(
+    tp: Templates,
+    r: Request,
+    s: Settings,
+) -> HTMLResponse:
+    # TODO layout: should we use a component?
+    return tp.TemplateResponse(
+        r, "login.html", context={},
+    )
+
+
+@router_generic.post("/login", name="generic.login_post")
+def login_post(
+    tp: Templates,
+    r: Request,
+    s: Settings,
+    login: t.Annotated[str, Form()],
+    password: t.Annotated[str, Form()],
+) -> Response:
+
+    success = password == "password"
+    if not success:
+        # TODO pass error && username
+        return tp.TemplateResponse(
+            r, "login-fragment.html", context={"errors": ["invalid."]},
+        )
+
+    # TODO first add a session cookie without CSRF
+    # TODO MVP: non-signed cookie, just to get the UI started
+    # TODO MVP2: signed, with `HttpOnly; Secure; SameSite=Lax`
+    resp = HtmxRedirectResponse(r.url_for('usersuite.index'))
+    resp.set_cookie("username", login)
+    return resp
+
+
+# TODO move to some htmx helpers module
+class HtmxRedirectResponse(Response):
+    def __init__(
+        self,
+        url: str | URL,
+        status_code: int = 204,
+        headers: t.Mapping[str, str] | None = None,
+        background: BackgroundTask | None = None,
+    ) -> None:
+        super().__init__(content=b"", status_code=status_code, headers=headers, background=background)
+        self.headers["HX-Location"] = quote(str(url), safe=":/%#?=@[]!$&'()*+,;")
+
+
 @bp_generic.route("/logout")
 @login_required
 def logout():
@@ -176,6 +241,12 @@ def logout():
     logout_user()
     flash(gettext("Abmeldung erfolgreich!"), 'success')
     return redirect(url_for('.index'))
+
+
+@router_generic.get("/logout", name="generic.logout")
+def logout_(request: Request) -> RedirectResponse:
+    # TODO nontrivial: remove FastAPI session/cookie and clear request.state.user
+    return RedirectResponse(request.url_for("generic.index"), status_code=302)
 
 
 @bp_generic.route('/reset-password', methods=['GET', 'POST'])
@@ -190,12 +261,18 @@ def request_password_reset():
 
     if form.validate_on_submit():
         try:
-            pycroft.user.User.request_password_reset(form.ident.data, form.email.data)
+            api = current_app.extensions["pycroft_api"]
+            pycroft.user.request_password_reset(api, form.ident.data, form.email.data)
         except (UserNotContactableError, UserNotFound):
             flash(_("Für die angegebenen Daten konnte kein Benutzer gefunden werden."), "error")
         except UnknownError:
-            flash("{} {}".format(_("Es ist ein unbekannter Fehler aufgetreten."),
-                                 _("Bitte kontaktiere den Support.")), "error")
+            flash(
+                "{} {}".format(
+                    _("Es ist ein unbekannter Fehler aufgetreten."),
+                    _("Bitte kontaktiere den Support."),
+                ),
+                "error",
+            )
         else:
             flash(gettext("Es wurde eine Nachricht an die hinterlegte E-Mail Adresse gesendet. "
                           "Falls du die Nachricht nicht erhälst, wende dich an den Support."), "success")
@@ -212,13 +289,23 @@ def reset_password(token):
 
     if form.validate_on_submit():
         try:
-            pycroft.user.User.password_reset(token, form.password.data)
+            pycroft.user.password_reset(
+                current_app.extensions["pycroft_api"], token, form.password.data
+            )
         except TokenNotFound:
-            flash(_("Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."), "error")
-            return redirect(url_for('.request_password_reset'))
+            flash(
+                _("Der verwendete Passwort-Token ist ungültig. Bitte fordere einen neuen Link an."),
+                "error",
+            )
+            return redirect(url_for(".request_password_reset"))
         except UnknownError:
-            flash("{} {}".format(_("Es ist ein unbekannter Fehler aufgetreten."),
-                                 _("Bitte kontaktiere den Support.")), "error")
+            flash(
+                "{} {}".format(
+                    _("Es ist ein unbekannter Fehler aufgetreten."),
+                    _("Bitte kontaktiere den Support."),
+                ),
+                "error",
+            )
         else:
             flash(gettext("Dein Passwort wurde geändert."), "success")
 
@@ -226,6 +313,24 @@ def reset_password(token):
 
     return render_template('generic_form.html', page_title=gettext("Passwort zurücksetzen"),
                            form_args={'form': form, 'cancel_to': url_for('.login')})
+
+
+@router_generic.get("/reset-password", name="generic.request_password_reset")
+@router_generic.post("/reset-password", name="generic.request_password_reset")
+def request_password_reset_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: Flask-WTF form + CSRF -> FastAPI
+    # TODO nontrivial: capture client IP (request.client.host) for user_from_ip
+    # TODO nontrivial: implement flash messaging + redirects
+    # TODO nontrivial: call pycroft.user.User.request_password_reset
+    return HTMLResponse("TODO: /reset-password (FastAPI)")
+
+
+@router_generic.get("/reset-password/{token}", name="generic.reset_password")
+@router_generic.post("/reset-password/{token}", name="generic.reset_password")
+def reset_password_(request: Request, token: str) -> HTMLResponse:
+    # TODO nontrivial: Flask-WTF form + CSRF -> FastAPI
+    # TODO nontrivial: call pycroft.user.User.password_reset
+    return HTMLResponse(f"TODO: /reset-password/{token} (FastAPI)")
 
 
 bp_generic.add_app_template_filter(dynamic_unit, name='unit')
@@ -309,6 +414,19 @@ def traffic_api():
     return jsonify(version=3, **trafficdata)
 
 
+@router_generic.get("/usertraffic", name="generic.usertraffic")
+def usertraffic_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: implement auth and user selection (current_user vs user_from_ip)
+    # TODO nontrivial: port traffic chart generation + template rendering
+    return HTMLResponse("TODO: /usertraffic (FastAPI)")
+
+
+@router_generic.get("/usertraffic/json", name="generic.traffic_api")
+def traffic_api_(request: Request) -> JSONResponse:
+    # TODO nontrivial: port chosen user logic + traffic history serialization
+    return JSONResponse({"version": 0})
+
+
 @bp_generic.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = AnonymousContactForm()
@@ -331,6 +449,15 @@ def contact():
         return redirect(url_for('.index'))
 
     return render_template('anonymous_contact.html', form=form)
+
+
+@router_generic.get("/contact", name="generic.contact")
+@router_generic.post("/contact", name="generic.contact")
+def contact_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: port AnonymousContactForm (Flask-WTF) incl. honeypot field
+    # TODO nontrivial: dormitory choices from backends.dormitories_short
+    # TODO nontrivial: send_contact_mail and flash+redirect
+    return HTMLResponse("TODO: /contact (FastAPI)")
 
 
 @bp_generic.route('/contact_official', methods=['GET', 'POST'])
@@ -358,6 +485,14 @@ def contact_official():
     )
 
 
+@router_generic.get("/contact_official", name="generic.contact_official")
+@router_generic.post("/contact_official", name="generic.contact_official")
+def contact_official_(request: Request) -> HTMLResponse:
+    # TODO nontrivial: port OfficialContactForm (Flask-WTF) + CSRF
+    # TODO nontrivial: send_official_contact_mail + flash+redirect
+    return HTMLResponse("TODO: /contact_official (FastAPI)")
+
+
 @bp_generic.route('/version')
 def version():
     """ Display version information from local repo """
@@ -369,6 +504,34 @@ def version():
     )
 
 
+@router_generic.get("/version", name="generic.version")
+def version_(request: Request) -> HTMLResponse:
+    # NOTE: this intentionally avoids Jinja rendering for now.
+    # Rendering `version.html` currently still depends on several Flask-only
+    # Jinja globals (e.g. get_locale, cf_pages).
+    sipa_dir = os.getcwd()
+    active_branch = get_repo_active_branch(sipa_dir)
+    commits = get_latest_commits(sipa_dir, 20)
+
+    commit_lines = "\n".join(
+        f"{c.get('date', '')} {c.get('hexsha', '')[:8]} {c.get('author', '')}: {c.get('message', '')}"
+        for c in commits
+    )
+
+    body = (
+        "<h2>Version</h2>"
+        f"<p>Branch: <code>{html.escape(str(active_branch))}</code></p>"
+        f"<pre>{html.escape(commit_lines)}</pre>"
+    )
+    return HTMLResponse(body)
+
+
 @bp_generic.route('/debug-sentry')
 def trigger_error():
     """An endpoint intentionally triggering an error to test reporting"""
+
+
+@router_generic.get("/debug-sentry", name="generic.trigger_error")
+def trigger_error_(request: Request) -> None:
+    raise RuntimeError("FastAPI debug-sentry endpoint triggered")
+

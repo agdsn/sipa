@@ -13,6 +13,7 @@ from .types import UserLike
 InitContextCallable = Callable[[Flask], None]
 
 
+# TODO remove abstraction, turn into `Pycroft` datasource and set reasonable defaults
 class DataSource:
     """A class providing a certain Backend.
 

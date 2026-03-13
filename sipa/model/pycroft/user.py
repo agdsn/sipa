@@ -2,144 +2,174 @@ from __future__ import annotations
 
 import logging
 import typing as t
-from datetime import date
+from dataclasses import dataclass
+from datetime import date, timedelta
 
-from pydantic import ValidationError
-
-from sipa.model.user import BaseUser
-from sipa.model.finance import BaseFinanceInformation
-from sipa.model.fancy_property import (
-    ActiveProperty,
-    UnsupportedProperty,
-    PropertyBase,
-    Capabilities,
-    connection_dependent,
-)
-from sipa.model.misc import PaymentDetails
-from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
-    MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed, \
-    MaximumNumberMPSKClients, NoWiFiPasswordGenerated
-from .api import PycroftApi
-from .exc import PycroftBackendError
-from .schema import UserData, UserStatus
-from .userdb import UserDB
-
-from flask_login import AnonymousUserMixin
-from flask.globals import current_app
 from flask_babel import gettext
-from werkzeug.local import LocalProxy
+from flask_login import AnonymousUserMixin
+from pydantic import ValidationError
+from sqlalchemy.engine.base import Engine
 from werkzeug.http import parse_date
 
+from sipa.config.typed_config import Mask
+from sipa.model.exceptions import (
+    ContinuationNotPossible,
+    LoginNotAllowed,
+    MacAlreadyExists,
+    MaximumNumberMPSKClients,
+    NetworkAccessAlreadyActive,
+    NoWiFiPasswordGenerated,
+    PasswordInvalid,
+    SubnetFull,
+    TerminationNotPossible,
+    TokenNotFound,
+    UnknownError,
+    UserNotContactableError,
+    UserNotFound,
+)
+from sipa.model.misc import PaymentDetails, UserPaymentDetails
+from sipa.model.user import TableRow
+
 from ..mspk_client import MPSKClientEntry
+from .api import PycroftApi
+from .exc import PycroftBackendError
+from .schema import TrafficHistoryEntry, UserData, UserStatus
+from .userdb import UserDB
 
 logger = logging.getLogger(__name__)
 
-api: PycroftApi = t.cast(
-    PycroftApi,
-    LocalProxy(lambda: current_app.extensions['pycroft_api'])
-)
 
+# TODO separate into sub-concerns derived from (validatd) `UserData` && `PycroftApi`
+# TODO try to separate queries (don't need API) and commands (need API)
+@t.final
+class User:
+    # TODO remove, this is legacy from flask_login
+    is_authenticated = True
+    is_active = True
+    is_anonymous = False
 
-class User(BaseUser):
+    uid: int
     user_data: UserData
+    api: PycroftApi
+    _payment_details: PaymentDetails
 
-    def __init__(self, user_data: dict):
+    def __init__(
+        self,
+        user_data: dict,
+        api: PycroftApi,
+        # TODO move these dependencies to the presentation layer: obtaining a `user` object
+        #  should be simple (e.g. for reauthentication purposes)
+        #  and not drag in unnecessary dependencies.
+        # TODO extract userdb info?
+        payment_details: PaymentDetails,
+        ip_mask: Mask,
+        engine: Engine,
+    ):
         try:
             self.user_data: UserData = UserData.model_validate(user_data)
-            self._userdb: UserDB = UserDB(self)
+            # TODO make userdb own dependency (ideally only of `user_data`)
+            self._userdb: UserDB = UserDB(dbname=self.login, ip_mask=ip_mask, database=engine)
         except ValidationError as e:
             raise PycroftBackendError("Error when parsing user lookup response") from e
-        super().__init__(uid=str(self.user_data.id))
 
+        self.uid: str = self.user_data.id
+        self.api = api
+        self._payment_details = payment_details
+
+    def __eq__(self, other):
+        return self.uid == other.uid and self.datasource == other.datasource
+
+    # TODO deprecate / replace by proper api call
     @classmethod
-    def get(cls, username):
-        status, user_data = api.get_user(username)
-
-        if status != 200:
-            raise UserNotFound
-
-        return cls(user_data)
+    def get(cls, username: str):
+        raise NotImplementedError("You need to migrate to fetch_by_name() instead")
 
     @classmethod
     def from_ip(cls, ip):
-        status, user_data = api.get_user_from_ip(ip)
-
-        if status != 200:
-            return AnonymousUserMixin()
-
-        return cls(user_data)
+        raise NotImplementedError("You need to migrate to fetch_by_ip() instead")
 
     def re_authenticate(self, password):
-        self.authenticate(self.user_data.login, password)
+        self.authenticate(self.api, self.user_data.login, password)
 
-    @classmethod
-    def authenticate(cls, username, password):
+    @staticmethod
+    def authenticate(api: PycroftApi, username: str, password: str) -> User:
         status, result = api.authenticate(username, password)
 
         if status != 200:
             raise PasswordInvalid
 
-        user = cls.get(result['id'])
+        user = fetch_by_name(api, result['id'])
 
         if not user.has_property('sipa_login'):
             raise LoginNotAllowed
 
         return user
 
-    can_change_password = True
-
     def change_password(self, old, new):
-        status, _ = api.change_password(self.user_data.id, old, new)
+        status, _ = self.api.change_password(self.user_data.id, old, new)
 
         if status != 200:
             raise PasswordInvalid
 
-    # TODO just pass through `list[TrafficHistoryEntry]` and move presentation
-    # to the blueprint
     @property
-    def traffic_history(self):
-        return [{
-            'day': (d.weekday() if (d := parse_date(entry.timestamp)) else None),
-            'input': to_kib(entry.ingress),
-            'output': to_kib(entry.egress),
-            'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
-        } for entry in self.user_data.traffic_history]
+    def traffic_history(self) -> list[TrafficHistoryRow]:
+        return [
+            parsed
+            for entry in self.user_data.traffic_history
+            if (parsed := parse_traffic_history_row(entry)) is not None
+        ]
+
+    def generate_rows(
+        self, description_dict: dict[str, tuple[str, str] | tuple[str]]
+    ) -> t.Iterator[TableRow]:
+        for key, val in description_dict.items():
+            d = self.__text_to_dict(val)
+            yield TableRow(
+                property=getattr(self, key), description=d["description"], subtext=d.get("subtext")
+            )
+
+    @staticmethod
+    def __text_to_dict(val: str | t.Sequence[str]) -> dict:
+        match val:
+            case [d, s]:
+                return {"description": d, "subtext": s}
+            case [d]:
+                return {"description": d}
+            case _:
+                return {"description": "Error"}
 
     @property
-    def realname(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](name="realname", value=self.user_data.name)
+    def realname(self) -> str:
+        return self.user_data.name
 
     @property
-    def birthdate(self) -> ActiveProperty[date, date]:
-        return ActiveProperty[date, date](
-            name="birthdate", value=self.user_data.birthdate
-        )
+    def birthdate(self) -> date | None:
+        return self.user_data.birthdate
 
     @property
-    def login(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](name="login", value=self.user_data.login)
+    def login(self) -> str:
+        return self.user_data.login
 
     @property
-    @connection_dependent
-    def ips(self) -> ActiveProperty[str, str]:
-        ips = sorted(ip for i in self.user_data.interfaces for ip in i.ips)
-        return ActiveProperty[str, str](name="ips", value=", ".join(ips))
+    def ips(self) -> list[str]:
+        return sorted(ip for i in self.user_data.interfaces for ip in i.ips)
 
     @property
-    @connection_dependent
-    def mac(self) -> ActiveProperty[str, str]:
-        macs = ", ".join(i.mac for i in self.user_data.interfaces)
-        return ActiveProperty[str, str](
-            name="mac",
-            value=macs,
-            capabilities=Capabilities.edit_if(len(self.user_data.interfaces) <= 1),
-        )
+    def macs(self) -> list[str]:
+        return sorted(i.mac for i in self.user_data.interfaces)
+
+    @property
+    def can_edit_mac(self) -> bool:
+        return len(self.macs) == 1
+
+    @property
+    def can_add_mac(self) -> bool:
+        return not self.macs
 
     def change_mac_address(self, new_mac, host_name, password):
         assert len(self.user_data.interfaces) == 1
 
-        status, _ = api.change_mac(
+        status, _ = self.api.change_mac(
             self.user_data.id,
             password,
             self.user_data.interfaces[0].id,
@@ -153,21 +183,15 @@ class User(BaseUser):
             raise MacAlreadyExists
 
     @property
-    @connection_dependent
-    def network_access_active(self) -> ActiveProperty[bool, bool]:
-        can_edit = (
-            self.user_data.room is not None
-            and self.has_property("network_access")
-            and not self.user_data.interfaces
-        )
-        return ActiveProperty[bool, bool](
-            name="network_access_active",
-            value=bool(self.user_data.interfaces),
-            capabilities=Capabilities.edit_if(can_edit),
-        )
+    def can_activate_network_access(self) -> bool:
+        return all((
+            self.user_data.room is not None,
+            self.has_property("network_access"),
+            not self.user_data.interfaces,
+        ))
 
     def activate_network_access(self, password, mac, birthdate, host_name):
-        status, _ = api.activate_network_access(self.user_data.id, password, mac,
+        status, _ = self.api.activate_network_access(self.user_data.id, password, mac,
                                                      birthdate, host_name)
 
         if status == 401:
@@ -180,7 +204,7 @@ class User(BaseUser):
             raise SubnetFull
 
     def terminate_membership(self, end_date):
-        status, _ = api.terminate_membership(self.user_data.id, end_date)
+        status, _ = self.api.terminate_membership(self.user_data.id, end_date)
 
         if status == 400:
             raise TerminationNotPossible
@@ -188,7 +212,7 @@ class User(BaseUser):
             raise UnknownError
 
     def estimate_balance(self, end_date):
-        status, result = api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
+        status, result = self.api.estimate_balance_at_end_of_membership(self.user_data.id, end_date)
 
         if status == 200:
             return result['estimated_balance']
@@ -196,7 +220,7 @@ class User(BaseUser):
             raise UnknownError
 
     def continue_membership(self):
-        status, _ = api.continue_membership(self.user_data.id)
+        status, _ = self.api.continue_membership(self.user_data.id)
 
         if status == 400:
             raise ContinuationNotPossible
@@ -204,15 +228,15 @@ class User(BaseUser):
             raise UnknownError
 
     @property
-    def mail(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](
-            name="mail",
-            value=self.user_data.mail,
-            capabilities=Capabilities.edit_if(self.has_property("mail")),
-        )
+    def mail(self) -> str | None:
+        return self.user_data.mail
+
+    @property
+    def can_edit_mail(self) -> bool:
+        return self.has_property("mail")
 
     def change_mail(self, password: str, new_mail: str, mail_forwarded: bool):
-        status, _ = api.change_mail(
+        status, _ = self.api.change_mail(
             self.user_data.id,
             password,
             new_mail,
@@ -226,119 +250,73 @@ class User(BaseUser):
         self.user_data.mail = new_mail
 
     @property
-    def mail_forwarded(self) -> ActiveProperty[str, bool]:
-        value = self.user_data.mail_forwarded
-        return ActiveProperty[str, bool](
-            name="mail_forwarded",
-            raw_value=value,
-            value=gettext("Aktiviert") if value else gettext("Nicht aktiviert"),
-            capabilities=Capabilities.edit_if(self.has_property("mail")),
-        )
+    def mail_forwarded(self) -> bool:
+        return self.user_data.mail_forwarded
 
     @property
-    def mail_confirmed(self) -> ActiveProperty[str, str]:
-        confirmed = self.user_data.mail_confirmed
-        editable = self.has_property('mail') and self.user_data.mail and not confirmed
-        return ActiveProperty[str, str](
-            name="mail_confirmed",
-            value=gettext("Bestätigt") if confirmed else gettext("Nicht bestätigt"),
-            style="success" if confirmed else "danger",
-            capabilities=Capabilities.edit_if(editable),
-        )
+    def can_change_mail_forwarded(self) -> bool:
+        return self.has_property("mail")
 
+    @property
+    def mail_confirmed(self) -> bool:
+        return self.user_data.mail_confirmed
+
+    @property
+    def can_resend_confirmation(self) -> bool:
+        return all((self.has_property("mail"), self.user_data.mail, not self.mail_confirmed))
+
+    # TODO “drehstuhlinterface” → do directly in endpoint
     def resend_confirm_mail(self) -> bool:
-        return api.resend_confirm_email(self.user_data.id)
+        return self.api.resend_confirm_email(self.user_data.id)
 
     @property
-    def address(self) -> ActiveProperty[str | None, str]:
-        return ActiveProperty[str | None, str](
-            name="address",
-            value=self.user_data.room,
-        )
+    def address(self) -> str | None:
+        return self.user_data.room
 
     @property
-    def status(self) -> ActiveProperty[str, str]:
-        value, style = self.evaluate_status(self.user_data.status)
-        return ActiveProperty[str, str](name="status", value=value, style=style)
+    def status(self) -> tuple[str, str]:
+        return self.evaluate_status(self.user_data.status)
 
     @property
-    def id(self) -> ActiveProperty[str, str]:
-        return ActiveProperty[str, str](name="id", value=self.user_data.user_id)
+    def id(self) -> str:
+        return self.user_data.user_id
 
     @property
-    def userdb_status(self) -> PropertyBase[str, str]:
-        status = self.userdb.has_db
-
-        capabilities = Capabilities(edit=True, delete=True)
-
-        if not self.has_property("userdb"):
-            return UnsupportedProperty[str, str]("userdb_status")
-
-        if status is None:
-            return ActiveProperty[str, str](name="userdb_status",
-                                  value=gettext("Datenbank nicht erreichbar"),
-                                  style='danger',
-                                  empty=True)
-
-        if status:
-            return ActiveProperty[str, str](name="userdb_status",
-                                  value=gettext("Aktiviert"),
-                                  style='success',
-                                  capabilities=capabilities)
-
-        return ActiveProperty[str, str](name="userdb_status",
-                                  value=gettext("Nicht aktiviert"),
-                                  empty=True,
-                                  capabilities=capabilities)
-
-    @property
-    def userdb(self) -> UserDB:
-        return self._userdb
-
-    @property
-    def has_connection(self) -> bool:
-        return True
+    def userdb(self) -> UserDB | None:
+        return self._userdb if self.has_property("userdb") else None
 
     @property
     def finance_information(self) -> FinanceInformation:
         return FinanceInformation(
             balance=self.user_data.finance_balance,
-            transactions=((parse_date(t.valid_on), t.amount, t.description) for t in
-                          self.user_data.finance_history),
+            transactions=self.user_data.finance_history,
             last_update=self.user_data.last_finance_update
         )
 
-    def payment_details(self) -> PaymentDetails:
-        return PaymentDetails(
-            recipient=current_app.config["PAYMENT_DETAILS"]["RECIPIENT"],
-            bank=current_app.config["PAYMENT_DETAILS"]["BANK"],
-            iban=current_app.config["PAYMENT_DETAILS"]["IBAN"],
-            bic=current_app.config["PAYMENT_DETAILS"]["BIC"],
-            purpose=f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",
+    @property
+    def payment_details(self) -> UserPaymentDetails:
+        return self._payment_details.with_purpose(
+            f"{self.user_data.user_id}, {self.user_data.name}, {self.user_data.room}",
         )
 
     def has_property(self, property: str) -> bool:
         return property in self.user_data.properties
 
     @property
-    def membership_end_date(self) -> ActiveProperty[date | None, date | None]:
+    def membership_end_date(self) -> date | None:
         """Implicitly used in :py:meth:`evaluate_status`"""
-        return ActiveProperty[date | None, date | None](
-            name="membership_end_date",
-            value=self.user_data.membership_end_date,
-            capabilities=Capabilities.edit_if(self.is_member),
-        )
+        return self.user_data.membership_end_date
 
     @property
-    def mpsk_clients(self) -> ActiveProperty[list[MPSKClientEntry], list[MPSKClientEntry]]:
-        return ActiveProperty(
-            name="mpsk_clients",
-            value=self.user_data.mpsk_clients,
-            capabilities=Capabilities(edit=True, displayable=False),
-        )
+    def can_edit_membership_end_date(self) -> bool:
+        return self.is_member
+
+    @property
+    def mpsk_clients(self) -> list[MPSKClientEntry]:
+        return self.user_data.mpsk_clients
 
     def change_mpsk_clients(self, mac, name, mpsk_id, password: str):
-        status, _ = api.change_mpsk(
+        status, _ = self.api.change_mpsk(
             user_id=self.user_data.id,
             mac=mac,
             name=name,
@@ -354,7 +332,7 @@ class User(BaseUser):
             raise ValueError
 
     def add_mpsk_client(self, name, mac, password):
-        status, response = api.add_mpsk(
+        status, response = self.api.add_mpsk(
             self.user_data.id,
             password,
             mac,
@@ -374,7 +352,7 @@ class User(BaseUser):
             raise ValueError(f"Invalid response from {response}")
 
     def delete_mpsk_client(self, mpsk_id, password):
-        status, _ = api.delete_mpsk(
+        status, _ = self.api.delete_mpsk(
             self.user_data.id,
             password,
             mpsk_id,
@@ -386,6 +364,8 @@ class User(BaseUser):
     def is_member(self) -> bool:
         return self.has_property('member')
 
+    # TODO fix gettext invocations
+    # TODO …or betterinstead return some ADT and leave styling to endpoint/component
     def evaluate_status(self, status: UserStatus):
         message = None
         style = None
@@ -400,11 +380,12 @@ class User(BaseUser):
                                             self.user_data.membership_begin_date.isoformat()), \
                              'warning'
         elif not status.member:
-            message, style = gettext('Kein Mitglied'), 'muted'
-        elif status.member and self.membership_end_date.raw_value is not None:
-            message, style = "{} {}".format(gettext('Mitglied bis'),
-                                            self.membership_end_date.value.isoformat()), \
-                             'warning'
+            message, style = gettext("Kein Mitglied"), "muted"
+        elif status.member and self.membership_end_date is not None:
+            message, style = (
+                "{} {}".format(gettext("Mitglied bis"), self.membership_end_date.isoformat()),
+                "warning",
+            )
         elif status.member:
             message, style = gettext('Mitglied'), 'success'
 
@@ -420,69 +401,105 @@ class User(BaseUser):
         return message, style
 
     @property
-    def wifi_password(self) -> ActiveProperty[str | None, str | None]:
-        return ActiveProperty(
-            name="wifi_password",
-            value=self.user_data.wifi_password,
-            style="password" if self.user_data.wifi_password is not None else None,
-            description_url="../pages/service/wlan",
-            capabilities=Capabilities(edit=True, copyable=True),
-        )
+    def wifi_password(self) -> str | None:
+        return self.user_data.wifi_password
 
     def reset_wifi_password(self):
-        status, result = api.reset_wifi_password(self.user_data.id)
+        status, result = self.api.reset_wifi_password(self.user_data.id)
 
         if status != 200:
             raise UnknownError
 
         return result
 
-    @classmethod
-    def request_password_reset(cls, user_ident, email):
-        status, result = api.request_password_reset(user_ident, email.lower())
 
-        if status == 404:
-            raise UserNotFound
-        elif status == 412:
-            raise UserNotContactableError
-        elif status != 200:
-            raise UnknownError
+# TODO do conversion / mapping / validation / replace-by-empty-list on the pydantic model itself
+@t.final
+class TrafficHistoryRow(t.TypedDict):
+    day: int
+    input: int
+    output: int
+    throughput: int
 
-        return result
 
-    @classmethod
-    def password_reset(cls, token, new_password):
-        status, result = api.reset_password(token, new_password)
+def parse_traffic_history_row(entry: TrafficHistoryEntry) -> TrafficHistoryRow | None:
+    return {
+        'day': d.weekday(),
+        'input': to_kib(entry.ingress),
+        'output': to_kib(entry.egress),
+        'throughput': to_kib(entry.ingress) + to_kib(entry.egress),
+        # TODO WTF why are we using RFC2822 dates?
+        # TODO also: just replace this parsing foo by proper pydantic parsing
+    } if (d := parse_date(entry.timestamp)) else None
 
-        if status == 403:
-            raise TokenNotFound
-        elif status != 200:
-            raise UnknownError
 
-        return result
+def fetch_by_name(api: PycroftApi, username: str) -> User:
+    status, user_data = api.get_user(username)
+
+    if status != 200:
+        raise UserNotFound
+
+    # TODO can we reasonably ensure that `user` is a `LiteralString`?
+    #  It is not user-provided, but pycroft-provided.
+    #  so in _some sense_ it is internally controlled, but in another it is not.
+    #  Perhaps a conscious cast at this one point should be fine.
+    # TODO pass these dependencies somehow (perhaps `UserLoader`? or deferring injection until needed)
+    return User(user_data, api, __TODO_payment_details, __TODO_ip_mask, __TODO_engine)
+
+
+def fetch_by_ip(api: PycroftApi, ip) -> User | AnonymousUserMixin:
+    status, user_data = api.get_user_from_ip(ip)
+
+    if status != 200:
+        return AnonymousUserMixin()
+
+    # TODO pass these dependencies somehow (perhaps `UserLoader`? or deferring injection until needed)
+    return User(user_data, api, __TODO_payment_details, __TODO_ip_mask, __TODO_engine)
+
+
+def request_password_reset(api: PycroftApi, user_ident: str, email: str) -> dict:
+    status, result = api.request_password_reset(user_ident, email.lower())
+
+    if status == 404:
+        raise UserNotFound
+    elif status == 412:
+        raise UserNotContactableError
+    elif status != 200:
+        raise UnknownError
+
+    return result
+
+
+def password_reset(api: PycroftApi, token: str, new_password: str) -> dict:
+    status, result = api.reset_password(token, new_password)
+
+    if status == 403:
+        raise TokenNotFound
+    elif status != 200:
+        raise UnknownError
+
+    return result
 
 
 def to_kib(v: int) -> int:
     return (v // 1024) if v is not None else 0
 
 
-class FinanceInformation(BaseFinanceInformation):
-    has_to_pay = True
-
-    def __init__(self, balance, transactions, last_update):
-        self._balance = balance
-        self._transactions = transactions
-        self._last_update = last_update
+@dataclass(frozen=True, slots=True)
+class FinanceInformation:
+    balance: float
+    transactions: list
+    last_update: date
 
     @property
-    def raw_balance(self):
-        return self._balance
-
-    @property
-    def last_update(self):
-        return self._last_update
-
-    @property
-    def history(self):
-        return self._transactions
-
+    def last_received_update(self):
+        last_update = self.last_update
+        match last_update.toordinal() % 7:
+            case 6:
+                return last_update - timedelta(days=2)
+            case 7:
+                return last_update - timedelta(days=3)
+            case 1:
+                return last_update - timedelta(days=3)
+            case _:
+                return last_update - timedelta(days=1)
