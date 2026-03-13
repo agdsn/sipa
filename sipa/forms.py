@@ -68,7 +68,7 @@ def render_links(raw: str, links: dict[str, str]):
 class HtmlFormattable(t.Protocol):
     def __html__(self) -> str: ...
 
-        
+
 @dataclass
 class LazilyProcessed[T: HtmlFormattable]:
     message: T
@@ -135,10 +135,6 @@ class OptionalIf(Optional):
             deciding_field.data) and deciding_field.data != 'None'
         if deciding_has_data ^ self.invert:
             super().__call__(form, field)
-
-
-def lower_filter(string):
-    return string.lower() if string else None
 
 
 def strip_filter(string):
