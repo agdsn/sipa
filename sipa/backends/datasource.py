@@ -20,14 +20,19 @@ class DataSource:
     instance the user class.
     """
 
+
+
+
+
+
     def __init__(
         self,
         name: str,
         user_class: type[UserLike],
         dormitories: list[Dormitory],
-        mail_server: str,
-        webmailer_url: str | None = None,
-        support_mail: str | None = None,
+        mail_server: str ,
+        webmailer_url : str | None = None,
+        support_mail  : str | None = None,
         init_app: InitContextCallable | None = None,
     ) -> None:
         super().__init__()
