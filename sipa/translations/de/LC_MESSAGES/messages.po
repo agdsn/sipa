@@ -885,9 +885,6 @@ msgstr ""
 msgid "Etage"
 msgstr ""
 
-msgid "Nur für Bewohner des Hauses!"
-msgstr ""
-
 msgid "Nächste Sprechstunde"
 msgstr ""
 
@@ -1071,6 +1068,12 @@ msgstr ""
 
 msgid "Ausgehend"
 msgstr ""
+
+msgid "Über normalem Klingelsystem"
+msgstr ""
+
+msgid "keine sprechanlage"
+msgstr "<u>Klingel hat keine Sprechanlage. Wir kommen die Tür öffnen.</u>"
 
 msgid "This field is required."
 msgstr "dieses Feld wird benötigt!"
