@@ -29,7 +29,7 @@
              <strong>{{ office }}</strong><br>
 
              {% if information.doorbell %}
-                {{ _("Klingel") }} {{ information.doorbell }}<br>
+                {{ _("Klingel") }} {{ _(information.doorbell) }}<br>
              {% endif %}
 
              {% if information.floor != None %}
@@ -45,9 +45,11 @@
 
                 {{ information.city }}
 
-                {% if information.only_residents %}
-                    <br/>
-                    <u>{{ _('Nur für Bewohner des Hauses!') }}</u>
+                {% if information.comments %}
+                    {% for comment in information.comments %}
+                        <br/>
+                        {{ _(comment) }}
+                    {% endfor %}
                 {% endif %}
                 {% if information.next %}
                 <div>

@@ -889,9 +889,6 @@ msgstr "Basement"
 msgid "Etage"
 msgstr "Floor"
 
-msgid "Nur für Bewohner des Hauses!"
-msgstr "Only for residents of the dorm!"
-
 msgid "Nächste Sprechstunde"
 msgstr "Next office hours"
 
@@ -1075,6 +1072,12 @@ msgstr "Incoming"
 
 msgid "Ausgehend"
 msgstr "Outgoing"
+
+msgid "über normalem Klingelsystem"
+msgstr "above regular bell system"
+
+msgid "keine sprechanlage"
+msgstr "<u>There’s no intercom. We’ll come and open the door.</u>"
 
 msgid "This field is required."
 msgstr ""
