@@ -901,8 +901,8 @@ msgstr ""
 msgid "Onlineanmeldung"
 msgstr ""
 
-msgid "Kostenpflichtig Mitglied werden (5€/Mo.)"
-msgstr ""
+msgid "Kostenpflichtig Mitglied werden"
+msgstr "Kostenpflichtig Mitglied werden (7€/Mo.)"
 
 msgid "Verifizierung überspringen"
 msgstr ""

@@ -905,8 +905,8 @@ msgstr "Monday and Thursday 7pm to 8pm "
 msgid "Onlineanmeldung"
 msgstr "Online registration"
 
-msgid "Kostenpflichtig Mitglied werden (5€/Mo.)"
-msgstr "Become a member (fee required, 5€/mo.)"
+msgid "Kostenpflichtig Mitglied werden"
+msgstr "Become a member (fee required, 7€/mo.)"
 
 msgid "Verifizierung überspringen"
 msgstr "Skip verification"
