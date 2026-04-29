@@ -163,3 +163,7 @@ tr:hover .text-password {
 .bus_few_minutes_left {
 	font-weight: bold;
 }
+
+.btn-group-padding {
+	padding-bottom: 1rem;
+}

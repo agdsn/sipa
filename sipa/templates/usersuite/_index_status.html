@@ -1,5 +1,5 @@
 <h2 id="hot-buttons">{{ _("Häufige Aktionen") }}</h2>
-<div class="btn-group" style="padding-bottom: 1rem;">
+<div class="btn-group btn-group-padding">
     {% if current_user.can_change_password %}
     <a href="{{ url_for('.change_password') }}" class="btn btn-outline-secondary">
         <span class="bi-asterisk"></span>
@@ -31,7 +31,7 @@
 
 <br>
 
-<div class="btn-group" style="padding-bottom: 1rem;">
+<div class="btn-group btn-group-padding">
 {% if current_user.wifi_password.raw_value %}
     <a href="{{ url_for('.get_apple_wlan_mobileconfig') }}" class="btn btn-outline-secondary">
         <span class="bi-apple"></span>
