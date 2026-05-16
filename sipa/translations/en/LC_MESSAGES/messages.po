@@ -1082,6 +1082,9 @@ msgstr "<u>There’s no intercom. We’ll come and open the door.</u>"
 msgid "This field is required."
 msgstr ""
 
+msgid "hss50-eingang-beschreibung"
+msgstr "<u>Office entrance on the right side of the building</u>"
+
 #~ msgid "Bitte beachte, dass diese Funktion deinen Steam-Client beeinträchtigen kann. Sollten Probleme auftreten, kontaktiere uns, der Steam-Support wird dir nicht helfen können."
 #~ msgstr "Please note, that this might cause problems with your clients. If there are problems, get in touch with us, the service providers won't be able to help."
 

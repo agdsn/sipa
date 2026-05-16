@@ -1078,6 +1078,9 @@ msgstr "<u>Klingel hat keine Sprechanlage. Wir kommen die Tür öffnen.</u>"
 msgid "This field is required."
 msgstr "dieses Feld wird benötigt!"
 
+msgid "hss50-eingang-beschreibung"
+msgstr "<u>Büroeingang auf der rechten Seite des Gebäudes</u>"
+
 #~ msgid "Bezahlt, verbunden"
 #~ msgstr ""
 
