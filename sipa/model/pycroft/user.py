@@ -348,6 +348,8 @@ class User(BaseUser):
 
         if status == 400:
             raise ValueError(f"mac: {mac} not found for user")
+        elif status == 401:
+            raise PasswordInvalid
         elif status == 409:
             raise MacAlreadyExists
         elif status == 422:
@@ -361,6 +363,8 @@ class User(BaseUser):
             name)
         if status == 400:
             raise MaximumNumberMPSKClients
+        elif status == 401:
+            raise PasswordInvalid
         elif status == 409:
             raise MacAlreadyExists
         elif status == 422:
@@ -379,8 +383,10 @@ class User(BaseUser):
             password,
             mpsk_id,
         )
-        if status == 400 or status == 401:
+        if status == 400:
             raise ValueError(f'Mpsk client not found for user: {mpsk_id}')
+        elif status == 401:
+            raise PasswordInvalid
 
     @property
     def is_member(self) -> bool:
