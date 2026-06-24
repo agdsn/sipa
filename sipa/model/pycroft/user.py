@@ -348,6 +348,8 @@ class User(BaseUser):
 
         if status == 400:
             raise ValueError(f"mac: {mac} not found for user")
+        elif status == 401:
+            raise  PasswordInvalid
         elif status == 409:
             raise MacAlreadyExists
         elif status == 422:
@@ -361,6 +363,8 @@ class User(BaseUser):
             name)
         if status == 400:
             raise MaximumNumberMPSKClients
+        elif status == 401:
+            raise  PasswordInvalid
         elif status == 409:
             raise MacAlreadyExists
         elif status == 422:
