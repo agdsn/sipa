@@ -1001,6 +1001,12 @@ msgstr "Please be aware that every user needs his own account. Sharing the accou
 msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
 msgstr "If you share your account with someone else (share login, enter someone else's MAC address) you are still liable for all activities of this account!"
 
+msgid "Das bearbeite interface existiert nicht!"
+msgstr "The edited interface does not exist!"
+
+msgid "Die MAC-Adresse kann bearbeitet werden, sobald du Mitglied bist."
+msgstr "The MAC address may be changed as soon as you are a member."
+
 msgid "Kontakt für Mitglieder"
 msgstr "Contact for members"
 

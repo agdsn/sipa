@@ -55,6 +55,7 @@ from sipa.model.exceptions import (
     TerminationNotPossible,
     UnknownError,
     ContinuationNotPossible,
+    NoInterfaceExists,
     SubnetFull, MaximumNumberMPSKClients, NoWiFiPasswordGenerated,
 )
 from sipa.model.misc import PaymentDetails
@@ -405,6 +406,10 @@ def change_mac():
 
         try:
             current_user.change_mac_address(mac, host_name, password)
+        except NoInterfaceExists:
+            flash(gettext("Das bearbeite interface existiert nicht!"), "error")
+            flash(gettext("Die MAC-Adresse kann bearbeitet werden, "
+                          "sobald du Mitglied bist."), 'info')
         except PasswordInvalid:
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
