@@ -344,6 +344,9 @@ msgstr "Error during communication with the backend server ('%(name)s')"
 msgid "Anmeldedaten fehlerhaft!"
 msgstr "Authentication data incorrect!"
 
+msgid "Benutzername nicht kleingeschrieben!"
+msgstr "Username not lowercase"
+
 msgid "Anmeldung erfolgreich!"
 msgstr "Authentication successful!"
 

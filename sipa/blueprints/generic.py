@@ -142,7 +142,10 @@ def login():
         try:
             user = User.authenticate(username, password)
         except InvalidCredentials as e:
-            if isinstance(e, UserNotFound):
+            if not username.islower():
+                cause = "case"
+                flash(gettext("Benutzername nicht kleingeschrieben!"), "error")
+            elif isinstance(e, UserNotFound):
                 cause = "username"
             elif isinstance(e, LoginNotAllowed):
                 cause = "login permission"
@@ -153,6 +156,7 @@ def login():
                 'tags': {'user': username, 'rate_critical': True}
             })
             flash(gettext("Anmeldedaten fehlerhaft!"), "error")
+
         else:
             if isinstance(user, User):
                 login_user(user, remember=remember)
