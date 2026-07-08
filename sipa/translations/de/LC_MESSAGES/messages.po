@@ -342,8 +342,8 @@ msgstr ""
 msgid "Anmeldedaten fehlerhaft!"
 msgstr ""
 
-msgid "Benutzername nicht kleingeschrieben!"
-msgstr "Username not lowercase"
+msgid "Anmeldedaten fehlerhaft oder Benutzername muss kleingeschrieben werden!"
+msgstr ""
 
 msgid "Anmeldung erfolgreich!"
 msgstr ""
