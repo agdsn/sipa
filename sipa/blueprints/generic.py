@@ -152,7 +152,11 @@ def login():
             logger.info("Authentication failed: Wrong %s", cause, extra={
                 'tags': {'user': username, 'rate_critical': True}
             })
-            flash(gettext("Anmeldedaten fehlerhaft!"), "error")
+            if not username.islower():
+                flash(gettext("Anmeldedaten fehlerhaft oder Benutzername muss kleingeschrieben werden!"), "error")
+            else:
+                flash(gettext("Anmeldedaten fehlerhaft!"), "error")
+
         else:
             if isinstance(user, User):
                 login_user(user, remember=remember)
