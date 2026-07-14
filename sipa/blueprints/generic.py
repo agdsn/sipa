@@ -139,30 +139,31 @@ def login():
         if username.endswith(valid_suffix):
             username = username[:-len(valid_suffix)]
 
-        try:
-            user = User.authenticate(username, password)
-        except InvalidCredentials as e:
-            if isinstance(e, UserNotFound):
-                cause = "username"
-            elif isinstance(e, LoginNotAllowed):
-                cause = "login permission"
-            else:
-                cause = "password"
 
-            logger.info("Authentication failed: Wrong %s", cause, extra={
-                'tags': {'user': username, 'rate_critical': True}
-            })
-            if not username.islower():
-                flash(gettext("Anmeldedaten fehlerhaft oder Benutzername muss kleingeschrieben werden!"), "error")
-            else:
-                flash(gettext("Anmeldedaten fehlerhaft!"), "error")
-
+        if not username.islower():
+            flash(gettext("Nutzername muss kleingeschrieben werden!"), "error")
         else:
-            if isinstance(user, User):
-                login_user(user, remember=remember)
-                logger.info('Authentication successful',
-                            extra={'tags': {'user': username}})
-                flash(gettext("Anmeldung erfolgreich!"), "success")
+            try:
+                user = User.authenticate(username, password)
+            except InvalidCredentials as e:
+                if isinstance(e, UserNotFound):
+                    cause = "username"
+                elif isinstance(e, LoginNotAllowed):
+                    cause = "login permission"
+                else:
+                    cause = "password"
+
+                logger.info("Authentication failed: Wrong %s", cause, extra={
+                    'tags': {'user': username, 'rate_critical': True}
+                })
+
+                flash(gettext("Anmeldedaten fehlerhaft!"), "error")
+            else:
+                if isinstance(user, User):
+                    login_user(user, remember=remember)
+                    logger.info('Authentication successful',
+                                extra={'tags': {'user': username}})
+                    flash(gettext("Anmeldung erfolgreich!"), "success")
 
     if current_user.is_authenticated:
         # `url_redirect` would not be bad here because this would allow for URL
