@@ -611,7 +611,7 @@ class RegisterFinishForm(FlaskForm):
         render_links,
         links={
             "constitution": "../pages/legal/agdsn_constitution",
-            "fee_regulation": "../pages/legal/membership_fee_regulations",
+            "fee_regulation": "../pages/legal/membership_contribution_regulations",
             "network_constitution": "../pages/legal/network_constitution",
             "privacy_policy": "../pages/legal/agdsn_dataprotection",
         },
