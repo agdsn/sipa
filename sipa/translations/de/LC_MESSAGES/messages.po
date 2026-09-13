@@ -1000,6 +1000,12 @@ msgstr ""
 msgid "Solltet ihr euren Account mit anderen teilen (ihn weitergeben, fremde MAC-Adressen eintragen), haftet weiterhin ihr als der Accountinhaber für alle Aktivitäten des Accounts!"
 msgstr ""
 
+msgid "Das bearbeitete interface existiert nicht!"
+msgstr ""
+
+msgid "Die MAC-Adresse kann bearbeitet werden, sobald du Mitglied bist."
+msgstr ""
+
 msgid "Kontakt für Mitglieder"
 msgstr ""
 
