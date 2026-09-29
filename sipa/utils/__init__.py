@@ -142,7 +142,6 @@ def meetingcal():
         if "LOCATION" in event:
 
             locations = re.split(r",\s+", event["LOCATION"])
-            print(locations)
             location_tmp = "-"
 
             patterns = [r"^[^\s<>'()\"]*\((https?://[^\s<>'()\"]*)\)", 
@@ -156,12 +155,17 @@ def meetingcal():
                     print(matching)
 
                     if "LOCATION" in event:
-                        if matching:
+                        if matching and location_tmp == "-":
                             location_tmp = re.sub("-", "", location_tmp)
                             location_tmp += location
                             break
+                        elif matching:
+                            location_tmp += (", " + location)
+                            break
 
-            print(event["LOCATION"])
+            event["LOCATION"] = location_tmp
+        else:
+            event["LOCATION"] = "-"
 
 
         next_meetings.append(
