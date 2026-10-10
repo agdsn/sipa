@@ -592,8 +592,8 @@ msgstr "Network access has been activated!"
 msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
 msgstr "It can take up to 10 Minutes until the changes apply."
 
-msgid "Netzwerkanschluss aktivieren"
-msgstr "Activate network access"
+msgid "Kabelanschluss aktivieren"
+msgstr "Activate wired network connection"
 
 msgid "Deine Datenbank wurde gelöscht."
 msgstr "Your database has been deleted."

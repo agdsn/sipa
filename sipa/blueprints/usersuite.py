@@ -594,7 +594,7 @@ def activate_network_access():
 
             return redirect(url_for('.index'))
 
-    return render_template('generic_form.html', page_title=gettext("Netzwerkanschluss aktivieren"),
+    return render_template('generic_form.html', page_title=gettext("Kabelanschluss aktivieren"),
                            form_args={'form': form, 'cancel_to': url_for('.index')})
 
 

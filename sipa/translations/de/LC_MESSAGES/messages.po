@@ -590,8 +590,8 @@ msgstr ""
 msgid "Es kann bis zu 10 Minuten dauern, bis der Netzwerkzugang funktioniert."
 msgstr ""
 
-msgid "Netzwerkanschluss aktivieren"
-msgstr ""
+msgid "Kabelanschluss aktivieren"
+msgstr "Kabelgebundenen Netzwerkanschluss aktivieren"
 
 msgid "Deine Datenbank wurde gelöscht."
 msgstr ""
