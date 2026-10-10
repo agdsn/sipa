@@ -14,7 +14,7 @@
     {% if current_user.network_access_active.capabilities.edit %}
     <a href="{{ url_for('.activate_network_access') }}" class="btn btn-info">
         <span class="bi-power"></span>
-        {{ _("Netzwerkanschluss aktivieren") }}
+        {{ _("Kabelanschluss aktivieren") }}
     </a>
     {% elif current_user.mac.capabilities.edit %}
     <a href="{{ url_for('.change_mac') }}" class="btn btn-outline-secondary">
