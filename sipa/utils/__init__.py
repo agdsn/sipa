@@ -133,40 +133,15 @@ def meetingcal():
 
     events = events_from_calendar(calendar)
 
-    print(f"{events}")
-
     next_meetings = []
 
     for event in events:
 
         if "LOCATION" in event:
+            event["LOCATION"] = xss_location(event["LOCATION"])
 
-            locations = re.split(r",\s+", event["LOCATION"])
-            location_tmp = "-"
-
-            patterns = [r"^[^\s<>'()\"]*\((https?://[^\s<>'()\"]*)\)", 
-                        r"^[a-zA-Z0-9ÄÖÜäöüß\s]+$"]
-
-            for location in locations:
-            
-                for pattern_str in patterns:
-
-                    matching = re.search(pattern_str, location)
-                    print(matching)
-
-                    if "LOCATION" in event:
-                        if matching and location_tmp == "-":
-                            location_tmp = re.sub("-", "", location_tmp)
-                            location_tmp += location
-                            break
-                        elif matching:
-                            location_tmp += (", " + location)
-                            break
-
-            event["LOCATION"] = location_tmp
         else:
             event["LOCATION"] = "-"
-
 
         next_meetings.append(
             {
@@ -174,13 +149,35 @@ def meetingcal():
                 "datetime": event["DTSTART"].dt,
                 "location": event["LOCATION"] if "LOCATION" in event else "-",
                 "location_link": markdown.markdown(event["LOCATION"])
-                if "LOCATION" in event
-                else "-",
             }
-            
         )
     next_meetings = sorted(next_meetings, key=itemgetter("datetime"))
     return next_meetings
+
+
+def xss_location(event_location: str) -> str:
+
+    locations = re.split(r",\s+", event_location)
+    location_tmp = "-"
+    
+    patterns = [r"^[^\s<>'()\"]*\((https?://[^\s<>'()\"]*)\)", 
+                r"^[a-zA-Z0-9ÄÖÜäöüß\s]+$"]
+    
+    for location in locations:
+                
+        for pattern_str in patterns:
+    
+            matching = re.search(pattern_str, location)
+    
+            if matching and location_tmp == "-":
+                location_tmp = re.sub("-", "", location_tmp)
+                location_tmp += location
+                break
+            elif matching:
+                location_tmp += (", " + location)
+                break
+    
+    return location_tmp
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=300))
