@@ -4,7 +4,8 @@ import typing
 import icalendar
 import pytest
 
-from sipa.utils import events_from_calendar, Event
+
+from sipa.utils import events_from_calendar, Event, xss_location
 
 
 @pytest.fixture(scope='session')
@@ -29,3 +30,17 @@ def test_ical_conversion(calendar: icalendar.Calendar, time_machine):
     assert ev['LOCATION'] == "NOC, Räcknitzhöhe 35"
     assert ev["DTSTART"].dt.weekday() == 1  # tuesday
     assert ev["DTEND"].dt.weekday() == 1  # tuesday
+
+
+def test_xss():
+    assert(xss_location("[123](http://example.com)")) == "[123](http://example.com)"
+    assert(xss_location("123")) == "123"
+    assert(xss_location("[123](https://example.com), 234")) == "[123](https://example.com), 234"
+    assert(xss_location("")) == "-"
+
+    assert(xss_location("[123] (http://example.com)")) == "-"
+    assert(xss_location("https://example.com")) == "-"
+    assert(xss_location("[123]")) == "-"
+    assert(xss_location("[<h1>123</h1>](https://example.com)")) == "-"
+    assert(xss_location("123, <h1>123</h1>(https://example.com)")) == "123"
+    assert(xss_location("[<h1>123</h1>](https://example.com ), 123, [234](https://<h1>123</h1>)")) == "123"
