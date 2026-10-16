@@ -17,9 +17,9 @@ from sipa.model.fancy_property import (
 )
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
-    MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed, \
-    MaximumNumberMPSKClients, NoWiFiPasswordGenerated
+    MacAlreadyExists, NoInterfaceExists, NetworkAccessAlreadyActive, TerminationNotPossible, \
+    UnknownError, ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, \
+    LoginNotAllowed, MaximumNumberMPSKClients, NoWiFiPasswordGenerated
 from .api import PycroftApi
 from .exc import PycroftBackendError
 from .schema import UserData, UserStatus
@@ -137,7 +137,8 @@ class User(BaseUser):
         )
 
     def change_mac_address(self, new_mac, host_name, password):
-        assert len(self.user_data.interfaces) == 1
+        if self.user_data.interfaces == 0:
+            raise NoInterfaceExists
 
         status, _ = api.change_mac(
             self.user_data.id,
