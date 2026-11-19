@@ -23,6 +23,10 @@ class MacAlreadyExists(Exception):
     pass
 
 
+class NoInterfaceExists(Exception):
+    pass
+
+
 class MaximumNumberMPSKClients(Exception):
     pass
 
