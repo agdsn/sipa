@@ -18,7 +18,7 @@ from sipa.model.fancy_property import (
 from sipa.model.misc import PaymentDetails
 from sipa.model.exceptions import UserNotFound, PasswordInvalid, \
     MacAlreadyExists, NetworkAccessAlreadyActive, TerminationNotPossible, UnknownError, \
-    ContinuationNotPossible, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed, \
+    ContinuationNotPossible, UnassignableSubnet, SubnetFull, UserNotContactableError, TokenNotFound, LoginNotAllowed, \
     MaximumNumberMPSKClients, NoWiFiPasswordGenerated
 from .api import PycroftApi
 from .exc import PycroftBackendError
@@ -176,6 +176,8 @@ class User(BaseUser):
             raise MacAlreadyExists
         elif status == 412:
             raise NetworkAccessAlreadyActive
+        elif status == 423:
+            raise UnassignableSubnet
         elif status == 422:
             raise SubnetFull
 

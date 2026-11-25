@@ -52,6 +52,7 @@ from sipa.model.exceptions import (
     PasswordInvalid,
     UserNotFound,
     MacAlreadyExists,
+    UnassignableSubnet,
     TerminationNotPossible,
     UnknownError,
     ContinuationNotPossible,
@@ -581,6 +582,8 @@ def activate_network_access():
             flash(gettext("Passwort war inkorrekt!"), "error")
         except MacAlreadyExists:
             flash(gettext("MAC-Adresse ist bereits in Verwendung!"), "error")
+        except UnassignableSubnet:
+            flash(gettext("Keine Berechtigung um eine MAC-Adresse zu hinterlegen"), "error")
         except SubnetFull:
             flash(gettext("Es sind nicht mehr genug freie IPv4 Adressen verfügbar. Bitte kontaktiere den Support."), "error")
         else:

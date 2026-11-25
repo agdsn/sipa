@@ -56,3 +56,6 @@ class UserNotContactableError(Exception):
 
 class TokenNotFound(InvalidCredentials):
     pass
+
+class UnassignableSubnet(InvalidCredentials):
+    pass
